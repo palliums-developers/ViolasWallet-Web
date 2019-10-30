@@ -1,20 +1,21 @@
 import { observable, action } from "mobx";
 
 export default class Count{ 
-    @observable counts
+    @observable purse
 
     // 初始化
     constructor(){
-        this.counts = 1000;
+        this.purse = 'violas钱包';
     }
 
-    changeCount(type) {
-      console.log(type)
+    changePurse(type) {
+        this.purse = type;
+    //   console.log(type)
       //type === '+' ? this.count ++ : this.count --
     }
 
     @action async autoAdd(type) {
-        await this.changeCount(type);
+        await this.changePurse(type);
     }
 
 }   

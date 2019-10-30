@@ -2,8 +2,6 @@ import React,{Component} from 'react';
 import './app.scss';
 import { inject,observer } from 'mobx-react'
 
-@inject('count')
-@observer
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +9,6 @@ class App extends Component {
     this.state = {  }
   }
   render() { 
-    console.log(this.props.count.counts)
     return ( 
       <div className="app">
         <div onClick={() => {

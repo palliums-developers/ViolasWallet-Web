@@ -24,6 +24,8 @@ import CodeBackup from "../view/default/backup/codeBackup";
 import Manage from "../view/default/home/manage";
 import DetailWallet from "../view/default/home/detailWallet";
 import AddAddress from "../view/default/home/mine/addAddress";
+import Record from "../view/default/home/mine/record";
+import Transfar from "../view/default/home/mine/transfer";
 
 const routes = [
     //首页
@@ -79,7 +81,11 @@ const routes = [
             }
         ]
     },
-
+    //交易记录
+    {
+        path:'/record',
+        component:Record
+    },
     //管理
     {
         path:'/manage',
@@ -94,6 +100,11 @@ const routes = [
     {
         path:'/sweepcode',
         component:Sweepcode
+    },
+    //转账
+    {
+        path:'/transfar',
+        component:Transfar
     },
     //收款
     {

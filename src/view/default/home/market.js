@@ -23,7 +23,7 @@ class Market extends Component {
                             <div className="change">
                                 <p><img src="/img/BTC@2x.png"/><span>BTC</span></p>
                                 <p><img src="/img/vio@2x.png"/><span>Violas</span></p>
-                                <div class="changeLogo"><img src="/img/编组 2@2x.png"/></div>
+                                <div className="changeLogo"><img src="/img/编组 2@2x.png"/></div>
                             </div>
                             <div className="title">
                                 <span>转出数量</span>

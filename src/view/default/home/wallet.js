@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
-// import '../default.scss';
+import { inject,observer } from 'mobx-react';
+
+@inject('index')
+@observer
 
 class Wallet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShow: false
+            isShow: false,
+            wallets:['violas钱包','BTC钱包','libra钱包']
         }
     }
     componentDidMount(){
-        
         document.addEventListener('click',()=>{
             this.setState({
               isShow: false
             })
           })
     }
+    getChange = (e) => {
+        this.setState({
+          isShow: !this.state.isShow
+        })
+        e.nativeEvent.stopImmediatePropagation();
+      }
+    getCurIndex = (val, ind) => {
+        this.props.index.changePurse(val)
+      }
     copyUrl2 = () =>{
         let text = document.getElementById("addressId");
         if (document.body.createTextRange) {
@@ -32,15 +44,20 @@ class Wallet extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
       }
     render() {
+        let { wallets } = this.state;
+        let { purse } = this.props.index
         return (
             <div className="wallet">
                 <header>
-                    <div id="select" onClick={(e) => this.getChange(e)}>
-                        <label>violas钱包</label><img src="/img/路径 3@2x.png" />
+                    <div id="select">
+                        <div onClick={(e) => this.getChange(e)}><label>{purse}</label><img src="/img/路径 3@2x.png" /></div>
                             {
                                 this.state.isShow ? <ul className="selectList">
-                                <li>violas钱包</li>
-                                <li>libra钱包</li>
+                                {
+                                    wallets && wallets.map((v, i) => {
+                                    return <li key={i} className={purse == v ? 'act' : ''} onClick={() => this.getCurIndex(v, i)}>{v}</li>
+                                    })
+                                }
                             </ul> : null
                             }
                         </div>
@@ -69,7 +86,9 @@ class Wallet extends Component {
                            
                         </div>
                         <div className="btns">
-                            <dl>
+                            <dl onClick={() => {
+                                this.props.history.push('/transfar')
+                            }}>
                                 <dt><img src="/img/编组@2x.png"/></dt>
                                 <dd>转账</dd>
                             </dl>
@@ -82,7 +101,9 @@ class Wallet extends Component {
                             </dl>
                          </div>
                         <div className="dealRecord">
-                           <div className="title">
+                           <div className="title" onClick={() => {
+                                this.props.history.push('/record')
+                                }}>
                                <span>交易记录</span>
                                <span>2019-09-10<i><img src="/img/路径复制 4@2x.png"/></i></span>
                            </div>
@@ -96,24 +117,29 @@ class Wallet extends Component {
                               </div>
                               <div className="mList">
                                   <p><label>Vcoin</label><span>0.102</span></p>
-                                  <p><label>Zcoin</label><span>1</span></p>
+                                  {/* <p><label>Zcoin</label><span>1</span></p>
                                   <p><label>Ycoin</label><span>1</span></p>
-                                  <p><label>Lcoin</label><span>1</span></p>
+                                  <p><label>Lcoin</label><span>1</span></p> */}
                               </div>
                            </div>
                         </div>
                     </div>
-                    
+                    <div className="warning">
+                        <div className="head">
+                            <label><img src="/img/编组 5@2x.png"/></label>
+                            <span>安全提醒</span>
+                        </div>
+                        <div className="warnText">
+                            <p>您的身份助记词未备份，请务必备份助记词</p>
+                            <p>助记词可用于恢复身份下钱包资产，防止忘记密码、应用删除、手机丢失等情况导致资产损失</p>
+                        </div>
+                        <div className="btn">立即备份</div>
+                    </div>
                 </section>
             </div>
         );
     }
-    getChange = (e) => {
-        this.setState({
-          isShow: !this.state.isShow
-        })
-        e.nativeEvent.stopImmediatePropagation();
-      }
+    
 }
 
 export default Wallet;
