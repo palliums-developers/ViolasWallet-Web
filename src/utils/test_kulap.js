@@ -72,27 +72,30 @@ const transfer=async(account_from,account_to_hex,amount)=>{
 // transfer(address_mnemonic,address_key.getAddress().toHex(),97e6);
 // transfer(address_key,address_mnemonic.getAddress().toHex(),138e6);
 
-
+const get_address=(account)=>{
+        return account.getAddress().toHex();
+}
 /**
  * save account
  * @param {*} account 
  */
-const save_account=(account)=>{
-    let account_template=(require('./account_template.json'));
-    // console.log(account_template);
-    console.log(typeof(account));
-    let keyPair=account.keyPair;
-    let address=account.getAddress();
-    // console.log(keyPair);
-    // console.log(address);
-    fs.writeFileSync('keypair.txt',inspect(keyPair));
-    fs.writeFileSync('address.txt',inspect(address));
-}
+// const save_account=(account)=>{
+//     let account_template=(require('./account_template.json'));
+//     // console.log(account_template);
+//     console.log(typeof(account));
+//     let keyPair=account.keyPair;
+//     let address=account.getAddress();
+//     // console.log(keyPair);
+//     // console.log(address);
+//     fs.writeFileSync('keypair.txt',inspect(keyPair));
+//     fs.writeFileSync('address.txt',inspect(address));
+// }
 // save_account(address_mnemonic);
 
 // save_account(address_key);
 module.exports={
     creat_account_mnemonic,
     balance,
-    transfer
+    transfer,
+    get_address
 }

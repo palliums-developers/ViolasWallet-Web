@@ -5,12 +5,20 @@ class Market extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShow: false
+            isShow: false,
+            coin:true
         }
     }
     componentDidMount(){
         
     }
+
+    getCoin = () =>{
+      this.setState({
+        coin:!this.state.coin
+      })
+    }
+
     render() {
         return (
             <div className="market">
@@ -20,11 +28,18 @@ class Market extends Component {
                 <section>
                     <div className="marketDescr">
                         <div className="changeDescr">
-                            <div className="change">
+                            {
+                                this.state.coin ? <div className="change">
                                 <p><img src="/img/BTC@2x.png"/><span>BTC</span></p>
                                 <p><img src="/img/vio@2x.png"/><span>Violas</span></p>
-                                <div className="changeLogo"><img src="/img/编组 2@2x.png"/></div>
+                                <div className="changeLogo" onClick={()=>this.getCoin()}><img src="/img/编组 2@2x.png"/></div>
+                            </div> : <div className="change">
+                                <p><img src="/img/vio@2x.png"/><span>Violas</span></p>
+                                <p><img src="/img/BTC@2x.png"/><span>BTC</span></p>
+                                <div className="changeLogo" onClick={()=>this.getCoin()}><img src="/img/编组 2@2x.png"/></div>
                             </div>
+                            }
+                            
                             <div className="title">
                                 <span>转出数量</span>
                                 <span>收到数量</span>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Record extends Component {
+class Record1 extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,10 +15,7 @@ class Record extends Component {
             <div className="record">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push({
-                        pathname:'/home/wallet',
-                        state:false
-                    })
+                    this.props.history.push('/home/mine')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>交易记录</span>
                 </header>
@@ -45,4 +42,4 @@ class Record extends Component {
     }
 }
 
-export default Record;
+export default Record1;

@@ -30,7 +30,7 @@ class Mine extends Component {
                        <span className="line"></span>
                    </div>
                    <li onClick={()=>{
-                           this.props.history.push('/inviteFriends')
+                           this.props.history.push('/record1')
                        }}>
                        <span><img src="/img/形状 2@2x.png"/></span>
                        <p>转账记录</p>
@@ -51,6 +51,7 @@ class Mine extends Component {
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                  </ul>
+                 <div className="btn">退出登录</div>
               </section>
             </div>
         );

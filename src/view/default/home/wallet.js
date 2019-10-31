@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
+import { creat_account_mnemonic } from '../../../utils/test_kulap'
+let aes256 = require('aes256');
 
 @inject('index')
 @observer
@@ -17,8 +19,12 @@ class Wallet extends Component {
             this.setState({
               isShow: false
             })
-          })
+        })
+        let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
+        let arr = creat_account_mnemonic(decrypted.mne_arr)
+        console.log(arr,'.......')
     }
+
     getChange = (e) => {
         this.setState({
           isShow: !this.state.isShow

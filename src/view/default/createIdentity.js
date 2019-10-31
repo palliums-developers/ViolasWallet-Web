@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 
 import '../app.scss';
+let mnemonic_random = require("bip39");
 let aes256 = require('aes256');
 
 class CreateIdentity extends Component {
@@ -45,7 +46,10 @@ class CreateIdentity extends Component {
         password1:pass1,
         password2:pass2
       })))
-       this.props.history.push('/backup')
+      window.localStorage.setItem('mnes',aes256.encrypt('mnes',JSON.stringify({
+        mne_arr:mnemonic_random.generateMnemonic()
+      }))) 
+      this.props.history.push('/backup')
      }
   }
   render() { 

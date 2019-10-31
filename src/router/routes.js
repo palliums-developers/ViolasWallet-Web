@@ -26,6 +26,9 @@ import DetailWallet from "../view/default/home/detailWallet";
 import AddAddress from "../view/default/home/mine/addAddress";
 import Record from "../view/default/home/mine/record";
 import Transfar from "../view/default/home/mine/transfer";
+import ConfirmWords from "../view/default/backup/confirmWords";
+import Sweepcode1 from "../view/default/home/sweepCode1";
+import Record1 from "../view/default/home/mine/record1";
 
 const routes = [
     //首页
@@ -58,6 +61,11 @@ const routes = [
         path:'/codeBackup',
         component:CodeBackup
     },
+    //确认助记词
+    {
+        path:'/confirmWords',
+        component:ConfirmWords
+    },
     //钱包首页
     {  
         path:'/home',
@@ -86,6 +94,11 @@ const routes = [
         path:'/record',
         component:Record
     },
+    //转账记录
+    {
+        path:'/record1',
+        component:Record1
+    },
     //管理
     {
         path:'/manage',
@@ -100,6 +113,10 @@ const routes = [
     {
         path:'/sweepcode',
         component:Sweepcode
+    },
+    {
+        path:'/sweepcode1',
+        component:Sweepcode1
     },
     //转账
     {

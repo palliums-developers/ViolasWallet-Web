@@ -15,10 +15,7 @@ class DailyCash extends Component {
             <div className="dailyCash">
                 <header>
                     <span onClick={() => {
-                        this.props.history.push({
-                            pathname:'/home/wallet',
-                            state:false
-                        })
+                        this.props.history.push('/home/mine')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>钱包管理</span>
                     <span onClick={() => {

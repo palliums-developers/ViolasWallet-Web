@@ -1,11 +1,23 @@
 import React,{Component} from 'react';
 import '../default.scss';
+import { inject,observer } from 'mobx-react';
+let aes256 = require('aes256');
+
+@inject('index')
+@observer
 
 class CodeBackup extends Component {
   constructor(props) {
     super(props);
-    this.state = {  }
+    this.state = { 
+      mnes_arr:[]
+     }
   }
+  componentDidMount() {
+    let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
+    this.setState({ mnes_arr:decrypted.mne_arr.split(" ") });
+  }
+
   render() { 
     return ( 
       <div className="codeBackup">
@@ -19,18 +31,11 @@ class CodeBackup extends Component {
            <div className="backupPaper">
              <h4>请将这些词按顺序写在纸上</h4>
              <div className="words">
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
-              <p>Foot</p>
+               {
+                 this.state.mnes_arr && this.state.mnes_arr.map((v,i)=>{
+                    return <p key={i}>{v}</p>
+                 })
+               }
              </div>
              <div className="warning">
                <div className="warnLogo"><img src="/img/编组 4slice@2x.png"/></div>
@@ -40,7 +45,9 @@ class CodeBackup extends Component {
                  <p>造成资产损失</p>
                </div>
              </div>
-             <div className="btn">
+             <div className="btn" onClick={() => {
+              this.props.history.push('/confirmWords')
+              }}>
                下一步
              </div>
            </div>
