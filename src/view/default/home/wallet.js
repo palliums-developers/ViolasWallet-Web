@@ -10,29 +10,18 @@ class Wallet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShow: false,
-            wallets:['violas钱包','BTC钱包','libra钱包']
+            isShow: false
         }
     }
     componentDidMount(){
-        document.addEventListener('click',()=>{
-            this.setState({
-              isShow: false
-            })
-        })
+        console.log(this.props.index.autoAdd,'11111')
         let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
         let arr = creat_account_mnemonic(decrypted.mne_arr)
         console.log(arr,'.......')
     }
 
-    getChange = (e) => {
-        this.setState({
-          isShow: !this.state.isShow
-        })
-        e.nativeEvent.stopImmediatePropagation();
-      }
-    getCurIndex = (val, ind) => {
-        this.props.index.changePurse(val)
+    getChange = () => {
+        this.props.history.push('/walletSystem')
       }
     copyUrl2 = () =>{
         let text = document.getElementById("addressId");
@@ -50,23 +39,14 @@ class Wallet extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
       }
     render() {
-        let { wallets } = this.state;
         let { purse } = this.props.index
+        console.log(purse)
         return (
             <div className="wallet">
                 <header>
                     <div id="select">
-                        <div onClick={(e) => this.getChange(e)}><label>{purse}</label><img src="/img/路径 3@2x.png" /></div>
-                            {
-                                this.state.isShow ? <ul className="selectList">
-                                {
-                                    wallets && wallets.map((v, i) => {
-                                    return <li key={i} className={purse == v ? 'act' : ''} onClick={() => this.getCurIndex(v, i)}>{v}</li>
-                                    })
-                                }
-                            </ul> : null
-                            }
-                        </div>
+                        <div onClick={() => this.getChange()}><label>{purse}</label><img src="/img/路径 3@2x.png" /></div>
+                    </div>
                     <span onClick={() => {
                     this.props.history.push('/sweepcode')
                     }}><img src="/img/编组 3@2x.png"/></span>
@@ -137,7 +117,7 @@ class Wallet extends Component {
                         </div>
                         <div className="warnText">
                             <p>您的身份助记词未备份，请务必备份助记词</p>
-                            <p>助记词可用于恢复身份下钱包资产，防止忘记密码、应用删除、手机丢失等情况导致资产损失</p>
+                            <p>助记词可用于恢复身份下钱包资产，防止忘记密码、应用删r、手机丢失等情况导致资产损失</p>
                         </div>
                         <div className="btn">立即备份</div>
                     </div>

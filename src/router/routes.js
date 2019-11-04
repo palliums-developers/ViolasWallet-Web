@@ -29,6 +29,7 @@ import Transfar from "../view/default/home/mine/transfer";
 import ConfirmWords from "../view/default/backup/confirmWords";
 import Sweepcode1 from "../view/default/home/sweepCode1";
 import Record1 from "../view/default/home/mine/record1";
+import WalletSystem from "../view/default/home/walletSystem";
 
 const routes = [
     //首页
@@ -88,6 +89,11 @@ const routes = [
                 redirect:'/home/wallet'
             }
         ]
+    },
+    //选择钱包体系
+    {
+        path:'/walletSystem',
+        component:WalletSystem
     },
     //交易记录
     {

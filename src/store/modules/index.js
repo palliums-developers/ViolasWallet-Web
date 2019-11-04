@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-
+import { getCurUserInfo } from '../../api/server'
 export default class Count{ 
     @observable purse
     @observable mnes_string
@@ -20,8 +20,9 @@ export default class Count{
         console.log(mne)
     }
 
-    @action async autoAdd(type) {
-        // await this.changePurse(type);
-    }
+    // @action async autoAdd() {
+    //     let coins = await this.getCurUserInfo();
+    //     console.log(coins)
+    // }
 
 }   

@@ -16,7 +16,7 @@ class Transfar extends Component {
         }
     }
     componentDidMount(){
-
+       
     }
     log = (name) => {
         return (value) => {
@@ -29,9 +29,11 @@ class Transfar extends Component {
     }
     confirmTrans = () =>{
         let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
+        console.log(decrypted,'.......')
         let account = creat_account_mnemonic(decrypted.mne_arr)
-        // let balances = balance(get_address(account))
-        // console.log(balances,'.......')
+        console.log(account,'.......')
+        let balances = balance(get_address(account))
+        console.log(balances,'.......')
     }
     render() {
         let { purse } = this.props.index

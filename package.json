@@ -145,9 +145,11 @@
   "devDependencies": {
     "aes256": "^1.0.4",
     "antd-mobile": "^2.3.1",
+    "axios": "^0.19.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "bip39": "^3.0.2",
-    "kulap-libra": "^2.0.3",
+    "cors": "^2.8.5",
+    "kulap-libra": "^2.0.4",
     "lib-flexible": "^0.3.2",
     "mobx": "^5.14.2",
     "mobx-react": "^6.1.4",
