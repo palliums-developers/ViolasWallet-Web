@@ -193,7 +193,7 @@ export default {
     'simplified Chinese':'Simplified Chinese',
     'traditional Chinese':'traditional Chinese',
     'english':'English',
-    'language':'Language',
+    'multiLanguage':'multiLanguage',
     'Log out':'Log out',
     'Please re-login':'Please re-login',
     'How to register Sealpay account':'How to register Sealpay account',

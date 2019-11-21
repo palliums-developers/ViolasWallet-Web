@@ -7,6 +7,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+           isShow:false,
            routes:[
                {
                     to:'/home/wallet',
@@ -27,7 +28,9 @@ class Home extends Component {
         }
     }
     componentDidMount(){
-        
+        this.setState({
+            isShow:this.props.location.state
+        })
     }
     render() {
         let { routes } = this.props;

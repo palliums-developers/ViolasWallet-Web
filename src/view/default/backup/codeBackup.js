@@ -14,17 +14,22 @@ class CodeBackup extends Component {
      }
   }
   componentDidMount() {
-    let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
+    let decrypted = JSON.parse(window.localStorage.getItem('data'));
     this.setState({ mnes_arr:decrypted.mne_arr.split(" ") });
+  }
+  stateCode = () =>{
+    if(this.props.location.state.id == 0){
+      this.props.history.push('/backup')
+    }else if(this.props.location.state.id == 1){
+      this.props.history.push('/home/wallet')
+    }
   }
 
   render() { 
     return ( 
       <div className="codeBackup">
         <header>
-            <span onClick={() => {
-            this.props.history.push('/backup')
-            }}><img src="/img/Combined Shape 1@2x.png"/></span>
+            <span onClick={() => this.stateCode()}><img src="/img/Combined Shape 1@2x.png"/></span>
             <span>备份助记词</span>
         </header>
         <section>

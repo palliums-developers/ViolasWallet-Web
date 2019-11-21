@@ -30,6 +30,7 @@ import ConfirmWords from "../view/default/backup/confirmWords";
 import Sweepcode1 from "../view/default/home/sweepCode1";
 import Record1 from "../view/default/home/mine/record1";
 import WalletSystem from "../view/default/home/walletSystem";
+import stablecoin from "../view/default/home/mine/stablecoin";
 
 const routes = [
     //首页
@@ -138,6 +139,11 @@ const routes = [
     {
         path:'/addCurrency',
         component:AddCurrency
+    },
+    //稳定币转账
+    {
+        path:'/stablecoin',
+        component:stablecoin
     },
     //钱包管理
     {

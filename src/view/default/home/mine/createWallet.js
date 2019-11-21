@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader'
-// import '../default.scss';
+let bip39 = require("bip39");
 
 class CreateWallet extends Component {
     constructor(props) {
         super(props);
         this.state = {
           isShow:false,
-          wType:'violas'
+          wType:'violas',
+          name:'',
+          pass1:'',
+          pass2:'',
         }
     }
     componentDidMount(){
@@ -19,6 +22,66 @@ class CreateWallet extends Component {
         this.setState({
             isShow:type
         })
+    }
+
+    getValue = (e,type) =>{
+        if(type == 'name'){
+          this.setState({
+            name:e.target.value
+          })
+        }else if(type == 'pass1'){
+          this.setState({
+            pass1:e.target.value
+          })
+        }else if(type == 'pass2'){
+          this.setState({
+            pass2:e.target.value
+          })
+        }
+        
+      }
+    
+    createWallet = (type) =>{
+        let { name,pass1,pass2 } = this.state;
+        if(name == ''){
+        alert('请输入昵称！！！')
+        }else if(pass1 == ''){
+        alert('请设置钱包密码！！！')
+        }else if(pass2 == ''){
+        alert('再次确认密码！！！')
+        }else if(pass1.indexOf(pass2) == -1){
+        alert('两次输入密码不同！！！')
+        }else{
+           let extra_wallet = {}
+          if(type == 'violas'){
+            
+            extra_wallet = {
+                type:type,
+                name:name,
+                password:pass1,
+                mnemoic:bip39.generateMnemonic()
+            }
+          } else if(type == 'libra'){
+            extra_wallet = {
+                type:type,
+                name:name,
+                password:pass1,
+                mnemoic:bip39.generateMnemonic()
+            }
+          }else if(type == 'BTC'){
+            extra_wallet = {
+                type:type,
+                name:name,
+                password:pass1,
+                mnemoic:bip39.generateMnemonic()
+            }
+          }
+          let wallets = JSON.parse(window.localStorage.getItem('data'));
+          wallets.extra_wallet.push(extra_wallet)
+          window.localStorage.setItem('data',JSON.stringify(wallets))
+          this.props.history.push('/dailyCash');
+          
+        }
     }
     render() {
         return (
@@ -42,13 +105,15 @@ class CreateWallet extends Component {
                               }
                       </div>
                       <div className="form">
-                         <input type="text" placeholder="请输入昵称"/>
+                         <input type="text" placeholder="请输入昵称" onChange={(e)=>this.getValue(e,'name')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="设置钱包密码"/>
+                         <input type="password" placeholder="设置钱包密码" onChange={(e)=>this.getValue(e,'pass1')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="再次确认钱包密码"/>
+                         <input type="password" placeholder="再次确认钱包密码" onChange={(e)=>this.getValue(e,'pass2')}/>
                          <div className="line"></div>
-                         <div className="btn">创建</div>
+                         {
+                            this.state.wType == 'violas' ? <div className="btn" onClick={()=>this.createWallet('violas')}>创建</div> : this.state.wType == 'lib' ? <div className="btn" onClick={()=>this.createWallet('libra')}>创建</div> :  this.state.wType == 'btc' ? <div className="btn" onClick={()=>this.createWallet('BTC')}>创建</div> : null
+                         }
                       </div>
                    </div>
                 </section>

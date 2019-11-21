@@ -38,7 +38,12 @@ class Backup extends Component {
               </div>
             </div>
             <div className="btn" onClick={() => {
-                    this.props.history.push('/codeBackup')
+                    this.props.history.push({
+                      pathname:'/codeBackup',
+                      state:{
+                        id:0
+                      }
+                    })
             }}>开始备份</div>
         </section>
       </div>

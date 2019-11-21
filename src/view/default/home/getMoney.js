@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // import '../default.scss';
 import { inject,observer } from 'mobx-react';
+import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function'
+import vAccount from '../../../utils/violas'
 let QRCode = require('qrcode-react');
 @inject('index')
 @observer
@@ -9,24 +11,68 @@ class GetMoney extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            purseCoin:''
+            purseCoin:'',
+            curWal:[]
         }
     }
-    componentDidMount(){
-       console.log(this.props.index.purse)
-       if(this.props.index.purse == 'violas钱包'){
+    async componentDidMount(){
+        let decrypted =  JSON.parse(window.localStorage.getItem('data'));
+        let arr = creat_account_mnemonic(decrypted.mne_arr);
+        let balanceData;
+        if(window.localStorage.getItem('type') == 'Violas钱包'){
+            let violas = new vAccount(decrypted.mne_arr);
+            balanceData = await this.props.index.getBalance({
+                address:violas.address,
+                name:'violas'
+            })
             this.setState({
+                balancedata:balanceData,
                 purseCoin:'vtoken'
             })
-       }else if(this.props.index.purse == 'BTC钱包'){
-            this.setState({
-                purseCoin:'bitcoin'
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                if((v.name).indexOf(window.localStorage.getItem('type').slice(0,5))==0){
+                    return v.name;
+                }
             })
-       }else if(this.props.index.purse == 'libra钱包'){
+            this.setState({
+                curWal:wal[0]
+            })
+            
+        }else if(window.localStorage.getItem('type') == 'Libra钱包'){
+            let addressStr = get_address(arr);
+            balanceData = await this.props.index.getBalance({
+                address:addressStr,
+                name:'libra'
+            })
+            this.setState({
+                balancedata:balanceData,
+                purseCoin:'bitcoin',
+            })
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                if((v.name).indexOf(window.localStorage.getItem('type').slice(0,5))==0){
+                    return v.name;
+                }
+            })
+            this.setState({
+                curWal:wal[0]
+            })
+        }else if(window.localStorage.getItem('type') == 'BTC钱包'){
+            // balanceData = await this.props.index.getBalance({
+            //     address:addressStr,
+            //     name:'btc'
+            // })
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                if((v.name).indexOf(window.localStorage.getItem('type').slice(0,1))==0){
+                        return v.name;
+                    }
+                })
+            this.setState({
+                curWal:wal[0]
+            })
             this.setState({
                 purseCoin:'libra'
             })
-       }
+        }
     }
     copyUrl2 = () =>{
         let text = document.getElementById("addressId");
@@ -44,7 +90,7 @@ class GetMoney extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
       }
     render() {
-        let { purseCoin } = this.state;
+        let { purseCoin,balancedata } = this.state;
         return (
             <div className="getMoney">
                 <header>
@@ -60,12 +106,12 @@ class GetMoney extends Component {
                     <div className="box">
                         <h3>收款地址</h3>
                         <div className="code">
-                        <QRCode value={`${purseCoin}:1KZgtUrWZGuAmjRR8HEeuZtMGT3Wqutc1a`} size={164}  />
+                        <QRCode value={`${purseCoin}:${balancedata && balancedata.address}`} size={164}  />
                         </div>
                         <div className="wName">
-                            <label>xxx</label><span>Wallet</span>
+                            <label>{this.state.curWal.name}</label><span></span>
                         </div>
-                        <p id='addressId'>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
+                        <p id='addressId'>{balancedata && balancedata.address}</p>
                         <div className="btn" onClick={()=>this.copyUrl2()}>复制地址</div>
                     </div>
                 </section>

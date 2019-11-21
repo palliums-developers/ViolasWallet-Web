@@ -215,7 +215,7 @@ export default {
     'simplified Chinese':'简体中文',
     'traditional Chinese':'繁体中文',
     'english':'英文',
-    'language':'语言',
+    'multiLanguage':'多语言',
     'Log out':'退出',
     'Please re-login':'请重新登录',
     'How to register Sealpay account':'如何注册Sealpay',

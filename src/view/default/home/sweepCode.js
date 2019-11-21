@@ -6,12 +6,30 @@ class Sweepcode extends Component {
     constructor(props) {
         super(props);
         this.state = {
-      
+            file:false
         }
     }
+
     componentDidMount(){
        
     }
+
+    handleScan = data => {
+       console.log(data)
+    }
+
+    handleError = err => {
+        console.error(err)
+    }
+
+    openImageDialog = () =>{
+        this.setState({
+           file:true
+        },()=>{
+            this.refs.qrReader.openImageDialog();
+        }) 
+     }
+     
     render() {
         return (
             <div className="sweepcode">
@@ -23,6 +41,7 @@ class Sweepcode extends Component {
                     })
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>扫一扫</span>
+                     <button onClick={this.openImageDialog}>相册</button>
                 </header>
                 <section>
                     <div className="code">

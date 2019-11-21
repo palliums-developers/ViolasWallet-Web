@@ -1,21 +1,47 @@
 import React, { Component } from 'react';
 import 'antd-mobile/dist/antd-mobile.css';
-import { Modal, Button, WhiteSpace } from 'antd-mobile';
+import { Modal } from 'antd-mobile';
+import vAccount from '../../../utils/violas'
 const prompt = Modal.prompt;
 
 class Manage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           isShow:false
+           isShow:false,
+           address:'',
+           wallet:'',
+           curWal:[]
         }
     }
     componentDidMount(){
-       
+        let decrypted =  JSON.parse(window.localStorage.getItem('data'));
+        let violas = new vAccount(decrypted.mne_arr);
+        this.setState({
+            address:violas.address
+        })
+        if(window.localStorage.getItem('type') == 'BTC钱包'){
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                    if((v.name).indexOf(window.localStorage.getItem('type').slice(0,1))==0){
+                            return v.name;
+                        }
+                    })
+                this.setState({
+                    curWal:wal[0]
+                })
+        }else {
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                    if((v.name).indexOf(window.localStorage.getItem('type').slice(0,5))==0){
+                        return v.name;
+                    }
+                })
+            this.setState({
+                curWal:wal[0]
+            })
+    }
     }
     
     render() {
-        
         return (
             <div className="manage">
                 <header>
@@ -27,11 +53,14 @@ class Manage extends Component {
                 <section>
                    <div className="lists">
                        <div className="list" onClick={() => {
-                            this.props.history.push('/detailWallet')
+                            this.props.history.push({
+                                pathname:'/detailWallet',
+                                state:this.state.curWal && this.state.curWal
+                            })
                             }}>
                            <div className="listContent">
-                               <h4>Libra-wallet1</h4>
-                               <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
+                               <h4>{this.state.curWal.name}</h4>
+                               <p>{this.state.address}</p>
                            </div>
                            <div className="rightLogo"><img src="/img/路径复制 10@2x.png"/></div>
                        </div>

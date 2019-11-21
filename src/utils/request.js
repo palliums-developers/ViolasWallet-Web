@@ -5,7 +5,7 @@ const service = axios.create({
 
   // baseURL: 'http://47.106.208.207:4000/api',
   // withCredentials: true, // 跨域请求时发送 cookies
-  // headers:{"Content-Type":"application/json"},
+  headers:{"Content-Type":"application/json"},
   timeout: 5000 // request timeout
 })
 
@@ -39,11 +39,7 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
-    const res = response.data
-    if (res.code == 1){
-      return res;
-    }
-
+    return response
     // if (res.code !== 20000) {
     //   Message({
     //     message: res.msg || 'error',

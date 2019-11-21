@@ -1,6 +1,117 @@
 import request from '../utils/request'
-let url = 'http://47.106.208.207:4000/api'
+let url = 'http://52.27.228.84:4000'
+let url1 = 'https://tchain.api.btc.com/v3/'
 
-export let getCurUserInfo = () => {
-    return request.get(url+'/1.0/wallet/currency');
+//新用户创建提交信息
+export let createUserInfo = (params) =>{
+    return request({
+        url: url+'/1.0/wallet',
+        method: 'post',
+        params: params
+    });
+}
+//修改钱包名
+// export let updateWallet = (params) =>{
+//     return request({
+//         url: url+'/1.0/wallet/name',
+//         method: 'put',
+//         params: params
+//     });
+// }
+
+//获取余额信息
+export let getCurBalance = (params) =>{
+    if(params.name == 'violas'){
+        return request({
+            url: url+'/1.0/'+params.name+'/balance?addr='+params.address,
+            method: 'get',
+        });
+    }else if(params.name == 'libra'){
+        return request({
+            url: url+'/1.0/'+params.name+'/balance?addr='+params.address,
+            method: 'get',
+        });
+    }else if(params.name == 'BTC'){
+        return request({
+            url: url1+'address/'+params.address,
+            method: 'get',
+        });
+    }
+    
+}
+//发起violas转账
+export let startCurVTranfer = (params) =>{
+    return request({
+        url: url+'/1.0/violas/transaction',
+        method: 'post',
+        params:params
+    });
+}
+//发起libra转账
+export let startCurLTranfer = (params) =>{
+    return request({
+        url: url+'/1.0/libra/transaction',
+        method: 'post',
+        params:params
+    });
+}
+//获取violas币种信息
+export let getCurCoinMess = () =>{
+    return request({
+        url: url+'/1.0/violas/currency',
+        method: 'get',
+    });
+}
+//添加币种
+export let curAddCurrency = () =>{
+    return request({
+        url: url+'/1.0/wallet/currency',
+        method: 'put',
+    });
+}
+
+//获取libra交易记录
+export let getLibraDealRecord = (params) =>{
+    console.log(params,'..........')
+    return request({
+        url: url+'/1.0/libra/transaction?addr='+params.addr+'&limit='+params.limit+'&offset='+params.offset,
+        method: 'get',
+    });
+}
+
+//获取violas交易记录
+export let getViolasDealRecord = (params) =>{
+    return request({
+        url: url+'/1.0/violas/transaction?addr='+params.addr+'&limit='+params.limit+'&offset='+params.offset,
+        method: 'get',
+    });
+}
+//获取btc交易记录
+export let getBTCDealRecord = (params) =>{
+    return request({
+        url:url1+'address/'+params.address+'/',
+        method: 'get',
+    });
+}
+//获取地址簿
+export let getCurUserInfo = () =>{
+    return request({
+        url: url+'/1.0/contacts',
+        method: 'get'
+    });
+}
+//添加地址信息
+export let addressMessage = (params) =>{
+    return request({
+        url: url+'/1.0/contacts',
+        method: 'post',
+        params:params
+    });
+}
+//检测稳定币状态
+export let checkNewCoin = (params) =>{
+    // return request({
+    //     url: url+'/1.0/violas/module?addr='+params.addr+'&modu='+params.modu,
+    //     method: 'get'
+    // });
 }

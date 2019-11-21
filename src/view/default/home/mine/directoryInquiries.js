@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
+import { inject,observer } from 'mobx-react';
+
+@inject('index')
+@observer
 
 class DirectoryInquiries extends Component {
     constructor(props) {
         super(props);
         this.state = {
-      
+           addresses:[]
         }
     }
-    componentDidMount(){
-       
+    async componentDidMount(){
+        let data = await this.props.index.autoAddress();
+        this.setState({
+            addresses:data
+        })
     }
     render() {
         return (
@@ -24,18 +31,14 @@ class DirectoryInquiries extends Component {
                 </header>
                 <section>
                     <div className="addressList">
-                        <div className="list">
-                           <label>Rxx</label>
-                           <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
-                        </div>  
-                        <div className="list">
-                           <label>Rxx</label>
-                           <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
-                        </div>  
-                        <div className="list">
-                           <label>Rxx</label>
-                           <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
-                        </div>  
+                        {
+                            JSON.parse(window.localStorage.getItem('data')).address_book && JSON.parse(window.localStorage.getItem('data')).address_book.map((v,i)=>{
+                               return <div className="list" key={i}>
+                               <label>{v.name}</label>
+                               <p>{v.address}</p>
+                            </div>  
+                            })
+                        }
                     </div>
                 </section>
             </div>

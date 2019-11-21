@@ -1,8 +1,12 @@
 import React,{Component} from 'react';
-
+import { inject,observer } from 'mobx-react';
 import '../app.scss';
 let mnemonic_random = require("bip39");
 let aes256 = require('aes256');
+
+
+@inject('index')
+@observer
 
 class CreateIdentity extends Component {
   constructor(props) {
@@ -30,7 +34,7 @@ class CreateIdentity extends Component {
     }
     
   }
-  createFun = () =>{
+  createFun = async() =>{
      let { name,pass1,pass2 } = this.state;
      if(name == ''){
        alert('请输入昵称！！！')
@@ -41,14 +45,18 @@ class CreateIdentity extends Component {
      }else if(pass1.indexOf(pass2) == -1){
        alert('两次输入密码不同！！！')
      }else{
-       window.localStorage.setItem('userInfo',aes256.encrypt('userInfo',JSON.stringify({
+       window.localStorage.setItem('data',JSON.stringify({
         name:name,
         password1:pass1,
-        password2:pass2
-      })))
-      window.localStorage.setItem('mnes',aes256.encrypt('mnes',JSON.stringify({
-        mne_arr:mnemonic_random.generateMnemonic()
-      }))) 
+        mne_arr:'display paddle crush crowd often friend topple agent entry use host begin',
+        wallet_name:[
+          {name:'Violas-Wallet',type:'violas'},{name:'Bitcoin',type:'BTC'},{name:'Libra-Wallet',type:'libra'}
+        ],
+        extra_wallet:[],
+        address_book:[],
+        backup:true
+      }))
+      window.localStorage.setItem('type','Violas钱包');
       this.props.history.push('/backup')
      }
   }

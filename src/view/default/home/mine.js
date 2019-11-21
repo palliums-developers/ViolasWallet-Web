@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-// import '../default.scss';
+// import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function'
+let aes256 = require('aes256');
 
 class Mine extends Component {
     constructor(props) {
@@ -8,8 +9,32 @@ class Mine extends Component {
         }
     }
     componentDidMount(){
-       
     }
+    saveJson = async() => {
+        let userInfo = JSON.parse(window.localStorage.getItem('data'));
+        
+        let data = {
+            name: userInfo.name,
+            password:userInfo.password1,
+            mne_arr:userInfo.mne_arr,
+            wallet_name:[
+              {name:'Violas-Wallet'},{name:'Bitcoin'},{name:'Libra-Wallet'}
+            ],
+            extra_wallet:[],
+            address_book:[],
+            backup:true
+        }
+
+        var jsonData = aes256.encrypt(userInfo.password1,JSON.stringify(data));
+        var a = document.createElement("a");
+        var file = new Blob([jsonData], { type: 'text/plain' });
+        a.href = URL.createObjectURL(file);
+        a.download = userInfo.name+'.json';
+        a.click();
+        await window.localStorage.clear();
+        await this.props.history.push('/app')
+    }
+   
     render() {
         return (
             <div className="mine">
@@ -26,16 +51,16 @@ class Mine extends Component {
                        <p>钱包管理</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
-                   <div className="lines">
+                   {/* <div className="lines">
                        <span className="line"></span>
-                   </div>
-                   <li onClick={()=>{
+                   </div> */}
+                   {/* <li onClick={()=>{
                            this.props.history.push('/record1')
                        }}>
                        <span><img src="/img/形状 2@2x.png"/></span>
                        <p>转账记录</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
-                   </li>
+                   </li> */}
                    <li onClick={()=>{
                            this.props.history.push('/directoryInquiries')
                        }}>
@@ -51,7 +76,8 @@ class Mine extends Component {
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                  </ul>
-                 <div className="btn">退出登录</div>
+                 <div className="btn" onClick={()=>this.saveJson()}>退出登录</div>
+                 
               </section>
             </div>
         );

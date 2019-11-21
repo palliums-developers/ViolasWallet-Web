@@ -19,12 +19,13 @@ class ConfirmWords extends Component {
         }
     }
     componentDidMount() {
-        let decrypted = JSON.parse(aes256.decrypt('mnes', window.localStorage.getItem('mnes')));
+        let decrypted = JSON.parse( window.localStorage.getItem('data'));
         console.log(decrypted)
         this.setState({ mnes_arr: decrypted.mne_arr.split(" ") });
         let mne_arr_json = this.get_mne_json(decrypted.mne_arr);
         this.random_arr(mne_arr_json);
         this.init_click_block_arr();
+        
     }
 
     get_mne_json(mne_string_temp) {
@@ -136,6 +137,16 @@ class ConfirmWords extends Component {
             console.log('error ')
         }
       }
+    finish = () =>{
+      console.log(this.state.mnes_empty)
+      if(this.state.mnes_empty.length == 12 && this.state.mnes_empty.length != '' ){
+        let data = JSON.parse(window.localStorage.getItem('data'));
+        data.backup = false;
+        window.localStorage.setItem('data',JSON.stringify(data))
+        this.props.history.push('/home')
+      }
+      
+    }
     render() {
         return (
             <div className="confirmWords">
@@ -171,7 +182,7 @@ class ConfirmWords extends Component {
                         })
                         }
                         </div>
-                        <div className="btn">完成</div>
+                        <div className="btn" onClick={()=>this.finish()}>完成</div>
                     </div>
                 </section>
             </div>
