@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import RouterView from '../../router/routerView'
-import { NavLink } from 'react-router-dom'
+import RouterView from '../../router/routerView';
+import { NavLink } from 'react-router-dom';
+import { inject,observer } from 'mobx-react';
 import './default.scss';
+
+@inject('dealIndex')
+@observer
 
 class Home extends Component {
     constructor(props) {
@@ -24,6 +28,24 @@ class Home extends Component {
                     name:'我的',
                     activeName:'active'
                }
+           ],
+           ind:-1,
+           list:[
+               {
+                name:'AAAUSD'
+               },
+               {
+                name:'BBBUSD'
+               },
+               {
+                name:'CCCUSD'
+               },
+               {
+                name:'DDDUSD'
+               },
+               {
+                name:'EEEUSD'
+               }
            ]
         }
     }
@@ -31,6 +53,13 @@ class Home extends Component {
         this.setState({
             isShow:this.props.location.state
         })
+        
+    }
+    handleMouseUp = (i) => {
+        this.setState({
+            ind:i
+        })
+        this.props.dealIndex.selectChange(false)
     }
     render() {
         let { routes } = this.props;
@@ -61,6 +90,21 @@ class Home extends Component {
                             })
                         }
                 </footer>
+                {
+                    this.props.dealIndex.isShow ? <div className="selectListDialog animated bounceInUp">
+                                                    <div className="selectLists">
+                                                        {
+                                                            this.state.list.map((v,i)=>{
+                                                                return  <div key={i} className="selectList" onClick={()=>this.handleMouseUp(i)}>
+                                                                         <label>{v.name}</label>
+                                                                         <span className={this.state.ind == i ? 'light' : 'dark'}></span>
+                                                                        </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div> : null
+                }
+                
             </div>
         );
     }

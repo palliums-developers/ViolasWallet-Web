@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
-import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function';
 import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 let aes256 = require('aes256');
@@ -14,16 +13,17 @@ class Wallet extends Component {
         this.state = {
             isShow: false,
             balancedata:[],
-            curWal:[]
+            curWal:[],
+            dealdata:{},
+            coindata:[]
         }
     }
     async componentDidMount(){
-        let { purse } = this.props.index
         let decrypted =  JSON.parse(window.localStorage.getItem('data'));
-        let arr = creat_account_mnemonic(decrypted.mne_arr);
         let balanceData;
         if(window.localStorage.getItem('type') == 'Violas钱包'){
             let violas = new vAccount(decrypted.mne_arr);
+            let coinData = await this.props.index.getCoinMess();
             balanceData = await this.props.index.getBalance({
                 address:violas.address,
                 name:'violas'
@@ -37,37 +37,56 @@ class Wallet extends Component {
                 modu:'05599ef248e215849cc599f563b4883fc8aff31f1e43dff1e3ebe4de1370e054'
             })
             
+            coinData.map(async (v, i) => {
+                let data = await this.props.index.checkCurNewCoin({
+                    addr:violas.address,
+                    modu:v.address
+                })
+                
+                if(Number(data[0].slice(0,5))>=0){
+                let dealData = await this.props.index.getBalance({
+                    address:violas.address,
+                    name:'violas',
+                    modu:v.address
+                })
+                this.setState({
+                    dealdata:dealData,
+                    coindata:coinData
+                })
+                }
+            })
+            
         }else if(window.localStorage.getItem('type') == 'Libra钱包'){
-            let addressStr = get_address(arr);
+            let libra = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
-                address:addressStr,
+                address:libra.address,
                 name:'libra'
+            })
+            this.setState({
+                balancedata:balanceData,
+                curWal:JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name
+            })
+        }else if(window.localStorage.getItem('type') == 'BTC钱包'){
+            let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+            balanceData = await this.props.index.getBTCBalance({
+                address:btc.address,
+                name:'BTC'
             })
             this.setState({
                 balancedata:balanceData,
                 curWal:JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
-        }else if(window.localStorage.getItem('type') == 'BTC钱包'){
-            let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
-            console.log(btc.address)
-            balanceData = await this.props.index.getBalance({
-                address:btc.address,
-                name:'BTC'
-            })
-            
-            this.setState({
-                curWal:JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name
-            })
         }
         
         
     }
-    getData = () =>{
-        
-    }
     getChange = () => {
         this.props.history.push('/walletSystem')
-      }
+    }
+    getBTCAddress(){
+        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        return btc.address
+    }
     copyUrl2 = () =>{
         let text = document.getElementById("addressId");
         if (document.body.createTextRange) {
@@ -84,8 +103,7 @@ class Wallet extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
       }
     render() {
-        let { purse } = this.props.index
-        let { balancedata,curWal } = this.state
+        let { balancedata,curWal,dealdata,coindata } = this.state;
         return (
             <div className="wallet">
                 <header>
@@ -113,7 +131,7 @@ class Wallet extends Component {
                             </div>
                             <div className="userDescr">
                                 <span>{curWal}</span>
-                                <span id='addressId'>{balancedata.address}</span>
+                                <span id='addressId'>{balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
                                 <span onClick={()=>this.copyUrl2()}><img src="/img/Fill 3@2x.png"/></span>
                             </div>
                            
@@ -152,12 +170,17 @@ class Wallet extends Component {
                                }
                                {
                                     window.localStorage.getItem('type') == 'Violas钱包' ? <div className="mList">
-                                            <p onClick={()=>{
+                                        {
+                                          coindata && coindata.map((v,i)=>{
+                                            return <p key={i} onClick={()=>{
                                                 this.props.history.push('/stablecoin')
-                                            }}><label>Vcoin</label><span>0.102</span></p>
-                                            {/* <p><label>Zcoin</label><span>1</span></p>
-                                            <p><label>Ycoin</label><span>1</span></p>
-                                            <p><label>Lcoin</label><span>1</span></p> */}
+                                                window.localStorage.setItem('coinType',JSON.stringify({
+                                                    name:v.name,
+                                                    balance:dealdata.modules[0].balance
+                                                }))
+                                            }}><label>{v.name}</label><span>{dealdata.modules[0].balance}</span></p>
+                                           }) 
+                                        }
                                         </div> : null
                                }
                               

@@ -31,6 +31,10 @@ import Sweepcode1 from "../view/default/home/sweepCode1";
 import Record1 from "../view/default/home/mine/record1";
 import WalletSystem from "../view/default/home/walletSystem";
 import stablecoin from "../view/default/home/mine/stablecoin";
+import Transfar1 from "../view/default/home/mine/tranfer1";
+import GetMoney1 from "../view/default/home/getMoney1";
+import OrderForm from "../view/default/home/market/orderForm";
+import OrderDetail from "../view/default/home/market/orderDetail";
 
 const routes = [
     //首页
@@ -91,6 +95,16 @@ const routes = [
             }
         ]
     },
+    //订单
+    {
+        path:'/orderForm',
+        component:OrderForm
+    },
+    //订单详情
+    {
+        path:'/orderDetail',
+        component:OrderDetail
+    },
     //选择钱包体系
     {
         path:'/walletSystem',
@@ -130,10 +144,18 @@ const routes = [
         path:'/transfar',
         component:Transfar
     },
+    {
+        path:'/transfar1',
+        component:Transfar1
+    },
     //收款
     {
         path:'/getMoney',
         component:GetMoney
+    },
+    {
+        path:'/getMoney1',
+        component:GetMoney1
     },
     //添加币种
     {

@@ -52,14 +52,18 @@ class WalletSystem extends Component {
              })
         // let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
         // console.log(btc.address)
-        }
+     }
     getVioAddress(){
         let violas = new vAccount(decrypted.mne_arr);
         return violas.address;
     }
     getBTCAddress(){
-        let btc = new Account(decrypted.mne_arr);
+        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
         return btc.address;
+    }
+    getBTCAddressData(){
+        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        return btc.address
     }
     getWallets = (type) =>{
         if(type){
@@ -116,9 +120,7 @@ class WalletSystem extends Component {
       }
     }
     render() {
-        let { purse } = this.props.index
         let { balancedata1,balancedata2 } = this.state;
-        console.log(window.localStorage.getItem('data').extra_wallet)
         return (
             <div className="walletSystem">
                 <header>
@@ -145,7 +147,7 @@ class WalletSystem extends Component {
                                        <label>{v.name}</label>
                                        <span className={this.state.types==v.type?'act':''}></span>
                                    </div>
-                                   <p>{v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address :v.type == 'BTC' ? balancedata2.address :null }</p>
+                                   <p>{v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address :v.type == 'BTC' ? this.getBTCAddressData() :null }</p>
                                 </div>
                            })
                        }

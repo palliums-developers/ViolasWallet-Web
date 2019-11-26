@@ -24,37 +24,40 @@ class AddCurrency extends Component {
         let coinData = await this.props.index.getCoinMess();
         console.log(coinData)
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        let violas = new vAccount(this.state.mne);
-        coinData.map(async (v, i) => {
-            // console.log(v,'vvvvv')
+        let violas = new vAccount(decrypted.mne_arr);
+        let newData = coinData.map( (v, i) => {
+
             if (v.checked) {
                 return v;
             } else {
                 return Object.assign(v, { checked: false })
             }
+
         })
-        // console.log(data)
-        // await this.props.index.checkCurNewCoin({
-        //     addr:violas.address,
-        //     modu:v.address
-        // }) 
+        
+        newData.map(async (v, i) => {
+            let data = await this.props.index.checkCurNewCoin({
+                addr:violas.address,
+                modu:v.address
+            })
+             if(Number(data[0].slice(0,5))>=0){
+               return v.checked = true;
+             }else{
+               return v.checked = false;
+             }
+        })
+        console.log(newData)
         this.setState({
-            coindata: coinData,
+            coindata: newData,
             mne: decrypted.mne_arr
         })
     }
-    onClick = () => {
-
-    }
-    onChange = async (i, name) => {
+    onChange = (i, name) => {
         this.setState({
             isShow: true,
             ind: i,
             name: name
         })
-
-
-
     }
     getValue = (e) => {
         this.setState({
@@ -62,23 +65,27 @@ class AddCurrency extends Component {
         })
     }
     confirm = async () => {
-        if (this.state.value = '') {
+        if (this.state.value == '') {
             alert('请输入密码！！！')
-        } else {
+        }else if(this.state.value != JSON.parse(window.localStorage.getItem('data')).password1){
+            alert('密码不匹配，请重新输入！！！')
+        } else{
             this.setState({
                 isShow: false
             })
             this.state.coindata[this.state.ind].checked = true;
+            let violas = new vAccount(this.state.mne);
+            let arr = await violas.publish(this.state.name);
+            console.log(arr, 'arr')
+            this.props.index.starVTranfer({
+                signedtxn: arr
+            })
         }
-        let violas = new vAccount(this.state.mne);
-        let arr = await violas.publish(this.state.name);
-        console.log(arr, 'arr')
-        this.props.index.starVTranfer({
-            signedtxn: arr
-        })
+        
     }
     render() {
-        let { coindata, switchs } = this.state;
+        let { coindata } = this.state;
+        console.log(coindata)
         return (
             <div className="addCurrency">
                 <header>
@@ -105,7 +112,7 @@ class AddCurrency extends Component {
                                     <div className="logo"><img src="/img/BTC@2x.png" /></div>
                                     <div className="coinDescr">
                                         <h4>{v.name}</h4>
-                                        <p>{v.description}</p>
+                            <p>{v.description}{v.checked.toString()}</p>
                                     </div>
                                     <div className="switch">
                                         {

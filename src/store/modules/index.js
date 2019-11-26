@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { checkNewCoin,startCurLTranfer,startCurVTranfer,getCurUserInfo,createUserInfo,getCurBalance,getCurCoinMess,getLibraDealRecord,addressMessage,getViolasDealRecord } from '../../api/server'
+import { getBTCDealRecord,checkNewCoin,startCurLTranfer,getCurUserInfo,createUserInfo,getCurBalance,getCurCoinMess,getLibraDealRecord,addressMessage,getViolasDealRecord } from '../../api/server'
 import axios from 'axios';
 export default class Index{ 
     @observable purse
@@ -39,22 +39,26 @@ export default class Index{
         let balance = await getCurBalance(params);
         return balance.data.data;
     }
+    //获取BTC余额信息
+    @action async getBTCBalance(params) {
+        let balance = await getCurBalance(params);
+        return balance.data;
+    }
     //获取币种信息
     @action async getCoinMess() {
         let coins = await getCurCoinMess();
         return coins.data.data;
     }
-    //发起violas转账
+    //发起转账
     @action async starVTranfer(params) {
-        let violasTranfer = await startCurVTranfer(params);
-        console.log(violasTranfer)
-        // return coins.data.data;
-    }
-    //发起libra转账startCurLTranfer
-    @action async starLTranfer(params) {
-        let libraTranfer = await startCurLTranfer(params);
-        console.log(libraTranfer)
-        // return coins.data.data;
+        let data = await axios.post('http://52.27.228.84:4000/1.0/'+params.name+'/transaction',{
+            signedtxn:params.signedtxn
+        },{
+            'Headers': 'Content-Type:application/json'
+        }).then(res=>{
+            return res.data
+        });
+        return data;
     }
     //获取libra交易记录
     @action async getLibDealRecord(params) {
@@ -70,10 +74,16 @@ export default class Index{
         return records.data.data;
         
     }
+    //获取BTC交易记录
+    @action async getBTCDealRecords(params) {
+        let records = await getBTCDealRecord(params);
+        return records.data;
+        
+    }
     //检测稳定币状态
     @action async checkCurNewCoin(params) {
         let coins = await checkNewCoin(params);
-        console.log(coins)
+        return coins.data.data;
         
     }
     //地址簿

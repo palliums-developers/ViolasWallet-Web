@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import 'antd-mobile/dist/antd-mobile.css';
 import { Slider, WingBlank } from 'antd-mobile';
-import { creat_account_mnemonic, balance, get_address, transfer } from '../../../../utils/kulap-function'
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
-
+import axios from 'axios';
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
+let fee = 1;
 @inject('index')
 @observer
 
@@ -37,7 +39,6 @@ class Transfar extends Component {
             }
         }
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        let arr = creat_account_mnemonic(decrypted.mne_arr);
         let balanceData;
         if (window.localStorage.getItem('type') == 'Violas钱包') {
             let violas = new vAccount(decrypted.mne_arr);
@@ -50,9 +51,9 @@ class Transfar extends Component {
             })
 
         } else if (window.localStorage.getItem('type') == 'Libra钱包') {
-            let addressStr = get_address(arr);
+            let libra = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
-                address: addressStr,
+                address: libra.address,
                 name: 'libra'
             })
             this.setState({
@@ -60,10 +61,12 @@ class Transfar extends Component {
             })
         } else if (window.localStorage.getItem('type') == 'BTC钱包') {
             let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
-            console.log(btc.address)
-            balanceData = await this.props.index.getBalance({
+            balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
                 name: 'BTC'
+            })
+            this.setState({
+                balancedata: balanceData
             })
         }
     }
@@ -116,23 +119,39 @@ class Transfar extends Component {
     confirmTrans = async (type) => {
         let { violasAmount, libraAmount, btcAmount, address1, address2, address3 } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        let account = creat_account_mnemonic(decrypted.mne_arr);
         let transFar;
         if (type == 'violas') {
             let violas = new vAccount(decrypted.mne_arr);
             transFar = await violas.transaction(address1, violasAmount, 'violas')
-            console.log(transFar, '111')
-            await this.props.index.starVTranfer({
-                signedtxn: transFar
+            let data = await this.props.index.starVTranfer({
+                signedtxn: transFar,
+                name:type
             })
+            if(data.message == 'ok'){
+               alert('转账成功！！！');
+               this.props.history.push('/home');
+            }else{
+                alert('转账失败！！！');
+            }
         } else if (type == 'libra') {
-
-            transFar = transfer(account, libraAmount, address2)
-            console.log(transFar, '22')
+            let libra = new vAccount(decrypted.mne_arr);
+            transFar = await libra.transaction_libra(address2, libraAmount);
+            let data = await this.props.index.starVTranfer({
+                signedtxn: transFar,
+                name:type
+            })
+            if(data.message == 'ok'){
+                alert('转账成功！！！');
+                this.props.history.push('/home');
+            }else{
+                alert('转账失败！！！');
+            }
+            
         } else if (type == 'BTC') {
-            transFar = transfer(account, btcAmount, address3)
+            let account = new Account(decrypted.mne_arr, testnet);
+            transFar = await account.transaction( address3,btcAmount,fee)
+            console.log(transFar)
         }
-        // console.log(transFar)
     }
 
     render() {
@@ -157,7 +176,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>Vtoken</span>
-                                    <span>余额：<s>{balancedata.balance}</s>Vtoken</span>
+                                    <span>余额：<s>{balancedata.balance}</s> Vtoken</span>
                                 </div>
                                 <input type="text" placeholder="输入金额" onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
@@ -199,7 +218,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>BTC</span>
-                                    <span>余额：<s>{balancedata.balance}</s>BTC</span>
+                                    <span>余额：<s>{balancedata.balance}</s> BTC</span>
                                 </div>
                                 <input type="text" placeholder="输入金额" onChange={(e) => this.getBtcAm(e, 'amount')} />
                                 <div className="title">
@@ -241,7 +260,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>Lib</span>
-                                    <span>余额：<s>{balancedata.balance}</s>Lib</span>
+                                    <span>余额：<s>{balancedata.balance}</s> Lib</span>
                                 </div>
                                 <input type="text" placeholder="输入金额" onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">

@@ -6,6 +6,7 @@ import "lib-flexible"
 // import 'antd-mobile/dist/antd-mobile.css';
 import { Provider } from 'mobx-react';
 import Store from './store';
+import "animate.css";
 
 import intl from 'react-intl-universal'
 import EN from './locales/index-en'
