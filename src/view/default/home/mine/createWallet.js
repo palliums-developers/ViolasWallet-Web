@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader'
+import intl from 'react-intl-universal';
 let bip39 = require("bip39");
 
 class CreateWallet extends Component {
@@ -12,6 +13,9 @@ class CreateWallet extends Component {
           pass1:'',
           pass2:'',
         }
+    }
+    componentWillMount(){
+      intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
         this.setState({
@@ -44,13 +48,13 @@ class CreateWallet extends Component {
     createWallet = (type) =>{
         let { name,pass1,pass2 } = this.state;
         if(name == ''){
-        alert('请输入昵称！！！')
+        alert(intl.get('Please input nickname')+'!!!')
         }else if(pass1 == ''){
-        alert('请设置钱包密码！！！')
+        alert(intl.get('Please set Wallet Access Code')+'!!!')
         }else if(pass2 == ''){
-        alert('再次确认密码！！！')
+        alert(intl.get('Confirm Access Code')+'!!!')
         }else if(pass1.indexOf(pass2) == -1){
-        alert('两次输入密码不同！！！')
+          alert(intl.get('The passwords are different')+'!!!')
         }else{
            let extra_wallet = {}
           if(type == 'violas'){
@@ -101,18 +105,18 @@ class CreateWallet extends Component {
                               }
                             </div>
                               {
-                                this.state.wType == 'violas' ? <h4>创建Vcoin钱包</h4> : this.state.wType == 'lib' ? <h4>创建Libone钱包</h4> :  this.state.wType == 'btc' ? <h4>创建Bitcoin钱包</h4> : null
+                                this.state.wType == 'violas' ? <h4>{intl.get('Create VcoinWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Create LiboneWallet')}</h4> :  this.state.wType == 'btc' ? <h4>{intl.get('Create BitcoinWallet')}</h4> : null
                               }
                       </div>
                       <div className="form">
-                         <input type="text" placeholder="请输入昵称" onChange={(e)=>this.getValue(e,'name')}/>
+                         <input type="text" placeholder={intl.get('Input Nickname')} onChange={(e)=>this.getValue(e,'name')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="设置钱包密码" onChange={(e)=>this.getValue(e,'pass1')}/>
+                         <input type="password" placeholder={intl.get('Set Wallet Access Code')} onChange={(e)=>this.getValue(e,'pass1')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="再次确认钱包密码" onChange={(e)=>this.getValue(e,'pass2')}/>
+                         <input type="password" placeholder={intl.get('Confirm Wallet Access Code')} onChange={(e)=>this.getValue(e,'pass2')}/>
                          <div className="line"></div>
                          {
-                            this.state.wType == 'violas' ? <div className="btn" onClick={()=>this.createWallet('violas')}>创建</div> : this.state.wType == 'lib' ? <div className="btn" onClick={()=>this.createWallet('libra')}>创建</div> :  this.state.wType == 'btc' ? <div className="btn" onClick={()=>this.createWallet('BTC')}>创建</div> : null
+                            this.state.wType == 'violas' ? <div className="btn" onClick={()=>this.createWallet('violas')}>{intl.get('Create')}</div> : this.state.wType == 'lib' ? <div className="btn" onClick={()=>this.createWallet('libra')}>{intl.get('Create')}</div> :  this.state.wType == 'btc' ? <div className="btn" onClick={()=>this.createWallet('BTC')}>{intl.get('Create')}</div> : null
                          }
                       </div>
                    </div>

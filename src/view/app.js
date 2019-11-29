@@ -1,12 +1,18 @@
 import React,{Component} from 'react';
 import './app.scss';
 import { inject,observer } from 'mobx-react'
-
+import intl from 'react-intl-universal'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {  }
+  }
+  componentDidMount(){
+    const lang = intl.options.currentLocale
+    intl.options.currentLocale = lang =='zh'?'CN':'EN';
+    let lang2=intl.options.currentLocale;
+    localStorage.setItem('local',lang2);
   }
   render() { 
     return ( 

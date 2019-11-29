@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader'
+import intl from 'react-intl-universal';
 // import '../default.scss';
 
 class AddPurse extends Component {
@@ -9,6 +10,9 @@ class AddPurse extends Component {
           isShow:false,
           wType:null
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
        
@@ -27,7 +31,7 @@ class AddPurse extends Component {
                     <span onClick={() => {
                     this.props.history.push('/dailyCash')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>添加钱包</span>
+                    <span>{intl.get('Add Wallet')}</span>
                 </header>
                 <section>
                     <div className="lists">
@@ -64,7 +68,7 @@ class AddPurse extends Component {
                                     options:wType
                                 }
                             })
-                         }}><span><img src="/img/chuangjianv@2x.png"/></span><label>创建</label></p>
+                         }}><span><img src="/img/chuangjianv@2x.png"/></span><label>{intl.get('Create')}</label></p>
                          <div className="line"></div>
                          <p onClick={() => {
                             this.props.history.push({
@@ -73,9 +77,9 @@ class AddPurse extends Component {
                                     options:wType
                                 }
                             })
-                            }}><span><img src="/img/daoru@2x.png"/></span><label>导入</label></p>
+                            }}><span><img src="/img/daoru@2x.png"/></span><label>{intl.get('Import')}</label></p>
                          <div className="line"></div>
-                         <div className="btn" onClick={()=>this.getList(false)}>取消</div>
+                         <div className="btn" onClick={()=>this.getList(false)}>{intl.get('Cancel')}</div>
                     </div>
                  </div> : null
                 }

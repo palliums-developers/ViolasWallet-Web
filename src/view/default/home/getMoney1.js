@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
 import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function'
-import vAccount from '../../../utils/violas'
+import vAccount from '../../../utils/violas';
+import intl from 'react-intl-universal';
 let QRCode = require('qrcode-react');
 
 @inject('index')
@@ -13,6 +14,9 @@ class GetMoney1 extends Component {
         this.state = {
             coinData:{}
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
         this.setState({
@@ -53,11 +57,11 @@ class GetMoney1 extends Component {
                     <span onClick={() => {
                     this.props.history.push('/stablecoin')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>收款</span>
+                    <span>{intl.get('Receive')}</span>
                 </header>
                 <section>
                     <div className="box">
-                        <h3>收款地址</h3>
+                        <h3>{intl.get('Receving Address')}</h3>
                         <div className="code">
                         <QRCode value={`${coinData.name}:${balancedata && balancedata.address}`} size={164}  />
                         </div>
@@ -65,7 +69,7 @@ class GetMoney1 extends Component {
                             <label>{coinData.name}</label><span></span>
                         </div>
                         <p id='addressId'>{balancedata && balancedata.address}</p>
-                        <div className="btn" onClick={()=>this.copyUrl2()}>复制地址</div>
+                        <div className="btn" onClick={()=>this.copyUrl2()}>{intl.get('Copy Address')}</div>
                     </div>
                 </section>
             </div>

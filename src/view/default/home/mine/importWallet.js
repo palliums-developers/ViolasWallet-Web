@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import intl from 'react-intl-universal';
 let bip39 = require("bip39");
 
 class ImportWallet extends Component {
@@ -12,6 +13,9 @@ class ImportWallet extends Component {
           pass2:'',
           mne:''
         }
+    }
+    componentWillMount(){
+      intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
         this.setState({
@@ -46,13 +50,13 @@ class ImportWallet extends Component {
     createWallet = (type) =>{
         let { name,pass1,pass2,mne } = this.state;
         if(name == ''){
-        alert('请输入昵称！！！')
+          alert(intl.get('Please input nickname')+'!!!')
         }else if(pass1 == ''){
-        alert('请设置钱包密码！！！')
+          alert(intl.get('Please set Wallet Access Code')+'!!!')
         }else if(pass2 == ''){
-        alert('再次确认密码！！！')
+          alert(intl.get('Confirm Access Code')+'!!!')
         }else if(pass1.indexOf(pass2) == -1){
-        alert('两次输入密码不同！！！')
+          alert(intl.get('The passwords are different')+'!!!')
         }else{
            let extra_wallet = {};
            if(type == 'violas'){
@@ -101,19 +105,19 @@ class ImportWallet extends Component {
                               }
                             </div>
                                 {
-                                    this.state.wType == 'violas' ? <h4>导入Vcoin钱包</h4> : this.state.wType == 'lib' ? <h4>导入Libone钱包</h4> :  this.state.wType == 'btc' ? <h4>导入Bitcoin钱包</h4> : null
+                                  this.state.wType == 'violas' ? <h4>{intl.get('Import VcoinWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Import LiboneWallet')}</h4> :  this.state.wType == 'btc' ? <h4>{intl.get('Import BitcoinWallet')}</h4> : null
                                 }
                       </div>
                       <div className="form">
-                         <textarea placeholder="输入助记词单词，并用空格分隔" onChange={(e)=>this.getValue(e,'mne')}></textarea>
-                         <input type="text" placeholder="输入昵称" onChange={(e)=>this.getValue(e,'name')}/>
+                         <textarea placeholder={intl.get('Input Mnemonic Words separated with a space')} onChange={(e)=>this.getValue(e,'mne')}></textarea>
+                         <input type="text" placeholder={intl.get('Input Nickname')} onChange={(e)=>this.getValue(e,'name')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="设置钱包密码" onChange={(e)=>this.getValue(e,'pass1')}/>
+                         <input type="password" placeholder={intl.get('Set Wallet Access Code')} onChange={(e)=>this.getValue(e,'pass1')}/>
                          <div className="line"></div>
-                         <input type="password" placeholder="再次确认密码" onChange={(e)=>this.getValue(e,'pass2')}/>
+                         <input type="password" placeholder={intl.get('Confirm Access Code')} onChange={(e)=>this.getValue(e,'pass2')}/>
                          <div className="line"></div>
                          {
-                                    this.state.wType == 'violas' ? <div className="btn" onClick={()=>this.createWallet('violas')}>开始导入</div> : this.state.wType == 'lib' ? <div className="btn" onClick={()=>this.createWallet('libra')}>开始导入</div> : this.state.wType == 'btc' ? <div className="btn" onClick={()=>this.createWallet('BTC')}>开始导入</div> : null
+                                    this.state.wType == 'violas' ? <div className="btn" onClick={()=>this.createWallet('violas')}>{intl.get('Start Import')}</div> : this.state.wType == 'lib' ? <div className="btn" onClick={()=>this.createWallet('libra')}>{intl.get('Start Import')}</div> : this.state.wType == 'btc' ? <div className="btn" onClick={()=>this.createWallet('BTC')}>{intl.get('Start Import')}</div> : null
                           }
                       </div>
                    </div>

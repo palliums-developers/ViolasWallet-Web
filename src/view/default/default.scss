@@ -363,18 +363,11 @@
                         color:rgba(61,57,73,1);
                     }
                     span:nth-child(2){
-                        font-size:0.37rem;
-                        font-family:PingFangSC-Regular,PingFang SC;
-                        font-weight:400;
-                        color:rgba(61,57,73,.5);
+                        width:0.18rem;
+                        height:0.29rem;
                         display: flex;
-                        i{
-                            width:0.18rem;
-                            height:0.29rem;
-                            margin-left: 0.2rem;
-                            img{
-                                width: 100%;
-                            }
+                        img{
+                            width: 100%;
                         }
                     }
                 }
@@ -1178,6 +1171,15 @@
             display: flex;
             flex-direction: column;
             background: rgba(247, 247, 249, 1);
+            overflow-y: auto;
+            .rightContent{
+                // width: 7.5rem;
+                // height: 100%;
+                // display: flex;
+                // flex-direction: column;
+                // // justify-content: center;
+                // margin: 0 auto;
+            }
         }
         .identityWallet{
             width: 100%;
@@ -1197,7 +1199,8 @@
                 margin-left: 0.3rem;
             }
             .identityContent{
-                width: 7.4rem;
+                // width: 7.4rem;
+                width:100%;
                 height: 1.7rem;
                 // background:url('/img/bg@2x.png')no-repeat;
                 // background-size:100% 100% ;
@@ -1479,8 +1482,8 @@
                             background:linear-gradient(152deg,rgba(147,57,243,1) 0%,rgba(112,56,253,1) 100%);
                         }
                         .am-slider-handle{
-                            width: 0.4rem;
-                            height: 0.4rem;
+                            width: 0.3rem;
+                            height: 0.3rem;
                             border: 2px solid rgba(112,56,253,1);
                             top: 0.1rem;
                         }
@@ -2141,16 +2144,25 @@
                         }
                     }
                     .changeLogo{
-                        width: 1.3rem;
-                        height: 1.3rem;
+                        width: 1rem;
+                        height: 1rem;
+                        top:1.15rem;
+                        left: 50%;
+                        margin-left: -0.65rem;
                         display: flex;
                         position: absolute;
-                        top:1rem;
-                        left: 50%;
-                        margin-left: -0.75rem;
-                        img{
-                            width: 100%;
-                        }
+                        background: 0;
+                        border-radius: 50%;
+                        box-shadow:0 0  3px 5px rgba(14,0,81,0.03);
+                    }
+                    .noReturn{
+                        
+                        background: url('/img/编组 2@2x.png')no-repeat;
+                        background-size:100% 100%;
+                    }
+                    .return{
+                        background: url('/img/编组 22@2x.png')no-repeat;
+                        background-size:100% 100%;
                     }
                 }
                 .title{
@@ -2196,7 +2208,7 @@
                             color:rgba(60,56,72,1);
                         }
                         ::-webkit-input-placeholder{
-                            font-size:0.37rem;
+                            font-size:0.34rem;
                             font-family:PingFangSC-Regular,PingFang SC;
                             font-weight:400;
                             color:rgba(60,56,72,.3);
@@ -2284,12 +2296,13 @@
                                 .am-slider-track{
                                     height: 3px;
                                     background:linear-gradient(152deg,rgba(147,57,243,1) 0%,rgba(112,56,253,1) 100%);
+                                    
                                 }
                                 .am-slider-handle{
                                     width: 0.4rem;
                                     height: 0.4rem;
                                     border: 2px solid rgba(112,56,253,1);
-                                    top: 0.1rem;
+                                    top: 0.05rem;
                                 }
                             }
                         }
@@ -2474,9 +2487,6 @@
                             }
                             
                         }
-                    p:nth-child(2){
-                        margin-right: 1rem;
-                    }
                 }
             }
         }
@@ -2704,11 +2714,12 @@
                             display: flex;
 
                             >p{
-                                width: 2rem;
+                                width: 2.6rem;
                                 font-size:0.37rem;
                                 font-family:PingFangSC-Medium,PingFang SC;
                                 font-weight:500;
                                 color:rgba(255,140,140,1);
+                                word-break: break-all;
                            }
                         }
                         
@@ -2811,7 +2822,7 @@
                     
                 }
                 p{
-                    width: 1.6rem;
+                    // width: 1.6rem;
                     font-size:0.32rem;
                     font-family:PingFangSC-Regular,PingFang SC;
                     font-weight:400;
@@ -3523,6 +3534,8 @@
         background:rgba(247, 247, 249, 1);
         .list{
             width: 100%;
+            padding:0 0.37rem;
+            box-sizing: border-box;
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -3532,8 +3545,6 @@
         .languageList{
             width: 100%;
             height: 1.59rem;
-            padding:0 0.37rem;
-            box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -3554,7 +3565,7 @@
             }
         }
         .line{
-            width: 9.3rem;
+            width: 100%;
             height: 1px;
             background:rgba(60, 56, 72, .1);
             display: flex;
@@ -3575,25 +3586,35 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow: auto;
         .content{
-            width: 8.4rem;
+            width: 100%;
+            padding: 0 0.94rem;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            // align-items: center;
+            
             h3{
+                width: 100%;
                 font-size:0.54rem;
                 font-family:PingFangSC-Regular,PingFang SC;
                 font-weight:400;
                 color:rgba(84,84,84,1);
-                margin-top: 0.8rem;
+                margin-top: 0.6rem;
                 margin-bottom: 0.1rem;
+                text-align: center;
+            }
+            h4{
+                font-size:0.43rem;
+                margin: 0.2rem 0;
             }
             p{
                 font-size:0.37rem;
                 font-family:PingFangSC-Regular,PingFang SC;
                 font-weight:400;
                 color:rgba(60,56,72,1);
-                line-height:20px;
+                line-height:30px;
             }
         }
     }

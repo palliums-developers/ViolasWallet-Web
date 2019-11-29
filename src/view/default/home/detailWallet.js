@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 
 @inject('index')
 @observer
@@ -10,6 +11,9 @@ class DetailWallet extends Component {
         this.state = {
            oldName:''
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
         this.setState({
@@ -42,12 +46,12 @@ class DetailWallet extends Component {
             <div className="detailWallet">
                 <header>
                     <span onClick={() => this.update()}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>钱包详情</span>
+                    <span>{intl.get('Wallet Detail')}</span>
                 </header>
                 <section>
                    <div className="lists">
                        <div className="list">
-                           <h4>更换钱包名</h4>
+                           <h4>{intl.get('Change Wallet Name')}</h4>
                            <input type="text" onChange={(e)=>this.getNewName(e)} value={this.state.oldName}/>
                        </div>
                    </div>

@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { inject,observer } from 'mobx-react';
 import '../app.scss';
+import intl from 'react-intl-universal';
 let mnemonic_random = require("bip39");
 let aes256 = require('aes256');
 
@@ -17,7 +18,9 @@ class CreateIdentity extends Component {
        pass2:'',
     }
   }
-
+  componentWillMount(){
+    intl.options.currentLocale=localStorage.getItem("local");
+  }
   getValue = (e,type) =>{
     if(type == 'name'){
       this.setState({
@@ -37,13 +40,13 @@ class CreateIdentity extends Component {
   createFun = async() =>{
      let { name,pass1,pass2 } = this.state;
      if(name == ''){
-       alert('请输入昵称！！！')
+       alert(intl.get('Input Nickname')+'!!!')
      }else if(pass1 == ''){
-       alert('请设置钱包密码！！！')
+       alert(intl.get('Please set Wallet Access Code')+'!!!')
      }else if(pass2 == ''){
-       alert('再次确认密码！！！')
+       alert(intl.get('Confirm Access Code')+'!!!')
      }else if(pass1.indexOf(pass2) == -1){
-       alert('两次输入密码不同！！！')
+       alert(intl.get('The passwords are different')+'!!!')
      }else{
        window.localStorage.setItem('data',JSON.stringify({
         name:name,
@@ -56,7 +59,7 @@ class CreateIdentity extends Component {
         address_book:[],
         backup:true
       }))
-      window.localStorage.setItem('type','Violas钱包');
+      window.localStorage.setItem('type',intl.get('ViolasWallet'));
       this.props.history.push('/backup')
      }
   }
@@ -67,14 +70,14 @@ class CreateIdentity extends Component {
             <span onClick={() => {
             this.props.history.push('/welcome')
             }}><img src="/img/Combined Shape 2@2x.png"/></span>
-            <span>创建身份</span>
+            <span>{intl.get('Create Identity')}</span>
         </header>
         <section>
             <div className="form">
-                <input type="text" placeholder="输入昵称" onChange={(e)=>this.getValue(e,'name')}/>
-                <input type="password" placeholder="设置钱包密码" onChange={(e)=>this.getValue(e,'pass1')}/>
-                <input type="password" placeholder="再次确认密码" onChange={(e)=>this.getValue(e,'pass2')}/>
-                <div className="btn" onClick={() => this.createFun()}>创建</div>
+                <input type="text" placeholder={intl.get('Input Nickname')} onChange={(e)=>this.getValue(e,'name')}/>
+                <input type="password" placeholder={intl.get('Set Wallet Access Code')} onChange={(e)=>this.getValue(e,'pass1')}/>
+                <input type="password" placeholder={intl.get('Confirm Access Code')} onChange={(e)=>this.getValue(e,'pass2')}/>
+                <div className="btn" onClick={() => this.createFun()}>{intl.get('Create')}</div>
             </div>
         </section>
       </div>

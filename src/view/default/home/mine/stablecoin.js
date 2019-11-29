@@ -3,6 +3,7 @@ import { inject,observer } from 'mobx-react';
 import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
+import intl from 'react-intl-universal';
 let decrypted =  JSON.parse(window.localStorage.getItem('data'));
 // let aes256 = require('aes256');
 
@@ -16,7 +17,9 @@ class stablecoin extends Component {
             balancedata:[]
         }
     }
-
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
+    }
     async componentDidMount(){
         let violas = new vAccount(decrypted.mne_arr);
         let balanceData = await this.props.index.getBalance({
@@ -72,25 +75,25 @@ class stablecoin extends Component {
                                 this.props.history.push('/transfar1')
                             }}>
                                 <dt><img src="/img/编组@2x.png"/></dt>
-                                <dd>转账</dd>
+                                <dd>{intl.get('Transfer')}</dd>
                             </dl>
                             <span></span>
                             <dl onClick={() => {
                                 this.props.history.push('/getMoney1')
                             }}>
                                 <dt><img src="/img/编组 .png"/></dt>
-                                <dd>收款</dd>
+                                <dd>{intl.get('Receive')}</dd>
                             </dl>
                          </div>
                       </div>  
                       <div className="dealRecord">
-                          <h4>交易记录</h4>
+                          <h4>{intl.get('Transfer History')}</h4>
                           <div className="recordDetails">
                               <div className="recordDetail">
                                         <div className="title">
-                                            <span>日期</span>
-                                            <span>数量</span>
-                                            <span className="redC">转账</span>
+                                            <span>{intl.get('Date')}</span>
+                                            <span>{intl.get('Amount')}</span>
+                                            <span className="redC">{intl.get('Transfer')}</span>
                                         </div>
                                         <div className="titleContent">
                                             <span>18.05.23 15:42</span>
@@ -99,14 +102,14 @@ class stablecoin extends Component {
                                         </div>
                                         <div className="titleContent">
                                             <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
-                                            <p>浏览器查询</p>
+                                            <p>{intl.get('Browser query')}</p>
                                         </div>
                                 </div>
                                 <div className="recordDetail">
                                         <div className="title">
-                                            <span>日期</span>
-                                            <span>数量</span>
-                                            <span className="greenC">收款</span>
+                                            <span>{intl.get('Date')}</span>
+                                            <span>{intl.get('Amount')}</span>
+                                            <span className="greenC">{intl.get('Receive')}</span>
                                         </div>
                                         <div className="titleContent">
                                             <span>18.05.23 15:42</span>
@@ -115,7 +118,7 @@ class stablecoin extends Component {
                                         </div>
                                         <div className="titleContent">
                                             <p>mkYUsJ8N1AidNUySQGCpwswQUaoyL2Mu8L</p>
-                                            <p>浏览器查询</p>
+                                            <p>{intl.get('Browser query')}</p>
                                         </div>
                                 </div>
                           </div>

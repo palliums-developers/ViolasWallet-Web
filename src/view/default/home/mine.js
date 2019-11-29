@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function'
+import intl from 'react-intl-universal'
 let aes256 = require('aes256');
+
 
 class Mine extends Component {
     constructor(props) {
@@ -9,6 +11,7 @@ class Mine extends Component {
         }
     }
     componentDidMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     saveJson = async() => {
         let userInfo = JSON.parse(window.localStorage.getItem('data'));
@@ -40,7 +43,7 @@ class Mine extends Component {
             <div className="mine">
                 <header>
                   <div className="headLogo"><img src=""/></div>
-                  <span>Rxx</span>
+                  <span>{JSON.parse(window.localStorage.getItem('data')).name}</span>
                 </header>
               <section>
                  <ul className="userList">
@@ -48,35 +51,25 @@ class Mine extends Component {
                            this.props.history.push('/dailyCash')
                        }}>
                        <span><img src="/img/编组1@2x.png"/></span>
-                       <p>钱包管理</p>
+                       <p>{intl.get('Manage Wallet')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
-                   {/* <div className="lines">
-                       <span className="line"></span>
-                   </div> */}
-                   {/* <li onClick={()=>{
-                           this.props.history.push('/record1')
-                       }}>
-                       <span><img src="/img/形状 2@2x.png"/></span>
-                       <p>转账记录</p>
-                       <span><img src="/img/路径复制 10@2x.png"/></span>
-                   </li> */}
                    <li onClick={()=>{
                            this.props.history.push('/directoryInquiries')
                        }}>
                        <span><img src="/img/编组 62@2x.png"/></span>
-                       <p>地址簿</p>
+                       <p>{intl.get('Address Book')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                    <li onClick={()=>{
                            this.props.history.push('/setting')
                        }}>
                        <span><img src="/img/setting@2x.png"/></span>
-                       <p>设置</p>
+                       <p>{intl.get('Settings')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                  </ul>
-                 <div className="btn" onClick={()=>this.saveJson()}>退出登录</div>
+                 <div className="btn" onClick={()=>this.saveJson()}>{intl.get('Logout')}</div>
                  
               </section>
             </div>

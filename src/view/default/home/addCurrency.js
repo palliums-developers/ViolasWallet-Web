@@ -3,6 +3,7 @@ import QrReader from 'react-qr-reader'
 import { inject, observer } from 'mobx-react';
 import 'antd/dist/antd.css';
 import vAccount from '../../../utils/violas';
+import intl from 'react-intl-universal';
 let aes256 = require('aes256');
 
 @inject('index')
@@ -19,6 +20,9 @@ class AddCurrency extends Component {
             name: '',
             ind: Number
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount() {
         let coinData = await this.props.index.getCoinMess();
@@ -66,9 +70,9 @@ class AddCurrency extends Component {
     }
     confirm = async () => {
         if (this.state.value == '') {
-            alert('请输入密码！！！')
+            alert(intl.get('Please input Access Code'))
         }else if(this.state.value != JSON.parse(window.localStorage.getItem('data')).password1){
-            alert('密码不匹配，请重新输入！！！')
+            alert(intl.get('Access Code does not match,please Re_input'))
         } else{
             this.setState({
                 isShow: false
@@ -95,7 +99,7 @@ class AddCurrency extends Component {
                             state: false
                         })
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
-                    <span>添加币种</span>
+                    <span>{intl.get('Add Digital Currency')}</span>
                 </header>
                 <section>
                     <div className="classify">

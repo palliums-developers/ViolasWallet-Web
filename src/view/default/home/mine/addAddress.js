@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
 import { inject,observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 
 @inject('index')
 @observer
@@ -14,6 +15,10 @@ class AddAddress extends Component {
            types:''
         }
     }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
+        this.forceUpdate();
+      }
     componentDidMount(){
     //    this.props.index.getAddressMessage()
     }
@@ -44,11 +49,11 @@ class AddAddress extends Component {
     plus = () =>{
         let { name,address,types } = this.state;
         if(name == ''){
-        alert('请输入昵称！！！')
+           alert(intl.get('Please input nickname')+'!!!')
         }else if(address == ''){
-        alert('请填写备注！！！')
+           alert(intl.get('Please input Note')+'!!!')
         }else if(types == ''){
-        alert('请输入地址！！！')
+           alert(intl.get('Please input address')+'!!!')
         }else{
            let address_book = {
             type:types,
@@ -69,38 +74,38 @@ class AddAddress extends Component {
             <div className="addAddress">
                 <header>
                     <span onClick={() => this.getAddress()}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>添加地址</span>
+                    <span>{intl.get('Add Address')}</span>
                 </header>
                 <section>
                     <div className="form">
                         <div className="p">
                             <label>type</label>
                             <div className="ipt">
-                                <input type="text" placeholder="请输入钱包种类" onChange={(e)=>this.getValue(e,'type')}/>
+                                <input type="text" placeholder={intl.get('Input your wallet type')} onChange={(e)=>this.getValue(e,'type')}/>
                             </div>
                         </div>
                         <div className="line">
                           <div className="lines"></div>  
                         </div>  
                         <div className="p">
-                            <label>备注</label>
+                            <label>{intl.get('Note')}</label>
                             <div className="ipt">
-                                <input type="text" placeholder="备注信息少于20个字" onChange={(e)=>this.getValue(e,'name')}/>
+                                <input type="text" placeholder={intl.get('Note less than 20 words')} onChange={(e)=>this.getValue(e,'name')}/>
                             </div>
                         </div>
                         <div className="line">
                           <div className="lines"></div>  
                         </div>  
                         <div className="p">
-                            <label>地址</label>
+                            <label>{intl.get('Address')}</label>
                             <div className="ipt">
-                                <input type="text" placeholder="输入地址" onChange={(e)=>this.getValue(e,'address')}/>   
+                                <input type="text" placeholder={intl.get('Input address')} onChange={(e)=>this.getValue(e,'address')}/>   
                                 <div className="code"><img src="/img/code@2x.png"/></div>
                             </div>
                         </div><div className="line"><div className="lines"></div></div>
                         
                     </div>
-                    <div className="btn" onClick={()=>this.plus()}>添加</div>
+                    <div className="btn" onClick={()=>this.plus()}>{intl.get('Add')}</div>
                 </section>
             </div>
         );

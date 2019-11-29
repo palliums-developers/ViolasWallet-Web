@@ -4,7 +4,7 @@ import 'antd-mobile/dist/antd-mobile.css';
 import { Slider, WingBlank } from 'antd-mobile';
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
-import axios from 'axios';
+import intl from 'react-intl-universal';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let fee = 1;
@@ -25,6 +25,9 @@ class Transfar extends Component {
             balancedata:[]
         }
     }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
+    }
     async componentDidMount() {
         if (this.props.index.type) {
             if (this.props.index.type == 'vtoken' || 'lib') {
@@ -40,7 +43,7 @@ class Transfar extends Component {
         }
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let balanceData;
-        if (window.localStorage.getItem('type') == 'Violas钱包') {
+        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
             let violas = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
                 address: violas.address,
@@ -50,7 +53,7 @@ class Transfar extends Component {
                 balancedata: balanceData
             })
 
-        } else if (window.localStorage.getItem('type') == 'Libra钱包') {
+        } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             let libra = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
                 address: libra.address,
@@ -59,7 +62,7 @@ class Transfar extends Component {
             this.setState({
                 balancedata: balanceData
             })
-        } else if (window.localStorage.getItem('type') == 'BTC钱包') {
+        } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
             let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
             balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
@@ -128,10 +131,10 @@ class Transfar extends Component {
                 name:type
             })
             if(data.message == 'ok'){
-               alert('转账成功！！！');
+               alert(intl.get('Transfer success')+'!!!');
                this.props.history.push('/home');
             }else{
-                alert('转账失败！！！');
+                alert(intl.get('Transfer failed')+'!!!');
             }
         } else if (type == 'libra') {
             let libra = new vAccount(decrypted.mne_arr);
@@ -141,10 +144,10 @@ class Transfar extends Component {
                 name:type
             })
             if(data.message == 'ok'){
-                alert('转账成功！！！');
+                alert(intl.get('Transfer success')+'!!!');
                 this.props.history.push('/home');
             }else{
-                alert('转账失败！！！');
+                alert(intl.get('Transfer failed')+'!!!');
             }
             
         } else if (type == 'BTC') {
@@ -166,25 +169,25 @@ class Transfar extends Component {
                         })
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     {
-                        window.localStorage.getItem('type') == 'Violas钱包' ? <span>violas转账</span> : window.localStorage.getItem('type') == 'BTC钱包' ? <span>BTC转账</span> : window.localStorage.getItem('type') == 'Libra钱包' ? <span>libra转账</span> : null
+                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{intl.get('Transfer Vtoken')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
                     }
 
                 </header>
                 <section>
                     {
-                        window.localStorage.getItem('type') == 'Violas钱包' ? <div className="transfarDescr">
+                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
                                     <span>Vtoken</span>
-                                    <span>余额：<s>{balancedata.balance}</s> Vtoken</span>
+                                    <span>{intl.get('Balance')}：<s>{balancedata.balance}</s> Vtoken</span>
                                 </div>
-                                <input type="text" placeholder="输入金额" onChange={(e) => this.getViolasAm(e, 'amount')} />
+                                <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
-                                    <span>收款地址</span>
-                                    <span>地址簿</span>
+                                    <span>{intl.get('Receving Address')}</span>
+                                    <span>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
-                                    <input type="text" placeholder="输入收款地址" onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
+                                    <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
                                     <span onClick={() => {
                                         this.props.history.push('/sweepCode1')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
@@ -192,11 +195,11 @@ class Transfar extends Component {
                             </div>
                             <div className="fees">
                                 <div className="title">
-                                    <span>手续费</span>
+                                    <span>{intl.get('Transaction Fee')}</span>
                                 </div>
                                 <div className="speed">
-                                    <p className="sub-title">慢</p>
-                                    <p className="sub-title">快</p>
+                                    <p className="sub-title">{intl.get('Slow')}</p>
+                                    <p className="sub-title">{intl.get('Fast')}</p>
                                 </div>
                                 <WingBlank size="lg">
 
@@ -212,21 +215,21 @@ class Transfar extends Component {
                                 <div className="rate">{this.state.rate / 100000} Vtoken</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('violas')}>
-                                确认转账
+                            {intl.get('Confirm Transfer')}
                         </div>
-                        </div> : window.localStorage.getItem('type') == "BTC钱包" ? <div className="transfarDescr">
+                        </div> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
                                     <span>BTC</span>
-                                    <span>余额：<s>{balancedata.balance}</s> BTC</span>
+                                    <span>{intl.get('Input Amount')}：<s>{balancedata.balance}</s> BTC</span>
                                 </div>
-                                <input type="text" placeholder="输入金额" onChange={(e) => this.getBtcAm(e, 'amount')} />
+                                <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getBtcAm(e, 'amount')} />
                                 <div className="title">
-                                    <span>收款地址</span>
-                                    <span>地址簿</span>
+                                    <span>{intl.get('Receving Address')}</span>
+                                    <span>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
-                                    <input type="text" placeholder="输入收款地址" onChange={(e) => this.getBtcAm(e, 'address')} value={this.state.address3} />
+                                    <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getBtcAm(e, 'address')} value={this.state.address3} />
                                     <span onClick={() => {
                                         this.props.history.push('/sweepCode1')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
@@ -234,11 +237,11 @@ class Transfar extends Component {
                             </div>
                             <div className="fees">
                                 <div className="title">
-                                    <span>手续费</span>
+                                    <span>{intl.get('Transaction Fee')}</span>
                                 </div>
                                 <div className="speed">
-                                    <p className="sub-title">慢</p>
-                                    <p className="sub-title">快</p>
+                                    <p className="sub-title">{intl.get('Slow')}</p>
+                                    <p className="sub-title">{intl.get('Fast')}</p>
                                 </div>
                                 <WingBlank size="lg">
 
@@ -254,21 +257,21 @@ class Transfar extends Component {
                                 <div className="rate">{this.state.rate / 100000} BTC</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('BTC')}>
-                                确认转账
+                                {intl.get('Confirm Transfer')}
                         </div>
-                        </div> : window.localStorage.getItem('type') == "Libra钱包" ? <div className="transfarDescr">
+                        </div> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
                                     <span>Lib</span>
-                                    <span>余额：<s>{balancedata.balance}</s> Lib</span>
+                                    <span>{intl.get('Input Amount')}：<s>{balancedata.balance}</s> Lib</span>
                                 </div>
-                                <input type="text" placeholder="输入金额" onChange={(e) => this.getLibraAm(e, 'amount')} />
+                                <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">
-                                    <span>收款地址</span>
-                                    <span>地址簿</span>
+                                    <span>{intl.get('Receving Address')}</span>
+                                    <span>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
-                                    <input type="text" placeholder="输入收款地址" onChange={(e) => this.getLibraAm(e, 'address')} value={this.state.address2} />
+                                    <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getLibraAm(e, 'address')} value={this.state.address2} />
                                     <span onClick={() => {
                                         this.props.history.push('/sweepCode1')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
@@ -276,11 +279,11 @@ class Transfar extends Component {
                             </div>
                             <div className="fees">
                                 <div className="title">
-                                    <span>手续费</span>
+                                    <span>{intl.get('Transaction Fee')}</span>
                                 </div>
                                 <div className="speed">
-                                    <p className="sub-title">慢</p>
-                                    <p className="sub-title">快</p>
+                                    <p className="sub-title">{intl.get('Slow')}</p>
+                                    <p className="sub-title">{intl.get('Fast')}</p>
                                 </div>
                                 <WingBlank size="lg">
 
@@ -296,7 +299,7 @@ class Transfar extends Component {
                                 <div className="rate">{this.state.rate / 100000} Lib</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('libra')}>
-                                确认转账
+                                {intl.get('Confirm Transfer')}
                         </div>
                         </div> : null
                     }

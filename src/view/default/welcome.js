@@ -1,10 +1,14 @@
 import React,{Component} from 'react';
+import intl from 'react-intl-universal';
 import '../app.scss';
 
 class Welcome extends Component {
   constructor(props) {
     super(props);
     this.state = {  }
+  }
+  componentWillMount(){
+    intl.options.currentLocale=localStorage.getItem("local");
   }
   render() { 
     return ( 
@@ -18,10 +22,10 @@ class Welcome extends Component {
         <div className="btns">
           <span onClick={() => {
             this.props.history.push('/createIdentity')
-          }}>创建钱包</span>
+          }}>{intl.get('Create Wallet')}</span>
           <span onClick={() => {
             this.props.history.push('/importIdentity')
-          }}>导入钱包</span>
+          }}>{intl.get('Import Wallet')}</span>
         </div>
       </div>
      );

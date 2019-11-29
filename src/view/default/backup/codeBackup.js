@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import '../default.scss';
 import { inject,observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 let aes256 = require('aes256');
 
 @inject('index')
@@ -13,15 +14,23 @@ class CodeBackup extends Component {
       mnes_arr:[]
      }
   }
+  componentWillMount(){
+    intl.options.currentLocale=localStorage.getItem("local");
+    this.forceUpdate();
+  }
   componentDidMount() {
     let decrypted = JSON.parse(window.localStorage.getItem('data'));
     this.setState({ mnes_arr:decrypted.mne_arr.split(" ") });
   }
   stateCode = () =>{
-    if(this.props.location.state.id == 0){
+    if(this.props.location.state.id){
+      if(this.props.location.state.id == 0){
+        this.props.history.push('/backup')
+      }else if(this.props.location.state.id == 1){
+        this.props.history.push('/home/wallet')
+      }
+    }else{
       this.props.history.push('/backup')
-    }else if(this.props.location.state.id == 1){
-      this.props.history.push('/home/wallet')
     }
   }
 
@@ -30,11 +39,11 @@ class CodeBackup extends Component {
       <div className="codeBackup">
         <header>
             <span onClick={() => this.stateCode()}><img src="/img/Combined Shape 1@2x.png"/></span>
-            <span>备份助记词</span>
+            <span>{intl.get('Backup Mnemonic Words')}</span>
         </header>
         <section>
            <div className="backupPaper">
-             <h4>请将这些词按顺序写在纸上</h4>
+             <h4>{intl.get('Please write down these words in order on a paper')}</h4>
              <div className="words">
                {
                  this.state.mnes_arr && this.state.mnes_arr.map((v,i)=>{
@@ -45,15 +54,15 @@ class CodeBackup extends Component {
              <div className="warning">
                <div className="warnLogo"><img src="/img/编组 4slice@2x.png"/></div>
                <div className="warnDescr">
-                 <p>不要截屏或复制到剪切板 </p>
-                 <p>这将可能被第三方恶意软件收集 </p>
-                 <p>造成资产损失</p>
+                 <p>{intl.get('Do not make screenshot or copy to clipboard.')} </p>
+                 <p>{intl.get('It might be collected by a third party software')} </p>
+                 <p>{intl.get('to cause loss of funds.')}</p>
                </div>
              </div>
              <div className="btn" onClick={() => {
               this.props.history.push('/confirmWords')
               }}>
-               下一步
+               {intl.get('Next')}
              </div>
            </div>
         </section>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import 'antd-mobile/dist/antd-mobile.css';
 import { Slider, WingBlank } from 'antd-mobile';
-import { creat_account_mnemonic, balance, get_address, transfer } from '../../../../utils/kulap-function'
+import intl from 'react-intl-universal';
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
 
@@ -19,6 +19,9 @@ class Transfar1 extends Component {
             balancedata:[],
             coinData:{}
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount() {
         this.setState({
@@ -71,10 +74,10 @@ class Transfar1 extends Component {
             })
             console.log(data)
         if(data.message == 'ok'){
-            alert('转账成功！！！');
+            alert(intl.get('Transfer success')+'!!!');
             this.props.history.push('/home');
         }else{
-            alert('转账失败！！！');
+            alert(intl.get('Transfer failed')+'!!!');
         }
     }
 
@@ -86,7 +89,7 @@ class Transfar1 extends Component {
                     <span onClick={() => {
                         this.props.history.push('/home')
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
-                    <span>{coinData.name}转账</span>
+                    <span>{coinData.name}{intl.get('Market')}</span>Transfer
 
                 </header>
                 <section>
@@ -94,15 +97,15 @@ class Transfar1 extends Component {
                             <div className="form">
                                 <div className="title">
                                 <span>{coinData.name}</span>
-                                <span>余额：<s>{coinData.balance}</s> {coinData.name}</span>
+                                <span>{intl.get('Balance')}：<s>{coinData.balance}</s> {coinData.name}</span>
                                 </div>
-                                <input type="text" placeholder="输入金额" onChange={(e) => this.getViolasAm(e, 'amount')} />
+                                <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
-                                    <span>收款地址</span>
-                                    <span>地址簿</span>
+                                    <span>{intl.get('Receving Address')}</span>
+                                    <span>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
-                                    <input type="text" placeholder="输入收款地址" onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
+                                    <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
                                     <span onClick={() => {
                                         this.props.history.push('/sweepCode1')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
@@ -110,11 +113,11 @@ class Transfar1 extends Component {
                             </div>
                             <div className="fees">
                                 <div className="title">
-                                    <span>手续费</span>
+                                    <span>{intl.get('Transaction Fee')}</span>
                                 </div>
                                 <div className="speed">
-                                    <p className="sub-title">慢</p>
-                                    <p className="sub-title">快</p>
+                                    <p className="sub-title">{intl.get('Slow')}</p>
+                                    <p className="sub-title">{intl.get('Fast')}</p>
                                 </div>
                                 <WingBlank size="lg">
 
@@ -130,7 +133,7 @@ class Transfar1 extends Component {
                                 <div className="rate">{this.state.rate / 100000} {coinData.name}</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('violas')}>
-                                确认转账
+                            {intl.get('Confirm Transfer')}
                         </div>
                         </div>
                 </section>

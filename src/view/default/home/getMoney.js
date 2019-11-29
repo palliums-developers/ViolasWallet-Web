@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 // import '../default.scss';
 import { inject,observer } from 'mobx-react';
 import { creat_account_mnemonic,get_address } from '../../../utils/kulap-function'
-import vAccount from '../../../utils/violas'
+import vAccount from '../../../utils/violas';
+import intl from 'react-intl-universal';
 let QRCode = require('qrcode-react');
+
 @inject('index')
 @observer
 
@@ -15,11 +17,14 @@ class GetMoney extends Component {
             curWal:[]
         }
     }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
+    }
     async componentDidMount(){
         let decrypted =  JSON.parse(window.localStorage.getItem('data'));
         let arr = creat_account_mnemonic(decrypted.mne_arr);
         let balanceData;
-        if(window.localStorage.getItem('type') == 'Violas钱包'){
+        if(window.localStorage.getItem('type') == intl.get('ViolasWallet')){
             let violas = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
                 address:violas.address,
@@ -38,7 +43,7 @@ class GetMoney extends Component {
                 curWal:wal[0]
             })
             
-        }else if(window.localStorage.getItem('type') == 'Libra钱包'){
+        }else if(window.localStorage.getItem('type') == intl.get('LibraWallet')){
             let addressStr = get_address(arr);
             balanceData = await this.props.index.getBalance({
                 address:addressStr,
@@ -56,7 +61,7 @@ class GetMoney extends Component {
             this.setState({
                 curWal:wal[0]
             })
-        }else if(window.localStorage.getItem('type') == 'BTC钱包'){
+        }else if(window.localStorage.getItem('type') == intl.get('BTCWallet')){
             // balanceData = await this.props.index.getBalance({
             //     address:addressStr,
             //     name:'btc'
@@ -100,11 +105,11 @@ class GetMoney extends Component {
                         state:false
                     })
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>收款</span>
+                    <span>{intl.get('Receive')}</span>
                 </header>
                 <section>
                     <div className="box">
-                        <h3>收款地址</h3>
+                        <h3>{intl.get('Receving Address')}</h3>
                         <div className="code">
                         <QRCode value={`${purseCoin}:${balancedata && balancedata.address}`} size={164}  />
                         </div>
@@ -112,7 +117,7 @@ class GetMoney extends Component {
                             <label>{this.state.curWal.name}</label><span></span>
                         </div>
                         <p id='addressId'>{balancedata && balancedata.address}</p>
-                        <div className="btn" onClick={()=>this.copyUrl2()}>复制地址</div>
+                        <div className="btn" onClick={()=>this.copyUrl2()}>{intl.get('Copy Address')}</div>
                     </div>
                 </section>
             </div>

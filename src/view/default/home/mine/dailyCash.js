@@ -3,6 +3,7 @@ import { inject,observer } from 'mobx-react';
 import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
+import intl from 'react-intl-universal';
 let decrypted =  JSON.parse(window.localStorage.getItem('data'));
 
 @inject('index')
@@ -15,6 +16,9 @@ class DailyCash extends Component {
             balancedata1:[],
             balancedata2:[]
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
         let arr = creat_account_mnemonic(decrypted.mne_arr);
@@ -51,14 +55,14 @@ class DailyCash extends Component {
                     <span onClick={() => {
                         this.props.history.push('/home/mine')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>钱包管理</span>
+                    <span>{intl.get('Manage Wallet')}</span>
                     <span onClick={() => {
                         this.props.history.push('/addPurse')
                     }}><img src="/img/Close 2@2x.png"/></span>
                 </header>
                 <section>
                     <div className="identityWallet">
-                       <h4>身份钱包</h4>
+                       <h4>{intl.get('Identity Wallet')}</h4>
                        <div className="identityContent">
                           <div className="title">
                               <label>{JSON.parse(window.localStorage.getItem('data')).wallet_name[0].name}</label>
@@ -82,7 +86,7 @@ class DailyCash extends Component {
                        </div>
                     </div>
                     <div className="identityWallet toIdentity">
-                       <h4>创建/导入</h4>
+                       <h4>{intl.get('Create/Import')}</h4>
                        {
                            JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v,i)=>{
                              return <div className={v.type == 'violas' ? 'identityContent vioBack':v.type == 'libra' ? 'identityContent libBack':v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={()=>this.getWallet(v.type)} key={i}>

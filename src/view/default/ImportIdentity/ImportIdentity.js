@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import intl from 'react-intl-universal';
 let aes256 = require('aes256');
 
 class ImportIdentity extends Component {
@@ -10,6 +11,9 @@ class ImportIdentity extends Component {
         userInfo:{}
      }
   }
+  componentWillMount(){
+    intl.options.currentLocale=localStorage.getItem("local");
+}
   componentDidMount(){
     
   }
@@ -51,14 +55,14 @@ class ImportIdentity extends Component {
             <span onClick={() => {
             this.props.history.push('/welcome')
             }}><img src="/img/Combined Shape 1@2x.png"/></span>
-            <span>导入身份</span>
+            <span> {intl.get('Import Identity')}</span>
         </header>
         <section>
             <div className="form">
-                <input type="text" placeholder="输入密码" onChange={(e)=>this.getPass(e)}/>
+                <input type="text" placeholder={intl.get('Input  Access Code')} onChange={(e)=>this.getPass(e)}/>
             </div>
 
-            <div className="btn">开始导入</div>
+            <div className="btn"> {intl.get('Start Import')}</div>
             <input className="btns" type="file" id="files" onChange={()=>this.handleFiles()} />
             
         </section>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import QrReader from 'react-qr-reader'
-// import '../default.scss';
+import QrReader from 'react-qr-reader';
+import intl from 'react-intl-universal';
 
 class Sweepcode extends Component {
     constructor(props) {
@@ -9,7 +9,9 @@ class Sweepcode extends Component {
             file:false
         }
     }
-
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
+    }
     componentDidMount(){
        
     }
@@ -40,8 +42,8 @@ class Sweepcode extends Component {
                         state:false
                     })
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>扫一扫</span>
-                     <button onClick={this.openImageDialog}>相册</button>
+                    <span>{intl.get('Scan')}</span>
+                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>
                 </header>
                 <section>
                     <div className="code">

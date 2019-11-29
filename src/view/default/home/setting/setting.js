@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader'
-// import '../default.scss';
+import intl from 'react-intl-universal'
 
 class Setting extends Component {
     constructor(props) {
@@ -9,9 +9,10 @@ class Setting extends Component {
       
         }
     }
-    componentDidMount(){
-       
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
+    
     render() {
         return (
             <div className="setting">
@@ -19,7 +20,7 @@ class Setting extends Component {
                     <span onClick={() => {
                     this.props.history.push('/home/mine')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>设置</span>
+                    <span>{intl.get('Settings')}</span>
                 </header>
                 <section>
                     <div className="headDescr">
@@ -30,7 +31,7 @@ class Setting extends Component {
                    <li onClick={()=>{
                            this.props.history.push('/multiLanguage')
                        }}>
-                       <p>多语言</p>
+                       <p>{intl.get('multiLanguage')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                    <div className="lines">
@@ -39,19 +40,19 @@ class Setting extends Component {
                    <li onClick={()=>{
                            this.props.history.push('/service')
                        }}>
-                       <p>服务协议</p>
+                       <p>{intl.get('Service Agreement')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                    <li onClick={()=>{
                            this.props.history.push('/aboutUs')
                        }}>
-                       <p>关于我们</p>
+                       <p>{intl.get('About Us')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                    <li onClick={()=>{
                            this.props.history.push('/feekBack')
                        }}>
-                       <p>帮助与反馈</p>
+                       <p>{intl.get('Help & Feedback')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                  </ul>

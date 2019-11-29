@@ -1,10 +1,15 @@
 import React,{Component} from 'react';
+import intl from 'react-intl-universal';
 import '../default.scss';
 
 class Backup extends Component {
   constructor(props) {
     super(props);
     this.state = {  }
+  }
+  componentWillMount(){
+    intl.options.currentLocale=localStorage.getItem("local");
+    this.forceUpdate();
   }
   render() { 
     return ( 
@@ -13,28 +18,28 @@ class Backup extends Component {
             <span onClick={() => {
             this.props.history.push('/createIdentity')
             }}><img src="/img/Combined Shape 1@2x.png"/></span>
-            <span>备份提示</span>
+            <span>{intl.get('Backup Hint')}</span>
             <span onClick={() => {
             this.props.history.push({
               pathname:'/home',
               state:true
             })
-            }}>稍后备份</span>
+            }}>{intl.get('Backup Later')}</span>
         </header>
         <section>
             <div className="backupContent">
-              <h2>获取助记词</h2>
-              <p>等于拥有钱包资产所有权</p>
+              <h2>{intl.get('Get Mnemonic Words')}</h2>
+              <p>{intl.get('Equal to own all funds in the wallet')}</p>
               <p><img src="/img/编组 6@2x.png"/></p>
               <div className="list">
-                <h3><span></span> 备份助记词</h3>
-                <p>使用纸和笔正确抄写助记词</p>
-                <p>如果你的手机丢失、被盗、损坏，Keystore将可以回复你的资产</p>
+                <h3><span></span> {intl.get('Backup Mnemonic Words')}</h3>
+                <p>{intl.get('Write down these Mnemonic Words on a paper')}</p>
+                <p>{intl.get('In case you have lost or demaged your phone，the mnemonic words will be used to recover your funds in the wallet.')}</p>
               </div>
               <div className="list">
-                <h3><span></span> 离线保管</h3>
-                <p>请妥善保管至隔离网络的安全地方</p>
-                <p>请勿将助记词在联网环境下分享和存储，比如邮件、相册、社交应用等</p>
+                <h3><span></span> {intl.get('Keep Offline')}</h3>
+                <p>{intl.get('Please keep it in a safe and offline place')}</p>
+                <p>{intl.get('Never share or store in any online media such as email, album and social network')}</p>
               </div>
             </div>
             <div className="btn" onClick={() => {
@@ -44,7 +49,7 @@ class Backup extends Component {
                         id:0
                       }
                     })
-            }}>开始备份</div>
+            }}>{intl.get('Start Backup')}</div>
         </section>
       </div>
      );

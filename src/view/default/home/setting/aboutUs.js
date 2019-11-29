@@ -30,8 +30,6 @@ class AboutUs extends Component {
                         <p><label>官方网站</label><span>violas.io</span></p>
                         <p><label>邮箱</label><span>violas.io</span></p>
                         <p><label>微信</label><span>x x x</span></p>
-                        <p><label>QQ</label><span>xxxxx</span></p>
-                        <p><label>微博</label><span>xxxxxxx</span></p>
                         <p><label>Telegram电报群</label><span>xxxxx</span></p>
                         <p><label>Twitter</label><span>xxxxxx</span></p>
                         <p><label>Facebook</label><span>xxxxxx</span></p>

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
 // import vAccount from '../../../../utils/violas';
 // import {timeStamp2String} from '../../../../utils/timer';
+import intl from 'react-intl-universal';
 
 // @inject('index')
 // @observer
@@ -11,12 +12,12 @@ class OrderForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status:['未完成','已完成'],
+            status:['Incomplete','Completed'],
             ind:0
         }
     }
-    async componentDidMount(){
-       
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     getIndex = (i) =>{
        this.setState({
@@ -31,13 +32,13 @@ class OrderForm extends Component {
                     <span onClick={() => {
                     this.props.history.push('/home/market')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>订单</span>
+                    <span>{intl.get('Order')}</span>
                 </header>
                 <section>
                    <div className="navList">
                        {
                            this.state.status.map((v,i)=>{
-                           return <span onClick={()=>this.getIndex(i)} key={i}><label className={this.state.ind ==i ? 'active': ''}>{v}</label></span>
+                           return <span onClick={()=>this.getIndex(i)} key={i}><label className={this.state.ind ==i ? 'active': ''}>{intl.get(v)}</label></span>
                            })
                        }
                    </div>
@@ -47,15 +48,15 @@ class OrderForm extends Component {
                        }}>
                           <div className="head">
                             <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD/</span><label>AAAUSD</label></p>
-                            <span>撤销</span>
+                            <span>{intl.get('cancel')}</span>
                           </div>
                           <div className="firstContents">
                             <div className="firstContent">
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>价格</span>
-                                        <span>数量</span>
-                                        <span>时间</span>
+                                        <span>{intl.get('Price')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span>{intl.get('Time')}</span>
                                     </div>
                                     <div className="list">
                                         <span>9.2</span>
@@ -65,8 +66,8 @@ class OrderForm extends Component {
                                 </div>
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>已成交数量</span>
-                                        <span>手续费</span>
+                                        <span>{intl.get('Amount Completed')}</span>
+                                        <span>{intl.get('Transaction Fee')}</span>
                                         <span></span>
                                     </div>
                                     <div className="list">
@@ -80,17 +81,17 @@ class OrderForm extends Component {
                           </div>
                        </div>
                        <div className="first">
-                          <div className="head">
-                            <p><i><img src="/img/编组 17@2x.png"/></i><span>BBBUSD/</span><label>AAAUSD</label></p>
-                            <span>撤销</span>
+                       <div className="head">
+                            <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD/</span><label>AAAUSD</label></p>
+                            <span>{intl.get('cancel')}</span>
                           </div>
                           <div className="firstContents">
                             <div className="firstContent">
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>价格</span>
-                                        <span>数量</span>
-                                        <span>时间</span>
+                                        <span>{intl.get('Price')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span>{intl.get('Time')}</span>
                                     </div>
                                     <div className="list">
                                         <span>9.2</span>
@@ -100,8 +101,8 @@ class OrderForm extends Component {
                                 </div>
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>已成交数量</span>
-                                        <span>手续费</span>
+                                        <span>{intl.get('Amount Completed')}</span>
+                                        <span>{intl.get('Transaction Fee')}</span>
                                         <span></span>
                                     </div>
                                     <div className="list">
@@ -117,17 +118,17 @@ class OrderForm extends Component {
                    </div>
                    <div className={this.state.ind == 1 ? 'unfinishedList' : 'unfinishedList dis'}>
                        <div className="first">
-                          <div className="head">
-                            <p><i><img src="/img/编组 17@2x.png"/></i><span>yBBBUSD/</span><label>AAAUSD</label></p>
-                            <span>撤销</span>
+                       <div className="head">
+                            <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD2/</span><label>AAAUSD</label></p>
+                            <span>{intl.get('cancel')}</span>
                           </div>
                           <div className="firstContents">
                             <div className="firstContent">
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>价格</span>
-                                        <span>数量</span>
-                                        <span>时间</span>
+                                        <span>{intl.get('Price')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span>{intl.get('Time')}</span>
                                     </div>
                                     <div className="list">
                                         <span>9.2</span>
@@ -137,8 +138,8 @@ class OrderForm extends Component {
                                 </div>
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>已成交数量</span>
-                                        <span>手续费</span>
+                                        <span>{intl.get('Amount Completed')}</span>
+                                        <span>{intl.get('Transaction Fee')}</span>
                                         <span></span>
                                     </div>
                                     <div className="list">
@@ -152,17 +153,17 @@ class OrderForm extends Component {
                           </div>
                        </div>
                        <div className="first">
-                          <div className="head">
-                            <p><i><img src="/img/编组 17@2x.png"/></i><span>BBBUSD/</span><label>AAAUSD</label></p>
-                            <span>撤销</span>
+                       <div className="head">
+                            <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD/</span><label>AAAUSD</label></p>
+                            <span>{intl.get('cancel')}</span>
                           </div>
                           <div className="firstContents">
                             <div className="firstContent">
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>价格</span>
-                                        <span>数量</span>
-                                        <span>时间</span>
+                                        <span>{intl.get('Price')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span>{intl.get('Time')}</span>
                                     </div>
                                     <div className="list">
                                         <span>9.2</span>
@@ -172,8 +173,8 @@ class OrderForm extends Component {
                                 </div>
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>已成交数量</span>
-                                        <span>手续费</span>
+                                        <span>{intl.get('Amount Completed')}</span>
+                                        <span>{intl.get('Transaction Fee')}</span>
                                         <span></span>
                                     </div>
                                     <div className="list">

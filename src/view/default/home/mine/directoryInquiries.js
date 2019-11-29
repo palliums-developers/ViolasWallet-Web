@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 
 @inject('index')
 @observer
@@ -10,6 +11,9 @@ class DirectoryInquiries extends Component {
         this.state = {
            addresses:[]
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
         let data = await this.props.index.autoAddress();
@@ -24,7 +28,7 @@ class DirectoryInquiries extends Component {
                     <span onClick={() => {
                         this.props.history.push('/home/mine')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>地址簿</span>
+                    <span>{intl.get('Address Book')}</span>
                     <span onClick={() => {
                         this.props.history.push('/addAddress')
                     }}><img src="/img/Close 2@2x.png"/></span>

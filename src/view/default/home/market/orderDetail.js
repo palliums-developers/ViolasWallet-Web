@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
 // import vAccount from '../../../../utils/violas';
 // import {timeStamp2String} from '../../../../utils/timer';
-
+import intl from 'react-intl-universal';
 // @inject('index')
 // @observer
 
@@ -14,6 +14,9 @@ class OrderDetail extends Component {
             status:['未完成','已完成'],
             ind:0
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
        
@@ -31,7 +34,7 @@ class OrderDetail extends Component {
                     <span onClick={() => {
                     this.props.history.push('/orderForm')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>订单详情</span>
+                    <span>{intl.get('The order details')}</span>
                 </header>
                 <section>
                        <div className="first" onClick={()=>{
@@ -39,14 +42,14 @@ class OrderDetail extends Component {
                        }}>
                           <div className="head">
                             <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD /</span><label> AAAUSD</label></p>
-                            <span>已完成</span>
+                            <span>{intl.get('Completed')}</span>
                           </div>
                           <div className="firstContents">
                                 <div className="firstContentL">
                                     <div className="title">
-                                        <span>价格</span>
-                                        <span>数量</span>
-                                        <span>时间</span>
+                                        <span>{intl.get('Price')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span>{intl.get('Time')}</span>
                                     </div>
                                     <div className="list">
                                         <span>9.2</span>
@@ -56,8 +59,8 @@ class OrderDetail extends Component {
                                 </div>
                                 <div className="firstContentL firstContentL1">
                                     <div className="title">
-                                        <span>已成交数量</span>
-                                        <span>手续费</span>
+                                        <span>{intl.get('Amount Completed')}</span>
+                                        <span>{intl.get('Transaction Fee')}</span>
                                         <span></span>
                                     </div>
                                     <div className="listCon">
@@ -66,64 +69,64 @@ class OrderDetail extends Component {
                                             <span>0.01Vtoken</span>
                                             <span></span>
                                         </div>
-                                        <p>浏览器查询</p>
+                                        <p>{intl.get('Browser query')}</p>
                                     </div>
                                 </div>
                           </div>
                        </div>
                        <div className="line"></div>
                        <div className="bidHistory">
-                          <h3>成交记录</h3>
+                          <h3>{intl.get('Browser query')}</h3>
                           <div className="bidHistoryList">
                               <div className="lists">
                                   <dl>
-                                      <dt>时间</dt>
+                                      <dt>{intl.get('Time')}</dt>
                                       <dd>10/17 12:06:23</dd>
                                   </dl>
                                   <dl>
-                                      <dt>价格（Atoken）</dt>
+                                      <dt>{intl.get('Price')}（Atoken）</dt>
                                       <dd>2000.8232</dd>
                                   </dl>
                                   <dl>
-                                      <dt>数量</dt>
+                                      <dt>{intl.get('Amount')}</dt>
                                       <dd>40.0000</dd>
                                   </dl>
                               </div>
-                              <p>浏览器查询</p>
+                              <p>{intl.get('Browser query')}</p>
+                          </div>
+                          <div className="bidHistoryList">
+                             <div className="lists">
+                                  <dl>
+                                      <dt>{intl.get('Time')}</dt>
+                                      <dd>10/17 12:06:23</dd>
+                                  </dl>
+                                  <dl>
+                                      <dt>{intl.get('Price')}（Atoken）</dt>
+                                      <dd>2000.8232</dd>
+                                  </dl>
+                                  <dl>
+                                      <dt>{intl.get('Amount')}</dt>
+                                      <dd>40.0000</dd>
+                                  </dl>
+                              </div>
+                              <p>{intl.get('Browser query')}</p>
                           </div>
                           <div className="bidHistoryList">
                               <div className="lists">
                                   <dl>
-                                      <dt>时间</dt>
+                                      <dt>{intl.get('Time')}</dt>
                                       <dd>10/17 12:06:23</dd>
                                   </dl>
                                   <dl>
-                                      <dt>价格（Atoken）</dt>
+                                      <dt>{intl.get('Price')}（Atoken）</dt>
                                       <dd>2000.8232</dd>
                                   </dl>
                                   <dl>
-                                      <dt>数量</dt>
+                                      <dt>{intl.get('Amount')}</dt>
                                       <dd>40.0000</dd>
                                   </dl>
-                              </div>
-                              <p>浏览器查询</p>
-                          </div>
-                          <div className="bidHistoryList">
-                              <div className="lists">
-                                  <dl>
-                                      <dt>时间</dt>
-                                      <dd>10/17 12:06:23</dd>
-                                  </dl>
-                                  <dl>
-                                      <dt>价格（Atoken）</dt>
-                                      <dd>2000.8232</dd>
-                                  </dl>
-                                  <dl>
-                                      <dt>数量</dt>
-                                      <dd>40.0000</dd>
-                                  </dl>
-                              </div>
-                              <p>浏览器查询</p>
+                               </div>
+                               <p>{intl.get('Browser query')}</p>
                           </div>
                        </div>
                 </section>

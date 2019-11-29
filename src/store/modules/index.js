@@ -1,6 +1,9 @@
 import { observable, action } from "mobx";
 import { getBTCDealRecord,checkNewCoin,startCurLTranfer,getCurUserInfo,createUserInfo,getCurBalance,getCurCoinMess,getLibraDealRecord,addressMessage,getViolasDealRecord } from '../../api/server'
 import axios from 'axios';
+import intl from 'react-intl-universal';
+intl.options.currentLocale=localStorage.getItem("local");
+
 export default class Index{ 
     @observable purse
     @observable mnes_string

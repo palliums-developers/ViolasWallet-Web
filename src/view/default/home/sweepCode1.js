@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
 import { inject,observer } from 'mobx-react';
-// import '../default.scss';
+import intl from 'react-intl-universal';
+
 @inject('index')
 @observer
 
@@ -12,6 +13,9 @@ class Sweepcode1 extends Component {
             file:false,
             address:''
         }
+    }
+    componentWillMount(){
+        intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
        
@@ -45,8 +49,8 @@ class Sweepcode1 extends Component {
                     <span onClick={() => {
                     this.props.history.push('/transfar')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>扫一扫</span>
-                    <button onClick={this.openImageDialog}>相册</button>
+                    <span>{intl.get('Scan')}</span>
+                    <button onClick={this.openImageDialog}>{intl.get('Album')}</button>
                 </header>
                 <section>
                     <div className="code">

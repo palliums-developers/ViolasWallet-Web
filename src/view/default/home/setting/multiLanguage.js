@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import intl from 'react-intl-universal'
+import intl from 'react-intl-universal';
 
 class MultiLanguage extends Component {
     constructor(props) {
@@ -9,7 +9,6 @@ class MultiLanguage extends Component {
         }
     }
     componentDidMount(){
-       
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
@@ -36,7 +35,7 @@ class MultiLanguage extends Component {
                             localStorage.setItem('local','CN');
                             this.changeLang('CN');
                             }}>
-                            <h4>简体中文</h4>
+                            <h4>{intl.get('Simplified Chinese')}</h4>
                             <span className={localStorage.getItem('local')=='CN'?'act':''}></span>
                         </div>
                         <div className="line"></div>
@@ -44,7 +43,7 @@ class MultiLanguage extends Component {
                             localStorage.setItem('local','EN');
                             this.changeLang('EN');
                             }}>
-                            <h4>English</h4>
+                            <h4>{intl.get('English')}</h4>
                             <span className={localStorage.getItem('local')=='EN'?'act':''}></span>
                         </div>
                     </div>

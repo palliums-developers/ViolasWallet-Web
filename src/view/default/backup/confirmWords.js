@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../default.scss';
 import { inject, observer } from 'mobx-react';
 import { thisExpression } from '@babel/types';
+import intl from 'react-intl-universal';
 let aes256 = require('aes256');
 
 @inject('index')
@@ -17,6 +18,10 @@ class ConfirmWords extends Component {
             clickable: true,
             swap:{},
         }
+    }
+    componentWillMount(){
+      intl.options.currentLocale=localStorage.getItem("local");
+      this.forceUpdate();
     }
     componentDidMount() {
         let decrypted = JSON.parse( window.localStorage.getItem('data'));
@@ -154,13 +159,13 @@ class ConfirmWords extends Component {
                     <span onClick={() => {
                         this.props.history.push('/codeBackup')
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
-                    <span>确认助记词</span>
+                    <span>{intl.get('Confirm Mnemonic Words')}</span>
                 </header>
                 <section>
                     <div className="backupPaper">
-                        <h4>请按顺序点击助记词，以确认您正确备份</h4>
+                        <h4>{intl.get('Please select these mnemonic words in proper order to confirm you have backup them properly')}</h4>
                         {
-                            this.state.clickable ? null : <p>助记词顺序不正确，请校对</p>
+                            this.state.clickable ? null : <p>{intl.get('The order of mnemonic words is not correct, please try again')}</p>
                         }
                         <div className="words">
                             {this.state.mnes_empty.map((v, i) => {
@@ -182,7 +187,7 @@ class ConfirmWords extends Component {
                         })
                         }
                         </div>
-                        <div className="btn" onClick={()=>this.finish()}>完成</div>
+                        <div className="btn" onClick={()=>this.finish()}>{intl.get('Complete')}</div>
                     </div>
                 </section>
             </div>
