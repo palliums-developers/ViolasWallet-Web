@@ -11,14 +11,14 @@ export let stableCurTranfer = (params) =>{
 //交易记录
 export let stableCurDeal = (params) =>{
     return request({
-        url: url1+'/returnOrderBook?base='+params.base+'&quote='+params.quote,
+        url: url+'/returnOrderBook?base='+params.base+'&quote='+params.quote,
         method: 'get',
     });
 }
 
 export let selfCurDeal = (params) =>{
     return request({
-        url: url1+'/returnOrders?user=0xb95b427af584a781a7240122c9d2582720e28174d276094429fa1aa356bc2d5d&base=0x352ba42b3a2fb66bff15f08ea691b5b87eff0fe6a69b79cda364c4cdf787a0a2&quote=0x0f7100fcf2d114ef199575f0651620001d210718c680fbe7568c72d6e0160731',
+        url: url+'/returnOrders?user=0x8e8f033830c60602ef491d0f850094d72d483e602c9a5df845eac7efc3387a38',
         method: 'get',
     });
 }

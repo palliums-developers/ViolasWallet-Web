@@ -15,7 +15,8 @@ class Market extends Component {
             coin:true,
             rate: 0,
             curEntrust:[],
-            othersEntrust:[]
+            othersEntrust:[],
+            dealData:[]
         }
     }
     componentWillMount(){
@@ -27,9 +28,10 @@ class Market extends Component {
     }
     async getContent(){
         let { ind,inds,list,stableDeal,selfDeal }= this.props.dealIndex;
-        console.log(ind,inds)
         let data = await selfDeal()
-        console.log(data,'data........')
+        this.setState({
+            dealData:data
+        })
         let dealData = [];
         if(list[ind].addr < list[inds].addr){
             dealData = await stableDeal({
@@ -78,8 +80,9 @@ class Market extends Component {
     }
 
     render() {
-        let {curEntrust,othersEntrust} = this.state;
-        let {vals,val} = this.props.dealIndex
+        let {curEntrust,othersEntrust,dealData} = this.state;
+        let {vals,val} = this.props.dealIndex;
+        console.log(dealData,'dealData......')
         return (
             <div className="market">
                 <header>
@@ -146,7 +149,7 @@ class Market extends Component {
                     </div>
                     <div className="commissioned ">
                         <div className="head">
-                            <h4>{intl.get('Market Price')}</h4>
+                            <h4>{intl.get('Market')}</h4>
                             <span onClick={()=>{
                                   this.props.history.push('/orderForm')
                               }}>{intl.get('All')}</span>
@@ -154,30 +157,25 @@ class Market extends Component {
                         <div className="list">
                             <div className="title">
                                 <span>{intl.get('Market')}</span>
-                                <span>{intl.get('Amount')}(BBBUSD)</span>
-                                <span>{intl.get('Price')}(BBBUSD)</span>
+                                <span>{intl.get('Amount')}({val})</span>
+                                <span>{intl.get('Exchange Rate')}</span>
                             </div>
                             <div className="lists">
-                              <div className="listRecord">
-                                  <div className="deal">
-                                    <p><i><img src="/img/编组 17@2x.png"/></i><span>BBBUSD/</span><label>AAAUSD</label></p>
-                                    <p>200</p>
-                                    <p>7.1</p>
-                                  </div>
-                                  <div className="time">
-                                    01/18   12:06:23
-                                  </div>
-                              </div>
-                              <div className="listRecord">
-                                  <div className="deal">
-                                    <p><i><img src="/img/编组 17@2x.png"/></i><span>BBBUSD/</span><label>AAAUSD</label></p>
-                                    <p>200</p>
-                                    <p>7.1</p>
-                                  </div>
-                                  <div className="time">
-                                    01/18   12:06:23
-                                  </div>
-                              </div>
+                                {
+                                    dealData && dealData.map((v,i)=>{
+                                        return <div className="listRecord" key={i}>
+                                                    <div className="deal">
+                                                    <p><i><img src="/img/编组 17@2x.png"/></i><span>{val}/</span><label>{vals}</label></p>
+                                                    <p>{v.amountGet}</p>
+                                                    <p>{v.amountGet/v.amountGive}</p>
+                                                    </div>
+                                                    <div className="time">
+                                                    {v.date}
+                                                    </div>
+                                                </div>
+                                    })
+                                }
+                              
                             </div>
                         </div>
                     </div>

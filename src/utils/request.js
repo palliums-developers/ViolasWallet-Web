@@ -5,7 +5,7 @@ const service = axios.create({
 
   // baseURL: 'http://47.106.208.207:4000/api',
   // withCredentials: true, // 跨域请求时发送 cookies
-  headers:{"Content-Type":"application/json"},
+  // headers:{"Content-Type":"application/json"},
   timeout: 5000 // request timeout
 })
 

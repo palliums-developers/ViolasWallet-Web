@@ -50,6 +50,6 @@ export default class DealIndex{
     }
     @action async selfDeal(params) {
         let data = await selfCurDeal(params);
-        return data.data
+        return data.data.orders
     }
 }   
