@@ -1,3 +1,4 @@
+// let violas = require("kulap-libra-violas/build/index");
 let violas = require("kulap-libra-violas/build/index");
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;

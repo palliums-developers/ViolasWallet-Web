@@ -80,7 +80,16 @@ class Home extends Component {
                     <RouterView routes={routes}></RouterView>
                 </div>
                 {
-                    this.state.isShow == true ? <div className="dialog">
+                    this.state.isShow == true ? intl.get('Start Now')=="Start Now"?<div className="dialog">
+                        <div className="dialogContent">
+                            <p><img src="/img/编组 30@2xen.png" /></p>
+                            <span onClick={() => {
+                                this.setState({
+                                    isShow: false
+                                })
+                            }}>{intl.get('Start Now')}</span>
+                        </div>
+                    </div>:<div className="dialog">
                         <div className="dialogContent">
                             <p><img src="/img/编组 30@2x.png" /></p>
                             <span onClick={() => {
