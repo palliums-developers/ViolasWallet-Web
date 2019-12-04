@@ -1,13 +1,17 @@
 import { observable, action } from "mobx";
-import { stableCurTranfer,stableCurDeal,selfCurDeal } from '../../api/deal'
+import {
+    stableCurTranfer,
+    stableCurDeal,
+    selfCurDeal,
+    getCurCoinMess,
+    getOtherCoinMess
+} from '../../api/deal'
 
 export default class DealIndex{ 
     @observable isShow = false
-    @observable val = 'DTM'
+    @observable val = 1
     @observable isShows = false
-    @observable vals = 'XDS'
-    @observable ind = 1
-    @observable inds = 2
+    @observable vals = 2
     @observable list = [
             { "addr": "0x0000000000000000000000000000000000000000000000000000000000000000", "name": "LIBRA", "decimals": 6 },
             { "addr": "0x0f7100fcf2d114ef199575f0651620001d210718c680fbe7568c72d6e0160731", "name": "DTM", "decimals": 6 },
@@ -22,10 +26,10 @@ export default class DealIndex{
         
     }
     changeInd(ind){
-      this.ind = ind
+      this.val = ind
     }
     changeInds(ind){
-        this.inds = ind
+        this.vals = ind
       }
     selectChange(type) { 
         if(type.value){
@@ -44,6 +48,15 @@ export default class DealIndex{
         let data = await stableCurTranfer(params);
         console.log(data)
     }
+    //获取币种信息
+    @action async getCoinMess() {
+        let coins = await getCurCoinMess();
+        return coins.data.data;
+    }
+     @action async getOthersCoinMess() {
+         let coins = await getOtherCoinMess();
+         return coins.data;
+     }
     @action async stableDeal(params) {
         let data = await stableCurDeal(params);
         return data.data

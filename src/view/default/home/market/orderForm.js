@@ -49,6 +49,10 @@ class OrderForm extends Component {
     }
     render() {
         let { datas } = this.state;
+        let {
+            selfCoin,
+            othersCoin
+        } = this.props.location.state;
         return (
             <div className="orderForm">
                 <header>
@@ -72,13 +76,15 @@ class OrderForm extends Component {
                                     this.props.history.push({
                                         pathname:'/orderDetail',
                                         state : {
-                                            id:v.id
+                                            id:v.id,
+                                            selfCoin: selfCoin,
+                                            othersCoin: othersCoin
                                         }
                                         
                                     })
                                 }} key={i}>
                                    <div className="head">
-                                     <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD/</span><label>AAAUSD</label></p>
+                            <p><i><img src="/img/编组 17@2x.png"/></i><span>{selfCoin}/</span><label>{othersCoin}</label></p>
                                      <span>{intl.get('cancel')}</span>
                                    </div>
                                    <div className="firstContents">

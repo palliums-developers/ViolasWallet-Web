@@ -16,40 +16,54 @@ class Market extends Component {
             rate: 0,
             curEntrust:[],
             othersEntrust:[],
-            dealData:[]
+            condata:[],
+            otherdata:[],
+            dealData:[],
+            count:''
         }
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
-        this.getContent()
+        
+        let coinData = await this.props.dealIndex.getCoinMess();
+        let othersData = await this.props.dealIndex.getOthersCoinMess();
+        this.setState({
+            coindata: coinData,
+            othersdata: othersData
+        },()=>{
+         this.getContent()   
+        })
         
     }
     async getContent(){
-        let { ind,inds,list,stableDeal,selfDeal }= this.props.dealIndex;
-        let data = await selfDeal()
+        let { val,vals,stableDeal,selfDeal }= this.props.dealIndex;
+        let { coindata,othersdata } = this.state;
+        let data = await selfDeal();
         this.setState({
             dealData:data
         })
         let dealData = [];
-        if(list[ind].addr < list[inds].addr){
-            dealData = await stableDeal({
-                base:list[ind].addr,
-                quote:list[inds].addr
-             });
-            this.setState({
-                curEntrust:dealData.buys
-            })
-        }else{
-            dealData = await stableDeal({
-                base:list[inds].addr,
-                quote:list[ind].addr
-             });
-            this.setState({
-                othersEntrust:dealData.sells
-            })
-        }
+            if (coindata && coindata[val].address < othersdata && othersdata[vals].addr) {
+                dealData = await stableDeal({
+                    base: coindata && coindata[val].address,
+                    quote: othersdata && othersdata[vals].addr
+                });
+                console.log(dealData, 'dealData........')
+                this.setState({
+                    curEntrust:dealData.buys
+                })
+            } else {
+                dealData = await stableDeal({
+                    base: othersdata && othersdata[vals].addr,
+                    quote: coindata && coindata[val].address
+                });
+                console.log(dealData, 'dealData2........')
+                this.setState({
+                    othersEntrust:dealData.sells
+                })
+            }
     }
     getCoin = () =>{
       this.setState({
@@ -78,11 +92,20 @@ class Market extends Component {
        }
        
     }
-
+   getCount = (e) =>{
+     this.setState({
+         count:e.target.value
+     })
+   }
     render() {
-        let {curEntrust,othersEntrust,dealData} = this.state;
+        let {
+            curEntrust,
+            othersEntrust,
+            dealData,
+            othersdata,
+            coindata
+        } = this.state;
         let {vals,val} = this.props.dealIndex;
-        console.log(dealData,'dealData......')
         return (
             <div className="market">
                 <header>
@@ -94,25 +117,35 @@ class Market extends Component {
                             <div className="change">
                                 {
                                     this.state.coin ? <div id="select">
-                                  <div onClick={() => this.getChange('a')}><label>{this.props.dealIndex.val}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                  <div onClick={() => this.getChange('a')}><label>{coindata && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                 </div> : <div id="select">
-                                    <div onClick={() => this.getChange('b')}><label>{this.props.dealIndex.vals}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                    <div onClick={() => this.getChange('b')}><label>{othersdata && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                 </div>
                                 }
                                 <div className={this.state.coin ? 'changeLogo noReturn' : 'changeLogo return'} onClick={()=>this.getCoin()}></div>
                                 {
                                     this.state.coin ? <div id="select">
-                                    <div onClick={() => this.getChange('b')}><label>{this.props.dealIndex.vals}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                    <div onClick={() => this.getChange('b')}><label>{othersdata && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                 </div> : <div id="select">
-                                    <div onClick={() => this.getChange('a')}><label>{this.props.dealIndex.val}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                    <div onClick={() => this.getChange('a')}><label>{coindata && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                 </div>
                                 }
                                 
                             </div>
                             
                             <div className="title">
-                                <span>{intl.get('Amount Transfered')}</span>
-                                <span>{intl.get('Amount Received')}</span>
+                                <input type="text" value={this.state.count} placeholder={intl.get('Amount Transfered')} onChange={(e)=>this.getCount(e)}/>
+                                <input type = "text"
+                                 value = {
+                                     this.state.count
+                                 }
+                                placeholder = {
+                                    intl.get('Amount Received')
+                                }
+                                onChange = {
+                                    (e) => this.getCount(e)
+                                }
+                                />
                             </div>
                             <div className="address">
                                 <h4>{intl.get('Receving Address')}</h4>
@@ -122,7 +155,10 @@ class Market extends Component {
                             </div>
                             <div className="rate">
                                <h4>{intl.get('Exchange Rate')}</h4>
-                               <span>1AAAUSD=1BBBUSD</span>
+                               {
+                                   this.state.coin ? <span>1{coindata && coindata[val].name}=1{othersdata && othersdata[vals].name}</span> : <span>1{othersdata && othersdata[vals].name}=1{coindata && coindata[val].name}</span> 
+                               }
+                               
                             </div>
                             <div className="line"></div>
                             <div className="fees">
@@ -151,23 +187,42 @@ class Market extends Component {
                         <div className="head">
                             <h4>{intl.get('Market')}</h4>
                             <span onClick={()=>{
-                                  this.props.history.push('/orderForm')
+                                if(this.state.coin){
+                                    this.props.history.push({
+                                        pathname: '/orderForm',
+                                        state:{
+                                            selfCoin: coindata && coindata[val].name,
+                                            othersCoin: othersdata && othersdata[vals].name
+                                        }
+                                    })
+                                }else{
+                                    this.props.history.push({
+                                        pathname: '/orderForm',
+                                        state: {
+                                            selfCoin: othersdata && othersdata[vals].name,
+                                            othersCoin: coindata && coindata[val].name
+                                        }
+                                    })
+                                }
+                                  
                               }}>{intl.get('All')}</span>
                         </div>
                         <div className="list">
                             <div className="title">
                                 <span>{intl.get('Market')}</span>
-                                <span>{intl.get('Amount')}({val})</span>
-                                <span>{intl.get('Exchange Rate')}</span>
+                                <span>{intl.get('Amount')}</span>
+                                <span>{intl.get('Price')}</span>
                             </div>
                             <div className="lists">
                                 {
                                     dealData && dealData.map((v,i)=>{
                                         return <div className="listRecord" key={i}>
                                                     <div className="deal">
-                                                    <p><i><img src="/img/编组 17@2x.png"/></i><span>{val}/</span><label>{vals}</label></p>
+                                                    {
+                                                        this.state.coin ? <p><i><img src="/img/编组 17@2x.png"/></i><span>{othersdata && othersdata[vals].name}/</span><label>{coindata && coindata[val].name}</label></p> : <p><i><img src="/img/编组 17@2x.png"/></i><span>{coindata && coindata[val].name}/</span><label>{othersdata && othersdata[vals].name}</label></p>
+                                                    }
                                                     <p>{v.amountGet}</p>
-                                                    <p>{v.amountGet/v.amountGive}</p>
+                                                    <p>{othersdata && othersdata[vals].price}</p>
                                                     </div>
                                                     <div className="time">
                                                     {v.date}
@@ -187,8 +242,8 @@ class Market extends Component {
                         </div>
                         <div className="list">
                             <div className="title">
-                                <span>{intl.get('Amount')}({vals})</span>
-                                <span>{intl.get('Price')}({val}/{vals})</span>
+                                <span>{intl.get('Amount')}</span>
+                                <span>{intl.get('Price')}(USD)</span>
                             </div>
                             <div className="lists">
                                 {

@@ -34,22 +34,30 @@ class OrderDetail extends Component {
     }
     render() {
         let { detailData } = this.state;
+        let {
+            selfCoin,
+            othersCoin
+        } = this.props.location.state;
         return (
             <div className="orderDetail">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push('/orderForm')
+                    this.props.history.push({
+                        pathname:'/orderForm',
+                        state: {
+                            selfCoin: selfCoin && selfCoin,
+                            othersCoin: othersCoin && othersCoin
+                        }
+                    })
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>{intl.get('The order details')}</span>
                 </header>
                 <section>
                        {
                            detailData && detailData.map((v,i)=>{
-                               return <div className="first" onClick={()=>{
-                                this.props.history.push('/orderDetail')
-                            }} key={i}>
+                               return <div className="first" key={i}>
                                <div className="head">
-                                 <p><i><img src="/img/编组 17@2x.png"/></i><span>wBBBUSD /</span><label> AAAUSD</label></p>
+                                 <p><i><img src="/img/编组 17@2x.png"/></i><span>{selfCoin} /</span><label> {othersCoin}</label></p>
                                  <span>{intl.get('Completed')}</span>
                                </div>
                                <div className="firstContents">

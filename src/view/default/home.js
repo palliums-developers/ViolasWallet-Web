@@ -13,6 +13,8 @@ class Home extends Component {
         super(props);
         this.state = {
             isShow: false,
+            condata: [],
+            otherdata: [],
             routes: [
                 {
                     to: '/home/wallet',
@@ -46,34 +48,35 @@ class Home extends Component {
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
     }
-    componentDidMount() {
-        
+    async componentDidMount() {
+        let coinData = await this.props.dealIndex.getCoinMess();
+        let othersData = await this.props.dealIndex.getOthersCoinMess();
+        this.setState({
+            coindata: coinData,
+            othersdata: othersData
+        })
         this.setState({
             isShow: this.props.location.state
         })
 
     }
-    handleMouseUp = (i,val) => {
-        // this.setState({
-        //     ind: i
-        // })
+    handleMouseUp = (i,) => {
         this.props.dealIndex.changeInd(i)
         this.props.dealIndex.selectChange({
-            value:val,
             isShow:false
         })
         
     }
-    handlesMouseUp = (i,val) =>{
+    handlesMouseUp = (i) =>{
         this.props.dealIndex.changeInds(i)
         this.props.dealIndex.selectsChange({
-            value:val,
             isShows:false
         })
     }
     render() {
         let { routes } = this.props;
-        let {list,ind,inds} = this.props.dealIndex
+        let {val,vals} = this.props.dealIndex
+        let { coindata,othersdata} = this.state
         return (
             <div className="default">
                 <div className="wrap">
@@ -114,10 +117,10 @@ class Home extends Component {
                     this.props.dealIndex.isShow ? <div className="selectListDialog animated bounceInUp">
                         <div className="selectLists">
                             {
-                                list.map((v, i) => {
+                                coindata.map((v, i) => {
                                     return <div key={i} className="selectList" onClick={() => this.handleMouseUp(i,v.name)}>
                                         <label>{v.name}</label>
-                                        <span className={ind == i ? 'light' : 'dark'}></span>
+                                        <span className={val == i ? 'light' : 'dark'}></span>
                                     </div>
                                 })
                             }
@@ -128,10 +131,10 @@ class Home extends Component {
                     this.props.dealIndex.isShows ? <div className="selectListDialog animated bounceInUp">
                         <div className="selectLists">
                             {
-                                list.map((v, i) => {
+                                othersdata.map((v, i) => {
                                     return <div key={i} className="selectList" onClick={() => this.handlesMouseUp(i,v.name)}>
                                         <label>{v.name}</label>
-                                        <span className={inds == i ? 'light' : 'dark'}></span>
+                                        <span className={vals == i ? 'light' : 'dark'}></span>
                                     </div>
                                 })
                             }
