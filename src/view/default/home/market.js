@@ -185,14 +185,15 @@ class Market extends Component {
                     </div>
                     <div className="commissioned ">
                         <div className="head">
-                            <h4>{intl.get('Market')}</h4>
+                            <h4>{intl.get('Current Commission')}</h4>
                             <span onClick={()=>{
                                 if(this.state.coin){
                                     this.props.history.push({
                                         pathname: '/orderForm',
                                         state:{
                                             selfCoin: coindata && coindata[val].name,
-                                            othersCoin: othersdata && othersdata[vals].name
+                                            othersCoin: othersdata && othersdata[vals].name,
+                                            price: othersdata && othersdata[vals].price
                                         }
                                     })
                                 }else{
@@ -200,7 +201,8 @@ class Market extends Component {
                                         pathname: '/orderForm',
                                         state: {
                                             selfCoin: othersdata && othersdata[vals].name,
-                                            othersCoin: coindata && coindata[val].name
+                                            othersCoin: coindata && coindata[val].name,
+                                            price: othersdata && othersdata[vals].price
                                         }
                                     })
                                 }
@@ -218,9 +220,7 @@ class Market extends Component {
                                     dealData && dealData.map((v,i)=>{
                                         return <div className="listRecord" key={i}>
                                                     <div className="deal">
-                                                    {
-                                                        this.state.coin ? <p><i><img src="/img/编组 17@2x.png"/></i><span>{othersdata && othersdata[vals].name}/</span><label>{coindata && coindata[val].name}</label></p> : <p><i><img src="/img/编组 17@2x.png"/></i><span>{coindata && coindata[val].name}/</span><label>{othersdata && othersdata[vals].name}</label></p>
-                                                    }
+                                                    <p><i><img src="/img/编组 17@2x.png" /></i><span>{othersdata && othersdata[vals].name}/</span><label>{coindata && coindata[val].name}</label></p>
                                                     <p>{v.amountGet}</p>
                                                     <p>{othersdata && othersdata[vals].price}</p>
                                                     </div>

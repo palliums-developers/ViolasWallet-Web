@@ -38,7 +38,7 @@ export default {
     'Fund':'资产',
     'Safety Reminder':'安全提醒',
     'You have not backup your Identity Mnemonic Words，Please backup your Mnemonic Words':'您的身份助记词未备份，请务必备份助记词',
-    'Mnemonic Words can be used to recover funds in the Identity Wallet in case you forgot Access Code, removed the App, lost phone.':'助记词可用于恢复身份下钱包资产，防止忘记密码、应用删r、手机丢失等情况导致资产损失',
+    'Mnemonic Words can be used to recover funds in the Identity Wallet in case you forgot Access Code, removed the App, lost phone.':'助记词可用于恢复身份下钱包资产，防止忘记密码、应用删除、手机丢失等情况导致资产损失',
     'Backup Now':'立即备份',
     'Wallet':'钱包',
     'Market':'市场',

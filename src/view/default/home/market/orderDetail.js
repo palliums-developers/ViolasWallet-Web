@@ -25,7 +25,6 @@ class OrderDetail extends Component {
         this.setState({
             detailData:datas
         })
-        console.log(datas,'data.....')
     }
     getIndex = (i) =>{
        this.setState({
@@ -36,7 +35,8 @@ class OrderDetail extends Component {
         let { detailData } = this.state;
         let {
             selfCoin,
-            othersCoin
+            othersCoin,
+            price
         } = this.props.location.state;
         return (
             <div className="orderDetail">
@@ -46,7 +46,8 @@ class OrderDetail extends Component {
                         pathname:'/orderForm',
                         state: {
                             selfCoin: selfCoin && selfCoin,
-                            othersCoin: othersCoin && othersCoin
+                            othersCoin: othersCoin && othersCoin,
+                            price: price && price
                         }
                     })
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
@@ -68,7 +69,7 @@ class OrderDetail extends Component {
                                              <span>{intl.get('Time')}</span>
                                          </div>
                                          <div className="list">
-                                             <span>{v.amountGet/v.amountGive}</span>
+                                               <span>{price}</span>
                                              <span>{v.amountGet}</span>
                                              <span>{v.date}</span>
                                          </div>

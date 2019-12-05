@@ -29,7 +29,6 @@ class OrderForm extends Component {
         let data = await selfDeal();
         let undoneData = data.filter(v=>v.state == 'OPEN');
         let completedData = data.filter(v=>v.state == 'FILLED');
-        
         if(ind == 0){
             this.setState({
                 datas:undoneData
@@ -51,7 +50,8 @@ class OrderForm extends Component {
         let { datas } = this.state;
         let {
             selfCoin,
-            othersCoin
+            othersCoin,
+            price
         } = this.props.location.state;
         return (
             <div className="orderForm">
@@ -78,7 +78,8 @@ class OrderForm extends Component {
                                         state : {
                                             id:v.id,
                                             selfCoin: selfCoin,
-                                            othersCoin: othersCoin
+                                            othersCoin: othersCoin,
+                                            price:price
                                         }
                                         
                                     })
@@ -96,7 +97,7 @@ class OrderForm extends Component {
                                                  <span>{intl.get('Time')}</span>
                                              </div>
                                              <div className="list">
-                                                 <span>{v.amountGet / v.amountGive}</span>
+                                                 <span>{price}</span>
                                                  <span>{v.amountGet}</span>
                                                  <span>{v.date}</span>
                                              </div>

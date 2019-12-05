@@ -45,7 +45,7 @@ export default class Index{
     //获取BTC余额信息
     @action async getBTCBalance(params) {
         let balance = await getCurBalance(params);
-        return balance.data;
+        return balance.data.data;
     }
     //获取币种信息
     @action async getCoinMess() {
@@ -79,8 +79,8 @@ export default class Index{
     }
     //获取BTC交易记录
     @action async getBTCDealRecords(params) {
-        let records = await getBTCDealRecord(params);
-        return records.data;
+        let records = await getCurBalance(params);
+        return records.data.list.list;
         
     }
     //检测稳定币状态

@@ -5,6 +5,9 @@ import vAccount from '../../../../utils/violas';
 import {timeStamp2String} from '../../../../utils/timer';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
+let decrypted = JSON.parse(window.localStorage.getItem('data'));
 
 @inject('index')
 @observer
@@ -21,7 +24,6 @@ class Record extends Component {
         intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
-       let decrypted =  JSON.parse(window.localStorage.getItem('data'));
        let arr = creat_account_mnemonic(decrypted.mne_arr)
        let addressStr = get_address(arr);
        if(window.localStorage.getItem('type') == intl.get('LibraWallet')){
@@ -45,19 +47,20 @@ class Record extends Component {
             recordData:data
         })
        }else if(window.localStorage.getItem('type') == intl.get('BTCWallet')){
-        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        let btc = new Account(decrypted.mne_arr, testnet);
         let data = await this.props.index.getBTCDealRecords({
             address:btc.address,
-            page:1
+            page:1,
+            name:'BTC'
         })
         this.setState({
             recordBData:data
         })
-        console.log(data)
        }
     }
     render() {
-        let { recordBData } = this.state;
+        let { recordBData, recordData } = this.state;
+        let btc = new Account(decrypted.mne_arr, testnet);
         return (
             <div className="record">
                 <header>
@@ -71,7 +74,7 @@ class Record extends Component {
                 </header>
                 <section>
                     {
-                        this.state.recordData && this.state.recordData.map((v,i)=>{
+                        recordData && recordData.map((v,i)=>{
                             return <div className="recordDetail" key={i}>
                                         <div className="title">
                                             <span>{intl.get('Date')}</span>
@@ -95,12 +98,19 @@ class Record extends Component {
                         })
                     }
                     {
-                        recordBData.result && recordBData.result.map((v,i)=>{
+                        recordBData && recordBData.map((v,i)=>{
                             return <div className="recordDetail" key={i}>
                                         <div className="title">
                                             <span>{intl.get('Date')}</span>
                                             <span>{intl.get('Amount')}</span>
-                                            <span className={recordBData.recs[i]&&recordBData.recs[i] ? 'redC' : 'greenC'}>{recordBData.recs[i]&&recordBData.recs[i] ? intl.get('Transfer') : intl.get('Receive')}</span>
+                                            {
+                                            v.inputs.map((val, ind) => {
+                                              return val.prev_addresses.map((va, index) => {
+                                                  return <span key={i} className={va.address ? (va.address.indexOf(btc.address) == 0 ? 'redC' : 'greenC') : (va.indexOf(btc.address) == 0 ? 'redC' : 'greenC')}>{va.address ? (va.address.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive')) : (va.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive'))}</span>
+                                                })
+                                            })
+                                            }
+                                            {/* <span className={recordBData.recs[i]&&recordBData.recs[i] ? 'redC' : 'greenC'}>{recordBData.recs[i]&&recordBData.recs[i] ? intl.get('Transfer') : intl.get('Receive')}</span> */}
                                         </div>
                                         <div className="titleContent">
                                             <span>{timeStamp2String(v.block_time+'000')}</span>

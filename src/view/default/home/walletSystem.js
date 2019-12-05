@@ -4,6 +4,8 @@ import { creat_account_mnemonic, get_address } from '../../../utils/kulap-functi
 import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
 let decrypted = JSON.parse(window.localStorage.getItem('data'));
 @inject('index')
 @observer
@@ -54,19 +56,17 @@ class WalletSystem extends Component {
         this.setState({
             balancedata2: balanceData2
         })
-        // let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
-        // console.log(btc.address)
     }
     getVioAddress() {
         let violas = new vAccount(decrypted.mne_arr);
         return violas.address;
     }
     getBTCAddress() {
-        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        let btc = new Account(decrypted.mne_arr, testnet);
         return btc.address;
     }
     getBTCAddressData() {
-        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        let btc = new Account(decrypted.mne_arr, testnet);
         return btc.address
     }
     getWallets = (type) => {

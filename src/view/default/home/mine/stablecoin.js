@@ -29,7 +29,7 @@ class stablecoin extends Component {
         this.setState({
             balancedata:balanceData
         })
-        await this.props.dealIndex.stableDeal()
+        // await this.props.dealIndex.stableDeal()
     }
 
     copyUrl2 = () =>{

@@ -22,7 +22,8 @@ class Transfar extends Component {
             address1: '',
             address2: '',
             address3: '',
-            balancedata:[]
+            balancedata:[],
+            balance:Number
         }
     }
     componentWillMount(){
@@ -50,7 +51,7 @@ class Transfar extends Component {
                 name: 'violas'
             })
             this.setState({
-                balancedata: balanceData
+                balancedata: balanceData.balance/1e6
             })
 
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
@@ -60,16 +61,17 @@ class Transfar extends Component {
                 name: 'libra'
             })
             this.setState({
-                balancedata: balanceData
+                balancedata: balanceData.balance / 1e6
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+            let btc = new Account(decrypted.mne_arr,testnet);
             balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
+                page:1,
                 name: 'BTC'
             })
             this.setState({
-                balancedata: balanceData
+                balancedata: balanceData.balance / 1e8
             })
         }
     }
@@ -179,7 +181,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>Vtoken</span>
-                                    <span>{intl.get('Balance')}：<s>{balancedata.balance}</s> Vtoken</span>
+                                    <span>{intl.get('Balance')}：<s>{balancedata}</s> Vtoken</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
@@ -221,7 +223,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>BTC</span>
-                                    <span>{intl.get('Input Amount')}：<s>{balancedata.balance}</s> BTC</span>
+                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> BTC</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getBtcAm(e, 'amount')} />
                                 <div className="title">
@@ -263,7 +265,7 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>Lib</span>
-                                    <span>{intl.get('Input Amount')}：<s>{balancedata.balance}</s> Lib</span>
+                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> Lib</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">

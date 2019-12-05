@@ -3,7 +3,10 @@ import { inject, observer } from 'mobx-react';
 import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
+let decrypted = JSON.parse(window.localStorage.getItem('data'));
 
 @inject('index')
 @observer
@@ -14,17 +17,17 @@ class Wallet extends Component {
         this.state = {
             isShow: false,
             balancedata: [],
-            curWal: [],
+            curWal: '',
             dealdata: {},
-            coindata: []
+            coindata: [],
+            balance:Number
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        // console.log(decrypted)
+        // console.log(JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name)
         let balanceData;
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
             let violas = new vAccount(decrypted.mne_arr);
@@ -35,6 +38,7 @@ class Wallet extends Component {
             })
             this.setState({
                 balancedata: balanceData,
+                balance: balanceData.balance/1e6,
                 curWal: JSON.parse(window.localStorage.getItem('data')).name
             })
             let arrs = await this.props.index.checkCurNewCoin({
@@ -69,16 +73,21 @@ class Wallet extends Component {
             })
             this.setState({
                 balancedata: balanceData,
+                balance: balanceData.balance / 1e6,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+            // console.log(JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name)
+            let btc = new Account(decrypted.mne_arr,testnet);
+            // console.log(btc)
             balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
+                page:1,
                 name: 'BTC'
             })
             this.setState({
                 balancedata: balanceData,
+                balance: balanceData.balance / 1e8,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
         }
@@ -89,7 +98,7 @@ class Wallet extends Component {
         this.props.history.push('/walletSystem')
     }
     getBTCAddress() {
-        let btc = new Account('sport chicken goat abandon actual extra essay build maid garbage ahead aim');
+        let btc = new Account(decrypted.mne_arr, testnet);
         return btc.address
     }
     copyUrl2 = () => {
@@ -108,7 +117,7 @@ class Wallet extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
     }
     render() {
-        let { balancedata, curWal, dealdata, coindata } = this.state;
+        let { balancedata, curWal, dealdata, coindata, balance } = this.state;
         return (
             <div className="wallet">
                 <header>
@@ -130,7 +139,7 @@ class Wallet extends Component {
                                 }}><img src="/img/编组 14@2x.png" /></span>
                             </div>
                             <div className="banlanceDescr">
-                                <span>{balancedata.balance}</span><label>{
+                                <span>{balance}</span><label>{
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                 }</label>
                             </div>
