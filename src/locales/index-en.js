@@ -146,6 +146,8 @@ export default {
     'multiLanguage':'multiLanguage',
     'Exchange Rate':'Exchange Rate',
     'cancel':'cancel',
+    'canceled': 'canceled',
+    'canceling': 'canceling',
     'The order details':'The order details',
     'Browser query':'Browser query',
     'Trading Record':'Trading Record'

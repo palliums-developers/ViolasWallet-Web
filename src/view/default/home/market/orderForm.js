@@ -85,15 +85,15 @@ class OrderForm extends Component {
     }
     ifCancle(sta){
         if (sta == 'CANCELED'){
-           return '已撤销'
+            return intl.get('canceled')
         } else if (sta == 'FILLED') {
-            return '已撤销'
+            return intl.get('canceled')
         } else if(sta == 'CANCELING') {
-            return '撤销中'
+            return intl.get('canceling') 
         } else if (sta == 'OPEN') {
-            return '撤销中'
+            return intl.get('canceling')
         } else {
-            return '撤销'
+            return intl.get('cancel')
         }
         
     }

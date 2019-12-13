@@ -146,6 +146,8 @@ export default {
     'multiLanguage':'多语言',
     'Exchange Rate':'汇率',
     'cancel':'撤销',
+    'canceled': '已撤销',
+    'canceling': '撤销',
     'The order details':'订单详情',
     'Browser query':'浏览器查询',
     'Trading Record':'成交记录'
