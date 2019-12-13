@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import 'antd-mobile/dist/antd-mobile.css';
 import { Modal } from 'antd-mobile';
-import vAccount from '../../../utils/violas'
+import vAccount from '../../../utils/violas';
+import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
 let aes256 = require('aes256');
-
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
 const prompt = Modal.prompt;
 class Manage extends Component {
     constructor(props) {
@@ -22,29 +24,28 @@ class Manage extends Component {
     componentDidMount() {
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        this.setState({
-            address: violas.address
-        })
-        if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
-                console.log(v.name)
-                if ((v.type).indexOf(window.localStorage.getItem('type').slice(0, 1)) == 0) {
-                    return v.name;
-                }
-            })
-            this.setState({
-                curWal: wal[0]
-            })
-        } else {
+        let btc = new Account(decrypted.mne_arr, testnet);
+        if(window.localStorage.getItem('type') == intl.get('BTCWallet')){
+            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
+                    if((v.name).indexOf(window.localStorage.getItem('type').slice(0,1))==0){
+                            return v.name;
+                        }
+                    })
+                this.setState({
+                    curWal: wal[0],
+                    address: btc.address
+                })
+        }else {
             let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
                 if ((v.type).indexOf(window.localStorage.getItem('type').slice(0, 5).toLowerCase()) == 0) {
                     return v.name;
                 }
             })
             this.setState({
-                curWal: wal[0]
+                curWal:wal[0],
+                address: violas.address
             })
-        }
+        } 
     }
     getValue = (e) => {
         this.setState({
