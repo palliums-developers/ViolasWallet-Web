@@ -6,8 +6,7 @@ import {timeStamp2String} from '../../../../utils/timer';
 import intl from 'react-intl-universal';
 import vAccount from '../../../../utils/violas';
 import BScroll from 'better-scroll'
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
-let violas = new vAccount(decrypted.mne_arr);
+let decrypted, violas;
 
 @inject('dealIndex')
 @observer
@@ -24,6 +23,10 @@ class OrderForm extends Component {
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
+        if (window.localStorage.getItem('data')){
+            decrypted = JSON.parse(window.localStorage.getItem('data'));
+            violas = new vAccount(decrypted.mne_arr);
+        }
     }
     async componentDidMount(){
         this.getDatas(this.state.ind)
@@ -32,7 +35,7 @@ class OrderForm extends Component {
         })
         let scroll = new BScroll(this.refs.content, {
             probeType:1,
-            click: true,  
+            click: true,
             scrollbar:true,
             mouseWheel: true
         })
