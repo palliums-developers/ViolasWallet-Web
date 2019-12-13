@@ -7,8 +7,7 @@ import coinData from '../../../utils/currencyToken.json';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
-
+let decrypted;
 
 @inject('index')
 @observer
@@ -22,18 +21,21 @@ class Wallet extends Component {
             curWal: '',
             dealdata: {},
             coindata: [],
-            balance:Number,
-            nameData:[]
+            balance: Number,
+            nameData: []
         }
     }
     componentWillMount() {
+        if(window.localStorage.getItem('data')){
+            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        }
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
         let balanceData;
-        
+
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
-            
+
             let violas = new vAccount(decrypted.mne_arr);
             let data = await this.props.index.updateCurCoin({
                 addr: violas.address
@@ -51,14 +53,14 @@ class Wallet extends Component {
                     if (coinsData[i].address.indexOf(data[j]) == 0) {
                         namData.push(coinsData[i].name);
                         break;
-                    } 
+                    }
                 }
             }
-            
+
             this.setState({
                 balancedata: balanceData,
                 nameData: namData,
-                balance: balanceData.balance/1e6,
+                balance: balanceData.balance / 1e6,
                 curWal: JSON.parse(window.localStorage.getItem('data')).name
             })
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
@@ -74,11 +76,11 @@ class Wallet extends Component {
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
             // console.log(JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name)
-            let btc = new Account(decrypted.mne_arr,testnet);
+            let btc = new Account(decrypted.mne_arr, testnet);
             // console.log(btc)
             balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
-                page:1,
+                page: 1,
                 name: 'BTC'
             })
             this.setState({
@@ -204,14 +206,14 @@ class Wallet extends Component {
                             <div className="warnText">
                                 <p>{intl.get('You have not backup your Identity Mnemonic Words，Please backup your Mnemonic Words')}</p>
                                 <p>{intl.get('Mnemonic Words can be used to recover funds in the Identity Wallet in case you forgot Access Code, removed the App, lost phone.')}</p>
-                            <div className="btn" onClick={() => {
-                                this.props.history.push({
-                                    pathname: '/codeBackup',
-                                    state: {
-                                        id: 0
-                                    }
-                                })
-                            }}>{intl.get('Backup Now')}</div>
+                                <div className="btn" onClick={() => {
+                                    this.props.history.push({
+                                        pathname: '/codeBackup',
+                                        state: {
+                                            id: 0
+                                        }
+                                    })
+                                }}>{intl.get('Backup Now')}</div>
                             </div>
                         </div> : null
                     }
