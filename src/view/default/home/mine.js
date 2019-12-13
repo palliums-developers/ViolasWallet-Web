@@ -20,12 +20,10 @@ class Mine extends Component {
             name: userInfo.name,
             password1: userInfo.password1,
             mne_arr: userInfo.mne_arr,
-            wallet_name: [
-                {name:'Violas-Wallet',type:'violas'},{name:'Bitcoin',type:'BTC'},{name:'Libra-Wallet',type:'libra'}
-            ],
-            extra_wallet: [],
-            address_book: [],
-            backup: true
+            wallet_name: userInfo.wallet_name,
+            extra_wallet: userInfo.extra_wallet,
+            address_book: userInfo.address_book,
+            backup: userInfo.backup
         }
         console.log(userInfo.password1)
         console.log(data)

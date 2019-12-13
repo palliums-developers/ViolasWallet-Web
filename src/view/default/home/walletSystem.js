@@ -6,7 +6,7 @@ import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
+let decrypted;
 @inject('index')
 @observer
 
@@ -49,6 +49,9 @@ class WalletSystem extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
+        if(window.localStorage.getItem('data')){
+            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        }
     }
     async componentDidMount() {
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
