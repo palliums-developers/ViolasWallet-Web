@@ -102,7 +102,7 @@ const routes = [
     },
     //订单详情
     {
-        path:'/orderDetail',
+        path:'/orderDetail/:id',
         component:OrderDetail
     },
     //选择钱包体系

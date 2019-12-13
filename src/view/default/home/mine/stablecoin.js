@@ -62,7 +62,7 @@ class stablecoin extends Component {
                     <div className="walletContent">
                         <div className="showBanlance">
                            <div className="banlanceDescr">
-                                <span>{JSON.parse(window.localStorage.getItem('coinType')).balance}</span><label> {JSON.parse(window.localStorage.getItem('coinType')).name}</label>
+                                <span>{JSON.parse(window.localStorage.getItem('coinType')).balance / 1e6}</span><label> {JSON.parse(window.localStorage.getItem('coinType')).name}</label>
                             </div>
                             <div className="userDescr">
                                 <span id="addressId">{balancedata.address}</span>

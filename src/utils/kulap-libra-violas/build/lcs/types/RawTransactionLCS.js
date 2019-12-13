@@ -24,7 +24,8 @@ class RawTransactionLCS {
     constructor(sender, sequence, payload, data) {
         this.maxGasAmount = new bignumber_js_1.default(140000);
         this.gasUnitPrice = new bignumber_js_1.default(0);
-        this.expirtationTime = new bignumber_js_1.default(Math.floor(new Date().getTime() / 1000) + 1000);
+        this.expirtationTime = new bignumber_js_1.default(Math.floor(new Date().getTime() / 1000) + 300);
+        // console.log(this.expirtationTime)
         // this.expirtationTime = new bignumber_js_1.default(10000);
         // this.expirtationTime = new bignumber_js_1.default(0);
         this.sender = new AddressLCS_1.AddressLCS(sender);

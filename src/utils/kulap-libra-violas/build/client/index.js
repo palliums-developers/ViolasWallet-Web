@@ -138,6 +138,7 @@ class LibraClient {
     }
     async publish(sender,coinType,sequenceNumber){
         let keypair = sender.keyPair;
+        
         return await this.Vexecute(transaction_1.LibraTransaction.publish(coinType, sender, sequenceNumber), keypair);
     }
     /**

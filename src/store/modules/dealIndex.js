@@ -6,12 +6,15 @@ import {
     getCurCoinMess,
     getOtherCoinMess
 } from '../../api/deal'
+import axios from 'axios';
 
 export default class DealIndex{ 
     @observable isShow = false
-    @observable val = 1
+    @observable val = 0
     @observable isShows = false
-    @observable vals = 2
+    @observable coinsData = []
+    @observable coin = true
+    @observable vals = 1
     @observable list = [
             { "addr": "0x0000000000000000000000000000000000000000000000000000000000000000", "name": "LIBRA", "decimals": 6 },
             { "addr": "0x0f7100fcf2d114ef199575f0651620001d210718c680fbe7568c72d6e0160731", "name": "DTM", "decimals": 6 },
@@ -24,6 +27,9 @@ export default class DealIndex{
     // 初始化
     constructor(){
         
+    }
+    updateCoin(type){
+        this.coin = type
     }
     changeInd(ind){
       this.val = ind
@@ -55,7 +61,8 @@ export default class DealIndex{
     }
      @action async getOthersCoinMess() {
          let coins = await getOtherCoinMess();
-         return coins.data;
+         
+         return coins.data; 
      }
     @action async stableDeal(params) {
         let data = await stableCurDeal(params);
@@ -64,5 +71,14 @@ export default class DealIndex{
     @action async selfDeal(params) {
         let data = await selfCurDeal(params);
         return data.data.orders
+    }
+    //交易所兑换
+    @action async exchange(params) {
+        let data = await axios.post('http://52.27.228.84:4000/1.0/violas/transaction', params, {
+            'Headers': 'Content-Type:application/json'
+        }).then(res => {
+            return res.data
+        });
+        return data;
     }
 }   

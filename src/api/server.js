@@ -110,3 +110,9 @@ export let checkNewCoin = (params) =>{
         method: 'get'
     });
 }
+export let updateCoin = (params) => {
+    return request({
+        url: url + '/1.0/violas/module?addr=' + params.addr ,
+        method: 'get'
+    });
+}

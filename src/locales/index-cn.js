@@ -76,6 +76,8 @@ export default {
     'Amount Received':'收到数量',
     'Input Receving Account':'请输入收款账户',
     'Exchange':'兑换',
+    'For successful':'兑换成功',
+    'For failure': '兑换失败',
     'Current Commission':'当前委托',
     'All':'全部',
     'Price':'价格',

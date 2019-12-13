@@ -1,4 +1,3 @@
-// let violas = require("kulap-libra-violas/build/index");
 let violas = require("kulap-libra-violas/build/index");
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;
@@ -6,6 +5,9 @@ let vNetwork = violas.LibraNetwork;
 let axios = require("axios");
 let bip39 = require("bip39");
 let code_data = require("./code_data.json");
+let _currencyToken = require("./currencyToken.json")
+const _mne1 = "display paddle crush crowd often friend topple agent entry use host begin";
+const _mne2 = "valid cactus long reform forget mouse blanket era swear call poem table";
 
 class vAccount {
     constructor(mne) {
@@ -14,7 +16,8 @@ class vAccount {
         this.address = this.getaddress();
         this.sequenceNum_violas = this.getsequenceNum_violas();
         this.sequenceNum_libra = this.getsequenceNum_libra();
-        this.exaddress = "b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89";
+        // this.dexAddress = "b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89";
+        this.dexAddress="07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095"
     }
     getmne(mne) {
         if (mne) {
@@ -43,23 +46,24 @@ class vAccount {
             return res.data.data
         })
     }
-    async transaction_libra(receiver_address, amount){
-        const _client1 = new vClient({
+    async transaction_libra(receiver_address, amount) {
+        const _client = new vClient({
             network: vNetwork.Testnet
         });
-        const result = await _client1.transferCoins_libra(this.account, receiver_address, amount, await this.sequenceNum_libra, "libra");
+        const result = await _client.transferCoins_libra(this.account, receiver_address, amount, await this.sequenceNum_libra, "libra");
         const signTx = Buffer.from(result.array[4]).toString("hex");
         //   const signTx = buf2hex(result);
+        // console.log(signTx);
         return signTx;
     }
-    async transaction(receiver_address, amount, coinType) {
+    async transaction_violas(receiver_address, amount, coinType) {
         const _client = new vClient({
             network: vNetwork.Testnet
         });
         const result = await _client.transferCoins(this.account, receiver_address, amount, await this.sequenceNum_violas, coinType);
         const signTx = Buffer.from(result.array[4]).toString("hex");
         //   const signTx = buf2hex(result);
-        console.log(signTx);
+        // console.log(signTx);
         return signTx;
     }
     async publish(coinType) {
@@ -68,40 +72,48 @@ class vAccount {
         });
         let result = await _client.publish(this.account, coinType, await this.sequenceNum_violas);
         const signpublish = Buffer.from(result.array[4]).toString("hex");
-        console.log(signpublish);
+        // console.log(signpublish);
         return signpublish
     }
-    async transactionEX(myCoinType, amount, exCoinType, tokenamount) {
+    async transactionEX(myCoinType, myAmount, exCoinType, exAmount) {
         const _client = new vClient({
             network: vNetwork.Testnet
         });
         let token;
-        switch (exCoinType) {
-            case "S001_dtoken":
-                token = code_data.S001_dtoken;
-                break;
-            case "Vbtc_dtoken":
-                token = code_data.Vbtc_dtoken;
-                break;
-            case "S001":
-                token = code_data.S001;
-                break;
-            case "S002":
-                token = code_data.S002;
-                break;
+        let i=0;
+        for (i in _currencyToken.data) {
+            if (exCoinType == _currencyToken.data[i].name) {
+                token = _currencyToken.data[i].address
+            }
         }
         const data = {
             "type": "sub_ex",
             "addr": token,
-            "amount": tokenamount,
+            "amount": exAmount,
             "fee": 0,
             "exp": 10000000000
         }
-        let data1 = stringToByte(JSON.stringify(data));
-        const result = await _client.transferEXCoins(this.account, this.exaddress, amount, await this.sequenceNum_violas, myCoinType, data1);
+        // let data_string = null;
+        let data_string = stringToByte(JSON.stringify(data));
+        // console.log(data_string)
+        const result = await _client.transferEXCoins(this.account, this.dexAddress, myAmount, await this.sequenceNum_violas, myCoinType, data_string);
         const signTx = Buffer.from(result.array[4]).toString("hex");
         //   const signTx = buf2hex(result);
-        console.log(signTx);
+        // console.log(signTx);
+        return signTx;
+    }
+    async transactionEXWithdraw(myCoinType,version) {
+        const _client = new vClient({
+            network: vNetwork.Testnet
+        });
+        const data = {
+            "type": "wd_ex",
+            "ver": version
+        }
+        let data1 = stringToByte(JSON.stringify(data));
+        const result = await _client.transferEXCoins(this.account, this.dexAddress, 0, await this.sequenceNum_violas, myCoinType, data1);
+        const signTx = Buffer.from(result.array[4]).toString("hex");
+        // console.log(signTx);
         return signTx;
     }
 }
@@ -140,14 +152,15 @@ export default vAccount;
 // console.log(code_data.transfer==code_data.transfer2);
 // let violastrans=new_base64(code_data.transfer2,code_data.default_token);
 // console.log(violastrans);
-// let violas1 = new vAccount("display paddle crush crowd often friend topple agent entry use host begin");
-// //address   b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89
-// let violas2 = new vAccount("valid cactus long reform forget mouse blanket era swear call poem table");
-// //address   d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16
-// violas1.transaction_libra("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10, "libra"); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transaction("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transactionEX("S001_dtoken",20, "Vbtc_dtoken",120); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.publish("S001");
-
+// let violas1 = new vAccount(_mne1);  //address   b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89
+// let violas2 = new vAccount(_mne2); //address   d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16
+// violas1.transaction_libra("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transaction_violas("07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095", 10, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transaction_violas("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 20, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transactionEX("ABCUSD",20, "HIJUSD",120); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transactionEXWithdraw("ABCUSD",76444);
+// violas1.publish("HIJUSD");
 // let new_code=new_base64(code_data.transfer_with_data_mv,code_data.S002);
 // console.log(new_code);
+
+// export default vAccount;

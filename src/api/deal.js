@@ -1,7 +1,8 @@
 import request from '../utils/request';
 let url2 = 'http://52.27.228.84:4000'
 let url1 = 'http://192.168.1.253:8181';
-let url = 'http://192.168.1.111:10088';
+let url = 'http://192.168.1.111:10088/v1';
+// let url = 'http://18.220.66.235:38181'
 //稳定币交易
 export let stableCurTranfer = (params) =>{
     return request({
@@ -9,7 +10,7 @@ export let stableCurTranfer = (params) =>{
         method: 'get',
     });
 }
-//交易记录
+//卖出的
 export let stableCurDeal = (params) =>{
     return request({
         url: url+'/orderbook?base='+params.base+'&quote='+params.quote,
@@ -30,9 +31,10 @@ export let getOtherCoinMess = () => {
         method: 'get',
     });
 }
+//订单
 export let selfCurDeal = (params) =>{
     return request({
-        url: url+'/orders?user=0x8e8f033830c60602ef491d0f850094d72d483e602c9a5df845eac7efc3387a38',
+        url: url+'/orders?user='+params.user,
         method: 'get',
     });
 }

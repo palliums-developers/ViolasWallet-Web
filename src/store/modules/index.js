@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { getBTCDealRecord,checkNewCoin,startCurLTranfer,getCurUserInfo,createUserInfo,getCurBalance,getCurCoinMess,getLibraDealRecord,addressMessage,getViolasDealRecord } from '../../api/server'
+import { getBTCDealRecord, checkNewCoin, updateCoin,startCurLTranfer,getCurUserInfo,createUserInfo,getCurBalance,getCurCoinMess,getLibraDealRecord,addressMessage,getViolasDealRecord } from '../../api/server'
 import axios from 'axios';
 import intl from 'react-intl-universal';
 intl.options.currentLocale=localStorage.getItem("local");
@@ -85,9 +85,13 @@ export default class Index{
     }
     //检测稳定币状态
     @action async checkCurNewCoin(params) {
-        let coins = await checkNewCoin(params);
+        let data = await checkNewCoin(params);
+        return data.data
+    }
+    @action async updateCurCoin(params) {
+        let coins = await updateCoin(params);
         return coins.data.data;
-        
+
     }
     //地址簿
     @action async autoAddress() {

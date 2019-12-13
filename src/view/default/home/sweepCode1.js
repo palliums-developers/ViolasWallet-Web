@@ -47,7 +47,7 @@ class Sweepcode1 extends Component {
             <div className="sweepcode">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push('/transfar')
+                    this.props.history.push('/transfar1')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>{intl.get('Scan')}</span>
                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>

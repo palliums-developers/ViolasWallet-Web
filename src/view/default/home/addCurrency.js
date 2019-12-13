@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import 'antd/dist/antd.css';
 import vAccount from '../../../utils/violas';
 import intl from 'react-intl-universal';
+import coinData from '../../../utils/currencyToken.json'
 let aes256 = require('aes256');
 
 @inject('index')
@@ -25,11 +26,12 @@ class AddCurrency extends Component {
         intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount() {
-        let coinData = await this.props.index.getCoinMess();
-        console.log(coinData)
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let newData = coinData.map( (v, i) => {
+        let newData = await this.props.index.updateCurCoin({
+            addr: violas.address
+        })
+        let data = coinData.data.map( (v, i) => {
 
             if (v.checked) {
                 return v;
@@ -38,21 +40,18 @@ class AddCurrency extends Component {
             }
 
         })
-        
-        newData.map(async (v, i) => {
-            let data = await this.props.index.checkCurNewCoin({
-                addr:violas.address,
-                modu:v.address
-            })
-             if(Number(data[0].slice(0,5))>=0){
-               return v.checked = true;
-             }else{
-               return v.checked = false;
-             }
-        })
-        console.log(newData)
+        for(let i=0;i<data.length;i++){
+            for (let j = 0; j < newData.length; j++) {
+                if (data[i].address.indexOf(newData[j]) == 0) {
+                    data[i].checked = true;
+                    break;
+                } else {
+                    data[i].checked = false;
+                }
+            }
+        }
         this.setState({
-            coindata: newData,
+            coindata: data,
             mne: decrypted.mne_arr
         })
     }
@@ -89,7 +88,6 @@ class AddCurrency extends Component {
     }
     render() {
         let { coindata } = this.state;
-        console.log(coindata)
         return (
             <div className="addCurrency">
                 <header>
@@ -116,7 +114,7 @@ class AddCurrency extends Component {
                                     <div className="logo"><img src="/img/BTC@2x.png" /></div>
                                     <div className="coinDescr">
                                         <h4>{v.name}</h4>
-                            <p>{v.description}{v.checked.toString()}</p>
+                            <p>{v.description}</p>
                                     </div>
                                     <div className="switch">
                                         {

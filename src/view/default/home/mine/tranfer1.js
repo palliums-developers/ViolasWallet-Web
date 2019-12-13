@@ -50,12 +50,22 @@ class Transfar1 extends Component {
 
         };
     }
+    
     //violas转账
     getViolasAm = (e, way) => {
+
         if (way == 'amount') {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
+                e.target.value = parseFloat(e.target.value);
+            } 
             this.setState({
-                violasAmount: e.target.value
+                violasAmount:e.target.value
             })
+            
         } else if (way == 'address') {
             this.setState({
                 address1: e.target.value
@@ -64,10 +74,10 @@ class Transfar1 extends Component {
     }
     
     confirmTrans = async (type) => {
-        let { violasAmount, address1 } = this.state;
+        let { violasAmount, address1, coinData } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let transFar = await violas.transaction(address1, violasAmount, 'S001_dtoken');
+        let transFar = await violas.transaction_violas(address1, violasAmount, coinData.name);
         let data = await this.props.index.starVTranfer({
                 signedtxn: transFar,
                 name:'violas'
@@ -89,7 +99,7 @@ class Transfar1 extends Component {
                     <span onClick={() => {
                         this.props.history.push('/home')
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
-                    <span>{coinData.name}{intl.get('Market')}</span>Transfer
+                    <span>{coinData.name}{intl.get('Market')}</span>
 
                 </header>
                 <section>
@@ -97,7 +107,7 @@ class Transfar1 extends Component {
                             <div className="form">
                                 <div className="title">
                                 <span>{coinData.name}</span>
-                                <span>{intl.get('Balance')}：<s>{coinData.balance}</s> {coinData.name}</span>
+                                <span>{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {coinData.name}</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">

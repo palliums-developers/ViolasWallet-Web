@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { inject,observer } from 'mobx-react';
 // import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
-// import vAccount from '../../../../utils/violas';
-// import {timeStamp2String} from '../../../../utils/timer';
+import vAccount from '../../../../utils/violas';
+import {timeStamp2String} from '../../../../utils/timer';
 import intl from 'react-intl-universal';
+let decrypted = JSON.parse(window.localStorage.getItem('data'));
+let violas = new vAccount(decrypted.mne_arr);
+
 @inject('dealIndex')
 @observer
 
@@ -13,43 +16,46 @@ class OrderDetail extends Component {
         this.state = {
             status:['未完成','已完成'],
             ind:0,
-            detailData:[]
+            detailData:[],
+            othersList:[]
         }
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
-        let data = await this.props.dealIndex.selfDeal();
-        let datas = data.filter(v=>v.id == this.props.location.state.id);
+        let data = await this.props.dealIndex.selfDeal({
+            user: violas.address
+        });
+        this.setState({
+            othersList: await this.props.dealIndex.getOthersCoinMess()
+        })
+        let datas = data.filter(v => v.id == this.props.match.params.id);
         this.setState({
             detailData:datas
         })
+        console.log(datas,'.......')
     }
     getIndex = (i) =>{
        this.setState({
            ind:i
        })
     }
+    getPrices(name) {
+        let { othersList } = this.state;
+        for (let i = 0; i < othersList.length; i++) {
+            if ((othersList[i].name).indexOf(name) == 0) {
+                return othersList[i].price;
+            }
+        }
+    }
     render() {
         let { detailData } = this.state;
-        let {
-            selfCoin,
-            othersCoin,
-            price
-        } = this.props.location.state;
         return (
             <div className="orderDetail">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push({
-                        pathname:'/orderForm',
-                        state: {
-                            selfCoin: selfCoin && selfCoin,
-                            othersCoin: othersCoin && othersCoin,
-                            price: price && price
-                        }
-                    })
+                        this.props.history.push('/orderForm')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>{intl.get('The order details')}</span>
                 </header>
@@ -58,8 +64,8 @@ class OrderDetail extends Component {
                            detailData && detailData.map((v,i)=>{
                                return <div className="first" key={i}>
                                <div className="head">
-                                 <p><i><img src="/img/编组 17@2x.png"/></i><span>{selfCoin} /</span><label> {othersCoin}</label></p>
-                                 <span>{intl.get('Completed')}</span>
+                                       <p><i><img src="/img/编组 17@2x.png" /></i><span>{v.tokenGiveSymbol}/</span><label>{v.tokenGetSymbol}</label></p>
+                                       <span>{v.state == 'OPEN' ? intl.get('Incomplete') : v.state == 'FILLED' ?  intl.get('Completed') : null }</span>
                                </div>
                                <div className="firstContents">
                                      <div className="firstContentL">
@@ -69,9 +75,9 @@ class OrderDetail extends Component {
                                              <span>{intl.get('Time')}</span>
                                          </div>
                                          <div className="list">
-                                               <span>{price}</span>
+                                               <span>{this.getPrices(v.tokenGetSymbol)}</span>
                                              <span>{v.amountGet}</span>
-                                             <span>{v.date}</span>
+                                               <span>{v.state == 'OPEN' ? timeStamp2String(v.date - 300 + '000') : v.state == 'FILLED' ? timeStamp2String(v.date + '000') : null}</span>
                                          </div>
                                      </div>
                                      <div className="firstContentL firstContentL1">
@@ -82,7 +88,7 @@ class OrderDetail extends Component {
                                          </div>
                                          <div className="listCon">
                                              <div className="list">
-                                                 <span>{v.amountFilled}</span>
+                                                   <span>{v.amountFilled}</span>
                                                  <span>0.01Vtoken</span>
                                                  <span></span>
                                              </div>

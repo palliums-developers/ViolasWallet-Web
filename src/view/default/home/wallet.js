@@ -3,10 +3,12 @@ import { inject, observer } from 'mobx-react';
 import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
+import coinData from '../../../utils/currencyToken.json';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
 let decrypted = JSON.parse(window.localStorage.getItem('data'));
+
 
 @inject('index')
 @observer
@@ -20,51 +22,45 @@ class Wallet extends Component {
             curWal: '',
             dealdata: {},
             coindata: [],
-            balance:Number
+            balance:Number,
+            nameData:[]
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        // console.log(JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name)
         let balanceData;
+        
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
+            
             let violas = new vAccount(decrypted.mne_arr);
-            let coinData = await this.props.index.getCoinMess();
-            balanceData = await this.props.index.getBalance({
-                address: violas.address,
-                name: 'violas'
+            let data = await this.props.index.updateCurCoin({
+                addr: violas.address
             })
+            let coinAddr = data.join(',');
+            let balanceData = await this.props.index.getBalance({
+                address: violas.address,
+                name: 'violas',
+                modu: coinAddr
+            })
+            let coinsData = coinData.data;
+            let namData = [];
+            for (let i = 0; i < coinsData.length; i++) {
+                for (let j = 0; j < data.length; j++) {
+                    if (coinsData[i].address.indexOf(data[j]) == 0) {
+                        namData.push(coinsData[i].name);
+                        break;
+                    } 
+                }
+            }
+            
             this.setState({
                 balancedata: balanceData,
+                nameData: namData,
                 balance: balanceData.balance/1e6,
                 curWal: JSON.parse(window.localStorage.getItem('data')).name
             })
-            let arrs = await this.props.index.checkCurNewCoin({
-                addr: balanceData.address,
-                modu: '05599ef248e215849cc599f563b4883fc8aff31f1e43dff1e3ebe4de1370e054'
-            })
-
-            coinData.map(async (v, i) => {
-                let data = await this.props.index.checkCurNewCoin({
-                    addr: violas.address,
-                    modu: v.address
-                })
-
-                if (Number(data[0].slice(0, 5)) >= 0) {
-                    let dealData = await this.props.index.getBalance({
-                        address: violas.address,
-                        name: 'violas',
-                        modu: v.address
-                    })
-                    this.setState({
-                        dealdata: dealData,
-                        coindata: coinData
-                    })
-                }
-            })
-
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             let libra = new vAccount(decrypted.mne_arr);
             balanceData = await this.props.index.getBalance({
@@ -91,8 +87,6 @@ class Wallet extends Component {
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
         }
-
-
     }
     getChange = () => {
         this.props.history.push('/walletSystem')
@@ -117,7 +111,7 @@ class Wallet extends Component {
         document.execCommand("Copy"); // 执行浏览器复制命令
     }
     render() {
-        let { balancedata, curWal, dealdata, coindata, balance } = this.state;
+        let { balancedata, curWal, nameData, balance } = this.state;
         return (
             <div className="wallet">
                 <header>
@@ -185,14 +179,14 @@ class Wallet extends Component {
                                 {
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
                                         {
-                                            coindata && coindata.map((v, i) => {
+                                            balancedata.modules && balancedata.modules.map((v, i) => {
                                                 return <p key={i} onClick={() => {
                                                     this.props.history.push('/stablecoin')
                                                     window.localStorage.setItem('coinType', JSON.stringify({
-                                                        name: v.name,
-                                                        balance: dealdata.modules[0].balance
+                                                        name: nameData && nameData[i],
+                                                        balance: v.balance
                                                     }))
-                                                }}><label>{v.name}</label><span>{dealdata.modules[0].balance}</span></p>
+                                                }}><label>{nameData && nameData[i]}</label><span>{v.balance / 1e6}</span></p>
                                             })
                                         }
                                     </div> : null

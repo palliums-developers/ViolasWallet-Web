@@ -109,6 +109,8 @@ export default {
     'Import LiboneWalle':'Import LiboneWalle',
     'Add Address':'Add Address',
     'Note':'Note',
+    'For successful': 'For successful',
+    'For failure': 'For failure',
     'Address':'Address',
     'Transfer success':'Transfer success',
     'Transfer failed':'Transfer failed',

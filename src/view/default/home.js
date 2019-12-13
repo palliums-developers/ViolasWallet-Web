@@ -3,9 +3,11 @@ import RouterView from '../../router/routerView';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
+import vAccount from '../../utils/violas';
 import './default.scss';
+// import coinData from '../../utils/currencyToken.json';
 
-@inject('dealIndex')
+@inject('index', 'dealIndex')
 @observer
 
 class Home extends Component {
@@ -13,7 +15,7 @@ class Home extends Component {
         super(props);
         this.state = {
             isShow: false,
-            condata: [],
+            coindata: [],
             otherdata: [],
             routes: [
                 {
@@ -28,62 +30,116 @@ class Home extends Component {
                 },
                 {
                     to: '/home/mine',
-                    name:'My Profile',
+                    name: 'My Profile',
                     activeName: 'active'
                 }
             ],
-            ind:0,
-            inds:1,
+            updatas: [],
+            ind: 0,
+            inds: 1,
             list: [
-                    { "addr": "0x0000000000000000000000000000000000000000000000000000000000000000", "name": "LIBRA", "decimals": 6 },
-                    { "addr": "0x0f7100fcf2d114ef199575f0651620001d210718c680fbe7568c72d6e0160731", "name": "DTM", "decimals": 6 },
-                    { "addr": "0x352ba42b3a2fb66bff15f08ea691b5b87eff0fe6a69b79cda364c4cdf787a0a2", "name": "XDS", "decimals": 6 },
-                    { "addr": "0x76e5ed3e0805d54a9e8138164861f4fb1390a58100f9f9a63a962e22bb5ceed6", "name": "LDN", "decimals": 6 },
-                    { "addr": "0x8d6bcfbdf80140a7d1020af8050f1377d77c29325741795dc269b3fd0706a9b4", "name": "XSL", "decimals": 6 },
-                    { "addr": "0xb95b427af584a781a7240122c9d2582720e28174d276094429fa1aa356bc2d5d", "name": "XSL", "decimals": 6 },
-                    { "addr": "0x8e8f033830c60602ef491d0f850094d72d483e602c9a5df845eac7efc3387a38", "name": "XSL", "decimals": 6 }
-                ]
+                { "addr": "0x0000000000000000000000000000000000000000000000000000000000000000", "name": "LIBRA", "decimals": 6 },
+                { "addr": "0x0f7100fcf2d114ef199575f0651620001d210718c680fbe7568c72d6e0160731", "name": "DTM", "decimals": 6 },
+                { "addr": "0x352ba42b3a2fb66bff15f08ea691b5b87eff0fe6a69b79cda364c4cdf787a0a2", "name": "XDS", "decimals": 6 },
+                { "addr": "0x76e5ed3e0805d54a9e8138164861f4fb1390a58100f9f9a63a962e22bb5ceed6", "name": "LDN", "decimals": 6 },
+                { "addr": "0x8d6bcfbdf80140a7d1020af8050f1377d77c29325741795dc269b3fd0706a9b4", "name": "XSL", "decimals": 6 },
+                { "addr": "0xb95b427af584a781a7240122c9d2582720e28174d276094429fa1aa356bc2d5d", "name": "XSL", "decimals": 6 },
+                { "addr": "0x8e8f033830c60602ef491d0f850094d72d483e602c9a5df845eac7efc3387a38", "name": "XSL", "decimals": 6 }
+            ]
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        let coinData = await this.props.dealIndex.getCoinMess();
+        // let coinData = await this.props.dealIndex.getCoinMess();
+        let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let othersData = await this.props.dealIndex.getOthersCoinMess();
-        this.setState({
-            coindata: coinData,
-            othersdata: othersData
+        let violas = new vAccount(decrypted.mne_arr);
+        let newData = await this.props.index.updateCurCoin({
+            addr: violas.address
         })
+        let data = [], data1 = [];
+        data = this.addCheck(othersData);
+        data1 = this.addCheck(othersData);
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < newData.length; j++) {
+                if (data[i].addr.indexOf(newData[j]) == 0) {
+                    data[i].checked = true;
+                    break;
+                } else {
+                    data[i].checked = false;
+                }
+            }
+        }
+        for (let i = 0; i < data1.length; i++) {
+            for (let j = 0; j < newData.length; j++) {
+                if (data1[i].addr.indexOf(newData[j]) == 0) {
+                    data1[i].checked = true;
+                    break;
+                } else {
+                    data1[i].checked = false;
+                }
+            }
+        }
         this.setState({
+            coindata: data1,
+            othersdata: data,
             isShow: this.props.location.state
         })
 
     }
-    handleMouseUp = (i,) => {
+    addCheck(data) {
+       return data.map((v, i) => {
+
+            if (v.checked) {
+                return v;
+            } else {
+                return Object.assign(v, { checked: false })
+            }
+
+        })
+    }
+    handleMouseUp = (i) => {
+        this.state.coindata[i].checked = true;
         this.props.dealIndex.changeInd(i)
         this.props.dealIndex.selectChange({
-            isShow:false
+            isShow: false
         })
-        
+
     }
-    handlesMouseUp = (i) =>{
+    handlesMouseUp = (i) => {
         this.props.dealIndex.changeInds(i)
         this.props.dealIndex.selectsChange({
-            isShows:false
+            isShows: false
         })
+    }
+    getTo(to) {
+        if (window.localStorage.getItem('type') == 'Violas钱包') {
+            if (to == '/home/market') {
+                return '/home/market';
+            } else {
+                return to;
+            }
+        } else {
+            if (to == '/home/market') {
+                return false;
+            } else {
+                return to;
+            }
+        }
     }
     render() {
         let { routes } = this.props;
-        let {val,vals} = this.props.dealIndex
-        let { coindata,othersdata} = this.state
+        let { val, vals } = this.props.dealIndex
+        let { coindata, othersdata } = this.state
         return (
             <div className="default">
                 <div className="wrap">
                     <RouterView routes={routes}></RouterView>
                 </div>
                 {
-                    this.state.isShow == true ? intl.get('Start Now')=="Start Now"?<div className="dialog">
+                    this.state.isShow == true ? intl.get('Start Now') == "Start Now" ? <div className="dialog">
                         <div className="dialogContent">
                             <p><img src="/img/编组 30@2xen.png" /></p>
                             <span onClick={() => {
@@ -92,21 +148,22 @@ class Home extends Component {
                                 })
                             }}>{intl.get('Start Now')}</span>
                         </div>
-                    </div>:<div className="dialog">
-                        <div className="dialogContent">
-                            <p><img src="/img/编组 30@2x.png" /></p>
-                            <span onClick={() => {
-                                this.setState({
-                                    isShow: false
-                                })
-                            }}>{intl.get('Start Now')}</span>
-                        </div>
-                    </div> : null
+                    </div> : <div className="dialog">
+                            <div className="dialogContent">
+                                <p><img src="/img/编组 30@2x.png" /></p>
+                                <span onClick={() => {
+                                    this.setState({
+                                        isShow: false
+                                    })
+                                }}>{intl.get('Start Now')}</span>
+                            </div>
+                        </div> : null
                 }
                 <footer>
                     {
                         this.state.routes.map((v, i) => {
-                            return <NavLink key={i} to={v.to} activeClassName={`${v.activeName}${i}`}>
+
+                            return <NavLink key={i} to={this.getTo(v.to)} activeClassName={`${v.activeName}${i}`}>
                                 <dt></dt>
                                 <dd>{intl.get(v.name)}</dd>
                             </NavLink>
@@ -118,8 +175,8 @@ class Home extends Component {
                         <div className="selectLists">
                             {
                                 coindata.map((v, i) => {
-                                    return <div key={i} className="selectList" onClick={() => this.handleMouseUp(i,v.name)}>
-                                        <label>{v.name}</label>
+                                    return <div key={i} className="selectList" onClick={() => this.handleMouseUp(i, v.name)}>
+                                        <label><span className={v.checked ? 'light' : 'dark'}></span>{v.name}</label>
                                         <span className={val == i ? 'light' : 'dark'}></span>
                                     </div>
                                 })
@@ -132,8 +189,8 @@ class Home extends Component {
                         <div className="selectLists">
                             {
                                 othersdata.map((v, i) => {
-                                    return <div key={i} className="selectList" onClick={() => this.handlesMouseUp(i,v.name)}>
-                                        <label>{v.name}</label>
+                                    return <div key={i} className="selectList" onClick={() => this.handlesMouseUp(i, v.name)}>
+                                        <label><span className={v.checked ? 'light' : 'dark'}></span>{v.name}</label>
                                         <span className={vals == i ? 'light' : 'dark'}></span>
                                     </div>
                                 })

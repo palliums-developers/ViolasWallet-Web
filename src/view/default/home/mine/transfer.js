@@ -127,7 +127,7 @@ class Transfar extends Component {
         let transFar;
         if (type == 'violas') {
             let violas = new vAccount(decrypted.mne_arr);
-            transFar = await violas.transaction(address1, violasAmount, 'violas')
+            transFar = await violas.transaction_violas(address1, violasAmount, 'violas')
             let data = await this.props.index.starVTranfer({
                 signedtxn: transFar,
                 name:type
