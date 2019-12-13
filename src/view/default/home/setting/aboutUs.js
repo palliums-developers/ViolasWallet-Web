@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import intl from 'react-intl-universal';
 
 class AboutUs extends Component {
     constructor(props) {
@@ -6,6 +7,9 @@ class AboutUs extends Component {
         this.state = {
           
         }
+    }
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount(){
        
@@ -19,7 +23,7 @@ class AboutUs extends Component {
                     <span onClick={() => {
                     this.props.history.push('/setting')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>关于我们</span>
+                    <span>{intl.get('About Us')}</span>
                 </header>
                 <section>
                     <div className="headDescr">
@@ -27,12 +31,12 @@ class AboutUs extends Component {
                         <h4>Violas 1.0.0</h4>
                     </div>
                     <div className="aboutList">
-                        <p><label>官方网站</label><span>violas.io</span></p>
-                        <p><label>邮箱</label><span>violas.io</span></p>
-                        <p><label>微信</label><span>x x x</span></p>
-                        <p><label>Telegram电报群</label><span>xxxxx</span></p>
-                        <p><label>Twitter</label><span>xxxxxx</span></p>
-                        <p><label>Facebook</label><span>xxxxxx</span></p>
+                        <p><label>{intl.get('Official Website')}</label><span>violas.io</span></p>
+                        <p><label>{intl.get('Email Address')}</label><span>violas.io</span></p>
+                        <p><label>{intl.get('Wechat')}</label><span>x x x</span></p>
+                        <p><label>{intl.get('Telegram Group')}</label><span>xxxxx</span></p>
+                        <p><label>{intl.get('Twitter')}</label><span>xxxxxx</span></p>
+                        <p><label>{intl.get('Facebook')}</label><span>xxxxxx</span></p>
                     </div>
                 </section>
             </div>

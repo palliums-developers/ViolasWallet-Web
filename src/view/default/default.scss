@@ -2192,7 +2192,7 @@
                     align-items: center;
                     border-bottom: 1px solid rgba(60, 56, 72, .1);
                     input{
-                        width: 2rem;
+                        width: 3.2rem;
                         font-size:0.37rem;
                         font-family:PingFangSC-Regular,PingFang SC;
                         font-weight:400;
@@ -2531,7 +2531,72 @@
             }
         }
     }
-    
+    .passDialog{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.6);
+        .passContent{
+            width: 7.8rem;
+            height: 5.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background:rgba(247,247,249,1);
+            border-radius:3px;
+            position: absolute;
+            top: 6.2rem;
+            left: 50%;
+            margin-left:-3.9rem ;
+            h4{
+                font-size:0.54rem;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(60,56,72,1);
+                margin: 0.6rem 0;
+            }
+            input{
+                width: 6.5rem;
+                height: 1.3rem;
+                
+                border: 0;
+                outline: 0;
+                background:rgba(255,255,255,1);
+                border-radius:3px;
+                font-size:0.43rem;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                padding-left: 0.4rem;
+                box-sizing: border-box;
+            }
+            ::-webkit-input-placeholder{
+                font-size:0.43rem;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(60,56,72,.5);
+            }
+            .btns{
+                width: 100%;
+                height: 1.8rem;
+                display: flex;
+                align-items: center;
+                margin-top: 0.3rem;
+                span{
+                    flex: 1;
+                    font-size:0.54rem;
+                    font-family:PingFangSC-Medium,PingFang SC;
+                    font-weight:500;
+                    color:rgba(60,56,72,1);
+                    text-align: center;
+                }
+                span:nth-child(2){
+                    color: rgba(122, 122, 238, 1);
+                }
+            }
+        }
+    }
 }
 //订单
 .orderForm{
@@ -3146,12 +3211,13 @@
     height: 100%;
     @include head;
     .toBottomDialog{
-      width: 100%;
+      width: 11rem;
       height: 100%;
       background:rgba(0,0,0,0.6);
       position: fixed;
       top: 0;
-      left: 0;
+      left:50%;
+      margin-left: -5.5rem;
       .botContent{
           width: 100%;
           height: 7.1rem;
@@ -3428,7 +3494,7 @@
         box-sizing: border-box;
         .line{
             width:100%;
-            padding-left: 1.1rem;
+            padding-left: 1.7rem;
             box-sizing: border-box;
             .lines{
                 width:100%;
@@ -3442,6 +3508,7 @@
             display: flex;
             align-items: center;
             label{
+                width: 1.4rem;
                 font-size:0.43rem;
                 font-family:PingFangSC-Regular,PingFang SC;
                 font-weight:400;
@@ -3449,7 +3516,7 @@
                 white-space: nowrap;
             }
             .ipt{
-                width: 7.7rem;
+                flex: 1;
                 height:100%; 
                 margin-left: 0.3rem;
                 display: flex;
@@ -3794,6 +3861,7 @@
           font-family:PingFangSC-Medium,PingFang SC;
           font-weight:500;
           color:rgba(14,0,81,1);
+          margin-left: 40px;
         }
         span:nth-child(3){
             font-size:16px;

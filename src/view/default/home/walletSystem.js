@@ -17,8 +17,34 @@ class WalletSystem extends Component {
             balancedata1: [],
             balancedata2: [],
             balancedata3: [],
+            name:'all',
             type: '',
-            types: ''
+            types: '',
+            violaswal:[],
+            libwal:[],
+            btcwal:[],
+            imgs:[
+                {
+                    name:'all',
+                    src: '/img/menu@2x.png',
+                    src1: '/img/upall.png'
+                },
+                {
+                    name: 'vio',
+                    src: '/img/vio@2x.png',
+                    src1: '/img/upvio.png'
+                },
+                {
+                    name: 'lib',
+                    src: '/img/lib@2x.png',
+                    src1: '/img/uplib.png'
+                },
+                {
+                    name: 'bt',
+                    src: '/img/BTC@2x.png',
+                    src1: '/img/upbtc.png'
+                }
+            ]
         }
     }
     componentWillMount() {
@@ -55,6 +81,15 @@ class WalletSystem extends Component {
         })
         this.setState({
             balancedata2: balanceData2
+        })
+        let wallets = JSON.parse(window.localStorage.getItem('data')).wallet_name;
+        let violasW = wallets.filter((v)=>v.type == 'violas')
+        let libraW = wallets.filter((v) => v.type == 'libra')
+        let btcW = wallets.filter((v) => v.type == 'BTC')
+        this.setState({
+            violaswal: violasW,
+            libwal: libraW,
+            btcwal: btcW,
         })
     }
     getVioAddress() {
@@ -124,7 +159,7 @@ class WalletSystem extends Component {
         }
     }
     render() {
-        let { balancedata1, balancedata2 } = this.state;
+        let { balancedata1, balancedata2, imgs, violaswal, libwal, btcwal } = this.state;
         return (
             <div className="walletSystem">
                 <header>
@@ -136,28 +171,34 @@ class WalletSystem extends Component {
                 </header>
                 <section>
                     <div className="left">
-                        <span><img src="/img/menu@2x.png" /></span>
-                        <span><img src="/img/vio@2x.png" /></span>
-                        <span><img src="/img/lib@2x.png" /></span>
-                        <span><img src="/img/BTC@2x.png" /></span>
+                        {
+                            imgs.map((v,i)=>{
+                                return <span onClick={()=>{
+                                    this.setState({
+                                        name:v.name
+                                    })
+                                }} key={i}><img src={this.state.name == v.name ? v.src : v.src1} /></span>
+                            })
+                        }
                     </div>
                     <div className="right">
-                        <div className="rightContent">
-                            <div className="identityWallet">
-                                <h4>{intl.get('Identity Wallet')}</h4>
-                                {
-                                    JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
-                                        return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallets(v.type)}>
-                                            <div className="title">
-                                                <label>{v.name}</label>
-                                                <span className={this.state.types == v.type ? 'act' : ''}></span>
+                        {
+                            this.state.name == 'all' ? <div className="rightContent">
+                                <div className="identityWallet">
+                                    <h4>{intl.get('Identity Wallet')}</h4>
+                                    {
+                                        JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
+                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallets(v.type)}>
+                                                <div className="title">
+                                                    <label>{v.name}</label>
+                                                    <span className={this.state.types == v.type ? 'act' : ''}></span>
+                                                </div>
+                                                <p>{v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address : v.type == 'BTC' ? this.getBTCAddressData() : null}</p>
                                             </div>
-                                            <p>{v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address : v.type == 'BTC' ? this.getBTCAddressData() : null}</p>
-                                        </div>
-                                    })
-                                }
+                                        })
+                                    }
 
-                                {/* <div className="identityContent" onClick={()=>{
+                                    {/* <div className="identityContent" onClick={()=>{
                            this.props.index.changePurse(intl.get('ViolasWallet'))
                        }}>
                           <div className="title">
@@ -185,25 +226,80 @@ class WalletSystem extends Component {
                           <p>{balancedata2.address}</p>
                        </div>
                     </div> */}
-                            </div>
-                            <div className="identityWallet toIdentity">
-                                <h4>{intl.get('Create/Import')}</h4>
-                                {
-                                    JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v, i) => {
-                                        return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallet(v.type)}>
-                                            <div className="title">
-                                                <label>{v.name}</label>
-                                                <span className={this.state.type == v.type ? 'act' : ''}></span>
+                                </div>
+                                <div className="identityWallet toIdentity">
+                                    <h4>{intl.get('Create/Import')}</h4>
+                                    {
+                                        JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v, i) => {
+                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallet(v.type)}>
+                                                <div className="title">
+                                                    <label>{v.name}</label>
+                                                    <span className={this.state.type == v.type ? 'act' : ''}></span>
+                                                </div>
+                                                <p>{
+                                                    v.type == 'violas' ? get_address(creat_account_mnemonic(decrypted.mne_arr)) : v.type == 'libra' ?
+                                                        this.getVioAddress() : v.type == 'BTC' ? this.getBTCAddress() : null
+                                                }</p>
                                             </div>
-                                            <p>{
-                                                v.type == 'violas' ? get_address(creat_account_mnemonic(decrypted.mne_arr)) : v.type == 'libra' ?
-                                                    this.getVioAddress() : v.type == 'BTC' ? this.getBTCAddress() : null
-                                            }</p>
-                                        </div>
-                                    })
-                                }
-                            </div>
-                        </div>
+                                        })
+                                    }
+                                </div>
+                            </div> : null
+                        }
+                        {
+                            this.state.name == 'vio' ? <div className="rightContent">
+                                <div className="identityWallet">
+                                    <h4>{intl.get('Identity Wallet')}</h4>
+                                    {
+                                        violaswal && violaswal.map((v, i) => {
+                                            return <div key={i} className='identityContent vioBack' onClick={() => this.getWallets(v.type)}>
+                                                <div className="title">
+                                                    <label>{v.name}</label>
+                                                    <span className={this.state.types == v.type ? 'act' : ''}></span>
+                                                </div>
+                                                <p>{balancedata1.address}</p>
+                                            </div>
+                                        })
+                                    }
+                                    </div>
+                            </div> : null
+                        }
+                        {
+                            this.state.name == 'lib' ? <div className="rightContent">
+                                <div className="identityWallet">
+                                    <h4>{intl.get('Identity Wallet')}</h4>
+                                    {
+                                        libwal && libwal.map((v, i) => {
+                                            return <div key={i} className='identityContent libBack' onClick={() => this.getWallets(v.type)}>
+                                                <div className="title">
+                                                    <label>{v.name}</label>
+                                                    <span className={this.state.types == v.type ? 'act' : ''}></span>
+                                                </div>
+                                                <p>{balancedata2.address}</p>
+                                            </div>
+                                        })
+                                    }
+                                </div>
+                            </div> : null
+                        }
+                        {
+                            this.state.name == 'bt' ? <div className="rightContent">
+                                <div className="identityWallet">
+                                    <h4>{intl.get('Identity Wallet')}</h4>
+                                    {
+                                        btcwal && btcwal.map((v, i) => {
+                                            return <div key={i} className='identityContent btcBack' onClick={() => this.getWallets(v.type)}>
+                                                <div className="title">
+                                                    <label>{v.name}</label>
+                                                    <span className={this.state.types == v.type ? 'act' : ''}></span>
+                                                </div>
+                                                <p>{this.getBTCAddressData()}</p>
+                                            </div>
+                                        })
+                                    }
+                                </div>
+                            </div> : null
+                        }
                     </div>
                 </section>
             </div>

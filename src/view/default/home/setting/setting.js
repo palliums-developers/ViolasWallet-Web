@@ -52,7 +52,7 @@ class Setting extends Component {
                    <li onClick={()=>{
                            this.props.history.push('/feekBack')
                        }}>
-                       <p>{intl.get('Help & Feedback')}</p>
+                       <p>{intl.get('Help&Feedback')}</p>
                        <span><img src="/img/路径复制 10@2x.png"/></span>
                    </li>
                  </ul>

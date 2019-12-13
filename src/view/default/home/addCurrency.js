@@ -104,8 +104,8 @@ class AddCurrency extends Component {
                         <div className="eachcoin">
                             <div className="logo"><img src="/img/vio@2x.png" /></div>
                             <div className="coinDescr">
-                                <h4>{window.localStorage.getItem('type') == 'Violas钱包' ? 'Vtoken' : null}</h4>
-                                <p>{window.localStorage.getItem('type') == 'Violas钱包' ? 'violas' : null}</p>
+                                <h4>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'Vtoken' : null}</h4>
+                                <p>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'violas' : null}</p>
                             </div>
                         </div>
                         {

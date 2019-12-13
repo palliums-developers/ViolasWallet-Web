@@ -115,7 +115,7 @@ class Home extends Component {
         })
     }
     getTo(to) {
-        if (window.localStorage.getItem('type') == 'Violas钱包') {
+        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
             if (to == '/home/market') {
                 return '/home/market';
             } else {

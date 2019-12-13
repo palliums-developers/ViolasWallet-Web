@@ -47,8 +47,8 @@ class FeekBack extends Component {
                     <span onClick={() => {
                     this.props.history.push('/setting')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
-                    <span>{intl.get('Help & Feedback')}</span>
-                    <span onClick={()=>this.getQuestion('right')}>{intl.get('Question & Feedback')}</span>
+                    <span>{intl.get('Help&Feedback')}</span>
+                    <span onClick={()=>this.getQuestion('right')}>{intl.get('Question&Feedback')}</span>
                 </header>
                 <section>
                     {/* <div className="content">
@@ -60,7 +60,7 @@ class FeekBack extends Component {
                     this.state.isShow ? <div className="questDialog">
                     <div className="feedback">
                        <div className="head">
-                         <span>{intl.get('Question & Feedback')}</span>
+                         <span>{intl.get('Question&Feedback')}</span>
                          <span onClick={()=>this.getQuestion('error')}><img src="/img/Close@2x.png"/></span>
                        </div>
                        <div className="content">

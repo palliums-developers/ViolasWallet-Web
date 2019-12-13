@@ -34,7 +34,9 @@ class Market extends Component {
             otherdata: [],
             dealData: [],
             leftCount: '',
-            rightCount:''
+            rightCount:'',
+            value:'',
+            disNone:false
         }
     }
     componentWillMount() {
@@ -219,80 +221,102 @@ class Market extends Component {
 
     }
     getExchange = async () => {
-        let { vals, val ,coin} = this.props.dealIndex;
-        let {  updatas, coindata, count, othersdata } = this.state;
-        let violas = new vAccount(decrypted.mne_arr);
-        let Transaction = '';
-        let publishTranaction1 = '';
-        let publishTranaction2 = '';
-        if (coin) {
-            Transaction = await violas.transactionEX(coindata[val].name, count, othersdata[vals].name, count);
-            for (let i = 0; i < updatas.length;i++){
-                if (updatas[i].name == coindata[val].name) {
-                    publishTranaction1 = 'did';
-                }
-                if (updatas[i].name == othersdata[vals].name) {
-                    publishTranaction2 = 'did';
-                }
-            } 
-            console.log(publishTranaction1,'1')
-            console.log(publishTranaction2,'2')
-            console.log(Transaction,'3')
-            // if (publishTranaction1 !== 'did') {
-            //     publishTranaction1 = await violas.publish(coindata[val].name);
-            //     this.props.dealIndex.exchange({
-            //         signedtxn: publishTranaction1
-            //     })
-            // }
-            
-            // if (publishTranaction2 !== 'did') {
-            //     publishTranaction2 = await violas.publish(othersdata[vals].name);
-            //     this.props.dealIndex.exchange({
-            //         signedtxn: publishTranaction2
-            //     })
-            // }
-            // let data = await this.props.dealIndex.exchange({
-            //     signedtxn: Transaction
-            // })
-            // if(data.code = 2000){
-            //     alert(intl.get('For successful')+'!!!')
-            // }else{
-            //     alert(intl.get('For failure') + '!!!')
-            // }
-        } 
-        else {
-            Transaction = await violas.transactionEX(othersdata[vals].name, count, coindata[val].name, count);
-            for (let i = 0; i < updatas.length; i++) {
-                if (updatas[i].name == coindata[val].name) {
-                    publishTranaction1 = 'did';
-                }
-                if (updatas[i].name == othersdata[vals].name) {
-                    publishTranaction2 = 'did';
-                }
-            }
-            if (publishTranaction1 !== 'did') {
-                publishTranaction1 = await violas.publish(othersdata[vals].name);
-                this.props.dealIndex.exchange({
-                    signedtxn: publishTranaction1
-                })
-            }
-            if (publishTranaction2 !== 'did') {
-                publishTranaction2 = await violas.publish(othersdata[vals].name);
-                this.props.dealIndex.exchange({
-                    signedtxn: publishTranaction2
-                })
-            }
-            let data = await this.props.dealIndex.exchange({
-                signedtxn: Transaction
-            })
-            if (data.code = 2000) {
-                alert(intl.get('For successful') + '!!!')
-            } else {
-                alert(intl.get('For failure') + '!!!')
-            }
-        }
+        this.setState({
+            disNone: true
+        })
+        
     }
+    getValue = (e) => {
+        this.setState({
+            value: e.target.value
+        })
+    }
+    confirm = async () => {
+        if (this.state.value == '') {
+            alert(intl.get('Please input Access Code'))
+        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+            alert(intl.get('Access Code does not match,please Re_input'))
+        } else {
+            let { vals, val, coin } = this.props.dealIndex;
+            let { updatas, coindata, count, othersdata } = this.state;
+            let violas = new vAccount(decrypted.mne_arr);
+            let Transaction = '';
+            let publishTranaction1 = '';
+            let publishTranaction2 = '';
+            if (coin) {
+                Transaction = await violas.transactionEX(coindata[val].name, count, othersdata[vals].name, count);
+                for (let i = 0; i < updatas.length; i++) {
+                    if (updatas[i].name == coindata[val].name) {
+                        publishTranaction1 = 'did';
+                    }
+                    if (updatas[i].name == othersdata[vals].name) {
+                        publishTranaction2 = 'did';
+                    }
+                }
+                console.log(publishTranaction1, '1')
+                console.log(publishTranaction2, '2')
+                console.log(Transaction, '3')
+                if (publishTranaction1 !== 'did') {
+                    publishTranaction1 = await violas.publish(coindata[val].name);
+                    this.props.dealIndex.exchange({
+                        signedtxn: publishTranaction1
+                    })
+                }
 
+                if (publishTranaction2 !== 'did') {
+                    publishTranaction2 = await violas.publish(othersdata[vals].name);
+                    this.props.dealIndex.exchange({
+                        signedtxn: publishTranaction2
+                    })
+                }
+                let data = await this.props.dealIndex.exchange({
+                    signedtxn: Transaction
+                })
+                console.log(data, '4')
+                // if(data.code = 2000){
+                // this.setState({
+                //     disNone: false
+                // })
+                //     alert(intl.get('For successful')+'!!!')
+                // }else{
+                //     alert(intl.get('For failure') + '!!!')
+                // }
+            }
+            else {
+                Transaction = await violas.transactionEX(othersdata[vals].name, count, coindata[val].name, count);
+                for (let i = 0; i < updatas.length; i++) {
+                    if (updatas[i].name == coindata[val].name) {
+                        publishTranaction1 = 'did';
+                    }
+                    if (updatas[i].name == othersdata[vals].name) {
+                        publishTranaction2 = 'did';
+                    }
+                }
+                if (publishTranaction1 !== 'did') {
+                    publishTranaction1 = await violas.publish(othersdata[vals].name);
+                    this.props.dealIndex.exchange({
+                        signedtxn: publishTranaction1
+                    })
+                }
+                if (publishTranaction2 !== 'did') {
+                    publishTranaction2 = await violas.publish(othersdata[vals].name);
+                    this.props.dealIndex.exchange({
+                        signedtxn: publishTranaction2
+                    })
+                }
+                let data = await this.props.dealIndex.exchange({
+                    signedtxn: Transaction
+                })
+                if (data.code = 2000) {
+                    alert(intl.get('For successful') + '!!!')
+                } else {
+                    alert(intl.get('For failure') + '!!!')
+                }
+            }
+            
+        }
+
+    }
     render() {
         let {
             curEntrust,
@@ -446,6 +470,22 @@ class Market extends Component {
                         </div>
                     </div>
                 </section>
+                {
+                    this.state.disNone ? <div className="passDialog">
+                        <div className="passContent">
+                            <h4>输入密码</h4>
+                            <input type="text" placeholder="密码" onChange={(e) => this.getValue(e)} />
+                            <div className="btns">
+                                <span onClick={() => {
+                                    this.setState({
+                                        disNone: false
+                                    })
+                                }}>取消</span>
+                                <span onClick={() => this.confirm()}>确认</span>
+                            </div>
+                        </div>
+                    </div> : null
+                }
             </div>
         );
     }
