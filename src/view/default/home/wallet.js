@@ -26,14 +26,13 @@ class Wallet extends Component {
         }
     }
     componentWillMount() {
-        if(window.localStorage.getItem('data')){
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
         }
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
         let balanceData;
-
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
 
             let violas = new vAccount(decrypted.mne_arr);
@@ -169,15 +168,21 @@ class Wallet extends Component {
                                 <span><img src="/img/路径复制 4@2x.png" /></span>
                             </div>
                             <div className="dealContent">
-                                {
-                                    window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="head">
-                                        <label>{intl.get('Fund')}</label>
-                                        <span onClick={() => {
+                                <div className="head">
+                                    <label>{intl.get('Fund')}</label>
+                                    {
+                                        window.localStorage.getItem('type') && window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span onClick={() => {
                                             this.props.history.push('/addCurrency')
                                         }}><img src="/img/编组 9@2x.png" />
-                                        </span>
-                                    </div> : null
-                                }
+                                        </span> : null
+                                    }
+                                </div>
+                                <div className="">
+                                </div>
+                                <div className="mList">
+                                    <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}
+                                    </label><span>{balance}</span></p>
+                                </div>
                                 {
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
                                         {
@@ -188,7 +193,7 @@ class Wallet extends Component {
                                                         name: nameData && nameData[i],
                                                         balance: v.balance
                                                     }))
-                                                }}><label>{nameData && nameData[i]}</label><span>{v.balance / 1e6}</span></p>
+                                                }}><label>{nameData && nameData[i].toLowerCase()}</label><span>{v.balance / 1e6}</span></p>
                                             })
                                         }
                                     </div> : null
