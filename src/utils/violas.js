@@ -1,4 +1,5 @@
-let violas = require("kulap-libra-violas/build/index");
+let violas = require("./kulap-libra-violas/build/index.js");
+// let violas = require("kulap-libra-violas/build/index");
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;
 let vNetwork = violas.LibraNetwork;
@@ -17,7 +18,7 @@ class vAccount {
         this.sequenceNum_violas = this.getsequenceNum_violas();
         this.sequenceNum_libra = this.getsequenceNum_libra();
         // this.dexAddress = "b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89";
-        this.dexAddress="07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095"
+        this.dexAddress = "07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095"
     }
     getmne(mne) {
         if (mne) {
@@ -52,7 +53,7 @@ class vAccount {
         });
         const result = await _client.transferCoins_libra(this.account, receiver_address, amount, await this.sequenceNum_libra, "libra");
         const signTx = Buffer.from(result.array[4]).toString("hex");
-        //   const signTx = buf2hex(result);
+        // const signTx = buf2hex(result);
         // console.log(signTx);
         return signTx;
     }
@@ -62,7 +63,7 @@ class vAccount {
         });
         const result = await _client.transferCoins(this.account, receiver_address, amount, await this.sequenceNum_violas, coinType);
         const signTx = Buffer.from(result.array[4]).toString("hex");
-        //   const signTx = buf2hex(result);
+        // const signTx = buf2hex(result);
         // console.log(signTx);
         return signTx;
     }
@@ -80,7 +81,7 @@ class vAccount {
             network: vNetwork.Testnet
         });
         let token;
-        let i=0;
+        let i = 0;
         for (i in _currencyToken.data) {
             if (exCoinType == _currencyToken.data[i].name) {
                 token = _currencyToken.data[i].address
@@ -102,7 +103,7 @@ class vAccount {
         // console.log(signTx);
         return signTx;
     }
-    async transactionEXWithdraw(myCoinType,version) {
+    async transactionEXWithdraw(myCoinType, version) {
         const _client = new vClient({
             network: vNetwork.Testnet
         });
@@ -149,6 +150,7 @@ const stringToByte = (str) => {
     return bytes;
 }
 export default vAccount;
+
 // console.log(code_data.transfer==code_data.transfer2);
 // let violastrans=new_base64(code_data.transfer2,code_data.default_token);
 // console.log(violastrans);
@@ -163,4 +165,6 @@ export default vAccount;
 // let new_code=new_base64(code_data.transfer_with_data_mv,code_data.S002);
 // console.log(new_code);
 
-// export default vAccount;
+/**
+ * salt file: build/constants/HashSaltValues.js
+ */

@@ -230,6 +230,7 @@ class LibraClient {
         const saltHash = new sha3_1.default(256)
             .update(HashSaltValues_1.default.rawTransactionHashSalt, 'utf-8')
             .digest();
+        console.log(saltHash)
         const data = BufferUtil_1.BufferUtil.concat(saltHash, rawTransaction);
         const hash = new sha3_1.default(256)
             .update(BufferUtil_1.BufferUtil.toHex(data), 'hex')

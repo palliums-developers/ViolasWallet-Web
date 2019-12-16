@@ -63,7 +63,6 @@ class LibraTransaction {
     }
     // console.log(BufferUtil_1.BufferUtil.fromBase64(_currencyToken.data[2].address_base64).toString==BufferUtil_1.BufferUtil.fromHex(_currencyToken.data[2].address_hex).toString,'qqqqqq')
     // console.log(ProgamBase64Codes_1.default.peerToPeerTxn.toString == BufferUtil_1.BufferUtil.fromBase64(_currencyToken.data[0].address_base64).toString)
-
     prog.setCodeFromBuffer(BufferUtil_1.BufferUtil.fromBase64(tokenBase64));
     // prog.setCodeFromBuffer(BufferUtil_1.BufferUtil.fromHex(tokenHex));
     const recipientAddressLCS = new AddressLCS_1.AddressLCS(recipientAddress);
@@ -86,7 +85,7 @@ class LibraTransaction {
       sequence.toString(),
       payload
     );
-    // console.log(transaction,'create transaction')
+    console.log(transaction,'create transaction')
     return transaction;
   }
   static publish(coinType, sender, sequence) {
