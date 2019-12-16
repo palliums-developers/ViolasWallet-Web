@@ -20,5 +20,4 @@ intl.init({
     CN
   }
 })
-
 ReactDOM.render(<Provider {...Store}><RouterConfig></RouterConfig></Provider>, document.getElementById('root'));
