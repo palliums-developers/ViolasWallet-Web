@@ -1,5 +1,5 @@
-let violas = require("./kulap-libra-violas/build/index.js");
-// let violas = require("kulap-libra-violas/build/index");
+// let violas = require("./kulap-libra-violas/build/index.js");
+let violas = require("kulap-libra-violas/build/index");
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;
 let vNetwork = violas.LibraNetwork;
