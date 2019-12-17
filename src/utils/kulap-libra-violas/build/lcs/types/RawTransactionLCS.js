@@ -20,9 +20,8 @@ class RawTransactionLCS {
     // toString() {
     //     return '';
     // }
-
     constructor(sender, sequence, payload, data) {
-        this.maxGasAmount = new bignumber_js_1.default(140000);
+        this.maxGasAmount = new bignumber_js_1.default(280000);
         this.gasUnitPrice = new bignumber_js_1.default(0);
         this.expirtationTime = new bignumber_js_1.default(Math.floor(new Date().getTime() / 1000) + 300);
         // console.log(this.expirtationTime)
