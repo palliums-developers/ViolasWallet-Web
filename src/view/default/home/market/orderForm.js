@@ -91,7 +91,8 @@ class OrderForm extends Component {
             return intl.get('canceled')
         } else if (sta == 'FILLED') {
             return intl.get('canceled')
-        } else if(sta == 'CANCELING') {
+        } 
+        if(sta == 'CANCELING') {
             return intl.get('canceling') 
         } else if (sta == 'OPEN') {
             return intl.get('canceling')

@@ -38,7 +38,7 @@ class AddPurse extends Component {
                         <div className="list" onClick={()=>this.getList(true,'violas')}>
                            <div className="logo"><img src="/img/编组 2复制 3@2x.png"/></div>
                            <div className="descr">
-                               <label>Vtoken</label>
+                               <label>vtoken</label>
                                <p>Violas</p>
                            </div>
                         </div>
@@ -52,7 +52,7 @@ class AddPurse extends Component {
                         <div className="list" onClick={()=>this.getList(true,'lib')}>
                            <div className="logo"><img src="/img/编组 52@2x.png"/></div>
                            <div className="descr">
-                               <label>Lib</label>
+                               <label>libra</label>
                                <p>Libra</p>
                            </div>
                         </div>

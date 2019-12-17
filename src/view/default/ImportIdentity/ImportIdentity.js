@@ -25,25 +25,20 @@ class ImportIdentity extends Component {
   }
 
   handleFiles = () => {
-    var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
-    var name = selectedFile.name;//读取选中文件的文件名
-    var size = selectedFile.size;//读取选中文件的大小
-    var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
-    reader.readAsText(selectedFile);//读取文件的内容
-    console.log(this.state.password)
-    reader.onload = (e) => {
-      console.log("读取结果：", e.currentTarget.result);//当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
-      console.log("读取结果转为JSON：");
-      let json = aes256.decrypt(this.state.password, e.currentTarget.result);
-      if (json[0] == '{') {
-        alert('解密成功！！！')
-        window.localStorage.setItem('data', JSON.stringify(JSON.parse(json)));
-        window.localStorage.setItem('type', intl.get('ViolasWallet'));
-        this.props.history.push('/home/wallets')
-      } else {
-        alert('密码错误！！！')
-      }
-    };
+      var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
+      var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
+      reader.readAsText(selectedFile);//读取文件的内容
+      reader.onload = (e) => {
+        let json = aes256.decrypt(this.state.password, e.currentTarget.result);
+        if (json[0] == '{') {
+          alert('解密成功！！！')
+          window.localStorage.setItem('data', JSON.stringify(JSON.parse(json)));
+          window.localStorage.setItem('type', intl.get('ViolasWallet'));
+          this.props.history.push('/home/wallets')
+        } else {
+          alert('密码错误！！！')
+        }
+      };
   }
 
   render() {

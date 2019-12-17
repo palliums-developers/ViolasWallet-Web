@@ -150,5 +150,7 @@ export default {
     'canceling': 'canceling',
     'The order details':'The order details',
     'Browser query':'Browser query',
-    'Trading Record':'Trading Record'
+    'Trading Record':'Trading Record',
+    'Password setting does not match': 'Password setting does not match',
+    'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password': 'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password'
 }

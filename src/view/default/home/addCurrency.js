@@ -129,15 +129,15 @@ class AddCurrency extends Component {
                 {
                     this.state.isShow ? <div className="passDialog">
                         <div className="passContent">
-                            <h4>输入密码</h4>
-                            <input type="text" placeholder="密码" onChange={(e) => this.getValue(e)} />
+                            <h4>{intl.get('This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password')}</h4>
+                            <input type="text" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({
                                         isShow: false
                                     })
-                                }}>取消</span>
-                                <span onClick={() => this.confirm()}>确认</span>
+                                }}>{intl.get('Cancel')}</span>
+                                <span onClick={() => this.confirm()}>{intl.get('Confirm')}</span>
                             </div>
                         </div>
                     </div> : null

@@ -4,7 +4,8 @@ import {
     stableCurDeal,
     selfCurDeal,
     getCurCoinMess,
-    getOtherCoinMess
+    getOtherCoinMess,
+    getVersion
 } from '../../api/deal'
 import axios from 'axios';
 
@@ -80,5 +81,9 @@ export default class DealIndex{
             return res.data
         });
         return data;
+    }
+    @action async getCurVersion(params) {
+        let data = await getVersion(params);
+        return data.data.trades
     }
 }   

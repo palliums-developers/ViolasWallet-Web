@@ -22,7 +22,9 @@ import FeekBack from "../view/default/home/setting/feedBack";
 import DirectoryInquiries from "../view/default/home/mine/directoryInquiries";
 import CodeBackup from "../view/default/backup/codeBackup";
 import Manage from "../view/default/home/manage";
+import Manage1 from "../view/default/home/mine/manage1";
 import DetailWallet from "../view/default/home/detailWallet";
+import DetailWallet1 from "../view/default/home/mine/detailWallet1";
 import AddAddress from "../view/default/home/mine/addAddress";
 import Record from "../view/default/home/mine/record";
 import Transfar from "../view/default/home/mine/transfer";
@@ -125,10 +127,18 @@ const routes = [
         path:'/manage',
         component:Manage
     },
+    {
+        path: '/manage1',
+        component: Manage1
+    },
     //钱包详情
     {
         path:'/detailWallet',
         component:DetailWallet
+    },
+    {
+        path: '/detailWallet1',
+        component: DetailWallet1
     },
     //扫一扫
     {

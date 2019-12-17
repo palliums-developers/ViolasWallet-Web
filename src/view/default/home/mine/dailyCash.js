@@ -4,7 +4,9 @@ import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-func
 import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
-let decrypted =  JSON.parse(window.localStorage.getItem('data'));
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
+let decrypted;
 
 @inject('index')
 @observer
@@ -19,6 +21,9 @@ class DailyCash extends Component {
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
+        if (window.localStorage.getItem('data')) {
+            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        }
     }
     async componentDidMount(){
         let arr = creat_account_mnemonic(decrypted.mne_arr);
@@ -43,9 +48,13 @@ class DailyCash extends Component {
         let violas = new vAccount(decrypted.mne_arr);
         return violas.address;
     }
-    getBTCAddress(){
-        let btc = new Account(decrypted.mne_arr);
-        return btc.address;
+    // getBTCAddress(){
+    //     let btc = new Account(decrypted.mne_arr);
+    //     return btc.address;
+    // }
+    getBTCAddressData() {
+        let btc = new Account(decrypted.mne_arr, testnet);
+        return btc.address
     }
     render() {
         let { balancedata1,balancedata2 } = this.state;
@@ -63,7 +72,26 @@ class DailyCash extends Component {
                 <section>
                     <div className="identityWallet">
                        <h4>{intl.get('Identity Wallet')}</h4>
-                       <div className="identityContent">
+                        {
+                            JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
+                                return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} >
+                                    <div className="title">
+                                        <label>{v.name}</label>
+                                        <span onClick={() => {
+                                            this.props.history.push({
+                                                pathname: '/manage1',
+                                                state:{
+                                                    type:v.name,
+                                                    addr: v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address : v.type == 'BTC' ? this.getBTCAddressData() : null
+                                                }
+                                            })
+                                        }}><img src="/img/编组 142@2x.png" /></span>
+                                    </div>
+                                    <p>{v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address : v.type == 'BTC' ? this.getBTCAddressData() : null}</p>
+                                </div>
+                            })
+                        }
+                       {/* <div className="identityContent">
                           <div className="title">
                               <label>{JSON.parse(window.localStorage.getItem('data')).wallet_name[0].name}</label>
                               <span><img src="/img/编组 142@2x.png"/></span>
@@ -83,20 +111,28 @@ class DailyCash extends Component {
                               <span><img src="/img/编组 142@2x.png"/></span>
                           </div>
                           <p>{balancedata2.address}</p>
-                       </div>
-                    </div>
+                       </div>*/}
+                    </div> 
                     <div className="identityWallet toIdentity">
                        <h4>{intl.get('Create/Import')}</h4>
                        {
                            JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v,i)=>{
-                             return <div className={v.type == 'violas' ? 'identityContent vioBack':v.type == 'libra' ? 'identityContent libBack':v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={()=>this.getWallet(v.type)} key={i}>
+                             return <div className={v.type == 'violas' ? 'identityContent vioBack':v.type == 'libra' ? 'identityContent libBack':v.type == 'BTC' ? 'identityContent btcBack' : null} key={i}>
                                         <div className="title">
                                             <label>{v.name}</label>
-                                            <span></span>
+                                            <span onClick={() => {
+                                                this.props.history.push({
+                                                    pathname: '/manage1',
+                                                    state: {
+                                                        type: v.name,
+                                                        addr: v.type == 'violas' ? balancedata1.address : v.type == 'libra' ? balancedata2.address : v.type == 'BTC' ? this.getBTCAddressData() : null
+                                                    }
+                                                })
+                                            }}><img src="/img/编组 142@2x.png" /></span>
                                         </div>
                                         <p>{
                                             v.type == 'violas' ?  get_address(creat_account_mnemonic(decrypted.mne_arr)) : v.type == 'libra' ?  
-                                            this.getVioAddress() : v.type == 'BTC' ? this.getBTCAddress() : null
+                                         this.getVioAddress() : v.type == 'BTC' ? this.getBTCAddressData() : null
                                             }</p>
                                     </div>
                            })

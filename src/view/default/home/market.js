@@ -43,6 +43,7 @@ class Market extends Component {
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
         })
+        let { coin } = this.props.dealIndex;
         // let coinsData = CoinData.data;
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
@@ -61,7 +62,7 @@ class Market extends Component {
             updatas: updateData,
             othersdata: othersData
         }, () => {
-            this.getContent()
+            this.getContent(coin)
 
         })
 
@@ -85,9 +86,10 @@ class Market extends Component {
             }
         }
     }
-    async getContent() {
+    async getContent(coin) {
         let { val, vals, stableDeal, selfDeal } = this.props.dealIndex;
         let { coindata, othersdata } = this.state;
+        console.log(coin,'coin,,,,,,,')
         let data = await selfDeal({
             user: violas.address
         });
@@ -95,13 +97,13 @@ class Market extends Component {
             dealData: data.splice(0, 3)
         })
         let dealData = [];
-        if (coindata && coindata[val].addr < othersdata && othersdata[vals].addr) {
+        if (coin) {
             dealData = await stableDeal({
                 base: coindata && coindata[val].addr,
                 quote: othersdata && othersdata[vals].addr
             });
             this.setState({
-                curEntrust: dealData.buys
+                othersEntrust: dealData.buys
             })
         } else {
             dealData = await stableDeal({
@@ -109,7 +111,7 @@ class Market extends Component {
                 quote: coindata && coindata[val].addr
             });
             this.setState({
-                othersEntrust: dealData.sells
+                othersEntrust: dealData.buys
             })
         }
     }
@@ -126,7 +128,6 @@ class Market extends Component {
 
     getChange = (type) => {
         let { coin } = this.props.dealIndex;
-        console.log(coin)
         if (type == 'a') {
             if (coin) {
                 this.props.dealIndex.selectChange({
@@ -198,7 +199,12 @@ class Market extends Component {
     getCoin = () => {
         let { coin } = this.props.dealIndex;
         this.props.dealIndex.updateCoin(!coin)
-
+        if(coin){
+            this.getContent(false)
+        }else{
+            this.getContent(true)
+        }
+        
         if (this.state.coin) {
             this.setState({
                 leftCount: this.state.leftCount,
@@ -246,9 +252,6 @@ class Market extends Component {
                         publishTranaction2 = 'did';
                     }
                 }
-                console.log(publishTranaction1, '1')
-                console.log(publishTranaction2, '2')
-                console.log(Transaction, '3')
                 if (publishTranaction1 !== 'did') {
                     publishTranaction1 = await violas.publish(coindata[val].name);
                     this.props.dealIndex.exchange({
@@ -466,15 +469,15 @@ class Market extends Component {
                 {
                     this.state.disNone ? <div className="passDialog">
                         <div className="passContent">
-                            <h4>输入密码</h4>
-                            <input type="text" placeholder="密码" onChange={(e) => this.getValue(e)} />
+                            <h4>{intl.get('Input  Access Code')}</h4>
+                            <input type="text" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({
                                         disNone: false
                                     })
-                                }}>取消</span>
-                                <span onClick={() => this.confirm()}>确认</span>
+                                }}>{intl.get('Cancel')}</span>C
+                                <span onClick={() => this.confirm()}>{intl.get('Confirm')}</span>
                             </div>
                         </div>
                     </div> : null

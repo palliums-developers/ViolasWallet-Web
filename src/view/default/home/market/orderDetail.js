@@ -16,7 +16,9 @@ class OrderDetail extends Component {
             status: ['未完成', '已完成'],
             ind: 0,
             detailData: [],
-            othersList: []
+            othersList: [],
+            browerData:[],
+            price:''
         }
     }
     componentWillMount() {
@@ -30,30 +32,39 @@ class OrderDetail extends Component {
         let data = await this.props.dealIndex.selfDeal({
             user: violas.address
         });
-        this.setState({
-            othersList: await this.props.dealIndex.getOthersCoinMess()
-        })
         let datas = data.filter(v => v.id == this.props.match.params.id);
-        this.setState({
-            detailData: datas
+        let dataB = await this.props.dealIndex.getCurVersion({
+            version:datas[0].version
         })
-        console.log(datas, '.......')
+        
+        
+        this.setState({
+            othersList: await this.props.dealIndex.getOthersCoinMess(),
+            detailData: datas,
+            browerData: dataB
+        },()=>{
+            let price = this.getPrices(this.state.detailData[0].tokenGetSymbol)
+            this.setState({
+                price:price
+            })
+        })
     }
     getIndex = (i) => {
         this.setState({
             ind: i
         })
     }
-    getPrices(name) {
+    getPrices = (name) => {
         let { othersList } = this.state;
         for (let i = 0; i < othersList.length; i++) {
             if ((othersList[i].name).indexOf(name) == 0) {
                 return othersList[i].price;
             }
         }
+        
     }
     render() {
-        let { detailData } = this.state;
+        let { detailData, browerData, price } = this.state;
         return (
             <div className="orderDetail">
                 <header>
@@ -78,7 +89,7 @@ class OrderDetail extends Component {
                                             <span>{intl.get('Time')}</span>
                                         </div>
                                         <div className="list">
-                                            <span>{this.getPrices(v.tokenGetSymbol)}</span>
+                                            <span>{price}</span>
                                             <span>{v.amountGet}</span>
                                             <span>{v.state == 'OPEN' ? timeStamp2String(v.date - 300 + '000') : v.state == 'FILLED' ? timeStamp2String(v.date + '000') : null}</span>
                                         </div>
@@ -106,57 +117,28 @@ class OrderDetail extends Component {
                     <div className="line"></div>
                     <div className="bidHistory">
                         <h3>{intl.get('Browser query')}</h3>
-                        <div className="bidHistoryList">
-                            <div className="lists">
-                                <dl>
-                                    <dt>{intl.get('Time')}</dt>
-                                    <dd>10/17 12:06:23</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Price')}（Atoken）</dt>
-                                    <dd>2000.8232</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Amount')}</dt>
-                                    <dd>40.0000</dd>
-                                </dl>
-                            </div>
-                            <p>{intl.get('Browser query')}</p>
-                        </div>
-                        <div className="bidHistoryList">
-                            <div className="lists">
-                                <dl>
-                                    <dt>{intl.get('Time')}</dt>
-                                    <dd>10/17 12:06:23</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Price')}（Atoken）</dt>
-                                    <dd>2000.8232</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Amount')}</dt>
-                                    <dd>40.0000</dd>
-                                </dl>
-                            </div>
-                            <p>{intl.get('Browser query')}</p>
-                        </div>
-                        <div className="bidHistoryList">
-                            <div className="lists">
-                                <dl>
-                                    <dt>{intl.get('Time')}</dt>
-                                    <dd>10/17 12:06:23</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Price')}（Atoken）</dt>
-                                    <dd>2000.8232</dd>
-                                </dl>
-                                <dl>
-                                    <dt>{intl.get('Amount')}</dt>
-                                    <dd>40.0000</dd>
-                                </dl>
-                            </div>
-                            <p>{intl.get('Browser query')}</p>
-                        </div>
+                        {
+                            browerData && browerData.map((v,i)=>{
+                                return <div className="bidHistoryList" key={i}>
+                                    <div className="lists">
+                                        <dl>
+                                            <dt>{intl.get('Time')}</dt>
+                                            <dd>{timeStamp2String(v.date + '000')}</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>{intl.get('Price')}（vtoken）</dt>
+                                            <dd>{price}</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>{intl.get('Amount')}</dt>
+                                            <dd>{v.amount}</dd>
+                                        </dl>
+                                    </div>
+                                    <p>{intl.get('Browser query')}</p>
+                                </div>
+                            })
+                        }
+                        
                     </div>
                 </section>
             </div>

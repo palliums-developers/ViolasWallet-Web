@@ -180,8 +180,8 @@ class Transfar extends Component {
                         window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
-                                    <span>Vtoken</span>
-                                    <span>{intl.get('Balance')}：<s>{balancedata}</s> Vtoken</span>
+                                    <span>vtoken</span>
+                                    <span>{intl.get('Balance')}：<s>{balancedata}</s> vtoken</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
@@ -214,7 +214,7 @@ class Transfar extends Component {
                                         onAfterChange={this.log('afterChange')}
                                     />
                                 </WingBlank>
-                                <div className="rate">{this.state.rate / 100000} Vtoken</div>
+                                <div className="rate">{this.state.rate / 100000} vtoken</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('violas')}>
                             {intl.get('Confirm Transfer')}
@@ -264,8 +264,8 @@ class Transfar extends Component {
                         </div> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
-                                    <span>Lib</span>
-                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> Lib</span>
+                                    <span>libra</span>
+                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> libra</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">
@@ -298,7 +298,7 @@ class Transfar extends Component {
                                         onAfterChange={this.log('afterChange')}
                                     />
                                 </WingBlank>
-                                <div className="rate">{this.state.rate / 100000} Lib</div>
+                                <div className="rate">{this.state.rate / 100000} libra</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('libra')}>
                                 {intl.get('Confirm Transfer')}

@@ -50,8 +50,8 @@ export default {
     'Remove Wallet':'删除钱包',
     'Wallet Detail':'钱包详情',
     'Change Wallet Name':'更换钱包名',
-    'Transfer Vtoken':'violas转账',
-    'Transfer libra':'libra转账',
+    'Transfer Vtoken':'Violas转账',
+    'Transfer libra':'Libra转账',
     'Transfer BTC':'BTC转账',
     'Balance':'余额',
     'Receving Address':'收款地址',
@@ -70,6 +70,7 @@ export default {
     'Access Code':'密码',
     'Cancel':'取消',
     'Confirm':'确认',
+    'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password':'进行此项操作需要消耗gas费，如要进行此操作请输入密码',
     'Date':'日期',
     'Amount':'数量',
     'Amount Transfered':'转出数量',
@@ -147,8 +148,9 @@ export default {
     'Exchange Rate':'汇率',
     'cancel':'撤销',
     'canceled': '已撤销',
-    'canceling': '撤销',
+    'canceling': '撤销中',
     'The order details':'订单详情',
     'Browser query':'浏览器查询',
-    'Trading Record':'成交记录'
+    'Trading Record':'成交记录',
+    'Password setting does not match':'密码设定不符合'
 }

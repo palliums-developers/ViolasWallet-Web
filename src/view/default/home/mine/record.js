@@ -79,13 +79,15 @@ class Record extends Component {
                                         <div className="title">
                                             <span>{intl.get('Date')}</span>
                                             <span>{intl.get('Amount')}</span>
-                                            <span>{intl.get('Transfer')}</span>
+                                            <span className='redC'>{intl.get('Transfer')}</span>
                                         </div>
                                         <div className="titleContent">
                                             <span>{timeStamp2String(v.expiration_time+'000')}</span>
-                                            <span>{v.value} {
+                                            <span> {v.amount} 
+                                            {/* {
                                                 window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
-                                            }</span>
+                                            } */}
+                                            </span>
                                             <span>{
                                                 window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                             }</span>

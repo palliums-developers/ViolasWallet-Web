@@ -39,15 +39,21 @@ class CreateIdentity extends Component {
   }
   createFun = async () => {
     let { name, pass1, pass2 } = this.state;
+    // let reg = new RegExp('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,20}$')
+    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$')
     if (name == '') {
       alert(intl.get('Input Nickname') + '!!!')
     } else if (pass1 == '') {
       alert(intl.get('Please set Wallet Access Code') + '!!!')
-    } else if (pass2 == '') {
+    } 
+    else if (pass2 == '') {
       alert(intl.get('Confirm Access Code') + '!!!')
     } else if (pass1.indexOf(pass2) == -1) {
       alert(intl.get('The passwords are different') + '!!!')
-    } else {
+    } 
+    else if (!reg.test(pass1)) {
+      alert(intl.get('Password setting does not match')+'！！！')
+    }else {
       window.localStorage.setItem('data', JSON.stringify({
         name: name,
         password1: pass1,
