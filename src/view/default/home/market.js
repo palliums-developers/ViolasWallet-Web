@@ -23,14 +23,15 @@ class Market extends Component {
             otherdata: [],
             dealData: [],
             leftCount: '',
-            rightCount:'',
-            value:'',
-            disNone:false
+            rightCount: '',
+            value: '',
+            disNone: false,
+            updatas: []
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')){
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }
@@ -47,7 +48,7 @@ class Market extends Component {
         // let coinsData = CoinData.data;
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
-                if (othersData[i].addr.indexOf(newData[j]) == 0) {
+                if (othersData[i].addr.indexOf("0x" + newData[j]) == 0) {
 
                     updateData.push({
                         name: othersData[i].name
@@ -56,7 +57,6 @@ class Market extends Component {
                 }
             }
         }
-
         this.setState({
             coindata: othersData,
             updatas: updateData,
@@ -89,7 +89,6 @@ class Market extends Component {
     async getContent(coin) {
         let { val, vals, stableDeal, selfDeal } = this.props.dealIndex;
         let { coindata, othersdata } = this.state;
-        console.log(coin,'coin,,,,,,,')
         let data = await selfDeal({
             user: violas.address
         });
@@ -199,31 +198,28 @@ class Market extends Component {
     getCoin = () => {
         let { coin } = this.props.dealIndex;
         this.props.dealIndex.updateCoin(!coin)
-        if(coin){
+        if (coin) {
             this.getContent(false)
-        }else{
+        } else {
             this.getContent(true)
         }
-        
+
         if (this.state.coin) {
             this.setState({
                 leftCount: this.state.leftCount,
                 rightCount: this.state.rightCount
             })
-
         } else {
             this.setState({
                 leftCount: this.state.rightCount,
                 rightCount: this.state.leftCount
             })
         }
-
     }
     getExchange = async () => {
         this.setState({
             disNone: true
         })
-        
     }
     getValue = (e) => {
         this.setState({
@@ -237,13 +233,13 @@ class Market extends Component {
             alert(intl.get('Access Code does not match,please Re_input'))
         } else {
             let { vals, val, coin } = this.props.dealIndex;
-            let { updatas, coindata, count, othersdata } = this.state;
+            let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
             let violas = new vAccount(decrypted.mne_arr);
             let Transaction = '';
             let publishTranaction1 = '';
             let publishTranaction2 = '';
             if (coin) {
-                Transaction = await violas.transactionEX(coindata[val].name, count, othersdata[vals].name, count);
+                Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
                     if (updatas[i].name == coindata[val].name) {
                         publishTranaction1 = 'did';
@@ -252,13 +248,13 @@ class Market extends Component {
                         publishTranaction2 = 'did';
                     }
                 }
+
                 if (publishTranaction1 !== 'did') {
                     publishTranaction1 = await violas.publish(coindata[val].name);
                     this.props.dealIndex.exchange({
                         signedtxn: publishTranaction1
                     })
                 }
-
                 if (publishTranaction2 !== 'did') {
                     publishTranaction2 = await violas.publish(othersdata[vals].name);
                     this.props.dealIndex.exchange({
@@ -268,18 +264,18 @@ class Market extends Component {
                 let data = await this.props.dealIndex.exchange({
                     signedtxn: Transaction
                 })
-                console.log(data, '4')
-                // if(data.code = 2000){
-                // this.setState({
-                //     disNone: false
-                // })
-                //     alert(intl.get('For successful')+'!!!')
-                // }else{
-                //     alert(intl.get('For failure') + '!!!')
-                // }
+
+                if(data.code = 2000){
+                this.setState({
+                    disNone: false
+                })
+                    alert(intl.get('For successful')+'!!!')
+                }else{
+                    alert(intl.get('For failure') + '!!!')
+                }
             }
             else {
-                Transaction = await violas.transactionEX(othersdata[vals].name, count, coindata[val].name, count);
+                Transaction = await violas.transactionEX(othersdata[vals].name, leftCount, coindata[val].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
                     if (updatas[i].name == coindata[val].name) {
                         publishTranaction1 = 'did';
@@ -309,7 +305,7 @@ class Market extends Component {
                     alert(intl.get('For failure') + '!!!')
                 }
             }
-            
+
         }
 
     }

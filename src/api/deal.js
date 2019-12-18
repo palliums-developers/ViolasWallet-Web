@@ -1,7 +1,7 @@
 import request from '../utils/request';
 let url2 = 'http://52.27.228.84:4000';
 let url1 = 'http://192.168.1.253:8181';
-let url = 'http://192.168.1.123:10088/v1';
+let url = 'http://localhost:10088/v1';
 // let url = 'http://18.220.66.235:38181'
 
 //稳定币交易

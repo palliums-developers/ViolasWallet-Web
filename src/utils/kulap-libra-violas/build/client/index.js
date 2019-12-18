@@ -18,7 +18,7 @@ const Accounts_1 = require("../wallet/Accounts");
 const Decoder_1 = require("./Decoder");
 const ProgamBase64Codes_1 = __importDefault(
     require("../constants/ProgamBase64Codes")
-  );
+);
 var LibraNetwork;
 (function (LibraNetwork) {
     LibraNetwork["Testnet"] = "testnet";
@@ -136,9 +136,9 @@ class LibraClient {
         const signedTransactionWP = r.getTransactionWithProof();
         return this.decoder.decodeSignedTransactionWithProof(signedTransactionWP);
     }
-    async publish(sender,coinType,sequenceNumber){
+    async publish(sender, coinType, sequenceNumber) {
         let keypair = sender.keyPair;
-        
+
         return await this.Vexecute(transaction_1.LibraTransaction.publish(coinType, sender, sequenceNumber), keypair);
     }
     /**
@@ -162,7 +162,7 @@ class LibraClient {
         // }
         return await this.execute(transaction_1.LibraTransaction.createTransfer(coinType, sender, recipientAddress, new bignumber_js_1.default(numCoins), sequenceNumber), keypair);
     }
-    async transferEXCoins(sender, recipientAddress, numCoins, sequenceNumber, coinType,data) {
+    async transferEXCoins(sender, recipientAddress, numCoins, sequenceNumber, coinType, data) {
         // const state = await this.getAccountState(sender.getAddress().toHex());
         let keypair = sender.keyPair;
         // if (additionalKey != null) {
@@ -170,7 +170,7 @@ class LibraClient {
         // }
         // let _data={data:data}
         // console.log(data);
-        return await this.Vexecute(transaction_1.LibraTransaction.createEXTransfer(coinType, sender, recipientAddress, new bignumber_js_1.default(numCoins), sequenceNumber,data), keypair);
+        return await this.Vexecute(transaction_1.LibraTransaction.createEXTransfer(coinType, sender, recipientAddress, new bignumber_js_1.default(numCoins), sequenceNumber, data), keypair);
     }
     /**
      *
@@ -202,7 +202,6 @@ class LibraClient {
         // return response;
     }
     async Vexecute(transaction, sender) {
-        // console.log(transaction);
         const senderSignature = await this.signTransaction(transaction, sender);
         const rawTxn = serialization_1.LCSSerialization.rawTransactionToByte(senderSignature.transaction);
         const publicKeyLCS = serialization_1.LCSSerialization.byteArrayToByte(senderSignature.publicKey);
@@ -219,18 +218,14 @@ class LibraClient {
      *
      */
     async signTransaction(transaction, keyPair) {
-        // console.log(transaction);
         const rawTxn = serialization_1.LCSSerialization.rawTransactionToByte(transaction);
         const signature = this.signRawTransaction(rawTxn, keyPair);
-        // console.log("sign")
         return new transaction_1.LibraSignedTransaction(transaction, keyPair.getPublicKey(), signature);
     }
     signRawTransaction(rawTransaction, keyPair) {
-        // console.log("raw")
         const saltHash = new sha3_1.default(256)
             .update(HashSaltValues_1.default.rawTransactionHashSalt, 'utf-8')
             .digest();
-        console.log(saltHash)
         const data = BufferUtil_1.BufferUtil.concat(saltHash, rawTransaction);
         const hash = new sha3_1.default(256)
             .update(BufferUtil_1.BufferUtil.toHex(data), 'hex')

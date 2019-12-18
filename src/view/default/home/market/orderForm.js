@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { inject,observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 // import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
 // import vAccount from '../../../../utils/violas';
-import {timeStamp2String} from '../../../../utils/timer';
+import { timeStamp2String } from '../../../../utils/timer';
 import intl from 'react-intl-universal';
 import vAccount from '../../../../utils/violas';
 import BScroll from 'better-scroll'
@@ -15,28 +15,28 @@ class OrderForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status:['Incomplete','Completed'],
-            ind:0,
-            othersList:[],
-            datas:[]
+            status: ['Incomplete', 'Completed'],
+            ind: 0,
+            othersList: [],
+            datas: []
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
-        if (window.localStorage.getItem('data')){
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }
     }
-    async componentDidMount(){
+    async componentDidMount() {
         this.getDatas(this.state.ind)
         this.setState({
             othersList: await this.props.dealIndex.getOthersCoinMess()
         })
         let scroll = new BScroll(this.refs.content, {
-            probeType:1,
+            probeType: 1,
             click: true,
-            scrollbar:true,
+            scrollbar: true,
             mouseWheel: true
         })
     }
@@ -55,7 +55,7 @@ class OrderForm extends Component {
             this.getDatas(this.state.ind)
         })
     }
-    async getDatas (ind){
+    async getDatas(ind) {
         let { selfDeal } = this.props.dealIndex;
         let data = await selfDeal({
             user: violas.address
@@ -66,40 +66,40 @@ class OrderForm extends Component {
             this.setState({
                 datas: undoneData
             })
-            
+
         } else if (ind == 1) {
             this.setState({
                 datas: completedData
             })
         }
     }
-    
-    cancel = async (name,version) =>{
+
+    cancel = async (name, version) => {
         let Transaction = await violas.transactionEXWithdraw(name, version);
         let data = await this.props.dealIndex.exchange({
             signedtxn: Transaction
         })
-        console.log(data,'........')
+        console.log(data, '........')
         // if (data.code = 2000) {
         //     alert(intl.get('For successful') + '!!!')
         // } else {
         //     alert(intl.get('For failure') + '!!!')
         // }
     }
-    ifCancle(sta){
-        if (sta == 'CANCELED'){
+    ifCancle(sta) {
+        if (sta == 'CANCELED') {
             return intl.get('canceled')
         } else if (sta == 'FILLED') {
             return intl.get('canceled')
-        } 
-        if(sta == 'CANCELING') {
-            return intl.get('canceling') 
+        }
+        if (sta == 'CANCELING') {
+            return intl.get('canceling')
         } else if (sta == 'OPEN') {
             return intl.get('canceling')
         } else {
             return intl.get('cancel')
         }
-        
+
     }
     render() {
         let { datas } = this.state;
@@ -107,12 +107,12 @@ class OrderForm extends Component {
             <div className="orderForm">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push('/home/market')
-                    }}><img src="/img/Combined Shape 1@2x.png"/></span>
+                        this.props.history.push('/home/market')
+                    }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Order')}</span>
                 </header>
                 <section>
-                   <div className="navlists">
+                    <div className="navlists">
                         <div className="navList">
                             {
                                 this.state.status.map((v, i) => {
@@ -120,7 +120,7 @@ class OrderForm extends Component {
                                 })
                             }
                         </div>
-                   </div>
+                    </div>
                     <div className="finishedContent" ref='content'>
                         <div className='unfinishedList'>
                             {
@@ -165,7 +165,7 @@ class OrderForm extends Component {
                                 })
                             }
                         </div>
-                   </div>
+                    </div>
                 </section>
             </div>
         );
