@@ -83,7 +83,7 @@ class Record extends Component {
                                 </div>
                                 <div className="titleContent">
                                     <span>{timeStamp2String(v.expiration_time + '000')}</span>
-                                    <span> {v.amount}
+                                    <span> {window.localStorage.getItem('type')==intl.get('LibraWallet')?v.value:v.amount}
                                         {/* {
                                                 window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                             } */}

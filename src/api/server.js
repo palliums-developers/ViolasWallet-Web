@@ -67,9 +67,8 @@ export let curAddCurrency = () => {
 
 //获取libra交易记录
 export let getLibraDealRecord = (params) => {
-    console.log(params, '..........')
     return request({
-        url: url2 + '/1.0/libra/transaction?addr=' + params.addr + '&limit=' + params.limit + '&offset=' + params.offset,
+        url: url + '/1.0/libra/transaction?addr=' + params.addr + '&limit=' + params.limit + '&offset=' + params.offset,
         method: 'get',
     });
 }
