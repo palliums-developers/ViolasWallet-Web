@@ -28,15 +28,15 @@ class Transfar1 extends Component {
             coinData:JSON.parse(window.localStorage.getItem('coinType'))
         })
         
-        if (this.props.index.type) {
-            if (this.props.index.type == 'vtoken' || 'lib') {
+        if (this.props.index.type1) {
+            if (this.props.index.type1 == 'vtoken' || 'lib') {
                 this.setState({
-                    address1: this.props.index.sweepCode,
-                    address2: this.props.index.sweepCode
+                    address1: this.props.index.sweepCode1,
+                    address2: this.props.index.sweepCode1
                 })
             } else if (this.props.index.type == 'BTC') {
                 this.setState({
-                    address3: this.props.index.sweepCode
+                    address3: this.props.index.sweepCode1
                 })
             }
         }

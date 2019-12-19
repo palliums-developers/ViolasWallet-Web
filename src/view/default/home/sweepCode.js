@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import QrReader from 'react-qr-reader';
 import intl from 'react-intl-universal';
 
+@inject('index')
+@observer
 class Sweepcode extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +20,17 @@ class Sweepcode extends Component {
     }
 
     handleScan = data => {
-       console.log(data)
+        if (data) {
+            let start = data.indexOf(":");
+            let str = data.substring(start, 0);
+            let mun = data.substring(start + 1);
+            console.log(mun)
+            this.props.index.getAddress({
+                type: str,
+                address: mun
+            });
+            this.props.history.push('/transfar')
+        }
     }
 
     handleError = err => {

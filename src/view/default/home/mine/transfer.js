@@ -191,7 +191,7 @@ class Transfar extends Component {
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
                                     <span onClick={() => {
-                                        this.props.history.push('/sweepCode1')
+                                        this.props.history.push('/sweepCode')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
                                 </div>
                             </div>

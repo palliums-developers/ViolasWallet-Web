@@ -25,7 +25,8 @@ class Market extends Component {
             leftCount: '',
             rightCount:'',
             value:'',
-            disNone:false
+            disNone:false,
+            updatas:[]
         }
     }
     componentWillMount() {

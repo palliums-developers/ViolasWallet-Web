@@ -21,14 +21,17 @@ class Sweepcode1 extends Component {
        
     }
     handleScan = data => {
-        let start = data.indexOf(":"); 
-        let str= data.substring(start,0); 
-        let mun= data.substring(start+1); 
-        console.log(mun)
-        this.props.index.getAddress({
-            type:str,
-            address:mun
-        });
+        if(data){
+            let start = data.indexOf(":");
+            let str = data.substring(start, 0);
+            let mun = data.substring(start + 1);
+            console.log(mun)
+            this.props.index.getAddress({
+                type: str,
+                address: mun
+            });
+            this.props.history.push('/transfar1')
+        }
      }
  
      handleError = err => {

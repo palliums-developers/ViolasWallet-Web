@@ -17,6 +17,8 @@ export default class Index{
         this.mnes_arr = [];
         this.sweepCode = '';
         this.type = '';
+        this.sweepCode1 = '';
+        this.type1 = '';
     }
 
     changePurse(type) {
@@ -27,6 +29,10 @@ export default class Index{
     getAddress(params){
        this.type = params.type;
        this.sweepCode = params.address;
+    }
+    getAddress1(params) {
+        this.type1 = params.type;
+        this.sweepCode1 = params.address;
     }
     //创建用户信息
     @action async getCreateUser(params) {
