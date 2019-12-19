@@ -85,7 +85,7 @@ class LibraTransaction {
       sequence.toString(),
       payload
     );
-    console.log(transaction,'create transaction')
+    // console.log(transaction,'create transaction')
     return transaction;
   }
   static publish(coinType, sender, sequence) {

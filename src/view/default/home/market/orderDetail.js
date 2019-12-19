@@ -17,13 +17,13 @@ class OrderDetail extends Component {
             ind: 0,
             detailData: [],
             othersList: [],
-            browerData:[],
-            price:''
+            browerData: [],
+            price: ''
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')){
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }
@@ -34,18 +34,18 @@ class OrderDetail extends Component {
         });
         let datas = data.filter(v => v.id == this.props.match.params.id);
         let dataB = await this.props.dealIndex.getCurVersion({
-            version:datas[0].version
+            version: datas[0].version
         })
-        
-        
+
+
         this.setState({
             othersList: await this.props.dealIndex.getOthersCoinMess(),
             detailData: datas,
             browerData: dataB
-        },()=>{
+        }, () => {
             let price = this.getPrices(this.state.detailData[0].tokenGetSymbol)
             this.setState({
-                price:price
+                price: price
             })
         })
     }
@@ -61,7 +61,7 @@ class OrderDetail extends Component {
                 return othersList[i].price;
             }
         }
-        
+
     }
     render() {
         let { detailData, browerData, price } = this.state;
@@ -118,7 +118,7 @@ class OrderDetail extends Component {
                     <div className="bidHistory">
                         <h3>{intl.get('Browser query')}</h3>
                         {
-                            browerData && browerData.map((v,i)=>{
+                            browerData && browerData.map((v, i) => {
                                 return <div className="bidHistoryList" key={i}>
                                     <div className="lists">
                                         <dl>
@@ -138,7 +138,7 @@ class OrderDetail extends Component {
                                 </div>
                             })
                         }
-                        
+
                     </div>
                 </section>
             </div>

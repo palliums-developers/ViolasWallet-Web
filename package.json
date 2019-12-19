@@ -62,7 +62,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "set PORT=10080 && node scripts/start.js",
+    "start": "PORT=10080 node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
@@ -154,6 +154,7 @@
     "bip32": "^2.0.4",
     "bip39": "^3.0.2",
     "bitcoinjs-lib": "^5.1.6",
+    "btoa": "^1.2.1",
     "cors": "^2.8.5",
     "kulap-libra": "^2.0.4",
     "lib-flexible": "^0.3.2",

@@ -19,26 +19,26 @@ class Market extends Component {
             rate: 0,
             curEntrust: [],
             othersEntrust: [],
-            condata: [],
-            otherdata: [],
+            coindata: [],
+            othersdata: [],
             dealData: [],
             leftCount: '',
-            rightCount:'',
-            value:'',
-            disNone:false,
-            updatas:[]
+            rightCount: '',
+            value: '',
+            disNone: false,
+            updatas: []
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')){
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }
     }
     async componentDidMount() {
-        // let coinData = await this.props.dealIndex.getCoinMess();
         let othersData = await this.props.dealIndex.getOthersCoinMess();
+        console.log(othersData)
         let violas = new vAccount(decrypted.mne_arr);
         let updateData = [];
         let newData = await this.props.index.updateCurCoin({
@@ -48,7 +48,7 @@ class Market extends Component {
         // let coinsData = CoinData.data;
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
-                if (othersData[i].addr.indexOf(newData[j]) == 0) {
+                if (othersData[i].addr.indexOf("0x" + newData[j]) == 0) {
 
                     updateData.push({
                         name: othersData[i].name
@@ -57,22 +57,22 @@ class Market extends Component {
                 }
             }
         }
-
         this.setState({
             coindata: othersData,
             updatas: updateData,
             othersdata: othersData
         }, () => {
             this.getContent(coin)
+            console.log(this.state.coindata)
 
         })
-
+        console.log(this.state.othersdata)
     }
     stringEntFun(value) {
-        value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
-        value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+        value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
         value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入6个小数  
+        value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入6个小数
         if (value.indexOf(".") < 0 && value != "") {
             value = parseFloat(value);
         }
@@ -90,7 +90,6 @@ class Market extends Component {
     async getContent(coin) {
         let { val, vals, stableDeal, selfDeal } = this.props.dealIndex;
         let { coindata, othersdata } = this.state;
-        console.log(coin,'coin,,,,,,,')
         let data = await selfDeal({
             user: violas.address
         });
@@ -169,14 +168,14 @@ class Market extends Component {
                 let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
                 this.setState({
                     leftCount: value,
-                    rightCount: rightcount
+                    rightCount: rightcount.toFixed(6)
                 })
 
             } else if (type == 'right') {
                 let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
                 this.setState({
                     leftCount: leftcount,
-                    rightCount: value
+                    rightCount: value.toFixed(6)
                 })
             }
         } else {
@@ -185,13 +184,13 @@ class Market extends Component {
                 let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
                 this.setState({
                     leftCount: value,
-                    rightCount: leftcount
+                    rightCount: leftcount.toFixed(6)
                 })
             } else if (type == 'right') {
                 let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
                 this.setState({
                     leftCount: rightcount,
-                    rightCount: value
+                    rightCount: value.toFixed(6)
                 })
             }
         }
@@ -200,31 +199,28 @@ class Market extends Component {
     getCoin = () => {
         let { coin } = this.props.dealIndex;
         this.props.dealIndex.updateCoin(!coin)
-        if(coin){
+        if (coin) {
             this.getContent(false)
-        }else{
+        } else {
             this.getContent(true)
         }
-        
+
         if (this.state.coin) {
             this.setState({
                 leftCount: this.state.leftCount,
                 rightCount: this.state.rightCount
             })
-
         } else {
             this.setState({
                 leftCount: this.state.rightCount,
                 rightCount: this.state.leftCount
             })
         }
-
     }
     getExchange = async () => {
         this.setState({
             disNone: true
         })
-        
     }
     getValue = (e) => {
         this.setState({
@@ -238,13 +234,13 @@ class Market extends Component {
             alert(intl.get('Access Code does not match,please Re_input'))
         } else {
             let { vals, val, coin } = this.props.dealIndex;
-            let { updatas, coindata, count, othersdata } = this.state;
+            let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
             let violas = new vAccount(decrypted.mne_arr);
             let Transaction = '';
             let publishTranaction1 = '';
             let publishTranaction2 = '';
             if (coin) {
-                Transaction = await violas.transactionEX(coindata[val].name, count, othersdata[vals].name, count);
+                Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
                     if (updatas[i].name == coindata[val].name) {
                         publishTranaction1 = 'did';
@@ -253,13 +249,13 @@ class Market extends Component {
                         publishTranaction2 = 'did';
                     }
                 }
+
                 if (publishTranaction1 !== 'did') {
                     publishTranaction1 = await violas.publish(coindata[val].name);
                     this.props.dealIndex.exchange({
                         signedtxn: publishTranaction1
                     })
                 }
-
                 if (publishTranaction2 !== 'did') {
                     publishTranaction2 = await violas.publish(othersdata[vals].name);
                     this.props.dealIndex.exchange({
@@ -269,18 +265,18 @@ class Market extends Component {
                 let data = await this.props.dealIndex.exchange({
                     signedtxn: Transaction
                 })
-                console.log(data, '4')
-                // if(data.code = 2000){
-                // this.setState({
-                //     disNone: false
-                // })
-                //     alert(intl.get('For successful')+'!!!')
-                // }else{
-                //     alert(intl.get('For failure') + '!!!')
-                // }
+
+                if (data.code = 2000) {
+                    this.setState({
+                        disNone: false
+                    })
+                    alert(intl.get('For successful') + '!!!')
+                } else {
+                    alert(intl.get('For failure') + '!!!')
+                }
             }
             else {
-                Transaction = await violas.transactionEX(othersdata[vals].name, count, coindata[val].name, count);
+                Transaction = await violas.transactionEX(othersdata[vals].name, leftCount, coindata[val].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
                     if (updatas[i].name == coindata[val].name) {
                         publishTranaction1 = 'did';
@@ -310,7 +306,7 @@ class Market extends Component {
                     alert(intl.get('For failure') + '!!!')
                 }
             }
-            
+
         }
 
     }
@@ -334,17 +330,17 @@ class Market extends Component {
                             <div className="change">
                                 {
                                     coin ? <div id="select">
-                                        <div onClick={() => this.getChange('a')}><label>{coindata && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                        <div onClick={() => this.getChange('a')}><label>{coindata.length>0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                     </div> : <div id="select">
-                                            <div onClick={() => this.getChange('b')}><label>{othersdata && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                            <div onClick={() => this.getChange('b')}><label>{othersdata.length>0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                         </div>
                                 }
                                 <div className={coin ? 'changeLogo noReturn' : 'changeLogo return'} onClick={() => this.getCoin()}></div>
                                 {
                                     coin ? <div id="select">
-                                        <div onClick={() => this.getChange('b')}><label>{othersdata && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                        <div onClick={() => this.getChange('b')}><label>{othersdata.length>0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                     </div> : <div id="select">
-                                            <div onClick={() => this.getChange('a')}><label>{coindata && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                            <div onClick={() => this.getChange('a')}><label>{coindata.length>0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                         </div>
                                 }
 
@@ -373,7 +369,7 @@ class Market extends Component {
                             <div className="rate">
                                 <h4>{intl.get('Exchange Rate')}</h4>
                                 {
-                                    coin ? <span>{coindata && 1 / coindata[val].price}{coindata && coindata[val].name}={othersdata && 1 / othersdata[vals].price}{othersdata && othersdata[vals].name}</span> : <span>{othersdata && 1 / othersdata[vals].price}{othersdata && othersdata[vals].name}={coindata && 1 / coindata[val].price}{coindata && coindata[val].name}</span>
+                                    coin ? <span>{coindata.length>0 && 1 / coindata[val].price}{coindata.length>0 && coindata[val].name}={othersdata.length>0 && 1 / othersdata[vals].price}{othersdata.length>0 && othersdata[vals].name}</span> : <span>{othersdata.length>0 && 1 / othersdata[vals].price}{othersdata.length>0 && othersdata[vals].name}={coindata.length>0 && 1 / coindata[val].price}{coindata.length>0 && coindata[val].name}</span>
                                 }
 
                             </div>

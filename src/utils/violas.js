@@ -1,5 +1,5 @@
-// let violas = require("./kulap-libra-violas/build/index.js");
-let violas = require("kulap-libra-violas/build/index");
+// let violas = require("./kulap-libra-violas/build/index.js"); //test violas.js
+let violas = require("kulap-libra-violas/build/index"); //wallet
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;
 let vNetwork = violas.LibraNetwork;
@@ -77,6 +77,7 @@ class vAccount {
         return signpublish
     }
     async transactionEX(myCoinType, myAmount, exCoinType, exAmount) {
+        console.log(myCoinType, myAmount, exCoinType, exAmount)
         const _client = new vClient({
             network: vNetwork.Testnet
         });
@@ -159,7 +160,7 @@ export default vAccount;
 // violas1.transaction_libra("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transaction_violas("07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095", 10, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transaction_violas("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 20, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transactionEX("ABCUSD",20, "HIJUSD",120); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transactionEX("ABCUSD",20, "HIJUSD",20); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transactionEXWithdraw("ABCUSD",76444);
 // violas1.publish("HIJUSD");
 // let new_code=new_base64(code_data.transfer_with_data_mv,code_data.S002);

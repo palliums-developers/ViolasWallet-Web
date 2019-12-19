@@ -9,14 +9,14 @@ class Sweepcode extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            file:false
+            file: false
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
-    componentDidMount(){
-       
+    componentDidMount() {
+
     }
 
     handleScan = data => {
@@ -37,26 +37,27 @@ class Sweepcode extends Component {
         console.error(err)
     }
 
-    openImageDialog = () =>{
+    openImageDialog = () => {
         this.setState({
-           file:true
-        },()=>{
+            file: true
+        }, () => {
             this.refs.qrReader.openImageDialog();
-        }) 
-     }
-     
+        })
+    }
+
     render() {
+        console.log(111)
         return (
             <div className="sweepcode">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push({
-                        pathname:'/home/wallet',
-                        state:false
-                    })
-                    }}><img src="/img/Combined Shape 1@2x.png"/></span>
+                        this.props.history.push({
+                            pathname: '/home/wallet',
+                            state: false
+                        })
+                    }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Scan')}</span>
-                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>
+                    <button onClick={this.openImageDialog}>{intl.get('Album')}</button>
                 </header>
                 <section>
                     <div className="code">
