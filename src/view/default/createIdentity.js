@@ -39,7 +39,7 @@ class CreateIdentity extends Component {
   }
   createFun = async () => {
     let { name, pass1, pass2 } = this.state;
-    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$')
+    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$'); 
     if (name == '') {
       alert(intl.get('Input Nickname') + '!!!')
     } else if (pass1 == '') {

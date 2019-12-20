@@ -60,11 +60,11 @@ class Home extends Component {
             addr: violas.address
         })
         let data = [], data1 = [];
-        data = this.addCheck(othersData);
-        data1 = this.addCheck(othersData);
+        data = this.addCheck(othersData && othersData);
+        data1 = this.addCheck(othersData && othersData);
         for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < newData.length; j++) {
-                if (data[i].addr.indexOf(newData[j]) == 0) {
+                if (data[i].addr.indexOf('0x'+newData[j]) == 0) {
                     data[i].checked = true;
                     break;
                 } else {
@@ -74,7 +74,7 @@ class Home extends Component {
         }
         for (let i = 0; i < data1.length; i++) {
             for (let j = 0; j < newData.length; j++) {
-                if (data1[i].addr.indexOf(newData[j]) == 0) {
+                if (data1[i].addr.indexOf('0x' +newData[j]) == 0) {
                     data1[i].checked = true;
                     break;
                 } else {

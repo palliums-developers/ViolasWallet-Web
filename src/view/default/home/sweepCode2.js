@@ -25,11 +25,11 @@ class Sweepcode1 extends Component {
             let start = data.indexOf(":");
             let str = data.substring(start, 0);
             let mun = data.substring(start + 1);
-            this.props.index.getAddress1({
+            this.props.index.getAddress3({
                 type: str,
                 address: mun
             });
-            this.props.history.push('/transfar1')
+            this.props.history.push('/addAddress')
         }
      }
  
@@ -49,7 +49,7 @@ class Sweepcode1 extends Component {
             <div className="sweepcode">
                 <header>
                     <span onClick={() => {
-                    this.props.history.push('/transfar1')
+                        this.props.history.push('/addAddress')
                     }}><img src="/img/Combined Shape 1@2x.png"/></span>
                     <span>{intl.get('Scan')}</span>
                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>

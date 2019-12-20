@@ -38,14 +38,12 @@ class Market extends Component {
     }
     async componentDidMount() {
         let othersData = await this.props.dealIndex.getOthersCoinMess();
-        console.log(othersData)
         let violas = new vAccount(decrypted.mne_arr);
         let updateData = [];
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
         })
         let { coin } = this.props.dealIndex;
-        // let coinsData = CoinData.data;
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
                 if (othersData[i].addr.indexOf("0x" + newData[j]) == 0) {
@@ -63,10 +61,8 @@ class Market extends Component {
             othersdata: othersData
         }, () => {
             this.getContent(coin)
-            console.log(this.state.coindata)
 
         })
-        console.log(this.state.othersdata)
     }
     stringEntFun(value) {
         value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符

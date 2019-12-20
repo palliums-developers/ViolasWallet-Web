@@ -159,7 +159,7 @@ export default vAccount;
 // let violas2 = new vAccount(_mne2); //address   d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16
 // violas1.transaction_libra("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transaction_violas("07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095", 10, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transaction_violas("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 20, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
+// violas1.transaction_violas("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 20, "HIJUSD"); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transactionEX("ABCUSD",20, "HIJUSD",20); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transactionEXWithdraw("ABCUSD",76444);
 // violas1.publish("HIJUSD");

@@ -24,7 +24,6 @@ class Sweepcode extends Component {
             let start = data.indexOf(":");
             let str = data.substring(start, 0);
             let mun = data.substring(start + 1);
-            console.log(mun)
             this.props.index.getAddress({
                 type: str,
                 address: mun
@@ -46,7 +45,6 @@ class Sweepcode extends Component {
     }
 
     render() {
-        console.log(111)
         return (
             <div className="sweepcode">
                 <header>

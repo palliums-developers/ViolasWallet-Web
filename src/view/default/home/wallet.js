@@ -46,16 +46,23 @@ class Wallet extends Component {
                 modu: coinAddr
             })
             let coinsData = coinData.data;
+            
             let namData = [];
             for (let i = 0; i < coinsData.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (coinsData[i].address.indexOf(data[j]) == 0) {
-                        namData.push(coinsData[i].name);
-                        break;
+                    for (let z = 0; z < balanceData.modules.length; z++) {
+                    
+                        if (coinsData[i].address.indexOf(data[j]) == 0) {
+                            if (coinsData[i].address.indexOf(balanceData.modules[z].address) == 0) {
+                                namData.push({
+                                    name: coinsData[i].name,
+                                    price: balanceData.modules[z].balance
+                                });
+                            }
+                        }
                     }
                 }
             }
-
             this.setState({
                 balancedata: balanceData,
                 nameData: namData,
@@ -86,6 +93,11 @@ class Wallet extends Component {
                 balancedata: balanceData,
                 balance: balanceData.balance / 1e8,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
+            })
+        }
+        if (window.localStorage.getItem('name')){
+            this.setState({
+                curWal: window.localStorage.getItem('name')
             })
         }
     }
@@ -189,14 +201,14 @@ class Wallet extends Component {
                                 {
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
                                         {
-                                            balancedata.modules && balancedata.modules.map((v, i) => {
+                                            nameData && nameData.map((v, i) => {
                                                 return <p key={i} onClick={() => {
                                                     this.props.history.push('/stablecoin')
                                                     window.localStorage.setItem('coinType', JSON.stringify({
-                                                        name: nameData && nameData[i],
-                                                        balance: v.balance
+                                                        name: v.name,
+                                                        balance: v.price
                                                     }))
-                                                }}><label>{nameData && nameData[i].toLowerCase()}</label><span>{v.balance / 1e6}</span></p>
+                                                }}><label>{v.name.toLowerCase()}</label><span>{v.price / 1e6}</span></p>
                                             })
                                         }
                                     </div> : null
