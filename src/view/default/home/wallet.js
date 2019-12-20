@@ -21,7 +21,7 @@ class Wallet extends Component {
             curWal: '',
             dealdata: {},
             coindata: [],
-            balance: Number,
+            balance: 0,
             nameData: []
         }
     }
@@ -89,9 +89,10 @@ class Wallet extends Component {
                 page: 1,
                 name: 'BTC'
             })
+            console.log(balanceData)
             this.setState({
                 balancedata: balanceData,
-                balance: balanceData.balance / 1e8,
+                balance: balanceData && balanceData.balance / 1e8,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
         }
@@ -146,13 +147,13 @@ class Wallet extends Component {
                                 }}><img src="/img/编组 14@2x.png" /></span>
                             </div>
                             <div className="banlanceDescr">
-                                <span>{balance}</span><label>{
+                                <span>{balance ? balance : 0}</span><label>{
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                 }</label>
                             </div>
                             <div className="userDescr">
                                 <span>{curWal}</span>
-                                <span id='addressId'>{balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
+                                <span id='addressId'>{balancedata && balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
                                 <span onClick={() => this.copyUrl2()}><img src="/img/Fill 3@2x.png" /></span>
                             </div>
 

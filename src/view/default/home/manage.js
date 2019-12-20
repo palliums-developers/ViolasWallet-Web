@@ -91,6 +91,7 @@ class Manage extends Component {
                 <header>
                     <span onClick={() => {
                         this.props.history.push('/home/wallet')
+                        window.localStorage.setItem('name', this.state.curWal.name)
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Manage')}</span>
                 </header>
