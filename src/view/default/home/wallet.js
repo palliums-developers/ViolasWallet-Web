@@ -197,7 +197,7 @@ class Wallet extends Component {
                                 </div>
                                 <div className="mList">
                                     <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}
-                                    </label><span>{balance}</span></p>
+                                    </label><span>{balance ? balance : 0}</span></p>
                                 </div>
                                 {
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
