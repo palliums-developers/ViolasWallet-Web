@@ -5,6 +5,7 @@ import vAccount from '../../../../utils/violas';
 import { timeStamp2String } from '../../../../utils/timer';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
+import BScroll from 'better-scroll'
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let decrypted = JSON.parse(window.localStorage.getItem('data'));
@@ -17,46 +18,87 @@ class Record extends Component {
         super(props);
         this.state = {
             recordData: [],
-            recordBData: []
+            recordBData: [],
+            off:0,
+            lim:5
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
     }
-    async componentDidMount() {
+    async getVoHistory(){
+        let violas = new vAccount(decrypted.mne_arr);
+        let data = await this.props.index.getVioDealRecord({
+            addr: violas.address,
+            limit: 5,
+            offset: 0
+        })
+        this.setState({
+            recordData: data
+        })
+    }
+    async getLiHistory() {
         let arr = creat_account_mnemonic(decrypted.mne_arr)
         let addressStr = get_address(arr);
+        let data = await this.props.index.getLibDealRecord({
+            addr: addressStr,
+            limit: this.state.lim,
+            offset: this.state.off
+        })
+        this.setState({
+            recordData: data
+        })
+    }
+    async getBTCHistory(){
+        let btc = new Account(decrypted.mne_arr, testnet);
+        let data = await this.props.index.getBTCDealRecords({
+            address: btc.address,
+            page: 1,
+            name: 'BTC'
+        })
+        this.setState({
+            recordBData: data
+        })
+    }
+    async componentDidMount() {
+        let that = this;
+        let Bscroll = new BScroll('.sec',{
+            probeType: 1,
+            click: true,
+            scrollbar: true,
+            mouseWheel: true
+        })
         if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
-            let data = await this.props.index.getLibDealRecord({
-                addr: addressStr,
-                limit: 5,
-                offset: 0
-            })
-            this.setState({
-                recordData: data
-            })
-            console.log(this.state.recordData)
+            this.getLiHistory();
         } else if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
-            let violas = new vAccount(decrypted.mne_arr);
-            let data = await this.props.index.getVioDealRecord({
-                addr: violas.address,
-                limit: 5,
-                offset: 0
-            })
-            this.setState({
-                recordData: data
-            })
+            this.getVoHistory();
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            let btc = new Account(decrypted.mne_arr, testnet);
-            let data = await this.props.index.getBTCDealRecords({
-                address: btc.address,
-                page: 1,
-                name: 'BTC'
-            })
-            this.setState({
-                recordBData: data
-            })
+            this.getBTCHistory();
         }
+        Bscroll.on('scroll', function () {
+            if (this.y < this.maxScrollY - 44) {
+                this.scroller.setAttribute('down', '加载更多');
+            } else if (this.y > this.maxScrollY - 44) {
+                this.scroller.setAttribute('down', '上拉加载');
+            }
+        })
+        Bscroll.on('scrollEnd', function () {
+            if (this.scroller.getAttribute('down') == '加载更多') {
+                this.scroller.setAttribute('down', '上拉加载');
+                that.setState({
+                    recordData: [],
+                    recordBData: []
+                })
+                that.state.lim += that.state.lim;
+                if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
+                    that.getLiHistory();
+                } else if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
+                    that.getVoHistory();
+                } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                    that.getBTCHistory();
+                }
+            }
+        })
     }
     render() {
         let { recordBData, recordData } = this.state;
@@ -72,14 +114,15 @@ class Record extends Component {
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Transfer History')}</span>
                 </header>
-                <section>
+                <section className="sec">
+                    <div className="secContent" down={recordData.length >= 6 ? '上拉加载' : null}>
                     {
                         recordData && recordData.map((v, i) => {
                             return <div className="recordDetail" key={i}>
                                 <div className="title">
                                     <span>{intl.get('Date')}</span>
                                     <span>{intl.get('Amount')}</span>
-                                    <span className='redC'>{intl.get('Transfer')}</span>
+                                    <span className={v.receiver == this.props.location.state.address ? 'greenC' : 'redC'}>{v.receiver == this.props.location.state.address ? intl.get('Receive') : intl.get('Transfer')}</span>
                                 </div>
                                 <div className="titleContent">
                                     <span>{timeStamp2String(v.expiration_time + '000')}</span>
@@ -93,7 +136,7 @@ class Record extends Component {
                                     }</span>
                                 </div>
                                 <div className="titleContent">
-                                    <p>{v.address}</p>
+                                    <p>{v.receiver}</p>
                                     <p>{intl.get('Browser query')}</p>
                                 </div>
                             </div>
@@ -130,6 +173,7 @@ class Record extends Component {
                             </div>
                         })
                     }
+                    </div>
                 </section>
             </div>
         );

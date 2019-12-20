@@ -162,7 +162,12 @@ class Wallet extends Component {
                         </div>
                         <div className="dealRecord">
                             <div className="title" onClick={() => {
-                                this.props.history.push('/record')
+                                this.props.history.push({
+                                    pathname:'/record',
+                                    state:{
+                                        address:balancedata.address ? balancedata.address : this.getBTCAddress()
+                                    }
+                                })
                             }}>
                                 <span>{intl.get('Transfer History')}</span>
                                 <span><img src="/img/路径复制 4@2x.png" /></span>
@@ -176,8 +181,6 @@ class Wallet extends Component {
                                         }}><img src="/img/编组 9@2x.png" />
                                         </span> : null
                                     }
-                                </div>
-                                <div className="">
                                 </div>
                                 <div className="mList">
                                     <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}

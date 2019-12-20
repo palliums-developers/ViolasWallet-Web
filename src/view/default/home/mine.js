@@ -25,8 +25,6 @@ class Mine extends Component {
             address_book: userInfo.address_book,
             backup: userInfo.backup
         }
-        console.log(userInfo.password1)
-        console.log(data)
         var jsonData = aes256.encrypt(userInfo.password1, JSON.stringify(data));
         var a = document.createElement("a");
         var file = new Blob([jsonData], { type: 'text/plain' });

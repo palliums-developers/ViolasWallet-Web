@@ -108,58 +108,53 @@ class WalletSystem extends Component {
         return btc.address
     }
     getWallets = (type) => {
-        if (type) {
-            this.setState({
-                type: ''
-            })
-        }
         if (type == 'violas') {
             this.setState({
                 types: 'violas'
             }, () => {
                 this.props.index.changePurse(intl.get('ViolasWallet'))
+                this.props.history.push('/home/wallet')
             })
-
         } else if (type == 'libra') {
             this.setState({
                 types: 'libra'
             }, () => {
                 this.props.index.changePurse(intl.get('LibraWallet'))
+                this.props.history.push('/home/wallet')
             })
         } else if (type == 'BTC') {
             this.setState({
                 types: 'BTC'
             }, () => {
                 this.props.index.changePurse(intl.get('BTCWallet'))
+                this.props.history.push('/home/wallet')
             })
         }
     }
     getWallet = (type) => {
-        if (type) {
-            this.setState({
-                types: ''
-            })
-        }
         if (type == 'violas') {
             this.setState({
                 type: 'violas'
             }, () => {
                 this.props.index.changePurse(intl.get('ViolasWallet'))
+                this.props.history.push('/home/wallet')
             })
-
         } else if (type == 'libra') {
             this.setState({
                 type: 'libra'
             }, () => {
                 this.props.index.changePurse(intl.get('LibraWallet'))
+                    this.props.history.push('/home/wallet')
             })
         } else if (type == 'BTC') {
             this.setState({
                 type: 'BTC'
             }, () => {
                 this.props.index.changePurse(intl.get('BTCWallet'))
+                this.props.history.push('/home/wallet')
             })
         }
+        
     }
     render() {
         let { balancedata1, balancedata2, imgs, violaswal, libwal, btcwal } = this.state;

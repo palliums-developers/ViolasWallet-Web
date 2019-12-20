@@ -661,7 +661,7 @@
                             color:rgba(0,0,0,.5);
                         }
                         span:nth-child(2){
-                            margin-left: -1rem;
+                            margin-left: -0.5rem;
                         }
                         .redC{
                             color: rgba(229, 64, 64, 1);
@@ -720,7 +720,20 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        overflow: auto;
+        overflow: hidden;
+        .secContent{
+            position: relative;
+            &::after{
+               content:attr(down);
+               width: 100%;
+               height: 40px;
+               line-height: 40px;
+               text-align: center;
+               position: absolute;
+               bottom: -40px;
+               background: #FFF;
+            }
+        }
         .recordDetail{
             width: 100%;
             height: 2.6rem;
