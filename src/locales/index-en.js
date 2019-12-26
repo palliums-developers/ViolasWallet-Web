@@ -151,6 +151,6 @@ export default {
     'The order details':'The order details',
     'Browser query':'Browser query',
     'Trading Record':'Trading Record',
-    'Password setting does not match': 'Password setting does not match',
+    'Password setting does not match': 'Password setting does not match, 8-20 digit password consisting of at least one uppercase letter, one lowercase letter and one number',
     'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password': 'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password'
 }

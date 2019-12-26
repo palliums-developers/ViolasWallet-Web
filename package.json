@@ -62,7 +62,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "set PORT=10080 && node scripts/start.js",
+    "start": "PORT=10086 node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },

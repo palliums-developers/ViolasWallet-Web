@@ -13,7 +13,7 @@ export default {
     'Backup Mnemonic Words':'备份助记词',
     'Keep Offline':'离线保管',
     'Write down these Mnemonic Words on a paper':'使用纸和笔正确抄写助记词',
-    'In case you have lost or demaged your phone，the mnemonic words will be used to recover your funds in the wallet.':'如果你的手机丢失、被盗、损坏，Keystore将可以回复你的资产',
+    'In case you have lost or demaged your phone，the mnemonic words will be used to recover your funds in the wallet.':'如果你的手机丢失、被盗、损坏，Keystore将可以恢复你的资产',
     'Please keep it in a safe and offline place':'请妥善保管至隔离网络的安全地方',
     'Never share or store in any online media such as email, album and social network':'请勿将助记词在联网环境下分享和存储，比如邮件、相册、社交应用等',
     'Start Backup':'开始备份',
@@ -152,5 +152,5 @@ export default {
     'The order details':'订单详情',
     'Browser query':'浏览器查询',
     'Trading Record':'成交记录',
-    'Password setting does not match':'密码设定不符合'
+    'Password setting does not match':'密码设定不符合,至少一个大写字母，一个小写字母和一个数字组成的8-20位密码'
 }
