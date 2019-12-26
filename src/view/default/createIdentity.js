@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import '../app.scss';
 import intl from 'react-intl-universal';
-let mnemonic_random = require("bip39");
+import vAccount from '../../utils/violas';
 let aes256 = require('aes256');
-
 
 @inject('index')
 @observer
@@ -16,10 +15,18 @@ class CreateIdentity extends Component {
       name: '',
       pass1: '',
       pass2: '',
+      mne_Arr: ''
+
     }
   }
   componentWillMount() {
     intl.options.currentLocale = localStorage.getItem("local");
+  }
+  componentDidMount(){
+    let violas = new vAccount('');
+    this.setState({
+      mne_Arr: violas.getmne()
+    })
   }
   getValue = (e, type) => {
     if (type == 'name') {
@@ -38,8 +45,8 @@ class CreateIdentity extends Component {
 
   }
   createFun = async () => {
-    let { name, pass1, pass2 } = this.state;
-    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$')
+    let { name, pass1, pass2, mne_Arr } = this.state;
+    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$'); 
     if (name == '') {
       alert(intl.get('Input Nickname') + '!!!')
     } else if (pass1 == '') {
@@ -56,7 +63,7 @@ class CreateIdentity extends Component {
       window.localStorage.setItem('data', JSON.stringify({
         name: name,
         password1: pass1,
-        mne_arr: 'display paddle crush crowd often friend topple agent entry use host begin',
+        mne_arr: mne_Arr,
         wallet_name: [
           { name: 'Violas-Wallet', type: 'violas' }, { name: 'Bitcoin', type: 'BTC' }, { name: 'Libra-Wallet', type: 'libra' }
         ],

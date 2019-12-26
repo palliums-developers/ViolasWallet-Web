@@ -30,6 +30,7 @@ import Record from "../view/default/home/mine/record";
 import Transfar from "../view/default/home/mine/transfer";
 import ConfirmWords from "../view/default/backup/confirmWords";
 import Sweepcode1 from "../view/default/home/sweepCode1";
+import Sweepcode2 from "../view/default/home/sweepCode2";
 import Record1 from "../view/default/home/mine/record1";
 import WalletSystem from "../view/default/home/walletSystem";
 import stablecoin from "../view/default/home/mine/stablecoin";
@@ -148,6 +149,10 @@ const routes = [
     {
         path: '/sweepcode1',
         component: Sweepcode1
+    },
+    {
+        path: '/sweepcode2',
+        component: Sweepcode2
     },
     //转账
     {

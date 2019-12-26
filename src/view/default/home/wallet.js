@@ -21,7 +21,7 @@ class Wallet extends Component {
             curWal: '',
             dealdata: {},
             coindata: [],
-            balance: Number,
+            balance: 0,
             nameData: []
         }
     }
@@ -46,16 +46,23 @@ class Wallet extends Component {
                 modu: coinAddr
             })
             let coinsData = coinData.data;
+            
             let namData = [];
             for (let i = 0; i < coinsData.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (coinsData[i].address.indexOf(data[j]) == 0) {
-                        namData.push(coinsData[i].name);
-                        break;
+                    for (let z = 0; z < balanceData.modules.length; z++) {
+                    
+                        if (coinsData[i].address.indexOf(data[j]) == 0) {
+                            if (coinsData[i].address.indexOf(balanceData.modules[z].address) == 0) {
+                                namData.push({
+                                    name: coinsData[i].name,
+                                    price: balanceData.modules[z].balance
+                                });
+                            }
+                        }
                     }
                 }
             }
-
             this.setState({
                 balancedata: balanceData,
                 nameData: namData,
@@ -82,10 +89,16 @@ class Wallet extends Component {
                 page: 1,
                 name: 'BTC'
             })
+            console.log(balanceData)
             this.setState({
                 balancedata: balanceData,
-                balance: balanceData.balance / 1e8,
+                balance: balanceData && balanceData.balance / 1e8,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
+            })
+        }
+        if (window.localStorage.getItem('name')){
+            this.setState({
+                curWal: window.localStorage.getItem('name')
             })
         }
     }
@@ -134,13 +147,13 @@ class Wallet extends Component {
                                 }}><img src="/img/编组 14@2x.png" /></span>
                             </div>
                             <div className="banlanceDescr">
-                                <span>{balance}</span><label>{
+                                <span>{balance ? balance : 0}</span><label>{
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                 }</label>
                             </div>
                             <div className="userDescr">
                                 <span>{curWal}</span>
-                                <span id='addressId'>{balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
+                                <span id='addressId'>{balancedata && balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
                                 <span onClick={() => this.copyUrl2()}><img src="/img/Fill 3@2x.png" /></span>
                             </div>
 
@@ -162,7 +175,12 @@ class Wallet extends Component {
                         </div>
                         <div className="dealRecord">
                             <div className="title" onClick={() => {
-                                this.props.history.push('/record')
+                                this.props.history.push({
+                                    pathname:'/record',
+                                    state:{
+                                        address:balancedata.address ? balancedata.address : this.getBTCAddress()
+                                    }
+                                })
                             }}>
                                 <span>{intl.get('Transfer History')}</span>
                                 <span><img src="/img/路径复制 4@2x.png" /></span>
@@ -177,23 +195,21 @@ class Wallet extends Component {
                                         </span> : null
                                     }
                                 </div>
-                                <div className="">
-                                </div>
                                 <div className="mList">
                                     <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}
-                                    </label><span>{balance}</span></p>
+                                    </label><span>{balance ? balance : 0}</span></p>
                                 </div>
                                 {
                                     window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
                                         {
-                                            balancedata.modules && balancedata.modules.map((v, i) => {
+                                            nameData && nameData.map((v, i) => {
                                                 return <p key={i} onClick={() => {
                                                     this.props.history.push('/stablecoin')
                                                     window.localStorage.setItem('coinType', JSON.stringify({
-                                                        name: nameData && nameData[i],
-                                                        balance: v.balance
+                                                        name: v.name,
+                                                        balance: v.price
                                                     }))
-                                                }}><label>{nameData && nameData[i].toLowerCase()}</label><span>{v.balance / 1e6}</span></p>
+                                                }}><label>{v.name.toLowerCase()}</label><span>{v.price / 1e6}</span></p>
                                             })
                                         }
                                     </div> : null

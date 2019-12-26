@@ -109,7 +109,7 @@ class stablecoin extends Component {
                                         <div className="title">
                                             <span>{intl.get('Date')}</span>
                                             <span>{intl.get('Amount')}</span>
-                                            <span className="redC">{intl.get('Transfer')}</span>
+                                            <span className={v.receiver == balancedata.address ? 'greenC' : 'redC'}>{v.receiver == balancedata.address ? intl.get('Receive') : intl.get('Transfer')}</span>
                                         </div>
                                         <div className="titleContent">
                                             <span>{timeStamp2String(v.expiration_time+'000')}</span>

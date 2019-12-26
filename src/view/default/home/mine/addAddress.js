@@ -20,7 +20,10 @@ class AddAddress extends Component {
         this.forceUpdate();
       }
     componentDidMount(){
-    //    this.props.index.getAddressMessage()
+        console.log(this.props.index.sweepCode2)
+        this.setState({
+            name:this.props.index.sweepCode2
+        })
     }
     getValue = (e,type) =>{
         if(type == 'type'){
@@ -99,8 +102,10 @@ class AddAddress extends Component {
                         <div className="p">
                             <label>{intl.get('Address')}</label>
                             <div className="ipt">
-                                <input type="text" placeholder={intl.get('Input address')} onChange={(e)=>this.getValue(e,'address')}/>   
-                                <div className="code"><img src="/img/code@2x.png"/></div>
+                                <input type="text" value={this.state.name} placeholder={intl.get('Input address')} onChange={(e)=>this.getValue(e,'address')}/>   
+                                <div className="code" onClick={()=>{
+                                    this.props.history.push('/sweepCode2')
+                                }}><img src="/img/code@2x.png"/></div>
                             </div>
                         </div><div className="line"><div className="lines"></div></div>
                         

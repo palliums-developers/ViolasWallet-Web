@@ -25,8 +25,6 @@ class Mine extends Component {
             address_book: userInfo.address_book,
             backup: userInfo.backup
         }
-        console.log(userInfo.password1)
-        console.log(data)
         var jsonData = aes256.encrypt(userInfo.password1, JSON.stringify(data));
         var a = document.createElement("a");
         var file = new Blob([jsonData], { type: 'text/plain' });
@@ -41,7 +39,7 @@ class Mine extends Component {
         return (
             <div className="mine">
                 <header>
-                    <div className="headLogo"><img src="" /></div>
+                    <div className="headLogo"><img src="/img/编组 8@2x.png" /></div>
                     <span>{JSON.parse(window.localStorage.getItem('data')).name}</span>
                 </header>
                 <section>

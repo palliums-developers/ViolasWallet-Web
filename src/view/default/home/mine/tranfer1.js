@@ -28,15 +28,15 @@ class Transfar1 extends Component {
             coinData:JSON.parse(window.localStorage.getItem('coinType'))
         })
         
-        if (this.props.index.type) {
-            if (this.props.index.type == 'vtoken' || 'lib') {
+        if (this.props.index.type1) {
+            if (this.props.index.type1 == 'vtoken' || 'lib') {
                 this.setState({
-                    address1: this.props.index.sweepCode,
-                    address2: this.props.index.sweepCode
+                    address1: this.props.index.sweepCode1,
+                    address2: this.props.index.sweepCode1
                 })
             } else if (this.props.index.type == 'BTC') {
                 this.setState({
-                    address3: this.props.index.sweepCode
+                    address3: this.props.index.sweepCode1
                 })
             }
         }
@@ -77,12 +77,11 @@ class Transfar1 extends Component {
         let { violasAmount, address1, coinData } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let transFar = await violas.transaction_violas(address1, violasAmount, coinData.name);
+        let transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6 , coinData.name);
         let data = await this.props.index.starVTranfer({
                 signedtxn: transFar,
                 name:'violas'
-            })
-            console.log(data)
+        })
         if(data.message == 'ok'){
             alert(intl.get('Transfer success')+'!!!');
             this.props.history.push('/home');
@@ -107,7 +106,7 @@ class Transfar1 extends Component {
                             <div className="form">
                                 <div className="title">
                                 <span>{coinData.name}</span>
-                                <span>{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {coinData.name}</span>
+                                <span>{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {(coinData.name) && (coinData.name).toLowerCase()}</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">

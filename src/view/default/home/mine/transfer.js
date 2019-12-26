@@ -15,7 +15,7 @@ class Transfar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rate: 6,
+            rate: 0,
             violasAmount: '',
             libraAmount: '',
             btcAmount: '',
@@ -84,9 +84,17 @@ class Transfar extends Component {
 
         };
     }
+
     //violas转账
     getViolasAm = (e, way) => {
         if (way == 'amount') {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
+                e.target.value = parseFloat(e.target.value);
+            }
             this.setState({
                 violasAmount: e.target.value
             })
@@ -99,6 +107,13 @@ class Transfar extends Component {
     //libra转账
     getLibraAm = (e, way) => {
         if (way == 'amount') {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
+                e.target.value = parseFloat(e.target.value);
+            }
             this.setState({
                 libraAmount: e.target.value
             })
@@ -111,6 +126,13 @@ class Transfar extends Component {
 
     //BTC转账
     getBtcAm = (e, way) => {
+        e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
+        e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+        e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+        if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
+            e.target.value = parseFloat(e.target.value);
+        }
         if (way == 'amount') {
             this.setState({
                 btcAmount: e.target.value
@@ -127,7 +149,7 @@ class Transfar extends Component {
         let transFar;
         if (type == 'violas') {
             let violas = new vAccount(decrypted.mne_arr);
-            transFar = await violas.transaction_violas(address1, violasAmount, 'violas')
+            transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, 'violas')
             let data = await this.props.index.starVTranfer({
                 signedtxn: transFar,
                 name:type
@@ -140,7 +162,7 @@ class Transfar extends Component {
             }
         } else if (type == 'libra') {
             let libra = new vAccount(decrypted.mne_arr);
-            transFar = await libra.transaction_libra(address2, libraAmount);
+            transFar = await libra.transaction_libra(address2, Number(libraAmount) * 1e6);
             let data = await this.props.index.starVTranfer({
                 signedtxn: transFar,
                 name:type
@@ -154,7 +176,7 @@ class Transfar extends Component {
             
         } else if (type == 'BTC') {
             let account = new Account(decrypted.mne_arr, testnet);
-            transFar = await account.transaction( address3,btcAmount,fee)
+            transFar = await account.transaction(address3, Number(btcAmount) * 1e8,fee)
             console.log(transFar)
         }
     }
@@ -191,7 +213,7 @@ class Transfar extends Component {
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
                                     <span onClick={() => {
-                                        this.props.history.push('/sweepCode1')
+                                        this.props.history.push('/sweepCode')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
                                 </div>
                             </div>

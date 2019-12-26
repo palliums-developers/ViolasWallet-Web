@@ -47,14 +47,17 @@ class CreateWallet extends Component {
     
     createWallet = (type) =>{
         let { name,pass1,pass2 } = this.state;
+        let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$')
         if(name == ''){
-        alert(intl.get('Please input nickname')+'!!!')
+          alert(intl.get('Please input nickname')+'!!!')
         }else if(pass1 == ''){
-        alert(intl.get('Please set Wallet Access Code')+'!!!')
+          alert(intl.get('Please set Wallet Access Code')+'!!!')
         }else if(pass2 == ''){
-        alert(intl.get('Confirm Access Code')+'!!!')
+          alert(intl.get('Confirm Access Code')+'!!!')
         }else if(pass1.indexOf(pass2) == -1){
           alert(intl.get('The passwords are different')+'!!!')
+        } else if (!reg.test(pass1)) {
+          alert(intl.get('Password setting does not match') + '！！！')
         }else{
            let extra_wallet = {}
           if(type == 'violas'){

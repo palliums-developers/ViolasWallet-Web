@@ -76,10 +76,8 @@ class ConfirmWords extends Component {
         let temp_mnes_json=this.state.mnes_json;
         let temp_swap=this.state.swap;
         if(remove_json===" "){
-          console.log("you can't remove empty")
           return;
         }
-        console.log(remove_json, "remove");
         for(let i=0;i<12;i++){
           temp_swap={index:remove_json.index,mne:remove_json.mne};
           this.setState({swap:temp_swap});
@@ -98,7 +96,6 @@ class ConfirmWords extends Component {
         }
     }
     check_mne() {
-        console.log("check");
         let temp_check = this.state.mnes_empty;
         let temp_arr = this.state.mnes_arr;
         for (let i = 0; i < 12; i++) {
@@ -119,7 +116,6 @@ class ConfirmWords extends Component {
         let temp_mnes_json=this.state.mnes_json;
         let temp_swap=this.state.swap;
         if(click_json.mne===" "){
-          console.log("this one have been clicked");
           return;
         }else if (this.state.clickable){
           for(let i=0;i<12;i++){
@@ -130,7 +126,6 @@ class ConfirmWords extends Component {
               this.setState({mnes_json:temp_mnes_json});
             }
           }
-          console.log(click_json, "click");
           for (let i = 0; i < 12; i++) {
             if (temp_mnes_empty[i] == " ") {
               temp_mnes_empty[i] = temp_swap;
@@ -143,9 +138,14 @@ class ConfirmWords extends Component {
         }
       }
     finish = () =>{
-      console.log(this.state.mnes_empty)
       if(this.state.mnes_empty.length == 12 && this.state.mnes_empty.length != '' ){
         let data = JSON.parse(window.localStorage.getItem('data'));
+        var jsonData = aes256.encrypt(data.password1, JSON.stringify(data));
+        var a = document.createElement("a");
+        var file = new Blob([jsonData], { type: 'text/plain' });
+        a.href = URL.createObjectURL(file);
+        a.download = data.name + '.json';
+        a.click();
         data.backup = false;
         window.localStorage.setItem('data',JSON.stringify(data))
         this.props.history.push('/home')

@@ -107,59 +107,64 @@ class WalletSystem extends Component {
         let btc = new Account(decrypted.mne_arr, testnet);
         return btc.address
     }
-    getWallets = (type) => {
-        if (type) {
-            this.setState({
-                type: ''
-            })
-        }
+    getWallets = (type,name) => {
         if (type == 'violas') {
             this.setState({
                 types: 'violas'
             }, () => {
-                this.props.index.changePurse(intl.get('ViolasWallet'))
+                this.props.index.changePurse(intl.get('ViolasWallet'));
+                window.localStorage.setItem('name',name);
+                this.props.history.push('/home/wallet');
+                
             })
-
         } else if (type == 'libra') {
             this.setState({
                 types: 'libra'
             }, () => {
-                this.props.index.changePurse(intl.get('LibraWallet'))
+                this.props.index.changePurse(intl.get('LibraWallet'));
+                window.localStorage.setItem('name', name)
+                this.props.history.push('/home/wallet')
+                
             })
         } else if (type == 'BTC') {
             this.setState({
                 types: 'BTC'
             }, () => {
                 this.props.index.changePurse(intl.get('BTCWallet'))
+                window.localStorage.setItem('name', name)
+                this.props.history.push('/home/wallet')
+                   
             })
         }
     }
-    getWallet = (type) => {
-        if (type) {
-            this.setState({
-                types: ''
-            })
-        }
+    getWallet = (type, name) => {
         if (type == 'violas') {
             this.setState({
                 type: 'violas'
             }, () => {
-                this.props.index.changePurse(intl.get('ViolasWallet'))
+                this.props.index.changePurse(intl.get('ViolasWallet'));
+                window.localStorage.setItem('name', name);
+                this.props.history.push('/home/wallet');
+                   
             })
-
         } else if (type == 'libra') {
             this.setState({
                 type: 'libra'
             }, () => {
-                this.props.index.changePurse(intl.get('LibraWallet'))
+                this.props.index.changePurse(intl.get('LibraWallet'));
+                window.localStorage.setItem('name', name);
+                this.props.history.push('/home/wallet');
             })
         } else if (type == 'BTC') {
             this.setState({
                 type: 'BTC'
             }, () => {
-                this.props.index.changePurse(intl.get('BTCWallet'))
+                this.props.index.changePurse(intl.get('BTCWallet'));
+                window.localStorage.setItem('name', name);
+                this.props.history.push('/home/wallet');
             })
         }
+        
     }
     render() {
         let { balancedata1, balancedata2, imgs, violaswal, libwal, btcwal } = this.state;
@@ -191,7 +196,7 @@ class WalletSystem extends Component {
                                     <h4>{intl.get('Identity Wallet')}</h4>
                                     {
                                         JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
-                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallets(v.type)}>
+                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallets(v.type, v.name)}>
                                                 <div className="title">
                                                     <label>{v.name}</label>
                                                     <span className={this.state.types == v.type ? 'act' : ''}></span>
@@ -200,41 +205,12 @@ class WalletSystem extends Component {
                                             </div>
                                         })
                                     }
-
-                                    {/* <div className="identityContent" onClick={()=>{
-                           this.props.index.changePurse(intl.get('ViolasWallet'))
-                       }}>
-                          <div className="title">
-                              <label>{JSON.parse(window.localStorage.getItem('data')).wallet_name[0].name}</label>
-                              <span className={window.localStorage.getItem('type')=="Violas钱包"?'act':''}></span>
-                          </div>
-                          <p>{balancedata1.address}</p>
-                       </div>
-                       <div className="identityContent identityContent1"  onClick={()=>{
-                           this.props.index.changePurse(intl.get('BTCWallet'))
-                       }}>
-                          <div className="title">
-                              <label>{JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name}</label>
-                              <span className={window.localStorage.getItem('type')=="BTC钱包"?'act':''}></span>
-                          </div>
-                          <p>{balancedata2.address}</p>
-                       </div>
-                       <div className="identityContent identityContent2" onClick={()=>{
-                           this.props.index.changePurse(intl.get('LibraWallet'))
-                       }}>
-                          <div className="title">
-                              <label>{JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name}</label>
-                              <span className={window.localStorage.getItem('type')=="Libra钱包"?'act':''}></span>
-                          </div>
-                          <p>{balancedata2.address}</p>
-                       </div>
-                    </div> */}
                                 </div>
                                 <div className="identityWallet toIdentity">
                                     <h4>{intl.get('Create/Import')}</h4>
                                     {
                                         JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v, i) => {
-                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallet(v.type)}>
+                                            return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallet(v.type, v.name)}>
                                                 <div className="title">
                                                     <label>{v.name}</label>
                                                     <span className={this.state.type == v.type ? 'act' : ''}></span>

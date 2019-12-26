@@ -16,10 +16,6 @@ class DirectoryInquiries extends Component {
         intl.options.currentLocale=localStorage.getItem("local");
     }
     async componentDidMount(){
-        let data = await this.props.index.autoAddress();
-        this.setState({
-            addresses:data
-        })
     }
     render() {
         return (

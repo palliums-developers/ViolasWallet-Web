@@ -1,5 +1,5 @@
-let violas = require("./kulap-libra-violas/build/index.js"); //test violas.js
-// let violas = require("kulap-libra-violas/build/index"); //wallet
+// let violas = require("./kulap-libra-violas/build/index.js"); //test violas.js
+let violas = require("kulap-libra-violas/build/index"); //wallet
 let vClient = violas.LibraClient;
 let vWallet = violas.LibraWallet;
 let vNetwork = violas.LibraNetwork;
@@ -64,7 +64,7 @@ class vAccount {
         const result = await _client.transferCoins(this.account, receiver_address, amount, await this.sequenceNum_violas, coinType);
         const signTx = Buffer.from(result.array[4]).toString("hex");
         // const signTx = buf2hex(result);
-        console.log(signTx);
+        // console.log(signTx);
         return signTx;
     }
     async publish(coinType) {
@@ -73,7 +73,7 @@ class vAccount {
         });
         let result = await _client.publish(this.account, coinType, await this.sequenceNum_violas);
         const signpublish = Buffer.from(result.array[4]).toString("hex");
-        console.log(signpublish);
+        // console.log(signpublish);
         return signpublish
     }
     async transactionEX(myCoinType, myAmount, exCoinType, exAmount) {
@@ -100,7 +100,7 @@ class vAccount {
         const result = await _client.transferEXCoins(this.account, this.dexAddress, myAmount, await this.sequenceNum_violas, myCoinType, data_string);
         const signTx = Buffer.from(result.array[4]).toString("hex");
         //   const signTx = buf2hex(result);
-        console.log(signTx);
+        // console.log(signTx);
         return signTx;
     }
     async transactionEXWithdraw(myCoinType, version) {
@@ -149,22 +149,17 @@ const stringToByte = (str) => {
     }
     return bytes;
 }
-// export default vAccount;
+export default vAccount;
 
 // console.log(code_data.transfer==code_data.transfer2);
 // let violastrans=new_base64(code_data.transfer2,code_data.default_token);
 // console.log(violastrans);
-let violas1 = new vAccount(_mne1);  //address   b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89
+// let violas1 = new vAccount(_mne1);  //address   b45d3e7e8079eb16cd7111b676f0c32294135e4190261240e3fd7b96fe1b9b89
 // let violas2 = new vAccount(_mne2); //address   d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16
 // violas1.transaction_libra("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 10); //http://52.27.228.84:4000/1.0/violas/transaction
 // violas1.transaction_violas("07e92f79c67fdd6b80ed9103636a49511363de8c873bc709966fffb2e3fcd095", 10, "violas"); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transaction_violas("d46b830174f84b892f2a5517b5d35eefe0a5fd676d58e79a0a977e1797a17f16", 20, "ABCUSD"); //http://52.27.228.84:4000/1.0/violas/transaction
-violas1.transactionEX("ABCUSD",20, "HIJUSD",20); //http://52.27.228.84:4000/1.0/violas/transaction
-// violas1.transactionEXWithdraw("ABCUSD",76444);
-// violas2.publish("HIJUSD");
 // violas2.publish("ABCUSD");
 // let new_code=new_base64(code_data.transfer_with_data_mv,code_data.S002);
-// console.log(new_code);
 
 /**
  * salt file: build/constants/HashSaltValues.js
