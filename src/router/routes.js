@@ -40,206 +40,206 @@ import OrderForm from "../view/default/home/market/orderForm";
 import OrderDetail from "../view/default/home/market/orderDetail";
 
 const routes = [
-  //首页
-  {
-    path: "/app",
-    component: App
-  },
-  //欢迎
-  {
-    path: "/welcome",
-    component: Welcome
-  },
-  //创建身份
-  {
-    path: "/createIdentity",
-    component: CreateIdentity
-  },
-  //导入身份
-  {
-    path: "/importIdentity",
-    component: ImportIdentity
-  },
-  //备份提示
-  {
-    path: "/backup",
-    component: Backup
-  },
-  //备份助记词
-  {
-    path: "/codeBackup",
-    component: CodeBackup
-  },
-  //确认助记词
-  {
-    path: "/confirmWords",
-    component: ConfirmWords
-  },
-  //钱包首页
-  {
-    path: "/home",
-    component: Home,
-    children: [
-      {
-        path: "/home/wallet",
-        component: Wallet
-      },
-      {
-        path: "/home/market",
-        component: Market
-      },
-      {
-        path: "/home/mine",
-        component: Mine
-      },
-      {
+    //首页
+    {
+        path: "/app",
+        component: App
+    },
+    //欢迎
+    {
+        path: "/welcome",
+        component: Welcome
+    },
+    //创建身份
+    {
+        path: "/createIdentity",
+        component: CreateIdentity
+    },
+    //导入身份
+    {
+        path: "/importIdentity",
+        component: ImportIdentity
+    },
+    //备份提示
+    {
+        path: "/backup",
+        component: Backup
+    },
+    //备份助记词
+    {
+        path: "/codeBackup",
+        component: CodeBackup
+    },
+    //确认助记词
+    {
+        path: "/confirmWords",
+        component: ConfirmWords
+    },
+    //钱包首页
+    {
         path: "/home",
-        redirect: "/home/wallet"
-      }
-    ]
-  },
-  //订单
-  {
-    path: "/orderForm",
-    component: OrderForm
-  },
-  //订单详情
-  {
-    path: "/orderDetail/:id",
-    component: OrderDetail
-  },
-  //选择钱包体系
-  {
-    path: "/walletSystem",
-    component: WalletSystem
-  },
-  //交易记录
-  {
-    path: "/record",
-    component: Record
-  },
-  //管理
-  {
-    path: "/manage",
-    component: Manage
-  },
-  {
-    path: "/manage1",
-    component: Manage1
-  },
-  //钱包详情
-  {
-    path: "/detailWallet",
-    component: DetailWallet
-  },
-  {
-    path: "/detailWallet1",
-    component: DetailWallet1
-  },
-  //扫一扫
-  {
-    path: "/sweepcode",
-    component: Sweepcode
-  },
-  {
-    path: "/sweepcode1",
-    component: Sweepcode1
-  },
-  {
-    path: "/sweepcode2",
-    component: Sweepcode2
-  },
-  //转账
-  {
-    path: "/transfar",
-    component: Transfar
-  },
-  {
-    path: "/transfar1",
-    component: Transfar1
-  },
-  //收款
-  {
-    path: "/getMoney",
-    component: GetMoney
-  },
-  {
-    path: "/getMoney1",
-    component: GetMoney1
-  },
-  //添加币种
-  {
-    path: "/addCurrency",
-    component: AddCurrency
-  },
-  //稳定币转账
-  {
-    path: "/stablecoin",
-    component: stablecoin
-  },
-  //钱包管理
-  {
-    path: "/dailyCash",
-    component: DailyCash
-  },
-  //添加钱包
-  {
-    path: "/addPurse",
-    component: AddPurse
-  },
-  //创建钱包
-  {
-    path: "/createWallet",
-    component: CreateWallet
-  },
-  //导入钱包importWallet
-  {
-    path: "/importWallet",
-    component: ImportWallet
-  },
-  //地址簿
-  {
-    path: "/directoryInquiries",
-    component: DirectoryInquiries
-  },
-  {
-    path: "/directoryInquiries1",
-    component: DirectoryInquiries1
-  },
-  //添加地址
-  {
-    path: "/addAddress",
-    component: AddAddress
-  },
-  //设置
-  {
-    path: "/setting",
-    component: Setting
-  },
-  //多语言
-  {
-    path: "/multiLanguage",
-    component: MultiLanguage
-  },
-  //服务协议
-  {
-    path: "/service",
-    component: Service
-  },
-  //关于我们
-  {
-    path: "/aboutUs",
-    component: AboutUs
-  },
-  //帮助与反馈
-  {
-    path: "/feekBack",
-    component: FeekBack
-  },
-  {
-    path: "/",
-    redirect: "/app"
-  }
+        component: Home,
+        children: [
+            {
+                path: "/home/wallet",
+                component: Wallet
+            },
+            {
+                path: "/home/market",
+                component: Market
+            },
+            {
+                path: "/home/mine",
+                component: Mine
+            },
+            {
+                path: "/home",
+                redirect: "/home/wallet"
+            }
+        ]
+    },
+    //订单
+    {
+        path: "/orderForm",
+        component: OrderForm
+    },
+    //订单详情
+    {
+        path: "/orderDetail/:id",
+        component: OrderDetail
+    },
+    //选择钱包体系
+    {
+        path: "/walletSystem",
+        component: WalletSystem
+    },
+    //交易记录
+    {
+        path: "/record",
+        component: Record
+    },
+    //管理
+    {
+        path: "/manage",
+        component: Manage
+    },
+    {
+        path: "/manage1",
+        component: Manage1
+    },
+    //钱包详情
+    {
+        path: "/detailWallet",
+        component: DetailWallet
+    },
+    {
+        path: "/detailWallet1",
+        component: DetailWallet1
+    },
+    //扫一扫
+    {
+        path: "/sweepcode",
+        component: Sweepcode
+    },
+    {
+        path: "/sweepcode1",
+        component: Sweepcode1
+    },
+    {
+        path: "/sweepcode2",
+        component: Sweepcode2
+    },
+    //转账
+    {
+        path: "/transfar",
+        component: Transfar
+    },
+    {
+        path: "/transfar1",
+        component: Transfar1
+    },
+    //收款
+    {
+        path: "/getMoney",
+        component: GetMoney
+    },
+    {
+        path: "/getMoney1",
+        component: GetMoney1
+    },
+    //添加币种
+    {
+        path: "/addCurrency",
+        component: AddCurrency
+    },
+    //稳定币转账
+    {
+        path: "/stablecoin",
+        component: stablecoin
+    },
+    //钱包管理
+    {
+        path: "/dailyCash",
+        component: DailyCash
+    },
+    //添加钱包
+    {
+        path: "/addPurse",
+        component: AddPurse
+    },
+    //创建钱包
+    {
+        path: "/createWallet",
+        component: CreateWallet
+    },
+    //导入钱包importWallet
+    {
+        path: "/importWallet",
+        component: ImportWallet
+    },
+    //地址簿
+    {
+        path: "/directoryInquiries",
+        component: DirectoryInquiries
+    },
+    {
+        path: "/directoryInquiries1",
+        component: DirectoryInquiries1
+    },
+    //添加地址
+    {
+        path: "/addAddress",
+        component: AddAddress
+    },
+    //设置
+    {
+        path: "/setting",
+        component: Setting
+    },
+    //多语言
+    {
+        path: "/multiLanguage",
+        component: MultiLanguage
+    },
+    //服务协议
+    {
+        path: "/service",
+        component: Service
+    },
+    //关于我们
+    {
+        path: "/aboutUs",
+        component: AboutUs
+    },
+    //帮助与反馈
+    {
+        path: "/feekBack",
+        component: FeekBack
+    },
+    {
+        path: "/",
+        redirect: "/app"
+    }
 ];
 
 export default routes

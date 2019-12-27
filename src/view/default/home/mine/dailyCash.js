@@ -28,23 +28,25 @@ class DailyCash extends Component {
         }
     }
     async componentDidMount() {
-        let arr = creat_account_mnemonic(decrypted.mne_arr);
-        let violas = new vAccount(decrypted.mne_arr);
-        let balanceData1 = await this.props.index.getBalance({
-            address: violas.address,
-            name: 'violas'
-        })
-        this.setState({
-            balancedata1: balanceData1
-        })
-        let addressStr = get_address(arr);
-        let balanceData2 = await this.props.index.getBalance({
-            address: addressStr,
-            name: 'libra'
-        })
-        this.setState({
-            balancedata2: balanceData2
-        })
+        if(decrypted){
+            let arr = creat_account_mnemonic(decrypted.mne_arr);
+            let violas = new vAccount(decrypted.mne_arr);
+            let balanceData1 = await this.props.index.getBalance({
+                address: violas.address,
+                name: 'violas'
+            })
+            this.setState({
+                balancedata1: balanceData1
+            })
+            let addressStr = get_address(arr);
+            let balanceData2 = await this.props.index.getBalance({
+                address: addressStr,
+                name: 'libra'
+            })
+            this.setState({
+                balancedata2: balanceData2
+            })
+        }
     }
     getVioAddress() {
         let violas = new vAccount(decrypted.mne_arr);

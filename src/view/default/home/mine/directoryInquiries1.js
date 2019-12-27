@@ -18,7 +18,7 @@ class DirectoryInquiries1 extends Component {
   }
   componentDidMount(){
     let userInfo = JSON.parse(window.localStorage.getItem("data"));
-    if (this.props.location.state.type) {
+    if (this.props.location.state) {
       if (this.props.location.state.type == "officialCoin") {
         if (window.localStorage.getItem("type") == intl.get("ViolasWallet")) {
           let arr = userInfo.address_book.filter(v => {
@@ -73,6 +73,8 @@ class DirectoryInquiries1 extends Component {
           });
         }
       }
+    }else{
+      this.props.history.push('/welcome');
     }
   }
   deleteFun = (ind) =>{
