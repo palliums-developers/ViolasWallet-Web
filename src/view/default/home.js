@@ -81,7 +81,7 @@ class Home extends Component {
 
     }
     addCheck(data) {
-        return data.map((v, i) => {
+        return data && data.map((v, i) => {
 
             if (v.checked) {
                 return v;

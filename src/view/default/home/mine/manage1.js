@@ -106,7 +106,7 @@ class Manage1 extends Component {
                     this.state.isShow ? <div className="passDialog">
                         <div className="passContent">
                             <h4>{intl.get('Input  Access Code')}</h4>
-                            <input type="text" placeholder="密码" onChange={(e) => this.getValue(e)} />
+                            <input type="password" placeholder="密码" onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({

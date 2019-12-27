@@ -52,7 +52,7 @@ class ImportIdentity extends Component {
         </header>
         <section>
           <div className="form">
-            <input type="text" placeholder={intl.get('Input  Access Code')} onChange={(e) => this.getPass(e)} />
+            <input type="password" placeholder={intl.get('Input  Access Code')} onChange={(e) => this.getPass(e)} />
           </div>
 
           <div className="btn"> {intl.get('Start Import')}</div>

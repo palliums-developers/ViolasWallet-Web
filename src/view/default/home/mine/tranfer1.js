@@ -29,12 +29,16 @@ class Transfar1 extends Component {
         })
         
         if (this.props.index.type1) {
-            if (this.props.index.type1 == 'vtoken' || 'lib') {
+            if (this.props.index.type1 == 'vtoken') {
                 this.setState({
-                    address1: this.props.index.sweepCode1,
-                    address2: this.props.index.sweepCode1
+                    address1: this.props.index.sweepCode1
+                    
                 })
-            } else if (this.props.index.type == 'BTC') {
+            }else if (this.props.index.type1 == 'libra') {
+                this.setState({
+                  address2: this.props.index.sweepCode1
+                });
+            } else if (this.props.index.type1 == 'bitcoin') {
                 this.setState({
                     address3: this.props.index.sweepCode1
                 })
@@ -86,7 +90,7 @@ class Transfar1 extends Component {
             alert(intl.get('Transfer success')+'!!!');
             this.props.history.push('/home');
         }else{
-            alert(intl.get('Transfer failed')+'!!!');
+            this.refs.bal.style.color = "red";
         }
     }
 
@@ -106,12 +110,19 @@ class Transfar1 extends Component {
                             <div className="form">
                                 <div className="title">
                                 <span>{coinData.name}</span>
-                                <span>{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {(coinData.name) && (coinData.name).toLowerCase()}</span>
+                                <span ref="bal">{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {(coinData.name) && (coinData.name).toLowerCase()}</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span>{intl.get('Address Book')}</span>
+                                    <span onClick={()=>{
+                                        this.props.history.push({
+                                          pathname: "/directoryInquiries1",
+                                          state:{
+                                              type:'stableCoin'
+                                          }
+                                        });
+                                    }}>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />

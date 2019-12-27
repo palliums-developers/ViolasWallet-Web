@@ -463,7 +463,7 @@ class Market extends Component {
                     this.state.disNone ? <div className="passDialog">
                         <div className="passContent">
                             <h4>{intl.get('Input  Access Code')}</h4>
-                            <input type="text" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
+                            <input type="password" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({
