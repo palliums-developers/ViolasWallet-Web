@@ -22,8 +22,8 @@ class AddCurrency extends Component {
             ind: Number
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
@@ -31,7 +31,7 @@ class AddCurrency extends Component {
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
         })
-        let data = coinData.data.map( (v, i) => {
+        let data = coinData.data.map((v, i) => {
 
             if (v.checked) {
                 return v;
@@ -40,7 +40,7 @@ class AddCurrency extends Component {
             }
 
         })
-        for(let i=0;i<data.length;i++){
+        for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < newData.length; j++) {
                 if (data[i].address.indexOf(newData[j]) == 0) {
                     data[i].checked = true;
@@ -70,21 +70,21 @@ class AddCurrency extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code'))
-        }else if(this.state.value != JSON.parse(window.localStorage.getItem('data')).password1){
+        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
-        } else{
+        } else {
             this.setState({
                 isShow: false
             })
             this.state.coindata[this.state.ind].checked = true;
             let violas = new vAccount(this.state.mne);
             let arr = await violas.publish(this.state.name);
-            console.log(arr, 'arr')
+            // console.log(arr, 'arr')
             this.props.index.starVTranfer({
                 signedtxn: arr
             })
         }
-        
+
     }
     render() {
         let { coindata } = this.state;
@@ -114,7 +114,7 @@ class AddCurrency extends Component {
                                     <div className="logo"><img src="/img/BTC@2x.png" /></div>
                                     <div className="coinDescr">
                                         <h4>{v.name}</h4>
-                            <p>{v.description}</p>
+                                        <p>{v.description}</p>
                                     </div>
                                     <div className="switch">
                                         {

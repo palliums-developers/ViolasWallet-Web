@@ -31,7 +31,8 @@ class Mine extends Component {
         a.href = URL.createObjectURL(file);
         a.download = userInfo.name + '.json';
         a.click();
-        await window.localStorage.clear();
+        await window.localStorage.removeItem('data');
+        // await window.localStorage.clear();
         await this.props.history.push('/app')
     }
 

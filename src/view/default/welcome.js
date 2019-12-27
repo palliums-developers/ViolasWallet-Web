@@ -8,6 +8,19 @@ class Welcome extends Component {
     this.state = {}
   }
   componentWillMount() {
+    let lang = intl.options.currentLocale
+    switch (lang) {
+      case 'zh':
+        lang = 'CN';
+        break;
+      case 'CN':
+        lang = 'CN';
+        break;
+      default:
+        lang='EN';
+        break;
+    }
+    localStorage.setItem('local', lang);
     intl.options.currentLocale = localStorage.getItem("local");
   }
   render() {

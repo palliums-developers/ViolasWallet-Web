@@ -46,12 +46,12 @@ class Wallet extends Component {
                 modu: coinAddr
             })
             let coinsData = coinData.data;
-            
+
             let namData = [];
             for (let i = 0; i < coinsData.length; i++) {
                 for (let j = 0; j < data.length; j++) {
                     for (let z = 0; z < balanceData.modules.length; z++) {
-                    
+
                         if (coinsData[i].address.indexOf(data[j]) == 0) {
                             if (coinsData[i].address.indexOf(balanceData.modules[z].address) == 0) {
                                 namData.push({
@@ -67,7 +67,7 @@ class Wallet extends Component {
                 balancedata: balanceData,
                 nameData: namData,
                 balance: balanceData.balance / 1e6,
-                curWal: JSON.parse(window.localStorage.getItem('data')).name
+                curWal: window.localStorage.getItem('data') && JSON.parse(window.localStorage.getItem('data')).name
             })
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             let libra = new vAccount(decrypted.mne_arr);
@@ -96,7 +96,7 @@ class Wallet extends Component {
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
         }
-        if (window.localStorage.getItem('name')){
+        if (window.localStorage.getItem('name')) {
             this.setState({
                 curWal: window.localStorage.getItem('name')
             })
@@ -176,9 +176,9 @@ class Wallet extends Component {
                         <div className="dealRecord">
                             <div className="title" onClick={() => {
                                 this.props.history.push({
-                                    pathname:'/record',
-                                    state:{
-                                        address:balancedata.address ? balancedata.address : this.getBTCAddress()
+                                    pathname: '/record',
+                                    state: {
+                                        address: balancedata.address ? balancedata.address : this.getBTCAddress()
                                     }
                                 })
                             }}>
@@ -196,7 +196,7 @@ class Wallet extends Component {
                                     }
                                 </div>
                                 <div className="mList">
-                                    <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}
+                                    <p ><label>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : 'BTC'}
                                     </label><span>{balance ? balance : 0}</span></p>
                                 </div>
                                 {
