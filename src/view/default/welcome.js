@@ -7,12 +7,21 @@ class Welcome extends Component {
     super(props);
     this.state = {}
   }
-  componentWillMount(){
-      intl.options.currentLocale=localStorage.getItem("local");
-    
-  }
-  componentDidMount(){
-    
+  componentWillMount() {
+    let lang = intl.options.currentLocale
+    switch (lang) {
+      case 'zh':
+        lang = 'CN';
+        break;
+      case 'CN':
+        lang = 'CN';
+        break;
+      default:
+        lang='EN';
+        break;
+    }
+    localStorage.setItem('local', lang);
+    intl.options.currentLocale = localStorage.getItem("local");
   }
   render() {
     return (

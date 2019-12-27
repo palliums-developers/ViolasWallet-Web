@@ -25,6 +25,7 @@ class Record extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     async getVoHistory(){
         let violas = new vAccount(decrypted.mne_arr);
@@ -112,8 +113,9 @@ class Record extends Component {
     }
     render() {
         let { recordBData, recordData } = this.state;
-        let btc = new Account(decrypted.mne_arr, testnet);
+        let btc = new Account(decrypted&&decrypted.mne_arr, testnet);
         return (
+            btc&&
             <div className="record">
                 <header>
                     <span onClick={() => {

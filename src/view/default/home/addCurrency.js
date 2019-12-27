@@ -22,38 +22,40 @@ class AddCurrency extends Component {
             ind: Number
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        let violas = new vAccount(decrypted.mne_arr);
-        let newData = await this.props.index.updateCurCoin({
-            addr: violas.address
-        })
-        let data = coinData.data.map( (v, i) => {
-
-            if (v.checked) {
-                return v;
-            } else {
-                return Object.assign(v, { checked: false })
-            }
-
-        })
-        for(let i=0;i<data.length;i++){
-            for (let j = 0; j < newData.length; j++) {
-                if (data[i].address.indexOf(newData[j]) == 0) {
-                    data[i].checked = true;
-                    break;
+        if (window.localStorage.getItem('data')) {
+            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+            let violas = new vAccount(decrypted.mne_arr);
+            let newData = await this.props.index.updateCurCoin({
+                addr: violas.address
+            })
+            let data = coinData.data.map((v, i) => {
+                if (v.checked) {
+                    return v;
                 } else {
-                    data[i].checked = false;
+                    return Object.assign(v, { checked: false })
+                }
+            })
+            for (let i = 0; i < data.length; i++) {
+                for (let j = 0; j < newData.length; j++) {
+                    if (data[i].address.indexOf(newData[j]) == 0) {
+                        data[i].checked = true;
+                        break;
+                    } else {
+                        data[i].checked = false;
+                    }
                 }
             }
+            this.setState({
+                coindata: data,
+                mne: decrypted.mne_arr
+            })
+        } else {
+            this.props.history.push('/welcome');
         }
-        this.setState({
-            coindata: data,
-            mne: decrypted.mne_arr
-        })
     }
     onChange = (i, name) => {
         this.setState({
@@ -70,9 +72,9 @@ class AddCurrency extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code'))
-        }else if(this.state.value != JSON.parse(window.localStorage.getItem('data')).password1){
+        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
-        } else{
+        } else {
             this.setState({
                 isShow: false
             })
@@ -81,10 +83,10 @@ class AddCurrency extends Component {
             let arr = await violas.publish(this.state.name);
             this.props.index.starVTranfer({
                 signedtxn: arr,
-                name:'violas'
+                name: 'violas'
             })
         }
-        
+
     }
     render() {
         let { coindata } = this.state;
@@ -114,7 +116,7 @@ class AddCurrency extends Component {
                                     <div className="logo"><img src="/img/BTC@2x.png" /></div>
                                     <div className="coinDescr">
                                         <h4>{v.name}</h4>
-                            <p>{v.description}</p>
+                                        <p>{v.description}</p>
                                     </div>
                                     <div className="switch">
                                         {

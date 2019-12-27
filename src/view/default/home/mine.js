@@ -10,6 +10,9 @@ class Mine extends Component {
         this.state = {
         }
     }
+    componentWillMount(){
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
+    }
     componentDidMount() {
         intl.options.currentLocale = localStorage.getItem("local");
     }
@@ -31,6 +34,7 @@ class Mine extends Component {
         a.href = URL.createObjectURL(file);
         a.download = userInfo.name + '.json';
         a.click();
+        // await window.localStorage.removeItem('data');
         await window.localStorage.clear();
         await this.props.history.push('/app')
     }
@@ -40,7 +44,7 @@ class Mine extends Component {
             <div className="mine">
                 <header>
                     <div className="headLogo"><img src="/img/编组复制 18备份 2@2x.png" /></div>
-                    <span>{JSON.parse(window.localStorage.getItem('data')).name}</span>
+                    <span>{window.localStorage.getItem('data')&&JSON.parse(window.localStorage.getItem('data')).name}</span>
                 </header>
                 <section>
                     <ul className="userList">

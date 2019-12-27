@@ -17,15 +17,15 @@ class WalletSystem extends Component {
             balancedata1: [],
             balancedata2: [],
             balancedata3: [],
-            name:'all',
+            name: 'all',
             type: '',
             types: '',
-            violaswal:[],
-            libwal:[],
-            btcwal:[],
-            imgs:[
+            violaswal: [],
+            libwal: [],
+            btcwal: [],
+            imgs: [
                 {
-                    name:'all',
+                    name: 'all',
                     src: '/img/menu@2x.png',
                     src1: '/img/upall.png'
                 },
@@ -49,51 +49,55 @@ class WalletSystem extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if(window.localStorage.getItem('data')){
+        if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
+        }else{
+            this.props.history.push('welcome')
         }
     }
     async componentDidMount() {
-        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
-            this.setState({
-                types: 'violas'
+        if(window.localStorage.getItem('data')){
+            if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
+                this.setState({
+                    types: 'violas'
+                })
+            } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
+                this.setState({
+                    types: 'libra'
+                })
+            } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                this.setState({
+                    types: 'BTC'
+                })
+            }
+            let arr = creat_account_mnemonic(decrypted.mne_arr);
+            let violas = new vAccount(decrypted.mne_arr);
+            let btc = new Account(decrypted.mne_arr);
+            let balanceData1 = await this.props.index.getBalance({
+                address: violas.address,
+                name: 'violas'
             })
-        } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             this.setState({
-                types: 'libra'
+                balancedata1: balanceData1
             })
-        } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+            let addressStr = get_address(arr);
+            let balanceData2 = await this.props.index.getBalance({
+                address: addressStr,
+                name: 'libra'
+            })
             this.setState({
-                types: 'BTC'
+                balancedata2: balanceData2
+            })
+            let wallets = JSON.parse(window.localStorage.getItem('data')).wallet_name;
+            let violasW = wallets.filter((v) => v.type == 'violas')
+            let libraW = wallets.filter((v) => v.type == 'libra')
+            let btcW = wallets.filter((v) => v.type == 'BTC')
+            this.setState({
+                violaswal: violasW,
+                libwal: libraW,
+                btcwal: btcW,
             })
         }
-        let arr = creat_account_mnemonic(decrypted.mne_arr);
-        let violas = new vAccount(decrypted.mne_arr);
-        let btc = new Account(decrypted.mne_arr);
-        let balanceData1 = await this.props.index.getBalance({
-            address: violas.address,
-            name: 'violas'
-        })
-        this.setState({
-            balancedata1: balanceData1
-        })
-        let addressStr = get_address(arr);
-        let balanceData2 = await this.props.index.getBalance({
-            address: addressStr,
-            name: 'libra'
-        })
-        this.setState({
-            balancedata2: balanceData2
-        })
-        let wallets = JSON.parse(window.localStorage.getItem('data')).wallet_name;
-        let violasW = wallets.filter((v)=>v.type == 'violas')
-        let libraW = wallets.filter((v) => v.type == 'libra')
-        let btcW = wallets.filter((v) => v.type == 'BTC')
-        this.setState({
-            violaswal: violasW,
-            libwal: libraW,
-            btcwal: btcW,
-        })
     }
     getVioAddress() {
         let violas = new vAccount(decrypted.mne_arr);
@@ -107,15 +111,15 @@ class WalletSystem extends Component {
         let btc = new Account(decrypted.mne_arr, testnet);
         return btc.address
     }
-    getWallets = (type,name) => {
+    getWallets = (type, name) => {
         if (type == 'violas') {
             this.setState({
                 types: 'violas'
             }, () => {
                 this.props.index.changePurse(intl.get('ViolasWallet'));
-                window.localStorage.setItem('name',name);
+                window.localStorage.setItem('name', name);
                 this.props.history.push('/home/wallet');
-                
+
             })
         } else if (type == 'libra') {
             this.setState({
@@ -124,7 +128,7 @@ class WalletSystem extends Component {
                 this.props.index.changePurse(intl.get('LibraWallet'));
                 window.localStorage.setItem('name', name)
                 this.props.history.push('/home/wallet')
-                
+
             })
         } else if (type == 'BTC') {
             this.setState({
@@ -133,7 +137,7 @@ class WalletSystem extends Component {
                 this.props.index.changePurse(intl.get('BTCWallet'))
                 window.localStorage.setItem('name', name)
                 this.props.history.push('/home/wallet')
-                   
+
             })
         }
     }
@@ -145,7 +149,7 @@ class WalletSystem extends Component {
                 this.props.index.changePurse(intl.get('ViolasWallet'));
                 window.localStorage.setItem('name', name);
                 this.props.history.push('/home/wallet');
-                   
+
             })
         } else if (type == 'libra') {
             this.setState({
@@ -164,11 +168,12 @@ class WalletSystem extends Component {
                 this.props.history.push('/home/wallet');
             })
         }
-        
+
     }
     render() {
         let { balancedata1, balancedata2, imgs, violaswal, libwal, btcwal } = this.state;
         return (
+            window.localStorage.getItem('data')&&
             <div className="walletSystem">
                 <header>
                     <span onClick={() => {
@@ -180,10 +185,10 @@ class WalletSystem extends Component {
                 <section>
                     <div className="left">
                         {
-                            imgs.map((v,i)=>{
-                                return <span onClick={()=>{
+                            imgs.map((v, i) => {
+                                return <span onClick={() => {
                                     this.setState({
-                                        name:v.name
+                                        name: v.name
                                     })
                                 }} key={i}><img src={this.state.name == v.name ? v.src : v.src1} /></span>
                             })
@@ -240,7 +245,7 @@ class WalletSystem extends Component {
                                             </div>
                                         })
                                     }
-                                    </div>
+                                </div>
                             </div> : null
                         }
                         {

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { inject,observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
 @inject("index")
 @observer
-
 class DirectoryInquiries extends Component {
   constructor(props) {
     super(props);
@@ -15,9 +14,13 @@ class DirectoryInquiries extends Component {
   componentWillMount() {
     intl.options.currentLocale = localStorage.getItem("local");
   }
-  deleteFun = (ind) =>{
+  async componentDidMount() {
+    !window.localStorage.getItem("data") && this.props.history.push("/welcome");
+  }
+  deleteFun = ind => {
     let userInfo = JSON.parse(window.localStorage.getItem("data"));
-    let address_book = JSON.parse(window.localStorage.getItem("data")).address_book;
+    let address_book = JSON.parse(window.localStorage.getItem("data"))
+      .address_book;
     address_book.splice(ind, 1);
     let data = {
       name: userInfo.name,
@@ -28,11 +31,12 @@ class DirectoryInquiries extends Component {
       address_book: address_book,
       backup: userInfo.backup
     };
-    window.localStorage.setItem("data",JSON.stringify(data));
+    window.localStorage.setItem("data", JSON.stringify(data));
     this.forceUpdate();
-  }
+  };
   render() {
     return (
+      window.localStorage.getItem("data") &&
       <div className="directoryInquiries">
         <header>
           <span
@@ -48,7 +52,7 @@ class DirectoryInquiries extends Component {
               this.props.history.push({
                 pathname: "/addAddress",
                 state: {
-                  path: 'directoryInquiries'
+                  path: "directoryInquiries"
                 }
               });
             }}

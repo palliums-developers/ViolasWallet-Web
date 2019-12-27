@@ -16,18 +16,17 @@ class Transfar1 extends Component {
             rate: 0,
             violasAmount: '',
             address1: '',
-            balancedata:[],
-            coinData:{}
+            balancedata: [],
+            coinData: {}
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
         this.setState({
-            coinData:JSON.parse(window.localStorage.getItem('coinType'))
+            coinData: JSON.parse(window.localStorage.getItem('coinType'))
         })
-        
         if (this.props.index.type1) {
             if (this.props.index.type1 == 'vtoken') {
                 this.setState({
@@ -43,6 +42,8 @@ class Transfar1 extends Component {
                     address3: this.props.index.sweepCode1
                 })
             }
+        }else{
+            // this.props.history.push('/welcome');
         }
     }
     log = (name) => {
@@ -54,7 +55,7 @@ class Transfar1 extends Component {
 
         };
     }
-    
+
     //violas转账
     getViolasAm = (e, way) => {
 
@@ -65,29 +66,29 @@ class Transfar1 extends Component {
             e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
                 e.target.value = parseFloat(e.target.value);
-            } 
+            }
             this.setState({
-                violasAmount:e.target.value
+                violasAmount: e.target.value
             })
-            
+
         } else if (way == 'address') {
             this.setState({
                 address1: e.target.value
             })
         }
     }
-    
+
     confirmTrans = async (type) => {
         let { violasAmount, address1, coinData } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6 , coinData.name);
+        let transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, coinData.name);
         let data = await this.props.index.starVTranfer({
-                signedtxn: transFar,
-                name:'violas'
+            signedtxn: transFar,
+            name: 'violas'
         })
-        if(data.message == 'ok'){
-            alert(intl.get('Transfer success')+'!!!');
+        if (data.message == 'ok') {
+            alert(intl.get('Transfer success') + '!!!');
             this.props.history.push('/home');
         }else{
             this.refs.bal.style.color = "red";
@@ -106,9 +107,9 @@ class Transfar1 extends Component {
 
                 </header>
                 <section>
-                       <div className="transfarDescr">
-                            <div className="form">
-                                <div className="title">
+                    <div className="transfarDescr">
+                        <div className="form">
+                            <div className="title">
                                 <span>{coinData.name}</span>
                                 <span ref="bal">{intl.get('Balance')}：<s>{coinData.balance / 1e6}</s> {(coinData.name) && (coinData.name).toLowerCase()}</span>
                                 </div>
@@ -129,33 +130,33 @@ class Transfar1 extends Component {
                                     <span onClick={() => {
                                         this.props.history.push('/sweepCode1')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
-                                </div>
+                                </div>            
+                        </div>
+                        <div className="fees">
+                            <div className="title">
+                                <span>{intl.get('Transaction Fee')}</span>
                             </div>
-                            <div className="fees">
-                                <div className="title">
-                                    <span>{intl.get('Transaction Fee')}</span>
-                                </div>
-                                <div className="speed">
-                                    <p className="sub-title">{intl.get('Slow')}</p>
-                                    <p className="sub-title">{intl.get('Fast')}</p>
-                                </div>
-                                <WingBlank size="lg">
+                            <div className="speed">
+                                <p className="sub-title">{intl.get('Slow')}</p>
+                                <p className="sub-title">{intl.get('Fast')}</p>
+                            </div>
+                            <WingBlank size="lg">
 
-                                    <Slider
-                                        style={{ marginLeft: 30, marginRight: 30 }}
-                                        defaultValue={0}
-                                        min={0}
-                                        max={30}
-                                        onChange={this.log('change')}
-                                        onAfterChange={this.log('afterChange')}
-                                    />
-                                </WingBlank>
-                                <div className="rate">{this.state.rate / 100000} {coinData.name}</div>
-                            </div>
-                            <div className="btn" onClick={() => this.confirmTrans('violas')}>
+                                <Slider
+                                    style={{ marginLeft: 30, marginRight: 30 }}
+                                    defaultValue={0}
+                                    min={0}
+                                    max={30}
+                                    onChange={this.log('change')}
+                                    onAfterChange={this.log('afterChange')}
+                                />
+                            </WingBlank>
+                            <div className="rate">{this.state.rate / 100000} {coinData.name}</div>
+                        </div>
+                        <div className="btn" onClick={() => this.confirmTrans('violas')}>
                             {intl.get('Confirm Transfer')}
                         </div>
-                        </div>
+                    </div>
                 </section>
             </div>
         );

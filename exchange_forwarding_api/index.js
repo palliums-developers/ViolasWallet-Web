@@ -70,6 +70,12 @@ app.get('/v1/trades', async (req, res) => {
   res.send(result)
 })
 
+app.post('/v1/cancelOrder',async(req,res)=>{
+  let result=await axios.post(url+'/cancelOrder',req.body,{Headers:{'Content-Type':'application/json'}})
+  .then(res=>{return res.data})
+  res.send(result);
+})
+
 app.listen(PORT, function () {
   console.log('CORS-enabled web server listening on port' + PORT)
 })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
-import { inject,observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
 @inject('index')
@@ -17,13 +17,14 @@ class AddAddress extends Component {
            ind:-1
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
         this.forceUpdate();
-      }
-    componentDidMount(){
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
+    }
+    componentDidMount() {
         this.setState({
-            name:this.props.index.sweepCode2
+            name: this.props.index.sweepCode2
         })
     }
     getValue = (e,type) =>{
@@ -36,7 +37,6 @@ class AddAddress extends Component {
             address:e.target.value
           })
         }
-       
     }
     getAddress = () =>{
         this.props.history.push("/directoryInquiries");

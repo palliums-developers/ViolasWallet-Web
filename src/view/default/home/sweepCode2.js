@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
-import { inject,observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
 @inject('index')
@@ -10,18 +10,21 @@ class Sweepcode1 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            file:false,
-            address:''
+            file: false,
+            address: ''
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
     }
-    componentDidMount(){
-       
+    componentDidMount() {
+        // if(this.props.location.state){
+        // }else{
+        //     this.props.history.push('/welcome');
+        // }
     }
     handleScan = data => {
-        if(data){
+        if (data) {
             let start = data.indexOf(":");
             let str = data.substring(start, 0);
             let mun = data.substring(start + 1);
@@ -31,26 +34,26 @@ class Sweepcode1 extends Component {
             });
             this.props.history.push('/addAddress')
         }
-     }
- 
-     handleError = err => {
-         console.error(err)
-     }
- 
-     openImageDialog = () =>{
-         this.setState({
-            file:true
-         },()=>{
-             this.refs.qrReader.openImageDialog();
-         }) 
-      }
+    }
+
+    handleError = err => {
+        console.error(err)
+    }
+
+    openImageDialog = () => {
+        this.setState({
+            file: true
+        }, () => {
+            this.refs.qrReader.openImageDialog();
+        })
+    }
     render() {
         return (
             <div className="sweepcode">
                 <header>
                     <span onClick={() => {
                         this.props.history.push('/addAddress')
-                    }}><img src="/img/Combined Shape 1@2x.png"/></span>
+                    }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Scan')}</span>
                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>
                 </header>

@@ -34,11 +34,13 @@ class Market extends Component {
         if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
+        }else{
+            this.props.history.push('/welcome');
         }
     }
     async componentDidMount() {
         let othersData = await this.props.dealIndex.getOthersCoinMess();
-        let violas = new vAccount(decrypted.mne_arr);
+        let violas = new vAccount(decrypted&&decrypted.mne_arr);
         let updateData = [];
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address

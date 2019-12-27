@@ -9,6 +9,7 @@ class MultiLanguage extends Component {
         }
     }
     componentDidMount() {
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");

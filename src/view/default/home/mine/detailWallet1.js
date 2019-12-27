@@ -16,9 +16,13 @@ class DetailWallet1 extends Component {
         intl.options.currentLocale=localStorage.getItem("local");
     }
     componentDidMount(){
-        this.setState({
-            oldName:this.props.location.state.name
-        })
+        if(this.props.location.state){
+            this.setState({
+                oldName:this.props.location.state.name
+            })
+        }else{
+            this.props.history.push('/welcome');
+        }
     }
     getNewName = (e) =>{
         this.setState({

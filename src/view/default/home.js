@@ -46,7 +46,7 @@ class Home extends Component {
         // let coinData = await this.props.dealIndex.getCoinMess();
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let othersData = await this.props.dealIndex.getOthersCoinMess();
-        let violas = new vAccount(decrypted.mne_arr);
+        let violas = new vAccount(decrypted&&decrypted.mne_arr);
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
         })

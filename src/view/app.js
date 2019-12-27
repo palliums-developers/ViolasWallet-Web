@@ -9,11 +9,12 @@ class App extends Component {
     this.state = {}
   }
   componentDidMount() {
-    let lang = intl.options.currentLocale;
-    intl.options.currentLocale = lang == 'zh' ? 'CN' : lang == 'CN' ? 'CN':'EN';
-    let lang2 = intl.options.currentLocale;
-    localStorage.setItem('local', lang2);
-    
+    // const lang = intl.options.currentLocale
+    // console.log(lang,111)
+    // intl.options.currentLocale = lang == 'zh' ? 'CN' : 'EN';
+    // let lang2 = intl.options.currentLocale;
+    // // console.log(lang2)
+    // localStorage.setItem('local', lang2);
   }
   render() {
     return (
