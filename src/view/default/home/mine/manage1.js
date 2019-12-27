@@ -22,11 +22,15 @@ class Manage1 extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        let { type,addr } = this.props.location.state;
-        this.setState({
-            curWal: type,
-            address: addr
-        })
+        if (this.props.location.state) {
+            let { type, addr } = this.props.location.state;
+            this.setState({
+                curWal: type,
+                address: addr
+            })
+        }else{
+            this.props.history.push('/welcome');
+        }
     }
     getValue = (e) => {
         this.setState({
