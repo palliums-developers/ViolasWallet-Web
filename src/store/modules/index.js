@@ -85,7 +85,6 @@ export default class Index {
     //获取violas交易记录
     @action async getVioDealRecord(params) {
         let records = await getViolasDealRecord(params);
-        console.log(records)
         return records.data.data;
 
     }

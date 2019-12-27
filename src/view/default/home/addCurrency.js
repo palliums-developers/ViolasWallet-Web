@@ -81,7 +81,8 @@ class AddCurrency extends Component {
             let arr = await violas.publish(this.state.name);
             console.log(arr, 'arr')
             this.props.index.starVTranfer({
-                signedtxn: arr
+                signedtxn: arr,
+                name:'violas'
             })
         }
         

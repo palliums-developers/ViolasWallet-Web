@@ -52,7 +52,7 @@ class AddAddress extends Component {
     plus = () =>{
         let { name,address,types } = this.state;
         if(name == ''){
-           alert(intl.get('Please input nickname')+'!!!')
+           alert(intl.get("Input your wallet type") + "!!!");
         }else if(address == ''){
            alert(intl.get('Please input Note')+'!!!')
         }else if(types == ''){
@@ -102,7 +102,7 @@ class AddAddress extends Component {
                         <div className="p">
                             <label>{intl.get('Address')}</label>
                             <div className="ipt">
-                                <input type="text" value={this.state.name} placeholder={intl.get('Input address')} onChange={(e)=>this.getValue(e,'address')}/>   
+                                <input type="text" value={this.state.address} placeholder={intl.get('Input address')} onChange={(e)=>this.getValue(e,'address')}/>   
                                 <div className="code" onClick={()=>{
                                     this.props.history.push('/sweepCode2')
                                 }}><img src="/img/code@2x.png"/></div>

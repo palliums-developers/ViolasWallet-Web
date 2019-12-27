@@ -31,12 +31,12 @@ class ImportIdentity extends Component {
       reader.onload = (e) => {
         let json = aes256.decrypt(this.state.password, e.currentTarget.result);
         if (json[0] == '{') {
-          alert('解密成功！！！')
+          alert(intl.get('Decryption success')+'！！！')
           window.localStorage.setItem('data', JSON.stringify(JSON.parse(json)));
           window.localStorage.setItem('type', intl.get('ViolasWallet'));
           this.props.history.push('/home/wallets')
         } else {
-          alert('密码错误！！！')
+          alert(intl.get('Access Code is wrong') + '！！！')
         }
       };
   }

@@ -8,7 +8,11 @@ class Welcome extends Component {
     this.state = {  }
   }
   componentWillMount(){
-    intl.options.currentLocale=localStorage.getItem("local");
+      intl.options.currentLocale=localStorage.getItem("local");
+    
+  }
+  componentDidMount(){
+    
   }
   render() { 
     return ( 
