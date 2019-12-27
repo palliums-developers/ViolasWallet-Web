@@ -16,10 +16,7 @@ class Sweepcode extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        if(this.props.location.state){
-        }else{
-            this.props.history.push('/welcome');
-        }
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
 
     handleScan = data => {

@@ -5,7 +5,7 @@ import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import { timeStamp2String } from '../../../../utils/timer';
 import intl from 'react-intl-universal';
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
+let decrypted = JSON.parse(window.localStorage.getItem('data')&&window.localStorage.getItem('data'));
 // let aes256 = require('aes256');
 
 @inject('index', 'dealIndex')
@@ -23,7 +23,7 @@ class stablecoin extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        if(localStorage.getItem('coinType')){
+        if(localStorage.getItem('coinType')&&window.localStorage.getItem('data')){
             let violas = new vAccount(decrypted.mne_arr);
             let coin_name = JSON.parse(localStorage.getItem('coinType')).name;
             let getCurCoinMessage = await this.props.index.getCoinMess();
