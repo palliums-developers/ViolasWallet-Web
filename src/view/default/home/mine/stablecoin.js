@@ -26,7 +26,7 @@ class stablecoin extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        if(localStorage.getItem('coinType')){
+        if(localStorage.getItem('coinType')&&window.localStorage.getItem('data')){
             let violas = new vAccount(decrypted.mne_arr);
             let coin_name = JSON.parse(localStorage.getItem('coinType')).name;
             let getCurCoinMessage = await this.props.index.getCoinMess();

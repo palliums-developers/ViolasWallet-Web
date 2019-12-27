@@ -22,6 +22,7 @@ class Transfar1 extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     async componentDidMount() {
         this.setState({
@@ -42,8 +43,6 @@ class Transfar1 extends Component {
                     address3: this.props.index.sweepCode1
                 })
             }
-        }else{
-            // this.props.history.push('/welcome');
         }
     }
     log = (name) => {

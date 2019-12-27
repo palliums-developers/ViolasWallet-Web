@@ -76,6 +76,18 @@ app.post('/v1/cancelOrder',async(req,res)=>{
   res.send(result);
 })
 
+// post /v1/cancelOrder
+// #### Request body
+// {
+//     "version": xxx,
+//     "signedtxn": "xxxxx"
+// }
+// #### Response
+// {
+//     "code":2000,
+//     "message":"cancelling"
+// }
+
 app.listen(PORT, function () {
   console.log('CORS-enabled web server listening on port' + PORT)
 })
