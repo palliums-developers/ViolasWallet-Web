@@ -4,6 +4,7 @@ import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
 import coinData from '../../../utils/currencyToken.json';
+import BScroll from 'better-scroll'
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
@@ -89,7 +90,6 @@ class Wallet extends Component {
                 page: 1,
                 name: 'BTC'
             })
-            console.log(balanceData)
             this.setState({
                 balancedata: balanceData,
                 balance: balanceData && balanceData.balance / 1e8,
@@ -129,117 +129,117 @@ class Wallet extends Component {
         return (
             <div className="wallet">
                 <header>
-                    <div id="select">
-                        <div onClick={() => this.getChange()}><label>{window.localStorage.getItem('type')}</label><img src="/img/路径 3@2x.png" /></div>
-                    </div>
-                    <span onClick={() => {
-                        this.props.history.push('/sweepcode')
-                    }}><img src="/img/编组 3@2x.png" /></span>
-                </header>
-
-                <section>
-                    <div className="walletContent">
-                        <div className="showBanlance">
-                            <div className="title">
-                                <span>{intl.get('Current Balances')}</span>
-                                <span onClick={() => {
-                                    this.props.history.push('/manage')
-                                }}><img src="/img/编组 14@2x.png" /></span>
-                            </div>
-                            <div className="banlanceDescr">
-                                <span>{balance ? balance : 0}</span><label>{
-                                    window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
-                                }</label>
-                            </div>
-                            <div className="userDescr">
-                                <span>{curWal}</span>
-                                <span id='addressId'>{balancedata && balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
-                                <span onClick={() => this.copyUrl2()}><img src="/img/Fill 3@2x.png" /></span>
-                            </div>
-
+                        <div id="select">
+                            <div onClick={() => this.getChange()}><label>{window.localStorage.getItem('type')}</label><img src="/img/路径 3@2x.png" /></div>
                         </div>
-                        <div className="btns">
-                            <dl onClick={() => {
-                                this.props.history.push('/transfar')
-                            }}>
-                                <dt><img src="/img/编组@2x.png" /></dt>
-                                <dd>{intl.get('Transfer')}</dd>
-                            </dl>
-                            <span></span>
-                            <dl onClick={() => {
-                                this.props.history.push('/getMoney')
-                            }}>
-                                <dt><img src="/img/编组 .png" /></dt>
-                                <dd>{intl.get('Receive')}</dd>
-                            </dl>
-                        </div>
-                        <div className="dealRecord">
-                            <div className="title" onClick={() => {
-                                this.props.history.push({
-                                    pathname: '/record',
-                                    state: {
-                                        address: balancedata.address ? balancedata.address : this.getBTCAddress()
-                                    }
-                                })
-                            }}>
-                                <span>{intl.get('Transfer History')}</span>
-                                <span><img src="/img/路径复制 4@2x.png" /></span>
-                            </div>
-                            <div className="dealContent">
-                                <div className="head">
-                                    <label>{intl.get('Fund')}</label>
-                                    {
-                                        window.localStorage.getItem('type') && window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span onClick={() => {
-                                            this.props.history.push('/addCurrency')
-                                        }}><img src="/img/编组 9@2x.png" />
-                                        </span> : null
-                                    }
+                        <span onClick={() => {
+                            this.props.history.push('/sweepcode')
+                        }}><img src="/img/编组 3@2x.png" /></span>
+                    </header>
+
+                    <section>
+                        <div className="walletContent">
+                            <div className="showBanlance">
+                                <div className="title">
+                                    <span>{intl.get('Current Balances')}</span>
+                                    <span onClick={() => {
+                                        this.props.history.push('/manage')
+                                    }}><img src="/img/编组 14@2x.png" /></span>
                                 </div>
-                                <div className="mList">
-                                    <p ><label>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : 'BTC'}
-                                    </label><span>{balance ? balance : 0}</span></p>
+                                <div className="banlanceDescr">
+                                    <span>{balance ? balance : 0}</span><label>{
+                                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
+                                    }</label>
                                 </div>
-                                {
-                                    window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
-                                        {
-                                            nameData && nameData.map((v, i) => {
-                                                return <p key={i} onClick={() => {
-                                                    this.props.history.push('/stablecoin')
-                                                    window.localStorage.setItem('coinType', JSON.stringify({
-                                                        name: v.name,
-                                                        balance: v.price
-                                                    }))
-                                                }}><label>{v.name.toLowerCase()}</label><span>{v.price / 1e6}</span></p>
-                                            })
-                                        }
-                                    </div> : null
-                                }
+                                <div className="userDescr">
+                                    <span>{curWal}</span>
+                                    <span id='addressId'>{balancedata && balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
+                                    <span onClick={() => this.copyUrl2()}><img src="/img/Fill 3@2x.png" /></span>
+                                </div>
 
                             </div>
-                        </div>
-                    </div>
-                    {
-                        JSON.parse(window.localStorage.getItem('data')).backup ? <div className="warning">
-                            <div className="head">
-                                <label><img src="/img/编组 5@2x.png" /></label>
-                                <span>{intl.get('Safety Reminder')}</span>
+                            <div className="btns">
+                                <dl onClick={() => {
+                                    this.props.history.push('/transfar')
+                                }}>
+                                    <dt><img src="/img/编组@2x.png" /></dt>
+                                    <dd>{intl.get('Transfer')}</dd>
+                                </dl>
+                                <span></span>
+                                <dl onClick={() => {
+                                    this.props.history.push('/getMoney')
+                                }}>
+                                    <dt><img src="/img/编组 .png" /></dt>
+                                    <dd>{intl.get('Receive')}</dd>
+                                </dl>
                             </div>
-                            <div className="warnText">
-                                <p>{intl.get('You have not backup your Identity Mnemonic Words，Please backup your Mnemonic Words')}</p>
-                                <p>{intl.get('Mnemonic Words can be used to recover funds in the Identity Wallet in case you forgot Access Code, removed the App, lost phone.')}</p>
-                                <div className="btn" onClick={() => {
+                            <div className="dealRecord">
+                                <div className="title" onClick={() => {
                                     this.props.history.push({
-                                        pathname: '/codeBackup',
+                                        pathname: '/record',
                                         state: {
-                                            id: 0
+                                            address: balancedata.address ? balancedata.address : this.getBTCAddress()
                                         }
                                     })
-                                }}>{intl.get('Backup Now')}</div>
+                                }}>
+                                    <span>{intl.get('Transfer History')}</span>
+                                    <span><img src="/img/路径复制 4@2x.png" /></span>
+                                </div>
+                                <div className="dealContent">
+                                    <div className="head">
+                                        <label>{intl.get('Fund')}</label>
+                                        {
+                                            window.localStorage.getItem('type') && window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span onClick={() => {
+                                                this.props.history.push('/addCurrency')
+                                            }}><img src="/img/编组 9@2x.png" />
+                                            </span> : null
+                                        }
+                                    </div>
+                                    <div className="mList">
+                                        <p ><label>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : 'BTC'}
+                                        </label><span>{balance ? balance : 0}</span></p>
+                                    </div>
+                                    {
+                                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <div className="mList">
+                                            {
+                                                nameData && nameData.map((v, i) => {
+                                                    return <p key={i} onClick={() => {
+                                                        this.props.history.push('/stablecoin')
+                                                        window.localStorage.setItem('coinType', JSON.stringify({
+                                                            name: v.name,
+                                                            balance: v.price
+                                                        }))
+                                                    }}><label>{v.name.toLowerCase()}</label><span>{v.price / 1e6}</span></p>
+                                                })
+                                            }
+                                        </div> : null
+                                    }
+
+                                </div>
                             </div>
-                        </div> : null
-                    }
-                </section>
-            </div>
+                        </div>
+                        {
+                            JSON.parse(window.localStorage.getItem('data')).backup ? <div className="warning">
+                                <div className="head">
+                                    <label><img src="/img/编组 5@2x.png" /></label>
+                                    <span>{intl.get('Safety Reminder')}</span>
+                                </div>
+                                <div className="warnText">
+                                    <p>{intl.get('You have not backup your Identity Mnemonic Words，Please backup your Mnemonic Words')}</p>
+                                    <p>{intl.get('Mnemonic Words can be used to recover funds in the Identity Wallet in case you forgot Access Code, removed the App, lost phone.')}</p>
+                                    <div className="btn" onClick={() => {
+                                        this.props.history.push({
+                                            pathname: '/codeBackup',
+                                            state: {
+                                                id: 0
+                                            }
+                                        })
+                                    }}>{intl.get('Backup Now')}</div>
+                                </div>
+                            </div> : null
+                        }
+                    </section>
+               </div>
         );
     }
 

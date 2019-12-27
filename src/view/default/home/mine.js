@@ -40,7 +40,7 @@ class Mine extends Component {
         return (
             <div className="mine">
                 <header>
-                    <div className="headLogo"><img src="/img/编组 8@2x.png" /></div>
+                    <div className="headLogo"><img src="/img/编组复制 18备份 2@2x.png" /></div>
                     <span>{JSON.parse(window.localStorage.getItem('data')).name}</span>
                 </header>
                 <section>

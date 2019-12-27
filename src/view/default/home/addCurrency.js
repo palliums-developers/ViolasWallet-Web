@@ -79,9 +79,9 @@ class AddCurrency extends Component {
             this.state.coindata[this.state.ind].checked = true;
             let violas = new vAccount(this.state.mne);
             let arr = await violas.publish(this.state.name);
-            // console.log(arr, 'arr')
             this.props.index.starVTranfer({
-                signedtxn: arr
+                signedtxn: arr,
+                name:'violas'
             })
         }
 

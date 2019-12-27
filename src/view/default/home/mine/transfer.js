@@ -148,6 +148,11 @@ class Transfar extends Component {
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let transFar;
         if (type == 'violas') {
+            if (violasAmount == '') {
+                alert(intl.get("Input Amount")+'!!!');
+            }else if (address1 == '') {
+                alert(intl.get("Input Receving Address") + "!!!");
+            }else{
             let violas = new vAccount(decrypted.mne_arr);
             transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, 'violas')
             let data = await this.props.index.starVTranfer({
@@ -159,25 +164,48 @@ class Transfar extends Component {
                this.props.history.push('/home');
             }else{
                 alert(intl.get('Transfer failed')+'!!!');
-            }
-        } else if (type == 'libra') {
-            let libra = new vAccount(decrypted.mne_arr);
-            transFar = await libra.transaction_libra(address2, Number(libraAmount) * 1e6);
-            let data = await this.props.index.starVTranfer({
-                signedtxn: transFar,
-                name:type
-            })
-            if(data.message == 'ok'){
-                alert(intl.get('Transfer success')+'!!!');
-                this.props.history.push('/home');
-            }else{
-                alert(intl.get('Transfer failed')+'!!!');
+            } 
             }
             
+        } else if (type == 'libra') {
+            if (libraAmount == "") {
+              alert(intl.get("Input Amount") + "!!!");
+            } else if (address2 == "") {
+              alert(intl.get("Input Receving Address") + "!!!");
+            } else {
+                let libra = new vAccount(decrypted.mne_arr);
+                transFar = await libra.transaction_libra(
+                  address2,
+                  Number(libraAmount) * 1e6
+                );
+                let data = await this.props.index.starVTranfer({
+                  signedtxn: transFar,
+                  name: type
+                });
+                if (data.message == "ok") {
+                  alert(intl.get("Transfer success") + "!!!");
+                  this.props.history.push("/home");
+                } else {
+                  alert(intl.get("Transfer failed") + "!!!");
+                }
+            }
+            
+            
         } else if (type == 'BTC') {
-            let account = new Account(decrypted.mne_arr, testnet);
-            transFar = await account.transaction(address3, Number(btcAmount) * 1e8,fee)
-            console.log(transFar)
+            if (btcAmount == "") {
+              alert(intl.get("Input Amount") + "!!!");
+            } else if (address3 == "") {
+              alert(intl.get("Input Receving Address") + "!!!");
+            } else {
+                let account = new Account(decrypted.mne_arr, testnet);
+                transFar = await account.transaction(
+                  address3,
+                  Number(btcAmount) * 1e8,
+                  fee
+                );
+                console.log(transFar);
+            }
+            
         }
     }
 
@@ -193,7 +221,7 @@ class Transfar extends Component {
                         })
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     {
-                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{intl.get('Transfer Vtoken')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
+                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{'vtoken'+intl.get('Transfer')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
                     }
 
                 </header>
