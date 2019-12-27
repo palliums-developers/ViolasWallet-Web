@@ -22,7 +22,7 @@ class CreateIdentity extends Component {
   componentWillMount() {
     intl.options.currentLocale = localStorage.getItem("local");
   }
-  componentDidMount(){
+  componentDidMount() {
     let violas = new vAccount('');
     this.setState({
       mne_Arr: violas.getmne()
@@ -46,20 +46,22 @@ class CreateIdentity extends Component {
   }
   createFun = async () => {
     let { name, pass1, pass2, mne_Arr } = this.state;
-    let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$'); 
+    // let reg = new RegExp('^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,20}$');
+    // let reg = new RegExp('^(?![a-z]+$)(?![A-z]+$)(?!\d+$)(?!^[_#@]+$)(?![a-zA-z]+$)(?![a-z]^[_#@]+$)(?![A-Z]^[_#@]+$)[a-zA-Z\d]+$.{8,20}$');
+    let reg=new RegExp('^(?![A-Za-z]+$)(?![A-Z\\d]+$)(?![A-Z\\W]+$)(?![a-z\\d]+$)(?![a-z\\W]+$)(?![\\d\\W]+$)\\S{8,20}$')
     if (name == '') {
       alert(intl.get('Input Nickname') + '!!!')
     } else if (pass1 == '') {
       alert(intl.get('Please set Wallet Access Code') + '!!!')
-    } 
+    }
     else if (pass2 == '') {
       alert(intl.get('Confirm Access Code') + '!!!')
     } else if (pass1.indexOf(pass2) == -1) {
       alert(intl.get('The passwords are different') + '!!!')
-    } 
+    }
     else if (!reg.test(pass1)) {
-      alert(intl.get('Password setting does not match')+'！！！')
-    }else {
+      alert(intl.get('Password setting does not match') + '！！！')
+    } else {
       window.localStorage.setItem('data', JSON.stringify({
         name: name,
         password1: pass1,

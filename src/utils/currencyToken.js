@@ -13,7 +13,7 @@ const v3_transferWithData = [76, 73, 66, 82, 65, 86, 77, 10, 1, 0, 7, 1, 74, 0, 
 const default_token = "7257c2417e4d1038e1817c8f283ace2e1041b3396cdbb099eb357bbee024d614";
 
 const token = async () => {
-    let currency = await Axios.get('http://52.27.228.84:4000/1.0/violas/currency').then(res => { return (res.data.data) });
+    let currency = await Axios.get('http://52.27.228.84:4000/1.0/violas/currency').then(res => {return (res.data.data) });
     return currency;
 }
 const byte2base64 = _byte => {
