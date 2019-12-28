@@ -559,3 +559,574 @@ Compiled with warnings.
 Search for the keywords to learn more about each warning.
 To ignore, add // eslint-disable-next-line to the line before.
 
+Compiling...
+Compiled with warnings.
+
+./src/utils/violas.js
+  Line 10:7:    '_mne1' is assigned a value but never used       no-unused-vars
+  Line 11:7:    '_mne2' is assigned a value but never used       no-unused-vars
+  Line 86:28:   Expected '===' and instead saw '=='              eqeqeq
+  Line 122:7:   'new_base64' is assigned a value but never used  no-unused-vars
+  Line 129:17:  The array literal notation [] is preferable      no-array-constructor
+
+./src/view/default/home/manage.js
+  Line 10:7:    'prompt' is assigned a value but never used                                                                no-unused-vars
+  Line 28:48:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 29:91:   Expected to return a value at the end of arrow function                                                    array-callback-return
+  Line 30:88:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 39:92:   Expected to return a value at the end of arrow function                                                    array-callback-return
+  Line 40:101:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 56:30:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 58:37:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 95:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 110:56:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 118:56:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/router/routerView.js
+  Line 14:39:  Expected to return a value at the end of arrow function  array-callback-return
+
+./src/view/default/welcome.js
+  Line 19:14:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 20:15:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/store/index.js
+  Line 1:10:  'autorun' is defined but never used  no-unused-vars
+
+./src/view/default/backup/backup.js
+  Line 20:16:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 33:18:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/setting/feedBack.js
+  Line 20:17:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 24:23:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 32:17:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 36:23:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 49:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 64:72:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/utils/kulap-function.js
+  Line 23:5:  'address_mnemonic' is assigned a value but never used  no-unused-vars
+  Line 26:5:  'address_mnemonic' is already defined                  no-redeclare
+  Line 46:5:  'address_key' is assigned a value but never used       no-unused-vars
+  Line 55:7:  'mint' is assigned a value but never used              no-unused-vars
+
+./src/view/default/home/setting/service.js
+  Line 24:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/setting/aboutUs.js
+  Line 25:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 30:47:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/directoryInquiries.js
+  Line 26:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 30:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/record1.js
+  Line 27:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/getMoney.js
+  Line 27:48:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 37:91:   Expected to return a value at the end of arrow function                                                    array-callback-return
+  Line 38:84:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 46:54:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 56:91:   Expected to return a value at the end of arrow function                                                    array-callback-return
+  Line 57:84:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 64:54:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 69:91:   Expected to return a value at the end of arrow function                                                    array-callback-return
+  Line 70:84:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:17:   'range' is already defined                                                                                 no-redeclare
+  Line 107:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/locales/index-en.js
+  Line 28:5:   Duplicate key 'Backup Later'            no-dupe-keys
+  Line 91:5:   Duplicate key 'Create'                  no-dupe-keys
+  Line 95:5:   Duplicate key 'Input Nickname'          no-dupe-keys
+  Line 103:5:  Duplicate key 'Set Wallet Access Code'  no-dupe-keys
+
+./src/view/default/home/setting/multiLanguage.js
+  Line 29:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 40:76:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 49:76:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/locales/index-cn.js
+  Line 29:5:   Duplicate key 'Backup Later'            no-dupe-keys
+  Line 96:5:   Duplicate key 'Create'                  no-dupe-keys
+  Line 100:5:  Duplicate key 'Input Nickname'          no-dupe-keys
+  Line 108:5:  Duplicate key 'Set Wallet Access Code'  no-dupe-keys
+
+./src/store/modules/dealIndex.js
+  Line 29:5:  Useless constructor  no-useless-constructor
+
+./src/store/modules/index.js
+  Line 2:10:   'getBTCDealRecord' is defined but never used   no-unused-vars
+  Line 2:54:   'startCurLTranfer' is defined but never used   no-unused-vars
+  Line 45:13:  'userInfo' is assigned a value but never used  no-unused-vars
+
+./src/utils/bitcoinjs-lib6.js
+  Line 2:7:    'testnet' is assigned a value but never used                                                                 no-unused-vars
+  Line 3:7:    'mainnet' is assigned a value but never used                                                                 no-unused-vars
+  Line 4:7:    'regtest' is assigned a value but never used                                                                 no-unused-vars
+  Line 7:7:    'mne1' is assigned a value but never used                                                                    no-unused-vars
+  Line 8:7:    'mne2' is assigned a value but never used                                                                    no-unused-vars
+  Line 11:7:   'fee' is assigned a value but never used                                                                     no-unused-vars
+  Line 46:19:  Function declared in a loop contains unsafe references to variable(s) 'total_count', '_satoshi', '_satoshi'  no-loop-func
+
+./src/view/default/home/mine/createWallet.js
+  Line 2:8:      'QrReader' is defined but never used                                                                       no-unused-vars
+  Line 32:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 36:23:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 40:23:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 50:36:    Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 50:61:    Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 51:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 53:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 55:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 57:39:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 63:19:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 71:26:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 78:25:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 99:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:50:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:64:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:112:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:123:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:172:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:183:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 111:50:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:125:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:199:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 122:46:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 122:169:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 122:289:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/home/addCurrency.js
+  Line 2:8:      'QrReader' is defined but never used                                                                       no-unused-vars
+  Line 8:5:      'aes256' is assigned a value but never used                                                                no-unused-vars
+  Line 45:57:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 71:30:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 73:35:    Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 99:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 105:51:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:74:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 108:73:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 114:59:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 121:55:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 121:66:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 121:144:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/addAddress.js
+  Line 2:8:     'QrReader' is defined but never used                                                                       no-unused-vars
+  Line 29:17:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 33:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 37:23:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 54:17:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 56:26:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 58:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 79:61:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 108:36:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/setting/setting.js
+  Line 2:8:    'QrReader' is defined but never used                                                                       no-unused-vars
+  Line 22:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 27:47:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 35:30:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 44:30:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 50:30:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 56:30:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/addPurse.js
+  Line 2:8:    'QrReader' is defined but never used                                                                       no-unused-vars
+  Line 33:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 39:50:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 46:50:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 53:50:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 71:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 80:38:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/detailWallet.js
+  Line 31:69:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 51:57:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/ImportIdentity/ImportIdentity.js
+  Line 33:21:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 50:14:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/detailWallet1.js
+  Line 33:43:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 38:46:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 64:57:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/transfer.js
+  Line 34:39:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 39:46:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 47:49:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 57:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 66:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 94:56:    Unnecessary escape character: \-                                                                           no-useless-escape
+  Line 95:67:    Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 101:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 109:17:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 113:56:   Unnecessary escape character: \-                                                                           no-useless-escape
+  Line 114:67:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 120:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 132:52:   Unnecessary escape character: \-                                                                           no-useless-escape
+  Line 133:63:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 136:17:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 140:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 150:18:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 157:29:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 163:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 170:29:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 177:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 194:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 196:61:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 196:172:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 196:277:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 202:61:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 217:40:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 244:70:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 259:40:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 286:70:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 301:40:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/market/orderDetail.js
+  Line 35:43:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 60:52:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 73:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 81:43:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 82:52:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 82:97:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 94:60:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 94:121:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/home/market/orderForm.js
+  Line 36:13:    'scroll' is assigned a value but never used                                                                no-unused-vars
+  Line 46:52:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 63:51:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 63:72:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 64:54:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 65:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 70:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 92:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 95:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 97:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 119:124:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 130:51:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 146:72:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 146:133:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 162:72:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/stablecoin.js
+  Line 3:10:     'creat_account_mnemonic' is defined but never used                                                         no-unused-vars
+  Line 3:34:     'get_address' is defined but never used                                                                    no-unused-vars
+  Line 5:8:      'Account' is defined but never used                                                                        no-unused-vars
+  Line 31:27:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 58:17:    'range' is already defined                                                                                 no-redeclare
+  Line 72:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 84:71:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 91:37:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 98:37:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 112:73:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 112:129:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/home/getMoney1.js
+  Line 3:10:   'creat_account_mnemonic' is defined but never used                                                         no-unused-vars
+  Line 3:33:   'get_address' is defined but never used                                                                    no-unused-vars
+  Line 45:17:  'range' is already defined                                                                                 no-redeclare
+  Line 59:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/app.js
+  Line 3:10:   'inject' is defined but never used                                                                         no-unused-vars
+  Line 3:18:   'observer' is defined but never used                                                                       no-unused-vars
+  Line 13:39:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 24:14:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 25:15:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/importWallet.js
+  Line 3:5:      'bip39' is assigned a value but never used                                                                 no-unused-vars
+  Line 31:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 35:23:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 39:23:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 43:23:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 52:34:    Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 52:59:    Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 53:17:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 55:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 57:24:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 59:39:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 65:20:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 72:26:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 79:25:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 99:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:52:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:66:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:114:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:125:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 107:174:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 107:185:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 111:52:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:127:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:201:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 123:54:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 123:183:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 123:308:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/api/server.js
+  Line 3:5:    'url1' is assigned a value but never used  no-unused-vars
+  Line 18:21:  Expected '===' and instead saw '=='        eqeqeq
+  Line 31:28:  Expected '===' and instead saw '=='        eqeqeq
+  Line 36:28:  Expected '===' and instead saw '=='        eqeqeq
+
+./src/api/deal.js
+  Line 3:5:  'url1' is assigned a value but never used  no-unused-vars
+
+./src/view/default/home/mine.js
+  Line 42:47:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 50:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 52:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 57:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 59:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 64:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 66:35:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/backup/confirmWords.js
+  Line 4:10:    'thisExpression' is defined but never used                                                                 no-unused-vars
+  Line 60:11:   Array prototype is read only, properties should not be added                                               no-extend-native
+  Line 84:37:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:40:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 130:36:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 141:39:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 141:77:  Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 161:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/manage1.js
+  Line 4:8:     'vAccount' is defined but never used                                                                       no-unused-vars
+  Line 5:8:     'Account' is defined but never used                                                                        no-unused-vars
+  Line 9:5:     'testnet' is assigned a value but never used                                                               no-unused-vars
+  Line 10:7:    'prompt' is assigned a value but never used                                                                no-unused-vars
+  Line 37:30:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 39:37:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 74:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 92:56:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 100:56:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/sweepCode2.js
+  Line 53:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/sweepCode1.js
+  Line 53:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/sweepCode.js
+  Line 56:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/walletSystem.js
+  Line 57:49:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 61:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 65:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 72:13:    'btc' is assigned a value but never used                                                                   no-unused-vars
+  Line 89:50:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:51:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 91:49:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 111:18:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 120:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 129:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 141:18:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 150:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 158:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 176:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 188:44:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 188:70:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 194:45:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 199:83:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 199:132:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 199:180:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 202:87:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 204:60:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 204:104:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 204:147:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 213:83:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 213:132:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 213:180:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 216:86:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 219:60:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 219:138:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 220:87:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 229:45:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 237:87:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 247:45:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 255:87:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 265:45:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 273:87:   Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/backup/codeBackup.js
+  Line 5:5:    'aes256' is assigned a value but never used                                                                no-unused-vars
+  Line 27:39:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 29:45:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 41:52:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 55:42:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/dailyCash.js
+  Line 66:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 70:24:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 77:71:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 77:120:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 77:168:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 85:66:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 85:110:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 85:153:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 88:44:    img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 90:48:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:92:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 90:135:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 120:60:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 120:107:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 120:153:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 128:70:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 128:114:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 128:157:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 131:48:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 134:52:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 134:131:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 135:72:   Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/home.js
+  Line 67:59:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 77:61:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 104:9:   Do not mutate state directly. Use setState()                                                               react/no-direct-mutation-state
+  Line 118:49:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 119:20:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 125:20:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 142:39:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 142:71:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 144:32:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 153:36:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 180:62:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 194:63:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/createIdentity.js
+  Line 6:5:    'aes256' is assigned a value but never used                                                                no-unused-vars
+  Line 32:14:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 36:21:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 40:21:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 49:32:  Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 49:57:  Unnecessary escape character: \d                                                                           no-useless-escape
+  Line 50:14:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 52:22:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 55:20:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 57:37:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 84:14:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/mine/record.js
+  Line 71:49:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 73:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 75:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 86:52:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 93:57:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 95:64:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 97:64:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 114:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 125:65:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 125:135:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 129:80:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 135:77:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 135:154:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 135:229:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 154:127:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 154:180:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 154:254:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 154:332:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 163:77:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 163:154:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 163:229:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 166:77:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 166:154:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 166:229:  Expected '===' and instead saw '=='                                                                        eqeqeq
+
+./src/view/default/home/mine/tranfer1.js
+  Line 7:8:     'Account' is defined but never used                                                                        no-unused-vars
+  Line 32:40:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 37:46:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 57:17:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 61:56:   Unnecessary escape character: \-                                                                           no-useless-escape
+  Line 62:67:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 69:24:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 85:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 100:24:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 120:40:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/market.js
+  Line 8:8:      'CoinData' is defined but never used                                                                       no-unused-vars
+  Line 49:67:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 71:34:    Unnecessary escape character: \-                                                                           no-useless-escape
+  Line 72:45:    Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 81:52:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 127:18:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 138:25:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 163:22:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 170:29:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 179:22:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 185:29:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 227:30:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 229:37:   Expected '!==' and instead saw '!='                                                                        eqeqeq
+  Line 233:38:   'count' is assigned a value but never used                                                                 no-unused-vars
+  Line 241:41:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 244:41:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 265:21:   Expected a conditional expression and instead saw an assignment                                            no-cond-assign
+  Line 277:41:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 280:41:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 299:21:   Expected a conditional expression and instead saw an assignment                                            no-cond-assign
+  Line 311:13:   'curEntrust' is assigned a value but never used                                                            no-unused-vars
+  Line 329:138:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 331:147:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 337:143:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 339:142:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 421:58:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 421:119:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 433:167:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+./src/view/default/home/wallet.js
+  Line 9:5:      'aes256' is assigned a value but never used                                                                no-unused-vars
+  Line 36:49:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 55:67:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 56:94:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 72:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 83:56:    Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 120:17:   'range' is already defined                                                                                 no-redeclare
+  Line 133:115:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 137:24:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 147:36:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 151:73:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 151:150:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 151:225:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 157:71:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 165:37:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 172:37:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 186:39:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 192:116:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 194:44:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 199:84:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 199:155:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 203:73:   Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 224:40:   img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+
+Could not open home.js in the editor.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server. Learn more: https://goo.gl/MMTaZt
+
+
+Could not open home.js in the editor.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server. Learn more: https://goo.gl/MMTaZt
+
+
+Could not open home.js in the editor.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server. Learn more: https://goo.gl/MMTaZt
+
