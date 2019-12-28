@@ -34,11 +34,13 @@ class Market extends Component {
         if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
+        } else {
+            this.props.history.push('/welcome');
         }
     }
     async componentDidMount() {
         let othersData = await this.props.dealIndex.getOthersCoinMess();
-        let violas = new vAccount(decrypted.mne_arr);
+        let violas = new vAccount(decrypted && decrypted.mne_arr);
         let updateData = [];
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
@@ -73,7 +75,6 @@ class Market extends Component {
             value = parseFloat(value);
         }
         return value;
-
     }
     getPrices(name) {
         let { othersdata } = this.state;
@@ -99,7 +100,7 @@ class Market extends Component {
                 quote: othersdata && othersdata[vals].addr
             });
             this.setState({
-                othersEntrust: dealData.buys
+                othersEntrust: dealData.buys.length>0?dealData.buys:dealData.sells
             })
         } else {
             dealData = await stableDeal({
@@ -107,7 +108,7 @@ class Market extends Component {
                 quote: coindata && coindata[val].addr
             });
             this.setState({
-                othersEntrust: dealData.buys
+                othersEntrust: dealData.buys.length>0?dealData.buys:dealData.sells
             })
         }
     }
@@ -326,17 +327,17 @@ class Market extends Component {
                             <div className="change">
                                 {
                                     coin ? <div id="select">
-                                        <div onClick={() => this.getChange('a')}><label>{coindata.length>0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                        <div onClick={() => this.getChange('a')}><label>{coindata.length > 0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                     </div> : <div id="select">
-                                            <div onClick={() => this.getChange('b')}><label>{othersdata.length>0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                            <div onClick={() => this.getChange('b')}><label>{othersdata.length > 0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                         </div>
                                 }
                                 <div className={coin ? 'changeLogo noReturn' : 'changeLogo return'} onClick={() => this.getCoin()}></div>
                                 {
                                     coin ? <div id="select">
-                                        <div onClick={() => this.getChange('b')}><label>{othersdata.length>0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                        <div onClick={() => this.getChange('b')}><label>{othersdata.length > 0 && othersdata[vals].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                     </div> : <div id="select">
-                                            <div onClick={() => this.getChange('a')}><label>{coindata.length>0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
+                                            <div onClick={() => this.getChange('a')}><label>{coindata.length > 0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                         </div>
                                 }
 
@@ -365,7 +366,7 @@ class Market extends Component {
                             <div className="rate">
                                 <h4>{intl.get('Exchange Rate')}</h4>
                                 {
-                                    coin ? <span>{coindata.length>0 && 1 / coindata[val].price}{coindata.length>0 && coindata[val].name}={othersdata.length>0 && 1 / othersdata[vals].price}{othersdata.length>0 && othersdata[vals].name}</span> : <span>{othersdata.length>0 && 1 / othersdata[vals].price}{othersdata.length>0 && othersdata[vals].name}={coindata.length>0 && 1 / coindata[val].price}{coindata.length>0 && coindata[val].name}</span>
+                                    coin ? <span>{coindata.length > 0 && 1 / coindata[val].price}{coindata.length > 0 && coindata[val].name}={othersdata.length > 0 && 1 / othersdata[vals].price}{othersdata.length > 0 && othersdata[vals].name}</span> : <span>{othersdata.length > 0 && 1 / othersdata[vals].price}{othersdata.length > 0 && othersdata[vals].name}={coindata.length > 0 && 1 / coindata[val].price}{coindata.length > 0 && coindata[val].name}</span>
                                 }
 
                             </div>
@@ -463,7 +464,7 @@ class Market extends Component {
                     this.state.disNone ? <div className="passDialog">
                         <div className="passContent">
                             <h4>{intl.get('Input  Access Code')}</h4>
-                            <input type="text" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
+                            <input type="password" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({

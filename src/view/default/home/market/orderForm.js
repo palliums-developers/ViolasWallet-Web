@@ -26,6 +26,8 @@ class OrderForm extends Component {
         if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
+        }else{
+            this.props.history.push('/welcome');
         }
     }
     async componentDidMount() {
@@ -33,12 +35,12 @@ class OrderForm extends Component {
         this.setState({
             othersList: await this.props.dealIndex.getOthersCoinMess()
         })
-        let scroll = new BScroll(this.refs.content, {
-            probeType: 1,
-            click: true,
-            scrollbar: true,
-            mouseWheel: true
-        })
+        // let scroll = new BScroll(this.refs.content, {
+        //     probeType: 1,
+        //     click: true,
+        //     scrollbar: true,
+        //     mouseWheel: true
+        // })
     }
     getPrices(name) {
         let { othersList } = this.state;
@@ -58,10 +60,10 @@ class OrderForm extends Component {
     async getDatas(ind) {
         let { selfDeal } = this.props.dealIndex;
         let data = await selfDeal({
-            user: violas.address
+            user: violas&&violas.address
         });
-        let undoneData = data.filter(v => v.state == 'OPEN' || v.state == 'CANCELING');
-        let completedData = data.filter(v => v.state == 'FILLED');
+        let undoneData = data&&data.filter(v => v.state == 'OPEN' || v.state == 'CANCELING');
+        let completedData = data&&data.filter(v => v.state == 'FILLED');
         if (ind == 0) {
             this.setState({
                 datas: undoneData

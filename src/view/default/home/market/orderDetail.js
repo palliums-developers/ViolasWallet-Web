@@ -26,15 +26,17 @@ class OrderDetail extends Component {
         if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
+        }else{
+            this.props.history.push('/welcome');
         }
     }
     async componentDidMount() {
         let data = await this.props.dealIndex.selfDeal({
-            user: violas.address
+            user: violas&&violas.address
         });
-        let datas = data.filter(v => v.id == this.props.match.params.id);
+        let datas = data&&data.filter(v => v.id == this.props.match.params.id);
         let dataB = await this.props.dealIndex.getCurVersion({
-            version: datas[0].version
+            version: datas&&datas[0].version
         })
 
 

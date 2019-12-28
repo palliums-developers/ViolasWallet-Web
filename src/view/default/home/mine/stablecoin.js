@@ -5,7 +5,7 @@ import vAccount from '../../../../utils/violas';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import { timeStamp2String } from '../../../../utils/timer';
 import intl from 'react-intl-universal';
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
+let decrypted;
 // let aes256 = require('aes256');
 
 @inject('index', 'dealIndex')
@@ -20,31 +20,37 @@ class stablecoin extends Component {
         }
     }
     componentWillMount() {
+        if (window.localStorage.getItem("data")) {
+          decrypted = JSON.parse(window.localStorage.getItem("data"));
+        }
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        let violas = new vAccount(decrypted.mne_arr);
-        let coin_name = JSON.parse(localStorage.getItem('coinType')).name;
-        let getCurCoinMessage = await this.props.index.getCoinMess();
-        let currency_module;
-        for (let i in getCurCoinMessage) {
-            if (coin_name == getCurCoinMessage[i].name) {
-                currency_module = getCurCoinMessage[i].address
+        if(localStorage.getItem('coinType')&&window.localStorage.getItem('data')){
+            let violas = new vAccount(decrypted.mne_arr);
+            let coin_name = JSON.parse(localStorage.getItem('coinType')).name;
+            let getCurCoinMessage = await this.props.index.getCoinMess();
+            let currency_module;
+            for (let i in getCurCoinMessage) {
+                if (coin_name == getCurCoinMessage[i].name) {
+                    currency_module = getCurCoinMessage[i].address
+                }
             }
+            let balanceData = await this.props.index.getBalance({
+                address: violas.address,
+                name: 'violas'
+            });
+            let detail_list_temp = await this.props.index.stable_coin_list({
+                addr: violas.address,
+                modu: currency_module
+            });
+            this.setState({
+                balancedata: balanceData,
+                detail_list: detail_list_temp,
+            });
+        }else{
+            this.props.history.push('/welcome');
         }
-        let balanceData = await this.props.index.getBalance({
-            address: violas.address,
-            name: 'violas'
-        });
-        let detail_list_temp = await this.props.index.stable_coin_list({
-            addr: violas.address,
-            modu: currency_module
-        });
-        this.setState({
-            balancedata: balanceData,
-            detail_list: detail_list_temp,
-        });
-        // await this.props.dealIndex.stableDeal()
     }
 
     copyUrl2 = () => {
@@ -65,6 +71,7 @@ class stablecoin extends Component {
     render() {
         let { balancedata, detail_list } = this.state;
         return (
+            localStorage.getItem('coinType')&&
             <div className="stablecoin">
                 <header>
                     <span onClick={() => {

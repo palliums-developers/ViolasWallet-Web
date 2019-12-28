@@ -5,7 +5,7 @@ import vAccount from '../../../../utils/violas';
 import { timeStamp2String } from '../../../../utils/timer';
 import Account from '../../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
-import BScroll from 'better-scroll'
+import BScroll from 'better-scroll';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let decrypted = JSON.parse(window.localStorage.getItem('data'));
@@ -25,6 +25,7 @@ class Record extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     async getVoHistory(){
         let violas = new vAccount(decrypted.mne_arr);
@@ -100,10 +101,21 @@ class Record extends Component {
             }
         })
     }
+    e7e8(_num){
+        let temp=_num;
+        let temp1=(_num).toString().split('-')[1]
+        if(temp1 && temp1==8){
+            temp=_num.toFixed(8);
+        }else if(temp1 && temp1==7)(
+            temp=_num.toFixed(7)
+        )
+        return (temp)
+    }
     render() {
         let { recordBData, recordData } = this.state;
-        let btc = new Account(decrypted.mne_arr, testnet);
+        let btc = new Account(decrypted&&decrypted.mne_arr, testnet);
         return (
+            btc&&
             <div className="record">
                 <header>
                     <span onClick={() => {
@@ -126,7 +138,7 @@ class Record extends Component {
                                 </div>
                                 <div className="titleContent">
                                     <span>{timeStamp2String(v.expiration_time + '000')}</span>
-                                    <span> {window.localStorage.getItem('type')==intl.get('LibraWallet')?v.value:v.amount}
+                                    <span> {window.localStorage.getItem('type') == intl.get('LibraWallet') ? (v.value / 1e6) : (v.amount / 1e6)}
                                         {/* {
                                                 window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                             } */}
@@ -159,7 +171,7 @@ class Record extends Component {
                                 </div>
                                 <div className="titleContent">
                                     <span>{timeStamp2String(v.block_time + '000')}</span>
-                                    <span>{v.inputs_count} {
+                                    <span>{this.e7e8(v.inputs_count/1e8)} {
                                         window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                     }</span>
                                     <span>{

@@ -22,30 +22,34 @@ class Manage extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
-        let violas = new vAccount(decrypted.mne_arr);
-        let btc = new Account(decrypted.mne_arr, testnet);
-        if(window.localStorage.getItem('type') == intl.get('BTCWallet')){
-            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v=>{
-                    if((v.name).indexOf(window.localStorage.getItem('type').slice(0,1))==0){
-                            return v.name;
-                        }
-                    })
+        if(window.localStorage.getItem('data')){
+            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+            let violas = new vAccount(decrypted.mne_arr);
+            let btc = new Account(decrypted.mne_arr, testnet);
+            if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                    if ((v.name).indexOf(window.localStorage.getItem('type').slice(0, 1)) == 0) {
+                        return v.name;
+                    }
+                })
                 this.setState({
                     curWal: wal[0],
                     address: btc.address
                 })
-        }else {
-            let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
-                if ((v.type).indexOf(window.localStorage.getItem('type').slice(0, 5).toLowerCase()) == 0) {
-                    return v.name;
-                }
-            })
-            this.setState({
-                curWal:wal[0],
-                address: violas.address
-            })
-        } 
+            } else {
+                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                    if ((v.type).indexOf(window.localStorage.getItem('type').slice(0, 5).toLowerCase()) == 0) {
+                        return v.name;
+                    }
+                })
+                this.setState({
+                    curWal: wal[0],
+                    address: violas.address
+                })
+            }
+        }else{
+            this.props.history.push('/welcome')
+        }
     }
     getValue = (e) => {
         this.setState({
@@ -124,7 +128,7 @@ class Manage extends Component {
                     this.state.isShow ? <div className="passDialog">
                         <div className="passContent">
                             <h4>{intl.get('Input  Access Code')}</h4>
-                            <input type="text" placeholder="密码" onChange={(e) => this.getValue(e)} />
+                            <input type="password" placeholder="密码" onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({

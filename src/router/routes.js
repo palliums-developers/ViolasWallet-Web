@@ -20,6 +20,7 @@ import Service from "../view/default/home/setting/service";
 import AboutUs from "../view/default/home/setting/aboutUs";
 import FeekBack from "../view/default/home/setting/feedBack";
 import DirectoryInquiries from "../view/default/home/mine/directoryInquiries";
+import DirectoryInquiries1 from "../view/default/home/mine/directoryInquiries1";
 import CodeBackup from "../view/default/backup/codeBackup";
 import Manage from "../view/default/home/manage";
 import Manage1 from "../view/default/home/mine/manage1";
@@ -31,7 +32,6 @@ import Transfar from "../view/default/home/mine/transfer";
 import ConfirmWords from "../view/default/backup/confirmWords";
 import Sweepcode1 from "../view/default/home/sweepCode1";
 import Sweepcode2 from "../view/default/home/sweepCode2";
-import Record1 from "../view/default/home/mine/record1";
 import WalletSystem from "../view/default/home/walletSystem";
 import stablecoin from "../view/default/home/mine/stablecoin";
 import Transfar1 from "../view/default/home/mine/tranfer1";
@@ -42,205 +42,204 @@ import OrderDetail from "../view/default/home/market/orderDetail";
 const routes = [
     //首页
     {
-        path: '/app',
+        path: "/app",
         component: App
     },
     //欢迎
     {
-        path: '/welcome',
+        path: "/welcome",
         component: Welcome
     },
     //创建身份
     {
-        path: '/createIdentity',
+        path: "/createIdentity",
         component: CreateIdentity
     },
     //导入身份
     {
-        path: '/importIdentity',
+        path: "/importIdentity",
         component: ImportIdentity
     },
     //备份提示
     {
-        path: '/backup',
+        path: "/backup",
         component: Backup
     },
     //备份助记词
     {
-        path: '/codeBackup',
+        path: "/codeBackup",
         component: CodeBackup
     },
     //确认助记词
     {
-        path: '/confirmWords',
+        path: "/confirmWords",
         component: ConfirmWords
     },
     //钱包首页
     {
-        path: '/home',
+        path: "/home",
         component: Home,
         children: [
             {
-                path: '/home/wallet',
+                path: "/home/wallet",
                 component: Wallet
             },
             {
-                path: '/home/market',
+                path: "/home/market",
                 component: Market
             },
             {
-                path: '/home/mine',
+                path: "/home/mine",
                 component: Mine
             },
             {
-                path: '/home',
-                redirect: '/home/wallet'
+                path: "/home",
+                redirect: "/home/wallet"
             }
         ]
     },
     //订单
     {
-        path: '/orderForm',
+        path: "/orderForm",
         component: OrderForm
     },
     //订单详情
     {
-        path: '/orderDetail/:id',
+        path: "/orderDetail/:id",
         component: OrderDetail
     },
     //选择钱包体系
     {
-        path: '/walletSystem',
+        path: "/walletSystem",
         component: WalletSystem
     },
     //交易记录
     {
-        path: '/record',
+        path: "/record",
         component: Record
-    },
-    //转账记录
-    {
-        path: '/record1',
-        component: Record1
     },
     //管理
     {
-        path: '/manage',
+        path: "/manage",
         component: Manage
     },
     {
-        path: '/manage1',
+        path: "/manage1",
         component: Manage1
     },
     //钱包详情
     {
-        path: '/detailWallet',
+        path: "/detailWallet",
         component: DetailWallet
     },
     {
-        path: '/detailWallet1',
+        path: "/detailWallet1",
         component: DetailWallet1
     },
     //扫一扫
     {
-        path: '/sweepcode',
+        path: "/sweepcode",
         component: Sweepcode
     },
     {
-        path: '/sweepcode1',
+        path: "/sweepcode1",
         component: Sweepcode1
     },
     {
-        path: '/sweepcode2',
+        path: "/sweepcode2",
         component: Sweepcode2
     },
     //转账
     {
-        path: '/transfar',
+        path: "/transfar",
         component: Transfar
     },
     {
-        path: '/transfar1',
+        path: "/transfar1",
         component: Transfar1
     },
     //收款
     {
-        path: '/getMoney',
+        path: "/getMoney",
         component: GetMoney
     },
     {
-        path: '/getMoney1',
+        path: "/getMoney1",
         component: GetMoney1
     },
     //添加币种
     {
-        path: '/addCurrency',
+        path: "/addCurrency",
         component: AddCurrency
     },
     //稳定币转账
     {
-        path: '/stablecoin',
+        path: "/stablecoin",
         component: stablecoin
     },
     //钱包管理
     {
-        path: '/dailyCash',
+        path: "/dailyCash",
         component: DailyCash
     },
     //添加钱包
     {
-        path: '/addPurse',
+        path: "/addPurse",
         component: AddPurse
     },
     //创建钱包
     {
-        path: '/createWallet',
+        path: "/createWallet",
         component: CreateWallet
     },
     //导入钱包importWallet
     {
-        path: '/importWallet',
+        path: "/importWallet",
         component: ImportWallet
     },
     //地址簿
     {
-        path: '/directoryInquiries',
+        path: "/directoryInquiries",
         component: DirectoryInquiries
+    },
+    {
+        path: "/directoryInquiries1",
+        component: DirectoryInquiries1
     },
     //添加地址
     {
-        path: '/addAddress',
+        path: "/addAddress",
         component: AddAddress
     },
     //设置
     {
-        path: '/setting',
+        path: "/setting",
         component: Setting
     },
     //多语言
     {
-        path: '/multiLanguage',
+        path: "/multiLanguage",
         component: MultiLanguage
     },
     //服务协议
     {
-        path: '/service',
+        path: "/service",
         component: Service
     },
     //关于我们
     {
-        path: '/aboutUs',
+        path: "/aboutUs",
         component: AboutUs
     },
     //帮助与反馈
     {
-        path: '/feekBack',
+        path: "/feekBack",
         component: FeekBack
     },
     {
-        path: '/',
-        redirect: '/app'
+        path: "/",
+        redirect: "/app"
     }
-]
+];
 
 export default routes

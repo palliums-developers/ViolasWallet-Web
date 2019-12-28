@@ -16,7 +16,7 @@ class Sweepcode extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
 
     handleScan = data => {
@@ -49,10 +49,7 @@ class Sweepcode extends Component {
             <div className="sweepcode">
                 <header>
                     <span onClick={() => {
-                        this.props.history.push({
-                            pathname: '/home/wallet',
-                            state: false
-                        })
+                        this.props.history.push('/transfar')
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     <span>{intl.get('Scan')}</span>
                     <button onClick={this.openImageDialog}>{intl.get('Album')}</button>

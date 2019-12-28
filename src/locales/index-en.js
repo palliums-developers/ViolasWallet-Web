@@ -139,6 +139,7 @@ export default {
     'Service Agreement':'Service Agreement',
     'Privacy Agreement':'Privacy Agreement',
     'FAQ': 'FAQ',
+    'Delete':'Delete',
     'Question&Feedback': 'Question&Feedback',
     'Input content': 'Input content',
     'Input your contact info': 'Input your contact info',
@@ -148,9 +149,10 @@ export default {
     'cancel':'cancel',
     'canceled': 'canceled',
     'canceling': 'canceling',
+    'Type':'Type',
     'The order details':'The order details',
     'Browser query':'Browser query',
     'Trading Record':'Trading Record',
-    'Password setting does not match': 'Password setting does not match',
+    'Password setting does not match': 'Password setting does not match, 8-20 digit password consisting of at least one uppercase letter, one lowercase letter and one number',
     'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password': 'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password'
 }

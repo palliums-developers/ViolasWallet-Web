@@ -4,6 +4,7 @@ import vAccount from '../../../utils/violas';
 import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
 import coinData from '../../../utils/currencyToken.json';
+import BScroll from 'better-scroll'
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
@@ -28,6 +29,8 @@ class Wallet extends Component {
     componentWillMount() {
         if (window.localStorage.getItem('data')) {
             decrypted = JSON.parse(window.localStorage.getItem('data'));
+        } else {
+            this.props.history.push('/welcome');
         }
         intl.options.currentLocale = localStorage.getItem("local");
     }
@@ -46,12 +49,12 @@ class Wallet extends Component {
                 modu: coinAddr
             })
             let coinsData = coinData.data;
-            
+
             let namData = [];
             for (let i = 0; i < coinsData.length; i++) {
                 for (let j = 0; j < data.length; j++) {
                     for (let z = 0; z < balanceData.modules.length; z++) {
-                    
+
                         if (coinsData[i].address.indexOf(data[j]) == 0) {
                             if (coinsData[i].address.indexOf(balanceData.modules[z].address) == 0) {
                                 namData.push({
@@ -67,7 +70,7 @@ class Wallet extends Component {
                 balancedata: balanceData,
                 nameData: namData,
                 balance: balanceData.balance / 1e6,
-                curWal: JSON.parse(window.localStorage.getItem('data')).name
+                curWal: window.localStorage.getItem('data') && JSON.parse(window.localStorage.getItem('data')).name
             })
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             let libra = new vAccount(decrypted.mne_arr);
@@ -89,14 +92,13 @@ class Wallet extends Component {
                 page: 1,
                 name: 'BTC'
             })
-            console.log(balanceData)
             this.setState({
                 balancedata: balanceData,
                 balance: balanceData && balanceData.balance / 1e8,
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
             })
         }
-        if (window.localStorage.getItem('name')){
+        if (window.localStorage.getItem('name')) {
             this.setState({
                 curWal: window.localStorage.getItem('name')
             })
@@ -106,7 +108,7 @@ class Wallet extends Component {
         this.props.history.push('/walletSystem')
     }
     getBTCAddress() {
-        let btc = new Account(decrypted.mne_arr, testnet);
+        let btc = new Account(decrypted.mne_arr, testnet)
         return btc.address
     }
     copyUrl2 = () => {
@@ -127,6 +129,7 @@ class Wallet extends Component {
     render() {
         let { balancedata, curWal, nameData, balance } = this.state;
         return (
+            decrypted ?
             <div className="wallet">
                 <header>
                     <div id="select">
@@ -176,9 +179,9 @@ class Wallet extends Component {
                         <div className="dealRecord">
                             <div className="title" onClick={() => {
                                 this.props.history.push({
-                                    pathname:'/record',
-                                    state:{
-                                        address:balancedata.address ? balancedata.address : this.getBTCAddress()
+                                    pathname: '/record',
+                                    state: {
+                                        address: balancedata.address ? balancedata.address : this.getBTCAddress()
                                     }
                                 })
                             }}>
@@ -196,7 +199,7 @@ class Wallet extends Component {
                                     }
                                 </div>
                                 <div className="mList">
-                                    <p ><label>{window.localStorage.getItem('type')==intl.get('ViolasWallet')?'vtoken':window.localStorage.getItem('type')==intl.get('LibraWallet')?'libra':'BTC'}
+                                    <p ><label>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : 'BTC'}
                                     </label><span>{balance ? balance : 0}</span></p>
                                 </div>
                                 {
@@ -239,7 +242,7 @@ class Wallet extends Component {
                         </div> : null
                     }
                 </section>
-            </div>
+            </div>:<p>please login</p>
         );
     }
 

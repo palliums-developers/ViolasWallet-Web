@@ -8,6 +8,7 @@ import intl from 'react-intl-universal';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
 let fee = 1;
+
 @inject('index')
 @observer
 
@@ -28,19 +29,23 @@ class Transfar extends Component {
     }
     componentWillMount(){
         intl.options.currentLocale=localStorage.getItem("local");
+        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome')
     }
     async componentDidMount() {
         if (this.props.index.type) {
-            if (this.props.index.type == 'vtoken' || 'lib') {
-                this.setState({
-                    address1: this.props.index.sweepCode,
-                    address2: this.props.index.sweepCode
-                })
-            } else if (this.props.index.type == 'BTC') {
-                this.setState({
-                    address3: this.props.index.sweepCode
-                })
-            }
+            if (this.props.index.type == "vtoken") {
+              this.setState({
+                address1: this.props.index.sweepCode
+              });
+            } else if (this.props.index.type == "libra") {
+              this.setState({
+                address2: this.props.index.sweepCode
+              });
+            } else if (this.props.index.type == "bitcoin") {
+                     this.setState({
+                       address3: this.props.index.sweepCode
+                     });
+                   }
         }
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let balanceData;
@@ -148,6 +153,11 @@ class Transfar extends Component {
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let transFar;
         if (type == 'violas') {
+            if (violasAmount == '') {
+                alert(intl.get("Input Amount")+'!!!');
+            }else if (address1 == '') {
+                alert(intl.get("Input Receving Address") + "!!!");
+            }else{
             let violas = new vAccount(decrypted.mne_arr);
             transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, 'violas')
             let data = await this.props.index.starVTranfer({
@@ -158,26 +168,49 @@ class Transfar extends Component {
                alert(intl.get('Transfer success')+'!!!');
                this.props.history.push('/home');
             }else{
-                alert(intl.get('Transfer failed')+'!!!');
-            }
-        } else if (type == 'libra') {
-            let libra = new vAccount(decrypted.mne_arr);
-            transFar = await libra.transaction_libra(address2, Number(libraAmount) * 1e6);
-            let data = await this.props.index.starVTranfer({
-                signedtxn: transFar,
-                name:type
-            })
-            if(data.message == 'ok'){
-                alert(intl.get('Transfer success')+'!!!');
-                this.props.history.push('/home');
-            }else{
-                alert(intl.get('Transfer failed')+'!!!');
+                this.refs.bal.style.color = "red";
+            } 
             }
             
+        } else if (type == 'libra') {
+            if (libraAmount == "") {
+              alert(intl.get("Input Amount") + "!!!");
+            } else if (address2 == "") {
+              alert(intl.get("Input Receving Address") + "!!!");
+            } else {
+                let libra = new vAccount(decrypted.mne_arr);
+                transFar = await libra.transaction_libra(
+                  address2,
+                  Number(libraAmount) * 1e6
+                );
+                let data = await this.props.index.starVTranfer({
+                  signedtxn: transFar,
+                  name: type
+                });
+                if (data.message == "ok") {
+                  alert(intl.get("Transfer success") + "!!!");
+                  this.props.history.push("/home");
+                } else {
+                  this.refs.bal.style.color = "red";
+                }
+            }
+            
+            
         } else if (type == 'BTC') {
-            let account = new Account(decrypted.mne_arr, testnet);
-            transFar = await account.transaction(address3, Number(btcAmount) * 1e8,fee)
-            console.log(transFar)
+            if (btcAmount == "") {
+              alert(intl.get("Input Amount") + "!!!");
+            } else if (address3 == "") {
+              alert(intl.get("Input Receving Address") + "!!!");
+            } else {
+                let account = new Account(decrypted.mne_arr, testnet);
+                transFar = await account.transaction(
+                  address3,
+                  Number(btcAmount) * 1e8,
+                  fee
+                );
+                console.log(transFar);
+            }
+            
         }
     }
 
@@ -193,7 +226,7 @@ class Transfar extends Component {
                         })
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     {
-                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{intl.get('Transfer Vtoken')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
+                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{'vtoken'+intl.get('Transfer')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
                     }
 
                 </header>
@@ -203,12 +236,19 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>vtoken</span>
-                                    <span>{intl.get('Balance')}：<s>{balancedata}</s> vtoken</span>
+                                    <span ref="bal">{intl.get('Balance')}：<s>{balancedata}</s> vtoken</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span>{intl.get('Address Book')}</span>
+                                    <span onClick={()=>{
+                                        this.props.history.push({
+                                          pathname: "/directoryInquiries1",
+                                          state:{
+                                              type:'officialCoin'
+                                          }
+                                        });
+                                    }}>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getViolasAm(e, 'address')} value={this.state.address1} />
@@ -245,17 +285,24 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>BTC</span>
-                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> BTC</span>
+                                    <span ref="bal">{intl.get('Input Amount')}：<s>{balancedata}</s> BTC</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getBtcAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span>{intl.get('Address Book')}</span>
+                                    <span onClick={()=>{
+                                        this.props.history.push({
+                                          pathname: "/directoryInquiries1",
+                                          state:{
+                                              type:'officialCoin'
+                                          }
+                                        });
+                                    }}>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getBtcAm(e, 'address')} value={this.state.address3} />
                                     <span onClick={() => {
-                                        this.props.history.push('/sweepCode1')
+                                        this.props.history.push('/sweepCode')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
                                 </div>
                             </div>
@@ -287,17 +334,24 @@ class Transfar extends Component {
                             <div className="form">
                                 <div className="title">
                                     <span>libra</span>
-                                    <span>{intl.get('Input Amount')}：<s>{balancedata}</s> libra</span>
+                                    <span ref="bal">{intl.get('Input Amount')}：<s>{balancedata}</s> libra</span>
                                 </div>
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span>{intl.get('Address Book')}</span>
+                                    <span onClick={()=>{
+                                        this.props.history.push({
+                                          pathname: "/directoryInquiries1",
+                                          state:{
+                                              type:'officialCoin'
+                                          }
+                                        });
+                                    }}>{intl.get('Address Book')}</span>
                                 </div>
                                 <div className="ipt">
                                     <input type="text" placeholder={intl.get('Input Receving Address')} onChange={(e) => this.getLibraAm(e, 'address')} value={this.state.address2} />
                                     <span onClick={() => {
-                                        this.props.history.push('/sweepCode1')
+                                        this.props.history.push('/sweepCode')
                                     }}><img src="/img/编组 3复制@2x.png" /></span>
                                 </div>
                             </div>
@@ -332,5 +386,4 @@ class Transfar extends Component {
         );
     }
 }
-
 export default Transfar;
