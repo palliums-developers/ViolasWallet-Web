@@ -70,9 +70,10 @@ app.get('/v1/trades', async (req, res) => {
   res.send(result)
 })
 
-app.post('/v1/cancelOrder',async(req,res)=>{
-  let result=await axios.post(url+'/cancelOrder',req.body,{Headers:{'Content-Type':'application/json'}})
-  .then(res=>{return res.data})
+app.post('/v1/cancelOrder', async (req, res) => {
+  // console.log(req.body)
+  let result = await axios.post(url + '/cancelOrder', req.body, { Headers: { 'Content-Type': 'application/json' } })
+    .then(res => { return res.data })
   res.send(result);
 })
 
