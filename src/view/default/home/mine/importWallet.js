@@ -111,7 +111,7 @@ class ImportWallet extends Component {
                 }
               </div>
               {
-                this.state.wType == 'violas' ? <h4>{intl.get('Import VcoinWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Import LiboneWallet')}</h4> : this.state.wType == 'btc' ? <h4>{intl.get('Import BitcoinWallet')}</h4> : null
+                this.state.wType == 'violas' ? <h4>{intl.get('Import VtokenWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Import LibraWallet')}</h4> : this.state.wType == 'btc' ? <h4>{intl.get('Import BTCWallet')}</h4> : null
               }
             </div>
             <div className="form">

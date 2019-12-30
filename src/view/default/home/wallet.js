@@ -22,7 +22,7 @@ class Wallet extends Component {
             curWal: '',
             dealdata: {},
             coindata: [],
-            balance: 0,
+            balance:0,
             nameData: []
         }
     }
@@ -84,7 +84,6 @@ class Wallet extends Component {
                 curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            // console.log(JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name)
             let btc = new Account(decrypted.mne_arr, testnet);
             // console.log(btc)
             balanceData = await this.props.index.getBTCBalance({
@@ -156,7 +155,7 @@ class Wallet extends Component {
                             </div>
                             <div className="userDescr">
                                 <span>{curWal}</span>
-                                <span id='addressId'>{balancedata && balancedata.address ? balancedata.address : this.getBTCAddress()}</span>
+                                    <span id='addressId'>{balancedata && balancedata.address}</span>
                                 <span onClick={() => this.copyUrl2()}><img src="/img/Fill 3@2x.png" /></span>
                             </div>
 

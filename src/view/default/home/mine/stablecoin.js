@@ -125,7 +125,9 @@ class stablecoin extends Component {
                                         </div>
                                         <div className="titleContent">
                                             <p>{v.receiver}</p>
-                                            <p>{intl.get('Browser query')}</p>
+                                            <p onClick={()=>{
+                                                window.open('http://47.52.66.26:30000/app/Violas_version/' + v.version)
+                                            }}>{intl.get('Browser query')}</p>
                                         </div>
                                     </div>
                                 })

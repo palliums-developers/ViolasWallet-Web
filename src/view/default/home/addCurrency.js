@@ -3,8 +3,11 @@ import QrReader from 'react-qr-reader'
 import { inject, observer } from 'mobx-react';
 import 'antd/dist/antd.css';
 import vAccount from '../../../utils/violas';
+import coinData from '../../../utils/currencyToken.json';
+import Account from '../../../utils/bitcoinjs-lib6';
 import intl from 'react-intl-universal';
-import coinData from '../../../utils/currencyToken.json'
+let bitcoin = require("bitcoinjs-lib");
+let testnet = bitcoin.networks.testnet;
 let aes256 = require('aes256');
 
 @inject('index')
@@ -19,7 +22,8 @@ class AddCurrency extends Component {
             isShow: false,
             value: '',
             name: '',
-            ind: Number
+            ind: Number,
+            balancedata:''
         }
     }
     componentWillMount() {
@@ -53,16 +57,52 @@ class AddCurrency extends Component {
                 coindata: data,
                 mne: decrypted.mne_arr
             })
+            let balanceData;
+            if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
+                let violas = new vAccount(decrypted.mne_arr);
+                balanceData = await this.props.index.getBalance({
+                    address: violas.address,
+                    name: 'violas'
+                })
+                this.setState({
+                    balancedata: balanceData.balance / 1e6
+                })
+
+            } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
+                let libra = new vAccount(decrypted.mne_arr);
+                balanceData = await this.props.index.getBalance({
+                    address: libra.address,
+                    name: 'libra'
+                })
+                this.setState({
+                    balancedata: balanceData.balance / 1e6
+                })
+            } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                let btc = new Account(decrypted.mne_arr, testnet);
+                balanceData = await this.props.index.getBTCBalance({
+                    address: btc.address,
+                    page: 1,
+                    name: 'BTC'
+                })
+                this.setState({
+                    balancedata: balanceData.balance / 1e8
+                })
+            }
         } else {
             this.props.history.push('/welcome');
         }
     }
     onChange = (i, name) => {
-        this.setState({
-            isShow: true,
-            ind: i,
-            name: name
-        })
+        if(this.state.balancedata == 0){
+            alert(intl.get('vtoken not enough'))
+        }else{
+            this.setState({
+                isShow: true,
+                ind: i,
+                name: name
+            })
+        }
+        
     }
     getValue = (e) => {
         this.setState({
@@ -132,7 +172,7 @@ class AddCurrency extends Component {
                     this.state.isShow ? <div className="passDialog">
                         <div className="passContent">
                             <h4>{intl.get('This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password')}</h4>
-                            <input type="text" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
+                            <input type="password" placeholder={intl.get('Access Code')} onChange={(e) => this.getValue(e)} />
                             <div className="btns">
                                 <span onClick={() => {
                                     this.setState({

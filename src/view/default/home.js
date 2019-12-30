@@ -74,8 +74,8 @@ class Home extends Component {
             }
         }
         this.setState({
-            coindata: data1,
-            othersdata: data,
+            coindata: data,
+            othersdata: data1,
             isShow: this.props.location.state
         })
 
@@ -100,6 +100,7 @@ class Home extends Component {
 
     }
     handlesMouseUp = (i) => {
+        this.state.othersdata[i].checked = true;
         this.props.dealIndex.changeInds(i)
         this.props.dealIndex.selectsChange({
             isShows: false
@@ -122,8 +123,8 @@ class Home extends Component {
     }
     render() {
         let { routes } = this.props;
-        let { val, vals } = this.props.dealIndex
-        let { coindata, othersdata } = this.state
+        let { val, vals } = this.props.dealIndex;
+        let { coindata, othersdata } = this.state;
         return (
             <div className="default">
                 <div className="wrap">

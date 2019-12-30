@@ -191,7 +191,6 @@ class Market extends Component {
                 })
             }
         }
-
     }
     getCoin = () => {
         let { coin } = this.props.dealIndex;
@@ -215,9 +214,14 @@ class Market extends Component {
         }
     }
     getExchange = async () => {
-        this.setState({
-            disNone: true
-        })
+        if (this.state.leftCount == '') {
+            alert(intl.get('Input amount'))
+        } else {
+            this.setState({
+                disNone: true
+            })
+        }
+        
     }
     getValue = (e) => {
         this.setState({
@@ -225,86 +229,86 @@ class Market extends Component {
         })
     }
     confirm = async () => {
-        if (this.state.value == '') {
-            alert(intl.get('Please input Access Code'))
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
-            alert(intl.get('Access Code does not match,please Re_input'))
-        } else {
-            let { vals, val, coin } = this.props.dealIndex;
-            let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
-            let violas = new vAccount(decrypted.mne_arr);
-            let Transaction = '';
-            let publishTranaction1 = '';
-            let publishTranaction2 = '';
-            if (coin) {
-                Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
-                for (let i = 0; i < updatas.length; i++) {
-                    if (updatas[i].name == coindata[val].name) {
-                        publishTranaction1 = 'did';
+            if (this.state.value == '') {
+                alert(intl.get('Please input Access Code'))
+            } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+                alert(intl.get('Access Code does not match,please Re_input'))
+            } else {
+                let { vals, val, coin } = this.props.dealIndex;
+                let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
+                let violas = new vAccount(decrypted.mne_arr);
+                let Transaction = '';
+                let publishTranaction1 = '';
+                let publishTranaction2 = '';
+                if (coin) {
+                    Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
+                    for (let i = 0; i < updatas.length; i++) {
+                        if (updatas[i].name == coindata[val].name) {
+                            publishTranaction1 = 'did';
+                        }
+                        if (updatas[i].name == othersdata[vals].name) {
+                            publishTranaction2 = 'did';
+                        }
                     }
-                    if (updatas[i].name == othersdata[vals].name) {
-                        publishTranaction2 = 'did';
+
+                    if (publishTranaction1 !== 'did') {
+                        publishTranaction1 = await violas.publish(coindata[val].name);
+                        this.props.dealIndex.exchange({
+                            signedtxn: publishTranaction1
+                        })
+                    }
+                    if (publishTranaction2 !== 'did') {
+                        publishTranaction2 = await violas.publish(othersdata[vals].name);
+                        this.props.dealIndex.exchange({
+                            signedtxn: publishTranaction2
+                        })
+                    }
+                    let data = await this.props.dealIndex.exchange({
+                        signedtxn: Transaction
+                    })
+
+                    if (data.code = 2000) {
+                        this.setState({
+                            disNone: false
+                        })
+                        alert(intl.get('Resting order successful,waiting for Exchange response') + '!!!')
+                    } else {
+                        alert(intl.get('Resting order failed') + '!!!')
+                    }
+                }
+                else {
+                    Transaction = await violas.transactionEX(othersdata[vals].name, leftCount, coindata[val].name, rightCount);
+                    for (let i = 0; i < updatas.length; i++) {
+                        if (updatas[i].name == coindata[val].name) {
+                            publishTranaction1 = 'did';
+                        }
+                        if (updatas[i].name == othersdata[vals].name) {
+                            publishTranaction2 = 'did';
+                        }
+                    }
+                    if (publishTranaction1 !== 'did') {
+                        publishTranaction1 = await violas.publish(othersdata[vals].name);
+                        this.props.dealIndex.exchange({
+                            signedtxn: publishTranaction1
+                        })
+                    }
+                    if (publishTranaction2 !== 'did') {
+                        publishTranaction2 = await violas.publish(othersdata[vals].name);
+                        this.props.dealIndex.exchange({
+                            signedtxn: publishTranaction2
+                        })
+                    }
+                    let data = await this.props.dealIndex.exchange({
+                        signedtxn: Transaction
+                    })
+                    if (data.code = 2000) {
+                        alert(intl.get('Resting order successful,waiting for Exchange response') + '!!!')
+                    } else {
+                        alert(intl.get('Resting order failed') + '!!!')
                     }
                 }
 
-                if (publishTranaction1 !== 'did') {
-                    publishTranaction1 = await violas.publish(coindata[val].name);
-                    this.props.dealIndex.exchange({
-                        signedtxn: publishTranaction1
-                    })
-                }
-                if (publishTranaction2 !== 'did') {
-                    publishTranaction2 = await violas.publish(othersdata[vals].name);
-                    this.props.dealIndex.exchange({
-                        signedtxn: publishTranaction2
-                    })
-                }
-                let data = await this.props.dealIndex.exchange({
-                    signedtxn: Transaction
-                })
-
-                if (data.code = 2000) {
-                    this.setState({
-                        disNone: false
-                    })
-                    alert(intl.get('For successful') + '!!!')
-                } else {
-                    alert(intl.get('For failure') + '!!!')
-                }
             }
-            else {
-                Transaction = await violas.transactionEX(othersdata[vals].name, leftCount, coindata[val].name, rightCount);
-                for (let i = 0; i < updatas.length; i++) {
-                    if (updatas[i].name == coindata[val].name) {
-                        publishTranaction1 = 'did';
-                    }
-                    if (updatas[i].name == othersdata[vals].name) {
-                        publishTranaction2 = 'did';
-                    }
-                }
-                if (publishTranaction1 !== 'did') {
-                    publishTranaction1 = await violas.publish(othersdata[vals].name);
-                    this.props.dealIndex.exchange({
-                        signedtxn: publishTranaction1
-                    })
-                }
-                if (publishTranaction2 !== 'did') {
-                    publishTranaction2 = await violas.publish(othersdata[vals].name);
-                    this.props.dealIndex.exchange({
-                        signedtxn: publishTranaction2
-                    })
-                }
-                let data = await this.props.dealIndex.exchange({
-                    signedtxn: Transaction
-                })
-                if (data.code = 2000) {
-                    alert(intl.get('For successful') + '!!!')
-                } else {
-                    alert(intl.get('For failure') + '!!!')
-                }
-            }
-
-        }
 
     }
     render() {
@@ -381,7 +385,7 @@ class Market extends Component {
 
                                     <Slider
                                         style={{ marginLeft: 30, marginRight: 30 }}
-                                        defaultValue={6}
+                                        defaultValue={0}
                                         min={0}
                                         max={30}
                                         onChange={this.log('change')}
@@ -470,7 +474,7 @@ class Market extends Component {
                                     this.setState({
                                         disNone: false
                                     })
-                                }}>{intl.get('Cancel')}</span>C
+                                }}>{intl.get('Cancel')}</span>
                                 <span onClick={() => this.confirm()}>{intl.get('Confirm')}</span>
                             </div>
                         </div>

@@ -114,6 +114,7 @@ class Record extends Component {
     render() {
         let { recordBData, recordData } = this.state;
         let btc = new Account(decrypted&&decrypted.mne_arr, testnet);
+        console.log(recordData, recordBData,'333')
         return (
             btc&&
             <div className="record">
@@ -148,8 +149,15 @@ class Record extends Component {
                                     }</span>
                                 </div>
                                 <div className="titleContent">
-                                    <p>{v.receiver}</p>
-                                    <p>{intl.get('Browser query')}</p>
+                                    <p>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? v.receiver : window.localStorage.getItem('type') == intl.get('LibraWallet') ? v.address : null}</p>
+                                    <p onClick={()=>{
+                                        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')){
+                                            window.open('http://47.52.66.26:30000/app/Violas_version/' + v.version)
+                                        } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')){
+                                            window.open('http://47.52.66.26:30000/app/Libra_dealbox/' + v.version)
+                                        }
+                                       
+                                    }}>{intl.get('Browser query')}</p>
                                 </div>
                             </div>
                         })
@@ -180,7 +188,12 @@ class Record extends Component {
                                 </div>
                                 <div className="titleContent">
                                     <p>{v.hash}</p>
-                                    <p>{intl.get('Browser query')}</p>
+                                    <p onClick={() => {
+                                        if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                                            window.open('http://47.52.66.26:30000/app/tBTC_transaction/' + v.hash)
+                                        } 
+
+                                    }}>{intl.get('Browser query')}</p>
                                 </div>
                             </div>
                         })
