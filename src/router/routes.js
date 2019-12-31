@@ -34,7 +34,7 @@ import Sweepcode1 from "../view/default/home/sweepCode1";
 import Sweepcode2 from "../view/default/home/sweepCode2";
 import WalletSystem from "../view/default/home/walletSystem";
 import stablecoin from "../view/default/home/mine/stablecoin";
-import Transfar1 from "../view/default/home/mine/tranfer1";
+// import Transfar1 from "../view/default/home/mine/tranfer1";
 import GetMoney1 from "../view/default/home/getMoney1";
 import OrderForm from "../view/default/home/market/orderForm";
 import OrderDetail from "../view/default/home/market/orderDetail";
@@ -153,10 +153,6 @@ const routes = [
     {
         path: "/transfar",
         component: Transfar
-    },
-    {
-        path: "/transfar1",
-        component: Transfar1
     },
     //收款
     {

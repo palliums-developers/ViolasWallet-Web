@@ -91,6 +91,7 @@ export default {
     'Price':'价格',
     'Commissioned ByOther':'他人委托',
     'Order':'订单',
+    'type number please':'请输入数字',
     'Incomplete':'未完成',
     'Completed':'已完成',
     'Amount Completed':'已成交数量',
