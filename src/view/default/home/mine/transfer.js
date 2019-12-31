@@ -23,29 +23,29 @@ class Transfar extends Component {
             address1: '',
             address2: '',
             address3: '',
-            balancedata:[],
-            balance:Number
+            balancedata: [],
+            balance: Number
         }
     }
-    componentWillMount(){
-        intl.options.currentLocale=localStorage.getItem("local");
-        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome')
+    componentWillMount() {
+        intl.options.currentLocale = localStorage.getItem("local");
+        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome')
     }
     async componentDidMount() {
         if (this.props.index.type) {
             if (this.props.index.type == "vtoken") {
-              this.setState({
-                address1: this.props.index.sweepCode
-              });
+                this.setState({
+                    address1: this.props.index.sweepCode
+                });
             } else if (this.props.index.type == "libra") {
-              this.setState({
-                address2: this.props.index.sweepCode
-              });
+                this.setState({
+                    address2: this.props.index.sweepCode
+                });
             } else if (this.props.index.type == "bitcoin") {
-                     this.setState({
-                       address3: this.props.index.sweepCode
-                     });
-                   }
+                this.setState({
+                    address3: this.props.index.sweepCode
+                });
+            }
         }
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let balanceData;
@@ -56,7 +56,7 @@ class Transfar extends Component {
                 name: 'violas'
             })
             this.setState({
-                balancedata: balanceData.balance/1e6
+                balancedata: balanceData.balance / 1e6
             })
 
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
@@ -69,10 +69,10 @@ class Transfar extends Component {
                 balancedata: balanceData.balance / 1e6
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-            let btc = new Account(decrypted.mne_arr,testnet);
+            let btc = new Account(decrypted.mne_arr, testnet);
             balanceData = await this.props.index.getBTCBalance({
                 address: btc.address,
-                page:1,
+                page: 1,
                 name: 'BTC'
             })
             this.setState({
@@ -89,20 +89,24 @@ class Transfar extends Component {
 
         };
     }
-
     //violas转账
     getViolasAm = (e, way) => {
         if (way == 'amount') {
-            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
-            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
             e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
             e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
                 e.target.value = parseFloat(e.target.value);
             }
-            this.setState({
-                violasAmount: e.target.value
-            })
+            if (e.target.value * 1 > 1e13) {
+                alert(intl.get('type number please'))
+                e.target.value=0;
+            }else{
+                this.setState({
+                    violasAmount: e.target.value
+                })
+            }
         } else if (way == 'address') {
             this.setState({
                 address1: e.target.value
@@ -154,63 +158,63 @@ class Transfar extends Component {
         let transFar;
         if (type == 'violas') {
             if (violasAmount == '') {
-                alert(intl.get("Input Amount")+'!!!');
-            }else if (address1 == '') {
+                alert(intl.get("Input Amount") + '!!!');
+            } else if (address1 == '') {
                 alert(intl.get("Input Receving Address") + "!!!");
-            }else{
-            let violas = new vAccount(decrypted.mne_arr);
-            transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, 'violas')
-            let data = await this.props.index.starVTranfer({
-                signedtxn: transFar,
-                name:type
-            })
-            if(data.message == 'ok'){
-               alert(intl.get('Transfer success')+'!!!');
-               this.props.history.push('/home');
-            }else{
-                this.refs.bal.style.color = "red";
-            } 
+            } else {
+                let violas = new vAccount(decrypted.mne_arr);
+                transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, 'violas')
+                let data = await this.props.index.starVTranfer({
+                    signedtxn: transFar,
+                    name: type
+                })
+                if (data.message == 'ok') {
+                    alert(intl.get('Transfer success') + '!!!');
+                    this.props.history.push('/home');
+                } else {
+                    this.refs.bal.style.color = "red";
+                }
             }
-            
+
         } else if (type == 'libra') {
             if (libraAmount == "") {
-              alert(intl.get("Input Amount") + "!!!");
+                alert(intl.get("Input Amount") + "!!!");
             } else if (address2 == "") {
-              alert(intl.get("Input Receving Address") + "!!!");
+                alert(intl.get("Input Receving Address") + "!!!");
             } else {
                 let libra = new vAccount(decrypted.mne_arr);
                 transFar = await libra.transaction_libra(
-                  address2,
-                  Number(libraAmount) * 1e6
+                    address2,
+                    Number(libraAmount) * 1e6
                 );
                 let data = await this.props.index.starVTranfer({
-                  signedtxn: transFar,
-                  name: type
+                    signedtxn: transFar,
+                    name: type
                 });
                 if (data.message == "ok") {
-                  alert(intl.get("Transfer success") + "!!!");
-                  this.props.history.push("/home");
+                    alert(intl.get("Transfer success") + "!!!");
+                    this.props.history.push("/home");
                 } else {
-                  this.refs.bal.style.color = "red";
+                    this.refs.bal.style.color = "red";
                 }
             }
-            
-            
+
+
         } else if (type == 'BTC') {
             if (btcAmount == "") {
-              alert(intl.get("Input Amount") + "!!!");
+                alert(intl.get("Input Amount") + "!!!");
             } else if (address3 == "") {
-              alert(intl.get("Input Receving Address") + "!!!");
+                alert(intl.get("Input Receving Address") + "!!!");
             } else {
                 let account = new Account(decrypted.mne_arr, testnet);
                 transFar = await account.transaction(
-                  address3,
-                  Number(btcAmount) * 1e8,
-                  fee
+                    address3,
+                    Number(btcAmount) * 1e8,
+                    fee
                 );
                 console.log(transFar);
             }
-            
+
         }
     }
 
@@ -226,7 +230,7 @@ class Transfar extends Component {
                         })
                     }}><img src="/img/Combined Shape 1@2x.png" /></span>
                     {
-                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{'vtoken'+intl.get('Transfer')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
+                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? <span>{'vtoken' + intl.get('Transfer')}</span> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <span>{intl.get('Transfer BTC')}</span> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <span>{intl.get('Transfer libra')}</span> : null
                     }
 
                 </header>
@@ -241,12 +245,12 @@ class Transfar extends Component {
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getViolasAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span onClick={()=>{
+                                    <span onClick={() => {
                                         this.props.history.push({
-                                          pathname: "/directoryInquiries1",
-                                          state:{
-                                              type:'officialCoin'
-                                          }
+                                            pathname: "/directoryInquiries1",
+                                            state: {
+                                                type: 'officialCoin'
+                                            }
                                         });
                                     }}>{intl.get('Address Book')}</span>
                                 </div>
@@ -279,8 +283,8 @@ class Transfar extends Component {
                                 <div className="rate">{this.state.rate / 100000} vtoken</div>
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('violas')}>
-                            {intl.get('Confirm Transfer')}
-                        </div>
+                                {intl.get('Confirm Transfer')}
+                            </div>
                         </div> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
@@ -290,12 +294,12 @@ class Transfar extends Component {
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getBtcAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span onClick={()=>{
+                                    <span onClick={() => {
                                         this.props.history.push({
-                                          pathname: "/directoryInquiries1",
-                                          state:{
-                                              type:'officialCoin'
-                                          }
+                                            pathname: "/directoryInquiries1",
+                                            state: {
+                                                type: 'officialCoin'
+                                            }
                                         });
                                     }}>{intl.get('Address Book')}</span>
                                 </div>
@@ -329,7 +333,7 @@ class Transfar extends Component {
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('BTC')}>
                                 {intl.get('Confirm Transfer')}
-                        </div>
+                            </div>
                         </div> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <div className="transfarDescr">
                             <div className="form">
                                 <div className="title">
@@ -339,12 +343,12 @@ class Transfar extends Component {
                                 <input type="text" placeholder={intl.get('Input Amount')} onChange={(e) => this.getLibraAm(e, 'amount')} />
                                 <div className="title">
                                     <span>{intl.get('Receving Address')}</span>
-                                    <span onClick={()=>{
+                                    <span onClick={() => {
                                         this.props.history.push({
-                                          pathname: "/directoryInquiries1",
-                                          state:{
-                                              type:'officialCoin'
-                                          }
+                                            pathname: "/directoryInquiries1",
+                                            state: {
+                                                type: 'officialCoin'
+                                            }
                                         });
                                     }}>{intl.get('Address Book')}</span>
                                 </div>
@@ -378,7 +382,7 @@ class Transfar extends Component {
                             </div>
                             <div className="btn" onClick={() => this.confirmTrans('libra')}>
                                 {intl.get('Confirm Transfer')}
-                        </div>
+                            </div>
                         </div> : null
                     }
                 </section>

@@ -74,7 +74,12 @@ class Market extends Component {
         if (value.indexOf(".") < 0 && value != "") {
             value = parseFloat(value);
         }
-        return value;
+        if(value*1>1e13){
+            alert(intl.get('type number please'))
+            return 0
+        }else{
+            return value;
+        }
     }
     getPrices(name) {
         let { othersdata } = this.state;
@@ -100,7 +105,7 @@ class Market extends Component {
                 quote: othersdata && othersdata[vals].addr
             });
             this.setState({
-                othersEntrust: dealData.buys.length>0?dealData.buys:dealData.sells
+                othersEntrust: dealData.buys.length > 0 ? dealData.buys : dealData.sells
             })
         } else {
             dealData = await stableDeal({
@@ -108,7 +113,7 @@ class Market extends Component {
                 quote: coindata && coindata[val].addr
             });
             this.setState({
-                othersEntrust: dealData.buys.length>0?dealData.buys:dealData.sells
+                othersEntrust: dealData.buys.length > 0 ? dealData.buys : dealData.sells
             })
         }
     }
@@ -150,48 +155,52 @@ class Market extends Component {
         }
 
     }
-
+    fix6 = (_num) => {
+        let temp = _num.toFixed(6);
+        return parseFloat(temp)
+    }
     getCount = (e, type) => {
         let {
             othersdata,
             coindata
         } = this.state;
         let { vals, val, coin } = this.props.dealIndex;
+        // console.log(coin+'  '+type)
         //判断内容的格式
         //换算
         if (coin) {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
+                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
+                // console.log(rightcount)
                 this.setState({
                     leftCount: value,
-                    rightCount: rightcount.toFixed(6)
+                    rightCount: rightcount
                 })
-
             } else if (type == 'right') {
-                let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
+                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
                 this.setState({
                     leftCount: leftcount,
-                    rightCount: value.toFixed(6)
+                    rightCount: value
                 })
             }
         } else {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
+                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
+                // console.log(leftcount)
                 this.setState({
                     leftCount: value,
-                    rightCount: leftcount.toFixed(6)
+                    rightCount: leftcount
                 })
             } else if (type == 'right') {
-                let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
+                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
                 this.setState({
                     leftCount: rightcount,
-                    rightCount: value.toFixed(6)
+                    rightCount: value
                 })
             }
         }
-
     }
     getCoin = () => {
         let { coin } = this.props.dealIndex;
@@ -215,9 +224,15 @@ class Market extends Component {
         }
     }
     getExchange = async () => {
-        this.setState({
-            disNone: true
-        })
+        if (this.state.leftCount == '') {
+            alert(intl.get('Input amount'))
+        } else if(this.props.dealIndex.val==this.props.dealIndex.vals){
+            alert(intl.get('exchange same currency'))
+        }else {
+            this.setState({
+                disNone: true
+            })
+        }
     }
     getValue = (e) => {
         this.setState({
@@ -236,6 +251,8 @@ class Market extends Component {
             let Transaction = '';
             let publishTranaction1 = '';
             let publishTranaction2 = '';
+            leftCount=leftCount*1e6;
+            rightCount=rightCount*1e6;
             if (coin) {
                 Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
@@ -267,9 +284,9 @@ class Market extends Component {
                     this.setState({
                         disNone: false
                     })
-                    alert(intl.get('For successful') + '!!!')
+                    alert(intl.get('Resting order successful,waiting for Exchange response') + '!!!')
                 } else {
-                    alert(intl.get('For failure') + '!!!')
+                    alert(intl.get('Resting order failed') + '!!!')
                 }
             }
             else {
@@ -298,14 +315,12 @@ class Market extends Component {
                     signedtxn: Transaction
                 })
                 if (data.code = 2000) {
-                    alert(intl.get('For successful') + '!!!')
+                    alert(intl.get('Resting order successful,waiting for Exchange response') + '!!!')
                 } else {
-                    alert(intl.get('For failure') + '!!!')
+                    alert(intl.get('Resting order failed') + '!!!')
                 }
             }
-
         }
-
     }
     render() {
         let {
@@ -340,9 +355,7 @@ class Market extends Component {
                                             <div onClick={() => this.getChange('a')}><label>{coindata.length > 0 && coindata[val].name}</label><img src="/img/Combined Shape复制 3@2x.png" /></div>
                                         </div>
                                 }
-
                             </div>
-
                             <div className="title">
                                 <input type="text" value={this.state.leftCount} placeholder={intl.get('Amount Transfered')} onChange={(e) => this.getCount(e, 'left')} />
                                 <input type="text"
@@ -381,7 +394,7 @@ class Market extends Component {
 
                                     <Slider
                                         style={{ marginLeft: 30, marginRight: 30 }}
-                                        defaultValue={6}
+                                        defaultValue={0}
                                         min={0}
                                         max={30}
                                         onChange={this.log('change')}
@@ -470,7 +483,7 @@ class Market extends Component {
                                     this.setState({
                                         disNone: false
                                     })
-                                }}>{intl.get('Cancel')}</span>C
+                                }}>{intl.get('Cancel')}</span>
                                 <span onClick={() => this.confirm()}>{intl.get('Confirm')}</span>
                             </div>
                         </div>

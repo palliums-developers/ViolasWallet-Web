@@ -29,7 +29,9 @@ class AboutUs extends Component {
                         <h4>Violas 1.0.0</h4>
                     </div>
                     <div className="aboutList">
-                        <p><label>{intl.get('Official Website')}</label><span>violas.io</span></p>
+                        <p onClick={()=>{
+                            window.open('https://violas.io');
+                        }}><label>{intl.get('Official Website')}</label><span>violas.io</span></p>
                         <p><label>{intl.get('Email Address')}</label><span>violas.io</span></p>
                         <p><label>{intl.get('Wechat')}</label><span>x x x</span></p>
                         <p><label>{intl.get('Telegram Group')}</label><span>xxxxx</span></p>

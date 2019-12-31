@@ -1615,6 +1615,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow: auto;
         .classify{
             width: 9.3rem;
             display: flex;
@@ -3082,7 +3083,8 @@
                 color:rgba(60,56,72,1);
                 flex: 1;
                 line-height: 1.5rem;
-                margin-left: 0.1rem;
+                margin-left: 0.2rem;
+                margin-bottom: 0;
             }
             span:nth-child(3){
                 width: 0.4rem;
@@ -3564,7 +3566,7 @@
             .ipt{
                 flex: 1;
                 height:100%; 
-                margin-left: 0.3rem;
+                margin-left: 0.5rem;
                 display: flex;
                 align-items: center;
                 .code{

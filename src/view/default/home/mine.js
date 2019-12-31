@@ -44,7 +44,7 @@ class Mine extends Component {
             <div className="mine">
                 <header>
                     <div className="headLogo"><img src="/img/编组复制 18备份 2@2x.png" /></div>
-                    <span>{window.localStorage.getItem('data')&&JSON.parse(window.localStorage.getItem('data')).name}</span>
+                    <span>ViolasPay</span>
                 </header>
                 <section>
                     <ul className="userList">

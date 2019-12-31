@@ -112,7 +112,7 @@ class CreateWallet extends Component {
                 }
               </div>
               {
-                this.state.wType == 'violas' ? <h4>{intl.get('Create VcoinWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Create LiboneWallet')}</h4> : this.state.wType == 'btc' ? <h4>{intl.get('Create BitcoinWallet')}</h4> : null
+                this.state.wType == 'violas' ? <h4>{intl.get('Create VtokenWallet')}</h4> : this.state.wType == 'lib' ? <h4>{intl.get('Create LibraWallet')}</h4> : this.state.wType == 'btc' ? <h4>{intl.get('Create BTCWallet')}</h4> : null
               }
             </div>
             <div className="form">
