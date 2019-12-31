@@ -67,19 +67,18 @@ class Market extends Component {
         })
     }
     stringEntFun(value) {
-        let reg=new RegExp('^[0-9]*$');
-        if(reg.test(value)){
-            value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
-            value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
-            value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-            value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入6个小数
-            if (value.indexOf(".") < 0 && value != "") {
-                value = parseFloat(value);
-            }
-            return value;
-        }else{
+        value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        value = value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入6个小数
+        if (value.indexOf(".") < 0 && value != "") {
+            value = parseFloat(value);
+        }
+        if(value*1>1e13){
             alert(intl.get('type number please'))
-            return 0;
+            return 0
+        }else{
+            return value;
         }
     }
     getPrices(name) {
@@ -156,7 +155,7 @@ class Market extends Component {
         }
 
     }
-    fix6=(_num)=>{
+    fix6 = (_num) => {
         let temp = _num.toFixed(6);
         return parseFloat(temp)
     }
@@ -172,14 +171,14 @@ class Market extends Component {
         if (coin) {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
+                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
                 // console.log(rightcount)
                 this.setState({
                     leftCount: value,
                     rightCount: rightcount
                 })
             } else if (type == 'right') {
-                let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
+                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
                 this.setState({
                     leftCount: leftcount,
                     rightCount: value
@@ -188,14 +187,14 @@ class Market extends Component {
         } else {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let leftcount = Number(value) * (coindata[val].price / othersdata[vals].price);
+                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
                 // console.log(leftcount)
                 this.setState({
                     leftCount: value,
                     rightCount: leftcount
                 })
             } else if (type == 'right') {
-                let rightcount = Number(value) * (othersdata[vals].price / coindata[val].price);
+                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
                 this.setState({
                     leftCount: rightcount,
                     rightCount: value
@@ -227,12 +226,13 @@ class Market extends Component {
     getExchange = async () => {
         if (this.state.leftCount == '') {
             alert(intl.get('Input amount'))
-        } else {
+        } else if(this.props.dealIndex.val==this.props.dealIndex.vals){
+            alert(intl.get('exchange same currency'))
+        }else {
             this.setState({
                 disNone: true
             })
         }
-
     }
     getValue = (e) => {
         this.setState({
@@ -251,6 +251,8 @@ class Market extends Component {
             let Transaction = '';
             let publishTranaction1 = '';
             let publishTranaction2 = '';
+            leftCount=leftCount*1e6;
+            rightCount=rightCount*1e6;
             if (coin) {
                 Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {

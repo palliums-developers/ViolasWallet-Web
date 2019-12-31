@@ -102,7 +102,6 @@ class AddCurrency extends Component {
                 name: name
             })
         }
-        
     }
     getValue = (e) => {
         this.setState({
@@ -120,6 +119,7 @@ class AddCurrency extends Component {
             })
             this.state.coindata[this.state.ind].checked = true;
             let violas = new vAccount(this.state.mne);
+            // console.log(violas)
             let arr = await violas.publish(this.state.name);
             this.props.index.starVTranfer({
                 signedtxn: arr,

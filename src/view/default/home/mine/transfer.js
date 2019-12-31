@@ -91,7 +91,6 @@ class Transfar extends Component {
     }
     //violas转账
     getViolasAm = (e, way) => {
-        let reg = new RegExp('^[0-9]*$');
         if (way == 'amount') {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
             e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的

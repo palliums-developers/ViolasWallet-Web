@@ -26,6 +26,7 @@ export default {
     'Please select these mnemonic words in proper order to confirm you have backup them properly.':'请按顺序点击助记词，以确认您正确备份',
     'The order of mnemonic words is not correct, please try again':'助记词顺序不正确，请校对',
     'Complete':'完成',
+    'exchange same currency':'您兑换的加密货币是同一种',
     'Backup Later':'稍后备份',
     'Start Now':'马上进入',
     'ViolasWallet':'Violas钱包',

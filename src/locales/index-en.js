@@ -22,6 +22,7 @@ export default {
     'It might be collected by a third party software':'It might be collected by a third party software ',
     'to cause loss of funds.':'to cause loss of funds. ',
     'Next':'Next',
+    'exchange same currency':'You are exchange the same currency',
     'Decryption success':'Decryption success',
     'Access Code is wrong':'Access Code is wrong',
     'Confirm Mnemonic Words':'Confirm Mnemonic Words',
