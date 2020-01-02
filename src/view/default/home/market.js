@@ -26,7 +26,8 @@ class Market extends Component {
             rightCount: '',
             value: '',
             disNone: false,
-            updatas: []
+            updatas: [],
+            confirming: false
         }
     }
     componentWillMount() {
@@ -74,10 +75,10 @@ class Market extends Component {
         if (value.indexOf(".") < 0 && value != "") {
             value = parseFloat(value);
         }
-        if(value*1>1e13){
+        if (value * 1 > 1e13) {
             alert(intl.get('type number please'))
             return 0
-        }else{
+        } else {
             return value;
         }
     }
@@ -224,14 +225,13 @@ class Market extends Component {
         }
     }
     getExchange = async () => {
-        let reg = /^.*(?!0).$/;
         if (this.state.leftCount == '') {
-            alert(intl.get('Input amount'))
-        }else if(reg.test(this.state.leftCount) == false) {
-            alert(intl.get("Amount cannot be zero")+'!!!');
-        }else if(this.props.dealIndex.val==this.props.dealIndex.vals){
-            alert(intl.get('exchange same currency'))
-        }else {
+            alert(intl.get('Input amount'));
+        } else if(this.state.leftCount==0){
+            alert(intl.get("The amount cannot be zero"));
+        }else if (this.props.dealIndex.val == this.props.dealIndex.vals) {
+            alert(intl.get('exchange same currency'));
+        } else {
             this.setState({
                 disNone: true
             })
@@ -245,17 +245,18 @@ class Market extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code'));
-        }else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
-        }else {
-            let { vals, val, coin } = this.props.dealIndex;
+        } else {
             let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
+            this.setState({ confirming: true })
+            let { vals, val, coin } = this.props.dealIndex;
             let violas = new vAccount(decrypted.mne_arr);
             let Transaction = '';
             let publishTranaction1 = '';
             let publishTranaction2 = '';
-            leftCount=leftCount*1e6;
-            rightCount=rightCount*1e6;
+            leftCount = leftCount * 1e6;
+            rightCount = rightCount * 1e6;
             if (coin) {
                 Transaction = await violas.transactionEX(coindata[val].name, leftCount, othersdata[vals].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
@@ -293,6 +294,7 @@ class Market extends Component {
                 }
             }
             else {
+                this.setState({ confirming: true })
                 Transaction = await violas.transactionEX(othersdata[vals].name, leftCount, coindata[val].name, rightCount);
                 for (let i = 0; i < updatas.length; i++) {
                     if (updatas[i].name == coindata[val].name) {
@@ -431,7 +433,7 @@ class Market extends Component {
                                         return <div className="listRecord" key={i}>
                                             <div className="deal">
                                                 <p><span>{v.tokenGiveSymbol}/</span><label>{v.tokenGetSymbol}</label></p>
-                                                <p>{v.amountGet}</p>
+                                                <p>{v.amountGet / 1e6}</p>
                                                 <p>{this.getPrices(v.tokenGetSymbol)}</p>
                                             </div>
                                             <div className="time">
@@ -467,7 +469,7 @@ class Market extends Component {
                                 {
                                     othersEntrust && othersEntrust.map((v, i) => {
                                         return <div className="listRecord" key={i}>
-                                            <p><span>{v.amountGet}</span></p>
+                                            <p><span>{v.amountGet / 1e6}</span></p>
                                             <p>{v.amountGet / v.amountGive}</p>
                                         </div>
                                     })
@@ -487,7 +489,7 @@ class Market extends Component {
                                         disNone: false
                                     })
                                 }}>{intl.get('Cancel')}</span>
-                                <span onClick={() => this.confirm()}>{intl.get('Confirm')}</span>
+                                <span onClick={!this.state.confirming&&(() => this.confirm())}>{this.state.confirming ? intl.get('Confirming') : intl.get('Confirm')}</span>
                             </div>
                         </div>
                     </div> : null

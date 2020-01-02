@@ -17,7 +17,8 @@ class Transfar1 extends Component {
             violasAmount: '',
             address1: '',
             balancedata: [],
-            coinData: {}
+            coinData: {},
+            confirming:false
         }
     }
     componentWillMount() {
@@ -57,7 +58,7 @@ class Transfar1 extends Component {
 
     //violas转账
     getViolasAm = (e, way) => {
-        
+
         if (way == 'amount') {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
             e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
@@ -68,8 +69,8 @@ class Transfar1 extends Component {
             }
             if (e.target.value * 1 > 1e13) {
                 alert(intl.get('type number please'))
-                e.target.value=0;
-            }else{
+                e.target.value = 0;
+            } else {
                 this.setState({
                     violasAmount: e.target.value
                 })
@@ -85,36 +86,36 @@ class Transfar1 extends Component {
         let { violasAmount, address1, coinData } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let reg = /^.*(?!0).$/;
         if (violasAmount == "") {
-          alert(intl.get("Input Amount") + "!!!");
-        } else if (reg.test(violasAmount) == false) {
-          alert(intl.get("The amount cannot be zero") + "!!!");
-        } else if (address1 == "") {
-          alert(intl.get("Input Receving Address") + "!!!");
-        }else{
+            alert(intl.get("Input Amount") + "!!!");
+        } else if (violasAmount == 0) {
+            alert(intl.get("The amount cannot be zero") + "!!!");
+        } else if (violasAmount>coinData.balance/1e6){
+            alert(intl.get('Amount are more than your balance')+ "!!!");
+        }else if (address1 == "") {
+            alert(intl.get("Input Receving Address") + "!!!");
+        } else {
+            this.setState({confirming:true})
             let transFar = await violas.transaction_violas(
-              address1,
-              Number(violasAmount) * 1e6,
-              coinData.name
+                address1,
+                Number(violasAmount) * 1e6,
+                coinData.name
             );
             let data = await this.props.index.starVTranfer({
-            signedtxn: transFar,
-            name: "violas"
+                signedtxn: transFar,
+                name: "violas"
             });
             if (data.message == "ok") {
-            alert(intl.get("Transfer success") + "!!!");
-            this.props.history.push("/home");
+                alert(intl.get("Transfer success") + "!!!");
+                this.props.history.push("/home");
             } else {
-            this.refs.bal.style.color = "red";
+                this.refs.bal.style.color = "red";
             }
         }
-        
     }
 
     render() {
         let { coinData } = this.state;
-        console.log(coinData.balance);
         return (
             <div className="transfar1">
                 <header>
@@ -171,8 +172,8 @@ class Transfar1 extends Component {
                             </WingBlank>
                             <div className="rate">{this.state.rate / 100000} {coinData.name}</div>
                         </div>
-                        <div className="btn" onClick={() => this.confirmTrans('violas')}>
-                            {intl.get('Confirm Transfer')}
+                        <div className="btn" onClick={!this.state.confirming&&(()=>this.confirmTrans('violas'))}>
+                            {this.state.confirming?intl.get('Confirming'):intl.get('Confirm Transfer')}
                         </div>
                     </div>
                 </section>

@@ -64,6 +64,8 @@ export default {
     'Slow':'慢',
     'Fast':'快',
     'Confirm Transfer':'确认转账',
+    'Confirming':'确认中',
+    'Amount are more than your balance':'转账数额超过您的余额',
     'Input Amount':'输入金额',
     'Input Receving Address':'输入收款地址',
     'Transfer success':'转账成功',

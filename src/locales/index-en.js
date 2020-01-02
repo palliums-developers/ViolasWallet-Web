@@ -63,6 +63,8 @@ export default {
     'Slow':'Slow',
     'Fast':'Fast',
     'Confirm Transfer':'Confirm Transfer',
+    'Confirming':'Confirming',
+    'Amount are more than your balance':'Amount are more than your balance',
     'Input Amount':'Input Amount',
     'Input Receving Address':'Input Receving Address',
     'Copy Address':'Copy Address',
