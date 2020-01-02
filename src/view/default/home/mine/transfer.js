@@ -155,10 +155,13 @@ class Transfar extends Component {
     confirmTrans = async (type) => {
         let { violasAmount, libraAmount, btcAmount, address1, address2, address3 } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        let reg = /^.*(?!0).$/;
         let transFar;
         if (type == 'violas') {
             if (violasAmount == '') {
                 alert(intl.get("Input Amount") + '!!!');
+            }else if(reg.test(violasAmount) == false) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
             } else if (address1 == '') {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {
@@ -179,6 +182,8 @@ class Transfar extends Component {
         } else if (type == 'libra') {
             if (libraAmount == "") {
                 alert(intl.get("Input Amount") + "!!!");
+            }else if(reg.test(libraAmount) == false) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
             } else if (address2 == "") {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {
@@ -203,6 +208,8 @@ class Transfar extends Component {
         } else if (type == 'BTC') {
             if (btcAmount == "") {
                 alert(intl.get("Input Amount") + "!!!");
+            } else if(reg.test(btcAmount) == false) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
             } else if (address3 == "") {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {

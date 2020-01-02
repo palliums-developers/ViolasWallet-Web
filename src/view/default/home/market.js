@@ -224,9 +224,12 @@ class Market extends Component {
         }
     }
     getExchange = async () => {
+        let reg = /^.*(?!0).$/;
         if (this.state.leftCount == '') {
             alert(intl.get('Input amount'))
-        } else if(this.props.dealIndex.val==this.props.dealIndex.vals){
+        }else if(reg.test(this.state.leftCount) == false) {
+            alert(intl.get("Amount cannot be zero")+'!!!');
+        }else if(this.props.dealIndex.val==this.props.dealIndex.vals){
             alert(intl.get('exchange same currency'))
         }else {
             this.setState({
@@ -241,10 +244,10 @@ class Market extends Component {
     }
     confirm = async () => {
         if (this.state.value == '') {
-            alert(intl.get('Please input Access Code'))
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+            alert(intl.get('Please input Access Code'));
+        }else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
-        } else {
+        }else {
             let { vals, val, coin } = this.props.dealIndex;
             let { updatas, coindata, count, othersdata, leftCount, rightCount } = this.state;
             let violas = new vAccount(decrypted.mne_arr);

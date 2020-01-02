@@ -46,3 +46,4 @@ export let getVersion = (params) => {
         method: 'get',
     });
 }
+

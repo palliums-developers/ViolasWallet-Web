@@ -57,7 +57,7 @@ class Transfar1 extends Component {
 
     //violas转账
     getViolasAm = (e, way) => {
-
+        
         if (way == 'amount') {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
             e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的  
@@ -85,21 +85,36 @@ class Transfar1 extends Component {
         let { violasAmount, address1, coinData } = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
-        let transFar = await violas.transaction_violas(address1, Number(violasAmount) * 1e6, coinData.name);
-        let data = await this.props.index.starVTranfer({
+        let reg = /^.*(?!0).$/;
+        if (violasAmount == "") {
+          alert(intl.get("Input Amount") + "!!!");
+        } else if (reg.test(violasAmount) == false) {
+          alert(intl.get("The amount cannot be zero") + "!!!");
+        } else if (address1 == "") {
+          alert(intl.get("Input Receving Address") + "!!!");
+        }else{
+            let transFar = await violas.transaction_violas(
+              address1,
+              Number(violasAmount) * 1e6,
+              coinData.name
+            );
+            let data = await this.props.index.starVTranfer({
             signedtxn: transFar,
-            name: 'violas'
-        })
-        if (data.message == 'ok') {
-            alert(intl.get('Transfer success') + '!!!');
-            this.props.history.push('/home');
-        } else {
+            name: "violas"
+            });
+            if (data.message == "ok") {
+            alert(intl.get("Transfer success") + "!!!");
+            this.props.history.push("/home");
+            } else {
             this.refs.bal.style.color = "red";
+            }
         }
+        
     }
 
     render() {
         let { coinData } = this.state;
+        console.log(coinData.balance);
         return (
             <div className="transfar1">
                 <header>

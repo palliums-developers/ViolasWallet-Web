@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 // import { creat_account_mnemonic,get_address } from '../../../../utils/kulap-function';
-// import vAccount from '../../../../utils/violas';
 import { timeStamp2String } from '../../../../utils/timer';
 import intl from 'react-intl-universal';
 import vAccount from '../../../../utils/violas';
@@ -35,12 +34,12 @@ class OrderForm extends Component {
         this.setState({
             othersList: await this.props.dealIndex.getOthersCoinMess()
         })
-        // let scroll = new BScroll(this.refs.content, {
-        //     probeType: 1,
-        //     click: true,
-        //     scrollbar: true,
-        //     mouseWheel: true
-        // })
+        let scroll = new BScroll(this.refs.content, {
+            probeType: 1,
+            click: true,
+            scrollbar: true,
+            mouseWheel: true
+        })
     }
     getPrices(name) {
         let { othersList } = this.state;
@@ -62,8 +61,8 @@ class OrderForm extends Component {
         let data = await selfDeal({
             user: violas&&violas.address
         });
-        let undoneData = data&&data.filter(v => v.state == 'OPEN' || v.state == 'CANCELING');
-        let completedData = data&&data.filter(v => v.state == 'FILLED');
+        let undoneData = data&&data.filter(v => v.state == 'OPEN' || v.state == 'CANCELLING');
+        let completedData = data&&data.filter(v => v.state == 'FILLED' || v.state == 'CANCELED');
         if (ind == 0) {
             this.setState({
                 datas: undoneData
@@ -78,10 +77,13 @@ class OrderForm extends Component {
 
     cancel = async (name, version) => {
         let Transaction = await violas.transactionEXWithdraw(name, version);
+        let data1 = await this.props.dealIndex.cancleFun({
+          version: version,
+          signedtxn: Transaction
+        });
         let data = await this.props.dealIndex.exchange({
-            signedtxn: Transaction
-        })
-        console.log(data, '........')
+          signedtxn: Transaction
+        });
         // if (data.code = 2000) {
         //     alert(intl.get('For successful') + '!!!')
         // } else {
@@ -94,10 +96,10 @@ class OrderForm extends Component {
         } else if (sta == 'FILLED') {
             return intl.get('canceled')
         }
-        if (sta == 'CANCELING') {
+        if (sta == 'CANCELLING') {
             return intl.get('canceling')
         } else if (sta == 'OPEN') {
-            return intl.get('canceling')
+            return intl.get("cancel");
         } else {
             return intl.get('cancel')
         }
@@ -144,7 +146,7 @@ class OrderForm extends Component {
                                                     </div>
                                                     <div className="list">
                                                         <span>{this.getPrices(v.tokenGetSymbol)}</span>
-                                                        <span>{v.amountGet}</span>
+                                                        <span>{v.amountGet / 1e6}</span>
                                                         <span>{v.state == 'OPEN' ? timeStamp2String(v.date - 300 + '000') : v.state == 'FILLED' ? timeStamp2String(v.date + '000') : null}</span>
                                                     </div>
                                                 </div>
