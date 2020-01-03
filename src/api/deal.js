@@ -42,7 +42,7 @@ export let selfCurDeal = (params) =>{
 //订单查询记录
 export let getVersion = (params) => {
     return request({
-        url: url + '/trades?version=79185' ,
+        url: url + '/trades?version='+params.version ,
         method: 'get',
     });
 }

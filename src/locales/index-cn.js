@@ -64,6 +64,8 @@ export default {
     'Slow':'慢',
     'Fast':'快',
     'Confirm Transfer':'确认转账',
+    'Confirming':'确认中',
+    'Amount are more than your balance':'转账数额超过您的余额',
     'Input Amount':'输入金额',
     'Input Receving Address':'输入收款地址',
     'Transfer success':'转账成功',
@@ -162,5 +164,7 @@ export default {
     'The order details':'订单详情',
     'Browser query':'浏览器查询',
     'Trading Record':'成交记录',
+    'Amount cannot be zeroo':'数量不能为零',
+    'The amount cannot be zero':'金额不能为零',
     'Password setting does not match':'密码设定不符合,至少一个大写字母，一个小写字母和一个数字组成的8-20位密码'
 }

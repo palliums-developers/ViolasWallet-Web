@@ -114,7 +114,6 @@ class Record extends Component {
     render() {
         let { recordBData, recordData } = this.state;
         let btc = new Account(decrypted&&decrypted.mne_arr, testnet);
-        console.log(recordData, recordBData,'333')
         return (
             btc&&
             <div className="record">

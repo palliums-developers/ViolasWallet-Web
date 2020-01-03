@@ -63,6 +63,8 @@ export default {
     'Slow':'Slow',
     'Fast':'Fast',
     'Confirm Transfer':'Confirm Transfer',
+    'Confirming':'Confirming',
+    'Amount are more than your balance':'Amount are more than your balance',
     'Input Amount':'Input Amount',
     'Input Receving Address':'Input Receving Address',
     'Copy Address':'Copy Address',
@@ -160,6 +162,8 @@ export default {
     'The order details':'The order details',
     'Browser query':'Browser query',
     'Trading Record':'Trading Record',
+    'Amount cannot be zero':'Amount cannot be zero',
+    'The amount cannot be zero':'The amount cannot be zero',
     'Password setting does not match': 'Password setting does not match, 8-20 digit password consisting of at least one uppercase letter, one lowercase letter and one number',
     'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password': 'This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password'
 }

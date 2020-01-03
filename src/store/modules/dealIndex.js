@@ -86,4 +86,13 @@ export default class DealIndex {
         let data = await getVersion(params);
         return data.data.trades
     }
+    //撤销
+    @action async cancleFun(params) {
+            let result = await axios.post("http://47.52.66.26:10088/v1/cancelOrder", params, {
+                Headers: { "Content-Type": "application/json" }
+            }).then(res => {
+                return res.data;
+            });
+            return result;
+        }
 }

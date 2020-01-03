@@ -38,7 +38,7 @@ class OrderDetail extends Component {
         let dataB = await this.props.dealIndex.getCurVersion({
             version: datas&&datas[0].version
         })
-
+        console.log(dataB);
 
         this.setState({
             othersList: await this.props.dealIndex.getOthersCoinMess(),
@@ -67,6 +67,7 @@ class OrderDetail extends Component {
     }
     render() {
         let { detailData, browerData, price } = this.state;
+        console.log(browerData);
         return (
             <div className="orderDetail">
                 <header>
@@ -81,7 +82,7 @@ class OrderDetail extends Component {
                             return <div className="first" key={i}>
                                 <div className="head">
                                     <p><i><img src="/img/编组 17@2x.png" /></i><span>{v.tokenGiveSymbol}/</span><label>{v.tokenGetSymbol}</label></p>
-                                    <span>{v.state == 'OPEN' ? intl.get('Incomplete') : v.state == 'FILLED' ? intl.get('Completed') : null}</span>
+                                    <span>{v.state == 'OPEN' || v.state == 'CANCELLING' ? intl.get('Incomplete') : v.state == 'FILLED' || v.state == 'CANCELED' ? intl.get('Completed') : null}</span>
                                 </div>
                                 <div className="firstContents">
                                     <div className="firstContentL">

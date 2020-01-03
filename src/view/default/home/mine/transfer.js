@@ -24,7 +24,8 @@ class Transfar extends Component {
             address2: '',
             address3: '',
             balancedata: [],
-            balance: Number
+            balance: Number,
+            confirming:false
         }
     }
     componentWillMount() {
@@ -153,13 +154,18 @@ class Transfar extends Component {
         }
     }
     confirmTrans = async (type) => {
-        let { violasAmount, libraAmount, btcAmount, address1, address2, address3 } = this.state;
+        let { violasAmount, libraAmount, btcAmount, address1, address2, address3 ,balancedata} = this.state;
         let decrypted = JSON.parse(window.localStorage.getItem('data'));
         let transFar;
         if (type == 'violas') {
+            this.setState({confirming:true});
             if (violasAmount == '') {
                 alert(intl.get("Input Amount") + '!!!');
-            } else if (address1 == '') {
+            }else if(violasAmount == 0) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
+            } else if(violasAmount>balancedata){
+                alert(intl.get('Amount are more than your balance'))
+            }else if (address1 == '') {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {
                 let violas = new vAccount(decrypted.mne_arr);
@@ -177,9 +183,14 @@ class Transfar extends Component {
             }
 
         } else if (type == 'libra') {
+            this.setState({confirming:true});
             if (libraAmount == "") {
                 alert(intl.get("Input Amount") + "!!!");
-            } else if (address2 == "") {
+            }else if((libraAmount) == 0) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
+            } else if(libraAmount>balancedata){
+                alert(intl.get('Amount are more than your balance'))
+            }else if (address2 == "") {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {
                 let libra = new vAccount(decrypted.mne_arr);
@@ -201,9 +212,14 @@ class Transfar extends Component {
 
 
         } else if (type == 'BTC') {
+            this.setState({confirming:true});
             if (btcAmount == "") {
                 alert(intl.get("Input Amount") + "!!!");
-            } else if (address3 == "") {
+            } else if((btcAmount) == 0) {
+                alert(intl.get("The amount cannot be zero")+'!!!');
+            } else if(btcAmount>balancedata){
+                alert(intl.get('Amount are more than your balance'))
+            }else if (address3 == "") {
                 alert(intl.get("Input Receving Address") + "!!!");
             } else {
                 let account = new Account(decrypted.mne_arr, testnet);
@@ -282,8 +298,8 @@ class Transfar extends Component {
                                 </WingBlank>
                                 <div className="rate">{this.state.rate / 100000} vtoken</div>
                             </div>
-                            <div className="btn" onClick={() => this.confirmTrans('violas')}>
-                                {intl.get('Confirm Transfer')}
+                            <div className="btn" onClick={!this.state.confirming&&(() => this.confirmTrans('violas'))}>
+                                {this.state.confirming?intl.get('Confirming'):intl.get('Confirm Transfer')}
                             </div>
                         </div> : window.localStorage.getItem('type') == intl.get('BTCWallet') ? <div className="transfarDescr">
                             <div className="form">
@@ -331,8 +347,8 @@ class Transfar extends Component {
                                 </WingBlank>
                                 <div className="rate">{this.state.rate / 100000} BTC</div>
                             </div>
-                            <div className="btn" onClick={() => this.confirmTrans('BTC')}>
-                                {intl.get('Confirm Transfer')}
+                            <div className="btn" onClick={!this.state.confirming&&(() => this.confirmTrans('BTC'))}>
+                                {this.state.confirming?intl.get('Confirming'):intl.get('Confirm Transfer')}
                             </div>
                         </div> : window.localStorage.getItem('type') == intl.get('LibraWallet') ? <div className="transfarDescr">
                             <div className="form">
@@ -380,8 +396,8 @@ class Transfar extends Component {
                                 </WingBlank>
                                 <div className="rate">{this.state.rate / 100000} libra</div>
                             </div>
-                            <div className="btn" onClick={() => this.confirmTrans('libra')}>
-                                {intl.get('Confirm Transfer')}
+                            <div className="btn" onClick={!this.state.confirming&&(() => this.confirmTrans('libra'))}>
+                                {this.state.confirming?intl.get('Confirming'):intl.get('Confirm Transfer')}
                             </div>
                         </div> : null
                     }
