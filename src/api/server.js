@@ -2,7 +2,7 @@ import request from '../utils/request';
 let url = 'http://52.27.228.84:4000';
 let url1 = 'https://tchain.api.btc.com/v3/';
 let url2 = 'http://192.168.1.111:10087/';
-let url3 = 'http://192.168.1.111:30001/';
+let url3 = 'http://47.52.66.26:30001/';
 //新用户创建提交信息
 export let createUserInfo = (params) => {
     return request({
@@ -81,12 +81,12 @@ export let getViolasDealRecord = (params) => {
     });
 }
 //获取btc交易记录
-export let getBTCDealRecord = (params) => {
-    return request({
-        url: url2 + 'ttransaction?address=' + params.address + '&page=' + params.page,
-        method: 'get',
-    });
-}
+// export let getBTCDealRecord = (params) => {
+//     return request({
+//         url: url2 + 'ttransaction?address=' + params.address + '&page=' + params.page,
+//         method: 'get',
+//     });
+// }
 //获取地址簿
 export let getCurUserInfo = () => {
     return request({
