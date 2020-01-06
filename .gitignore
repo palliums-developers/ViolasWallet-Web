@@ -17,8 +17,8 @@
 .env.test.local
 .env.production.local
 
-/sh/*.log
-/sh/*.out
+/sh/exchange.log
+/sh/nohup.out
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

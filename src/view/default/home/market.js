@@ -118,7 +118,28 @@ class Market extends Component {
             })
         }
     }
+    getCoin = async  () => {
+        
+        let { coin } = this.props.dealIndex;
+        await this.props.dealIndex.updateCoin(!coin)
+        if (coin) {
+            this.getContent(false)
+        } else {
+            this.getContent(true)
+        }
 
+        if (this.state.coin) {
+            this.setState({
+                leftCount: this.state.leftCount,
+                rightCount: this.state.rightCount
+            })
+        } else {
+            this.setState({
+                leftCount: this.state.rightCount,
+                rightCount: this.state.leftCount
+            })
+        }
+    }
     log = (name) => {
         return (value) => {
             //   console.log(`${name}: ${value}`);
@@ -172,14 +193,14 @@ class Market extends Component {
         if (coin) {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
+                let rightcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
                 // console.log(rightcount)
                 this.setState({
                     leftCount: value,
                     rightCount: rightcount
                 })
             } else if (type == 'right') {
-                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
+                let leftcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
                 this.setState({
                     leftCount: leftcount,
                     rightCount: value
@@ -188,14 +209,14 @@ class Market extends Component {
         } else {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let leftcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
+                let leftcount = this.fix6(Number(value) * (othersdata[vals].price / othersdata[vals].price));
                 // console.log(leftcount)
                 this.setState({
                     leftCount: value,
                     rightCount: leftcount
                 })
             } else if (type == 'right') {
-                let rightcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
+                let rightcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
                 this.setState({
                     leftCount: rightcount,
                     rightCount: value
@@ -203,27 +224,7 @@ class Market extends Component {
             }
         }
     }
-    getCoin = () => {
-        let { coin } = this.props.dealIndex;
-        this.props.dealIndex.updateCoin(!coin)
-        if (coin) {
-            this.getContent(false)
-        } else {
-            this.getContent(true)
-        }
-
-        if (this.state.coin) {
-            this.setState({
-                leftCount: this.state.leftCount,
-                rightCount: this.state.rightCount
-            })
-        } else {
-            this.setState({
-                leftCount: this.state.rightCount,
-                rightCount: this.state.leftCount
-            })
-        }
-    }
+    
     getExchange = async () => {
         if (this.state.leftCount == '') {
             alert(intl.get('Input amount'));
