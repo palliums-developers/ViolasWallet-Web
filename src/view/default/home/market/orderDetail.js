@@ -23,8 +23,8 @@ class OrderDetail extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }else{
             this.props.history.push('/welcome');

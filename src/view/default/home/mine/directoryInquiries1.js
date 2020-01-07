@@ -17,7 +17,7 @@ class DirectoryInquiries1 extends Component {
     intl.options.currentLocale = localStorage.getItem("local");
   }
   componentDidMount(){
-    let userInfo = JSON.parse(window.localStorage.getItem("data"));
+    let userInfo = JSON.parse(window.sessionStorage.getItem("data"));
     if (this.props.location.state) {
       if (this.props.location.state.type == "officialCoin") {
         if (window.localStorage.getItem("type") == intl.get("ViolasWallet")) {
@@ -78,8 +78,8 @@ class DirectoryInquiries1 extends Component {
     }
   }
   deleteFun = (ind) =>{
-    let userInfo = JSON.parse(window.localStorage.getItem("data"));
-    let address_book = JSON.parse(window.localStorage.getItem("data")).address_book;
+    let userInfo = JSON.parse(window.sessionStorage.getItem("data"));
+    let address_book = JSON.parse(window.sessionStorage.getItem("data")).address_book;
     address_book.splice(ind, 1);
     let data = {
       name: userInfo.name,
@@ -90,7 +90,7 @@ class DirectoryInquiries1 extends Component {
       address_book: address_book,
       backup: userInfo.backup
     };
-    window.localStorage.setItem("data",JSON.stringify(data));
+    window.sessionStorage.setItem("data",JSON.stringify(data));
     this.forceUpdate();
   }
   getEvery = (addr) =>{

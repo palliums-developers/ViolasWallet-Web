@@ -19,11 +19,11 @@ class GetMoney extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome');
     }
     async componentDidMount() {
-        if (window.localStorage.getItem('data')) {
-            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             let arr = creat_account_mnemonic(decrypted.mne_arr);
             let balanceData;
             if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
@@ -36,7 +36,7 @@ class GetMoney extends Component {
                     balancedata: balanceData,
                     purseCoin: 'vtoken'
                 })
-                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                let wal = JSON.parse(window.sessionStorage.getItem('data')).wallet_name.filter(v => {
                     if ((v.name).indexOf(window.localStorage.getItem('type').slice(0, 5)) == 0) {
                         return v.name;
                     }
@@ -55,7 +55,7 @@ class GetMoney extends Component {
                     balancedata: balanceData,
                     purseCoin: 'bitcoin',
                 })
-                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                let wal = JSON.parse(window.sessionStorage.getItem('data')).wallet_name.filter(v => {
                     if ((v.name).indexOf(window.localStorage.getItem('type').slice(0, 5)) == 0) {
                         return v.name;
                     }
@@ -68,7 +68,7 @@ class GetMoney extends Component {
                 //     address:addressStr,
                 //     name:'btc'
                 // })
-                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                let wal = JSON.parse(window.sessionStorage.getItem('data')).wallet_name.filter(v => {
                     if ((v.name).indexOf(window.localStorage.getItem('type').slice(0, 1)) == 0) {
                         return v.name;
                     }

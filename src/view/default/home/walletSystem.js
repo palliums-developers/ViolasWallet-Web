@@ -49,14 +49,14 @@ class WalletSystem extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         }else{
             this.props.history.push('welcome')
         }
     }
     async componentDidMount() {
-        if(window.localStorage.getItem('data')){
+        if (window.sessionStorage.getItem('data')){
             if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
                 this.setState({
                     types: 'violas'
@@ -88,7 +88,7 @@ class WalletSystem extends Component {
             this.setState({
                 balancedata2: balanceData2
             })
-            let wallets = JSON.parse(window.localStorage.getItem('data')).wallet_name;
+            let wallets = JSON.parse(window.sessionStorage.getItem('data')).wallet_name;
             let violasW = wallets.filter((v) => v.type == 'violas')
             let libraW = wallets.filter((v) => v.type == 'libra')
             let btcW = wallets.filter((v) => v.type == 'BTC')
@@ -173,7 +173,7 @@ class WalletSystem extends Component {
     render() {
         let { balancedata1, balancedata2, imgs, violaswal, libwal, btcwal } = this.state;
         return (
-            window.localStorage.getItem('data')&&
+            window.sessionStorage.getItem('data')&&
             <div className="walletSystem">
                 <header>
                     <span onClick={() => {
@@ -200,7 +200,7 @@ class WalletSystem extends Component {
                                 <div className="identityWallet">
                                     <h4>{intl.get('Identity Wallet')}</h4>
                                     {
-                                        JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
+                                        JSON.parse(window.sessionStorage.getItem('data')).wallet_name && JSON.parse(window.sessionStorage.getItem('data')).wallet_name.map((v, i) => {
                                             return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallets(v.type, v.name)}>
                                                 <div className="title">
                                                     <label>{v.name}</label>
@@ -214,7 +214,7 @@ class WalletSystem extends Component {
                                 <div className="identityWallet toIdentity">
                                     <h4>{intl.get('Create/Import')}</h4>
                                     {
-                                        JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v, i) => {
+                                        JSON.parse(window.sessionStorage.getItem('data')).extra_wallet && JSON.parse(window.sessionStorage.getItem('data')).extra_wallet.map((v, i) => {
                                             return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} onClick={() => this.getWallet(v.type, v.name)}>
                                                 <div className="title">
                                                     <label>{v.name}</label>

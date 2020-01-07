@@ -8,7 +8,7 @@ import intl from 'react-intl-universal';
 import BScroll from 'better-scroll';
 let bitcoin = require("bitcoinjs-lib");
 let testnet = bitcoin.networks.testnet;
-let decrypted = JSON.parse(window.localStorage.getItem('data'));
+let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
 
 @inject('index')
 @observer
@@ -25,7 +25,7 @@ class Record extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     async getVoHistory(){
         let violas = new vAccount(decrypted.mne_arr);

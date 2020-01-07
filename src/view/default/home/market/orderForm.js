@@ -22,8 +22,8 @@ class OrderForm extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         }else{
             this.props.history.push('/welcome');
@@ -157,7 +157,7 @@ class OrderForm extends Component {
                                                         <span></span>
                                                     </div>
                                                     <div className="list">
-                                                        <span>{v.amountFilled}</span>
+                                                        <span>{v.amountFilled / 1e6}</span>
                                                         <span>0.01Vtoken</span>
                                                         <span></span>
                                                     </div>

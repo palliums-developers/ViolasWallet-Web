@@ -21,8 +21,8 @@ class DailyCash extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         }else{
             this.props.history.push('/welcome');
         }
@@ -63,7 +63,7 @@ class DailyCash extends Component {
     render() {
         let { balancedata1, balancedata2 } = this.state;
         return (
-            window.localStorage.getItem('data')&&
+            window.sessionStorage.getItem('data')&&
             <div className="dailyCash">
                 <header>
                     <span onClick={() => {
@@ -78,7 +78,7 @@ class DailyCash extends Component {
                     <div className="identityWallet">
                         <h4>{intl.get('Identity Wallet')}</h4>
                         {
-                            JSON.parse(window.localStorage.getItem('data')).wallet_name && JSON.parse(window.localStorage.getItem('data')).wallet_name.map((v, i) => {
+                            JSON.parse(window.sessionStorage.getItem('data')).wallet_name && JSON.parse(window.sessionStorage.getItem('data')).wallet_name.map((v, i) => {
                                 return <div key={i} className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} >
                                     <div className="title">
                                         <label>{v.name}</label>
@@ -121,7 +121,7 @@ class DailyCash extends Component {
                     <div className="identityWallet toIdentity">
                         <h4>{intl.get('Create/Import')}</h4>
                         {
-                            JSON.parse(window.localStorage.getItem('data')).extra_wallet && JSON.parse(window.localStorage.getItem('data')).extra_wallet.map((v, i) => {
+                            JSON.parse(window.sessionStorage.getItem('data')).extra_wallet && JSON.parse(window.sessionStorage.getItem('data')).extra_wallet.map((v, i) => {
                                 return <div className={v.type == 'violas' ? 'identityContent vioBack' : v.type == 'libra' ? 'identityContent libBack' : v.type == 'BTC' ? 'identityContent btcBack' : null} key={i}>
                                     <div className="title">
                                         <label>{v.name}</label>

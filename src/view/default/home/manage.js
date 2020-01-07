@@ -22,12 +22,12 @@ class Manage extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        if(window.localStorage.getItem('data')){
-            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if(window.sessionStorage.getItem('data')){
+            let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             let violas = new vAccount(decrypted.mne_arr);
             let btc = new Account(decrypted.mne_arr, testnet);
             if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                let wal = JSON.parse(window.sessionStorage.getItem('data')).wallet_name.filter(v => {
                     if ((v.name).indexOf(window.localStorage.getItem('type').slice(0, 1)) == 0) {
                         return v.name;
                     }
@@ -37,7 +37,7 @@ class Manage extends Component {
                     address: btc.address
                 })
             } else {
-                let wal = JSON.parse(window.localStorage.getItem('data')).wallet_name.filter(v => {
+                let wal = JSON.parse(window.sessionStorage.getItem('data')).wallet_name.filter(v => {
                     if ((v.type).indexOf(window.localStorage.getItem('type').slice(0, 5).toLowerCase()) == 0) {
                         return v.name;
                     }
@@ -59,13 +59,13 @@ class Manage extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code') + '!!!')
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+        } else if (this.state.value != JSON.parse(window.sessionStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input') + '!!!')
         } else {
             this.setState({
                 isShow: false
             })
-            let userInfo = JSON.parse(window.localStorage.getItem('data'));
+            let userInfo = JSON.parse(window.sessionStorage.getItem('data'));
             let data = {
                 name: userInfo.name,
                 password1: userInfo.password1,
@@ -85,11 +85,11 @@ class Manage extends Component {
 
     }
     delete = () => {
-        window.localStorage.clear()
-        this.props.history.push('/app')
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        this.props.history.push('/app');
     }
     render() {
-        console.log(this.state.curWal)
         return (
             <div className="manage">
                 <header>

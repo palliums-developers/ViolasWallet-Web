@@ -30,8 +30,8 @@ class DetailWallet1 extends Component {
         })
     }
     update = () =>{
-        let arr = JSON.parse(window.localStorage.getItem('data')).wallet_name;
-        let arr1 = JSON.parse(window.localStorage.getItem('data')).extra_wallet;
+        let arr = JSON.parse(window.sessionStorage.getItem('data')).wallet_name;
+        let arr1 = JSON.parse(window.sessionStorage.getItem('data')).extra_wallet;
         let { name, address } = this.props.location.state;
         for(let i = 0;i < arr.length;i++){
             if((arr[i].name).indexOf(name)==0){
@@ -43,13 +43,13 @@ class DetailWallet1 extends Component {
                 arr1[i] = { name: this.state.oldName, type: arr1[i].type, mnemoic: arr1[i].mnemoic, password: arr1[i].password }
             }
         }
-        window.localStorage.setItem('data',JSON.stringify({
-            name:JSON.parse(window.localStorage.getItem('data')).name,
-            password1:JSON.parse(window.localStorage.getItem('data')).password1,
-            mne_arr:JSON.parse(window.localStorage.getItem('data')).mne_arr,
+        window.sessionStorage.setItem('data',JSON.stringify({
+            name:JSON.parse(window.sessionStorage.getItem('data')).name,
+            password1:JSON.parse(window.sessionStorage.getItem('data')).password1,
+            mne_arr:JSON.parse(window.sessionStorage.getItem('data')).mne_arr,
             extra_wallet: arr1,
-            address_book: JSON.parse(window.localStorage.getItem('data')).address_book,
-            backup: JSON.parse(window.localStorage.getItem('data')).backup,
+            address_book: JSON.parse(window.sessionStorage.getItem('data')).address_book,
+            backup: JSON.parse(window.sessionStorage.getItem('data')).backup,
             wallet_name:arr
         }))
         this.props.history.push({

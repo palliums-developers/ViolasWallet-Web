@@ -30,8 +30,8 @@ class AddCurrency extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        if (window.localStorage.getItem('data')) {
-            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             let violas = new vAccount(decrypted.mne_arr);
             let newData = await this.props.index.updateCurCoin({
                 addr: violas.address
@@ -111,7 +111,7 @@ class AddCurrency extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code'))
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+        } else if (this.state.value != JSON.parse(window.sessionStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
         } else {
             this.setState({
