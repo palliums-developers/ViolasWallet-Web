@@ -14,7 +14,7 @@ class FeekBack extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome');
     }
     getQuestion = (type) => {
         if (type == 'right') {

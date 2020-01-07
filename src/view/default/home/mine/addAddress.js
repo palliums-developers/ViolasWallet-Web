@@ -20,7 +20,7 @@ class AddAddress extends Component {
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
         this.forceUpdate();
-        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
+      !(window.sessionStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     componentDidMount() {
         this.setState({
@@ -59,9 +59,9 @@ class AddAddress extends Component {
             name:name,
             address:address
            }
-          let addressBooks = JSON.parse(window.localStorage.getItem('data'));
+          let addressBooks = JSON.parse(window.sessionStorage.getItem('data'));
           addressBooks.address_book.push(address_book)
-          window.localStorage.setItem('data',JSON.stringify(addressBooks));
+          window.sessionStorage.setItem('data',JSON.stringify(addressBooks));
           this.props.history.push("/directoryInquiries");
         }
     }

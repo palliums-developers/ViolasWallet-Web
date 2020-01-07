@@ -12,7 +12,7 @@ class AboutUs extends Component {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     componentDidMount() {
-        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome');
     }
     render() {
         return (
@@ -32,11 +32,11 @@ class AboutUs extends Component {
                         <p onClick={()=>{
                             window.open('https://violas.io');
                         }}><label>{intl.get('Official Website')}</label><span>violas.io</span></p>
-                        <p><label>{intl.get('Email Address')}</label><span>violas.io</span></p>
-                        <p><label>{intl.get('Wechat')}</label><span>x x x</span></p>
-                        <p><label>{intl.get('Telegram Group')}</label><span>xxxxx</span></p>
-                        <p><label>{intl.get('Twitter')}</label><span>xxxxxx</span></p>
-                        <p><label>{intl.get('Facebook')}</label><span>xxxxxx</span></p>
+                        <p><label>{intl.get('Email Address')}</label><span>violas_blockchain@violas.io</span></p>
+                        <p><label>{intl.get('Wechat')}</label><span></span></p>
+                        <p><label>{intl.get('Telegram Group')}</label><span></span></p>
+                        <p><label>{intl.get('Twitter')}</label><span></span></p>
+                        <p><label>{intl.get('Facebook')}</label><span></span></p>
                     </div>
                 </section>
             </div>

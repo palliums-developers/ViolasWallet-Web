@@ -32,8 +32,8 @@ class Market extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
         } else {
             this.props.history.push('/welcome');
@@ -253,7 +253,7 @@ class Market extends Component {
         })
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code'));
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+        } else if (this.state.value != JSON.parse(window.sessionStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input'))
         } else {
             this.setState({ confirming: true })

@@ -62,7 +62,7 @@ class CreateIdentity extends Component {
     else if (!reg.test(pass1)) {
       alert(intl.get('Password setting does not match') + '！！！')
     } else {
-      window.localStorage.setItem('data', JSON.stringify({
+      window.sessionStorage.setItem('data', JSON.stringify({
         name: name,
         password1: pass1,
         mne_arr: mne_Arr,

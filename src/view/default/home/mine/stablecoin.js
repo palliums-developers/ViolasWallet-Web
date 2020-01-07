@@ -20,13 +20,13 @@ class stablecoin extends Component {
         }
     }
     componentWillMount() {
-        if (window.localStorage.getItem("data")) {
-          decrypted = JSON.parse(window.localStorage.getItem("data"));
+        if (window.sessionStorage.getItem("data")) {
+            decrypted = JSON.parse(window.sessionStorage.getItem("data"));
         }
         intl.options.currentLocale = localStorage.getItem("local");
     }
     async componentDidMount() {
-        if(localStorage.getItem('coinType')&&window.localStorage.getItem('data')){
+        if (localStorage.getItem('coinType') && window.sessionStorage.getItem('data')){
             let violas = new vAccount(decrypted.mne_arr);
             let coin_name = JSON.parse(localStorage.getItem('coinType')).name;
             let getCurCoinMessage = await this.props.index.getCoinMess();

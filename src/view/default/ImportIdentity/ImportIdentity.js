@@ -32,7 +32,7 @@ class ImportIdentity extends Component {
         let json = aes256.decrypt(this.state.password, e.currentTarget.result);
         if (json[0] == '{') {
           alert(intl.get('Decryption success')+'！！！')
-          window.localStorage.setItem('data', JSON.stringify(JSON.parse(json)));
+          window.sessionStorage.setItem('data', JSON.stringify(JSON.parse(json)));
           window.localStorage.setItem('type', intl.get('ViolasWallet'));
           this.props.history.push('/home/wallets')
         } else {

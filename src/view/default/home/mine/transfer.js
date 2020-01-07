@@ -30,7 +30,7 @@ class Transfar extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome')
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome')
     }
     async componentDidMount() {
         if (this.props.index.type) {
@@ -48,7 +48,7 @@ class Transfar extends Component {
                 });
             }
         }
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         let balanceData;
         if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
             let violas = new vAccount(decrypted.mne_arr);
@@ -155,7 +155,7 @@ class Transfar extends Component {
     }
     confirmTrans = async (type) => {
         let { violasAmount, libraAmount, btcAmount, address1, address2, address3 ,balancedata} = this.state;
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         let transFar;
         if (type == 'violas') {
             this.setState({confirming:true});

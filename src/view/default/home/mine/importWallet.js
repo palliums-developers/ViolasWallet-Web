@@ -87,9 +87,9 @@ class ImportWallet extends Component {
           mnemoic: mne
         }
       }
-      let wallets = JSON.parse(window.localStorage.getItem('data'));
+      let wallets = JSON.parse(window.sessionStorage.getItem('data'));
       wallets.extra_wallet.push(extra_wallet)
-      window.localStorage.setItem('data', JSON.stringify(wallets))
+      window.sessionStorage.setItem('data', JSON.stringify(wallets))
       this.props.history.push('/dailyCash');
     }
   }

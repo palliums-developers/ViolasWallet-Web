@@ -15,11 +15,11 @@ class DirectoryInquiries extends Component {
     intl.options.currentLocale = localStorage.getItem("local");
   }
   async componentDidMount() {
-    !window.localStorage.getItem("data") && this.props.history.push("/welcome");
+    !window.sessionStorage.getItem("data") && this.props.history.push("/welcome");
   }
   deleteFun = ind => {
-    let userInfo = JSON.parse(window.localStorage.getItem("data"));
-    let address_book = JSON.parse(window.localStorage.getItem("data"))
+    let userInfo = JSON.parse(window.sessionStorage.getItem("data"));
+    let address_book = JSON.parse(window.sessionStorage.getItem("data"))
       .address_book;
     address_book.splice(ind, 1);
     let data = {
@@ -31,12 +31,12 @@ class DirectoryInquiries extends Component {
       address_book: address_book,
       backup: userInfo.backup
     };
-    window.localStorage.setItem("data", JSON.stringify(data));
+    window.sessionStorage.setItem("data", JSON.stringify(data));
     this.forceUpdate();
   };
   render() {
     return (
-      window.localStorage.getItem("data") &&
+      window.sessionStorage.getItem("data") &&
       <div className="directoryInquiries">
         <header>
           <span
@@ -62,8 +62,8 @@ class DirectoryInquiries extends Component {
         </header>
         <section>
           <div className="addressList">
-            {JSON.parse(window.localStorage.getItem("data")).address_book &&
-              JSON.parse(window.localStorage.getItem("data")).address_book.map(
+            {JSON.parse(window.sessionStorage.getItem("data")).address_book &&
+              JSON.parse(window.sessionStorage.getItem("data")).address_book.map(
                 (v, i) => {
                   return (
                     <div className="list" key={i}>

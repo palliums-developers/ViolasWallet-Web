@@ -11,13 +11,13 @@ class Mine extends Component {
         }
     }
     componentWillMount(){
-        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data'))&&this.props.history.push('/welcome');
     }
     componentDidMount() {
         intl.options.currentLocale = localStorage.getItem("local");
     }
     saveJson = async () => {
-        let userInfo = JSON.parse(window.localStorage.getItem('data'));
+        let userInfo = JSON.parse(window.sessionStorage.getItem('data'));
 
         let data = {
             name: userInfo.name,
@@ -36,7 +36,8 @@ class Mine extends Component {
         a.click();
         // await window.localStorage.removeItem('data');
         await window.localStorage.clear();
-        await this.props.history.push('/app')
+        await window.sessionStorage.clear();
+        await this.props.history.push('/app');
     }
 
     render() {

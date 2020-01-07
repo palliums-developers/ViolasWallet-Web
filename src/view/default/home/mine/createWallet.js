@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import QrReader from 'react-qr-reader'
+import QrReader from 'react-qr-reader';
 import intl from 'react-intl-universal';
 let bip39 = require("bip39");
 
@@ -87,9 +87,9 @@ class CreateWallet extends Component {
           mnemoic: bip39.generateMnemonic()
         }
       }
-      let wallets = JSON.parse(window.localStorage.getItem('data'));
+      let wallets = JSON.parse(window.sessionStorage.getItem('data'));
       wallets.extra_wallet.push(extra_wallet)
-      window.localStorage.setItem('data', JSON.stringify(wallets))
+      window.sessionStorage.setItem('data', JSON.stringify(wallets))
       this.props.history.push('/dailyCash');
 
     }

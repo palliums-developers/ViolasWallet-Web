@@ -27,8 +27,8 @@ class Wallet extends Component {
         }
     }
     componentWillMount() {
-        if (window.localStorage.getItem('data')) {
-            decrypted = JSON.parse(window.localStorage.getItem('data'));
+        if (window.sessionStorage.getItem('data')) {
+            decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         } else {
             this.props.history.push('/welcome');
         }
@@ -70,7 +70,7 @@ class Wallet extends Component {
                 balancedata: balanceData,
                 nameData: namData,
                 balance: balanceData.balance / 1e6,
-                curWal: window.localStorage.getItem('data') && JSON.parse(window.localStorage.getItem('data')).name
+                curWal: window.sessionStorage.getItem('data') && JSON.parse(window.sessionStorage.getItem('data')).name
             })
         } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
             let libra = new vAccount(decrypted.mne_arr);
@@ -81,7 +81,7 @@ class Wallet extends Component {
             this.setState({
                 balancedata: balanceData,
                 balance: balanceData.balance / 1e6,
-                curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[2].name
+                curWal: JSON.parse(window.sessionStorage.getItem('data')).wallet_name[2].name
             })
         } else if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
             let btc = new Account(decrypted.mne_arr, testnet);
@@ -94,7 +94,7 @@ class Wallet extends Component {
             this.setState({
                 balancedata: balanceData,
                 balance: balanceData && balanceData.balance / 1e8,
-                curWal: JSON.parse(window.localStorage.getItem('data')).wallet_name[1].name
+                curWal: JSON.parse(window.sessionStorage.getItem('data')).wallet_name[1].name
             })
         }
         if (window.localStorage.getItem('name')) {
@@ -221,7 +221,7 @@ class Wallet extends Component {
                         </div>
                     </div>
                     {
-                        JSON.parse(window.localStorage.getItem('data')).backup ? <div className="warning">
+                            JSON.parse(window.sessionStorage.getItem('data')).backup ? <div className="warning">
                             <div className="head">
                                 <label><img src="/img/编组 5@2x.png" /></label>
                                 <span>{intl.get('Safety Reminder')}</span>

@@ -40,13 +40,13 @@ class Manage1 extends Component {
     confirm = async () => {
         if (this.state.value == '') {
             alert(intl.get('Please input Access Code') + '!!!')
-        } else if (this.state.value != JSON.parse(window.localStorage.getItem('data')).password1) {
+        } else if (this.state.value != JSON.parse(window.sessionStorage.getItem('data')).password1) {
             alert(intl.get('Access Code does not match,please Re_input') + '!!!')
         } else {
             this.setState({
                 isShow: false
             })
-            let userInfo = JSON.parse(window.localStorage.getItem('data'));
+            let userInfo = JSON.parse(window.sessionStorage.getItem('data'));
             let data = {
                 name: userInfo.name,
                 password1: userInfo.password1,
@@ -66,8 +66,9 @@ class Manage1 extends Component {
 
     }
     delete = () => {
-        window.localStorage.clear()
-        this.props.history.push('/app')
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        this.props.history.push('/app');
     }
     render() {
         return (

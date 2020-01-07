@@ -20,8 +20,8 @@ class CodeBackup extends Component {
   }
   componentDidMount() {
     let decrypted;
-    if (window.localStorage.getItem('data')) {
-      decrypted = JSON.parse(window.localStorage.getItem('data'));
+    if (window.sessionStorage.getItem('data')) {
+      decrypted = JSON.parse(window.sessionStorage.getItem('data'));
       this.setState({ mnes_arr: decrypted.mne_arr.split(" ") });
     } else {
       this.props.history.push('/welcome');

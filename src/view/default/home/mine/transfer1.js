@@ -23,7 +23,7 @@ class Transfar1 extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.localStorage.getItem('data')) && this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome');
     }
     async componentDidMount() {
         this.setState({
@@ -84,7 +84,7 @@ class Transfar1 extends Component {
 
     confirmTrans = async (type) => {
         let { violasAmount, address1, coinData } = this.state;
-        let decrypted = JSON.parse(window.localStorage.getItem('data'));
+        let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
         let violas = new vAccount(decrypted.mne_arr);
         if (violasAmount == "") {
             alert(intl.get("Input Amount") + "!!!");

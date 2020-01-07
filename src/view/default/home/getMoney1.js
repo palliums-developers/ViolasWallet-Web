@@ -23,7 +23,7 @@ class GetMoney1 extends Component {
             this.setState({
                 coinData: JSON.parse(window.localStorage.getItem('coinType'))
             })
-            let decrypted = JSON.parse(window.localStorage.getItem('data'));
+            let decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             let violas = new vAccount(decrypted.mne_arr);
             let balanceData = await this.props.index.getBalance({
                 address: violas.address,

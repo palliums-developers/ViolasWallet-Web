@@ -11,7 +11,7 @@ class Setting extends Component {
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.localStorage.getItem('data'))&&this.props.history.push('/welcome'); 
+        !(window.sessionStorage.getItem('data'))&&this.props.history.push('/welcome'); 
     }
 
     render() {

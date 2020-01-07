@@ -24,8 +24,8 @@ class ConfirmWords extends Component {
   }
   componentDidMount() {
     let decrypted;
-    if (window.localStorage.getItem('data')) {
-      decrypted = JSON.parse(window.localStorage.getItem('data'));
+    if (window.sessionStorage.getItem('data')) {
+      decrypted = JSON.parse(window.sessionStorage.getItem('data'));
       this.setState({ mnes_arr: decrypted.mne_arr.split(" ") });
       let mne_arr_json = this.get_mne_json(decrypted.mne_arr);
       this.random_arr(mne_arr_json);
@@ -141,7 +141,7 @@ class ConfirmWords extends Component {
   }
   finish = () => {
     if (this.state.mnes_empty.length == 12 && this.state.mnes_empty.length != '') {
-      let data = JSON.parse(window.localStorage.getItem('data'));
+      let data = JSON.parse(window.sessionStorage.getItem('data'));
       var jsonData = aes256.encrypt(data.password1, JSON.stringify(data));
       var a = document.createElement("a");
       var file = new Blob([jsonData], { type: 'text/plain' });
@@ -149,7 +149,7 @@ class ConfirmWords extends Component {
       a.download = data.name + '.json';
       a.click();
       data.backup = false;
-      window.localStorage.setItem('data', JSON.stringify(data))
+      window.sessionStorage.setItem('data', JSON.stringify(data))
       this.props.history.push('/home')
     }
 
