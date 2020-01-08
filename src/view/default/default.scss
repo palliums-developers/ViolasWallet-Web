@@ -4230,7 +4230,7 @@
                 align-items: center;
                 box-sizing: border-box;
                 background: #FFF;
-
+		align-items:center;
                 span:nth-child(1) {
                     width: 0.59rem;
                     height: 0.59rem;
@@ -4248,6 +4248,7 @@
                     flex: 1;
                     line-height: 1.5rem;
                     margin-left: 0.1rem;
+		    margin-bottom:0;
                 }
 
                 span:nth-child(2) {
