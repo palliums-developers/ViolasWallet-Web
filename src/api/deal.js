@@ -11,6 +11,13 @@ export let stableCurTranfer = (params) =>{
         method: 'get',
     });
 }
+//价格
+export let getCoinPrice = (params) => {
+    return request({
+        url: url + '/price?give=' + params.give + '&get=' + params.get,
+        method: 'get',
+    });
+}
 //卖出的
 export let stableCurDeal = (params) =>{
     return request({

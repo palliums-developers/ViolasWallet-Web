@@ -27,7 +27,9 @@ class Market extends Component {
             value: '',
             disNone: false,
             updatas: [],
-            confirming: false
+            confirming: false,
+            leftRate:1,
+            rightRate: 1
         }
     }
     componentWillMount() {
@@ -46,7 +48,8 @@ class Market extends Component {
         let newData = await this.props.index.updateCurCoin({
             addr: violas.address
         });
-        let { coin } = this.props.dealIndex;
+        let { val, vals, coin, getCoinPrices } = this.props.dealIndex;
+        
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
                 if (othersData[i].addr.indexOf("0x" + newData[j]) == 0) {
@@ -62,9 +65,26 @@ class Market extends Component {
             coindata: othersData,
             updatas: updateData,
             othersdata: othersData
-        }, () => {
-            this.getContent(coin)
-
+        },async ()  =>  {
+            this.getContent(coin);
+            let data;
+            if(coin){
+                data = await getCoinPrices({
+                    give: this.state.coindata[val].addr,
+                    get: this.state.othersdata[vals].addr,
+                })
+                this.setState({
+                    rightRate: data
+                })
+            }else{
+                data = await getCoinPrices({
+                    give: this.state.othersdata[vals].addr,
+                    get: this.state.coindata[val].addr,
+                })
+                this.setState({
+                    rightRate: data
+                })
+            }
         });
     }
     stringEntFun(value) {
@@ -91,11 +111,29 @@ class Market extends Component {
     //     }
     // }
     async getContent(coin) {
-        let { val, vals, stableDeal, selfDeal } = this.props.dealIndex;
+        let { val, vals, stableDeal, selfDeal, getCoinPrices } = this.props.dealIndex;
         let { coindata, othersdata } = this.state;
         let data = await selfDeal({
             user: violas.address
         });
+        let priceData;
+        if (coin) {
+            priceData = await getCoinPrices({
+                give: this.state.coindata[val].addr,
+                get: this.state.othersdata[vals].addr,
+            })
+            this.setState({
+                rightRate: priceData
+            })
+        } else {
+            priceData = await getCoinPrices({
+                give: this.state.othersdata[vals].addr,
+                get: this.state.coindata[val].addr,
+            })
+            this.setState({
+                rightRate: priceData
+            })
+        }
         this.setState({
             dealData: data.splice(0, 3)
         })
@@ -184,23 +222,26 @@ class Market extends Component {
     getCount = (e, type) => {
         let {
             othersdata,
-            coindata
+            coindata,
+            leftRate,
+            rightRate
         } = this.state;
         let { vals, val, coin } = this.props.dealIndex;
+        
         // console.log(coin+'  '+type)
         //判断内容的格式
         //换算
         if (coin) {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let rightcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
+                let rightcount = this.fix6(Number(value) * rightRate);
                 // console.log(rightcount)
                 this.setState({
                     leftCount: value,
                     rightCount: rightcount
                 })
             } else if (type == 'right') {
-                let leftcount = this.fix6(Number(value) * (othersdata[vals].price / coindata[val].price));
+                let leftcount = this.fix6(Number(value) / rightRate);
                 this.setState({
                     leftCount: leftcount,
                     rightCount: value
@@ -209,14 +250,14 @@ class Market extends Component {
         } else {
             let value = this.stringEntFun(e.target.value);
             if (type == 'left') {
-                let leftcount = this.fix6(Number(value) * (othersdata[vals].price / othersdata[vals].price));
+                let leftcount = this.fix6(Number(value) * rightRate);
                 // console.log(leftcount)
                 this.setState({
                     leftCount: value,
                     rightCount: leftcount
                 })
             } else if (type == 'right') {
-                let rightcount = this.fix6(Number(value) * (coindata[val].price / othersdata[vals].price));
+                let rightcount = this.fix6(Number(value) / rightRate);
                 this.setState({
                     leftCount: rightcount,
                     rightCount: value
@@ -345,10 +386,11 @@ class Market extends Component {
             othersEntrust,
             dealData,
             othersdata,
-            coindata
+            coindata,
+            leftRate,
+            rightRate
         } = this.state;
         let { vals, val, coin } = this.props.dealIndex;
-        console.log(dealData)
         return (
             <div className="market">
                 <header>
@@ -397,7 +439,7 @@ class Market extends Component {
                             <div className="rate">
                                 <h4>{intl.get('Exchange Rate')}</h4>
                                 {
-                                    coin ? <span>{coindata.length > 0 && 1 / coindata[val].price}{coindata.length > 0 && coindata[val].name}={othersdata.length > 0 && 1 / othersdata[vals].price}{othersdata.length > 0 && othersdata[vals].name}</span> : <span>{othersdata.length > 0 && 1 / othersdata[vals].price}{othersdata.length > 0 && othersdata[vals].name}={coindata.length > 0 && 1 / coindata[val].price}{coindata.length > 0 && coindata[val].name}</span>
+                                    coin ? <span>{leftRate}{coindata.length > 0 && coindata[val].name}={rightRate}{othersdata.length > 0 && othersdata[vals].name}</span> : <span>{leftRate}{othersdata.length > 0 && othersdata[vals].name}={rightRate}{coindata.length > 0 && coindata[val].name}</span>
                                 }
 
                             </div>

@@ -5,7 +5,8 @@ import {
     selfCurDeal,
     getCurCoinMess,
     getOtherCoinMess,
-    getVersion
+    getVersion, 
+    getCoinPrice
 } from '../../api/deal'
 import axios from 'axios';
 
@@ -62,7 +63,6 @@ export default class DealIndex {
     }
     @action async getOthersCoinMess() {
         let coins = await getOtherCoinMess();
-        console.log(coins,'.........')
         return coins.data;
     }
     @action async stableDeal(params) {
@@ -72,6 +72,11 @@ export default class DealIndex {
     @action async selfDeal(params) {
         let data = await selfCurDeal(params);
         return data.data.orders
+    }
+    //价格
+    @action async getCoinPrices(params){
+        let data = await getCoinPrice(params);
+        return data.data.price;
     }
     //交易所兑换
     @action async exchange(params) {
@@ -94,5 +99,5 @@ export default class DealIndex {
                 return res.data;
             });
             return result;
-        }
+    }
 }
