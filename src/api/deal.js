@@ -28,7 +28,7 @@ export let getCurCoinMess = () => {
 //获取币种信息
 export let getOtherCoinMess = () => {
     return request({
-        url: url + '/prices',
+        url: url + '/tokens',
         method: 'get',
     });
 }

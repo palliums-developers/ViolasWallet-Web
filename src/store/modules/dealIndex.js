@@ -62,7 +62,7 @@ export default class DealIndex {
     }
     @action async getOthersCoinMess() {
         let coins = await getOtherCoinMess();
-
+        console.log(coins,'.........')
         return coins.data;
     }
     @action async stableDeal(params) {

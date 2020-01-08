@@ -55,16 +55,27 @@ app.get('/v1/orders', async function (req, res) {
   res.send(result);
 })
 
-app.get('/v1/prices', async (req, res) => {
-  let result = await axios.get(url + '/prices')
+app.get('/v1/price', async (req, res) => {
+  let give = req.query.give;
+  let get = req.query.get;
+  let result = await axios.get(url + '/price?give=' + give + '&get=' + get)
     .then(res => { return ((res.data)) })
     .catch(e => { console.log(e) })
   res.send(result);
 })
 
+app.get('/v1/tokens', async (req, res) => {
+  let result = await axios.get(url + '/tokens')
+    .then(res => { return (res.data)})
+    .catch(e => { console.log(e) })
+  res.send(result)
+})
+
 app.get('/v1/trades', async (req, res) => {
   let version = req.query.version;
-  let result = await axios.get(url + '/trades?version=' + version)
+  let pagenum = req.query.pagenum;
+  let pagesize = req.query.pagesize;
+  let result = await axios.get(url + '/trades?version=' + version + '&pagenum=' + pagenum + '&pagesize=' + pagesize)
     .then(res => { return res.data })
     .catch(e => console.log(e))
   res.send(result)

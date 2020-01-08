@@ -82,14 +82,14 @@ class Market extends Component {
             return value;
         }
     }
-    getPrices(name) {
-        let { othersdata } = this.state;
-        for (let i = 0; i < othersdata.length; i++) {
-            if ((othersdata[i].name).indexOf(name) == 0) {
-                return othersdata[i].price;
-            }
-        }
-    }
+    // getPrices(name) {
+    //     let { othersdata } = this.state;
+    //     for (let i = 0; i < othersdata.length; i++) {
+    //         if ((othersdata[i].name).indexOf(name) == 0) {
+    //             return othersdata[i].price;
+    //         }
+    //     }
+    // }
     async getContent(coin) {
         let { val, vals, stableDeal, selfDeal } = this.props.dealIndex;
         let { coindata, othersdata } = this.state;
@@ -348,6 +348,7 @@ class Market extends Component {
             coindata
         } = this.state;
         let { vals, val, coin } = this.props.dealIndex;
+        console.log(dealData)
         return (
             <div className="market">
                 <header>
@@ -446,7 +447,7 @@ class Market extends Component {
                                             <div className="deal">
                                                 <p><span>{v.tokenGiveSymbol}/</span><label>{v.tokenGetSymbol}</label></p>
                                                 <p>{v.amountGet / 1e6}</p>
-                                                <p>{this.getPrices(v.tokenGetSymbol)}</p>
+                                                <p>{v.tokenGivePrice}</p>
                                             </div>
                                             <div className="time">
                                                 {v.state == 'OPEN' ? timeStamp2String(v.date - 300 + '000') : v.state == 'FILLED' ? timeStamp2String(v.date + '000') : null}
