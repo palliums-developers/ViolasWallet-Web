@@ -18,7 +18,7 @@ import Setting from "../view/default/home/setting/setting";
 import MultiLanguage from "../view/default/home/setting/multiLanguage";
 import Service from "../view/default/home/setting/service";
 import AboutUs from "../view/default/home/setting/aboutUs";
-import FeekBack from "../view/default/home/setting/feedBack";
+import FeedBack from "../view/default/home/setting/feedBack";
 import DirectoryInquiries from "../view/default/home/mine/directoryInquiries";
 import DirectoryInquiries1 from "../view/default/home/mine/directoryInquiries1";
 import CodeBackup from "../view/default/backup/codeBackup";
@@ -233,8 +233,8 @@ const routes = [
     },
     //帮助与反馈
     {
-        path: "/feekBack",
-        component: FeekBack
+        path: "/feedBack",
+        component: FeedBack
     },
     {
         path: "/",

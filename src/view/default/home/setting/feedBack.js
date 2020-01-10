@@ -3,7 +3,7 @@ import 'antd-mobile/dist/antd-mobile.css';
 import { List, TextareaItem } from 'antd-mobile';
 import intl from 'react-intl-universal';
 
-class FeekBack extends Component {
+class FeedBack extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,4 +84,4 @@ class FeekBack extends Component {
     }
 }
 
-export default FeekBack;
+export default FeedBack;

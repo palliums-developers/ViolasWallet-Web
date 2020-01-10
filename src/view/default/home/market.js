@@ -6,6 +6,7 @@ import intl from 'react-intl-universal';
 import { timeStamp2String } from '../../../utils/timer';
 import vAccount from '../../../utils/violas';
 import CoinData from '../../../utils/currencyToken.json';
+import axios from 'axios';
 let decrypted, violas;
 
 @inject('dealIndex', 'index')
@@ -28,7 +29,7 @@ class Market extends Component {
             disNone: false,
             updatas: [],
             confirming: false,
-            leftRate:1,
+            leftRate: 1,
             rightRate: 1
         }
     }
@@ -40,6 +41,7 @@ class Market extends Component {
         } else {
             this.props.history.push('/welcome');
         }
+        axios.get('https://dex.violas.io/v1/tokens').then(res=>console.log(res.data))
     }
     async componentDidMount() {
         let othersData = await this.props.dealIndex.getOthersCoinMess();
@@ -49,7 +51,7 @@ class Market extends Component {
             addr: violas.address
         });
         let { val, vals, coin, getCoinPrices } = this.props.dealIndex;
-        
+
         for (let i = 0; i < othersData.length; i++) {
             for (let j = 0; j < newData.length; j++) {
                 if (othersData[i].addr.indexOf("0x" + newData[j]) == 0) {
@@ -65,10 +67,10 @@ class Market extends Component {
             coindata: othersData,
             updatas: updateData,
             othersdata: othersData
-        },async ()  =>  {
+        }, async () => {
             this.getContent(coin);
             let data;
-            if(coin){
+            if (coin) {
                 data = await getCoinPrices({
                     give: this.state.coindata[val].addr,
                     get: this.state.othersdata[vals].addr,
@@ -76,7 +78,7 @@ class Market extends Component {
                 this.setState({
                     rightRate: data
                 })
-            }else{
+            } else {
                 data = await getCoinPrices({
                     give: this.state.othersdata[vals].addr,
                     get: this.state.coindata[val].addr,
@@ -156,8 +158,8 @@ class Market extends Component {
             })
         }
     }
-    getCoin = async  () => {
-        
+    getCoin = async () => {
+
         let { coin } = this.props.dealIndex;
         await this.props.dealIndex.updateCoin(!coin)
         if (coin) {
@@ -227,7 +229,7 @@ class Market extends Component {
             rightRate
         } = this.state;
         let { vals, val, coin } = this.props.dealIndex;
-        
+
         // console.log(coin+'  '+type)
         //判断内容的格式
         //换算
@@ -265,7 +267,7 @@ class Market extends Component {
             }
         }
     }
-    
+
     getExchange = async () => {
         if (this.state.leftCount == '') {
             alert(intl.get('Input amount'));

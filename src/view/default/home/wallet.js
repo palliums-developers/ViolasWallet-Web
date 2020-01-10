@@ -36,8 +36,9 @@ class Wallet extends Component {
     }
     async componentDidMount() {
         let balanceData;
-        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
-
+        if(!decrypted){
+            this.props.history.push('/welcome');
+        }else if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
             let violas = new vAccount(decrypted.mne_arr);
             let data = await this.props.index.updateCurCoin({
                 addr: violas.address

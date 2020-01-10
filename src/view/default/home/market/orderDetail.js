@@ -26,17 +26,17 @@ class OrderDetail extends Component {
         if (window.sessionStorage.getItem('data')) {
             decrypted = JSON.parse(window.sessionStorage.getItem('data'));
             violas = new vAccount(decrypted.mne_arr);
-        }else{
+        } else {
             this.props.history.push('/welcome');
         }
     }
     async componentDidMount() {
         let data = await this.props.dealIndex.selfDeal({
-            user: violas&&violas.address
+            user: violas && violas.address
         });
-        let datas = data&&data.filter(v => v.id == this.props.match.params.id);
+        let datas = data && data.filter(v => v.id == this.props.match.params.id);
         let dataB = await this.props.dealIndex.getCurVersion({
-            version: datas&&datas[0].version
+            version: datas && datas[0].version
         })
         console.log(dataB);
 
@@ -109,7 +109,9 @@ class OrderDetail extends Component {
                                                 <span>0.01Vtoken</span>
                                                 <span></span>
                                             </div>
-                                            <p>{intl.get('Browser query')}</p>
+                                            <p onClick={() => {
+                                                window.open('http://47.52.66.26:10082/app/Violas_version/' + v.version)
+                                            }}>{intl.get('Browser query')}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +139,9 @@ class OrderDetail extends Component {
                                             <dd>{v.amount}</dd>
                                         </dl>
                                     </div>
-                                    <p>{intl.get('Browser query')}</p>
+                                    <p onClick={() => {
+                                        window.open('http://47.52.66.26:10082/app/Violas_version/' + v.version)
+                                    }}>{intl.get('Browser query')}</p>
                                 </div>
                             })
                         }

@@ -19,15 +19,16 @@ class Record extends Component {
         this.state = {
             recordData: [],
             recordBData: [],
-            off:0,
-            lim:5
+            off: 0,
+            lim: 5
         }
     }
     componentWillMount() {
         intl.options.currentLocale = localStorage.getItem("local");
-        !(window.sessionStorage.getItem('data'))&&this.props.history.push('/welcome');
+        !(window.sessionStorage.getItem('data')) && this.props.history.push('/welcome');
     }
-    async getVoHistory(){
+    async getVoHistory() {
+
         let violas = new vAccount(decrypted.mne_arr);
         let data = await this.props.index.getVioDealRecord({
             addr: violas.address,
@@ -50,7 +51,7 @@ class Record extends Component {
             recordData: data
         })
     }
-    async getBTCHistory(){
+    async getBTCHistory() {
         let btc = new Account(decrypted.mne_arr, testnet);
         let data = await this.props.index.getBTCDealRecords({
             address: btc.address,
@@ -63,7 +64,7 @@ class Record extends Component {
     }
     async componentDidMount() {
         let that = this;
-        let Bscroll = new BScroll('.sec',{
+        let Bscroll = new BScroll('.sec', {
             probeType: 1,
             click: true,
             scrollbar: true,
@@ -101,21 +102,21 @@ class Record extends Component {
             }
         })
     }
-    e7e8(_num){
-        let temp=_num;
-        let temp1=(_num).toString().split('-')[1]
-        if(temp1 && temp1==8){
-            temp=_num.toFixed(8);
-        }else if(temp1 && temp1==7)(
-            temp=_num.toFixed(7)
+    e7e8(_num) {
+        let temp = _num;
+        let temp1 = (_num).toString().split('-')[1]
+        if (temp1 && temp1 == 8) {
+            temp = _num.toFixed(8);
+        } else if (temp1 && temp1 == 7) (
+            temp = _num.toFixed(7)
         )
         return (temp)
     }
     render() {
         let { recordBData, recordData } = this.state;
-        let btc = new Account(decrypted&&decrypted.mne_arr, testnet);
+        let btc = new Account(decrypted && decrypted.mne_arr, testnet);
         return (
-            btc&&
+            btc &&
             <div className="record">
                 <header>
                     <span onClick={() => {
@@ -128,75 +129,75 @@ class Record extends Component {
                 </header>
                 <section className="sec">
                     <div className="secContent" down={recordData.length >= 6 ? '上拉加载' : null}>
-                    {
-                        recordData && recordData.map((v, i) => {
-                            return <div className="recordDetail" key={i}>
-                                <div className="title">
-                                    <span>{intl.get('Date')}</span>
-                                    <span>{intl.get('Amount')}</span>
-                                    <span className={v.receiver == this.props.location.state.address ? 'greenC' : 'redC'}>{v.receiver == this.props.location.state.address ? intl.get('Receive') : intl.get('Transfer')}</span>
-                                </div>
-                                <div className="titleContent">
-                                    <span>{timeStamp2String(v.expiration_time + '000')}</span>
-                                    <span> {window.localStorage.getItem('type') == intl.get('LibraWallet') ? (v.value / 1e6) : (v.amount / 1e6)}
-                                        {/* {
+                        {
+                            recordData && recordData.map((v, i) => {
+                                return <div className="recordDetail" key={i}>
+                                    <div className="title">
+                                        <span>{intl.get('Date')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        <span className={v.receiver == this.props.location.state.address ? 'greenC' : 'redC'}>{v.receiver == this.props.location.state.address ? intl.get('Receive') : intl.get('Transfer')}</span>
+                                    </div>
+                                    <div className="titleContent">
+                                        <span>{timeStamp2String(v.expiration_time + '000')}</span>
+                                        <span> {window.localStorage.getItem('type') == intl.get('LibraWallet') ? (v.value / 1e6) : (v.amount / 1e6)}
+                                            {/* {
                                                 window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
                                             } */}
-                                    </span>
-                                    <span>{
-                                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
-                                    }</span>
-                                </div>
-                                <div className="titleContent">
-                                    <p>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? v.receiver : window.localStorage.getItem('type') == intl.get('LibraWallet') ? v.address : null}</p>
-                                    <p onClick={()=>{
-                                        if (window.localStorage.getItem('type') == intl.get('ViolasWallet')){
-                                            window.open('http://47.52.66.26:30000/app/Violas_version/' + v.version)
-                                        } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')){
-                                            window.open('http://47.52.66.26:30000/app/Libra_dealbox/' + v.version)
-                                        }
-                                       
-                                    }}>{intl.get('Browser query')}</p>
-                                </div>
-                            </div>
-                        })
-                    }
-                    {
-                        recordBData && recordBData.map((v, i) => {
-                            return <div className="recordDetail" key={i}>
-                                <div className="title">
-                                    <span>{intl.get('Date')}</span>
-                                    <span>{intl.get('Amount')}</span>
-                                    {
-                                        v.inputs.map((val, ind) => {
-                                            return val.prev_addresses.map((va, index) => {
-                                                return <span key={i} className={va.address ? (va.address.indexOf(btc.address) == 0 ? 'redC' : 'greenC') : (va.indexOf(btc.address) == 0 ? 'redC' : 'greenC')}>{va.address ? (va.address.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive')) : (va.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive'))}</span>
-                                            })
-                                        })
-                                    }
-                                    {/* <span className={recordBData.recs[i]&&recordBData.recs[i] ? 'redC' : 'greenC'}>{recordBData.recs[i]&&recordBData.recs[i] ? intl.get('Transfer') : intl.get('Receive')}</span> */}
-                                </div>
-                                <div className="titleContent">
-                                    <span>{timeStamp2String(v.block_time + '000')}</span>
-                                    <span>{this.e7e8(v.inputs_count/1e8)} {
-                                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
-                                    }</span>
-                                    <span>{
-                                        window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
-                                    }</span>
-                                </div>
-                                <div className="titleContent">
-                                    <p>{v.hash}</p>
-                                    <p onClick={() => {
-                                        if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
-                                            window.open('http://47.52.66.26:30000/app/tBTC_transaction/' + v.hash)
-                                        } 
+                                        </span>
+                                        <span>{
+                                            window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
+                                        }</span>
+                                    </div>
+                                    <div className="titleContent">
+                                        <p>{window.localStorage.getItem('type') == intl.get('ViolasWallet') ? v.receiver : window.localStorage.getItem('type') == intl.get('LibraWallet') ? v.address : null}</p>
+                                        <p onClick={() => {
+                                            if (window.localStorage.getItem('type') == intl.get('ViolasWallet')) {
+                                                window.open('http://47.52.66.26:10082/app/Violas_version/' + v.version)
+                                            } else if (window.localStorage.getItem('type') == intl.get('LibraWallet')) {
+                                                window.open('http://47.52.66.26:10082/app/Libra_dealbox/' + v.version)
+                                            }
 
-                                    }}>{intl.get('Browser query')}</p>
+                                        }}>{intl.get('Browser query')}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        })
-                    }
+                            })
+                        }
+                        {
+                            recordBData && recordBData.map((v, i) => {
+                                return <div className="recordDetail" key={i}>
+                                    <div className="title">
+                                        <span>{intl.get('Date')}</span>
+                                        <span>{intl.get('Amount')}</span>
+                                        {
+                                            v.inputs.map((val, ind) => {
+                                                return val.prev_addresses.map((va, index) => {
+                                                    return <span key={i} className={va.address ? (va.address.indexOf(btc.address) == 0 ? 'redC' : 'greenC') : (va.indexOf(btc.address) == 0 ? 'redC' : 'greenC')}>{va.address ? (va.address.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive')) : (va.indexOf(btc.address) == 0 ? intl.get('Transfer') : intl.get('Receive'))}</span>
+                                                })
+                                            })
+                                        }
+                                        {/* <span className={recordBData.recs[i]&&recordBData.recs[i] ? 'redC' : 'greenC'}>{recordBData.recs[i]&&recordBData.recs[i] ? intl.get('Transfer') : intl.get('Receive')}</span> */}
+                                    </div>
+                                    <div className="titleContent">
+                                        <span>{timeStamp2String(v.block_time + '000')}</span>
+                                        <span>{this.e7e8(v.inputs_count / 1e8)} {
+                                            window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
+                                        }</span>
+                                        <span>{
+                                            window.localStorage.getItem('type') == intl.get('ViolasWallet') ? 'vtoken' : window.localStorage.getItem('type') == intl.get('LibraWallet') ? 'libra' : window.localStorage.getItem('type') == intl.get('BTCWallet') ? 'BTC' : null
+                                        }</span>
+                                    </div>
+                                    <div className="titleContent">
+                                        <p>{v.hash}</p>
+                                        <p onClick={() => {
+                                            if (window.localStorage.getItem('type') == intl.get('BTCWallet')) {
+                                                window.open('http://47.52.66.26:30000/app/tBTC_transaction/' + v.hash)
+                                            }
+
+                                        }}>{intl.get('Browser query')}</p>
+                                    </div>
+                                </div>
+                            })
+                        }
                     </div>
                 </section>
             </div>
