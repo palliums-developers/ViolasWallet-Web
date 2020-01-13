@@ -1,8 +1,9 @@
 import request from '../utils/request';
 let url='https://api.violas.io'
-let url1='https://dex.violas.io/v1';
+let url1 = 'https://api2.violas.io:10080/';
+// let url1='https://dex.violas.io/v1';
 // let url = 'http://52.27.228.84:4000';
-// let url1 = 'http://47.52.66.26:10088/';
+// let url = "http://18.220.66.235:38181/v1";
 //新用户创建提交信息
 export let createUserInfo = (params) => {
     return request({

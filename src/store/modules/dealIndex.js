@@ -5,7 +5,7 @@ import {
     selfCurDeal,
     getCurCoinMess,
     getOtherCoinMess,
-    getVersion, 
+    getVersion,
     getCoinPrice
 } from '../../api/deal'
 import axios from 'axios';
@@ -74,7 +74,7 @@ export default class DealIndex {
         return data.data.orders
     }
     //价格
-    @action async getCoinPrices(params){
+    @action async getCoinPrices(params) {
         let data = await getCoinPrice(params);
         return data.data.price;
     }
@@ -93,11 +93,11 @@ export default class DealIndex {
     }
     //撤销
     @action async cancleFun(params) {
-            let result = await axios.post("http://47.52.66.26:10088/v1/cancelOrder", params, {
-                Headers: { "Content-Type": "application/json" }
-            }).then(res => {
-                return res.data;
-            });
-            return result;
+        let result = await axios.post("http://47.52.66.26:10088/v1/cancelOrder", params, {
+            Headers: { "Content-Type": "application/json" }
+        }).then(res => {
+            return res.data;
+        });
+        return result;
     }
 }
