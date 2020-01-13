@@ -1,9 +1,9 @@
 import request from '../utils/request';
-let url2 = 'http://52.27.228.84:4000';
-// let url2='https://api.violas.io'
-let url = 'http://47.52.66.26:10088/v1';
+// let url = 'http://47.52.66.26:10088/v1';
+// let url2 = 'http://52.27.228.84:4000';
+let url ='https://dex.violas.io/v1';
+let url2='https://api.violas.io'
 // let url = 'http://18.220.66.235:38181';
-// let url ='https://dex.violas.io/v1';
 
 //稳定币交易
 export let stableCurTranfer = (params) =>{

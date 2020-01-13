@@ -41,7 +41,6 @@ class Market extends Component {
         } else {
             this.props.history.push('/welcome');
         }
-        axios.get('https://dex.violas.io/v1/tokens').then(res=>console.log(res.data))
     }
     async componentDidMount() {
         let othersData = await this.props.dealIndex.getOthersCoinMess();

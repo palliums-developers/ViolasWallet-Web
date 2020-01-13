@@ -120,7 +120,7 @@ class stablecoin extends Component {
                                         </div>
                                         <div className="titleContent">
                                             <span>{timeStamp2String(v.expiration_time+'000')}</span>
-                                            <span>{v.amount}</span>
+                                            <span>{v.amount/1e6}</span>
                                             <span>{JSON.parse(localStorage.getItem('coinType')).name.toLowerCase()}</span>
                                         </div>
                                         <div className="titleContent">

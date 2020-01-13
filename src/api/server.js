@@ -1,10 +1,8 @@
 import request from '../utils/request';
-let url = 'http://52.27.228.84:4000';
-// let url='https://api.violas.io'
-let url1 = 'https://tchain.api.btc.com/v3/';
-let url2 = 'http://192.168.1.111:10087/';
-let url3 = 'http://47.52.66.26:10088/';
-// let url3='https://dex.violas.io/v1';
+let url='https://api.violas.io'
+let url1='https://dex.violas.io/v1';
+// let url = 'http://52.27.228.84:4000';
+// let url1 = 'http://47.52.66.26:10088/';
 //新用户创建提交信息
 export let createUserInfo = (params) => {
     return request({
@@ -37,7 +35,7 @@ export let getCurBalance = (params) => {
         });
     } else if (params.name == 'BTC') {
         return request({
-            url: url3 + 'open/1.0/search_address?net=testnet&address=' + params.address + '&page=' + params.page,
+            url: url1 + 'open/1.0/search_address?net=testnet&address=' + params.address + '&page=' + params.page,
             method: 'get',
         });
     }

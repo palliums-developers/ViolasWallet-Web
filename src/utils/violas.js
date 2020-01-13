@@ -9,6 +9,10 @@ let code_data = require("./code_data.json");
 let _currencyToken = require("./currencyToken.json")
 const _mne1 = "display paddle crush crowd often friend topple agent entry use host begin";
 const _mne2 = "valid cactus long reform forget mouse blanket era swear call poem table";
+// const violas_sequence="http://52.27.228.84:4000/1.0/violas/seqnum?addr=";
+// const libra_sequence="http://52.27.228.84:4000/1.0/libra/seqnum?addr=";
+const violas_sequence="https://api.violas.io/1.0/violas/seqnum?addr=";
+const libra_sequence="https://api.violas.io/1.0/libra/seqnum?addr=";
 
 class vAccount {
     constructor(mne) {
@@ -38,12 +42,12 @@ class vAccount {
         return this.account.getAddress().toHex();
     }
     async getsequenceNum_violas() {
-        return await axios.get("http://52.27.228.84:4000/1.0/violas/seqnum?addr=" + this.address).then(res => {
+        return await axios.get(violas_sequence + this.address).then(res => {
             return res.data.data
         })
     }
     async getsequenceNum_libra() {
-        return await axios.get("http://52.27.228.84:4000/1.0/libra/seqnum?addr=" + this.address).then(res => {
+        return await axios.get(libra_sequence + this.address).then(res => {
             return res.data.data
         })
     }

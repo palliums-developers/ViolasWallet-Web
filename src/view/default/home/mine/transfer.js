@@ -228,7 +228,6 @@ class Transfar extends Component {
                     Number(btcAmount) * 1e8,
                     fee
                 );
-                console.log(transFar);
             }
 
         }
