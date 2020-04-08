@@ -1,23 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-import RouterConfig from './router/routerConfig'
-import "lib-flexible"
-// import 'antd-mobile/dist/antd-mobile.css';
-import { Provider } from 'mobx-react';
-import Store from './store';
-import "animate.css";
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
-import intl from 'react-intl-universal'
-import EN from './locales/index-en'
-import CN from './locales/index-cn'
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
-let lang = (navigator.languages && navigator.languages[0]) || navigator.language
-intl.init({
-  currentLocale: lang.split('-')[0],
-  locales: {
-    EN,
-    CN
-  }
-})
-ReactDOM.render(<Provider {...Store}><RouterConfig></RouterConfig></Provider>, document.getElementById('root'));
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
