@@ -1,17 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './view/app';
+import RouterConfig from './router/routerConfig';
+
+function init() {
+  let designSize = 1920; 
+  let html = document.documentElement;
+  let wW = html.clientWidth;// 窗口宽度
+  let rem = wW * 100 / designSize;
+  document.documentElement.style.fontSize = rem + 'px';
+}
+init();
+
+window.addEventListener('resize', function () {
+  init();
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RouterConfig><App /></RouterConfig>
   </React.StrictMode>,
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

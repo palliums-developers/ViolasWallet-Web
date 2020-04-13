@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./app.css";
 import QRCode from "qrcode.react"
 
 let url = "http://52.27.228.84:4000"
