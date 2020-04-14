@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./app.css";
+import "./app.scss";
 import QRCode from "qrcode.react"
 
 let url = "http://52.27.228.84:4000"
@@ -62,7 +62,8 @@ class App extends Component {
     )
       .then(res => res.json())
       // .then(res=>{console.log(JSON.stringify(res.data.wallets));return res})
-      .then(res => { res.data.status === 1 ? this.setState({ login: true, wallet_info: JSON.stringify(res.data.wallets) }) : this.setState({ login: false }) })
+      .then(res => { console.log(res.data.status) 
+        res.data.status === 1 ? this.setState({ login: true, wallet_info: JSON.stringify(res.data.wallets) }) : this.setState({ login: false }) })
       .catch(e => console.log(e))
   }
   get_address_info() {

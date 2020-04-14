@@ -47,8 +47,9 @@ class App extends Component {
       // http://125.39.5.57:38080/app/mock/16/1.0/violas/singin
       fetch(url + "/explorer/violas/singin?session_id=" + this.state.session_id).then(res => res.json())
         .then(res => { 
-          
+          console.log(res.data)
           if(res.data.status == 1){
+              this.props.history.push('/home')
               this.setState({
                 status:res.data.status,
                 wallet_info:JSON.stringify(res.data.wallets)
@@ -79,7 +80,7 @@ class App extends Component {
       )
         .then(res => res.json())
         .then(res => {
-          console.log(res.data.qr_code.session_id.toString())
+          // console.log(res.data.qr_code.session_id.toString())
           this.setState({
             session_id: res.data.qr_code.session_id.toString()
           },()=>{

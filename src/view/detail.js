@@ -13,8 +13,10 @@ class Detail extends Component {
       }
     }
     componentDidMount(){
-        console.log(this.props.match.params.address)
-        this.getBalance()
+      this.setState({
+        name:this.props.match.params.type
+      })
+      this.getBalance()
     }
     getBalance = () =>{
         fetch(url +"/app/mock/16/explorer/violas/address/<address>").then(res => res.json())
@@ -54,7 +56,7 @@ class Detail extends Component {
                 <div className="leftContent">
                  {
                    this.state.type.map((v,i)=>{
-                     return <p key={i} onClick={()=>this.getActive(i,v)} className={i == this.state.ind ? 'active' : null}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p>
+                     return <p key={i} onClick={()=>this.getActive(i,v)} className={this.state.name.toLocaleLowerCase() == v.toLocaleLowerCase() ? 'active' : null}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p>
                    })
                  }
                   

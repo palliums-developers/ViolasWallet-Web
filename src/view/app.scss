@@ -7,9 +7,9 @@
     background-size: cover;
     background-position: 50%;
     .logo{
-      margin-left: 15%;
-      padding-top: 0.37rem;
-      box-sizing: border-box;
+      margin-left: 2.3rem;
+      // padding-top: 0.37rem;
+      // box-sizing: border-box;
       img{
         width: 1.97rem;
         height: 0.32rem;
@@ -36,6 +36,10 @@
       }
       .qrCode{
         position: relative;
+        canvas{
+          width:2rem!important;
+          height:2rem!important;
+        }
         .dialog{
           width: 100%;
           height: 100%;
