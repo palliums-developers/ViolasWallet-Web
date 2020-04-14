@@ -21,8 +21,19 @@ class Home extends Component {
          ind:ind,
          name:val
        },()=>{
-         this.login_state()
+         this.getWalletInfo()
        })
+    }
+    getWalletInfo(){
+      let wallets = [];
+      if(window.sessionStorage.getItem('wallet_info')){
+        wallets = window.sessionStorage.getItem('wallet_info')
+      }
+      this.setState({
+        wallet_info:JSON.parse(wallets)
+      },()=>{
+        this.getType()
+      })
     }
     login_state() {
       // http://125.39.5.57:38080/app/mock/16/1.0/violas/singin
@@ -78,6 +89,7 @@ class Home extends Component {
         .catch(e => console.log(e))
     }
     getType = () => {
+      // console.log(JSON.parse(this.state.wallet_info))
       //身份
       let identityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
         return item.identity == 0
@@ -98,7 +110,9 @@ class Home extends Component {
       })
     }
     componentDidMount(){
-      this.login_state()
+      // this.login_state()
+      this.getWalletInfo()
+      
     }
     render(){
         return (
