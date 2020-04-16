@@ -264,6 +264,8 @@
       padding-left: 0.53rem;
       padding-right: 0.73rem;
       box-sizing: border-box;
+      overflow: hidden;
+
       .balanceList{
         width: 100%;
         background: #FFF;
@@ -361,6 +363,15 @@
               color:rgba(0,0,0,.5);
               line-height:0.24rem;
             }
+            .kai{
+              color: rgba(251, 143, 11, 1);
+            }
+            .tranfer{
+              color: rgba(229, 64, 64, 1);
+            }
+            .getMoney{
+              color: rgba(19, 183, 136, 1);
+            }
           }
           .titleContent{
             display: flex;
@@ -373,7 +384,7 @@
               line-height:0.24rem;
             }
             span:nth-child(2){
-              margin-left: -0.40rem;
+              margin-left: -1.3rem;
             }
           }
           .check{
@@ -391,6 +402,7 @@
               font-weight:400;
               color:rgba(122,122,238,1);
               line-height:0.24rem;
+              cursor: pointer;
             }
           }
         }

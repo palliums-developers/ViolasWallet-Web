@@ -13,7 +13,7 @@ class RouterConfig extends Component {
                     <Route exact path="/" component={App}/>
                     <Route exact path="/app1" component={App1}/>
                     <Route path="/home" component={Home}/>
-                    <Route path="/detail/:address/:type" component={Detail}/>
+                    <Route path="/detail/:address/:type/:nikename" component={Detail}/>
                     <Redirect from="/" to="/" />
                 </Switch>
             </HashRouter>

@@ -139,7 +139,7 @@ class Home extends Component {
                     {
                       this.state.identityWallet.map((v,i)=>{
                         return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'} onClick={()=>{
-                          this.props.history.push('/detail/'+v.address+'/'+v.type)
+                          this.props.history.push('/detail/'+v.address+'/'+v.type+'/'+v.name)
                         }}>
                           <h4>{v.name}</h4>
                           <p>{v.address}</p>
