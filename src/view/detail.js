@@ -66,6 +66,7 @@ class Detail extends Component {
     }
     render(){
         let { balance,transList,name } = this.state;
+        // console.log(transList,'...')
         return (
             <div className="detail">
               <div className="header">
@@ -110,7 +111,7 @@ class Detail extends Component {
                           }
                           </div>
                           <div className="titleContent">
-                          <span>{timeStamp2String(v.expiration_time)}</span>
+                          <span>{timeStamp2String(v.expiration_time + '000')}</span>
                           <span>{v.gas}{name == 'violas' ? 'Vtoken' : name == 'libra' ? 'Libra' : name == 'bitcoin' ? 'BTC' : null}</span>
                           <span></span>
                           </div>

@@ -28,7 +28,7 @@ class App extends Component {
                   <div className="link_logo"><img src="/img/编组复制 11@2x.png" /></div>
                   <h3>ViolasPay</h3>
                   <div className="qrCode">
-                    <QRCode size={200} value={this.json2String(this.state.session_id)}></QRCode>
+                    <QRCode value={this.json2String(this.state.session_id)}></QRCode>
                     {
                       this.state.status == 0 ? null : <div className="dialog">
                       <p>{
