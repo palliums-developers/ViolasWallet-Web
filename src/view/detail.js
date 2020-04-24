@@ -61,7 +61,7 @@ class Detail extends Component {
       }else if(this.props.match.params.type == 'bitcoin'){
         window.open('https://testnet.violas.io/app/BTC_block/'+version)
       }else if(this.props.match.params.type == 'libra'){
-        window.open('https://testnet.violas.io/app/Libra_version/'+version)
+        window.open('https://testnet.violas.io/app/Libra_dealbox/'+version)
       }
     }
     render(){
