@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {timeStamp2String} from '../utils/timer';
+import { connect } from 'react-redux';
 import "./app.scss";
 let url = "http://52.27.228.84:4000"
 
@@ -19,6 +20,7 @@ class Detail extends Component {
         name:this.props.match.params.type
       })
       this.getBalance()
+
     }
     getBalance = () =>{
         fetch(url +"/explorer/violas/address/"+this.props.match.params.address).then(res => res.json())
@@ -73,12 +75,21 @@ class Detail extends Component {
                  <div className="logo" onClick={()=>{
                     this.props.history.push('/home')
                   }}><img src="/img/形状结合 2@2x.png"/></div>
+                  <div className="back" onClick={()=>{
+                    window.history.go(-1);
+                    this.props.getType(this.props.match.params.type)
+                    
+                   }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div>
               </div>
               <div className="content">
                 <div className="leftContent">
                  {
                    this.state.type.map((v,i)=>{
-                     return <p key={i} className={name.toLocaleLowerCase() == v.toLocaleLowerCase() ? 'active' : null}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p>
+                     return <p onClick={()=>{
+                      window.history.go(-1);
+                      this.props.getTypes(v.toLocaleLowerCase())
+                      
+                     }} key={i} className={name.toLocaleLowerCase() == v.toLocaleLowerCase() ? 'active' : null}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p>
                    })
                  }
                 </div>
@@ -131,4 +142,24 @@ class Detail extends Component {
     }
 }
 
-export default Detail;
+let mapStateToProps = (state) =>{
+  return state.ListReducer;
+}
+
+let mapDispatchToProps = (dispatch) =>{
+    return {
+      getType:(type)=>{
+        dispatch({
+           type:"t_type",
+           params:type
+        })
+      },
+      getTypes:(val)=>{
+        dispatch({
+           type:"t_types",
+           params:val
+        })
+      }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Detail);

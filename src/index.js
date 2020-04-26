@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './view/app';
 import RouterConfig from './router/routerConfig';
+import { Provider } from 'react-redux'
+import Store from './store'
 
 function init() {
   let designSize = 1920; 
@@ -18,9 +20,11 @@ window.addEventListener('resize', function () {
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <RouterConfig><App /></RouterConfig>
-  </React.StrictMode>,
+  <Provider store={Store}>
+    <React.StrictMode>
+      <RouterConfig><App /></RouterConfig>
+    </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 );
 

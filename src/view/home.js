@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./app.scss";
 import { localeLowerCase } from "lower-case";
+import { connect } from 'react-redux'
 let url = "http://52.27.228.84:4000"
 
 class Home extends Component {
@@ -17,6 +18,12 @@ class Home extends Component {
       }
     }
     getActive = (ind,val) =>{
+      this.props.getTypes({
+        types:''
+      })
+      this.props.getTypes1({
+        types1:''
+      })
        this.setState({
          ind:ind,
          name:val
@@ -32,7 +39,78 @@ class Home extends Component {
       this.setState({
         wallet_info:JSON.parse(wallets)
       },()=>{
-        this.getType()
+        
+        if(this.props.type){
+          if(this.props.type == 'violas'){
+            this.setState({
+              ind:0
+            })
+          }else if(this.props.type == 'libra'){
+            this.setState({
+              ind:1
+            })
+          }else if(this.props.type == 'bitcoin'){
+            this.setState({
+              ind:2
+            })
+         }
+          let identityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
+            return item.identity == 0
+          })
+          let everyIdentityList = identityList.filter(v=>{
+            return v.type == this.props.type
+          })
+          //创建、导入
+          let createIdentityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
+            return item.identity == 1
+          })
+          let everyCreateIdentityList = createIdentityList.filter(v=>{
+            return this.props.type == v.type
+          })
+          this.setState({
+            identityWallet:everyIdentityList,
+            createIdentityWallet:everyCreateIdentityList
+          })
+          return;
+        }else{
+          this.getType()
+        }
+          if(this.props.types){
+              if(this.props.types == 'violas'){
+                this.setState({
+                  ind:0
+                })
+              }else if(this.props.types == 'libra'){
+                this.setState({
+                  ind:1
+                })
+              }else if(this.props.types == 'bitcoin'){
+                this.setState({
+                  ind:2
+                })
+            }
+              let identityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
+                return item.identity == 0
+              })
+              let everyIdentityList = identityList.filter(v=>{
+                return v.type == this.props.types
+              })
+              //创建、导入
+              let createIdentityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
+                return item.identity == 1
+              })
+              let everyCreateIdentityList = createIdentityList.filter(v=>{
+                return this.props.types == v.type
+              })
+              this.setState({
+                identityWallet:everyIdentityList,
+                createIdentityWallet:everyCreateIdentityList
+              })
+              return;
+            }else{
+              this.getType()
+            }
+            
       })
     }
     login_state() {
@@ -44,52 +122,11 @@ class Home extends Component {
                 status:res.data.status,
                 wallet_info:JSON.stringify(res.data.wallets),
               })
-          }else{
-            this.setState({
-              wallet_info:[
-                {
-                  "type": "violas", "address": "3a4cd3dd5bcb938dd7f8e68e1f0ebb6bae1492c41749857d9fda01b7e5f89e6c",
-                  "name": "Violas-Qwe", "identity": 0
-                },
-                {
-                  "type": "libra", "address": "3a4cd3dd5bcb938dd7f8e68e1f0ebb6bae1492c41749857d9fda01b7e5f89e6c",
-                  "name": "Libra-Qwe",
-                  "identity": 0
-                },
-                {
-                  "type": "bitcoin",
-                  "address": "mk6uz3KnEVgMD7Ht7okrfNgnhsNJyDupH8",
-                  "name": "Bitcoin-Qwe",
-                  "identity": 0
-                },
-                {
-                  "type": "violas",
-                  "address": "e06fda7f2bfb3efc1f9e976bf277a1328f599021f45db6182309f23a9c7be949",
-                  "name": "import vwallet",
-                  "identity": 1
-                },
-                {
-                  "type": "libra",
-                  "address": "e06fda7f2bfb3efc1f9e976bf277a1328f599021f45db6182309f23a9c7be949",
-                  "name": "import libra",
-                  "identity": 1
-                },
-                {
-                  "type": "bitcoin",
-                  "address": "e06fda7f2bfb3efc1f9e976bf277a1328f599021f45db6182309f23a9c7be949",
-                  "name": "import bitcoin",
-                  "identity": 1
-                }
-              ]
-            },()=>{
-              this.getType()
-            })
           }
         })
         .catch(e => console.log(e))
     }
     getType = () => {
-      // console.log(JSON.parse(this.state.wallet_info))
       //身份
       let identityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
         return item.identity == 0
@@ -172,5 +209,24 @@ class Home extends Component {
         )
     }
 }
+let mapStateToProps = (state) =>{
+  return state.ListReducer;
+}
+let mapDispatchToProps = (dispatch) =>{
+  return {
+    getTypes:(type)=>{
+      dispatch({
+         type:"t_type",
+         params:type.types
+      })
+    },
+    getTypes1:(type)=>{
+      dispatch({
+         type:"t_types",
+         params:type.types1
+      })
+    }
+  }
+}
 
-export default Home;
+export default connect(mapStateToProps,mapDispatchToProps)(Home);
