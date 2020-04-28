@@ -1,25 +1,16 @@
-import React,{Component} from 'react';
-import {HashRouter, Route, Switch,Redirect} from 'react-router-dom';
-import App from '../view/app'
-import App1 from '../view/app1'
-import Home from '../view/home'
-import Detail from '../view/detail'
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import RouterView from './routerView'
+import Routes from './routes'
 
 class RouterConfig extends Component {
-    render(){
+    render() {
         return (
-            <HashRouter>
-                <Switch>
-                    <Route exact path="/" component={App}/>
-                    <Route exact path="/app1" component={App1}/>
-                    <Route path="/home" component={Home}/>
-                    <Route path="/detail/:address/:type/:nikename" component={Detail}/>
-                    <Redirect from="/" to="/" />
-                </Switch>
-            </HashRouter>
-        )
+            <BrowserRouter>
+                <RouterView routes={Routes}></RouterView>
+            </BrowserRouter>
+        );
     }
 }
-
 
 export default RouterConfig;

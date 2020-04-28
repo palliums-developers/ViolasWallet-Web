@@ -22,7 +22,7 @@ window.addEventListener('resize', function () {
 ReactDOM.render(
   <Provider store={Store}>
     <React.StrictMode>
-      <RouterConfig><App /></RouterConfig>
+      <RouterConfig></RouterConfig>
     </React.StrictMode>
   </Provider>,
   document.getElementById('root')

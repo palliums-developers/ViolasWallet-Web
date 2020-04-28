@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./app.scss";
 import { localeLowerCase } from "lower-case";
 import { connect } from 'react-redux'
+import RouterView from '../router/routerView'
 let url = "http://52.27.228.84:4000"
 
 class Home extends Component {
@@ -152,59 +153,16 @@ class Home extends Component {
       
     }
     render(){
+        let { routes } = this.props;
         return (
+          
             <div className="home">
               <div className="header">
                  <div className="logo" onClick={()=>{
                   this.props.history.push('/home')
                 }}><img src="/img/形状结合 2@2x.png"/></div>
               </div>
-              <div className="content">
-                <div className="leftContent">
-                 {
-                   this.state.type.map((v,i)=>{
-                     return <p key={i} onClick={()=>this.getActive(i,v)} className={i == this.state.ind ? 'active' : null}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p>
-                   })
-                 }
-                  
-                
-                </div>
-                <div className="rightContent">
-                   <div className="identity">
-                    <h2>身份</h2>
-                    <div className="identityList">
-                    {
-                      this.state.identityWallet.map((v,i)=>{
-                        return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'} onClick={()=>{
-                          this.props.history.push('/detail/'+v.address+'/'+v.type+'/'+v.name)
-                        }}>
-                          <h4>{v.name}</h4>
-                          <p>{v.address}</p>
-                        </div>
-                      })
-                    }
-                    </div>
-                   </div>
-                   <div className="createIdentity">
-                   {
-                    this.state.createIdentityWallet.length>0 ? <h2>创建/导入</h2> : null
-                   }
-                     
-                     <div className="identityList createIdentityList">
-                     {
-                      this.state.createIdentityWallet.map((v,i)=>{
-                        return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'}>
-                        <h4>{v.name}</h4>
-                        <p>{v.address}</p>
-                      </div>
-                      })
-                     }
-                     </div>
-
-                    </div>
-                   
-                </div>
-              </div>
+              <RouterView routes={routes}></RouterView>
             </div>
         )
     }
