@@ -34,11 +34,14 @@ class HomeContent extends Component {
               return; 
            }
         }else{
+          if(this.props.location.pathname.split("/")[3]){
             if(this.props.location.pathname.split("/")[3].toLowerCase() == val.toLowerCase()){
-                return 'active'
-             }else{
+              return 'active'
+            }else{
                 return; 
-             }
+            }
+          }
+            
         }
     }
    
