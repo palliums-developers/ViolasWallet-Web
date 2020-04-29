@@ -13,7 +13,7 @@ class ViolasContent extends Component {
     }
     componentDidMount() {
         this.setState({
-           name:this.props.location.pathname.split("/")[3]
+           name:this.props.location.pathname.split("/")[4]
          },()=>{
            this.getWalletInfo()
          })
@@ -37,7 +37,6 @@ class ViolasContent extends Component {
         let everyIdentityList = identityList.filter(v=>{
           return this.state.name.toLowerCase() == v.type
         })
-        console.log(everyIdentityList)
         //创建、导入
         let createIdentityList = this.state.wallet_info && this.state.wallet_info.filter(item=>{
           return item.identity == 1
@@ -59,7 +58,7 @@ class ViolasContent extends Component {
                         {
                             this.state.identityWallet.map((v, i) => {
                                 return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'} onClick={() => {
-                                    this.props.history.push('/home/homeContent/detail/'+v.address+'/'+v.type+'/'+v.name)
+                                    this.props.history.push('/homepage/home/homeContent/detail/'+v.address+'/'+v.type+'/'+v.name)
                                 }}>
                                     <h4>{v.name}</h4>
                                     <p>{v.address}</p>

@@ -76,7 +76,7 @@ class App extends Component {
               },()=>{
                window.sessionStorage.setItem('wallet_info',this.state.wallet_info)
                setTimeout(()=>{
-                  this.props.history.push('/home')
+                  this.props.history.push('/homepage')
                },5000);
               })
           }else if(res.data.status == 2){

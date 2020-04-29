@@ -1,16 +1,21 @@
 let initState = {
-    type:'',
-    types:''
+    display:false,
+    display1:false,
+    address1:''
 }
 
 let ListReducer = (state = initState, action) => {
-  let type = state.type;
-  let types = state.type;
+  let display = state.display;
+  let display1 = state.display1;
+  let address = state.address1;
+  console.log(action.params)
   switch (action.type) { 
-      case 't_type':
-          return { type:action.params }  
-      case 't_types':
-          return { types:action.params } 
+      case 'DISPLAY':
+          return { display:action.params }  
+      case 'DISPLAY1':
+          return { display1:action.params.type }  
+      case 'ADDRESS':
+          return { address1:action.params.address }  
       default:
           return state;
   }

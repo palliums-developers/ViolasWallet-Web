@@ -27,32 +27,40 @@ class HomeContent extends Component {
     }
     
     getPath(val){
-        if(this.props.location.pathname.split("/")[5]){
-           if(this.props.location.pathname.split("/")[5].toLowerCase() == val.toLowerCase()){
+        if(this.props.location.pathname.split("/")[6]){
+           if(this.props.location.pathname.split("/")[6].toLowerCase() == val.toLowerCase()){
               return 'active'
            }else{
               return; 
            }
         }else{
-          if(this.props.location.pathname.split("/")[3]){
-            if(this.props.location.pathname.split("/")[3].toLowerCase() == val.toLowerCase()){
+          if(this.props.location.pathname.split("/")[5]){
+            if(this.props.location.pathname.split("/")[5].toLowerCase() == val.toLowerCase()){
               return 'active'
             }else{
                 return; 
             }
+          }else{
+            if(this.props.location.pathname.split("/")[4]){
+              if(this.props.location.pathname.split("/")[4].toLowerCase() == val.toLowerCase()){
+                return 'active'
+              }else{
+                  return; 
+              }
+            }
           }
-            
         }
     }
    
     render(){
         let { routes } = this.props;
+ 
         return (
             <div className="content">
                 <div className="leftContent">
                  {
                    this.state.type.map((v,i)=>{
-                     return <NavLink  key={i} activeStyle={{background: '#F7F7F9'}} to={'/home/homeContent/'+v}><p className={this.getPath(v)}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p></NavLink>
+                     return <NavLink  key={i} activeStyle={{background: '#F7F7F9'}} to={'/homepage/home/homeContent/'+v}><p className={this.getPath(v)}><img src={v == 'Violas' ? "/img/编组 2复制 4@2x.png" : v == 'Libra' ? "/img/编组 7@2x.png" : v == 'Bitcoin' ? "/img/BTC复制 2@2x.png" : null}/><label>{v}</label></p></NavLink>
                    })
                  }
                  </div>

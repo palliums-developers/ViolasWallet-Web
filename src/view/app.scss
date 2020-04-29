@@ -102,11 +102,133 @@
     }
   }
 }
+.homePage{
+  position: relative;
+  .transfarDialog{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    .dialogContent{
+      width: 7rem;
+      height: 4.98rem;
+      background: url('/img/bg.png') no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      top:50%;
+      margin-top: -3.2rem;
+      left:50%;
+      margin-left: -4.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .del{
+        width: 0.3rem;
+        height: 0.3rem;
+        display: flex;
+        position: absolute;
+        top:0.58rem;
+        right:0.52rem;
+        cursor: pointer;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      h4{
+        font-size:0.32rem;
+        font-weight:400;
+        color:rgba(56,47,68,1);
+        margin-top: 0.58rem;
+        margin-bottom: 0.59rem;
+      }
+
+      .qrCode,canvas{
+        width: 2.05rem!important;
+        height: 2.05rem!important;
+      }
+    }
+  }
+  .getMoneyDialog{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    .dialogContent{
+      width: 9rem;
+      height: 6.4rem;
+      background: url('/img/bg.png') no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      top:50%;
+      margin-top: -3.2rem;
+      left:50%;
+      margin-left: -4.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .del{
+        width: 0.3rem;
+        height: 0.3rem;
+        display: flex;
+        position: absolute;
+        top:0.9rem;
+        right:0.54rem;
+        cursor: pointer;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      h4{
+        font-size:0.32rem;
+        font-weight:600;
+        color:rgba(56,47,68,1);
+        margin-top: 0.84rem;
+        margin-bottom: 0.64rem;
+      }
+      p{
+        font-size:0.24rem;
+        font-weight:400;
+        color:rgba(56,47,68,1);
+        margin-bottom: 0.44rem;
+      }
+      .qrCode,canvas{
+        width: 2.05rem!important;
+        height: 2.05rem!important;
+      }
+      .addressCode{
+        display: flex;
+        margin-top: 0.32rem;
+        span{
+          font-size:0.24rem;
+          font-weight:400;
+          color:rgba(56,47,68,1);
+          margin-right: 0.1rem;
+        }
+        i{
+          width: 0.28rem;
+          height: 0.3rem;
+          display: flex;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+}
 .home{
   width: 100%;
   height: 10.77rem;
   display: flex;
   flex-direction: column;
+  
   .header{
     width: 100%;
     height: 1.00rem;
@@ -125,6 +247,7 @@
   .content{
     flex:1;
     display: flex;
+    overflow-y: auto;
     .leftContent{
       width: 20%;
       height: 100%;
@@ -162,6 +285,7 @@
       background: #F7F7F9;
       padding-left: 0.30rem;
       box-sizing: border-box;
+      overflow-y: auto;
       .back{
         position: absolute;
         top: 0.3rem;
@@ -288,6 +412,59 @@
               }
             }
           }
+          .btns{
+            display: flex;
+            dl{
+              width: 2.2rem;
+              height: 0.53rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: rgba(80, 27, 162, .06);
+              margin-top: 0.33rem;
+              margin-right: 0.6rem;
+              border-radius:3px;
+              cursor: pointer;
+              dt{
+                width: 0.4rem;
+                height: 0.4rem;
+                display: flex;
+                margin-right: 0.12rem;
+              
+              }
+              dd{
+                font-size:0.24rem;
+                font-weight:500;
+                color:rgba(80,27,162,1);
+              }
+              
+            }
+            dl:hover{
+              background: rgba(80, 27, 162, 1);
+              
+              dd{
+                color: #FFF;
+              }
+            }
+            dl:nth-child(1) dt{
+              background: url('/img/transfer.png') no-repeat;
+              background-size: 100% 100%;
+            }
+            dl:nth-child(2) dt{
+              background: url('/img/getMoney.png') no-repeat;
+              background-size: 100% 100%;
+            }
+            dl:nth-child(1):hover dt{
+              width:0.35rem;
+              height: 0.32rem;
+              background: url('/img/transfer1.png') no-repeat;
+              background-size: 100% 100%;
+            }
+            dl:nth-child(2):hover dt{
+              background: url('/img/getMoney1.png') no-repeat;
+              background-size: 100% 100%;
+            }
+          }
         }
         .dealList{
           width:100%;
@@ -375,6 +552,127 @@
             }
           }
         }
+    }
+    .transfar{
+      padding: 0.37rem 0.73rem 0 0.53rem;
+      box-sizing: border-box;
+      .transfarContent{
+        width: 100%;
+        height: 100%;
+        background: #FFF;
+        .transfarList{
+          width: 8.56rem;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          h4{
+            font-size:0.32rem;
+            font-weight:600;
+            color:rgba(60,56,72,1);
+            margin-top: 1.69rem;
+            margin-bottom: 0.62rem;
+          }
+          .iptAddress{
+            display: flex;
+            margin-bottom: 0.14rem;
+            textarea{
+              width: 8.56rem!important;
+              height: 1.61rem!important;
+              border-radius:3px;
+              border:1px solid rgba(151,151,151,1);
+              resize:none;
+              outline: none;
+              font-size:0.24rem;
+              font-weight:400;
+              color:rgba(158,156,164,1);
+              padding-top: 0.16rem;
+              padding-left: 0.2rem;
+              box-sizing: border-box;
+            }
+            textarea::-webkit-input-placeholder{
+              font-size:0.24rem;
+              font-weight:400;
+              color:rgba(158,156,164,1)!important;
+            }
+          }
+          .iptAmount{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 8.56rem!important;
+            height: 0.8rem;
+            border-radius:3px;
+            border:1px solid rgba(151,151,151,1);
+            padding-right: 0.1rem;
+            box-sizing: border-box;
+            input{
+              width:6rem;
+              height: 100%;
+              padding-left: 0.2rem;
+              box-sizing: border-box;
+              outline: none;
+              border: 0;
+            }
+            input::-webkit-input-placeholder{
+              font-size:0.24rem;
+              font-weight:400;
+              color:rgba(158,156,164,1);
+            }
+            label{
+              font-size:0.24rem;
+              font-weight:400;
+              color:rgba(60,56,72,1);
+            }
+          }
+          .amountShow{
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            margin-top: 0.19rem;
+            
+            p{
+              font-size:0.2rem;
+              font-weight:400;
+              color:rgba(158,156,164,1);
+              margin-left: 0.2rem;
+              span{
+                font-size:0.2rem;
+                font-weight:500;
+                color:rgba(60,56,72,1);
+              }
+            }
+          }
+          .foot{
+            width: 2.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .btn{
+            width: 2.75rem;
+            height: 0.53rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:rgba(96,66,158,1);
+            border-radius:27px;
+            font-size:0.22rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            margin-top: 1.27rem;
+          }
+          .active{
+            background:rgba(135,108,192,1);
+          }
+          .descr{
+            font-size:0.2rem;
+            font-weight:400;
+            color:rgba(209,26,67,1);
+            margin-top: 0.1rem;
+          }
+        }
+      }
     }
   }
 }

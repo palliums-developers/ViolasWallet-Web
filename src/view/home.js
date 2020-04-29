@@ -159,10 +159,11 @@ class Home extends Component {
             <div className="home">
               <div className="header">
                  <div className="logo" onClick={()=>{
-                  this.props.history.push('/home')
+                  this.props.history.push('/homepage/home')
                 }}><img src="/img/形状结合 2@2x.png"/></div>
               </div>
               <RouterView routes={routes}></RouterView>
+              
             </div>
         )
     }

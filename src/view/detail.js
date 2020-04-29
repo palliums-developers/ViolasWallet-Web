@@ -12,10 +12,12 @@ class Detail extends Component {
         // ind:0,
         name:'Violas',
         balance:0,
-        transList:[]
+        transList:[],
+        copy:false
       }
     }
     componentDidMount(){
+      
       this.setState({
         name:this.props.match.params.type
       })
@@ -47,6 +49,9 @@ class Detail extends Component {
     //    })
     // }
     handleCopy = () => {
+      this.setState({
+        copy:!this.state.copy
+      },()=>{
         const spanText = document.getElementById('add').innerText;
         const oInput = document.createElement('input');
         oInput.value = spanText;
@@ -56,6 +61,8 @@ class Detail extends Component {
         oInput.className = 'oInput';
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
+      })
+        
       };
     goWebsite = (version) =>{
       if(this.props.match.params.type == 'violas'){
@@ -68,7 +75,6 @@ class Detail extends Component {
     }
     render(){
         let { balance,transList,name } = this.state;
-        // console.log(transList,'...')
         return (
           <div className="rightContent">
           <div className="back" onClick={()=>{
@@ -86,8 +92,31 @@ class Detail extends Component {
                <p>{this.props.match.params.nikename}</p>
                <div className="addressCode">
                  <span id="add">{this.props.match.params.address}</span>
-                 <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
+                 
+                 {
+                   this.state.copy ? <i onClick={()=>this.handleCopy()}><img src="/img/Fill 32@2x.png"/></i> : <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
+                 }
+                 
                </div>
+            </div>
+            <div className="btns">
+              <dl onClick={()=>{
+                this.props.history.push({
+                  pathname:'/homepage/home/homeContent/transfar/'+name,
+                  state:{
+                    address:this.props.match.params.address
+                  }
+                })
+              }}>
+                <dt></dt>
+                <dd>转账</dd>
+              </dl>
+              <dl onClick={()=>{
+                this.props.getDisplay(true)
+              }}>
+                <dt></dt>
+                <dd>收款</dd>
+              </dl>
             </div>
           </div>
           <div className="dealList">
@@ -128,16 +157,10 @@ let mapStateToProps = (state) =>{
 
 let mapDispatchToProps = (dispatch) =>{
     return {
-      getType:(type)=>{
+      getDisplay:(type)=>{
         dispatch({
-           type:"t_type",
+           type:"DISPLAY",
            params:type
-        })
-      },
-      getTypes:(val)=>{
-        dispatch({
-           type:"t_types",
-           params:val
         })
       }
     }
