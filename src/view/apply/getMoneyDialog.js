@@ -9,7 +9,8 @@ class GetMoneyDialog extends Component {
       super()
       this.state = {
         title:'',
-        address:''
+        address:'',
+        dis:false
       }
     }
     componentDidMount(){
@@ -36,9 +37,17 @@ class GetMoneyDialog extends Component {
         oInput.className = 'oInput';
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
+        this.setState({
+          dis:true
+        })
+        let Timer = setInterval(() => {
+            this.setState({
+              dis:false
+            })
+        }, 500);
     };
     render(){
-        let { title,address } = this.state;
+        let { title,address,dis } = this.state;
         return (
           <div className="getMoneyDialog">
             <div className="dialogContent">
@@ -50,6 +59,9 @@ class GetMoneyDialog extends Component {
                <div className="addressCode">
                     <span id="add">{address}</span>
                     <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
+                    {
+                      dis ? <div className="warn"><img src="/img/suc.png"/></div> : null
+                    }
                 </div>
                 <div className="del" onClick={()=>{
                    this.props.getDisplay()

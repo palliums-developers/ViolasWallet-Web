@@ -8,7 +8,6 @@ let ListReducer = (state = initState, action) => {
   let display = state.display;
   let display1 = state.display1;
   let address = state.address1;
-  console.log(action.params)
   switch (action.type) { 
       case 'DISPLAY':
           return { display:action.params }  

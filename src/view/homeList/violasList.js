@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+let url = "http://52.27.228.84:4000";
 
 class ViolasContent extends Component {
     constructor(props) {
@@ -12,12 +13,27 @@ class ViolasContent extends Component {
         }
     }
     componentDidMount() {
+        // if(window.sessionStorage.getItem('session_id')){
+        //    this.login_state(window.sessionStorage.getItem('session_id'));
+        //    return;
+        // }
         this.setState({
            name:this.props.location.pathname.split("/")[4]
          },()=>{
            this.getWalletInfo()
          })
     }
+    // login_state(session_id) {
+    //     // http://125.39.5.57:38080/app/mock/16/1.0/violas/singin
+    //     fetch(url + "/explorer/violas/singin?session_id=" + session_id).then(res => res.json())
+    //       .then(res => { 
+    //         console.log(res.data)
+    //         if(res.data.status == 1){
+                
+    //         }
+    //       })
+    //       .catch(e => console.log(e))
+    //   }
     getWalletInfo(){
         let wallets = [];
         if(window.sessionStorage.getItem('wallet_info')){
@@ -75,7 +91,9 @@ class ViolasContent extends Component {
                     <div className="identityList createIdentityList">
                         {
                             this.state.createIdentityWallet.map((v, i) => {
-                                return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'}>
+                                return <div key={i} className={v.type == 'violas' ? "listContent vBack" : v.type == 'libra' ? "listContent lBack" : v.type == 'bitcoin' ? "listContent bBack" : 'listContent'} onClick={() => {
+                                    this.props.history.push('/homepage/home/homeContent/detail/'+v.address+'/'+v.type+'/'+v.name)
+                                }}>
                                     <h4>{v.name}</h4>
                                     <p>{v.address}</p>
                                 </div>
