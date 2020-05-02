@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import "./app.scss";
 let url = "http://52.27.228.84:4000"
 let url1 = "https://tbtc1.trezor.io"
+let url2 = "https://api.violas.io"
 
 class Detail extends Component {
     constructor(props){
@@ -18,7 +19,8 @@ class Detail extends Component {
         transList2:[],
         copy:false,
         btcTime:'',
-        gas:0
+        gas:0,
+        blockheight:''
       }
     }
     componentDidMount(){
@@ -41,7 +43,7 @@ class Detail extends Component {
         fetch(url +"/explorer/violas/address/"+this.props.match.params.address).then(res => res.json())
         .then(res => { 
           this.setState({
-            balance:res.data.status.balance / 1e6 / 10 / 10,
+            balance:res.data.status.balance / 1e6,
             transList:res.data.transactions && res.data.transactions
           })
           
@@ -49,7 +51,7 @@ class Detail extends Component {
         .catch(e => console.log(e))
     }
     getLibraBalance = () =>{
-      fetch(url +"/explorer/violas/address/"+this.props.match.params.address).then(res => res.json())
+      fetch(url2 +"/explorer/violas/address/"+this.props.match.params.address).then(res => res.json())
         .then(res => { 
           this.setState({
             balance:res.data.status.balance / 1e6,
@@ -60,19 +62,20 @@ class Detail extends Component {
         .catch(e => console.log(e))
     }
     getBTCBalance = () =>{
-      fetch(url1+'/api/address/mnfvtvx49DLM6PQ5MSaHJiVWeF2A3EqjNX').then(res => res.json())
+      fetch(url1+'/api/address/'+this.props.match.params.address).then(res => res.json())
       .then(res => { 
         this.setState({
-          balance:Number(res.balance) / 1e6 / 10 / 10
+          balance:Number(res.balance)
         },()=>{
-          res.transactions.map((item,index)=>{
-            fetch(url1 +"/api/tx/1dc46f1648b1a4d4828cbe4c7614c607d6da82b9112109d057344e16d19480e2").then(res => res.json())
+          res.transactions && res.transactions.map((item,index)=>{
+            fetch(url1 +"/api/tx/"+item).then(res => res.json())
             .then(res => { 
               this.setState({
                 btcTime:res.time,
                 gas:(res.valueIn-res.valueOut).toFixed(8),
                 transList1:res.vin,
-                transList2:res.vout
+                transList2:res.vout,
+                blockheight:res.blockheight
               })
             })
           })
@@ -207,7 +210,7 @@ class Detail extends Component {
                   </div>
                   <div className="check">
                       <span>{v.addresses[0]}</span>
-                      <span onClick={()=>this.goWebsite(v.version)}>浏览器查询</span>
+                      <span onClick={()=>this.goWebsite(this.state.blockheight)}>浏览器查询</span>
                   </div>
               </div>
               })
@@ -252,7 +255,7 @@ class Detail extends Component {
                   </div>
                   <div className="check">
                       <span>{v.scriptPubKey.addresses[0]}</span>
-                      <span onClick={()=>this.goWebsite(v.version)}>浏览器查询</span>
+                      <span onClick={()=>this.goWebsite(this.state.blockheight)}>浏览器查询</span>
                   </div>
               </div> 
               }) : null
