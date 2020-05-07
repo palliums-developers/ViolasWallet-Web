@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import "./app.scss";
 import { connect } from 'react-redux';
 // import {withRouter} from 'react-router-dom'
 let url = "http://52.27.228.84:4000"
@@ -112,11 +111,9 @@ class Transfar extends Component {
             },()=>{
                 
                 this.props.getDisplay1({
-                    address:this.state.address
+                    address:this.state.address,
+                    amount: this.state.amount
                 })
-                // this.props.getAddress({
-                //     address:this.state.address
-                // })
             })
         }
         
@@ -168,7 +165,8 @@ let mapDispatchToProps = (dispatch) =>{
             type:'DISPLAY1',
             params:{
                 type:true,
-                address:params.address
+                address:params.address,
+                amount:Number(params.amount)
             }
         })
      }

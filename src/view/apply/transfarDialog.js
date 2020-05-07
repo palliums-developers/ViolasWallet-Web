@@ -8,20 +8,28 @@ class TransfarDialog extends Component {
     constructor(props){
       super()
       this.state = {
-       
+        title:''
       }
     }
     componentDidMount(){
-       
+      if (this.props.location.pathname.split("/")[5]) {
+        let type = this.props.location.pathname.split("/")[5];
+        this.setState({
+          title: type
+        })
+      }
+      
     }
 
     render(){
+        let { title } = this.state;
+        let { address,amount } = this.props;
         return (
           <div className="transfarDialog">
             <div className="dialogContent">
                <h4>请在移动端确认转账信息</h4>
                <div className="qrCode">
-                 <QRCode value={this.props.location.state.address}></QRCode>
+                 <QRCode value={title +':'+ address+'?amount='+amount}></QRCode>
                </div>
                 <div className="del" onClick={()=>{
                    this.props.getDisplays()
@@ -32,7 +40,6 @@ class TransfarDialog extends Component {
     }
 }
 let mapStateToProps = (state) =>{
-  console.log(state.ListReducer)
   return state.ListReducer;
 }
 let mapDispatchToProps = (dispatch) =>{

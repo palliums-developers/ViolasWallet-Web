@@ -54,7 +54,7 @@ class GetMoneyDialog extends Component {
                <h4>{title}收款</h4>
                <p>扫描{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}地址二维码或者复制地址</p>
                <div className="qrCode">
-                 <QRCode value={address}></QRCode>
+                 <QRCode value={title.toUpperCase()+':'+address+'?amount=0'}></QRCode>
                </div>
                <div className="addressCode">
                     <span id="add">{address}</span>

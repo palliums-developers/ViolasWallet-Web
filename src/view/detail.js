@@ -138,12 +138,13 @@ class Detail extends Component {
         if(addresses[i].indexOf('mnfvtvx49DLM6PQ5MSaHJiVWeF2A3EqjNX')==0){
             return 'getMoney'
         }else{
-          return 'transfar'
+            return 'transfar'
         }
       }
     }
     render(){
         let { balance,transList,name,transList1,btcTime,gas,transList2 } = this.state;
+        // console.log(transList)
         return (
           <div className="rightContent">
           <div className="back" onClick={()=>{
@@ -154,7 +155,7 @@ class Detail extends Component {
           <div className="balanceList">
             <h4>当前资产</h4>
             <div className="balance">
-              <span>{balance }&nbsp;</span>
+              <span>{balance}&nbsp;</span>
               <span> {name == 'violas' ? 'Vtoken' : name == 'libra' ? 'Libra' : name == 'bitcoin' ? 'BTC' : null}</span>
             </div>
             <div className="list">
@@ -182,6 +183,7 @@ class Detail extends Component {
               </dl>
               <dl onClick={()=>{
                 this.props.getDisplay(true)
+                
               }}>
                 <dt></dt>
                 <dd>收款</dd>
@@ -278,7 +280,9 @@ let mapDispatchToProps = (dispatch) =>{
            type:"DISPLAY",
            params:type
         })
-      }
+      },
+      
+
     }
 }
 
