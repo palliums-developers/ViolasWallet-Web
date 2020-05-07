@@ -1,245 +1,78 @@
 import App from "../view/app";
-import Welcome from "../view/default/welcome";
-import CreateIdentity from "../view/default/createIdentity";
-import Backup from "../view/default/backup/backup";
-import Home from "../view/default/home";
-import Wallet from "../view/default/home/wallet";
-import Market from "../view/default/home/market";
-import Mine from "../view/default/home/mine";
-import Sweepcode from "../view/default/home/sweepCode";
-import GetMoney from "../view/default/home/getMoney";
-import ImportIdentity from "../view/default/ImportIdentity/ImportIdentity";
-import AddCurrency from "../view/default/home/addCurrency";
-import DailyCash from "../view/default/home/mine/dailyCash";
-import AddPurse from "../view/default/home/mine/addPurse";
-import CreateWallet from "../view/default/home/mine/createWallet";
-import ImportWallet from "../view/default/home/mine/importWallet";
-import Setting from "../view/default/home/setting/setting";
-import MultiLanguage from "../view/default/home/setting/multiLanguage";
-import Service from "../view/default/home/setting/service";
-import AboutUs from "../view/default/home/setting/aboutUs";
-import FeedBack from "../view/default/home/setting/feedBack";
-import DirectoryInquiries from "../view/default/home/mine/directoryInquiries";
-import DirectoryInquiries1 from "../view/default/home/mine/directoryInquiries1";
-import CodeBackup from "../view/default/backup/codeBackup";
-import Manage from "../view/default/home/manage";
-import Manage1 from "../view/default/home/mine/manage1";
-import DetailWallet from "../view/default/home/detailWallet";
-import DetailWallet1 from "../view/default/home/mine/detailWallet1";
-import AddAddress from "../view/default/home/mine/addAddress";
-import Record from "../view/default/home/mine/record";
-import Transfar from "../view/default/home/mine/transfer";
-import ConfirmWords from "../view/default/backup/confirmWords";
-import Sweepcode1 from "../view/default/home/sweepCode1";
-import Sweepcode2 from "../view/default/home/sweepCode2";
-import WalletSystem from "../view/default/home/walletSystem";
-import stablecoin from "../view/default/home/mine/stablecoin";
-import Transfar1 from "../view/default/home/mine/transfer1";
-import GetMoney1 from "../view/default/home/getMoney1";
-import OrderForm from "../view/default/home/market/orderForm";
-import OrderDetail from "../view/default/home/market/orderDetail";
+import App1 from '../view/app1'
+import Home from '../view/home'
+import HomeContent from '../view/homeContent'
+import Details from '../view/detail'
+import ViolasContent from "../view/homeList/violasList";
+import HomePage from "../view/homePage";
+import transfar from "../view/apply/transfar";
 
-const routes = [
+let routes = [
     //首页
     {
-        path: "/app",
+        path: '/app',
         component: App
     },
-    //欢迎
     {
-        path: "/welcome",
-        component: Welcome
-    },
-    //创建身份
-    {
-        path: "/createIdentity",
-        component: CreateIdentity
-    },
-    //导入身份
-    {
-        path: "/importIdentity",
-        component: ImportIdentity
-    },
-    //备份提示
-    {
-        path: "/backup",
-        component: Backup
-    },
-    //备份助记词
-    {
-        path: "/codeBackup",
-        component: CodeBackup
-    },
-    //确认助记词
-    {
-        path: "/confirmWords",
-        component: ConfirmWords
-    },
-    //钱包首页
-    {
-        path: "/home",
-        component: Home,
-        children: [
+        path: '/homepage',
+        component: HomePage,
+        children:[
             {
-                path: "/home/wallet",
-                component: Wallet
+                path: '/homepage/home',
+                component: Home,
+                children: [
+                    {
+                        path: '/homepage/home/homeContent',
+                        component: HomeContent,
+                        children:[
+                            {
+                                path: '/homepage/home/homeContent/Violas',
+                                component: ViolasContent
+                            },
+                            {
+                                path: '/homepage/home/homeContent/Libra',
+                                component: ViolasContent,
+                            },
+                            {
+                                path: '/homepage/home/homeContent/Bitcoin',
+                                component: ViolasContent,
+                            },
+                            {
+                                path: '/homepage/home/homeContent/detail/:address/:type/:nikename',
+                                component: Details,
+                            },
+                            {
+                                path: '/homepage/home/homeContent/transfar/:name',
+                                component: transfar
+                            },
+                            {
+                                path: '/homepage/home/homeContent',
+                                redirect: '/homepage/home/homeContent/Violas'
+                            },
+                        ]
+                    },
+                    {
+                        path: '/homepage/home',
+                        redirect: '/homepage/home/homeContent'
+                    }
+                ]
             },
             {
-                path: "/home/market",
-                component: Market
-            },
-            {
-                path: "/home/mine",
-                component: Mine
-            },
-            {
-                path: "/home",
-                redirect: "/home/wallet"
+                path: '/homepage',
+                redirect: '/homepage/home'
             }
         ]
+       
     },
-    //订单
+    // //详情
+    // {
+    //     path: '/detail/:address/:type/:nikename',
+    //     component: Detail
+    // },
     {
-        path: "/orderForm",
-        component: OrderForm
-    },
-    //订单详情
-    {
-        path: "/orderDetail/:id",
-        component: OrderDetail
-    },
-    //选择钱包体系
-    {
-        path: "/walletSystem",
-        component: WalletSystem
-    },
-    //交易记录
-    {
-        path: "/record",
-        component: Record
-    },
-    //管理
-    {
-        path: "/manage",
-        component: Manage
-    },
-    {
-        path: "/manage1",
-        component: Manage1
-    },
-    //钱包详情
-    {
-        path: "/detailWallet",
-        component: DetailWallet
-    },
-    {
-        path: "/detailWallet1",
-        component: DetailWallet1
-    },
-    //扫一扫
-    {
-        path: "/sweepcode",
-        component: Sweepcode
-    },
-    {
-        path: "/sweepcode1",
-        component: Sweepcode1
-    },
-    {
-        path: "/sweepcode2",
-        component: Sweepcode2
-    },
-    //转账
-    {
-        path: "/transfar",
-        component: Transfar
-    },
-    {
-        path: "/transfar1",
-        component: Transfar1
-    },
-    //收款
-    {
-        path: "/getMoney",
-        component: GetMoney
-    },
-    {
-        path: "/getMoney1",
-        component: GetMoney1
-    },
-    //添加币种
-    {
-        path: "/addCurrency",
-        component: AddCurrency
-    },
-    //稳定币转账
-    {
-        path: "/stablecoin",
-        component: stablecoin
-    },
-    //钱包管理
-    {
-        path: "/dailyCash",
-        component: DailyCash
-    },
-    //添加钱包
-    {
-        path: "/addPurse",
-        component: AddPurse
-    },
-    //创建钱包
-    {
-        path: "/createWallet",
-        component: CreateWallet
-    },
-    //导入钱包importWallet
-    {
-        path: "/importWallet",
-        component: ImportWallet
-    },
-    //地址簿
-    {
-        path: "/directoryInquiries",
-        component: DirectoryInquiries
-    },
-    {
-        path: "/directoryInquiries1",
-        component: DirectoryInquiries1
-    },
-    //添加地址
-    {
-        path: "/addAddress",
-        component: AddAddress
-    },
-    //设置
-    {
-        path: "/setting",
-        component: Setting
-    },
-    //多语言
-    {
-        path: "/multiLanguage",
-        component: MultiLanguage
-    },
-    //服务协议
-    {
-        path: "/service",
-        component: Service
-    },
-    //关于我们
-    {
-        path: "/aboutUs",
-        component: AboutUs
-    },
-    //帮助与反馈
-    {
-        path: "/feedBack",
-        component: FeedBack
-    },
-    {
-        path: "/",
-        redirect: "/app"
+        path: '/',
+        redirect: '/app'
     }
-];
+]
 
 export default routes

@@ -19,7 +19,6 @@ class RouterView extends Component {
                         }
                     }).concat(redirectRouter)
                 }
-
             </Switch>
         )
     }

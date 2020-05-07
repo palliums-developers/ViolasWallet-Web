@@ -1,19 +1,11 @@
-import { autorun } from 'mobx';
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+// import thunk from 'redux-thunk'
+import ListReducer from './reducer/reducer'
 
-// 引入模块
-import Index from './modules/index'
-import DealIndex from './modules/dealIndex'
 
-// 实例化
-const index = new Index();
-const dealIndex = new DealIndex();
-// 追踪数据变化
-// autorun(() => {
-//   console.log('count变成了...',index);
+const Reducers = combineReducers({
+    ListReducer
+})
+const Store = createStore(Reducers)
 
-// })
-
-export default {
-  index,
-  dealIndex
-}
+export default Store;

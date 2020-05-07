@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import RouterView from './routerView'
 import Routes from './routes'
 
