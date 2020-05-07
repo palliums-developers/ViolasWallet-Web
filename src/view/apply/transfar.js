@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 // import {withRouter} from 'react-router-dom'
 let url = "http://52.27.228.84:4000"
+let url1 = "https://tbtc1.trezor.io"
+let url2 = "https://api.violas.io"
+let WAValidator = require('wallet-address-validator');
 
 class Transfar extends Component {
     constructor(props){
@@ -16,31 +19,50 @@ class Transfar extends Component {
       }
     }
     componentDidMount(){
-        this.getBalance()
         if(this.props.location.pathname.split("/")[5]){
             let type = this.props.location.pathname.split("/")[5]
             this.setState({
               title:type.replace(type[0],type[0].toUpperCase())
+            },()=>{
+                if (this.state.title.toLowerCase() == 'violas') {
+                    this.getBalance()
+                } else if (this.state.title.toLowerCase() == 'libra') {
+                    this.getLibraBalance()
+                } else if (this.state.title.toLowerCase() == 'bitcoin') {
+                    this.getBTCBalance()
+                }
             })
           }
     }
+
     getBalance = () =>{
         if(this.props.location.state.address){
             fetch(url +"/explorer/violas/address/"+this.props.location.state.address).then(res => res.json())
                 .then(res => { 
-                if(this.props.match.params.type == 'bitcoin'){
                     this.setState({
-                    balance:res.data.status.balance / 1e6 / 10 / 10
+                        balance: res.data.status.balance / 1e6
                     })
-                }else{
-                    this.setState({
-                    balance:res.data.status.balance / 1e6
-                    })
-                }
                 
                 })
-                .catch(e => console.log(e))
         }
+    }
+    getLibraBalance = () => {
+        fetch(url2 + "/explorer/libra/address/" + this.props.location.state.address).then(res => res.json())
+            .then(res => {
+                this.setState({
+                    balance: res.data.status.balance / 1e6
+                })
+
+            })
+    }
+    getBTCBalance = () => {
+        fetch(url1 + '/api/address/' + this.props.location.state.address).then(res => res.json())
+            .then(res => {
+                this.setState({
+                    balance: Number(res.balance)
+                })
+
+            })
     }
     getTransAddress = (e) =>{
         this.setState({
@@ -68,16 +90,22 @@ class Transfar extends Component {
                          })
                         }
                  }else if(this.state.title == 'Bitcoin'){
-                     if(this.state.address.length != 35){
-                         this.setState({
-                             warning:'地址错误'
-                         })
-                     }else{
-                         this.setState({
-                             warning:''
-                         })
+                    let valid = WAValidator.validate(this.state.address, 'bitcoin','testnet');
+                     if (valid) {
+                       this.setState({
+                         warning: ""
+                       });
+                     } else {
+                       
+                       this.setState({
+                         warning: "地址错误"
+                       });
                      }
                  }
+            }else{
+                this.setState({
+                  warning: ""
+                });
             }
         })
      
@@ -109,11 +137,22 @@ class Transfar extends Component {
             this.setState({
                 getAct:!this.state.getAct
             },()=>{
+                if (this.state.title == 'Bitcoin'){
+                    this.props.getDisplay1({
+                        address: this.state.address,
+                        amount: this.state.amount * 1e8
+                    })
+                }else{
+                    this.props.getDisplay1({
+                        address: this.state.address,
+                        amount: this.state.amount * 1e6
+                    })
+                }
+                // this.props.getDisplay1({
+                //     address: this.state.address,
+                //     amount: this.state.amount * 10e8
+                // })
                 
-                this.props.getDisplay1({
-                    address:this.state.address,
-                    amount: this.state.amount
-                })
             })
         }
         
@@ -134,7 +173,7 @@ class Transfar extends Component {
               <div className="transfarList">
                 <h4>{title}转账</h4>
                 <div className="iptAddress">
-                  <textarea placeholder="请输入您的Violas转账地址" onChange={(e)=>this.getTransAddress(e)}></textarea>
+                  <textarea placeholder={'请输入您的'+title+'转账地址'} onChange={(e)=>this.getTransAddress(e)}></textarea>
                 </div>
                 <div className="iptAmount">
                   <input placeholder="请输入金额" onChange={(e)=>this.getTransAmount(e)}/>

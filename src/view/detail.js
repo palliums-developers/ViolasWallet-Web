@@ -51,7 +51,7 @@ class Detail extends Component {
         .catch(e => console.log(e))
     }
     getLibraBalance = () =>{
-      fetch(url2 +"/explorer/violas/address/"+this.props.match.params.address).then(res => res.json())
+      fetch(url2 +"/explorer/libra/address/"+this.props.match.params.address).then(res => res.json())
         .then(res => { 
           this.setState({
             balance:res.data.status.balance / 1e6,
