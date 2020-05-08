@@ -34,12 +34,12 @@ class App extends Component {
                       <p>{
                         this.state.status == 1 ? <img src="/img/saomachenggong 2@2x.png"/> : this.state.status == 2 ? <img src="/img/saomashibai 2@2x.png"/> : this.state.status == 3 ? <img onClick={()=>{window.location.reload()}} src="/img/erweimashixiao 2@2x.png"/> : null
                       }{
-                        this.state.status == 1 ? <label className="success">扫码成功</label> : this.state.status == 2 ? <label className="fail">扫码失败</label> : null
+                        this.state.status == 1 ? <label className="success">Success</label> : this.state.status == 2 ? <label className="fail">扫码失败</label> : null
                       }</p>
                     </div>
                     }
                   </div>
-                  <p>请使用手机ViolasPay扫码登录</p>
+                  <p>Please use your ViolasPay scan code to log in</p>
                 </div>
               </div>
             </div>

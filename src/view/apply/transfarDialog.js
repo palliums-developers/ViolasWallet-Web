@@ -27,7 +27,7 @@ class TransfarDialog extends Component {
         return (
           <div className="transfarDialog">
             <div className="dialogContent">
-               <h4>请在移动端确认转账信息</h4>
+               <h4>Please confirm the transfer information on the ViolasPay</h4>
                <div className="qrCode">
                  <QRCode value={title +':'+ address+'?amount='+amount}></QRCode>
                </div>

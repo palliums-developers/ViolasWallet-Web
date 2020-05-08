@@ -51,8 +51,8 @@ class GetMoneyDialog extends Component {
         return (
           <div className="getMoneyDialog">
             <div className="dialogContent">
-               <h4>{title}收款</h4>
-               <p>扫描{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}地址二维码或者复制地址</p>
+               <h4>{title}Receive</h4>
+              <p>Scan the qr code or copy the {title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}address</p>
                <div className="qrCode">
                  <QRCode value={title.toUpperCase()+':'+address+'?amount=0'}></QRCode>
                </div>

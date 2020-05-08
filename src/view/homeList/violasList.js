@@ -69,7 +69,7 @@ class ViolasContent extends Component {
         return (
             <div className="rightContent violasContent">
                 <div className="identity">
-                    <h2>身份</h2>
+                    <h2>Identity</h2>
                     <div className="identityList">
                         {
                             this.state.identityWallet.map((v, i) => {
@@ -85,7 +85,7 @@ class ViolasContent extends Component {
                 </div>
                 <div className="createIdentity">
                     {
-                        this.state.createIdentityWallet.length > 0 ? <h2>创建/导入</h2> : null
+                        this.state.createIdentityWallet.length > 0 ? <h2>Create/Import</h2> : null
                     }
 
                     <div className="identityList createIdentityList">

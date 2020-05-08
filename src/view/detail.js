@@ -115,7 +115,7 @@ class Detail extends Component {
       if(this.props.match.params.type == 'violas'){
         window.open('https://testnet.violas.io/app/Violas_version/'+version)
       }else if(this.props.match.params.type == 'bitcoin'){
-        window.open('https://testnet.violas.io/app/BTC_block/'+version)
+        window.open('https://testnet.violas.io/app/tBTC_block/'+version)
       }else if(this.props.match.params.type == 'libra'){
         window.open('https://testnet.violas.io/app/Libra_dealbox/'+version)
       }
@@ -153,7 +153,7 @@ class Detail extends Component {
             
            }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div>
           <div className="balanceList">
-            <h4>当前资产</h4>
+            <h4>Current Balances</h4>
             <div className="balance">
               <span>{balance}&nbsp;</span>
               <span> {name == 'violas' ? 'Vtoken' : name == 'libra' ? 'Libra' : name == 'bitcoin' ? 'BTC' : null}</span>
@@ -172,35 +172,33 @@ class Detail extends Component {
             <div className="btns">
               <dl onClick={()=>{
                 this.props.history.push({
-                  pathname:'/homepage/home/homeContent/transfar/'+name,
-                  state:{
-                    address:this.props.match.params.address
-                  }
+                  pathname:'/homepage/home/homeContent/transfar/'+name
                 })
+                window.sessionStorage.setItem('address', this.props.match.params.address)
               }}>
                 <dt></dt>
-                <dd>转账</dd>
+                <dd>Transfer</dd>
               </dl>
               <dl onClick={()=>{
                 this.props.getDisplay(true)
                 
               }}>
                 <dt></dt>
-                <dd>收款</dd>
+                <dd>Receive</dd>
               </dl>
             </div>
           </div>
           <div className="dealList">
-             <h3><i></i>交易记录</h3>
+             <h3><i></i>Transfer History</h3>
              <div className="dealContent">
              {
               name == 'bitcoin' ? transList1.map((v,i)=>{
                 return <div className="dealLists" key={i}>
                 <div className="title">
-                  <span>日期</span>
+                  <span>Date</span>
                   <span>消耗</span>
                   {
-                    this.getPayType(v.addresses) == 'transfar' ? <span className="tranfer">转账</span> : this.getPayType(v.addresses) == 'getMoney' ? <span className="getMoney">收款</span> : null 
+                      this.getPayType(v.addresses) == 'transfar' ? <span className="tranfer">Transfer</span> : this.getPayType(v.addresses) == 'getMoney' ? <span className="getMoney">Receive</span> : null 
                     
                     // v.receiver == this.props.match.params.address ? <span className="getMoney">收款</span>  : v.sender == this.props.match.params.address ? <span className="tranfer">转账</span> : null
                   }
@@ -212,7 +210,7 @@ class Detail extends Component {
                   </div>
                   <div className="check">
                       <span>{v.addresses[0]}</span>
-                      <span onClick={()=>this.goWebsite(this.state.blockheight)}>浏览器查询</span>
+                    <span onClick={() => this.goWebsite(this.state.blockheight)}>Browser query</span>
                   </div>
               </div>
               })
@@ -220,10 +218,10 @@ class Detail extends Component {
               transList.map((v,i)=>{
                 return <div className="dealLists" key={i}>
                 <div className="title">
-                  <span>日期</span>
-                  <span>消耗</span>
+                  <span>Date</span>
+                  <span>Spend</span>
                   {
-                    v.receiver == this.props.match.params.address ? <span className="getMoney">收款</span>  : v.sender == this.props.match.params.address ? <span className="tranfer">转账</span> : <span className="kai">开启</span>
+                      v.receiver == this.props.match.params.address ? <span className="getMoney">Transfer</span> : v.sender == this.props.match.params.address ? <span className="tranfer">Receive</span> : <span className="kai">Open</span>
                   }
                   </div>
                   <div className="titleContent">
@@ -233,7 +231,7 @@ class Detail extends Component {
                   </div>
                   <div className="check">
                       <span>{v.receiver}</span>
-                      <span onClick={()=>this.goWebsite(v.version)}>浏览器查询</span>
+                      <span onClick={() => this.goWebsite(v.version)}>Browser query</span>
                   </div>
               </div>
               })
@@ -242,10 +240,10 @@ class Detail extends Component {
               name == 'bitcoin' ? transList2.map((v,i)=>{
                 return <div className="dealLists" key={i}>
                 <div className="title">
-                  <span>日期</span>
-                  <span>消耗</span>
+                  <span>Date</span>
+                  <span>Spend</span>
                   {
-                    this.getPayType1(v.scriptPubKey.addresses) == 'transfar' ? <span className="tranfer">转账</span> : this.getPayType1(v.scriptPubKey.addresses) == 'getMoney' ? <span className="getMoney">收款</span> : null 
+                      this.getPayType1(v.scriptPubKey.addresses) == 'transfar' ? <span className="tranfer">Transfer</span> : this.getPayType1(v.scriptPubKey.addresses) == 'getMoney' ? <span className="getMoney">Receive</span> : null 
                     
                     // v.receiver == this.props.match.params.address ? <span className="getMoney">收款</span>  : v.sender == this.props.match.params.address ? <span className="tranfer">转账</span> : null
                   }
@@ -256,8 +254,8 @@ class Detail extends Component {
                   <span></span>
                   </div>
                   <div className="check">
-                      <span>{v.scriptPubKey.addresses[0]}</span>
-                      <span onClick={()=>this.goWebsite(this.state.blockheight)}>浏览器查询</span>
+                    <span>{v.scriptPubKey.addresses[0]}</span>
+                    <span onClick={() => this.goWebsite(this.state.blockheight)}>Browser query</span>
                   </div>
               </div> 
               }) : null

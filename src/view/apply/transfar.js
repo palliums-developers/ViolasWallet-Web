@@ -36,8 +36,8 @@ class Transfar extends Component {
     }
 
     getBalance = () =>{
-        if(this.props.location.state.address){
-            fetch(url +"/explorer/violas/address/"+this.props.location.state.address).then(res => res.json())
+        if (window.sessionStorage.getItem('address')){
+            fetch(url + "/explorer/violas/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
                 .then(res => { 
                     this.setState({
                         balance: res.data.status.balance / 1e6
@@ -47,22 +47,29 @@ class Transfar extends Component {
         }
     }
     getLibraBalance = () => {
-        fetch(url2 + "/explorer/libra/address/" + this.props.location.state.address).then(res => res.json())
+        if (window.sessionStorage.getItem('address')) {
+        fetch(url2 + "/explorer/libra/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
             .then(res => {
                 this.setState({
                     balance: res.data.status.balance / 1e6
                 })
 
             })
+        }
     }
     getBTCBalance = () => {
-        fetch(url1 + '/api/address/' + this.props.location.state.address).then(res => res.json())
-            .then(res => {
-                this.setState({
-                    balance: Number(res.balance)
-                })
+        console.log(window.sessionStorage.getItem('address'))
+        if (window.sessionStorage.getItem('address')){
+            fetch(url1 + '/api/address/' + window.sessionStorage.getItem('address')).then(res => res.json())
+                .then(res => {
+                    this.setState({
+                        balance: Number(res.balance)
+                    })
 
-            })
+                })
+        }
+
+        
     }
     getTransAddress = (e) =>{
         this.setState({
@@ -72,7 +79,7 @@ class Transfar extends Component {
                 if(this.state.title == 'Violas'){
                     if(this.state.address.length != 32){
                      this.setState({
-                         warning:'地址错误'
+                         warning:'address error'
                      })
                     }else{
                      this.setState({
@@ -82,7 +89,7 @@ class Transfar extends Component {
                  }else if(this.state.title == 'Libra'){
                      if(this.state.address.length != 32){
                          this.setState({
-                             warning:'地址错误'
+                             warning:'address error'
                          })
                      }else{
                          this.setState({
@@ -98,7 +105,7 @@ class Transfar extends Component {
                      } else {
                        
                        this.setState({
-                         warning: "地址错误"
+                           warning: "address error"
                        });
                      }
                  }
@@ -116,7 +123,7 @@ class Transfar extends Component {
         },()=>{
             if(Number(this.state.amount) > Number(this.state.balance)){
                 this.setState({
-                    warning:'可用余额不足'
+                    warning:'Insufficient available balance'
                 })
              }else{
                  this.setState({
@@ -128,9 +135,9 @@ class Transfar extends Component {
     getNext = () =>{
         
       if(this.state.address == ''){
-        alert('请输入您的转账地址')
+        alert('Please input address')
       }else if(this.state.amount == ''){
-        alert('请输入金额')
+        alert('Please input amoun')
       }else{
         
         if(this.state.warning == ''){
@@ -171,20 +178,20 @@ class Transfar extends Component {
             }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div>
             <div className="transfarContent">
               <div className="transfarList">
-                <h4>{title}转账</h4>
+                <h4>{title}Transfer</h4>
                 <div className="iptAddress">
-                  <textarea placeholder={'请输入您的'+title+'转账地址'} onChange={(e)=>this.getTransAddress(e)}></textarea>
+                    <textarea placeholder={'Please input your '+title+' address'} onChange={(e)=>this.getTransAddress(e)}></textarea>
                 </div>
                 <div className="iptAmount">
-                  <input placeholder="请输入金额" onChange={(e)=>this.getTransAmount(e)}/>
+                  <input placeholder="Please input amount" onChange={(e)=>this.getTransAmount(e)}/>
                   <label>{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}</label>
                 </div>
                 <div className="amountShow">
-                  <p>余额 <span>{balance}{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}</span></p>
+                    <p>Balance <span>{balance}{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}</span></p>
                 </div>
                 <div className="foot">
                    {
-                       this.state.getAct == false ? <p className="btn" onClick={()=>this.getNext()}>下一步</p> : <p className="btn active" onClick={()=>this.getNext()}>下一步</p>
+                    this.state.getAct == false ? <p className="btn" onClick={() => this.getNext()}>Next</p> : <p className="btn active" onClick={() => this.getNext()}>Next</p>
                    }
                    <p className="descr">{warning}</p>
                 </div>
