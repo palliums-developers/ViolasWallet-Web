@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { HashRouter, Route, Redirect } from 'react-router-dom'
 import RouterView from './routerView'
 import Routes from './routes'
 
 class RouterConfig extends Component {
     render() {
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <RouterView routes={Routes}></RouterView>
-            </BrowserRouter>
+            </HashRouter>
         );
     }
 }

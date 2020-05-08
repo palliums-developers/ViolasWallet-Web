@@ -16,7 +16,6 @@ class HomeContent extends Component {
       }
     }
     componentDidMount(){
-     
     }
     getActive = (ind,val) =>{
          this.props.history.push('/home/homeContent/'+val)

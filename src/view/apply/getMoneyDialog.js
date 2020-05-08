@@ -44,7 +44,7 @@ class GetMoneyDialog extends Component {
             this.setState({
               dis:false
             })
-        }, 500);
+        }, 1000);
     };
     render(){
         let { title,address,dis } = this.state;
