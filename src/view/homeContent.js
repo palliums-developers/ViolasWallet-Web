@@ -12,7 +12,6 @@ class HomeContent extends Component {
         type:['Violas','Libra','Bitcoin'],
         ind:0,
         name:'Violas',
-       
       }
     }
     componentDidMount(){

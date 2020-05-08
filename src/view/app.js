@@ -66,7 +66,6 @@ class App extends Component {
       // http://125.39.5.57:38080/app/mock/16/1.0/violas/singin
       fetch(url + "/explorer/violas/singin?session_id=" + this.state.session_id).then(res => res.json())
         .then(res => { 
-          console.log(res.data)
           if(res.data.status == 1){
               
               this.setState({
