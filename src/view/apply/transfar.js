@@ -137,7 +137,7 @@ class Transfar extends Component {
       if(this.state.address == ''){
         alert('Please input address')
       }else if(this.state.amount == ''){
-        alert('Please input amoun')
+        alert('Please input amount')
       }else{
         
         if(this.state.warning == ''){
