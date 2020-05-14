@@ -16,7 +16,12 @@ class CashPooling extends Component {
             types:['转入','转出'],
             type:'转入',
             name: 'Violas',
-            showDealType:false
+            showDealType: false,
+            getFocus: false,
+            getFocus1: false,
+            inputAmount: '',
+            outputAmount: '',
+            warning: ''
             // visible:false
         }
     }
@@ -61,9 +66,7 @@ class CashPooling extends Component {
     stopPropagation(e) {
         e.nativeEvent.stopImmediatePropagation();
     }
-    showExchangeCode = () => {
-        this.props.showDialog()
-    }
+    
     showTypes = (v) => {
 
         this.setState({
@@ -71,9 +74,55 @@ class CashPooling extends Component {
             showDealType: false
         })
     }
-    
+    getInputAmount = (e) => {
+        if (e.target.value) {
+            this.setState({
+                inputAmount: e.target.value,
+                getFocus: true
+            })
+        } else {
+            this.setState({
+                inputAmount: e.target.value,
+                getFocus: false
+            })
+        }
+    }
+    getOutputAmount = (e) => {
+        if (e.target.value) {
+            this.setState({
+                outputAmount: e.target.value,
+                getFocus1: true
+            })
+        } else {
+            this.setState({
+                outputAmount: e.target.value,
+                getFocus1: false
+            })
+        }
+    }
+    showExchangeCode = () => {
+        if (this.state.inputAmount) {
+            if (this.state.outputAmount) {
+                this.setState({
+                    warning: ''
+                }, () => {
+                    this.props.showDialog()
+                })
+
+            }
+            else {
+                this.setState({
+                    warning: '请输入兑换数量'
+                })
+            }
+        } else {
+            this.setState({
+                warning: '请输入兑换数量'
+            })
+        }
+    }
     render() {
-        let { names, name, showMenuViolas, showMenuViolas1, types,type, showDealType } = this.state;
+        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType,warning,getFocus,getFocus1 } = this.state;
 
         return (
             <div className="exchange cashPooling">
@@ -108,10 +157,10 @@ class CashPooling extends Component {
                                 </div>
                                 <p>gas：0.1000%</p>
                             </div>
-                            <div className="iptForm">
+                            <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
                                 <label>Input</label>
                                 <div className="iptContent">
-                                    <input placeholder="0.00" />
+                                    <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)}/>
                                     <div className="dropdown1">
                                         {
                                             showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -131,10 +180,10 @@ class CashPooling extends Component {
                                 </div>
                             </div>
                             <div className="changeImg"><img src="/img/编组 2备份@2x.png" /></div>
-                            <div className="iptForm1">
+                            <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                 <label>Output</label>
                                 <div className="iptContent">
-                                    <input placeholder="0.00" />
+                                    <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)}/>
                                     <div className="dropdown1">
                                         {
                                             showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>选择通证<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>选择通证<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -155,13 +204,13 @@ class CashPooling extends Component {
                         </div>
                         <div className="foot">
                             <p className="btn" onClick={() => this.showExchangeCode()}>转入</p>
-                            <p className="descr">请输入兑换数量</p>
+                            <p className="descr">{warning}</p>
                         </div>
                         <div className="changeRecord poolRecord">
                             <h4>资金池记录</h4>
                             <div className="poolRecordLists">
                                 <div className="poolRecordList" onClick={() => {
-                                    this.props.showDrawer1()
+                                    this.props.showDrawer1(this.props.visible1)
                                 }}>
                                     <div className="logo"><img src="/img/编组 42备份 11@2x.png"/></div>
                                     <div className="listContent">
@@ -226,6 +275,15 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
+        showDialog: () => {
+            dispatch({
+                type: 'EXCHANGE',
+                params: {
+                    type: true,
+                    vis: true
+                }
+            })
+        },
         showPolling: (payload) => {
             dispatch({
                 type: 'SHOWPOOL',
@@ -238,10 +296,10 @@ let mapDispatchToProps = (dispatch) => {
                 payload: false
             })
         },
-        showDrawer1: () => {
+        showDrawer1: (type) => {
             dispatch({
                 type: 'VISIBLE1',
-                payload: true
+                payload: !type
             })
         }
     }
