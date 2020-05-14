@@ -6,6 +6,9 @@ import Details from '../view/detail'
 import ViolasContent from "../view/homeList/violasList";
 import HomePage from "../view/homePage";
 import transfar from "../view/apply/transfar";
+import ChangeContent from "../view/market/changeContent";
+import ExChange from "../view/market/exChange";
+import CashPooling from "../view/market/cashPooling";
 
 let routes = [
     //首页
@@ -45,9 +48,29 @@ let routes = [
                                 path: '/homepage/home/homeContent/transfar/:name',
                                 component: transfar
                             },
+                            
                             {
                                 path: '/homepage/home/homeContent',
                                 redirect: '/homepage/home/homeContent/Violas'
+                            },
+                        ]
+
+                    },
+                    {
+                        path: '/homepage/home/changeContent',
+                        component: ChangeContent,
+                        children:[
+                            {
+                                path: '/homepage/home/changeContent/exchange',
+                                component: ExChange
+                            },
+                            {
+                                path: '/homepage/home/changeContent/cashPooling',
+                                component: CashPooling
+                            },
+                            {
+                                path: '/homepage/home/changeContent',
+                                redirect: '/homepage/home/changeContent/exchange'
                             },
                         ]
                     },
@@ -57,6 +80,8 @@ let routes = [
                     }
                 ]
             },
+            
+            
             {
                 path: '/homepage',
                 redirect: '/homepage/home'

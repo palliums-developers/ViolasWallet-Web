@@ -1,0 +1,274 @@
+.exchangeDetail{
+    width: 3.75rem;
+    height: 100%;
+    background: #FFF;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 0.36rem;
+    box-sizing: border-box;
+    h4{
+        display: flex;
+        align-items: center;
+        font-size:16px;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        margin-top: 1rem;
+        i{
+            width: 0.14rem;
+            height: 0.15rem;
+            display: flex;
+            margin-right: 0.8rem;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .status{
+        display: flex;
+        margin-top: 0.7rem;
+        p{
+            display: flex;
+            align-items: center;
+            font-size:0.14rem;
+            color:rgba(0, 0, 0, 0.07);
+            img{
+                width:0.16rem;
+                height: 0.16rem;
+            }
+            label{
+                font-size:0.14rem;
+                font-weight:400;
+                color:rgba(130,128,138,1);
+                margin: 0 0.05rem;
+            }
+            i{
+                width:0.38rem;
+                height:1px;
+                background:rgba(51, 51, 51, 1);
+                margin-right: 0.05rem;
+            }
+        }
+    }
+    .formShow{
+        height: 0.45rem;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.48rem;
+        .changeImg{
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            img{
+                width: 0.2rem;
+               height: 0.2rem;
+            }
+        }
+        dl{
+            dt{
+                font-size:0.12rem;
+                font-weight:400;
+                color:rgba(153,153,153,1);
+            }
+            dd{
+                font-size:0.16rem;
+                font-weight:400;
+                color:rgba(51,51,51,1);
+                span{
+                    font-size:0.24rem;
+                    font-weight:bold;
+                    color:rgba(51,51,51,1);
+                }
+                
+            }
+        }
+    }
+    .list{
+        margin-top: 0.5rem;
+        p{
+            display: flex;
+            margin-top: 0.2rem;
+            label{
+                width: 1rem;
+                font-size:0.14rem;
+                font-weight:400;
+                color:rgba(153,153,153,1);
+            }
+            span{
+                font-size:0.14rem;
+                font-weight:500;
+                color:rgba(51,51,51,1);
+                }
+        }
+    }
+}
+.myPoolDialog{
+    width: 3.75rem;
+    height: 100%;
+    background: #FFF;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 0.36rem;
+    box-sizing: border-box;
+     >h4{
+        display: flex;
+        align-items: center;
+        font-size:16px;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        margin-top: 1rem;
+        i{
+            width: 0.14rem;
+            height: 0.15rem;
+            display: flex;
+            margin-right: 0.8rem;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .amountShow{
+        width: 100%;
+        height: 0.84rem;
+        background:rgba(248,248,248,1);
+        border-radius:8px;
+        padding-top: 0.17rem;
+        padding-left: 0.16rem;
+        box-sizing: border-box;
+        margin-top: 0.5rem;
+        p:nth-child(1){
+            font-size:12px;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+        }
+        p:nth-child(2){
+            font-size:0.16rem;
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            margin-top: 0.05rem;
+            span{
+                font-size:0.24rem;
+                font-weight:bold;
+                color:rgba(51,51,51,1);
+                margin-right: 0.05rem;
+            }
+        }
+    }
+    .btns{
+        display: flex;
+        margin-top: 0.19rem;
+        button{
+            width:1.2rem;
+            height:0.3rem;
+            background:rgba(112,56,253,1);
+            border-radius:14px;
+            outline: 0;
+            border: 0;
+            font-size:0.14rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            margin: 0 0.16rem;
+            box-sizing: border-box;
+        }
+    }
+    .list{
+        // width: 100%;
+        // margin-top: 0.5rem;
+        h4{
+            font-size:0.14rem;
+            line-height: 0.6rem;
+            font-weight:400;
+            color:rgba(61,57,73,1);
+            border-bottom: 1px solid rgba(60, 56, 72, .2);
+        }
+        .listContent{
+            display: flex;
+            flex-direction: column;
+            p{
+                display: flex;
+                margin-top: 0.2rem;
+                justify-content: space-between;
+                label,span{
+                    font-size:0.14rem;
+                    font-weight:400;
+                    color:rgba(51,51,51,1);
+                }
+            
+            }
+        }
+        
+    }
+}
+.poolRecord{
+    .poolRecordLists{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.2rem;
+        .poolRecordList{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 0.75rem;
+            .logo{
+                width:0.24rem;
+                height:0.24rem;
+                margin-bottom: 0.05rem;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .listContent{
+                height: 100%;
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-left: 0.1rem;
+                border-bottom:1px solid  rgba(224, 224, 224, 1);
+                >label{
+                    width:0.13rem;
+                    height:0.13rem;
+                    display: flex;
+                    margin-left: 0.1rem;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .listContents{
+                    flex: 1;
+                    >div{
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.08rem;
+                        p{
+                            font-size:0.14rem;
+                            font-weight:400;
+                            color:rgba(153,153,153,1);
+                            label{
+                                font-size:0.14rem;
+                                font-weight:400;
+                                color:rgba(0,0,0,1);
+                            }
+                        }
+                        .green{
+                            color:rgba(19,183,136,1);
+                        }
+                        .org{
+                            color:rgba(251,143,11,1);
+                        }
+                        .red{
+                            color:rgba(229,64,64,1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
