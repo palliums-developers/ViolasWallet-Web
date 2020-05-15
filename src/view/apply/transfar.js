@@ -48,7 +48,7 @@ class Transfar extends Component {
     }
     getLibraBalance = () => {
         if (window.sessionStorage.getItem('address')) {
-        fetch(url2 + "/explorer/libra/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
+        fetch(url + "/explorer/libra/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
             .then(res => {
                 this.setState({
                     balance: res.data.status.balance / 1e6

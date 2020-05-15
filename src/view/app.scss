@@ -7,6 +7,9 @@
 p{
   margin-bottom: 0!important;
 }
+dd{
+  margin-bottom: 0!important;
+}
 .ant-drawer{
   z-index: 0;
 }
@@ -31,8 +34,8 @@ p{
     flex-direction: column;
     .logo{
       margin-left: 2.3rem;
-      // padding-top: 0.37rem;
-      // box-sizing: border-box;
+      padding-top: 0.37rem;
+      box-sizing: border-box;
       img{
         width: 1.97rem;
         height: 0.32rem;
