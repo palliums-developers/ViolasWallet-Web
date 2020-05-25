@@ -188,7 +188,7 @@ class App extends React.Component {
           </div>
           <button onClick={this.sendTransaction}>send transaction</button>
           <button onClick={this.logout}>log out</button>
-          {/* <button onClick={this.showNotification}>Show Notification</button> */}
+          <button onClick={this.showNotification}>Show Notification</button>
           {/* <Router>
             <Route path='/wallet' component={Wallet}/>
           </Router> */}
