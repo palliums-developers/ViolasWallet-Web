@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
 // import WalletConnect from  '@walletconnect/browser'
-import WalletConnect from './packages/browser/src/index'
-import WalletConnectQRCodeModal from './packages/qrcode-modal/src/index'
-// import WalletConnect1 from '@walletconnect/browser'
-// import WalletConnectQRCodeModal1 from '@walletconnect/qrcode-modal'
+import WalletConnect from './packages/browser/src/index';
+import WalletConnectQRCodeModal from './packages/qrcode-modal/src/index';
+import axios from 'axios';
+// import WalletConnect1 from '@walletconnect/browser';
+// import WalletConnectQRCodeModal1 from '@walletconnect/qrcode-modal';
 
 import Wallet from './Wallet';
-import {BrowserRouter as Router,Route} from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const walletConnector = new WalletConnect({ bridge: 'https://bridge.walletconnect.org' })
 class App extends React.Component {
@@ -16,11 +17,18 @@ class App extends React.Component {
     this.state = {
       bridge: 'https://bridge.walletconnect.org',
       walletConnect: null,
+      from: '111',
+      code: '',
+      tyArgs: '',
+      address: '',
+      value: 0,
     }
+    this.getSeqNumb = this.getSeqNumb.bind(this);
+    this.sendTransaction=this.sendTransaction.bind(this);
   }
   async componentDidMount() {
     console.log(walletConnector.consoleLog('aaa'));
-    // this.checkNotificationPermission();
+    // this.getSeqNumb('4fcdb78dbb64eef68229f498f641babe');
   }
   QRCode() {
     // walletConnector.peerId().then(res=>console.log(res))
@@ -56,29 +64,44 @@ class App extends React.Component {
       console.log('get account ', err)
     })
   }
-  sendTransaction() {
+  async getSeqNumb(_address) {
+    await axios(`https://api.violas.io/1.0/violas/seqnum?addr=${_address}`).then(res => {
+      return res.data.data + 1
+    });
+  }
+  async sendTransaction() {
+    const seq = await this.getSeqNumb(this.state.from).then(res => {
+      return res
+    }).catch(err => {
+      console.log(err)
+    })
+    // console.log(this.state.from)
+    // const seq = await axios('https://api.violas.io/1.0/violas/seqnum?addr=' + this.state.from).then(res => {
+    //   return res.data.data + 1
+    // });
     const tx = {
-      from: '4fcdb78dbb64eef68229f498f641babe',
+      from: this.state.from,
       payload: {
-        code: '0x123',
+        code: this.state.code,
         tyArgs: [
-          '0x1234ABCD'
+          this.state.tyArgs
         ],
         args: [
           {
             type: 'Address',
-            value: '4fcdb78dbb64eef68229f498f641babe'
+            value: this.state.address
           },
           {
             type: 'Number',
-            value: '1000000'
+            value: this.state.value
           }
         ]
       },
       maxGasAmount: 400000,
       gasUnitPrice: 0,
-      sequenceNUmber: 2
+      sequenceNumber: seq
     }
+    console.log(JSON.stringify(tx))
     walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
     }).catch(err => {
@@ -92,63 +115,8 @@ class App extends React.Component {
       }
       console.log('wallet disconnected')
     })
+    walletConnector.killSession();
   }
-  // QRCode1() {
-  //   const walletConnector1 = new WalletConnect1({ bridge: 'https://bridge.walletconnect.org' })
-  //   if (!walletConnector1.connected) {
-  //     walletConnector1.createSession().then(() => {
-  //       const uri = walletConnector1.uri;
-  //       console.log(uri)
-  //       WalletConnectQRCodeModal1.open(uri, () => {
-  //         console.log('QRCode closed')
-  //       });
-  //     });
-  //   }
-  //   walletConnector1.on('connect', (error, payload) => {
-  //     if (error) {
-  //       throw error
-  //     }
-  //     WalletConnectQRCodeModal1.close();
-  //     const { accounts, chainId } = payload.params[0];
-  //     console.log(accounts, ' ', chainId);
-  //   });
-  //   walletConnector1.on("session_update", (error, payload) => {
-  //     if (error) {
-  //       throw error;
-  //     }
-  //     const { accounts, chainId } = payload.params[0]
-  //     console.log(accounts, ' ', chainId);
-  //   });
-  // }
-  // sendTransaction1() {
-  //   const tx = {
-  //     from: "0xbc28Ea04101F03aA7a94C1379bc3AB32E65e62d3", // Required
-  //     to: "0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359", // Required (for non contract deployments)
-  //     data: "0x", // Required
-  //     gasPrice: "0x02540be400", // Optional
-  //     gasLimit: "0x9c40", // Optional
-  //     value: "0x00", // Optional
-  //     nonce: "0x0114" // Optional
-  //   };
-  //   // Send transaction
-  //   walletConnector
-  //     .sendTransaction(tx)
-  //     .then(result => {
-  //       // Returns transaction id (hash)
-  //       console.log(result);
-  //     })
-  //     .catch(error => {
-  //       // Error returned when rejected
-  //       console.error(error);
-  //     });
-  // }
-  // logout1() {
-  //   walletConnector.on("disconnect", (error, payload) => {
-  //     if (error) {
-  //       throw error;
-  //     }
-  //   })
-  // }
   checkNotificationPermission() {
     if ('Notification' in window) {
       if (Notification.permission === 'granted') {
@@ -182,16 +150,41 @@ class App extends React.Component {
     });
     setTimeout(myNotification.close.bind(myNotification), 3000)
   }
+  async handelChange(_type, e) {
+    switch (_type) {
+      case 'from':
+        await this.setState({ from: e.target.value });
+        break;
+      case 'code':
+        await this.setState({ code: e.target.value });
+        break;
+      case 'tyArgs':
+        await this.setState({ tyArgs: e.target.value });
+        break;
+      case 'address':
+        await this.setState({ address: e.target.value });
+        break;
+      case 'value':
+        await this.setState({ value: e.target.value });
+        break;
+    }
+  }
   render() {
     return (
       <div className='App'>
         <header className='App-header'>
           <button onClick={this.QRCode}>QRCode</button>
           <button onClick={this.getAccount}>get accounts</button>
+          <div className='tx'>
+            <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p>
+            <p>Code: <input type="text" onChange={this.handelChange.bind(this, 'code')} /></p>
+            <p>tyArgs: <input type="text" onChange={this.handelChange.bind(this, 'tyArgs')} /></p>
+            <p>Address: <input type="text" onChange={this.handelChange.bind(this, 'address')} /></p>
+            <p>Value: <input type="text" onChange={this.handelChange.bind(this, 'value')} /></p>
+          </div>
           <button onClick={this.sendTransaction}>send transaction</button>
           <button onClick={this.logout}>log out</button>
           {/* <button onClick={this.showNotification}>Show Notification</button> */}
-
           {/* <Router>
             <Route path='/wallet' component={Wallet}/>
           </Router> */}

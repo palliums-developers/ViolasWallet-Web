@@ -6,7 +6,11 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+.tx p{
+  margin: 0;
+  font-size: 12px;
+  width: 222px;
+}
 button{
   margin: 10px;
 }
