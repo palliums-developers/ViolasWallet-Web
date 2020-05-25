@@ -17,14 +17,14 @@ class App extends React.Component {
     this.state = {
       bridge: 'https://bridge.walletconnect.org',
       walletConnect: null,
-      from: '111',
+      from: '',
       code: '',
       tyArgs: '',
       address: '',
       value: 0,
     }
     this.getSeqNumb = this.getSeqNumb.bind(this);
-    this.sendTransaction=this.sendTransaction.bind(this);
+    this.sendTransaction = this.sendTransaction.bind(this);
   }
   async componentDidMount() {
     console.log(walletConnector.consoleLog('aaa'));
@@ -90,6 +90,10 @@ class App extends React.Component {
           {
             type: 'Address',
             value: this.state.address
+          },
+          {
+            type: 'Bytes',
+            value: '00'
           },
           {
             type: 'Number',
