@@ -93,7 +93,7 @@ class App extends React.Component {
           },
           {
             type: 'Bytes',
-            value: '00'
+            value: ''
           },
           {
             type: 'Number',
