@@ -576,9 +576,12 @@ var Connector = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this._get_accounts(request)];
+                        return [4 /*yield*/, this._sendCallRequest(request)
+                            // const result = await this._get_accounts(request)
+                        ];
                     case 2:
                         result = _a.sent();
+                        // const result = await this._get_accounts(request)
                         return [2 /*return*/, result];
                     case 3:
                         error_2 = _a.sent();
@@ -814,6 +817,7 @@ var Connector = /** @class */ (function () {
     Connector.prototype._get_accounts = function (request) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                console.log('_get');
                 this._transport.send(request);
                 return [2 /*return*/];
             });

@@ -594,7 +594,8 @@ class Connector implements IConnector {
       params: []
     })
     try {
-      const result = await this._get_accounts(request)
+      const result = await this._sendCallRequest(request)
+      // const result = await this._get_accounts(request)
       return result
     } catch (error) {
       throw error
@@ -771,6 +772,7 @@ class Connector implements IConnector {
 
   // -- private --------------------------------------------------------- //
   protected async _get_accounts(request) {
+    console.log('_get')
     this._transport.send(request)
   }
   protected async _sendRequest(

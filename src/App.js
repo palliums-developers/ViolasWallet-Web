@@ -36,7 +36,6 @@ class App extends React.Component {
     // walletConnector.peerId().then(res=>console.log(res))
     if (!walletConnector.connected) {
       walletConnector.createSession().then(() => {
-        // walletConnector.consoleLog('aaa').then(res=>console.log(res))
         const uri = walletConnector.uri;
         console.log(uri)
         WalletConnectQRCodeModal.open(uri, () => {
