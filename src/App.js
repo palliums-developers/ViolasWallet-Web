@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 const walletConnector = new WalletConnect({ bridge: 'https://bridge.walletconnect.org' })
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       bridge: 'https://bridge.walletconnect.org',
       walletConnect: null,
@@ -25,9 +25,11 @@ class App extends React.Component {
     }
     this.getSeqNumb = this.getSeqNumb.bind(this);
     this.sendTransaction = this.sendTransaction.bind(this);
+    this.showNotification = this.showNotification.bind(this);
+    this.checkNotificationPermission = this.checkNotificationPermission.bind(this);
   }
   async componentDidMount() {
-    console.log(walletConnector.consoleLog('aaa'));
+    console.log(walletConnector.consoleLog('test tsc -p tsconfig.json'));
     // this.getSeqNumb('4fcdb78dbb64eef68229f498f641babe');
   }
   QRCode() {
@@ -129,12 +131,13 @@ class App extends React.Component {
         Notification.requestPermission().then(res => {
           console.log(res);
         }).catch((err) => {
-          console.log(err)
+          console.log(err);
         });
       }
     }
   }
   showNotification() {
+    this.checkNotificationPermission();
     let title = 'This is title';
     let delayTime = Date.now() + 120000;
     let options = {
