@@ -32,7 +32,12 @@ class HomeContent extends Component {
                         <dt></dt>
                         <dd>Transfer</dd>
                       </dl>
-                      <dl>
+                      <dl onClick={() => {
+                        this.props.history.push({
+                          pathname: '/homepage/home/getMoney'
+                        })
+                        // window.sessionStorage.setItem('address', this.props.match.params.address)
+                      }}>
                         <dt></dt>
                         <dd>Receive</dd>
                       </dl>
@@ -40,11 +45,13 @@ class HomeContent extends Component {
                   </div>
                 </div>
                 <div className="assetList">
-                  <p><label>资产</label><i><img src="/img/编组 18@2x.png"/></i></p>
+                <p><label>资产</label><i onClick={() => {
+                  this.props.showPolling(!this.props.display);
+                }}><img src="/img/编组 18@2x.png"/></i></p>
                   <div className="assetLists">
-                    <div className="assetListsEvery" onClick={()=>{
-                    this.props.showPolling(!this.props.display);
-                    }}>
+                      <div className="assetListsEvery" onClick={() => {
+                        this.props.showDetails(!this.props.display1);
+                      }}>
                       <div className="leftAsset"><i><img src="/img/编组 2复制 4@2x.png"/></i><label>BTC</label></div>
                       <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
                     </div>
@@ -81,6 +88,12 @@ let mapDispatchToProps = (dispatch) => {
     showPolling: (type) => {
       dispatch({
         type: "DISPLAY",
+        payload: type,
+      });
+    },
+    showDetails: (type) => {
+      dispatch({
+        type: "DISPLAY1",
         payload: type,
       });
     },

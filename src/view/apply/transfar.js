@@ -15,10 +15,23 @@ class Transfar extends Component {
         warning:'',
         getAct:false,
         address:'',
-        amount:''
+        amount:'',
+        types: ['Violas', 'Libra','Bitcoin'],
+        type: 'Violas',
+        showDealType: false,
       }
     }
+    componentWillMount() {
+      if(this.props.display){
+        this.props.showPolling();
+      }
+      if (this.props.display1){
+        this.props.showDetails();
+      }
+
+    }
     componentDidMount(){
+        
         if(this.props.location.pathname.split("/")[5]){
             let type = this.props.location.pathname.split("/")[5]
             this.setState({
@@ -34,7 +47,19 @@ class Transfar extends Component {
             })
           }
     }
+    getTypeShow = (event) => {
+        // this.stopPropagation(event)
+        this.setState({
+            showDealType: !this.state.showDealType
+        })
+    }
+    showTypes = (v) => {
 
+        this.setState({
+            type: v,
+            showDealType: false
+        })
+    }
     getBalance = () =>{
         if (window.sessionStorage.getItem('address')){
             fetch(url + "/explorer/violas/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
@@ -168,15 +193,16 @@ class Transfar extends Component {
       
     }
     render(){
-        let { title,balance,warning } = this.state;
+        let { title, balance, warning,showDealType, types, type } = this.state;
         return (
-          <div className="rightContent transfar">
-            <div className="back" onClick={()=>{
+          <div className="transfar">
+            {/* <div className="back" onClick={()=>{
                 window.history.go(-1);
                 // this.props.getType(this.props.match.params.type)
                 
-            }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div>
+            }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div> */}
             <div className="transfarContent">
+              <i className="jt"><img src="/img/编组 10@2x.png" /></i>
               <div className="transfarList">
                 <h4>{title}Transfer</h4>
                 <div className="iptAddress">
@@ -184,7 +210,22 @@ class Transfar extends Component {
                 </div>
                 <div className="iptAmount">
                   <input placeholder="Please input amount" onChange={(e)=>this.getTransAmount(e)}/>
-                  <label>{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}</label>
+                  <div className="dropdown1">
+                    {
+                    showDealType ? <span className="showClick" onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
+                    }
+                    {
+                    showDealType ? <div className='dropdown-content1'>
+                        {
+                        types.map((v, i) => {
+                            return <span key={i} className={v == type ? 'active' : null} onClick={() => this.showTypes(v)}>{v}</span>
+                        })
+                        }
+                    </div> : null
+                    }
+
+
+                </div>
                 </div>
                 <div className="amountShow">
                     <p>Balance <span>{balance}{title == 'Violas' ? 'vtoken' : title == 'Libra' ? 'libra' : title == 'Bitcoin' ? 'BTC' : null}</span></p>
@@ -215,7 +256,19 @@ let mapDispatchToProps = (dispatch) =>{
                 amount:Number(params.amount)
             }
         })
-     }
+     },
+     showPolling: () => {
+      dispatch({
+        type: "DISPLAY",
+        payload: false,
+      });
+    },
+    showDetails: () => {
+      dispatch({
+        type: "DISPLAY1",
+        payload: false,
+      });
+    },
   }
 }
  

@@ -46,7 +46,28 @@ class Home extends Component {
                       <NavLink to="/homepage/home/homeContent" activeStyle={{ color: 'rgba(80,27,162,1)', background: '#F7F7F9' }}><i className={active == 'homeContent' ? 'wal' : 'noWal'}></i>Wallet</NavLink>
                       <NavLink to="/homepage/home/changeContent" activeStyle={{ color: 'rgba(80,27,162,1)', background: '#F7F7F9' }}><i className={active == 'changeContent' ? 'mar' : 'noMar'}></i>Market</NavLink></div> : null
                   }
-                  <div className="mine"><img src="/img/wode备份 2@2x.png" /></div>
+                  <div className="mine">
+                    <img src="/img/wode备份 2@2x.png" />
+                    <div className="mineList">
+                       <div className="balanceList">
+                         <div className="balance">
+                           <label>总资产之和($)</label>
+                           <span>22311.11</span>
+                         </div>
+                         <div className="icon"><img src="/img/Combined Shape 2@2x.png"/></div>
+                       </div>
+                       <div className="btns">
+                         <dl>
+                           <dt><img src="/img/编组 13备份 4@2x.png"/></dt>
+                           <dd>转账</dd>
+                         </dl>
+                          <dl>
+                            <dt><img src="/img/编组 13备份 5@2x.png" /></dt>
+                            <dd>收款</dd>
+                          </dl>
+                       </div>
+                    </div>
+                  </div>
                 </div>
                 
                

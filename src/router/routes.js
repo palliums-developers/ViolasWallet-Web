@@ -3,7 +3,8 @@ import Home from '../view/home'
 import HomeContent from '../view/homeContent'
 import HomePage from "../view/homePage";
 import ChangeContent from "../view/changeContent"
-import { Transfer } from "antd";
+import Transfer from "../view/apply/transfar";
+import GetMoney from "../view/apply/getMoney";
 
 let routes = [
     //首页
@@ -31,6 +32,10 @@ let routes = [
                     {
                         path: '/homepage/home/transfar',
                         component:Transfer
+                    },
+                    {
+                        path: '/homepage/home/getMoney',
+                        component: GetMoney
                     },
                     {
                         path: '/homepage/home',

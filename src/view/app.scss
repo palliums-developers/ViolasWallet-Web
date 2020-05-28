@@ -10,6 +10,76 @@ p {
 dd {
   margin-bottom: 0 !important;
 }
+@mixin dropdown {
+  .dropdown1 {
+        position: relative;
+        display: flex;
+        // top: -0.05rem;
+        margin-bottom:0.43rem ;
+        > span {
+          width: 1.2rem;
+          height: 0.35rem;
+          padding: 0 0.14rem;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(241, 238, 251, 1);
+          font-size: 0.16rem;
+          font-weight: 400;
+          color: rgba(112, 56, 253, 1);
+          border-radius: 16px;
+          cursor: pointer;
+
+          i {
+            display: flex;
+            width: 0.1rem;
+            height: 0.1rem;
+            margin-left: 0.05rem;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        .showClick {
+          background: rgba(112, 56, 253, 1);
+          color: rgba(255, 255, 255, 1);
+          i {
+            margin-top: 0.05rem;
+          }
+        }
+        .dropdown-content1 {
+          width: 1.2rem;
+          padding: 0 0.14rem;
+          padding-bottom: 0.1rem;
+          box-sizing: border-box;
+          position: absolute;
+          top: 0.35rem;
+          left: 0.01rem;
+          // overflow: auto;
+          display: flex;
+          flex-direction: column;
+          background: rgba(241, 238, 251, 1);
+          // display: none;
+          span {
+            // width: 100%;
+            height: 0.25rem;
+            line-height: 0.22rem;
+            text-align: center;
+            font-size: 0.14rem;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            border-radius: 11px;
+            margin-top: 0.1rem;
+            cursor: pointer;
+          }
+          .active {
+            background: #fff;
+          }
+        }
+      }
+}
 .ant-drawer {
   z-index: 0;
 }
@@ -19,8 +89,28 @@ dd {
   background-color: transparent !important;
 }
 .ant-drawer-content-wrapper {
-  width: 3.75rem !important;
+  width: 5rem !important;
+  height: 10.77rem !important;
+  .ant-drawer-content{
+    width: 100%;
+    height: 100%;
+    .ant-drawer-wrapper-body{
+      width: 100%;
+      height: 100%;
+      .ant-drawer-body{
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    }
+  }
 }
+.ant-drawer-body{
+  flex-grow: 0!important;
+  overflow: visible!important;
+}
+//登录页
 .app {
   width: 100%;
   height: 10.8rem;
@@ -34,7 +124,7 @@ dd {
     flex-direction: column;
     .logo {
       margin-left: 2.3rem;
-      // padding-top: 0.37rem;
+      padding-top: 0.37rem;
       box-sizing: border-box;
       img {
         width: 1.97rem;
@@ -124,6 +214,7 @@ dd {
 .homePage {
   position: relative;
 }
+//首页
 .home {
   width: 100%;
   height: 10.77rem;
@@ -143,6 +234,15 @@ dd {
       img {
         width: 0.24rem;
         height: 0.24rem;
+      }
+      .mineList{
+        width: 1.8rem;
+        height: 1.7rem;
+        position: absolute;
+        top:0.5rem;
+        right: 0.5rem;
+        background:rgba(80,27,162,1);
+        border-radius:8px;
       }
     }
     .logo {
@@ -216,29 +316,29 @@ dd {
     overflow-y: auto;
     background: #f7f7f9;
     .contentWrap {
-      width: 11rem;
-      margin:0.77rem auto;
-      
+      width: 11.5rem;
+      margin: 0.77rem auto;
+
       .apply {
         width: 100%;
         height: 2.5rem;
         padding-left: 0.29rem;
-        padding-right:0.4rem;
+        padding-right: 0.4rem;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        background: url('/img/编组 19@2x.png') no-repeat;
+        background: url("/img/编组 19@2x.png") no-repeat;
         background-size: 100% 100%;
-        p{
+        p {
           display: flex;
-          font-size:0.16rem;
-          font-weight:400;
-          color:rgba(154,145,190,1);
+          font-size: 0.16rem;
+          font-weight: 400;
+          color: rgba(154, 145, 190, 1);
           margin-top: 0.42rem;
           margin-bottom: 0.2rem;
-          i{
+          i {
             margin-left: 0.05rem;
-            img{
+            img {
               width: 0.2rem;
               height: 0.12rem;
             }
@@ -250,11 +350,11 @@ dd {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          span{
+          span {
             // height: 100%;
-            font-size:0.3rem;
-            font-weight:bold;
-            color:rgba(255,255,255,1);
+            font-size: 0.3rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
             margin-top: 0.1rem;
           }
           .btns {
@@ -265,7 +365,7 @@ dd {
               display: flex;
               align-items: center;
               justify-content: center;
-              background:rgba(255,255,255,1);
+              background: rgba(255, 255, 255, 1);
               margin-top: 0.33rem;
               margin-right: 0.23rem;
               border-radius: 3px;
@@ -310,185 +410,567 @@ dd {
           }
         }
       }
-      .assetList{
-        width:100%;
+      .assetList {
+        width: 100%;
         padding: 0.2rem 0.17rem;
         box-sizing: border-box;
-        background:rgba(255,255,255,1);
-        border-radius:24px 24px 0px 0px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 24px 24px 0px 0px;
         margin-top: -0.8rem;
-        p{
+        p {
           height: 0.7rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          
+          i {
+            width: 0.25rem;
+            height: 0.25rem;
+            display: flex;
+            cursor: pointer;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
         }
-        .assetLists{
-          .assetListsEvery{
+        .assetLists {
+          .assetListsEvery {
             width: 100%;
             height: 0.7rem;
             margin-bottom: 0.12rem;
-            background:#F7F7F9;
+            background: #f7f7f9;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 0.12rem;
             box-sizing: border-box;
-            border-radius:14px;
-            .leftAsset{
+            border-radius: 14px;
+            cursor: pointer;
+            .leftAsset {
               display: flex;
               align-items: center;
-              i{
+              i {
                 margin-right: 0.1rem;
-                img{
+                img {
                   width: 0.4rem;
                   height: 0.4rem;
                 }
               }
-              label{
-                font-size:0.18rem;
-                font-weight:600;
-                color:rgba(51,51,51,1);
+              label {
+                font-size: 0.18rem;
+                font-weight: 600;
+                color: rgba(51, 51, 51, 1);
               }
             }
-            .rightAsset{
+            .rightAsset {
               display: flex;
               flex-direction: column;
-              span{
-                font-size:0.18rem;
-                font-weight:600;
-                color:rgba(51,51,51,1);
+              span {
+                font-size: 0.18rem;
+                font-weight: 600;
+                color: rgba(51, 51, 51, 1);
               }
-              label{
-                font-size:0.14rem;
-                color:rgba(173,173,173,1);
+              label {
+                font-size: 0.14rem;
+                color: rgba(173, 173, 173, 1);
               }
             }
-            
           }
         }
       }
     }
-    .transfar {
-      padding: 0.37rem 0.73rem 0 0.53rem;
-      box-sizing: border-box;
-      .transfarContent {
-        width: 100%;
-        height: 100%;
-        background: #fff;
-        .transfarList {
-          width: 8.56rem;
-          margin: 0 auto;
+  }
+  //转账
+  .transfar {
+    width: 100%;
+    height: 100%;
+    background: #F7F7F9;
+    .transfarContent {
+      width: 10rem;
+      // height: 6.4rem;
+      background: #fff;
+      margin: 0.44rem auto;
+      position: relative;
+      .jt{
+          width: 0.32rem;
+          height: 0.17rem;
+          position: absolute;
+          top: 0.7rem;
+          left: 0.5rem;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+      .transfarList {
+        width: 8.56rem;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        h4 {
+          font-size: 0.32rem;
+          font-weight: 600;
+          color: rgba(60, 56, 72, 1);
+          margin-top: 0.7rem;
+          margin-bottom: 0.46rem;
+        }
+        .iptAddress {
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          h4 {
-            font-size: 0.32rem;
-            font-weight: 600;
-            color: rgba(60, 56, 72, 1);
-            margin-top: 1.69rem;
-            margin-bottom: 0.62rem;
-          }
-          .iptAddress {
-            display: flex;
-            margin-bottom: 0.14rem;
-            textarea {
-              width: 8.56rem !important;
-              height: 1.61rem !important;
-              border-radius: 3px;
-              border: 1px solid rgba(151, 151, 151, 1);
-              resize: none;
-              outline: none;
-              font-size: 0.24rem;
-              font-weight: 400;
-              color: rgba(158, 156, 164, 1);
-              padding-top: 0.16rem;
-              padding-left: 0.2rem;
-              box-sizing: border-box;
-              font-family: Arial, Helvetica, sans-serif;
-            }
-            textarea::-webkit-input-placeholder {
-              font-size: 0.24rem;
-              font-weight: 400;
-              color: rgba(158, 156, 164, 1) !important;
-            }
-          }
-          .iptAmount {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+          margin-bottom: 0.14rem;
+          textarea {
             width: 8.56rem !important;
-            height: 0.8rem;
+            height: 1.61rem !important;
             border-radius: 3px;
             border: 1px solid rgba(151, 151, 151, 1);
-            padding-right: 0.1rem;
+            resize: none;
+            outline: none;
+            font-size: 0.24rem;
+            font-weight: 400;
+            color: rgba(158, 156, 164, 1);
+            padding-top: 0.16rem;
+            padding-left: 0.2rem;
             box-sizing: border-box;
-            input {
-              width: 6rem;
-              height: 100%;
-              padding-left: 0.2rem;
-              box-sizing: border-box;
-              outline: none;
-              border: 0;
-              color: rgba(158, 156, 164, 1);
+            font-family: Arial, Helvetica, sans-serif;
+          }
+          textarea::-webkit-input-placeholder {
+            font-size: 0.24rem;
+            font-weight: 400;
+            color: rgba(158, 156, 164, 1) !important;
+          }
+        }
+        .iptAmount {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 8.56rem !important;
+          height: 0.8rem;
+          border-radius: 3px;
+          border: 1px solid rgba(151, 151, 151, 1);
+          padding-right: 0.1rem;
+          box-sizing: border-box;
+          @include dropdown;
+          .dropdown1 {
+            margin-bottom: 0;
+            >span{
+              background: 0;
+              border: 1px solid #7038FD;
             }
-            input::-webkit-input-placeholder {
-              font-size: 0.24rem;
-              font-weight: 400;
-              color: rgba(158, 156, 164, 1);
-            }
-            label {
-              font-size: 0.24rem;
-              font-weight: 400;
+          }
+          input {
+            width: 6rem;
+            height: 100%;
+            padding-left: 0.2rem;
+            box-sizing: border-box;
+            outline: none;
+            border: 0;
+            color: rgba(158, 156, 164, 1);
+          }
+          input::-webkit-input-placeholder {
+            font-size: 0.24rem;
+            font-weight: 400;
+            color: rgba(158, 156, 164, 1);
+          }
+          label {
+            font-size: 0.24rem;
+            font-weight: 400;
+            color: rgba(60, 56, 72, 1);
+          }
+        }
+        .amountShow {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          margin-top: 0.19rem;
+
+          p {
+            font-size: 0.2rem;
+            font-weight: 400;
+            color: rgba(158, 156, 164, 1);
+            margin-left: 0.2rem;
+            span {
+              font-size: 0.2rem;
+              font-weight: 500;
               color: rgba(60, 56, 72, 1);
             }
           }
-          .amountShow {
+        }
+        .foot {
+          width: 2.75rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .btn {
+          width: 2.75rem;
+          height: 0.53rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(96, 66, 158, 1);
+          border-radius: 27px;
+          font-size: 0.22rem;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 1);
+          margin-top: 1.27rem;
+          margin-bottom: 0.56rem!important;
+        }
+        .active {
+          background: rgba(135, 108, 192, 1);
+        }
+        .descr {
+          font-size: 0.2rem;
+          font-weight: 400;
+          color: rgba(209, 26, 67, 1);
+          margin-top: 0.1rem;
+        }
+      }
+    }
+  }
+  //收款
+  .getMoney {
+    width: 100%;
+    height: 100%;
+    background: #f7f7f9;
+    .dialogContent {
+      width: 10rem;
+      height: 6.4rem;
+      background: #fff;
+      margin: 0.53rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      .jt{
+        width: 0.32rem;
+        height: 0.17rem;
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+     
+      h4 {
+        font-size: 0.32rem;
+        font-weight: 600;
+        color: rgba(56, 47, 68, 1);
+        margin-top: 0.64rem;
+        margin-bottom: 0.4rem;
+      }
+      @include dropdown;
+      .qrCode,
+      canvas {
+        width: 2.05rem !important;
+        height: 2.05rem !important;
+      }
+      .addressCode {
+        display: flex;
+        margin-top: 0.32rem;
+        position: relative;
+        span {
+          font-size: 0.24rem;
+          font-weight: 400;
+          color: rgba(56, 47, 68, 1);
+          margin-right: 0.1rem;
+        }
+        i {
+          width: 0.28rem;
+          height: 0.3rem;
+          display: flex;
+          img {
             width: 100%;
+            height: 100%;
+          }
+        }
+        .warn {
+          width: 1.29rem;
+          height: 0.39rem;
+          display: flex;
+          position: absolute;
+          top: 0.4rem;
+          right: -0.15rem;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+  
+}
+//添加币种
+  .addCurrency{
+    width: 100%;
+    height: 100%;
+    padding: 0 0.47rem;
+    padding-top: 1rem;
+    box-sizing: border-box;
+    >h4{
+        display: flex;
+        align-items: center;
+        font-size:0.18rem;
+        font-weight:600;
+        color:rgba(51,51,51,1);
+        margin-bottom: 0.5rem;
+        i{
+            width: 0.16rem;
+            height: 0.17rem;
             display: flex;
-            align-items: flex-start;
-            margin-top: 0.19rem;
-
-            p {
-              font-size: 0.2rem;
-              font-weight: 400;
-              color: rgba(158, 156, 164, 1);
-              margin-left: 0.2rem;
-              span {
-                font-size: 0.2rem;
-                font-weight: 500;
-                color: rgba(60, 56, 72, 1);
-              }
+            margin-right: 1rem;
+            cursor: pointer;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .addCurrencyLists{
+        width: 100%;
+      .addCurrencyList{
+        width: 100%;
+        height: 0.6rem;
+        background:rgba(247,247,249,1);
+        border-radius:3px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.1rem;
+        padding: 0 0.13rem;
+        box-sizing: border-box;
+        p{
+          display: flex;
+          align-items: center;
+          i{
+          width:0.4rem;
+          height: 0.4rem;
+          display: flex;
+          margin-right: 0.12rem;
+          img{
+            width:100%;
+            height: 100%;
+          }
+        }
+        label{
+          font-size:0.16rem;
+          font-weight:600;
+          color:rgba(51,51,51,1);
+        }
+        }
+        p:nth-child(2){
+          cursor: pointer;
+          img{
+            width: 0.4rem;
+            height: 0.2rem;
+          }
+        }
+      }
+    }
+  }
+//币种详情
+.currencyDetail{
+  width: 100%;
+  height: 100%;
+  padding: 0 0.47rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+    >h4{
+        display: flex;
+        align-items: center;
+        font-size:0.18rem;
+        font-weight:600;
+        color:rgba(51,51,51,1);
+        margin-bottom: 0.5rem;
+        i{
+            width: 0.16rem;
+            height: 0.17rem;
+            display: flex;
+            margin-right: 1.5rem;
+            cursor: pointer;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .detailContent{
+      .detailNav{
+        margin-bottom: 0.2rem;
+        span{
+          font-size:0.14rem;
+          font-weight:400;
+          color:rgba(194,194,194,1);
+          margin-right: 0.32rem;
+        }
+      }
+      .detailLists{
+        .detailList{
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.2rem 0;
+          box-sizing: border-box;
+          border-bottom: 1px solid #DEDFE0;
+          cursor: pointer;
+          i{
+            img{
+              width: 0.3rem;
+              height: 0.3rem;
             }
           }
-          .foot {
-            width: 2.75rem;
+          .listCenter{
+            flex: 1;
+            margin-left: 0.2rem;
+            p:nth-child(1){
+              font-size:0.16rem;
+              font-weight: 500;
+              color:rgba(51,51,51,1);
+            }
+            p:nth-child(2){
+              font-size:0.12rem;
+              color:rgba(188,188,188,1);
+            }
+            .org{
+              color:rgba(251,143,11,1);
+            }
+            .gre{
+              color:#13B788;
+            }
+            .red{
+              color:#E54040;
+            }
+          }
+          .listResult{
+            p:nth-child(1){
+              font-size:0.16rem;
+              font-weight: 500;
+            }
+            p:nth-child(2){
+              font-size:0.12rem;
+              font-weight:400;
+            }
+            .org{
+              color:rgba(251,143,11,1);
+            }
+            .gre{
+              color:#13B788;
+            }
+            .red{
+              color:#E54040;
+            }
+          }
+        }
+      }
+    }
+}
+//详情
+.details{
+  width: 100%;
+  height: 100%;
+  padding: 0 0.47rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+  background: url('/img/编组@2x.png')no-repeat;
+  background-size: 100% 100%;
+  >h4{
+        display: flex;
+        align-items: center;
+        font-size:0.18rem;
+        font-weight:600;
+        color:rgba(51,51,51,1);
+        margin-bottom: 0.5rem;
+        i{
+            width: 0.16rem;
+            height: 0.17rem;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-right: 1.8rem;
+            cursor: pointer;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+  .detailsTable{
+    width: 100%;
+    padding:0.4rem 0;
+    box-sizing: border-box;
+    background: url('/img/编组 27@2x.png')no-repeat;
+    background-size: 100% 100%;
+    .tableContent{
+      width: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto;
+      i{
+        img{
+          width: 0.4rem;
+          height: 0.4rem;
+
+        }
+      }
+      h3{
+        font-size:0.18rem;
+        font-weight:600;
+        color:rgba(0,209,175,1);
+        margin-top: 0.14rem;
+        margin-bottom: 0.19rem;
+      }
+      >p{
+        font-size:0.14rem;
+        font-weight:400;
+        color:rgba(153,153,153,1);
+      }
+      .line{
+        width: 100%;
+        height: 1px;
+        display: flex;
+        margin-top: 0.45rem;
+        margin-bottom: 0.29rem;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+        // border: 1px dashed rgba(60, 56, 72, .2);
+      }
+      .tableList{
+        width:100%;
+        p{
+          // height:auto;
+          display: flex;
+          line-height: 0.4rem;
+          label{
+            width: 30%;
+            font-size:0.14rem;
+            font-weight:400;
+            color:rgba(153,153,153,1);
           }
-          .btn {
-            width: 2.75rem;
-            height: 0.53rem;
+          span{
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: rgba(96, 66, 158, 1);
-            border-radius: 27px;
-            font-size: 0.22rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 1);
-            margin-top: 1.27rem;
+            font-size:0.14rem;
+            font-weight:500;
+            color:rgba(153, 153, 153, 1);
+            img{
+              width: 0.12rem;
+              height: 0.13rem;
+              margin-left: 0.05rem;
+            }
           }
-          .active {
-            background: rgba(135, 108, 192, 1);
-          }
-          .descr {
-            font-size: 0.2rem;
-            font-weight: 400;
-            color: rgba(209, 26, 67, 1);
-            margin-top: 0.1rem;
+          
+        }
+        p:nth-child(1){
+          span{
+            display: flex;
+            font-size:0.14rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
           }
         }
       }
