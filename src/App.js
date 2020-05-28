@@ -31,6 +31,7 @@ class App extends React.Component {
     await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {
+    webStorage.removeSession();
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   async componentDidMount() {
