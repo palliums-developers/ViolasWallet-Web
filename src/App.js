@@ -31,7 +31,6 @@ class App extends React.Component {
     await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {
-    webStorage.removeSession();
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   async componentDidMount() {
@@ -41,6 +40,7 @@ class App extends React.Component {
     if (!this.state.walletConnector.connected) {
       this.state.walletConnector.createSession().then(() => {
         const uri = this.state.walletConnector.uri;
+        console.log(uri);
         webStorage.setSession(this.state.walletConnector.session);
         WalletConnectQRCodeModal.open(uri, () => {
           console.log('QRCode closed')
@@ -122,9 +122,9 @@ class App extends React.Component {
       console.log('send transaction ', err);
     })
   }
-  logout() {
-    this.state.walletConnector.killSession();
-    this.getNewWalletConnect();
+  async logout() {
+    await this.state.walletConnector.killSession();
+    await this.getNewWalletConnect();
   }
   checkNotificationPermission() {
     if ('Notification' in window) {
