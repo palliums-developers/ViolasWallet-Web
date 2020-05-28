@@ -1,65 +1,78 @@
 import React from 'react';
 import './App.css';
-// import WalletConnect from  '@walletconnect/browser'
 import WalletConnect from './packages/browser/src/index';
 import WalletConnectQRCodeModal from './packages/qrcode-modal/src/index';
+import webStorage from './packages/browser/src/webStorage'
 import axios from 'axios';
-// import WalletConnect1 from '@walletconnect/browser';
-// import WalletConnectQRCodeModal1 from '@walletconnect/qrcode-modal';
 
-import Wallet from './Wallet';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-
-const walletConnector = new WalletConnect({ bridge: 'https://bridge.walletconnect.org' })
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       bridge: 'https://bridge.walletconnect.org',
-      walletConnect: null,
+      walletConnector: {},
       from: '',
       code: '',
       tyArgs: '',
       address: '',
       value: 0,
     }
+    this.QRCode = this.QRCode.bind(this);
+    this.getAccount = this.getAccount.bind(this);
     this.getSeqNumb = this.getSeqNumb.bind(this);
+    this.logout = this.logout.bind(this);
     this.sendTransaction = this.sendTransaction.bind(this);
     this.showNotification = this.showNotification.bind(this);
     this.checkNotificationPermission = this.checkNotificationPermission.bind(this);
+    this.showUri = this.showUri.bind(this);
+    this.getNewWalletConnect = this.getNewWalletConnect.bind(this);
+  }
+  async componentWillMount() {
+    await this.getNewWalletConnect();
+  }
+  async getNewWalletConnect() {
+    await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   async componentDidMount() {
-    console.log(walletConnector.consoleLog('test tsc -p tsconfig.json'));
-    // this.getSeqNumb('4fcdb78dbb64eef68229f498f641babe');
+    // console.log(walletConnector.consoleLog('starting'));
   }
   QRCode() {
-    // walletConnector.peerId().then(res=>console.log(res))
-    if (!walletConnector.connected) {
-      walletConnector.createSession().then(() => {
-        const uri = walletConnector.uri;
-        console.log(uri)
+    if (!this.state.walletConnector.connected) {
+      this.state.walletConnector.createSession().then(() => {
+        const uri = this.state.walletConnector.uri;
+        webStorage.setSession(this.state.walletConnector.session);
         WalletConnectQRCodeModal.open(uri, () => {
           console.log('QRCode closed')
         })
       })
     }
-    walletConnector.on("connect", (error, payload) => {
+    this.state.walletConnector.on("connect", (error, payload) => {
       if (error) {
         throw error;
       }
       WalletConnectQRCodeModal.close();
-      console.log('you have connected')
-      const { accounts, chainId } = payload.params[0]
+      const { accounts, chainId } = payload.params[0];
+      console.log('you have connected ', accounts, chainId)
     })
-    walletConnector.on("session_update", (error, payload) => {
+    this.state.walletConnector.on("session_update", (error, payload) => {
       if (error) {
         throw error;
       }
       const { accounts, chainId } = payload.params[0];
+      console.log('session update ', accounts, chainId);
     });
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      console.log('wallet disconnected')
+    })
+  }
+  showUri() {
+    console.log('uri is: ', this.state.walletConnector.uri)
   }
   getAccount() {
-    walletConnector.get_accounts().then(res => {
+    this.state.walletConnector.get_accounts().then(res => {
       console.log('get account ', res)
     }).catch(err => {
       console.log('get account ', err)
@@ -76,10 +89,6 @@ class App extends React.Component {
     }).catch(err => {
       console.log(err)
     })
-    // console.log(this.state.from)
-    // const seq = await axios('https://api.violas.io/1.0/violas/seqnum?addr=' + this.state.from).then(res => {
-    //   return res.data.data + 1
-    // });
     const tx = {
       from: this.state.from,
       payload: {
@@ -106,21 +115,15 @@ class App extends React.Component {
       gasUnitPrice: 0,
       sequenceNumber: seq
     }
-    console.log(JSON.stringify(tx))
-    walletConnector.sendTransaction(tx).then(res => {
+    this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
     }).catch(err => {
       console.log('send transaction ', err);
     })
   }
   logout() {
-    walletConnector.on("disconnect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      console.log('wallet disconnected')
-    })
-    walletConnector.killSession();
+    this.state.walletConnector.killSession();
+    this.getNewWalletConnect();
   }
   checkNotificationPermission() {
     if ('Notification' in window) {
@@ -143,7 +146,7 @@ class App extends React.Component {
       body: 'This is body',
       data: { prop1: 123, prop2: 'wryyyyyyyyy' },
       lang: "en-US",
-      icon: '../public/logo192.png',
+      icon: "/images/hexiangu.jpg",
       timestamp: delayTime,
       vibrate: [100, 200, 100],
     };
@@ -180,6 +183,7 @@ class App extends React.Component {
       <div className='App'>
         <header className='App-header'>
           <button onClick={this.QRCode}>QRCode</button>
+          <button onClick={this.showUri}>show URI</button>
           <button onClick={this.getAccount}>get accounts</button>
           <div className='tx'>
             <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p>
@@ -191,15 +195,6 @@ class App extends React.Component {
           <button onClick={this.sendTransaction}>send transaction</button>
           <button onClick={this.logout}>log out</button>
           <button onClick={this.showNotification}>Show Notification</button>
-          {/* <Router>
-            <Route path='/wallet' component={Wallet}/>
-          </Router> */}
-          {/* <Wallet/> */}
-          {/* <section>
-            <button onClick={this.QRCode1}>walletConnect QRCode</button>
-            <button onClick={this.sendTransaction1}>walletConnect QRCode</button>
-            <button onClick={this.logout1}>walletConnect log out</button>
-          </section> */}
         </header>
       </div>
     )
