@@ -77,7 +77,9 @@ class GetMoney extends Component {
         return (
           <div className="getMoney">
             <div className="dialogContent">
-              <i className="jt"><img src="/img/编组 10@2x.png"/></i>
+              <i className="jt" onClick={() => {
+                window.history.go(-1);
+              }}><img src="/img/编组 10@2x.png"/></i>
               <h4>Receive</h4>
               <div className="dropdown1">
                 {

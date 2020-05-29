@@ -35,6 +35,7 @@ class Details extends Component {
                         </div>
                     </div>
                 </div>
+                
             </div>
         );
     }
@@ -46,8 +47,8 @@ let mapDispatchToProps = (dispatch) => {
     return {
         showEveryDetail:()=>{
             dispatch({
-                type: "DISPLAY2",
-                payload: false,
+                type: "DISPLAY1",
+                payload: true,
             });
         }
     };

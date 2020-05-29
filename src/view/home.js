@@ -11,28 +11,40 @@ class Home extends Component {
       super()
       this.state = {
         active:'',
-
+        showMineDialog:false
 
       }
     }
     getActive = (ind,val) =>{
      
     }
+    getMineDialog = (event) =>{
+      this.stopPropagation(event)
+      this.setState({
+        showMineDialog: !this.state.showMineDialog
+      })
+    }
     componentDidMount(){
-      
+      document.addEventListener('click', this.closeDialog);
       this.setState({
         active: this.props.location.pathname.split("/")[3]
       })
-      if (this.props.location.pathname.split("/") > 5) {
-
-      }
+    
       // console.log(this.props.location.pathname.split("/"))
       // console.log(this.props.location.pathname.split("/")[3])
       
     }
+    stopPropagation(e) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
+    closeDialog = () => {
+      this.setState({
+        showMineDialog: false
+      })
+    }
     render(){
         let { routes } = this.props;
-        let { active } = this.state;
+        let { active, showMineDialog } = this.state;
         return (
           
             <div className="home">
@@ -42,31 +54,42 @@ class Home extends Component {
               }}><img src="/img/logo.png"/></div>
                 <div className="navlist">
                   {
-                    this.props.location.pathname.split("/").length <= 5 ? <div className="route">
-                      <NavLink to="/homepage/home/homeContent" activeStyle={{ color: 'rgba(80,27,162,1)', background: '#F7F7F9' }}><i className={active == 'homeContent' ? 'wal' : 'noWal'}></i>Wallet</NavLink>
-                      <NavLink to="/homepage/home/changeContent" activeStyle={{ color: 'rgba(80,27,162,1)', background: '#F7F7F9' }}><i className={active == 'changeContent' ? 'mar' : 'noMar'}></i>Market</NavLink></div> : null
+                    <div className="route">
+                    <span onClick={()=>{
+                      this.props.history.push('/homepage/home/homeContent')
+                    }} className={active == 'homeContent' ? 'active' : active == 'transfar' ? 'active' : active == 'getMoney' ? 'active' : null}><i className={active == 'homeContent' ? 'wal' : active == 'transfar' ? 'wal' : active == 'getMoney' ? 'wal' : 'noWal'}></i>Wallet</span>
+                    <span onClick={() => {
+                      this.props.history.push('/homepage/home/changeContent')
+                    }} className={active == 'changeContent' ? 'active' : null}><i className={active == 'changeContent' ? 'mar' : 'noMar'}></i>Market</span></div>
                   }
                   <div className="mine">
-                    <img src="/img/wode备份 2@2x.png" />
-                    <div className="mineList">
-                       <div className="balanceList">
-                         <div className="balance">
-                           <label>总资产之和($)</label>
-                           <span>22311.11</span>
-                         </div>
-                         <div className="icon"><img src="/img/Combined Shape 2@2x.png"/></div>
-                       </div>
-                       <div className="btns">
-                         <dl>
-                           <dt><img src="/img/编组 13备份 4@2x.png"/></dt>
-                           <dd>转账</dd>
-                         </dl>
-                          <dl>
-                            <dt><img src="/img/编组 13备份 5@2x.png" /></dt>
-                            <dd>收款</dd>
-                          </dl>
-                       </div>
-                    </div>
+                    {
+                      showMineDialog ? <img onClick={(e) => this.getMineDialog(e)} src="/img/wode备份 3@2x.png" /> : <img onClick={(e) => this.getMineDialog(e)} src="/img/wode备份 2@2x.png" />
+                    }
+                    {
+                    showMineDialog ? <div className="mineList">
+                      <div className="balanceList">
+                        <div className="balance" onClick={() => {
+                          this.props.history.push('/homepage/home')
+                        }}>
+                          <label>总资产之和($)</label>
+                          <span>22311.11</span>
+                        </div>
+                        <div className="icon"><img src="/img/Combined Shape 2@2x.png" /></div>
+                      </div>
+                      <div className="btns">
+                        <dl>
+                          <dt><img src="/img/编组 13备份 4@2x.png" /></dt>
+                          <dd>转账</dd>
+                        </dl>
+                        <dl>
+                          <dt><img src="/img/编组 13备份 5@2x.png" /></dt>
+                          <dd>收款</dd>
+                        </dl>
+                      </div>
+                    </div> : null
+                    }
+                    
                   </div>
                 </div>
                 

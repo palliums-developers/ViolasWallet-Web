@@ -48,10 +48,13 @@ class Transfar extends Component {
           }
     }
     getTypeShow = (event) => {
-        // this.stopPropagation(event)
+        this.stopPropagation(event)
         this.setState({
             showDealType: !this.state.showDealType
         })
+    }
+    stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
     }
     showTypes = (v) => {
 
@@ -202,7 +205,9 @@ class Transfar extends Component {
                 
             }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div> */}
             <div className="transfarContent">
-              <i className="jt"><img src="/img/编组 10@2x.png" /></i>
+              <i className="jt" onClick={() => {
+                window.history.go(-1);
+              }}><img src="/img/编组 10@2x.png" /></i>
               <div className="transfarList">
                 <h4>{title}Transfer</h4>
                 <div className="iptAddress">
