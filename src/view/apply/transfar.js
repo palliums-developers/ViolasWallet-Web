@@ -31,7 +31,7 @@ class Transfar extends Component {
 
     }
     componentDidMount(){
-        
+        document.addEventListener('click', this.closeDialog);
         if(this.props.location.pathname.split("/")[5]){
             let type = this.props.location.pathname.split("/")[5]
             this.setState({
@@ -53,9 +53,7 @@ class Transfar extends Component {
             showDealType: !this.state.showDealType
         })
     }
-    stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    
     showTypes = (v) => {
 
         this.setState({
@@ -63,17 +61,15 @@ class Transfar extends Component {
             showDealType: false
         })
     }
-    getBalance = () =>{
-        if (window.sessionStorage.getItem('address')){
-            fetch(url + "/explorer/violas/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
-                .then(res => { 
-                    this.setState({
-                        balance: res.data.status.balance / 1e6
-                    })
-                
-                })
-        }
+    closeDialog = () => {
+        this.setState({
+            showDealType: false
+        })
     }
+    stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
+    
     getLibraBalance = () => {
         if (window.sessionStorage.getItem('address')) {
         fetch(url + "/explorer/libra/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
@@ -197,6 +193,7 @@ class Transfar extends Component {
     }
     render(){
         let { title, balance, warning,showDealType, types, type } = this.state;
+        console.log(type)
         return (
           <div className="transfar">
             {/* <div className="back" onClick={()=>{

@@ -17,13 +17,13 @@ class GetMoney extends Component {
       }
     }
     getTypeShow = (event) => {
-      // this.stopPropagation(event)
+      this.stopPropagation(event)
       this.setState({
         showDealType: !this.state.showDealType
       })
     }
     showTypes = (v) => {
-
+      console.log(v)
       this.setState({
         type: v,
         showDealType: false
@@ -39,7 +39,7 @@ class GetMoney extends Component {
       
     }
     componentDidMount(){
-      
+      document.addEventListener('click', this.closeDialog);
       if (this.props.location.pathname.split("/")[3]) {
         let type = this.props.location.pathname.split("/")[3]
         this.setState({
@@ -72,6 +72,14 @@ class GetMoney extends Component {
         })
       }, 1000);
     };
+    stopPropagation(e) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
+    closeDialog = () => {
+      this.setState({
+        showDealType: false
+      })
+    }
     render(){
       let { address, showDealType,types,type,title,dis } = this.state;
         return (

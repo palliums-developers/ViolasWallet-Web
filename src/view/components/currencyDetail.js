@@ -130,9 +130,7 @@ class CurrencyDetail extends Component {
                                 </div>
                             })
                         }
-                        {
-                            total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={5} total={Number(total)} onChange={this.onChange} /> : null
-                        }
+                        
                         {/* <div className="detailList">
                             <i><img src="/img/编组 13备份 3@2x.png" /></i>
                             <div className="listCenter">
@@ -164,7 +162,11 @@ class CurrencyDetail extends Component {
                             </div>
                         </div> */}
                     </div>
+                    
                 </div>
+                {
+                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={5} total={Number(total)} onChange={this.onChange} /> : null
+                }
             </div>
         );
     }

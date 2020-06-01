@@ -10,9 +10,20 @@ class HomeContent extends Component {
       }
     }
     componentDidMount(){
+      
     }
 
-   
+    getBalance = () => {
+      // if (window.sessionStorage.getItem('address')) {
+      //   fetch(url + "/explorer/violas/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
+      //     .then(res => {
+      //       this.setState({
+      //         balance: res.data.status.balance / 1e6
+      //       })
+
+      //     })
+      // }
+    }
     render(){
  
         return (

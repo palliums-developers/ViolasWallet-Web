@@ -19,13 +19,13 @@ class Home extends Component {
      
     }
     getMineDialog = (event) =>{
-      this.stopPropagation(event)
+      // this.stopPropagation(event)
       this.setState({
         showMineDialog: !this.state.showMineDialog
       })
     }
     componentDidMount(){
-      document.addEventListener('click', this.closeDialog);
+      // document.addEventListener('click', this.closeDialog);
       this.setState({
         active: this.props.location.pathname.split("/")[3]
       })
@@ -34,14 +34,14 @@ class Home extends Component {
       // console.log(this.props.location.pathname.split("/")[3])
       
     }
-    stopPropagation(e) {
-      e.nativeEvent.stopImmediatePropagation();
-    }
-    closeDialog = () => {
-      this.setState({
-        showMineDialog: false
-      })
-    }
+    // stopPropagation(e) {
+    //   e.nativeEvent.stopImmediatePropagation();
+    // }
+    // closeDialog = () => {
+    //   this.setState({
+    //     showMineDialog: false
+    //   })
+    // }
     render(){
         let { routes } = this.props;
         let { active, showMineDialog } = this.state;
