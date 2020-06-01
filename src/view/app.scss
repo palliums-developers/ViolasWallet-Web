@@ -15,17 +15,17 @@ dd {
         position: relative;
         display: flex;
         // top: -0.05rem;
-        margin-bottom:0.43rem ;
+        margin-bottom:43px;
         > span {
-          width: 1.2rem;
-          height: 0.35rem;
-          padding: 0 0.14rem;
+          width: 120px;
+          height: 35px;
+          padding: 0 14px;
           box-sizing: border-box;
           display: flex;
           align-items: center;
           justify-content: center;
           background: rgba(241, 238, 251, 1);
-          font-size: 0.16rem;
+          font-size: 16px;
           font-weight: 400;
           color: rgba(112, 56, 253, 1);
           border-radius: 16px;
@@ -33,9 +33,9 @@ dd {
 
           i {
             display: flex;
-            width: 0.1rem;
-            height: 0.1rem;
-            margin-left: 0.05rem;
+            width: 11px;
+            height: 11px;
+            margin-left: 5px;
             img {
               width: 100%;
               height: 100%;
@@ -46,32 +46,33 @@ dd {
           background: rgba(112, 56, 253, 1);
           color: rgba(255, 255, 255, 1);
           i {
-            margin-top: 0.05rem;
+            margin-top: 5px;
           }
         }
         .dropdown-content1 {
-          width: 1.2rem;
-          padding: 0 0.14rem;
-          padding-bottom: 0.1rem;
+          width: 120px;
+          padding: 10px 12px;
+          // padding-bottom: 10px;
           box-sizing: border-box;
           position: absolute;
-          top: 0.35rem;
-          left: 0.01rem;
+          top: 40px;
+          left: 1px;
           // overflow: auto;
           display: flex;
           flex-direction: column;
           background: rgba(241, 238, 251, 1);
+          border-radius: 8px;
           // display: none;
           span {
             // width: 100%;
-            height: 0.25rem;
-            line-height: 0.22rem;
+            height: 25px;
+            line-height: 25px;
             text-align: center;
-            font-size: 0.14rem;
+            font-size: 14px;
             font-weight: 400;
             color: rgba(51, 51, 51, 1);
             border-radius: 11px;
-            margin-top: 0.1rem;
+            margin-top: 1px;
             cursor: pointer;
           }
           .active {
@@ -122,7 +123,7 @@ dd {
 //登录页
 .app {
   width: 100%;
-  height: 10.8rem;
+  height: 1080px;
   .appContent {
     width: 100%;
     height: 100%;
@@ -132,41 +133,41 @@ dd {
     display: flex;
     flex-direction: column;
     .logo {
-      margin-left: 2.3rem;
-      padding-top: 0.37rem;
+      margin-left: 230px;
+      padding-top: 37px;
       box-sizing: border-box;
       img {
-        width: 1.97rem;
-        height: 0.32rem;
+        width: 197px;
+        height: 32px;
       }
     }
     .app_link {
-      width: 9.01rem;
-      height: 6.41rem;
+      width: 901px;
+      height: 641px;
       background: url("/img/编组 3@2x.png") no-repeat;
       background-size: cover;
       background-position: 50%;
       margin: 0 auto;
-      margin-top: 1.52rem;
+      margin-top: 152px;
       display: flex;
       flex-direction: column;
       align-items: center;
       .link_logo {
         img {
-          width: 0.97rem;
-          height: 0.97rem;
-          margin-top: 0.42rem;
+          width: 97px;
+          height: 97px;
+          margin-top: 42px;
         }
       }
       .qrCode {
         position: relative;
         canvas {
-          width: 2rem !important;
-          height: 2rem !important;
+          width: 200px !important;
+          height: 200px !important;
         }
         .dialog {
-          width: 2rem;
-          height: 2rem;
+          width: 200px;
+          height: 200px;
           background: rgba(255, 255, 255, 0.9);
           position: absolute;
           top: 0;
@@ -179,20 +180,20 @@ dd {
             display: flex;
             align-items: center;
             img {
-              width: 0.32rem;
-              height: 0.32rem;
-              margin-right: 0.08rem;
+              width: 32px;
+              height: 32px;
+              margin-right: 8px;
             }
             img:last-child {
-              width: 0.5rem;
-              height: 0.5rem;
+              width: 50px;
+              height: 50px;
               cursor: pointer;
             }
             label {
-              font-size: 0.32rem;
+              font-size:32px;
               font-weight: 600;
               color: rgba(58, 202, 101, 1);
-              line-height: 0.32rem;
+              line-height: 32px;
             }
             .success {
               color: rgba(58, 202, 101, 1);
@@ -204,18 +205,18 @@ dd {
         }
       }
       h3 {
-        font-size: 0.24rem;
+        font-size: 24px;
         font-weight: 500;
         color: rgba(56, 47, 68, 1);
-        line-height: 0.24rem;
-        margin-bottom: 0.5rem;
+        line-height: 24px;
+        margin-bottom: 50px;
       }
       > p {
-        font-size: 0.24rem;
+        font-size: 24px;
         font-weight: 400;
         color: rgba(97, 91, 107, 1);
-        line-height: 0.2rem;
-        margin-bottom: 1rem !important;
+        line-height:20px;
+        margin-bottom: 100px !important;
       }
     }
   }
@@ -225,14 +226,14 @@ dd {
 }
 //首页
 .home {
-  width: 100%;
-  height: 10.77rem;
+  width: 1440px;
+  height: 1080px;
   display: flex;
   flex-direction: column;
 
   .header {
     width: 100%;
-    height: 1rem;
+    height:100px;
     display: flex;
     align-items: center;
     .mine {
@@ -241,28 +242,28 @@ dd {
       z-index: 999;
       // margin-left:10rem;
       img {
-        width: 0.24rem;
-        height: 0.24rem;
+        width: 24px;
+        height:24px;
         cursor: pointer;
       }
       .mineList{
-        width: 1.8rem;
-        height: 1.7rem;
+        width: 180px;
+        height: 170px;
         position: absolute;
-        top:0.4rem;
+        top:40px;
         right: 0;
         background:rgba(80,27,162,1);
         border-radius:8px;
-        padding: 0.1rem;
+        padding: 10px;
         box-sizing: border-box;
         .balanceList{
            width: 100%;
-           height: 0.6rem;
+           height: 60px;
            background: #FFF;
            border-radius: 4px;
            display: flex;
            align-items: center;
-           padding: 0 0.1rem;
+           padding: 0 10px;
            box-sizing: border-box;
            cursor: pointer;
            .balance{
@@ -274,18 +275,18 @@ dd {
              label{
                color:rgba(153, 153, 153, 1);
                font-weight:400;
-               font-size: 0.12rem;
+               font-size: 12px;
              }
              span{
-               font-size:0.18rem;
+               font-size:18px;
                font-weight:600;
                color:rgba(51, 51, 51, 1);
              }
            }
            .icon{
              img{
-               width: 0.12rem;
-               height: 0.12rem;
+               width: 12px;
+               height: 12px;
              }
            }
         }
@@ -295,23 +296,23 @@ dd {
           flex-direction: column;
           dl{
             width: 100%;
-            height: 0.35rem;
+            height: 35px;
             display: flex;
             align-items: center;
             border-radius:17px;
             margin-bottom: 0!important;
-            margin-top: 0.1rem;
+            margin-top: 10px;
             cursor: pointer;
             dt{
               img{
-                width: 0.23rem;
-                height: 0.23rem;
-                margin-left: 0.1rem;
-                margin-right: 0.1rem;
+                width: 23px;
+                height:23px;
+                margin-left: 10px;
+                margin-right: 10px;
               }
             }
             dd{
-              font-size:0.16rem;
+              font-size:16px;
               font-weight:400;
               color:rgba(255,255,255,1);
               
@@ -327,10 +328,10 @@ dd {
       height: 100%;
       display: flex;
       align-items: center;
-      margin-left: 0.77rem;
+      margin-left: 77px;
       img {
-        max-width: 1.96rem;
-        max-height: 0.3rem;
+        max-width: 196px;
+        max-height: 30px;
       }
     }
     .navlist {
@@ -339,29 +340,32 @@ dd {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-right: 0.44rem;
+      padding-right: 44px;
       box-sizing: border-box;
     }
     .route {
       height: 100%;
       display: flex;
       align-items: center;
-      margin-left: 1.3rem;
+      margin-left: 130px;
       span {
         height: 100%;
-        font-size: 0.32rem;
+        font-size: 20px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
         color: rgba(157, 155, 163, 1);
         display: flex;
         align-items: center;
-        padding: 0 0.4rem;
+        padding: 0 40px;
         box-sizing: border-box;
         cursor: pointer;
+        label{
+          margin-top: 13px;
+        }
         i {
-          width: 0.31rem;
-          height: 0.34rem;
-          margin-right: 0.1rem;
+          width: 31px;
+          height: 34px;
+          margin-right: 10px;
         }
         .noWal {
           background: url("/img/编组 17复制 52@2x.png") no-repeat;
@@ -399,14 +403,14 @@ dd {
     overflow-y: auto;
     background: #f7f7f9;
     .contentWrap {
-      width: 11.5rem;
-      margin: 0.77rem auto;
+      width: 755px;
+      margin: 77px auto;
 
       .apply {
         width: 100%;
-        height: 2.5rem;
-        padding-left: 0.29rem;
-        padding-right: 0.4rem;
+        height: 196px;
+        padding-left: 29px;
+        padding-right: 40px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -414,16 +418,17 @@ dd {
         background-size: 100% 100%;
         p {
           display: flex;
-          font-size: 0.16rem;
+          font-size: 16px;
           font-weight: 400;
           color: rgba(154, 145, 190, 1);
-          margin-top: 0.42rem;
-          margin-bottom: 0.2rem;
+          margin-top: 42px;
+          margin-bottom: 20px;
           i {
-            margin-left: 0.05rem;
+            margin-left: 5px;
+            cursor: pointer;
             img {
-              width: 0.2rem;
-              height: 0.12rem;
+              width: 20px;
+              height: 12px;
             }
           }
         }
@@ -435,32 +440,32 @@ dd {
           justify-content: space-between;
           span {
             // height: 100%;
-            font-size: 0.3rem;
+            font-size: 28px;
             font-weight: bold;
             color: rgba(255, 255, 255, 1);
-            margin-top: 0.1rem;
+            margin-top:10px;
           }
           .btns {
             display: flex;
             dl {
-              width: 1.8rem;
-              height: 0.43rem;
+              width: 118px;
+              height: 34px;
               display: flex;
               align-items: center;
               justify-content: center;
               background: rgba(255, 255, 255, 1);
-              margin-top: 0.33rem;
-              margin-right: 0.23rem;
+              margin-top: 30px;
+              margin-right: 23px;
               border-radius: 3px;
               cursor: pointer;
               dt {
-                width: 0.3rem;
-                height: 0.3rem;
+                width: 24px;
+                height: 22px;
                 display: flex;
-                margin-right: 0.08rem;
+                margin-right: 8px;
               }
               dd {
-                font-size: 0.22rem;
+                font-size: 16px;
                 font-weight: 500;
                 color: rgba(80, 27, 162, 1);
               }
@@ -481,8 +486,8 @@ dd {
               background-size: 100% 100%;
             }
             dl:nth-child(1):hover dt {
-              width: 0.35rem;
-              height: 0.32rem;
+              width: 24px;
+                height: 18px;
               background: url("/img/transfer1.png") no-repeat;
               background-size: 100% 100%;
             }
@@ -495,19 +500,19 @@ dd {
       }
       .assetList {
         width: 100%;
-        padding: 0.2rem 0.17rem;
+        padding: 20px 17px;
         box-sizing: border-box;
         background: rgba(255, 255, 255, 1);
         border-radius: 24px 24px 0px 0px;
-        margin-top: -0.8rem;
+        margin-top: -50px;
         p {
-          height: 0.7rem;
+          height: 60px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           i {
-            width: 0.25rem;
-            height: 0.25rem;
+            width: 22px;
+            height:22px;
             display: flex;
             cursor: pointer;
             img {
@@ -519,13 +524,13 @@ dd {
         .assetLists {
           .assetListsEvery {
             width: 100%;
-            height: 0.7rem;
-            margin-bottom: 0.12rem;
+            height:60px;
+            margin-bottom: 12px;
             background: #f7f7f9;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 0.12rem;
+            padding: 0 12px;
             box-sizing: border-box;
             border-radius: 14px;
             cursor: pointer;
@@ -533,14 +538,14 @@ dd {
               display: flex;
               align-items: center;
               i {
-                margin-right: 0.1rem;
+                margin-right: 10px;
                 img {
-                  width: 0.4rem;
-                  height: 0.4rem;
+                  width: 40px;
+                  height: 40px;
                 }
               }
               label {
-                font-size: 0.18rem;
+                font-size:16px;
                 font-weight: 600;
                 color: rgba(51, 51, 51, 1);
               }
@@ -549,12 +554,12 @@ dd {
               display: flex;
               flex-direction: column;
               span {
-                font-size: 0.18rem;
+                font-size: 16px;
                 font-weight: 600;
                 color: rgba(51, 51, 51, 1);
               }
               label {
-                font-size: 0.14rem;
+                font-size: 12px;
                 color: rgba(173, 173, 173, 1);
               }
             }
@@ -569,17 +574,17 @@ dd {
     height: 100%;
     background: #F7F7F9;
     .transfarContent {
-      width: 10rem;
+      width: 960px;
       // height: 6.4rem;
       background: #fff;
-      margin: 0.44rem auto;
+      margin: 52px auto;
       position: relative;
       .jt{
-          width: 0.32rem;
-          height: 0.17rem;
+          width: 32px;
+          height: 17px;
           position: absolute;
-          top: 0.7rem;
-          left: 0.5rem;
+          top: 70px;
+          left: 50px;
           cursor: pointer;
           img{
             width: 100%;
@@ -587,39 +592,39 @@ dd {
           }
         }
       .transfarList {
-        width: 8.56rem;
+        width:642px;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
         align-items: center;
         
         h4 {
-          font-size: 0.32rem;
+          font-size: 24px;
           font-weight: 600;
           color: rgba(60, 56, 72, 1);
-          margin-top: 0.7rem;
-          margin-bottom: 0.46rem;
+          margin-top: 70px;
+          margin-bottom: 46px;
         }
         .iptAddress {
           display: flex;
-          margin-bottom: 0.14rem;
+          margin-bottom: 14px;
           textarea {
-            width: 8.56rem !important;
-            height: 1.61rem !important;
+            width: 642px !important;
+            height: 120px !important;
             border-radius: 3px;
             border: 1px solid rgba(151, 151, 151, 1);
             resize: none;
             outline: none;
-            font-size: 0.24rem;
+            font-size: 18px;
             font-weight: 400;
             color: rgba(158, 156, 164, 1);
-            padding-top: 0.16rem;
-            padding-left: 0.2rem;
+            padding-top: 16px;
+            padding-left: 20px;
             box-sizing: border-box;
             font-family: Arial, Helvetica, sans-serif;
           }
           textarea::-webkit-input-placeholder {
-            font-size: 0.24rem;
+            font-size: 18px;
             font-weight: 400;
             color: rgba(158, 156, 164, 1) !important;
           }
@@ -628,11 +633,11 @@ dd {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          width: 8.56rem !important;
-          height: 0.8rem;
+          width: 642px !important;
+          height: 60px;
           border-radius: 3px;
           border: 1px solid rgba(151, 151, 151, 1);
-          padding-right: 0.1rem;
+          padding-right: 10px;
           box-sizing: border-box;
           @include dropdown;
           .dropdown1 {
@@ -643,21 +648,21 @@ dd {
             }
           }
           input {
-            width: 6rem;
+            width: 400px;
             height: 100%;
-            padding-left: 0.2rem;
+            padding-left: 20px;
             box-sizing: border-box;
             outline: none;
             border: 0;
             color: rgba(158, 156, 164, 1);
           }
           input::-webkit-input-placeholder {
-            font-size: 0.24rem;
+            font-size: 18px;
             font-weight: 400;
             color: rgba(158, 156, 164, 1);
           }
           label {
-            font-size: 0.24rem;
+            font-size: 18px;
             font-weight: 400;
             color: rgba(60, 56, 72, 1);
           }
@@ -666,48 +671,49 @@ dd {
           width: 100%;
           display: flex;
           align-items: flex-start;
-          margin-top: 0.19rem;
+          margin-top: 19px;
 
           p {
-            font-size: 0.2rem;
+            font-size: 14px;
             font-weight: 400;
             color: rgba(158, 156, 164, 1);
-            margin-left: 0.2rem;
+            margin-left:20px;
             span {
-              font-size: 0.2rem;
+              font-size: 14px;
               font-weight: 500;
               color: rgba(60, 56, 72, 1);
             }
           }
         }
         .foot {
-          width: 2.75rem;
+          width: 206px;
           display: flex;
           flex-direction: column;
           align-items: center;
         }
         .btn {
-          width: 2.75rem;
-          height: 0.53rem;
+          width: 206px;
+          height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
           background: rgba(96, 66, 158, 1);
           border-radius: 27px;
-          font-size: 0.22rem;
+          font-size: 16px;
           font-weight: 500;
           color: rgba(255, 255, 255, 1);
-          margin-top: 1.27rem;
-          margin-bottom: 0.56rem!important;
+          margin-top: 127px;
+          margin-bottom: 56px!important;
+          cursor: pointer;
         }
         .active {
           background: rgba(135, 108, 192, 1);
         }
         .descr {
-          font-size: 0.2rem;
+          font-size: 14px;
           font-weight: 400;
           color: rgba(209, 26, 67, 1);
-          margin-top: 0.1rem;
+          margin-top: 10px;
         }
       }
     }
@@ -718,20 +724,20 @@ dd {
     height: 100%;
     background: #f7f7f9;
     .dialogContent {
-      width: 10rem;
-      height: 6.4rem;
+      width: 960px;
+      height: 600px;
       background: #fff;
-      margin: 0.53rem auto;
+      margin: 53px auto;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       .jt{
-        width: 0.32rem;
-        height: 0.17rem;
+        width: 32px;
+        height: 17px;
         position: absolute;
-        top: 0.5rem;
-        left: 0.5rem;
+        top: 67px;
+        left: 52px;
         cursor: pointer;
         img{
           width: 100%;
@@ -740,31 +746,31 @@ dd {
       }
      
       h4 {
-        font-size: 0.32rem;
+        font-size: 24px;
         font-weight: 600;
         color: rgba(56, 47, 68, 1);
-        margin-top: 0.64rem;
-        margin-bottom: 0.4rem;
+        margin-top: 69px;
+        margin-bottom:47px;
       }
       @include dropdown;
       .qrCode,
       canvas {
-        width: 2.05rem !important;
-        height: 2.05rem !important;
+        width: 154px !important;
+        height: 154px !important;
       }
       .addressCode {
         display: flex;
-        margin-top: 0.32rem;
+        margin-top: 32px;
         position: relative;
         span {
-          font-size: 0.24rem;
+          font-size: 18px;
           font-weight: 400;
           color: rgba(56, 47, 68, 1);
-          margin-right: 0.1rem;
+          margin-right: 10px;
         }
         i {
-          width: 0.28rem;
-          height: 0.3rem;
+          width: 28px;
+          height: 30px;
           display: flex;
           img {
             width: 100%;
@@ -772,12 +778,12 @@ dd {
           }
         }
         .warn {
-          width: 1.29rem;
-          height: 0.39rem;
+          width: 129px;
+          height: 39px;
           display: flex;
           position: absolute;
-          top: 0.4rem;
-          right: -0.15rem;
+          top: 40px;
+          right: -15px;
           img {
             width: 100%;
             height: 100%;
@@ -792,8 +798,8 @@ dd {
   .addCurrency{
     width: 100%;
     height: 100%;
-    padding: 0 0.47rem;
-    padding-top: 1rem;
+    padding: 0 47px;
+    padding-top: 100px;
     box-sizing: border-box;
     >h4{
         display: flex;
@@ -1099,4 +1105,9 @@ dd {
 .currencyDetail .ant-pagination{
   bottom: 3rem;
 }
+}
+@media screen and (min-width:1440px){
+  .home{
+    margin: 0 auto;
+  }
 }

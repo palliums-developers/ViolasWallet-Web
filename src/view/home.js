@@ -57,10 +57,10 @@ class Home extends Component {
                     <div className="route">
                     <span onClick={()=>{
                       this.props.history.push('/homepage/home/homeContent')
-                    }} className={active == 'homeContent' ? 'active' : active == 'transfar' ? 'active' : active == 'getMoney' ? 'active' : null}><i className={active == 'homeContent' ? 'wal' : active == 'transfar' ? 'wal' : active == 'getMoney' ? 'wal' : 'noWal'}></i>Wallet</span>
+                    }} className={active == 'homeContent' ? 'active' : active == 'transfar' ? 'active' : active == 'getMoney' ? 'active' : null}><i className={active == 'homeContent' ? 'wal' : active == 'transfar' ? 'wal' : active == 'getMoney' ? 'wal' : 'noWal'}></i><label>Wallet</label></span>
                     <span onClick={() => {
                       this.props.history.push('/homepage/home/changeContent')
-                    }} className={active == 'changeContent' ? 'active' : null}><i className={active == 'changeContent' ? 'mar' : 'noMar'}></i>Market</span></div>
+                    }} className={active == 'changeContent' ? 'active' : null}><i className={active == 'changeContent' ? 'mar' : 'noMar'}></i><label>Market</label></span></div>
                   }
                   <div className="mine">
                     {
