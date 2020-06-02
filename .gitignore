@@ -11,7 +11,8 @@
 # production
 /build
 /sh
-/walletConnect
+/src/sh
+/src/walletConnect
 # misc
 .DS_Store
 .env.local
