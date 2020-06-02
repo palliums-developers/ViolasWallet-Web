@@ -32,7 +32,6 @@ class CurrencyDetail extends Component {
         
     }
     componentDidMount() { 
-        console.log(window)
         this.getNavData()
     }
     getSubStr(str){
@@ -81,7 +80,6 @@ class CurrencyDetail extends Component {
     };
     render() {
         let { types, navType, dataList, total, curPage} = this.state;
-        console.log(total)
         return (
             <div className="currencyDetail">
                 <h4 onClick={() => this.showDetails()}>

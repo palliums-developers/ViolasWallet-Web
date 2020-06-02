@@ -17,26 +17,27 @@ class App extends Component {
       wallet_info: {},
       time: 0,
       login: false,
+      uri:''
     };
   }
   componentDidMount() {
-    this.QRCode();
+   this.QRCode();
   }
   async componentWillMount() {
-    await this.getNewWalletConnect();
+    await this.getNewWalletConnect(); 
   }
   async getNewWalletConnect() {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   QRCode() {
     if (!this.state.walletConnector.connected) {
-      this.state.walletConnector.createSession().then(() => {
+      this.state.walletConnector.createSession().then(async () => {
         const uri = this.state.walletConnector.uri;
-        console.log(uri);
         webStorage.setSession(this.state.walletConnector.session);
-        // WalletConnectQRCodeModal.open(uri, () => {
-        //   console.log("QRCode closed");
-        // });
+        await this.setState({
+          uri:uri
+        })
+
       });
     }
     this.state.walletConnector.on("connect", (error, payload) => {
@@ -46,7 +47,6 @@ class App extends Component {
         });
         throw error;
       }
-      // WalletConnectQRCodeModal.close();
       const { accounts, chainId } = payload.params[0];
       this.getAccount()
       this.setState({
@@ -55,11 +55,11 @@ class App extends Component {
           setTimeout(() => {
             this.props.history.push("/homepage");
           }, 5000);
-          window.sessionStorage.setItem(
+          window.localStorage.setItem(
             "address",
             accounts[0]
           );
-          console.log("you have connected ", accounts, chainId);
+          console.log("you have connected ");
       });
       
     });
@@ -69,27 +69,27 @@ class App extends Component {
       }
       const { accounts, chainId } = payload.params[0];
       this.getAccount()
-      console.log("session update ", accounts, chainId);
+      console.log("session update ");
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
-      console.log("wallet disconnected1");
+      console.log("wallet disconnected");
     });
   }
   getAccount() {
     this.state.walletConnector.get_accounts().then(res => {
-      window.sessionStorage.setItem(
+      window.localStorage.setItem(
         "wallet_info",
-        res
+        JSON.stringify(res)
       );
     }).catch(err => {
       console.log('get account ', err)
     })
   }
   render() {
-    console.log(this.state.walletConnector.uri, this.state.status)
+    let {uri} = this.state;
     return (
       <div className="app">
         <div className="appContent">
@@ -102,7 +102,7 @@ class App extends Component {
             </div>
             <h3>ViolasPay</h3>
             <div className="qrCode">
-              <QRCode value={this.state.walletConnector.uri}></QRCode>
+              <QRCode value={uri}></QRCode>
               {this.state.status == 1 ?  (
                 <div className="dialog">
                   <p><img src="/img/saomachenggong 2@2x.png" /><label className="success">Success</label></p>

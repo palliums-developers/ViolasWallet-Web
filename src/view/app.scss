@@ -83,15 +83,17 @@ dd {
 }
 .ant-drawer {
   z-index: 0;
+  position: absolute!important;
 }
-.ant-drawer.ant-drawer-open .ant-drawer-mask {
-  // visibility:hidden;
-  width: auto;
-  background-color: transparent !important;
-}
+// .ant-drawer.ant-drawer-open .ant-drawer-mask {
+//   // visibility:hidden;
+//   width: auto;
+//   background-color: transparent !important;
+// }
 .ant-drawer-content-wrapper {
-  width: 5rem !important;
-  height: 10.77rem !important;
+  width: 500px !important;
+  height: 1080px !important;
+  // overflow: auto;
   .ant-drawer-content{
     width: 100%;
     height: 100%;
@@ -107,10 +109,10 @@ dd {
     }
   }
 }
-.ant-drawer-body{
-  flex-grow: 0!important;
-  overflow: visible!important;
-}
+// .ant-drawer-body{
+//   flex-grow: 0!important;
+//   overflow: visible!important;
+// }
 .ant-pagination-options-size-changer.ant-select{
   display: none!important;
 }
@@ -133,41 +135,41 @@ dd {
     display: flex;
     flex-direction: column;
     .logo {
-      margin-left: 230px;
-      padding-top: 37px;
+      margin-left: 12%;
+      padding-top: 30px;
       box-sizing: border-box;
       img {
-        width: 197px;
-        height: 32px;
+        width: 147px;
+        height: 23px;
       }
     }
     .app_link {
-      width: 901px;
-      height: 641px;
+      width: 675px;
+      height: 480px;
       background: url("/img/编组 3@2x.png") no-repeat;
       background-size: cover;
       background-position: 50%;
       margin: 0 auto;
-      margin-top: 152px;
+      margin-top: 116px;
       display: flex;
       flex-direction: column;
       align-items: center;
       .link_logo {
         img {
-          width: 97px;
-          height: 97px;
-          margin-top: 42px;
+          width: 93px;
+          height: 93px;
+          margin-top: 32px;
         }
       }
       .qrCode {
         position: relative;
         canvas {
-          width: 200px !important;
-          height: 200px !important;
+          width: 153px !important;
+          height: 153px !important;
         }
         .dialog {
-          width: 200px;
-          height: 200px;
+          width: 153px;
+          height: 153px;
           background: rgba(255, 255, 255, 0.9);
           position: absolute;
           top: 0;
@@ -185,15 +187,14 @@ dd {
               margin-right: 8px;
             }
             img:last-child {
-              width: 50px;
-              height: 50px;
+              width:24px;
+              height:24px;
               cursor: pointer;
             }
             label {
-              font-size:32px;
+              font-size:24px;
               font-weight: 600;
               color: rgba(58, 202, 101, 1);
-              line-height: 32px;
             }
             .success {
               color: rgba(58, 202, 101, 1);
@@ -205,25 +206,29 @@ dd {
         }
       }
       h3 {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 500;
         color: rgba(56, 47, 68, 1);
-        line-height: 24px;
-        margin-bottom: 50px;
+        margin-bottom: 38px;
+        margin-top: 15px;
       }
       > p {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 400;
         color: rgba(97, 91, 107, 1);
-        line-height:20px;
-        margin-bottom: 100px !important;
+        // line-height:20px;
+        // margin-bottom: 100px !important;
+        margin-top: 26px;
       }
     }
   }
 }
 .homePage {
+  width: 100%;
   position: relative;
+  // overflow-x: hidden;
 }
+
 //首页
 .home {
   width: 1440px;
@@ -703,7 +708,7 @@ dd {
           font-weight: 500;
           color: rgba(255, 255, 255, 1);
           margin-top: 127px;
-          margin-bottom: 56px!important;
+          margin-bottom: 6px!important;
           cursor: pointer;
         }
         .active {
@@ -714,6 +719,7 @@ dd {
           font-weight: 400;
           color: rgba(209, 26, 67, 1);
           margin-top: 10px;
+          margin-bottom: 56px!important;
         }
       }
     }
@@ -772,6 +778,7 @@ dd {
           width: 28px;
           height: 30px;
           display: flex;
+          cursor: pointer;
           img {
             width: 100%;
             height: 100%;
@@ -804,15 +811,15 @@ dd {
     >h4{
         display: flex;
         align-items: center;
-        font-size:0.18rem;
+        font-size:16px;
         font-weight:600;
         color:rgba(51,51,51,1);
-        margin-bottom: 0.5rem;
+        margin-bottom: 50px;
         i{
-            width: 0.16rem;
-            height: 0.17rem;
+            width: 12px;
+            height: 13px;
             display: flex;
-            margin-right: 1rem;
+            margin-right: 100px;
             cursor: pointer;
             img{
                 width: 100%;
@@ -824,23 +831,23 @@ dd {
         width: 100%;
       .addCurrencyList{
         width: 100%;
-        height: 0.6rem;
+        height: 60px;
         background:rgba(247,247,249,1);
         border-radius:3px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.1rem;
-        padding: 0 0.13rem;
+        margin-bottom: 10px;
+        padding: 0 13px;
         box-sizing: border-box;
         p{
           display: flex;
           align-items: center;
           i{
-          width:0.4rem;
-          height: 0.4rem;
+          width:40px;
+          height: 40px;
           display: flex;
-          margin-right: 0.12rem;
+          margin-right: 12px;
           img{
             width:100%;
             height: 100%;
@@ -855,8 +862,8 @@ dd {
         p:nth-child(2){
           cursor: pointer;
           img{
-            width: 0.4rem;
-            height: 0.2rem;
+            width: 40px;
+            height: 20px;
           }
         }
       }
@@ -864,26 +871,28 @@ dd {
   }
 //币种详情
 .currencyDetail{
-  width: 4.1rem;
+  width: 440px;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-    >h4{
+  // overflow: hidden;
+
+    h4{
       width: 100%;
         display: flex;
         align-items: center;
-        font-size:0.18rem;
+        font-size:16px;
         font-weight:600;
         color:rgba(51,51,51,1);
-        margin-bottom: 0.5rem;
-        margin-top: 1rem;
+        margin-bottom: 50px;
+        margin-top: 100px;
         i{
-            width: 0.16rem;
-            height: 0.17rem;
+            width: 12px;
+            height: 13px;
             display: flex;
-            margin-right: 1.5rem;
+            margin-right: 150px;
             cursor: pointer;
             img{
                 width: 100%;
@@ -894,12 +903,12 @@ dd {
     .detailContent{
       width: 100%;
       .detailNav{
-        margin-bottom: 0.2rem;
+        margin-bottom: 20px;
         span{
-          font-size:0.14rem;
+          font-size:12px;
           font-weight:400;
           color:rgba(194,194,194,1);
-          margin-right: 0.32rem;
+          margin-right: 32px;
           cursor: pointer;
         }
         .active{
@@ -912,26 +921,26 @@ dd {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0.2rem 0;
+          padding: 20px 0;
           box-sizing: border-box;
           border-bottom: 1px solid #DEDFE0;
           cursor: pointer;
           i{
             img{
-              width: 0.3rem;
-              height: 0.3rem;
+              width: 25px;
+              height: 25px;
             }
           }
           .listCenter{
             flex: 1;
-            margin-left: 0.2rem;
+            margin-left:20px;
             p:nth-child(1){
-              font-size:0.16rem;
+              font-size:14px;
               font-weight: 500;
               color:rgba(51,51,51,1);
             }
             p:nth-child(2){
-              font-size:0.12rem;
+              font-size:12px;
               color:rgba(188,188,188,1);
             }
             .org{
@@ -946,11 +955,11 @@ dd {
           }
           .listResult{
             p:nth-child(1){
-              font-size:0.16rem;
+              font-size:14px;
               font-weight: 500;
             }
             p:nth-child(2){
-              font-size:0.12rem;
+              font-size:12px;
               font-weight:400;
             }
             .org{
@@ -969,7 +978,7 @@ dd {
     .ant-pagination{
       // width: 100%;
       position: absolute;
-      bottom: 1rem;
+      bottom: 100px;
       // left: 1rem;
       // margin: 0 auto;
     }
@@ -978,23 +987,23 @@ dd {
 .details{
   width: 100%;
   height: 100%;
-  padding: 0 0.47rem;
-  padding-top: 1rem;
+  padding: 0 47px;
+  padding-top: 100px;
   box-sizing: border-box;
   background: url('/img/编组@2x.png')no-repeat;
   background-size: 100% 100%;
   >h4{
         display: flex;
         align-items: center;
-        font-size:0.18rem;
+        font-size:16px;
         font-weight:600;
         color:rgba(51,51,51,1);
-        margin-bottom: 0.5rem;
+        margin-bottom: 50px;
         i{
-            width: 0.16rem;
-            height: 0.17rem;
+            width: 12px;
+            height: 13px;
             display: flex;
-            margin-right: 1.8rem;
+            margin-right: 180px;
             cursor: pointer;
             img{
                 width: 100%;
@@ -1004,32 +1013,32 @@ dd {
     }
   .detailsTable{
     width: 100%;
-    padding:0.4rem 0;
+    padding:40px 0;
     box-sizing: border-box;
     background: url('/img/编组 27@2x.png')no-repeat;
     background-size: 100% 100%;
     .tableContent{
-      width: 3rem;
+      width: 300px;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0 auto;
       i{
         img{
-          width: 0.4rem;
-          height: 0.4rem;
+          width: 40px;
+          height: 40px;
 
         }
       }
       h3{
-        font-size:0.18rem;
+        font-size:16px;
         font-weight:600;
         color:rgba(0,209,175,1);
-        margin-top: 0.14rem;
-        margin-bottom: 0.19rem;
+        margin-top: 14px;
+        margin-bottom: 19px;
       }
       >p{
-        font-size:0.14rem;
+        font-size:14px;
         font-weight:400;
         color:rgba(153,153,153,1);
       }
@@ -1037,8 +1046,8 @@ dd {
         width: 100%;
         height: 1px;
         display: flex;
-        margin-top: 0.45rem;
-        margin-bottom: 0.29rem;
+        margin-top: 45px;
+        margin-bottom: 29px;
         img{
           width: 100%;
           height: 100%;
@@ -1050,23 +1059,23 @@ dd {
         p{
           // height:auto;
           display: flex;
-          line-height: 0.4rem;
+          line-height:40px;
           label{
             width: 30%;
-            font-size:0.14rem;
+            font-size:14px;
             font-weight:400;
             color:rgba(153,153,153,1);
           }
           span{
             display: flex;
             align-items: center;
-            font-size:0.14rem;
+            font-size:14px;
             font-weight:500;
             color:rgba(153, 153, 153, 1);
             img{
-              width: 0.12rem;
-              height: 0.13rem;
-              margin-left: 0.05rem;
+              width:12px;
+              height:13px;
+              margin-left: 5px;
             }
           }
           
@@ -1074,7 +1083,7 @@ dd {
         p:nth-child(1){
           span{
             display: flex;
-            font-size:0.14rem;
+            font-size:14px;
             font-weight:500;
             color:rgba(51,51,51,1);
           }
@@ -1083,19 +1092,19 @@ dd {
     }
   }
 }
-@media screen and (max-width:1600px){
-  .ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next{
-        min-width: 25px!important;
-        height: 25px!important;
-        line-height: 25px!important;
-  }
-  .ant-pagination-item{
-        min-width: 25px!important;
-        height: 25px!important;
-        line-height: 25px!important;
-        margin-right: 5px!important;
-  }
-}
+// @media screen and (max-width:1600px){
+//   .ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next{
+//         min-width: 25px!important;
+//         height: 25px!important;
+//         line-height: 25px!important;
+//   }
+//   .ant-pagination-item{
+//         min-width: 25px!important;
+//         height: 25px!important;
+//         line-height: 25px!important;
+//         margin-right: 5px!important;
+//   }
+// }
 @media screen and (max-height:1000px){
 .currencyDetail .ant-pagination{
   bottom: 2rem;

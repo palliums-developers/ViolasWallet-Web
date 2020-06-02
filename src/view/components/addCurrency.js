@@ -5,13 +5,21 @@ import '../app.scss'
 class AddCurrency extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      addCurrencyList:[]
+    };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({
+      addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+    });
+    console.log(JSON.parse(window.localStorage.getItem("wallet_info")));
+  }
   showPolling = () => {
     this.props.showPolling();
   };
   render() {
+    let { addCurrencyList } = this.state;
     return (
       <div className="addCurrency">
         <h4 onClick={() => this.showPolling()}>
@@ -21,7 +29,16 @@ class AddCurrency extends Component {
           Add Digital Currency
         </h4>
         <div className="addCurrencyLists">
-          <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
+          {
+            addCurrencyList.map((v,i)=>{
+              return <div className="addCurrencyList" key={i}><p><i>
+                {
+                  v.coinType == 'violas' ? <img src="/img/编组 2复制 4@2x.png" /> : v.coinType == 'libra' ? <img src="/img/编组 7@2x.png" /> : v.coinType == 'bitcoin' ? <img src="/img/BTC复制 2@2x.png" /> : null
+                }
+                </i><label>{v.coinType}</label></p></div>
+            })
+          }
+          
           <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList">

@@ -13,7 +13,8 @@ class GetMoney extends Component {
         title: '',
         showDealType: false,
         address:'',
-        dis: false
+        dis: false,
+        address:''
       }
     }
     getTypeShow = (event) => {
@@ -40,12 +41,15 @@ class GetMoney extends Component {
     }
     componentDidMount(){
       document.addEventListener('click', this.closeDialog);
-      if (this.props.location.pathname.split("/")[3]) {
-        let type = this.props.location.pathname.split("/")[3]
-        this.setState({
-          title: type.replace(type[0], type[0].toUpperCase())
-        })
-      }
+      this.setState({
+        address:window.localStorage.getItem('address')
+      })
+      // if (this.props.location.pathname.split("/")[3]) {
+      //   let type = this.props.location.pathname.split("/")[3]
+      //   this.setState({
+      //     title: type.replace(type[0], type[0].toUpperCase())
+      //   })
+      // }
       // if (this.props.location.pathname.split("/")[5]) {
       //   let address = this.props.location.pathname.split("/")[5]
       //   this.setState({
@@ -106,14 +110,17 @@ class GetMoney extends Component {
 
               </div>
                <div className="qrCode">
-                <QRCode value={title.toUpperCase() + ':' + '3FqEyyjut8pywvohTMbvyN9vqEhd26Lqyv'+'?amount=0'}></QRCode>
+                <QRCode value={type.toUpperCase() + ':' + address+'?amount=0'}></QRCode>
                </div>
                <div className="addressCode">
-                   <span id="add">{'3FqEyyjut8pywvohTMbvyN9vqEhd26Lqyv'}</span>
-                    <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
-                    {
+                   <span id="add">{address}</span>
+                   {
+                     dis ? <i onClick={()=>this.handleCopy()}><img src="/img/fuzhi 3@2x.png"/></i> : <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
+                   }
+                    
+                    {/* {
                       dis ? <div className="warn"><img src="/img/suc.png"/></div> : null
-                    }
+                    } */}
                 </div>
             </div>
           </div>

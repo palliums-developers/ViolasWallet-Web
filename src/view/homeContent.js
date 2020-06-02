@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./app.scss";
+let url = "https://api.violas.io";
 
 class HomeContent extends Component {
     constructor(){
@@ -10,19 +11,20 @@ class HomeContent extends Component {
       }
     }
     componentDidMount(){
-      
+      this.getBalance()
     }
 
     getBalance = () => {
-      // if (window.sessionStorage.getItem('address')) {
-      //   fetch(url + "/explorer/violas/address/" + window.sessionStorage.getItem('address')).then(res => res.json())
-      //     .then(res => {
-      //       this.setState({
-      //         balance: res.data.status.balance / 1e6
-      //       })
+      if (window.localStorage.getItem('address')) {
+        fetch(url + "/explorer/violas/address/" + window.localStorage.getItem('address')).then(res => res.json())
+          .then(res => {
+            console.log(res);
+            // this.setState({
+            //   balance: res.data.status.balance / 1e6
+            // })
 
-      //     })
-      // }
+          })
+      }
     }
     render(){
  
@@ -58,6 +60,13 @@ class HomeContent extends Component {
                 <div className="assetList">
                 <p><label>资产</label><i onClick={() => {
                   this.props.showPolling(!this.props.display);
+                  // if (this.props.display1) {
+                  //   document.querySelector(".ant-drawer").position =
+                  //     "absolute!important";
+                  // } else {
+                  //   document.querySelector(".ant-drawer").position =
+                  //     "fixed!important";
+                  // }
                 }}><img src="/img/编组 18@2x.png"/></i></p>
                   <div className="assetLists">
                       <div className="assetListsEvery" onClick={() => {
