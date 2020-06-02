@@ -1,16 +1,23 @@
 import React from 'react';
 import './App.css';
-import WalletConnect from './packages/browser/src/index';
 import WalletConnectQRCodeModal from './packages/qrcode-modal/src/index';
-import webStorage from './packages/browser/src/webStorage'
+import WalletConnect from './packages/browser/src/index';
+import webStorage from './packages/browser/src/webStorage';
+// import WalletConnect from './walletConnect/browser/index';
+// import webStorage from './walletConnect/browser/webStorage';
 import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // bridge: 'http://192.168.1.151:5000',
       bridge: 'https://bridge.walletconnect.org',
-      walletConnector: {},
+        code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
+        walletConnector: {},
+      violas_address: '',
+      libra_address: '',
+      BTC_address: '',
       from: '',
       code: '',
       tyArgs: '',
@@ -26,6 +33,7 @@ class App extends React.Component {
     this.checkNotificationPermission = this.checkNotificationPermission.bind(this);
     this.showUri = this.showUri.bind(this);
     this.getNewWalletConnect = this.getNewWalletConnect.bind(this);
+    this.publish=this.publish.bind(this);
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
@@ -53,7 +61,7 @@ class App extends React.Component {
       }
       WalletConnectQRCodeModal.close();
       const { accounts, chainId } = payload.params[0];
-      console.log('you have connected ', accounts, chainId)
+      console.log('you have connected ', accounts[0], chainId);
     })
     this.state.walletConnector.on("session_update", (error, payload) => {
       if (error) {
@@ -73,8 +81,14 @@ class App extends React.Component {
     console.log('uri is: ', this.state.walletConnector.uri)
   }
   getAccount() {
-    this.state.walletConnector.get_accounts().then(res => {
-      console.log('get account ', res)
+    this.state.walletConnector.get_accounts().then(async res => {
+      console.log('get account ', res);
+      for(let i of res){
+        if(i.coinType==='violas'){
+          await this.setState({violas_address:i.address})
+          console.log(this.state.violas_address)
+        }
+      }
     }).catch(err => {
       console.log('get account ', err)
     })
@@ -85,11 +99,11 @@ class App extends React.Component {
     });
   }
   async sendTransaction() {
-    const seq = await this.getSeqNumb(this.state.from).then(res => {
-      return res
-    }).catch(err => {
-      console.log(err)
-    })
+    // const seq = await this.getSeqNumb(this.state.from).then(res => {
+    //   return res
+    // }).catch(err => {
+    //   console.log(err)
+    // })
     const tx = {
       from: this.state.from,
       payload: {
@@ -114,12 +128,30 @@ class App extends React.Component {
       },
       maxGasAmount: 400000,
       gasUnitPrice: 0,
-      sequenceNumber: seq
+      // sequenceNumber: seq
     }
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
     }).catch(err => {
       console.log('send transaction ', err);
+    })
+  }
+  async publish(){
+    const publish={
+      from: this.state.violas_address,
+      payload:{
+        code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
+        tyArgs: [
+          '0600000000000000000000000000000000034c4252015400'
+        ],
+        args:[]
+      }
+    }
+    console.log('start publish')
+    this.state.walletConnector.sendTransaction(publish).then(res => {
+      console.log('publish ', res);
+    }).catch(err => {
+      console.log('publish ', err);
     })
   }
   async logout() {
@@ -194,6 +226,7 @@ class App extends React.Component {
             <p>Value: <input type="text" onChange={this.handelChange.bind(this, 'value')} /></p>
           </div>
           <button onClick={this.sendTransaction}>send transaction</button>
+          <button onClick={this.publish}>Publish</button>
           <button onClick={this.logout}>log out</button>
           <button onClick={this.showNotification}>Show Notification</button>
         </header>

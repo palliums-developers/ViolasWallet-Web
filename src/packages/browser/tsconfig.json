@@ -5,5 +5,7 @@
     ],
     "compilerOptions": {
         "target": "es5",
+        // "composite": true,
+        // "tsBuildInfoFile": "../../walletConnect/browser"
     },
 }
