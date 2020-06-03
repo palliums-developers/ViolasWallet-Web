@@ -8,7 +8,7 @@ let url1 = "https://tbtc1.trezor.io"
 let url2 = "https://api.violas.io"
 let WAValidator = require('wallet-address-validator');
 
-class Transfar extends Component {
+class Transfer extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -233,13 +233,13 @@ class Transfar extends Component {
     let { title, balance, warning, showDealType, types, type } = this.state;
     // console.log(type)
     return (
-      <div className="transfar">
+      <div className="transfer">
         {/* <div className="back" onClick={()=>{
                 window.history.go(-1);
                 // this.props.getType(this.props.match.params.type)
                 
             }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div> */}
-        <div className="transfarContent">
+        <div className="transferContent">
           <i
             className="jt"
             onClick={() => {
@@ -248,7 +248,7 @@ class Transfar extends Component {
           >
             <img src="/img/编组 10@2x.png" />
           </i>
-          <div className="transfarList">
+          <div className="transferList">
             <h4>{title}Transfer</h4>
             <div className="iptAddress">
               <textarea
@@ -360,4 +360,4 @@ let mapDispatchToProps = (dispatch) =>{
   }
 }
  
-export default connect(mapStateToProps,mapDispatchToProps)(Transfar);
+export default connect(mapStateToProps,mapDispatchToProps)(Transfer);

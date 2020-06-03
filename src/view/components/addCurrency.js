@@ -13,7 +13,6 @@ class AddCurrency extends Component {
     this.setState({
       addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
     });
-    console.log(JSON.parse(window.localStorage.getItem("wallet_info")));
   }
   showPolling = () => {
     this.props.showPolling();

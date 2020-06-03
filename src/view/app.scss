@@ -323,6 +323,9 @@ dd {
               
             }
           }
+          dl:hover{
+            background:rgba(255,255,255,.2);
+          }
           .act{
             background:rgba(255,255,255,.2);
           }
@@ -574,11 +577,11 @@ dd {
     }
   }
   //转账
-  .transfar {
+  .transfer {
     width: 100%;
     height: 100%;
     background: #F7F7F9;
-    .transfarContent {
+    .transferContent {
       width: 960px;
       // height: 6.4rem;
       background: #fff;
@@ -596,7 +599,7 @@ dd {
             height: 100%;
           }
         }
-      .transfarList {
+      .transferList {
         width:642px;
         margin: 0 auto;
         display: flex;

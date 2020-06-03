@@ -78,8 +78,10 @@ class App extends Component {
       console.log("wallet disconnected");
     });
   }
+  
   getAccount() {
     this.state.walletConnector.get_accounts().then(res => {
+      console.log(res)
       window.localStorage.setItem(
         "wallet_info",
         JSON.stringify(res)
@@ -116,86 +118,6 @@ class App extends Component {
       </div>
     );
   }
-  // ask_login_state() {
-  //   let count = this.state.time;
-  //   let Timer = setInterval(() => {
-  //     if (this.state.login) {
-  //       clearInterval(Timer);
-  //     } else if (count === 60) {
-  //       this.setState({
-  //         status: 3,
-  //       });
-  //       clearInterval(Timer);
-  //     } else {
-  //       this.login_state();
-  //       count++;
-  //     }
-  //   }, 1000);
-  //   // setTimeout(() => { this.setState({ session_id: "" }) }, 5000);
-  // }
-  // login_state() {
-  //   // http://125.39.5.57:38080/app/mock/16/1.0/violas/singin
-  //   fetch(url + "/explorer/violas/singin?session_id=" + this.state.session_id)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       if (res.data.status == 1) {
-  //         this.setState(
-  //           {
-  //             login: true,
-  //             status: res.data.status,
-  //             wallet_info: JSON.stringify(res.data.wallets),
-  //           },
-  //           () => {
-  //             window.sessionStorage.setItem(
-  //               "wallet_info",
-  //               this.state.wallet_info
-  //             );
-  //             setTimeout(() => {
-  //               this.props.history.push("/homepage");
-  //             }, 5000);
-  //           }
-  //         );
-  //       } else if (res.data.status == 2) {
-  //         this.setState({
-  //           login: false,
-  //           status: res.data.status,
-  //         });
-  //       } else if (res.data.status == 3) {
-  //         this.setState({
-  //           login: false,
-  //           status: res.data.status,
-  //         });
-  //       } else {
-  //         this.setState({
-  //           login: false,
-  //         });
-  //       }
-  //     })
-  //     .catch((e) => console.log(e));
-  // }
-  // json2String = (_id) => {
-  //   let _temp = {
-  //     session_id: _id,
-  //     type: 2,
-  //   };
-  //   return JSON.stringify(_temp);
-  // };
-  // getQR = () => {
-  //   return fetch(url + "/explorer/violas/singin/qrcode")
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       // console.log(res.data.qr_code.session_id.toString())
-  //       this.setState(
-  //         {
-  //           session_id: res.data.qr_code.session_id.toString(),
-  //         },
-  //         () => {
-  //           window.sessionStorage.setItem("session_id", this.state.session_id);
-  //           this.ask_login_state();
-  //         }
-  //       );
-  //     });
-  // };
 }
 
 export default App;

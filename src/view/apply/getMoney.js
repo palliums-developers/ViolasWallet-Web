@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import "./app.scss";
 import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 
 class GetMoney extends Component {
     constructor(props){
@@ -14,7 +14,7 @@ class GetMoney extends Component {
         showDealType: false,
         address:'',
         dis: false,
-        address:''
+        address: ''
       }
     }
     getTypeShow = (event) => {
@@ -24,12 +24,14 @@ class GetMoney extends Component {
       })
     }
     showTypes = (v) => {
-      console.log(v)
       this.setState({
         type: v,
         showDealType: false
+      },()=>{
+          this.getNewArray()
       })
     }
+  
     componentWillMount(){
       if(this.props.display){
         this.props.showPolling();
@@ -39,23 +41,19 @@ class GetMoney extends Component {
       }
       
     }
+    getNewArray = ()=>{
+      let wallet_info = JSON.parse(window.localStorage.getItem('wallet_info'));
+      let newArray = wallet_info.filter(v => this.state.type.toLocaleLowerCase()==v.coinType)
+      this.setState({
+        address: newArray[0].address
+      })
+    }
     componentDidMount(){
       document.addEventListener('click', this.closeDialog);
+      this.getNewArray()
       this.setState({
         address:window.localStorage.getItem('address')
       })
-      // if (this.props.location.pathname.split("/")[3]) {
-      //   let type = this.props.location.pathname.split("/")[3]
-      //   this.setState({
-      //     title: type.replace(type[0], type[0].toUpperCase())
-      //   })
-      // }
-      // if (this.props.location.pathname.split("/")[5]) {
-      //   let address = this.props.location.pathname.split("/")[5]
-      //   this.setState({
-      //     address: address
-      //   })
-      // }
     }
     handleCopy = () => {
       const spanText = document.getElementById('add').innerText;

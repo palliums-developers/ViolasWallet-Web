@@ -3,7 +3,7 @@ import Home from '../view/home'
 import HomeContent from '../view/homeContent'
 import HomePage from "../view/homePage";
 import ChangeContent from "../view/changeContent"
-import Transfer from "../view/apply/transfar";
+import Transfer from "../view/apply/transfer";
 import GetMoney from "../view/apply/getMoney";
 
 let routes = [
@@ -30,7 +30,7 @@ let routes = [
                         component: ChangeContent
                     },
                     {
-                        path: '/homepage/home/transfar',
+                        path: '/homepage/home/transfer',
                         component:Transfer
                     },
                     {

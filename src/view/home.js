@@ -93,7 +93,7 @@ class Home extends Component {
                   className={
                     active == "homeContent"
                       ? "active"
-                      : active == "transfar"
+                      : active == "transfer"
                       ? "active"
                       : active == "getMoney"
                       ? "active"
@@ -104,7 +104,7 @@ class Home extends Component {
                     className={
                       active == "homeContent"
                         ? "wal"
-                        : active == "transfar"
+                        : active == "transfer"
                         ? "wal"
                         : active == "getMoney"
                         ? "wal"
@@ -155,17 +155,25 @@ class Home extends Component {
                     </div>
                   </div>
                   <div className="btns">
-                    <dl>
+                    <dl onClick={() => {
+                      this.props.history.push({
+                        pathname: '/homepage/home/transfer'
+                      })
+                    }} className={active == 'transfer'?'act':null}>
                       <dt>
                         <img src="/img/编组 13备份 4@2x.png" />
                       </dt>
-                      <dd>转账</dd>
+                      <dd>Transfer</dd>
                     </dl>
-                    <dl>
+                    <dl onClick={() => {
+                      this.props.history.push({
+                        pathname: '/homepage/home/getMoney'
+                      })
+                    }} className={active == 'getMoney' ? 'act' : null}>
                       <dt>
                         <img src="/img/编组 13备份 5@2x.png" />
                       </dt>
-                      <dd>收款</dd>
+                      <dd>Receive</dd>
                     </dl>
                   </div>
                 </div>
