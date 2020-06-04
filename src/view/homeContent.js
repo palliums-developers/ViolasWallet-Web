@@ -7,7 +7,9 @@ class HomeContent extends Component {
     constructor(){
       super()
       this.state = {
-        addCurrencyList: []
+        addCurrencyList: [],
+        balance:'0.00',
+        visible:true
       }
     }
     componentDidMount(){
@@ -31,14 +33,31 @@ class HomeContent extends Component {
       }
     }
     render(){
-        let { addCurrencyList } = this.state;
+        let { addCurrencyList,balance,visible } = this.state;
         return (
             <div className="content">
               <div className="contentWrap">
                 <div className="apply">
-                  <p>总资产<i><img src="/img/jurassic_openeyes 3@2x.png"/></i></p>
+                  <p>总资产
+                  <i>
+                  {
+                      visible ? <img onClick={()=>{
+                        this.setState({
+                          visible:!this.state.visible
+                        })
+                      }} src="/img/jurassic_openeyes 3@2x.png"/> :<img onClick={()=>{
+                        this.setState({
+                          visible:!this.state.visible
+                        })
+                      }} src="/img/biyanjing 2@2x.png"/>
+                  }
+                  </i>
+                  </p>
                   <div className="applyContent">
-                    <span>$0.00</span>
+                  {
+                    visible ? <span>${balance}</span> : <span>***</span>
+                  }
+                    
                     <div className="btns">
                       <dl onClick={() => {
                         this.props.history.push({
