@@ -78,6 +78,15 @@ class CurrencyDetail extends Component {
             this.getNavData()
         });
     };
+    curDataFun = (val) => {
+        console.log(val)
+        this.props.showDetails();
+        this.props.showEveryDetail({
+            display2:true,
+            detailData:val
+        });
+        // this.props.getDetailData(val)
+    }
     render() {
         let { types, navType, dataList, total, curPage} = this.state;
         return (
@@ -105,10 +114,7 @@ class CurrencyDetail extends Component {
                     <div className="detailLists">
                         {
                             dataList.map((v,i)=>{
-                                return <div key={i} className="detailList" onClick={() => {
-                                    this.props.showDetails();
-                                    this.props.showEveryDetail();
-                                }}>
+                                return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
                                     <i>
                                      {
                                             v.type.slice(0, 7) == 'PUBLISH' ? <img src="/img/编组 82@2x.png" /> : v.sender == this.state.address ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == this.state.address ? <img src="/img/编组 13备份 2@2x.png" /> : null
@@ -180,12 +186,21 @@ let mapDispatchToProps = (dispatch) => {
                 payload: false,
             });
         },
-        showEveryDetail: () => {
+        showEveryDetail: (payload) => {
             dispatch({
                 type: "DISPLAY2",
-                payload: true,
+                payload: {
+                    display2: payload.display2,
+                    detailData: payload.detailData
+                }
             });
         },
+        // getDetailData:(payload)=>{
+        //     dispatch({
+        //         type: "DETAILDATA",
+        //         payload: payload
+        //     });
+        // }
     };
 };
 

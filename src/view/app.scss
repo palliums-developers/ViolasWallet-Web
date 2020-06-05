@@ -1059,7 +1059,7 @@ dd {
       }
       .tableList{
         width:100%;
-        p{
+        >p{
           // height:auto;
           display: flex;
           line-height:40px;
@@ -1075,10 +1075,35 @@ dd {
             font-size:14px;
             font-weight:500;
             color:rgba(153, 153, 153, 1);
+            position: relative;
+            i{
+              font-style: normal;
+              width:200px;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap
+            }
             img{
               width:12px;
               height:13px;
               margin-left: 5px;
+              cursor: pointer;
+            }
+            .warn{
+              width: 97px;
+              height: 26px;
+              position: absolute;
+              right:-30px;
+              top: 40px;
+              z-index: 99;
+              font-size:12px;
+              font-weight:500;
+              color:rgba(255,255,255,1);
+              background:rgba(56, 47, 68, 1);
+              display: flex;
+              align-items: center;
+              justify-content:center;
+              border-radius: 3px;
             }
           }
           
@@ -1092,6 +1117,24 @@ dd {
           }
         }
       }
+    }
+  }
+  .goBrower{
+    width: 100%;
+    text-align: center;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(112,56,253,1);
+    line-height:14px;
+    margin-top: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    img{
+      width: 8px;
+      height: 11px;
+      margin-left: 3px;
     }
   }
 }
