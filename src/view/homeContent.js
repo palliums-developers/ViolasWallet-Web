@@ -63,6 +63,8 @@ class HomeContent extends Component {
                         this.props.history.push({
                           pathname: '/homepage/home/transfer'
                         })
+                      this.props.showPolling(false);
+                      this.props.showDetails(false);
                       }}>
                         <dt></dt>
                         <dd>Transfer</dd>
@@ -71,6 +73,8 @@ class HomeContent extends Component {
                         this.props.history.push({
                           pathname: '/homepage/home/getMoney'
                         })
+                      this.props.showPolling(false);
+                      this.props.showDetails(false);
                       }}>
                         <dt></dt>
                         <dd>Receive</dd>

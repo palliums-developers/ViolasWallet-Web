@@ -89,6 +89,8 @@ class Home extends Component {
                 <span
                   onClick={() => {
                     this.props.history.push("/homepage/home/homeContent");
+                    this.props.showDetails()
+                    this.props.showPolling()
                   }}
                   className={
                     active == "homeContent"
@@ -116,6 +118,8 @@ class Home extends Component {
                 <span
                   onClick={() => {
                     this.props.history.push("/homepage/home/changeContent");
+                    this.props.showDetails()
+                    this.props.showPolling()
                   }}
                   className={active == "changeContent" ? "active" : null}
                 >
@@ -159,6 +163,8 @@ class Home extends Component {
                       this.props.history.push({
                         pathname: '/homepage/home/transfer'
                       })
+                      this.props.showDetails()
+                      this.props.showPolling()
                     }} className={active == 'transfer'?'act':null}>
                       <dt>
                         <img src="/img/编组 13备份 4@2x.png" />
@@ -169,6 +175,8 @@ class Home extends Component {
                       this.props.history.push({
                         pathname: '/homepage/home/getMoney'
                       })
+                      this.props.showDetails()
+                      this.props.showPolling()
                     }} className={active == 'getMoney' ? 'act' : null}>
                       <dt>
                         <img src="/img/编组 13备份 5@2x.png" />
