@@ -24,7 +24,6 @@ class ChangeContent extends Component {
     //     })
     // }
 
-
     render() {
         let { routes } = this.props;
         let { name } = this.state;

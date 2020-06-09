@@ -25,10 +25,7 @@ class HomePage extends Component {
         return (
           
             <div className="homePage">
-              
               <RouterView routes={routes}></RouterView>
-              
-              
             </div>
         )
     }
