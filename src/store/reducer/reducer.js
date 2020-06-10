@@ -10,7 +10,7 @@ let ListReducer = (state = initState, action) => {
     let display1 = state.display;
     let display2 = state.display;
     let detailData = state.detailData;
-    console.log(action.payload)
+    // console.log(action.payload)
     switch (action.type) {
         case 'DISPLAY':
             return { display: action.payload };

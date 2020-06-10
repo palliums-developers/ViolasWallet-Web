@@ -10,6 +10,8 @@ p {
 dd {
   margin-bottom: 0 !important;
 }
+// body::-webkit-scrollbar { width:10px;/*外层轨道*/} 
+// body::-webkit-scrollbar-thumb{ display:block;/*内层轨道*/}
 @mixin dropdown {
   .dropdown1 {
         position: relative;
@@ -231,8 +233,8 @@ dd {
 
 //首页
 .home {
-  width: 1440px;
-  height: 1080px;
+  max-width: 1440px;
+  max-height: 1080px;
   display: flex;
   flex-direction: column;
 
@@ -402,14 +404,14 @@ dd {
   .changecontent {
     flex: 1;
     display: flex;
-    overflow-y: auto;
+    // overflow-y: auto;
     background: #f7f7f9;
   }
 
   .content {
     flex: 1;
     display: flex;
-    overflow-y: auto;
+    // overflow-y: auto;
     background: #f7f7f9;
     .contentWrap {
       width: 755px;

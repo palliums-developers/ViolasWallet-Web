@@ -5,6 +5,8 @@ import { Pagination } from 'antd';
 // import { withRouter } from "react-router-dom";
 import '../app.scss'
 let url = 'https://api.violas.io'
+let url1 = "http://52.27.228.84:4000"
+
 class CurrencyDetail extends Component {
     constructor(props) {
         super(props);
