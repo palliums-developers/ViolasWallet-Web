@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import WalletConnectQRCodeModal from './packages/qrcode-modal/src/index';
-import WalletConnect from './packages/browser/src/index';
-import webStorage from './packages/browser/src/webStorage';
-// import WalletConnect from './walletConnect/browser/index';
-// import webStorage from './walletConnect/browser/webStorage';
+import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal';
+// import WalletConnect from './packages/browser/src/index';
+// import webStorage from './packages/browser/src/webStorage';
+import WalletConnect from './packages/browser/dist/index';
+import webStorage from './packages/browser/dist/webStorage';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -13,8 +13,8 @@ class App extends React.Component {
     this.state = {
       // bridge: 'http://192.168.1.151:5000',
       bridge: 'https://bridge.walletconnect.org',
-        code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
-        walletConnector: {},
+      code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
+      walletConnector: {},
       violas_address: '',
       libra_address: '',
       BTC_address: '',
@@ -23,6 +23,7 @@ class App extends React.Component {
       tyArgs: '',
       address: '',
       value: 0,
+      message: '',
     }
     this.QRCode = this.QRCode.bind(this);
     this.getAccount = this.getAccount.bind(this);
@@ -33,7 +34,7 @@ class App extends React.Component {
     this.checkNotificationPermission = this.checkNotificationPermission.bind(this);
     this.showUri = this.showUri.bind(this);
     this.getNewWalletConnect = this.getNewWalletConnect.bind(this);
-    this.publish=this.publish.bind(this);
+    this.signTransaction = this.signTransaction.bind(this);
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
@@ -60,6 +61,7 @@ class App extends React.Component {
         throw error;
       }
       WalletConnectQRCodeModal.close();
+      this.getAccount();
       const { accounts, chainId } = payload.params[0];
       console.log('you have connected ', accounts[0], chainId);
     })
@@ -83,9 +85,9 @@ class App extends React.Component {
   getAccount() {
     this.state.walletConnector.get_accounts().then(async res => {
       console.log('get account ', res);
-      for(let i of res){
-        if(i.coinType==='violas'){
-          await this.setState({violas_address:i.address})
+      for (let i of res) {
+        if (i.coinType === 'violas') {
+          await this.setState({ violas_address: i.address })
           console.log(this.state.violas_address)
         }
       }
@@ -105,7 +107,8 @@ class App extends React.Component {
     //   console.log(err)
     // })
     const tx = {
-      from: this.state.from,
+      from: this.state.violas_address,
+      // from: this.state.from,
       payload: {
         code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
         tyArgs: [
@@ -126,8 +129,8 @@ class App extends React.Component {
           }
         ]
       },
-      maxGasAmount: 400000,
-      gasUnitPrice: 0,
+      // maxGasAmount: 400000,
+      // gasUnitPrice: 0,
       // sequenceNumber: seq
     }
     this.state.walletConnector.sendTransaction(tx).then(res => {
@@ -136,22 +139,11 @@ class App extends React.Component {
       console.log('send transaction ', err);
     })
   }
-  async publish(){
-    const publish={
-      from: this.state.violas_address,
-      payload:{
-        code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
-        tyArgs: [
-          '0600000000000000000000000000000000034c4252015400'
-        ],
-        args:[]
-      }
-    }
-    console.log('start publish')
-    this.state.walletConnector.sendTransaction(publish).then(res => {
-      console.log('publish ', res);
+  async signTransaction() {
+    this.state.walletConnector.signTransaction({ address: this.state.violas_address, message: this.state.message }).then(res => {
+      console.log('sign transaction ', res);
     }).catch(err => {
-      console.log('publish ', err);
+      console.log('sign transaction ', err);
     })
   }
   async logout() {
@@ -209,6 +201,9 @@ class App extends React.Component {
       case 'value':
         await this.setState({ value: e.target.value });
         break;
+      case 'msg':
+        await this.setState({ message: e.target.value });
+        break;
     }
   }
   render() {
@@ -217,16 +212,17 @@ class App extends React.Component {
         <header className='App-header'>
           <button onClick={this.QRCode}>QRCode</button>
           <button onClick={this.showUri}>show URI</button>
-          <button onClick={this.getAccount}>get accounts</button>
+          {/* <button onClick={this.getAccount}>get accounts</button> */}
           <div className='tx'>
-            <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p>
+            {/* <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p> */}
             {/* <p>Code: <input type="text" onChange={this.handelChange.bind(this, 'code')} /></p> */}
             {/* <p>tyArgs: <input type="text" onChange={this.handelChange.bind(this, 'tyArgs')} /></p> */}
             <p>Address: <input type="text" onChange={this.handelChange.bind(this, 'address')} /></p>
             <p>Value: <input type="text" onChange={this.handelChange.bind(this, 'value')} /></p>
+            <p>Message: <input type="text" onChange={this.handelChange.bind(this, 'msg')} /></p>
           </div>
           <button onClick={this.sendTransaction}>send transaction</button>
-          <button onClick={this.publish}>Publish</button>
+          <button onClick={this.signTransaction}>sign transaction</button>
           <button onClick={this.logout}>log out</button>
           <button onClick={this.showNotification}>Show Notification</button>
         </header>

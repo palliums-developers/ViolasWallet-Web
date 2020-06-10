@@ -593,34 +593,19 @@ var Connector = /** @class */ (function () {
             });
         });
     };
-    // public async signTransaction(tx: ITxData) {
-    //   if (!this._connected) {
-    //     throw new Error(ERROR_SESSION_DISCONNECTED)
-    //   }
-    //   const parsedTx = parseTransactionData(tx)
-    //   const request = this._formatRequest({
-    //     method: 'eth_signTransaction',
-    //     params: [parsedTx]
-    //   })
-    //   try {
-    //     const result = await this._sendCallRequest(request)
-    //     return result
-    //   } catch (error) {
-    //     throw error
-    //   }
-    // }
     Connector.prototype.signTransaction = function (tx) {
         return __awaiter(this, void 0, void 0, function () {
-            var request, result, error_3;
+            var parsedTx, request, result, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!this._connected) {
                             throw new Error(errors_1.ERROR_SESSION_DISCONNECTED);
                         }
+                        parsedTx = utils_1.parseTransactionData(tx);
                         request = this._formatRequest({
-                            method: 'violas_signTransaction',
-                            params: [tx]
+                            method: 'eth_signTransaction',
+                            params: [parsedTx]
                         });
                         _a.label = 1;
                     case 1:

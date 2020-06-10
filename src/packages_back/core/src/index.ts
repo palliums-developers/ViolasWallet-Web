@@ -601,35 +601,16 @@ class Connector implements IConnector {
       throw error
     };
   }
-  // public async signTransaction(tx: ITxData) {
-  //   if (!this._connected) {
-  //     throw new Error(ERROR_SESSION_DISCONNECTED)
-  //   }
-
-  //   const parsedTx = parseTransactionData(tx)
-
-  //   const request = this._formatRequest({
-  //     method: 'eth_signTransaction',
-  //     params: [parsedTx]
-  //   })
-
-  //   try {
-  //     const result = await this._sendCallRequest(request)
-  //     return result
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
   public async signTransaction(tx: ITxData) {
     if (!this._connected) {
       throw new Error(ERROR_SESSION_DISCONNECTED)
     }
 
-    // const parsedTx = parseTransactionData(tx)
+    const parsedTx = parseTransactionData(tx)
 
     const request = this._formatRequest({
-      method: 'violas_signTransaction',
-      params: [tx]
+      method: 'eth_signTransaction',
+      params: [parsedTx]
     })
 
     try {
@@ -639,6 +620,7 @@ class Connector implements IConnector {
       throw error
     }
   }
+
   public async signMessage(params: any[]) {
     if (!this._connected) {
       throw new Error(ERROR_SESSION_DISCONNECTED)
