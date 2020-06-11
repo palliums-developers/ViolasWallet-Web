@@ -2,53 +2,55 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./app.scss";
 let url = "https://api.violas.io";
-let url1 = "http://52.27.228.84:4000"
-
+// let url1 = "http://52.27.228.84:4000"
+let url1 = "https://tbtc1.trezor.io"
 class HomeContent extends Component {
     constructor(){
       super()
       this.state = {
         addCurrencyList: [],
-        addCurrencyList1:[],
-        balance:'0.00',
+        addCurrencyList1: [],
+        coinsBalance:0,
+        balance1: 0,
+        balance2: 0,
+        balance3: 0,
         visible:true
       }
     }
     componentDidMount(){
-      this.getBalance()
-
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+        addCurrencyList1: JSON.parse(window.sessionStorage.getItem('balances')).addCurrencyList1,
+        balance1: JSON.parse(window.sessionStorage.getItem('balances')).balance1,
+        balance2: JSON.parse(window.sessionStorage.getItem('balances')).balance2,
+        balance3: JSON.parse(window.sessionStorage.getItem('balances')).balance3
+      },()=>{
+        this.getBalance()
+          
       });
     }
 
     getBalance = () => {
-      if (window.localStorage.getItem('address')) {
-        fetch(url + "/explorer/violas/address/0000000000000000000000000a550c18" ).then(res => res.json())
-          .then(res => {
-            this.setState({
-              balance: res.data.status.balance/1e6,
-              addCurrencyList1: res.data.status.module_balande
-            })
-            // console.log(res);
-            // this.setState({
-            //   balance: res.data.status.balance / 1e6
-            // })
-
-          })
-        // fetch(url + "http://52.27.228.84:4000/explorer/libra/address/0000000000000000000000000a550c18").then(res => res.json())
-        //   .then(res => {
-          
-        //     console.log(res);
-        //     // this.setState({
-        //     //   balance: res.data.status.balance / 1e6
-        //     // })
-
-        //   })
+      let {addCurrencyList1} = this.state;
+      let amount = 0;
+      for (let i = 0; i < addCurrencyList1.length; i++) {
+        amount += Number(this.getFloat(addCurrencyList1[i].balance / 1e6, 6))
       }
+      this.setState({
+        coinsBalance: amount
+      })
+    }
+    getFloat(number, n) {
+      n = n ? parseInt(n) : 0;
+      if (n <= 0) {
+        return Math.round(number);
+      }
+      number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+      number = Number(number).toFixed(n); //补足位数
+      return number;
     }
     render(){
-      let { addCurrencyList, balance, visible, addCurrencyList1 } = this.state;
+      let { addCurrencyList, coinsBalance, visible,balance1, balance2, balance3, addCurrencyList1 } = this.state;
         return (
             <div className="content">
               <div className="contentWrap">
@@ -70,7 +72,7 @@ class HomeContent extends Component {
                   </p>
                   <div className="applyContent">
                   {
-                    visible ? <span>${balance}</span> : <span>***</span>
+                    visible ? <span>$ {this.getFloat(coinsBalance + balance1 + balance2 + balance3,6)}</span> : <span>***</span>
                   }
                     
                     <div className="btns">
@@ -117,36 +119,21 @@ class HomeContent extends Component {
                           <div className="leftAsset"><i>{
                             v.coinType == 'violas' ? <img src="/img/编组 2复制 4@2x.png" /> : v.coinType == 'libra' ? <img src="/img/编组 7@2x.png" /> : v.coinType == 'bitcoin' ? <img src="/img/BTC复制 2@2x.png" /> : null
                           }</i><label>{v.coinType}</label></div>
-                          <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
+                          <div className="rightAsset"><span>{v.coinType == 'violas' ? balance1 : v.coinType == 'libra' ? balance2 : v.coinType == 'bitcoin' ? balance3 : null}</span><label>≈$0.00</label></div>
                         </div>
                       })
                     }
                     {
                       addCurrencyList1.map((v, i) => {
-                        return <div className="assetListsEvery" onClick={() => {
+                        return <div className="assetListsEvery" key={i} onClick={() => {
                           this.props.showDetails(!this.props.display1);
                         }}>
                           <div className="leftAsset"><i><img src="/img/编组 38@2x.png" /></i><label>{v.name}</label></div>
-                          <div className="rightAsset"><span>{v.balance}</span><label>≈$0.00</label></div>
+                          <div className="rightAsset"><span>{this.getFloat(v.balance/1e6,6)}</span><label>≈$0.00</label></div>
                         </div>
                       })
                     }  
-                    {/* <div className="assetListsEvery">
-                      <div className="leftAsset"><i><img src="/img/编组 2复制 4@2x.png" /></i><label>BTC</label></div>
-                      <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
-                    </div>
-                    <div className="assetListsEvery">
-                      <div className="leftAsset"><i><img src="/img/编组 2复制 4@2x.png" /></i><label>BTC</label></div>
-                      <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
-                    </div>
-                    <div className="assetListsEvery">
-                      <div className="leftAsset"><i><img src="/img/编组 2复制 4@2x.png" /></i><label>BTC</label></div>
-                      <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
-                    </div>
-                    <div className="assetListsEvery">
-                      <div className="leftAsset"><i><img src="/img/编组 2复制 4@2x.png" /></i><label>BTC</label></div>
-                      <div className="rightAsset"><span>0.000</span><label>≈$0.00</label></div>
-                    </div> */}
+                    
                   </div>
                 </div>
               </div>

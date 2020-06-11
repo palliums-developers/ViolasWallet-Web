@@ -7,7 +7,6 @@ class ChangeContent extends Component {
     constructor() {
         super()
         this.state = {
-            
             name: '',
         }
     }

@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 // import {withRouter} from 'react-router-dom'
-let url = "http://52.27.228.84:4000"
+// let url = "http://52.27.228.84:4000"
 let url1 = "https://tbtc1.trezor.io"
-let url2 = "https://api.violas.io"
+let url = "https://api.violas.io"
 let WAValidator = require('wallet-address-validator');
 
 class Transfer extends Component {
@@ -43,24 +43,7 @@ class Transfer extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
-   
-    // if (this.props.location.pathname.split("/")[5]) {
-    //   let type = this.props.location.pathname.split("/")[5];
-    //   this.setState(
-    //     {
-    //       title: type.replace(type[0], type[0].toUpperCase()),
-    //     },
-    //     () => {
-    //       if (this.state.title.toLowerCase() == "violas") {
-    //         this.getBalance();
-    //       } else if (this.state.title.toLowerCase() == "libra") {
-    //         this.getLibraBalance();
-    //       } else if (this.state.title.toLowerCase() == "bitcoin") {
-    //         this.getBTCBalance();
-    //       }
-    //     }
-    //   );
-    // }
+    this.getTypeBalance()
   }
   getTypeShow = (event) => {
     this.stopPropagation(event);
@@ -73,6 +56,8 @@ class Transfer extends Component {
     this.setState({
       type: v,
       showDealType: false,
+    },()=>{
+        this.getTypeBalance()
     });
   };
   closeDialog = () => {
@@ -83,34 +68,56 @@ class Transfer extends Component {
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
   }
-
-  getLibraBalance = () => {
-    if (window.sessionStorage.getItem("address")) {
-      fetch(
-        url +
-          "/explorer/libra/address/" +
-          window.sessionStorage.getItem("address")
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          this.setState({
-            balance: res.data.status.balance / 1e6,
+  
+  getTypeBalance = () => {
+    let {type} = this.state;
+    let wallet_info = JSON.parse(window.localStorage.getItem("wallet_info"));
+    for(let i =0;i< wallet_info.length;i++){
+      if (wallet_info[i].coinType == 'violas' && wallet_info[i].coinType == type.toLowerCase()) {
+        fetch(
+          url +
+          "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407"
+          // window.sessionStorage.getItem("wallet_info")[1].address
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            this.setState({
+              balance: this.getFloat(res.data.status.balance / 1e6,6)
+            });
           });
-        });
-    }
-  };
-  getBTCBalance = () => {
-    console.log(window.sessionStorage.getItem("address"));
-    if (window.sessionStorage.getItem("address")) {
-      fetch(url1 + "/api/address/" + window.sessionStorage.getItem("address"))
-        .then((res) => res.json())
-        .then((res) => {
-          this.setState({
-            balance: Number(res.balance),
+      } else if (wallet_info[i].coinType == 'libra' && wallet_info[i].coinType == type.toLowerCase()){
+        fetch(
+          url +
+          "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407" 
+          // window.sessionStorage.getItem("wallet_info")[1].address
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            this.setState({
+              balance: this.getFloat(res.data.status.balance / 1e6, 6)
+            });
           });
-        });
+      } else if (wallet_info[i].coinType == 'bitcoin' && wallet_info[i].coinType == type.toLowerCase()) {
+        fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
+          .then((res) => res.json())
+          .then((res) => {
+            this.setState({
+              balance: this.getFloat(Number(res.balance), 8),
+            });
+          });
+      }
     }
+    
   };
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = Number(number).toFixed(n); //补足位数
+    return number;
+  }
   getTransAddress = (e) => {
     this.setState(
       {

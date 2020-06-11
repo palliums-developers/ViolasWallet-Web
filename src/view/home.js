@@ -9,7 +9,9 @@ import AddCurrency from "./components/addCurrency";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
 import WalletConnect from "../packages/browser/src/index";
-let url = "http://52.27.228.84:4000"
+let url = "https://api.violas.io";
+// let url1 = "http://52.27.228.84:4000"
+let url1 = "https://tbtc1.trezor.io"
 
 class Home extends Component {
   constructor(props) {
@@ -19,6 +21,12 @@ class Home extends Component {
       walletConnector: {},
       active: "",
       showMineDialog: false,
+      addCurrencyList: [],
+      addCurrencyList1: [],
+      balance1: 0,
+      balance2: 0,
+      balance3: 0,
+      coinsBalance: 0,
     };
   }
   getActive = (ind, val) => {};
@@ -28,10 +36,17 @@ class Home extends Component {
       showMineDialog: !this.state.showMineDialog,
     });
   };
+  async componentWillMount() {
+    await this.getNewWalletConnect();
+  }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
     this.setState({
       active: this.props.location.pathname.split("/")[3],
+      addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+    },async () => {
+      await this.getBalance()
+      
     });
      this.state.walletConnector.on("disconnect", (error, payload) => {
        if (error) {
@@ -41,6 +56,61 @@ class Home extends Component {
      });
     // console.log(this.props.location.pathname.split("/"))
     // console.log(this.props.location.pathname.split("/")[3])
+  }
+
+  getBalance = () => {
+    let { addCurrencyList, addCurrencyList1 } = this.state;
+    fetch(url + "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+      .then(res => { 
+        
+        this.setState({
+          balance1: Number(this.getFloat(res.data.status.balance / 1e6, 6)),
+          addCurrencyList1: res.data.status.module_balande
+        }, () => {
+           
+          let amount = 0;
+          for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+            amount += Number(this.getFloat(this.state.addCurrencyList1[i].balance / 1e6, 6))
+          }
+           
+          this.setState({
+            coinsBalance: amount
+          })
+        })
+      })
+
+    fetch(url + "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+      .then(res => {
+        this.setState({
+          balance2: Number(this.getFloat(res.data.status.balance / 1e6, 6))
+        })
+
+      })
+    fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          balance3: Number(this.getFloat(res.balance, 8))
+        },()=>{
+            let balancesData = {
+              addCurrencyList1: this.state.addCurrencyList1,
+              balance1: this.state.balance1,
+              balance2: this.state.balance2,
+              balance3: this.state.balance3
+            }
+            window.sessionStorage.setItem('balances', JSON.stringify(balancesData))
+        })
+      });
+    
+  }
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = Number(number).toFixed(n); //补足位数
+    return number;
   }
   // stopPropagation(e) {
   //   e.nativeEvent.stopImmediatePropagation();
@@ -54,9 +124,7 @@ class Home extends Component {
     this.props.showPolling();
     this.props.showDetails();
   };
-  async componentWillMount() {
-    await this.getNewWalletConnect();
-  }
+  
   async getNewWalletConnect() {
     await this.setState({
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
@@ -68,9 +136,10 @@ class Home extends Component {
     this.props.history.push('/app')
     
   }
+  
   render() {
     let { routes } = this.props;
-    let { active, showMineDialog } = this.state;
+    let { active, showMineDialog, coinsBalance,balance3,balance2,balance1 } = this.state;
     return (
       <div className="home">
         <div onClick={()=>this.logout()}>log out</div>
@@ -152,7 +221,7 @@ class Home extends Component {
                       }}
                     >
                       <label>总资产之和($)</label>
-                      <span>22311.11</span>
+                      <span>{this.getFloat(coinsBalance + balance1 + balance2 + balance3, 6)}</span>
                     </div>
                     <div className="icon">
                       <img src="/img/Combined Shape 2@2x.png" />
@@ -233,6 +302,7 @@ let mapStateToProps = (state) =>{
 }
 let mapDispatchToProps = (dispatch) =>{
   return {
+ 
     getTypes: (type) => {
       dispatch({
         type: "t_type",
