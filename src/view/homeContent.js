@@ -70,7 +70,7 @@ class HomeContent extends Component {
                 balance2: this.state.balance2,
                 balance3: this.state.balance3
               }
-              this.props.getBalances(this.getFloat(this.state.coinsBalance + this.state.balance1 + this.state.balance2 + this.state.balance3, 6))
+                window.sessionStorage.setItem('balances', this.getFloat(this.state.coinsBalance + this.state.balance1 + this.state.balance2 + this.state.balance3, 6))
             })
           }
 
@@ -185,12 +185,6 @@ let mapStateToProps = (state) => {
 };
 let mapDispatchToProps = (dispatch) => {
   return {
-    getBalances:(payload)=>{
-      dispatch({
-        type: "BALANCES",
-        payload: payload
-      });
-    },
     showPolling: (type) => {
       dispatch({
         type: "DISPLAY",

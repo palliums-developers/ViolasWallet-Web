@@ -2,8 +2,7 @@ let initState = {
     display: false,
     display1: false,
     display2: false,
-    detailData:{},
-    balances:0
+    detailData:{}
 }
 
 let ListReducer = (state = initState, action) => {
@@ -11,7 +10,6 @@ let ListReducer = (state = initState, action) => {
     let display1 = state.display;
     let display2 = state.display;
     let detailData = state.detailData;
-    let balances = state.balances;
     console.log(action.payload)
     switch (action.type) {
         case 'DISPLAY':
@@ -20,9 +18,6 @@ let ListReducer = (state = initState, action) => {
             return { display1: action.payload };
         case 'DISPLAY2':
             return { display2: action.payload.display2, detailData: action.payload.detailData };
-        
-        case 'BALANCES':
-            return { balances: action.payload}
         default:
             return state;
     }

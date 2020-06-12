@@ -157,7 +157,7 @@ class Home extends Component {
                       }}
                     >
                       <label>总资产之和($)</label>
-                      <span>{this.props.balances}</span>
+                      <span>{window.sessionStorage.getItem('balances')&&window.sessionStorage.getItem('balances')}</span>
                     </div>
                     <div className="icon">
                       <img src="/img/Combined Shape 2@2x.png" />
