@@ -20,25 +20,62 @@ class HomeContent extends Component {
     componentDidMount(){
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-        addCurrencyList1: JSON.parse(window.sessionStorage.getItem('balances')).addCurrencyList1,
-        balance1: JSON.parse(window.sessionStorage.getItem('balances')).balance1,
-        balance2: JSON.parse(window.sessionStorage.getItem('balances')).balance2,
-        balance3: JSON.parse(window.sessionStorage.getItem('balances')).balance3
-      },()=>{
+      }, () => {
         this.getBalance()
-          
-      });
-    }
 
+      });
+      
+    }
     getBalance = () => {
-      let {addCurrencyList1} = this.state;
-      let amount = 0;
-      for (let i = 0; i < addCurrencyList1.length; i++) {
-        amount += Number(this.getFloat(addCurrencyList1[i].balance / 1e6, 6))
-      }
-      this.setState({
-        coinsBalance: amount
-      })
+      let { addCurrencyList, addCurrencyList1 } = this.state;
+      fetch(url + "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+        .then(res => {
+          if (res.data) {
+            this.setState({
+              balance1: Number(this.getFloat(res.data.status.balance / 1e6, 6)),
+              addCurrencyList1: res.data.status.module_balande
+            }, () => {
+
+              let amount = 0;
+              for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+                amount += Number(this.getFloat(this.state.addCurrencyList1[i].balance / 1e6, 6))
+              }
+
+              this.setState({
+                coinsBalance: amount
+              })
+            })
+          }
+
+        })
+
+      fetch(url + "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+        .then(res => {
+          if (res.data) {
+            this.setState({
+              balance2: Number(this.getFloat(res.data.status.balance / 1e6, 6))
+            })
+          }
+        })
+      fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
+        .then((res) => res.json())
+        .then((res) => {
+          if (res) {
+            this.setState({
+              balance3: Number(this.getFloat(res.balance, 8))
+            }, () => {
+              let balancesData = {
+                coinsBalance: this.state.coinsBalance,
+                balance1: this.state.balance1,
+                balance2: this.state.balance2,
+                balance3: this.state.balance3
+              }
+              this.props.getBalances(this.getFloat(this.state.coinsBalance + this.state.balance1 + this.state.balance2 + this.state.balance3, 6))
+            })
+          }
+
+        });
+
     }
     getFloat(number, n) {
       n = n ? parseInt(n) : 0;
@@ -148,6 +185,12 @@ let mapStateToProps = (state) => {
 };
 let mapDispatchToProps = (dispatch) => {
   return {
+    getBalances:(payload)=>{
+      dispatch({
+        type: "BALANCES",
+        payload: payload
+      });
+    },
     showPolling: (type) => {
       dispatch({
         type: "DISPLAY",

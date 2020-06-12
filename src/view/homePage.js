@@ -13,7 +13,6 @@ class HomePage extends Component {
     }
     componentDidMount(){
       
-      // console.log(this.props.visible)
     }
     onClose = () => {
       this.props.showPolling();
