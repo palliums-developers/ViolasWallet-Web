@@ -73,6 +73,7 @@ class Wallet extends React.Component {
                 throw error;
             }
         })
+        walletConnector.killSession();
     }
     checkNotificationPermission() {
         if ('Notification' in window) {

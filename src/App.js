@@ -24,6 +24,7 @@ class App extends React.Component {
       address: '',
       value: 0,
       message: '',
+      gasCurrencyCode: 'LBR',
     }
     this.QRCode = this.QRCode.bind(this);
     this.getAccount = this.getAccount.bind(this);
@@ -38,6 +39,8 @@ class App extends React.Component {
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
+    await this.setState({ violas_address: sessionStorage.getItem('violas_address') ? sessionStorage.getItem('violas_address') : '' });
+    console.log('current violas address is ', this.state.violas_address);
   }
   async getNewWalletConnect() {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
@@ -87,7 +90,8 @@ class App extends React.Component {
       console.log('get account ', res);
       for (let i of res) {
         if (i.coinType === 'violas') {
-          await this.setState({ violas_address: i.address })
+          await sessionStorage.setItem('violas_address', i.address);
+          await this.setState({ violas_address: i.address });
           console.log(this.state.violas_address)
         }
       }
@@ -106,6 +110,7 @@ class App extends React.Component {
     // }).catch(err => {
     //   console.log(err)
     // })
+    console.log('Please confirm current violas address is ', this.state.violas_address);
     const tx = {
       from: this.state.violas_address,
       // from: this.state.from,
@@ -131,7 +136,8 @@ class App extends React.Component {
       },
       // maxGasAmount: 400000,
       // gasUnitPrice: 0,
-      // sequenceNumber: seq
+      // sequenceNumber: seq,
+      gasCurrencyCode: this.state.currencyCode,
     }
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
@@ -140,6 +146,7 @@ class App extends React.Component {
     })
   }
   async signTransaction() {
+    console.log('Please confirm current violas address is ', this.state.violas_address);
     this.state.walletConnector.signTransaction({ address: this.state.violas_address, message: this.state.message }).then(res => {
       console.log('sign transaction ', res);
     }).catch(err => {
@@ -149,6 +156,7 @@ class App extends React.Component {
   async logout() {
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
+    await sessionStorage.setItem('violas_address', '');
   }
   checkNotificationPermission() {
     if ('Notification' in window) {
@@ -204,6 +212,9 @@ class App extends React.Component {
       case 'msg':
         await this.setState({ message: e.target.value });
         break;
+      case 'gasCurrencyCode':
+        await this.setState({ gasCurrencyCode: e.target.value });
+        break;
     }
   }
   render() {
@@ -213,16 +224,21 @@ class App extends React.Component {
           <button onClick={this.QRCode}>QRCode</button>
           <button onClick={this.showUri}>show URI</button>
           {/* <button onClick={this.getAccount}>get accounts</button> */}
-          <div className='tx'>
-            {/* <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p> */}
-            {/* <p>Code: <input type="text" onChange={this.handelChange.bind(this, 'code')} /></p> */}
-            {/* <p>tyArgs: <input type="text" onChange={this.handelChange.bind(this, 'tyArgs')} /></p> */}
-            <p>Address: <input type="text" onChange={this.handelChange.bind(this, 'address')} /></p>
-            <p>Value: <input type="text" onChange={this.handelChange.bind(this, 'value')} /></p>
-            <p>Message: <input type="text" onChange={this.handelChange.bind(this, 'msg')} /></p>
+          <div className='boxs'>
+            <div className='tx'>
+              {/* <p>From: <input type="text" onChange={this.handelChange.bind(this, 'from')} /></p> */}
+              {/* <p>Code: <input type="text" onChange={this.handelChange.bind(this, 'code')} /></p> */}
+              {/* <p>tyArgs: <input type="text" onChange={this.handelChange.bind(this, 'tyArgs')} /></p> */}
+              <p>Address: <input type="text" onChange={this.handelChange.bind(this, 'address')} /></p>
+              <p>Value: <input type="text" onChange={this.handelChange.bind(this, 'value')} /></p>
+              <p>gasCurrencyCode: <input type="text" onChange={this.handelChange.bind(this, 'gasCurrencyCode')} /></p>
+              <button onClick={this.sendTransaction}>send transaction</button>
+            </div>
+            <div className='tx'>
+              <p>Message: <input type="text" onChange={this.handelChange.bind(this, 'msg')} /></p>
+              <button onClick={this.signTransaction}>sign transaction</button>
+            </div>
           </div>
-          <button onClick={this.sendTransaction}>send transaction</button>
-          <button onClick={this.signTransaction}>sign transaction</button>
           <button onClick={this.logout}>log out</button>
           <button onClick={this.showNotification}>Show Notification</button>
         </header>
