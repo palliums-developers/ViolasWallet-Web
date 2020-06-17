@@ -5,6 +5,8 @@ import HomePage from "../view/homePage";
 import ChangeContent from "../view/changeContent"
 import Transfer from "../view/apply/transfer";
 import GetMoney from "../view/apply/getMoney";
+import Exchange from '../view/market/exChange';
+import CashPooling from '../view/market/cashPooling';
 
 let routes = [
     //首页
@@ -27,7 +29,21 @@ let routes = [
                     },
                     {
                         path: '/homepage/home/changeContent',
-                        component: ChangeContent
+                        component: ChangeContent,
+                        children: [
+                            {
+                                path: '/homepage/home/changeContent/exchange',
+                                component: Exchange
+                            },
+                            {
+                                path: '/homepage/home/changeContent/cashPooling',
+                                component: CashPooling
+                            },
+                            {
+                                path: '/homepage/home/changeContent',
+                                redirect: '/homepage/home/changeContent/exchange'
+                            },
+                        ]
                     },
                     {
                         path: '/homepage/home/transfer',
