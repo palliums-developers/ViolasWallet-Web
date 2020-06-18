@@ -75,7 +75,7 @@ class Home extends Component {
   render() {
     let { routes } = this.props;
     let { active, showMineDialog } = this.state;
-    
+    console.log(this.props.display)
     return (
       <div className="home">
         <div onClick={()=>this.logout()}>log out</div>

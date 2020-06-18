@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from 'react-router-dom'
 import RouterView from '../router/routerView'
+import './market/market.scss'
 let url = "http://52.27.228.84:4000"
 
 class ChangeContent extends Component {
