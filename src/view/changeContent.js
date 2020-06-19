@@ -31,8 +31,10 @@ class ChangeContent extends Component {
         return (
             <div className="changecontent">
                 <div className="leftContent">
-                    <NavLink activeStyle={{ background: 'rgba(75, 63, 152,.06)', color: 'rgba(80, 27, 162, 1)' }} to='/homepage/home/changeContent/exchange'><i className={name == 'exchange' ? 'ex' : 'noEx'}></i>Exchange</NavLink>
-                    <NavLink activeStyle={{ background: 'rgba(75, 63, 152,.06)', color: 'rgba(80, 27, 162, 1)' }} to='/homepage/home/changeContent/cashPooling'><i className={name == 'cashPooling' ? 'pool' : 'noPool'}></i>Cash Pooling</NavLink>
+                   <div className="borderContent">
+                        <NavLink activeStyle={{ background: 'rgba(112, 56, 253, 1)', color: '#FFF' }} to='/homepage/home/changeContent/exchange'>兑换</NavLink>
+                        <NavLink activeStyle={{ background: 'rgba(112, 56, 253, 1)', color: '#FFF' }} to='/homepage/home/changeContent/cashPooling'>资金池</NavLink>
+                   </div>
                     {/* {
                         this.state.types.map((v, i) => {
                             return <NavLink key={i} activeStyle={{ background: 'rgba(75, 63, 152,.06)', color:'rgba(80, 27, 162, 1)'}} to={v.path}><i></i>{v.name}</NavLink>

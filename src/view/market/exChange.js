@@ -114,7 +114,6 @@ class ExChange extends Component {
             <div className="exchange">
                <div className="exchangeContent">
                     <div className="exchangeContents">
-                      <h4>Exchange</h4>
                       <div className="form">
                         <p>gas：0.1000%</p>
                         <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>

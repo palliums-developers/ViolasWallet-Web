@@ -8,6 +8,10 @@ import { Drawer } from "antd";
 import AddCurrency from "./components/addCurrency";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
+import ExchangeDialog from './market/exchangeDialog'
+import ExchangeDetail from './market/exchangeDetail'
+import MyPoolDialog from './market/myPoolDialog'
+import PoolingDetail from './market/poolingDetail'
 import WalletConnect from "../packages/browser/src/index";
 let url = "https://api.violas.io";
 // let url1 = "http://52.27.228.84:4000"
@@ -78,7 +82,7 @@ class Home extends Component {
     console.log(this.props.display)
     return (
       <div className="home">
-        <div onClick={()=>this.logout()}>log out</div>
+        <div onClick={()=>this.logout()} style={{position:'absolute'}}>log out</div>
         <div className="header">
           <div
             className="logo"
@@ -86,116 +90,128 @@ class Home extends Component {
               this.props.history.push("/homepage/home");
             }}
           >
-            <img src="/img/logo.png" />
+            <img src="/img/logo1.png" />
           </div>
-          <div className="navlist">
-            {
-              <div className="route">
-                <span
-                  onClick={() => {
-                    this.props.history.push("/homepage/home/homeContent");
-                    this.props.showDetails()
-                    this.props.showPolling()
-                  }}
-                  className={
-                    active == "homeContent"
-                      ? "active"
-                      : active == "transfer"
+          {
+            <div className="route">
+              <span
+                onClick={() => {
+                  this.props.history.push("/homepage/home/homeContent");
+                  this.props.showDetails()
+                  this.props.showPolling()
+                }}
+                className={
+                  active == "homeContent"
+                    ? "active"
+                    : active == "transfer"
                       ? "active"
                       : active == "getMoney"
-                      ? "active"
-                      : null
-                  }
-                >
-                  <i
-                    className={
-                      active == "homeContent"
-                        ? "wal"
-                        : active == "transfer"
-                        ? "wal"
-                        : active == "getMoney"
-                        ? "wal"
-                        : "noWal"
-                    }
-                  ></i>
-                  <label>Wallet</label>
-                </span>
-                <span
-                  onClick={() => {
-                    this.props.history.push("/homepage/home/changeContent");
-                    this.props.showDetails()
-                    this.props.showPolling()
-                  }}
-                  className={active == "changeContent" ? "active" : null}
-                >
-                  <i
-                    className={active == "changeContent" ? "mar" : "noMar"}
-                  ></i>
-                  <label>Market</label>
-                </span>
-              </div>
-            }
-            <div className="mine">
-              {showMineDialog ? (
-                <img
-                  onClick={(e) => this.getMineDialog(e)}
-                  src="/img/wode备份 3@2x.png"
-                />
-              ) : (
-                <img
-                  onClick={(e) => this.getMineDialog(e)}
-                  src="/img/wode备份 2@2x.png"
-                />
-              )}
-              {showMineDialog ? (
-                <div className="mineList">
-                  <div className="balanceList">
-                    <div
-                      className="balance"
-                      onClick={() => {
-                        this.props.history.push("/homepage/home");
-                      }}
-                    >
-                      <label>总资产之和($)</label>
-                      <span>{window.sessionStorage.getItem('balances')&&window.sessionStorage.getItem('balances')}</span>
-                    </div>
-                    <div className="icon">
-                      <img src="/img/Combined Shape 2@2x.png" />
-                    </div>
-                  </div>
-                  <div className="btns">
-                    <dl onClick={() => {
-                      this.props.history.push({
-                        pathname: '/homepage/home/transfer'
-                      })
-                      this.props.showDetails()
-                      this.props.showPolling()
-                    }} className={active == 'transfer'?'act':null}>
-                      <dt>
-                        <img src="/img/编组 13备份 4@2x.png" />
-                      </dt>
-                      <dd>Transfer</dd>
-                    </dl>
-                    <dl onClick={() => {
-                      this.props.history.push({
-                        pathname: '/homepage/home/getMoney'
-                      })
-                      this.props.showDetails()
-                      this.props.showPolling()
-                    }} className={active == 'getMoney' ? 'act' : null}>
-                      <dt>
-                        <img src="/img/编组 13备份 5@2x.png" />
-                      </dt>
-                      <dd>Receive</dd>
-                    </dl>
-                  </div>
-                </div>
-              ) : null}
+                        ? "active"
+                        : null
+                }
+              >
+                <i
+                  className="noWal"
+                  // {
+                  //   active == "homeContent"
+                  //     ? "wal"
+                  //     : active == "transfer"
+                  //       ? "wal"
+                  //       : active == "getMoney"
+                  //         ? "wal"
+                  //         : "l"
+                  // }
+                ></i>
+                <label>Wallet</label>
+              </span>
+              <span
+                onClick={() => {
+                  this.props.history.push("/homepage/home/changeContent");
+                  this.props.showDetails()
+                  this.props.showPolling()
+                }}
+                className={active == "changeContent" ? "active" : null}
+              >
+                <i
+                  className="noMar"
+                  // className={active == "changeContent" ? "mar" : "noMar"}
+                ></i>
+                <label>Market</label>
+              </span>
             </div>
-          </div>
+          }
+          {/* <div className="navlist"> */}
+            
+            {/*  */}
+          {/* </div> */}
         </div>
 
-        <RouterView routes={routes}></RouterView>
+        <div className="box">
+          <div className="boxHead">
+            <div className="boxHeadList">
+              <div className="mine">
+                {showMineDialog ? (
+                  <img
+                    onClick={(e) => this.getMineDialog(e)}
+                    src="/img/wode备份 3@2x.png"
+                  />
+                ) : (
+                    <img
+                      onClick={(e) => this.getMineDialog(e)}
+                      src="/img/wode备份 2@2x.png"
+                    />
+                  )}
+                {showMineDialog ? (
+                  <div className="mineList">
+                    <div className="balanceList">
+                      <div
+                        className="balance"
+                        onClick={() => {
+                          this.props.history.push("/homepage/home");
+                        }}
+                      >
+                        <label>总资产之和($)</label>
+                        <span>{window.sessionStorage.getItem('balances') && window.sessionStorage.getItem('balances')}</span>
+                      </div>
+                      <div className="icon">
+                        <img src="/img/Combined Shape 2@2x.png" />
+                      </div>
+                    </div>
+                    <div className="btns">
+                      <dl onClick={() => {
+                        this.props.history.push({
+                          pathname: '/homepage/home/transfer'
+                        })
+                        this.props.showDetails()
+                        this.props.showPolling()
+                      }} className={active == 'transfer' ? 'act' : null}>
+                        <dt>
+                          <img src="/img/编组 13备份 4@2x.png" />
+                        </dt>
+                        <dd>Transfer</dd>
+                      </dl>
+                      <dl onClick={() => {
+                        this.props.history.push({
+                          pathname: '/homepage/home/getMoney'
+                        })
+                        this.props.showDetails()
+                        this.props.showPolling()
+                      }} className={active == 'getMoney' ? 'act' : null}>
+                        <dt>
+                          <img src="/img/编组 13备份 5@2x.png" />
+                        </dt>
+                        <dd>Receive</dd>
+                      </dl>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+              <span>下载</span>
+            </div>
+            
+          </div>
+          <RouterView routes={routes}></RouterView>
+        </div>
         {/* 添加币种 */}
         <Drawer
           // title="Basic Drawer"
@@ -228,6 +244,38 @@ class Home extends Component {
           mask={false}
         >
           <Details></Details>
+        </Drawer>
+        {/* 兑换详情 */}
+        <Drawer
+          // title="Basic Drawer"
+          placement="right"
+          closable={false}
+          onClose={this.onClose}
+          visible={this.props.visible}
+          mask={false}
+        >
+          <ExchangeDetail></ExchangeDetail>
+        </Drawer>
+        {/* 我的资金池 */}
+        <Drawer
+          // title="Basic Drawer"
+          placement="right"
+          closable={false}
+          // onClose={this.onClose}
+          mask={false}
+          visible={this.props.showpooling}
+        >
+          <MyPoolDialog></MyPoolDialog>
+        </Drawer>
+        {/* 资金池详情 */}
+        <Drawer
+          // title="Basic Drawer"
+          placement="right"
+          closable={false}
+          visible={this.props.visible1}
+          mask={false}
+        >
+          <PoolingDetail></PoolingDetail>
         </Drawer>
       </div>
     );
