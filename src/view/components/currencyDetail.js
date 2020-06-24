@@ -4,8 +4,8 @@ import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
 // import { withRouter } from "react-router-dom";
 import '../app.scss'
-let url = 'https://api.violas.io'
-let url1 = "http://52.27.228.84:4000"
+// let url = 'https://api.violas.io'
+let url = "http://52.27.228.84:4000"
 
 class CurrencyDetail extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class CurrencyDetail extends Component {
                 }
             ],
             navType:'all',
-            address: '0000000000000000000000000a550c18',
+            address: '7f4644ae2b51b65bd3c9d414aa853407',
             dataList:[],
             total:0,
             page:0
@@ -37,6 +37,9 @@ class CurrencyDetail extends Component {
         this.getNavData()
     }
     getSubStr(str){
+        if(str == null){
+         return 'null'
+        }
         var subStr1 = str && str.substr(0, 10);
         var subStr2 = str && str.substr(str.length - 5, 5);
         var subStr = subStr1 + "..." + subStr2;
@@ -44,36 +47,34 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
-        fetch(url + '/explorer/violas/address/0000000000000000000000000a550c18?offset='+this.state.page+'&limit=5').then(res => res.json()).then(res => {
-            if (this.state.navType == 'all') {
+        if (this.state.navType == 'all') {
+            fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407').then(res => res.json()).then(res => {
                 this.setState({
-                    total: res.data.status.received_tx_count + res.data.status.sent_tx_count,
-                    dataList: res.data.transactions
+                    total: res.data.length,
+                    dataList: res.data
                 })
-            } else if (this.state.navType == 'into') {
-                let data = res.data.transactions.filter((v) => {
-                    console.log(v.receiver.slice(8,20))
-                    return v.receiver == this.state.address
-                })
+            })
+        } else if (this.state.navType == 'into') {
+            fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407&&flows=1').then(res => res.json()).then(res => {
                 this.setState({
-                    dataList:data
+                    total: res.data.length,
+                    dataList: res.data
                 })
+            })
             } else if (this.state.navType == 'out') {
-                let data = res.data.transactions.filter((v) => {
-                    return v.sender == this.state.address
-                })
-                this.setState({
-                    dataList: data
+                fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407&&flows=0').then(res => res.json()).then(res => {
+                    this.setState({
+                        total: res.data.length,
+                        dataList: res.data
+                    })
                 })
             }
-
-        })
+        
     }
     showDetails = () => {
         this.props.showDetails();
     };
     onChange = (page,pageSize) => {
-        console.log(page, pageSize);
         this.setState({
             page: page,
         },()=>{
@@ -81,7 +82,6 @@ class CurrencyDetail extends Component {
         });
     };
     curDataFun = (val) => {
-        console.log(val)
         this.props.showDetails();
         this.props.showEveryDetail({
             display2:true,
@@ -119,18 +119,18 @@ class CurrencyDetail extends Component {
                                 return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
                                     <i>
                                      {
-                                            v.type.slice(0, 7) == 'PUBLISH' ? <img src="/img/编组 82@2x.png" /> : v.sender == this.state.address ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == this.state.address ? <img src="/img/编组 13备份 2@2x.png" /> : null
+                                            v.type == 17 ? <img src="/img/编组 82@2x.png" /> : v.sender == this.state.address ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == this.state.address ? <img src="/img/编组 13备份 2@2x.png" /> : null
                                       }</i>
                                     <div className="listCenter">
                                         <p>
                                             {
-                                                v.type.slice(0, 7) == 'PUBLISH' ? 'Null' : v.sender == this.state.address ? this.getSubStr(v.receiver) : v.receiver == this.state.address ? this.getSubStr(v.sender) : null
+                                                v.type == 17 ? 'Null' : v.sender == this.state.address ? this.getSubStr(v.receiver) : v.receiver == this.state.address ? this.getSubStr(v.sender) : null
                                             }
                                         </p>
                                         <p>{timeStamp2String(v.expiration_time+'000')}</p>
                                     </div>
                                     <div className="listResult">
-                                        <p className={v.type.slice(0, 7) == 'PUBLISH' ? 'org' : v.receiver == this.state.address ? 'org':'green'}>{v.amount / 1e6}</p>
+                                        <p className={v.type == 17 ? 'org' : v.receiver == this.state.address ? 'org':'green'}>{v.amount / 1e6}</p>
                                         {/* <p className="org">交易中</p> */}
                                     </div>
                                 </div>

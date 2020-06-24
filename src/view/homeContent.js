@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./app.scss";
-let url = "https://api.violas.io";
-// let url1 = "http://52.27.228.84:4000"
+// let url = "https://api.violas.io";
+let url = "http://52.27.228.84:4000"
 let url1 = "https://tbtc1.trezor.io"
 class HomeContent extends Component {
     constructor(){
@@ -14,7 +14,11 @@ class HomeContent extends Component {
         balance1: 0,
         balance2: 0,
         balance3: 0,
-        visible:true
+        visible:true,
+        checkData:[],
+        balance:0,
+        arr1:[],
+        arr2:[]
       }
     }
     componentDidMount(){
@@ -22,41 +26,40 @@ class HomeContent extends Component {
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
       }, () => {
         this.getBalance()
-
+          this.getBalances()
       });
       
     }
     getBalance = () => {
       let { addCurrencyList, addCurrencyList1 } = this.state;
-      fetch(url + "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
-        .then(res => {
-          if (res.data) {
-            this.setState({
-              balance1: Number(this.getFloat(res.data.status.balance / 1e6, 6)),
-              addCurrencyList1: res.data.status.module_balande
-            }, () => {
+      // fetch(url + "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+      //   .then(res => {
+      //     if (res.data) {
+      //       this.setState({
+      //         balance1: Number(this.getFloat(res.data.status.balance / 1e6, 6))
+      //       }, () => {
 
-              let amount = 0;
-              for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
-                amount += Number(this.getFloat(this.state.addCurrencyList1[i].balance / 1e6, 6))
-              }
+      //         let amount = 0;
+      //         for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+      //           amount += Number(this.getFloat(this.state.addCurrencyList1[i].balance / 1e6, 6))
+      //         }
 
-              this.setState({
-                coinsBalance: amount
-              })
-            })
-          }
+      //         this.setState({
+      //           coinsBalance: amount
+      //         })
+      //       })
+      //     }
 
-        })
+      //   })
 
-      fetch(url + "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
-        .then(res => {
-          if (res.data) {
-            this.setState({
-              balance2: Number(this.getFloat(res.data.status.balance / 1e6, 6))
-            })
-          }
-        })
+      // fetch(url + "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+      //   .then(res => {
+      //     if (res.data) {
+      //       this.setState({
+      //         balance2: Number(this.getFloat(res.data.status.balance / 1e6, 6))
+      //       })
+      //     }
+      //   })
       fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
         .then((res) => res.json())
         .then((res) => {
@@ -86,8 +89,38 @@ class HomeContent extends Component {
       number = Number(number).toFixed(n); //补足位数
       return number;
     }
+     getBalances(){
+        fetch(url + "/1.0/violas/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+           .then(res => {
+             this.setState({
+               arr1:res.data.balances
+             })
+           })
+        fetch(url + "/1.0/libra/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+          .then(res => {
+            this.setState({
+              arr2: res.data.balances
+            }, () => {
+              let arr = this.state.arr1.concat(this.state.arr2)
+              this.setState({
+                checkData: arr
+              },()=>{
+                  let amount = 0;
+                  for (let i = 0; i < this.state.checkData.length; i++) {
+                    amount += Number(this.getFloat(this.state.checkData[i].balance / 1e6, 6))
+                  }
+
+                  this.setState({
+                    coinsBalance: amount
+                  })
+              })
+            })
+          })
+      
+    }
+    
     render(){
-      let { addCurrencyList, coinsBalance, visible,balance1, balance2, balance3, addCurrencyList1 } = this.state;
+      let { addCurrencyList, coinsBalance, visible, balance1, balance2, balance3, checkData, balance } = this.state;
         return (
             <div className="content">
               <div className="contentWrap">
@@ -148,7 +181,7 @@ class HomeContent extends Component {
                   // }
                 }}><img src="/img/编组 18@2x.png"/></i></p>
                   <div className="assetLists">
-                    {
+                    {/* {
                       addCurrencyList.map((v,i)=>{
                         return <div className="assetListsEvery" key={i} onClick={() => {
                           this.props.showDetails(!this.props.display1);
@@ -159,18 +192,18 @@ class HomeContent extends Component {
                           <div className="rightAsset"><span>{v.coinType == 'violas' ? balance1 : v.coinType == 'libra' ? balance2 : v.coinType == 'bitcoin' ? balance3 : null}</span><label>≈$0.00</label></div>
                         </div>
                       })
-                    }
+                    }*/}
                     {
-                      addCurrencyList1.map((v, i) => {
+                    checkData.map((v, i) => {
                         return <div className="assetListsEvery" key={i} onClick={() => {
                           this.props.showDetails(!this.props.display1);
                         }}>
-                          <div className="leftAsset"><i><img src="/img/编组 38@2x.png" /></i><label>{v.name}</label></div>
+                          <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{this.getFloat(v.balance/1e6,6)}</span><label>≈$0.00</label></div>
                         </div>
                       })
                     }  
-                    
+                     
                   </div>
                 </div>
               </div>
