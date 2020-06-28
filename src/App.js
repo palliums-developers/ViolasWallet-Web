@@ -16,12 +16,12 @@ class App extends React.Component {
       // code: 'a11ceb0b010007014600000004000000034a0000000c000000045600000002000000055800000009000000076100000029000000068a00000010000000099a0000001200000000000001010200010101000300010101000203050a020300010900063c53454c463e0c4c696272614163636f756e740f7061795f66726f6d5f73656e646572046d61696e00000000000000000000000000000000010000ffff030005000a000b010a023e0002',
       // code: 'a11ceb0b010007014600000002000000034800000006000000044e0000000200000005500000000d000000075d000000240000000881000000100000000991000000130000000000000100010101000205060c05030a020a02000109000c4c696272614163636f756e74167061795f66726f6d5f776974685f6d65746164617461000000000000000000000000000000000101000107000b000a010a020b030b04380002',
       code: 'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
+      publish_code:'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
       walletConnector: {},
       violas_address: '',
       libra_address: '',
       BTC_address: '',
       from: '',
-      code: '',
       tyArgs: '0700000000000000000000000000000001034c4252034c425200',
       address: '',
       value: 0,
@@ -44,6 +44,7 @@ class App extends React.Component {
     this.string2Byte = this.string2Byte.bind(this);
     this.bytes2StrHex = this.bytes2StrHex.bind(this);
     this.getTyArgs=this.getTyArgs.bind(this);
+    this.sendPublish=this.sendPublish.bind(this);
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
@@ -129,9 +130,9 @@ class App extends React.Component {
       name_length='0'+name_length;
     }
     let _name_hex=this.bytes2StrHex(this.string2Byte(_name));
-    console.log(_name_hex);
     let result=prefix+address+name_length+_name_hex+name_length+_name_hex+suffix;
-    console.log(result);
+    // console.log(_name_hex);
+    // console.log(result);
     this.setState({tyArgs:result});
   }
   async sendTransaction() {
@@ -174,10 +175,56 @@ class App extends React.Component {
       // sequenceNumber: seq,
       gasCurrencyCode: this.state.currencyCode,
     }
+    // console.log(JSON.stringify(tx));
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
     }).catch(err => {
       console.log('send transaction ', err);
+    })
+  }
+  async sendPublish() {
+    // const seq = await this.getSeqNumb(this.state.from).then(res => {
+    //   return res
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+    const tx = {
+      from: this.state.violas_address,
+      payload: {
+        code: this.state.publish_code,
+        tyArgs: [
+          // '0600000000000000000000000000000000034c4252015400'
+          this.state.tyArgs
+        ],
+        args: [
+          // {
+          //   type: 'Address',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Number',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Bytes',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Bytes',
+          //   value: ''
+          // },
+        ]
+      },
+      // maxGasAmount: 400000,
+      // gasUnitPrice: 0,
+      // sequenceNumber: seq,
+      gasCurrencyCode: this.state.currencyCode,
+    }
+    console.log(JSON.stringify(tx));
+    this.state.walletConnector.sendTransaction(tx).then(res => {
+      console.log('send publish ', res);
+    }).catch(err => {
+      console.log('send publish ', err);
     })
   }
   async signTransaction() {
@@ -310,6 +357,17 @@ class App extends React.Component {
           <button onClick={this.showUri}>show URI</button>
           {/* <button onClick={this.getAccount}>get accounts</button> */}
           <div className='boxs'>
+            <div className='tx'>
+            <select value={this.state.currency} onChange={this.handleChange.bind(this, 'currency')}>
+                {
+                  this.state.currencies && this.state.currencies.map((v, i) => {
+                    return <option value={v.name}>{v.name}</option>
+                  })
+                }
+              </select>
+              <br />
+              <button onClick={this.sendPublish}>send publish</button>
+            </div>
             <div className='tx'>
               {/* <p>From: <input type="text" onChange={this.handleChange.bind(this, 'from')} /></p> */}
               {/* <p>Code: <input type="text" onChange={this.handleChange.bind(this, 'code')} /></p> */}
