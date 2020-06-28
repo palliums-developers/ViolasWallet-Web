@@ -25,8 +25,7 @@ class HomeContent extends Component {
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
       }, () => {
-        this.getBalance()
-          this.getBalances()
+        this.getBalances()
       });
       
     }
@@ -60,24 +59,27 @@ class HomeContent extends Component {
       //       })
       //     }
       //   })
-      fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
-        .then((res) => res.json())
-        .then((res) => {
-          if (res) {
-            this.setState({
-              balance3: Number(this.getFloat(res.balance, 8))
-            }, () => {
-              let balancesData = {
-                coinsBalance: this.state.coinsBalance,
-                balance1: this.state.balance1,
-                balance2: this.state.balance2,
-                balance3: this.state.balance3
-              }
-                window.sessionStorage.setItem('balances', this.getFloat(this.state.coinsBalance + this.state.balance1 + this.state.balance2 + this.state.balance3, 6))
-            })
-          }
+      window.sessionStorage.setItem('balances', this.getFloat(this.state.coinsBalance, 6))
+      // fetch(url1 + "/1.0/btc/balance?addr=tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
+      //   .then(res => res.json())
+      //   .then(res => {
+      //     console.log(res)
+      //     if (res) {
+      //       this.setState({
+      //         balance3: Number(this.getFloat(res.balance, 8))
+      //       }, () => {
+      //         let balancesData = {
+      //           coinsBalance: this.state.coinsBalance,
+      //           // balance1: this.state.balance1,
+      //           // balance2: this.state.balance2,
+      //           // balance3: this.state.balance3
+      //         }
+      //           console.log(balancesData)
+      //          
+      //       })
+      //     }
 
-        });
+      //   });
 
     }
     getFloat(number, n) {
@@ -102,6 +104,9 @@ class HomeContent extends Component {
               arr2: res.data.balances
             }, () => {
               let arr = this.state.arr1.concat(this.state.arr2)
+              arr.sort((a,b)=>{
+                return b.balance - a.balance
+              })
               this.setState({
                 checkData: arr
               },()=>{
@@ -112,6 +117,8 @@ class HomeContent extends Component {
 
                   this.setState({
                     coinsBalance: amount
+                  },()=>{
+                      this.getBalance()
                   })
               })
             })
@@ -181,6 +188,12 @@ class HomeContent extends Component {
                   // }
                 }}><img src="/img/编组 18@2x.png"/></i></p>
                   <div className="assetLists">
+                    <div className="assetListsEvery" onClick={() => {
+                      this.props.showDetails(!this.props.display1);
+                    }}>
+                    <div className="leftAsset"><i><img src="/img/BTC复制 2@2x.png" /></i><label>BTC</label></div>
+                      <div className="rightAsset"><span>{0}</span><label>≈$0.00</label></div>
+                    </div>
                     {/* {
                       addCurrencyList.map((v,i)=>{
                         return <div className="assetListsEvery" key={i} onClick={() => {

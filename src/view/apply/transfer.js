@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 // import {withRouter} from 'react-router-dom'
-// let url = "http://52.27.228.84:4000"
+let url2 = "http://52.27.228.84:4000"
 let url1 = "https://tbtc1.trezor.io"
 let url = "https://api.violas.io"
 let WAValidator = require('wallet-address-validator');
@@ -18,11 +18,13 @@ class Transfer extends Component {
       getAct: false,
       address: "",
       amount: "",
-      types: ["Violas", "Libra", "Bitcoin"],
-      type: "Violas",
+      types: [],
+      type: "",
       showDealType: false,
       bridge: "https://bridge.walletconnect.org",
       walletConnector: {},
+      getTypeBalance1:0,
+      getTypeBalance2:0
     };
   }
   componentWillMount() {
@@ -43,7 +45,41 @@ class Transfer extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
+    fetch(url2 + "/1.0/violas/currency/published?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+      .then(res => {
+        console.log(res.data.published)
+        this.setState({
+          types: res.data.published,
+          type: res.data.published[0]
+        },()=>{
+            this.getTypesBalance()
+        })
+      })
     this.getTypeBalance()
+  }
+  getTypesBalance(){
+    fetch(url2 + "/1.0/violas/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+    .then(res => {
+      console.log(res.data.balances)
+      for (let i = 0; i < res.data.balances.length;i++){
+        if (this.state.type == res.data.balances[i].name){
+          this.setState({
+            balance: this.getFloat(res.data.balances[i].balance / 1e6, 6)
+          });
+         }
+      }
+      
+    })
+    // fetch(url2 + "/1.0/libra/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+    //   .then(res => {
+    //     for (let i = 0; i < res.data.balances.length; i++) {
+    //       if (this.state.type == res.data.balances[i].name) {
+    //         this.setState({
+    //           balance: this.state.balance+this.getFloat(res.data.balances[i].balance / 1e6, 6)
+    //         });
+    //       }
+    //     }
+    //   })
   }
   getTypeShow = (event) => {
     this.stopPropagation(event);
@@ -58,6 +94,7 @@ class Transfer extends Component {
       showDealType: false,
     },()=>{
         this.getTypeBalance()
+        this.getTypesBalance()
     });
   };
   closeDialog = () => {

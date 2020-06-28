@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import "./app.scss";
-import { localeLowerCase } from "lower-case";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
-import { NavLink } from "react-router-dom";
 import { Drawer } from "antd";
 import AddCurrency from "./components/addCurrency";
 import CurrencyDetail from "./components/currencyDetail";
@@ -79,7 +77,6 @@ class Home extends Component {
   render() {
     let { routes } = this.props;
     let { active, showMineDialog } = this.state;
-    console.log(this.props.display)
     return (
       <div className="home">
         <div onClick={()=>this.logout()} style={{position:'absolute'}}>log out</div>
