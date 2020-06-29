@@ -92,13 +92,13 @@ class HomeContent extends Component {
       return number;
     }
      getBalances(){
-        fetch(url + "/1.0/violas/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+       fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
            .then(res => {
              this.setState({
                arr1:res.data.balances
              })
            })
-        fetch(url + "/1.0/libra/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+       fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
           .then(res => {
             this.setState({
               arr2: res.data.balances
@@ -128,6 +128,7 @@ class HomeContent extends Component {
     
     render(){
       let { addCurrencyList, coinsBalance, visible, balance1, balance2, balance3, checkData, balance } = this.state;
+      // console.log(checkData,'//')
         return (
             <div className="content">
               <div className="contentWrap">
@@ -209,7 +210,10 @@ class HomeContent extends Component {
                     {
                     checkData.map((v, i) => {
                         return <div className="assetListsEvery" key={i} onClick={() => {
-                          this.props.showDetails(!this.props.display1);
+                          this.props.showDetails({
+                            disType: !this.props.display1,
+                            detailAddr:v.address
+                          });
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{this.getFloat(v.balance/1e6,6)}</span><label>≈$0.00</label></div>
@@ -238,9 +242,13 @@ let mapDispatchToProps = (dispatch) => {
       });
     },
     showDetails: (type) => {
+      console.log(type.detailAddr)
       dispatch({
         type: "DISPLAY1",
-        payload: type,
+        payload: {
+          disType:type.disType,
+          detailAddr: type.detailAddr
+        }
       });
     },
   };

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { withRouter } from "react-router-dom";
+import WalletConnect from '../../packages/browser/src/index';
 import '../app.scss'
 // let url = "https://api.violas.io";
 let url = "http://52.27.228.84:4000";
@@ -9,14 +10,25 @@ class AddCurrency extends Component {
   constructor(props) {
     super();
     this.state = {
+      bridge: 'https://bridge.walletconnect.org',
       addCurrencyList:[],
       addCurrencyList1:[],
       arr1:[],
       arr2:[],
       foc:false,
       addList:[],
-      checkData:[]
+      checkData:[],
+      code: 'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
+      publish_code: 'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
+      tyArgs: '0700000000000000000000000000000001034c4252034c425200',
+      walletConnector: {},
     };
+  }
+  async componentWillMount() {
+    await this.getNewWalletConnect();
+  }
+  async getNewWalletConnect() {
+    await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   componentDidMount() {
     this.getBalance()
@@ -57,9 +69,118 @@ class AddCurrency extends Component {
   showPolling = () => {
     this.props.showPolling();
   };
+  string2Byte(str) {
+    var bytes = new Array();
+    var len, c;
+    len = str.length;
+    for (var i = 0; i < len; i++) {
+      c = str.charCodeAt(i);
+      if (c >= 0x010000 && c <= 0x10FFFF) {
+        bytes.push(((c >> 18) & 0x07) | 0xF0);
+        bytes.push(((c >> 12) & 0x3F) | 0x80);
+        bytes.push(((c >> 6) & 0x3F) | 0x80);
+        bytes.push((c & 0x3F) | 0x80);
+      } else if (c >= 0x000800 && c <= 0x00FFFF) {
+        bytes.push(((c >> 12) & 0x0F) | 0xE0);
+        bytes.push(((c >> 6) & 0x3F) | 0x80);
+        bytes.push((c & 0x3F) | 0x80);
+      } else if (c >= 0x000080 && c <= 0x0007FF) {
+        bytes.push(((c >> 6) & 0x1F) | 0xC0);
+        bytes.push((c & 0x3F) | 0x80);
+      } else {
+        bytes.push(c & 0xFF);
+      }
+    }
+    return bytes;
+  }
+  bytes2StrHex(arrBytes) {
+    var str = "";
+    for (var i = 0; i < arrBytes.length; i++) {
+      var tmp;
+      var num = arrBytes[i];
+      if (num < 0) {
+        //此处填坑，当byte因为符合位导致数值为负时候，需要对数据进行处理
+        tmp = (255 + num + 1).toString(16);
+      } else {
+        tmp = num.toString(16);
+      }
+      if (tmp.length == 1) {
+        tmp = "0" + tmp;
+      }
+      if (i > 0) {
+        str += tmp;
+      } else {
+        str += tmp;
+      }
+    }
+    return str;
+  }
+  async getTyArgs(_name,_addr) {
+    let address = '00000000000000000000000000000001';
+    let prefix = '07';
+    let suffix = '00';
+    let name_length = _name.length;
+    if (name_length < 10) {
+      name_length = '0' + name_length;
+    }
+    let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+    let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+    // console.log(_name_hex);
+    // console.log(result);
+    this.setState({ tyArgs: result },async ()=>{
+     
+      await this.sendPublish()
+    });
+  }
+  async sendPublish() {
+    // const seq = await this.getSeqNumb(this.state.from).then(res => {
+    //   return res
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+    const tx = {
+      from: window.localStorage.getItem('address'),
+      payload: {
+        code: this.state.publish_code,
+        tyArgs: [
+          // '0600000000000000000000000000000000034c4252015400'
+          this.state.tyArgs
+        ],
+        args: [
+          // {
+          //   type: 'Address',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Number',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Bytes',
+          //   value: ''
+          // },
+          // {
+          //   type: 'Bytes',
+          //   value: ''
+          // },
+        ]
+      },
+      // maxGasAmount: 400000,
+      // gasUnitPrice: 0,
+      // sequenceNumber: seq,
+      gasCurrencyCode: this.state.gasCurrencyCode,
+    }
+    console.log(tx,'tx.........')
+    this.state.walletConnector.sendTransaction(tx).then(res => {
+      console.log('send publish ', res);
+    }).catch(err => {
+      console.log('send publish ', err);
+    })
+  }
+
   getPublish(){
     
-    fetch(url + "/1.0/violas/currency/published?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
+    fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
       .then(res => {
         let data = this.state.addCurrencyList1.map((v, i) => {
           if (v.checked) {
@@ -78,6 +199,10 @@ class AddCurrency extends Component {
             }
           }
         }
+        
+        data.sort((a, b) => {
+          return b.checked - a.checked
+        })
         this.setState({
           addCurrencyList1:data
         })
@@ -105,7 +230,7 @@ class AddCurrency extends Component {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                 v.checked == false ? <img src="/img/编组 4复制 2@2x.png" /> : <img src="/img/Rectangle 2@2x.png" />
+                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name,v.address)}/> : <img src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             })

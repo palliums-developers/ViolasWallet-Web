@@ -70,6 +70,7 @@ class Home extends Component {
   async logout() {
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
+    window.localStorage.clear()
     this.props.history.push('/app')
     
   }

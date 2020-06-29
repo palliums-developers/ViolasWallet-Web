@@ -22,7 +22,7 @@ let ListReducer = (state = initState, action) => {
         case 'DISPLAY':
             return { display: action.payload };
         case 'DISPLAY1':
-            return { display1: action.payload };
+            return { display1: action.payload.disType };
         case 'DISPLAY2':
             return { display2: action.payload.display2, detailData: action.payload.detailData };
         case 'EXCHANGE':
