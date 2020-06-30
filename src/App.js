@@ -115,7 +115,7 @@ class App extends React.Component {
     });
   }
   async getCurrencies() {
-    axios('http://52.27.228.84:4000/1.0/violas/currency')
+    axios('https://api4.violas.io/1.0/violas/currency')
       .then(async res => {
         // console.log(res.data.data.currencies);
         await this.setState({ currencies: res.data.data.currencies });
