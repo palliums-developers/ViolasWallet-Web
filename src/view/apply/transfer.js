@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 // import {withRouter} from 'react-router-dom'
-let url2 = "http://52.27.228.84:4000"
+let url = "https://api4.violas.io"
 let url1 = "https://tbtc1.trezor.io"
-let url = "https://api.violas.io"
+// let url = "https://api.violas.io"
 let WAValidator = require('wallet-address-validator');
 
 class Transfer extends Component {
@@ -14,7 +14,6 @@ class Transfer extends Component {
     this.state = {
       bridge: 'https://bridge.walletconnect.org',
       code:'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
-      
       tyArgs: '',
       balance: 0,
       title: "",
@@ -22,25 +21,28 @@ class Transfer extends Component {
       getAct: false,
       address: "",
       amount: "",
-      types: [],
       type: "",
       gasCurrencyCode: 'LBR',
       showDealType: false,
       bridge: "https://bridge.walletconnect.org",
       walletConnector: {},
       getTypeBalance1:0,
-      getTypeBalance2:0
+      getTypeBalance2:0,
+      arr1:[],
+      arr2:[],
+      selData:[],
+      addCurrencyList:[],
+      BTCAddress: ''
     };
   }
-  componentWillMount() {
+
+  async componentWillMount() {
     if (this.props.display) {
       this.props.showPolling();
     }
     if (this.props.display1) {
       this.props.showDetails();
     }
-  }
-  async componentWillMount() {
     await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {
@@ -50,41 +52,57 @@ class Transfer extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
-    fetch(url2 + "/1.0/violas/currency/published?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
-      .then(res => {
-        console.log(res.data.published)
-        this.setState({
-          types: res.data.published,
-          type: res.data.published[0]
-        },()=>{
-            this.getTypesBalance()
-        })
+    
+    this.setState({
+      addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+    }, () => {
+      this.state.addCurrencyList.map((v, i) => {
+        if (v.coinType == 'bitcoin') {
+          this.setState({
+            BTCAddress: v.address
+          }, () => {
+              this.getTypesBalance()
+          })
+        }
       })
-    this.getTypeBalance()
+    });
+
   }
   getTypesBalance(){
-    fetch(url2 + "/1.0/violas/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
-    .then(res => {
-      console.log(res.data.balances)
-      for (let i = 0; i < res.data.balances.length;i++){
-        if (this.state.type == res.data.balances[i].name){
-          this.setState({
-            balance: this.getFloat(res.data.balances[i].balance / 1e6, 6)
-          });
-         }
-      }
-      
-    })
-    // fetch(url2 + "/1.0/libra/balance?addr=7f4644ae2b51b65bd3c9d414aa853407").then(res => res.json())
-    //   .then(res => {
-    //     for (let i = 0; i < res.data.balances.length; i++) {
-    //       if (this.state.type == res.data.balances[i].name) {
-    //         this.setState({
-    //           balance: this.state.balance+this.getFloat(res.data.balances[i].balance / 1e6, 6)
-    //         });
-    //       }
-    //     }
-    //   })
+    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+      .then(res => {
+        this.setState({
+         BTCArr: res.data
+        },()=>{
+            fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+              .then(res => {
+                this.setState({
+                  arr1: res.data.balances
+                }, () => {
+                  if (this.state.type == "") {
+                    this.setState({
+                      type: res.data.balances[0].show_name,
+                      balance: res.data.balances[0].balance
+                    })
+                  }
+                })
+              })
+            fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+              .then(res => {
+                this.setState({
+                  arr2: res.data.balances
+                }, () => {
+                  let arr = this.state.arr1.concat(this.state.arr2)
+                  let arrs = arr.concat(this.state.BTCArr)
+                  console.log(arrs)
+                  this.setState({
+                    selData: arrs
+                  })
+                })
+        })
+        
+      })
+      })
   }
   getTypeShow = (event) => {
     this.stopPropagation(event);
@@ -93,12 +111,13 @@ class Transfer extends Component {
     });
   };
 
-  showTypes = (v) => {
+  showTypes = (v,bal) => {
     this.setState({
       type: v,
+      balance:bal,
       showDealType: false,
     },()=>{
-        this.getTypeBalance()
+        // this.getTypeBalance()
         this.getTypesBalance()
     });
   };
@@ -111,46 +130,6 @@ class Transfer extends Component {
     e.nativeEvent.stopImmediatePropagation();
   }
   
-  getTypeBalance = () => {
-    let {type} = this.state;
-    let wallet_info = JSON.parse(window.localStorage.getItem("wallet_info"));
-    for(let i =0;i< wallet_info.length;i++){
-      if (wallet_info[i].coinType == 'violas' && wallet_info[i].coinType == type.toLowerCase()) {
-        fetch(
-          url +
-          "/explorer/violas/address/7f4644ae2b51b65bd3c9d414aa853407"
-          // window.sessionStorage.getItem("wallet_info")[1].address
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            this.setState({
-              balance: this.getFloat(res.data.status.balance / 1e6,6)
-            });
-          });
-      } else if (wallet_info[i].coinType == 'libra' && wallet_info[i].coinType == type.toLowerCase()){
-        fetch(
-          url +
-          "/explorer/libra/address/7f4644ae2b51b65bd3c9d414aa853407" 
-          // window.sessionStorage.getItem("wallet_info")[1].address
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            this.setState({
-              balance: this.getFloat(res.data.status.balance / 1e6, 6)
-            });
-          });
-      } else if (wallet_info[i].coinType == 'bitcoin' && wallet_info[i].coinType == type.toLowerCase()) {
-        fetch(url1 + "/api/address/tb1qp0we5epypgj4acd2c4au58045ruud2pd6heuee")
-          .then((res) => res.json())
-          .then((res) => {
-            this.setState({
-              balance: this.getFloat(Number(res.balance), 8),
-            });
-          });
-      }
-    }
-    
-  };
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
     if (n <= 0) {
@@ -345,15 +324,10 @@ class Transfer extends Component {
     }
   };
   render() {
-    let { title, balance, warning, showDealType, types, type } = this.state;
-    // console.log(type)
+    let { title, balance, warning, showDealType, type, selData } = this.state;
+    // console.log(selData)
     return (
       <div className="transfer">
-        {/* <div className="back" onClick={()=>{
-                window.history.go(-1);
-                // this.props.getType(this.props.match.params.type)
-                
-            }}><i><img src="/img/xiala@2x.png"/></i><label>Violas</label></div> */}
         <div className="transferContent">
           <i
             className="jt"
@@ -397,14 +371,16 @@ class Transfer extends Component {
                 )}
                 {showDealType ? (
                   <div className="dropdown-content1">
-                    {types.map((v, i) => {
+                    {selData.map((v, i) => {
                       return (
                         <span
                           key={i}
-                          className={v == type ? "active" : null}
-                          onClick={() => this.showTypes(v)}
+                          className={v.show_name == type ? "active" : null}
+                          onClick={() => {
+                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC) : this.showTypes(v.show_name, v.balance)
+                          }}
                         >
-                          {v}
+                          {v.show_name}
                         </span>
                       );
                     })}
@@ -416,14 +392,7 @@ class Transfer extends Component {
               <p>
                 Balance{" "}
                 <span>
-                  {balance}
-                  {title == "Violas"
-                    ? "vtoken"
-                    : title == "Libra"
-                    ? "libra"
-                    : title == "Bitcoin"
-                    ? "BTC"
-                    : null}
+                  {balance == 0 ? 0 : this.getFloat(balance/1e6,6)}
                 </span>
               </p>
             </div>

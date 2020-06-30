@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import WalletConnect from '../../packages/browser/src/index';
 import '../app.scss'
 // let url = "https://api.violas.io";
-let url = "http://52.27.228.84:4000";
+let url = "https://api4.violas.io";
 
 class AddCurrency extends Component {
   constructor(props) {
@@ -22,6 +22,7 @@ class AddCurrency extends Component {
       publish_code: 'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
       tyArgs: '0700000000000000000000000000000001034c4252034c425200',
       walletConnector: {},
+      BTCData:[]
     };
   }
   async componentWillMount() {
@@ -43,6 +44,12 @@ class AddCurrency extends Component {
     
   }
   getBalance = () => {
+    fetch(url + "/1.0/btc/balance?address=1CRgedc7Gvf94Ua827QTfAeNnqLD3Ufnz6").then(res => res.json())
+      .then(res => {
+        this.setState({
+          BTCData:res.data
+        })
+      })
     if (window.localStorage.getItem('address')) {
       fetch(url + "/1.0/violas/currency").then(res => res.json())
         .then(res => {
@@ -125,25 +132,17 @@ class AddCurrency extends Component {
     }
     let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
     let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-    // console.log(_name_hex);
-    // console.log(result);
     this.setState({ tyArgs: result },async ()=>{
      
       await this.sendPublish()
     });
   }
   async sendPublish() {
-    // const seq = await this.getSeqNumb(this.state.from).then(res => {
-    //   return res
-    // }).catch(err => {
-    //   console.log(err)
-    // })
     const tx = {
       from: window.localStorage.getItem('address'),
       payload: {
         code: this.state.publish_code,
         tyArgs: [
-          // '0600000000000000000000000000000000034c4252015400'
           this.state.tyArgs
         ],
         args: [
@@ -210,7 +209,7 @@ class AddCurrency extends Component {
       })
   }
   render() {
-    let { addCurrencyList, addCurrencyList1, addList } = this.state;
+    let { addCurrencyList1, BTCData } = this.state;
     return (
       <div className="addCurrency">
         <h4 onClick={() => this.showPolling()}>
@@ -220,11 +219,12 @@ class AddCurrency extends Component {
           Add Digital Currency
         </h4>
         <div className="addCurrencyLists">
-          <div className="addCurrencyList"><p><i>
-            {
-              addList.coinType == 'bitcoin' ? <img src="/img/BTC复制 2@2x.png" /> : null
-            }
-          </i><label>{addList.coinType}</label></p></div>
+          {
+            BTCData.map((v,i)=>{
+              return <div key={i} className="addCurrencyList"><p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p></div>
+            })
+          }
+          
           {
             addCurrencyList1.map((v, i) => {
               return <div className="addCurrencyList" key={i}>

@@ -5,7 +5,7 @@ import { Pagination } from 'antd';
 // import { withRouter } from "react-router-dom";
 import '../app.scss'
 // let url = 'https://api.violas.io'
-let url = "http://52.27.228.84:4000"
+let url = "https://api4.violas.io"
 
 class CurrencyDetail extends Component {
     constructor(props) {
@@ -35,6 +35,7 @@ class CurrencyDetail extends Component {
     }
     componentDidMount() { 
         this.getNavData()
+        console.log(this.props.detailAddr,this.props.name)
     }
     getSubStr(str){
         if(str == null){
@@ -47,22 +48,42 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
+        let {detailAddr,name} = this.props;
+        if (name == 'BTC'){
+            if (this.state.navType == 'all'){
+                fetch(url + '/1.0/violas/transaction?addr='+detailAddr).then(res => res.json()).then(res => {
+                    this.setState({
+                        total: res.data.length,
+                        dataList: res.data
+                    })
+                })
+          }
+        }
         if (this.state.navType == 'all') {
-            fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407').then(res => res.json()).then(res => {
+            fetch(url + '/1.0/violas/transaction?addr='+detailAddr).then(res => res.json()).then(res => {
+                res.data.sort((a,b)=>{
+                    return b.amount - a.amount;
+                })
                 this.setState({
                     total: res.data.length,
                     dataList: res.data
                 })
             })
         } else if (this.state.navType == 'into') {
-            fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407&&flows=1').then(res => res.json()).then(res => {
+            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr+'&&flows=1').then(res => res.json()).then(res => {
+                res.data.sort((a, b) => {
+                    return b.amount - a.amount;
+                })
                 this.setState({
                     total: res.data.length,
                     dataList: res.data
                 })
             })
             } else if (this.state.navType == 'out') {
-                fetch(url + '/1.0/violas/transaction?addr=7f4644ae2b51b65bd3c9d414aa853407&&flows=0').then(res => res.json()).then(res => {
+            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr+'&&flows=0').then(res => res.json()).then(res => {
+                res.data.sort((a, b) => {
+                    return b.amount - a.amount;
+                })
                     this.setState({
                         total: res.data.length,
                         dataList: res.data
@@ -91,6 +112,8 @@ class CurrencyDetail extends Component {
     }
     render() {
         let { types, navType, dataList, total, curPage} = this.state;
+        let { detailAddr } = this.props;
+        console.log(dataList)
         return (
             <div className="currencyDetail">
                 <h4 onClick={() => this.showDetails()}>
@@ -119,18 +142,18 @@ class CurrencyDetail extends Component {
                                 return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
                                     <i>
                                      {
-                                            v.type == 17 ? <img src="/img/编组 82@2x.png" /> : v.sender == this.state.address ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == this.state.address ? <img src="/img/编组 13备份 2@2x.png" /> : null
+                                            v.type == 17 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddr ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddr ? <img src="/img/编组 13备份 2@2x.png" /> : null
                                       }</i>
                                     <div className="listCenter">
                                         <p>
                                             {
-                                                v.type == 17 ? 'Null' : v.sender == this.state.address ? this.getSubStr(v.receiver) : v.receiver == this.state.address ? this.getSubStr(v.sender) : null
+                                                v.type == 17 ? 'Null' : v.sender == detailAddr ? this.getSubStr(v.receiver) : v.receiver == detailAddr ? this.getSubStr(v.sender) : null
                                             }
                                         </p>
                                         <p>{timeStamp2String(v.expiration_time+'000')}</p>
                                     </div>
                                     <div className="listResult">
-                                        <p className={v.type == 17 ? 'org' : v.receiver == this.state.address ? 'org':'green'}>{v.amount / 1e6}</p>
+                                        <p className={v.type == 17 ? 'org' : v.receiver == detailAddr ? 'org':'green'}>{v.amount / 1e6}</p>
                                         {/* <p className="org">交易中</p> */}
                                     </div>
                                 </div>

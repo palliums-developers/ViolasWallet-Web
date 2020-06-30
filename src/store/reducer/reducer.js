@@ -6,7 +6,9 @@ let initState = {
     showExcode: false,
     visible: false,
     visible1: false,
-    showpooling: false
+    showpooling: false,
+    detailAddr:'',
+    name:''
 }
 
 let ListReducer = (state = initState, action) => {
@@ -22,7 +24,7 @@ let ListReducer = (state = initState, action) => {
         case 'DISPLAY':
             return { display: action.payload };
         case 'DISPLAY1':
-            return { display1: action.payload.disType };
+            return { display1: action.payload.disType, detailAddr: action.payload.detailAddr, name: action.payload.name};
         case 'DISPLAY2':
             return { display2: action.payload.display2, detailData: action.payload.detailData };
         case 'EXCHANGE':

@@ -4,7 +4,7 @@ import WalletConnect from "../packages/browser/src/index";
 import webStorage from "../packages/browser/src/webStorage";
 import "./app.scss";
 import QRCode from "qrcode.react"
-let url = "http://52.27.228.84:4000"
+let url = "https://api4.violas.io"
 
 class App extends Component {
   constructor() {
