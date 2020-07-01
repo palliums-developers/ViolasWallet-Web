@@ -19,7 +19,7 @@ let ListReducer = (state = initState, action) => {
     let showExcode = state.showExcode;
     let visible = state.visible;
     let visible1 = state.visible1;
-    console.log(action.payload)
+    // console.log(action.payload)
     switch (action.type) {
         case 'DISPLAY':
             return { display: action.payload };

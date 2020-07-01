@@ -23,6 +23,6 @@ export function timeStamp2String (time){
     if(second<10){
         second="0"+second;
     }
-    return month + "/" + date+" "+hour+":"+minute;
+    return month + "/" + date+" "+hour+":"+minute+":"+second;
 };
 // year + "." + 

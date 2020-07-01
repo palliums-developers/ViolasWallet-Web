@@ -146,42 +146,7 @@ class Transfer extends Component {
       },
       () => {
         if (this.state.address) {
-          if (this.state.title == "Violas") {
-            if (this.state.address.length != 32) {
-              this.setState({
-                warning: "address error",
-              });
-            } else {
-              this.setState({
-                warning: "",
-              });
-            }
-          } else if (this.state.title == "Libra") {
-            if (this.state.address.length != 32) {
-              this.setState({
-                warning: "address error",
-              });
-            } else {
-              this.setState({
-                warning: "",
-              });
-            }
-          } else if (this.state.title == "Bitcoin") {
-            let valid = WAValidator.validate(
-              this.state.address,
-              "bitcoin",
-              "testnet"
-            );
-            if (valid) {
-              this.setState({
-                warning: "",
-              });
-            } else {
-              this.setState({
-                warning: "address error",
-              });
-            }
-          }
+          this.addressWarn()
         } else {
           this.setState({
             warning: "",
@@ -190,21 +155,53 @@ class Transfer extends Component {
       }
     );
   };
+  addressWarn(){
+    if (this.state.type == "BTC") {
+      let valid = WAValidator.validate(
+        this.state.address,
+        "bitcoin",
+        "testnet"
+      );
+      if (valid) {
+        this.setState({
+          warning: "",
+        });
+      } else {
+        this.setState({
+          warning: "address error",
+        });
+      }
+
+    } else {
+      if (this.state.address.length != 32) {
+        this.setState({
+          warning: "address error",
+        });
+      } else {
+        this.setState({
+          warning: "",
+        });
+      }
+    }
+  }
+  amountWarn(){
+    if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+      this.setState({
+        warning: "Insufficient available balance",
+      });
+    } else {
+      this.setState({
+        warning: "",
+      });
+    }
+  }
   getTransAmount = (e) => {
     this.setState(
       {
         amount: e.target.value,
       },
       () => {
-        if (Number(this.state.amount) > Number(this.state.balance)) {
-          this.setState({
-            warning: "Insufficient available balance",
-          });
-        } else {
-          this.setState({
-            warning: "",
-          });
-        }
+       this.amountWarn()
       }
     );
   };
@@ -283,6 +280,8 @@ class Transfer extends Component {
       });
       // alert('Please input amount')
     } else {
+      this.addressWarn();
+      this.amountWarn();
       const tx = {
         from:window.localStorage.getItem('address'),
         payload: {
@@ -310,18 +309,17 @@ class Transfer extends Component {
         }
       };
       console.log(JSON.stringify(tx))
-      this.state.walletConnector
-        .sendTransaction(tx)
-        .then((res) => {
-          console.log('111')
-          console.log("send transaction ", res);
-        })
-        .catch((err) => {
-          console.log("send transaction ", err);
-        });
+      // this.state.walletConnector
+      //   .sendTransaction(tx)
+      //   .then((res) => {
+      //     console.log('111')
+      //     console.log("send transaction ", res);
+      //   })
+      //   .catch((err) => {
+      //     console.log("send transaction ", err);
+      //   });
     }
-    if (this.state.warning == "") {
-    }
+    
   };
   render() {
     let { title, balance, warning, showDealType, type, selData } = this.state;

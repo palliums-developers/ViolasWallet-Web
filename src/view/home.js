@@ -80,7 +80,7 @@ class Home extends Component {
     let { active, showMineDialog } = this.state;
     return (
       <div className="home">
-        <div onClick={()=>this.logout()} style={{position:'absolute'}}>log out</div>
+        {/* <div style={{position:'absolute'}}>log out</div> */}
         <div className="header">
           <div
             className="logo"
@@ -168,7 +168,7 @@ class Home extends Component {
                           this.props.history.push("/homepage/home");
                         }}
                       >
-                        <label>总资产之和($)</label>
+                        <label>Total assets($)</label>
                         <span>{window.sessionStorage.getItem('balances') && window.sessionStorage.getItem('balances')}</span>
                       </div>
                       <div className="icon">
@@ -201,10 +201,11 @@ class Home extends Component {
                         <dd>Receive</dd>
                       </dl>
                     </div>
+                    <p onClick={() => this.logout()}><img src="/img/tuichu 2@2x.png"/>Log out</p>
                   </div>
                 ) : null}
               </div>
-              <span>下载</span>
+              <span>Download</span>
             </div>
             
           </div>

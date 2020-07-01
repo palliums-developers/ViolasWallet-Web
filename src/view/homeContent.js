@@ -22,7 +22,8 @@ class HomeContent extends Component {
         BTCAddress:'',
         BTCBalances:[],
         BTCBalance:0,
-        totalAmount:0.00
+        totalAmount:0.00,
+        typeName:''
       }
     }
     componentWillMount(){
@@ -30,8 +31,10 @@ class HomeContent extends Component {
       
     }
     componentDidMount(){
+      console.log()
       this.setState({
-        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
+        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+        typeName:window.sessionStorage.getItem("typeName")
       }, () => {
         this.state.addCurrencyList.map((v, i) => {
           if (v.coinType == 'bitcoin') {
@@ -82,24 +85,49 @@ class HomeContent extends Component {
                        arr.sort((a, b) => {
                          return b.balance - a.balance
                        })
-                       this.setState({
-                         checkData: arr
-                       }, () => {
-                         let amount = 0;
-                         for (let i = 0; i < this.state.checkData.length; i++) {
-                           amount += Number(this.getFloat(this.state.checkData[i].balance / 1e6, 6))
-                         }
+                       
+                      if (this.state.typeName){
+                        let newArr = []; 
+                        newArr = arr.filter(v => v.show_name != this.state.typeName)
+                        this.setState({
+                          checkData: newArr
+                        }, () => {
+                          let amount = 0;
+                          for (let i = 0; i < this.state.checkData.length; i++) {
+                            amount += Number(this.getFloat(this.state.checkData[i].balance / 1e6, 6))
+                          }
 
-                         this.setState({
-                           coinsBalance: amount
-                         }, () => {
-                          //  console.log(this.state.coinsBalance, this.state.BTCBalance)
-                           window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                           this.setState({
-                             totalAmount: this.state.coinsBalance + this.state.BTCBalance
-                           })
+                          this.setState({
+                            coinsBalance: amount
+                          }, () => {
+                            console.log(this.state.coinsBalance, this.state.BTCBalance)
+                            window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                            this.setState({
+                              totalAmount: this.state.coinsBalance + this.state.BTCBalance
+                            })
                           })
-                       })
+                        })
+                      }else{
+                        this.setState({
+                          checkData: arr
+                        }, () => {
+                          let amount = 0;
+                          for (let i = 0; i < this.state.checkData.length; i++) {
+                            amount += Number(this.getFloat(this.state.checkData[i].balance / 1e6, 6))
+                          }
+
+                          this.setState({
+                            coinsBalance: amount
+                          }, () => {
+                             console.log(this.state.coinsBalance, this.state.BTCBalance)
+                            window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                            this.setState({
+                              totalAmount: this.state.coinsBalance + this.state.BTCBalance
+                            })
+                          })
+                        })
+                      }
+                       
                      })
                    })
              })
@@ -110,12 +138,13 @@ class HomeContent extends Component {
     }
     
     render(){
-      let { BTCAddress, BTCBalances, coinsBalance, visible, totalAmount, checkData, balance } = this.state;
+      let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
+      console.log(totalAmount)
         return (
             <div className="content">
               <div className="contentWrap">
                 <div className="apply">
-                  <p>总资产
+                  <p>Total assets
                   <i>
                   {
                       visible ? <img onClick={()=>{
@@ -160,7 +189,7 @@ class HomeContent extends Component {
                   </div>
                 </div>
                 <div className="assetList">
-                <p><label>资产</label><i onClick={() => {
+                <p><label>Funds</label><i onClick={() => {
                   this.props.showPolling(!this.props.display);
                   // if (this.props.display1) {
                   //   document.querySelector(".ant-drawer").position =
@@ -174,11 +203,13 @@ class HomeContent extends Component {
                     {
                       BTCBalances.map((v,i)=>{
                         return <div className="assetListsEvery" key={i} onClick={() => {
-                          this.props.showDetails({
-                            disType: !this.props.display1,
-                            detailAddr: BTCAddress,
-                            name:v.name
-                          });
+                          // this.props.showDetails({
+                          //   disType: !this.props.display1,
+                          //   detailAddr: BTCAddress,
+                          //   name:v.name
+                          // });
+                          // window.sessionStorage.setItem('detailAddr', BTCAddress)
+                          // window.sessionStorage.setItem('name', v.name)
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}</span><label>≈$0.00</label></div>
@@ -187,13 +218,15 @@ class HomeContent extends Component {
                     }
                     
                     {
-                    checkData.map((v, i) => {
+                      checkData.map((v, i) => {
                         return <div className="assetListsEvery" key={i} onClick={() => {
                           this.props.showDetails({
                             disType: !this.props.display1,
                             detailAddr:v.address,
                             name:v.name
                           });
+                          window.sessionStorage.setItem('detailAddr', v.address)
+                          window.sessionStorage.setItem('name', v.name)
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{v.balance == 0 ? 0 : this.getFloat(v.balance/1e6,6)}</span><label>≈$0.00</label></div>
@@ -222,7 +255,6 @@ let mapDispatchToProps = (dispatch) => {
       });
     },
     showDetails: (type) => {
-      console.log(type)
       dispatch({
         type: "DISPLAY1",
         payload: {

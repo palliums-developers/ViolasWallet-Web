@@ -22,7 +22,8 @@ class AddCurrency extends Component {
       publish_code: 'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
       tyArgs: '0700000000000000000000000000000001034c4252034c425200',
       walletConnector: {},
-      BTCData:[]
+      BTCData:[],
+      addCurrencyList2:[]
     };
   }
   async componentWillMount() {
@@ -208,8 +209,27 @@ class AddCurrency extends Component {
         
       })
   }
+  closePub = (name) =>{
+    window.sessionStorage.setItem('typeName',name)
+    console.log(window.sessionStorage.getItem('typeName'))
+    for (let i = 0; i < this.state.addCurrencyList1.length;i++){
+      if (window.sessionStorage.getItem('typeName')){
+        if (this.state.addCurrencyList1[i].show_name == window.sessionStorage.getItem('typeName')) {
+          this.state.addCurrencyList1[i].checked = false
+        }
+      }
+      
+    }
+    window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
+    // this.setState({
+    //   addCurrencyList2: this.state.addCurrencyList1
+    // },()=>{
+    //     console.log(this.state.addCurrencyList2)
+    // })
+  }
+
   render() {
-    let { addCurrencyList1, BTCData } = this.state;
+    let { addCurrencyList1, addCurrencyList2, BTCData } = this.state;
     return (
       <div className="addCurrency">
         <h4 onClick={() => this.showPolling()}>
@@ -226,11 +246,18 @@ class AddCurrency extends Component {
           }
           
           {
-            addCurrencyList1.map((v, i) => {
+            JSON.parse(window.sessionStorage.getItem('addCurrencyList1')) ? JSON.parse(window.sessionStorage.getItem('addCurrencyList1')).map((v, i) => {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name,v.address)}/> : <img src="/img/Rectangle 2@2x.png" />
+                 v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
+                }</p>
+              </div>
+            }) : addCurrencyList1.map((v, i) => {
+              return <div className="addCurrencyList" key={i}>
+                <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
+                <p>{
+                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             })

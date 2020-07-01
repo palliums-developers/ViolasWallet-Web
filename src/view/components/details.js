@@ -38,6 +38,7 @@ class Details extends Component {
     render() {
         let { detailData } = this.props;
         let { reve, tran,deal } = this.state;
+        console.log(detailData,'........')
         return (
             <div className="details">
                 <h4 onClick={() => {
@@ -50,27 +51,32 @@ class Details extends Component {
                 </h4>
                 <div className="detailsTable">
                     <div className="tableContent">
-                        <i><img src="/img/shenhetongguo 4@2x.png" /></i>
-                        <h3>收款成功</h3>
+                        {
+                            detailData.type == 0 ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : <i><img src="/img/shenhetongguo 4@2x.png" /></i>
+                        }
+                        {
+                            detailData.type == 0 ? <h3>Stability coin activated successfully</h3> :detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <h3>Payment success</h3> : null
+                        }
+                        
                         <p>{timeStamp2String1(detailData.expiration_time + '000')}</p>
                         <div className="line"><img src="/img/路径 42@2x.png" /></div>
 
                         <div className="tableList">
-                            <p><label>金额：</label><span>{detailData.amount / 1e6} VETH</span></p>
-                            <p><label>矿工费用：</label><span>{detailData.gas} ether</span></p>
-                            <p><label>收款地址：</label><span><i id="reve">{detailData.receiver}</i><img onClick={() => this.handleCopy('reve')} src="/img/icon- 2@2x.png" />{
-                                reve ? <p className="warn">地址复制成功</p> : null
+                            <p><label>Amount：</label><span>{detailData.amount / 1e6} VETH</span></p>
+                            <p><label>Cost of miners：</label><span>{detailData.gas / 1e6} ether</span></p>
+                            <p><label>Collection address：</label><span><i id="reve">{detailData.receiver == null ? '--' : detailData.receiver}</i><img onClick={() => this.handleCopy('reve')} src="/img/icon- 2@2x.png" />{
+                                reve ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
-                            <p><label>付款地址：</label><span><i id="tran">{detailData.sender}</i><img onClick={() => this.handleCopy('tran')} src="/img/icon- 2@2x.png" />{
-                                tran ? <p className="warn">地址复制成功</p> : null
+                            <p><label>Payment address：</label><span><i id="tran">{detailData.sender}</i><img onClick={() => this.handleCopy('tran')} src="/img/icon- 2@2x.png" />{
+                                tran ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
-                            <p><label>交易号：</label><span><i id="deal">{detailData.version}</i><img onClick={() => this.handleCopy('deal')} src="/img/icon- 2@2x.png" />{
-                                deal ? <p className="warn">地址复制成功</p> : null
+                            <p><label>Transaction no：</label><span><i id="deal">{detailData.version}</i><img onClick={() => this.handleCopy('deal')} src="/img/icon- 2@2x.png" />{
+                                deal ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
                         </div>
                     </div>
                 </div>
-                <p className="goBrower">浏览器查询更详细信息<img src="/img/go.png"/></p>
+                <p className="goBrower">The browser queries for more details ><img src="/img/go.png"/></p>
             </div>
         );
     }
@@ -83,7 +89,9 @@ let mapDispatchToProps = (dispatch) => {
         showEveryDetail:()=>{
             dispatch({
                 type: "DISPLAY1",
-                payload: true,
+                payload:{
+                    disType:true
+                }
             });
         }
     };

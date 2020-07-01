@@ -13,15 +13,15 @@ class CurrencyDetail extends Component {
         this.state = {
             types:[
                 {
-                    name:'全部',
+                    name:'ALL',
                     type:'all'
                 },
                 {
-                    name: '转入',
+                    name: 'INTO',
                     type: 'into'
                 },
                 {
-                    name: '转出',
+                    name: 'ROLL OUT',
                     type: 'out'
                 }
             ],
@@ -29,13 +29,21 @@ class CurrencyDetail extends Component {
             address: '7f4644ae2b51b65bd3c9d414aa853407',
             dataList:[],
             total:0,
-            page:0
+            page:0,
+            pageSize:10,
+            curIndex:0,
+            detailAddr:'',
+            name:''
         };
         
     }
     componentDidMount() { 
-        this.getNavData()
-        console.log(this.props.detailAddr,this.props.name)
+        this.setState({
+            detailAddr: window.sessionStorage.getItem('detailAddr')&&window.sessionStorage.getItem('detailAddr'),
+            name: window.sessionStorage.getItem('name') && window.sessionStorage.getItem('name'),
+        },()=>{
+           this.getNavData() 
+        })
     }
     getSubStr(str){
         if(str == null){
@@ -48,10 +56,12 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
-        let {detailAddr,name} = this.props;
+        let {detailAddr,name} = this.state;
+        // console.log(detailAddr, name)
         if (name == 'BTC'){
             if (this.state.navType == 'all'){
                 fetch(url + '/1.0/violas/transaction?addr='+detailAddr).then(res => res.json()).then(res => {
+                    console.log(res.data.length)
                     this.setState({
                         total: res.data.length,
                         dataList: res.data
@@ -60,12 +70,21 @@ class CurrencyDetail extends Component {
           }
         }
         if (this.state.navType == 'all') {
-            fetch(url + '/1.0/violas/transaction?addr='+detailAddr).then(res => res.json()).then(res => {
+            if (this.state.total == 0){
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
+
+                    this.setState({
+                        total: res.data.length
+                    })
+                })
+            }
+            
+            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
+                // console.log(res.data.length)
                 res.data.sort((a,b)=>{
                     return b.amount - a.amount;
                 })
                 this.setState({
-                    total: res.data.length,
                     dataList: res.data
                 })
             })
@@ -96,13 +115,17 @@ class CurrencyDetail extends Component {
         this.props.showDetails();
     };
     onChange = (page,pageSize) => {
+        console.log(page, pageSize)
         this.setState({
             page: page,
+            pageSize:pageSize,
+            curIndex:9
         },()=>{
             this.getNavData()
         });
     };
     curDataFun = (val) => {
+        console.log(val)
         this.props.showDetails();
         this.props.showEveryDetail({
             display2:true,
@@ -112,8 +135,8 @@ class CurrencyDetail extends Component {
     }
     render() {
         let { types, navType, dataList, total, curPage} = this.state;
-        let { detailAddr } = this.props;
-        console.log(dataList)
+        let { detailAddr } = this.state;
+        // console.log(dataList)
         return (
             <div className="currencyDetail">
                 <h4 onClick={() => this.showDetails()}>
@@ -139,21 +162,21 @@ class CurrencyDetail extends Component {
                     <div className="detailLists">
                         {
                             dataList.map((v,i)=>{
-                                return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
+                                return <div key={i} className="detailList" onClick={(v) => this.curDataFun(v)}>
                                     <i>
                                      {
-                                            v.type == 17 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddr ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddr ? <img src="/img/编组 13备份 2@2x.png" /> : null
+                                            v.type == 0 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddr ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddr ? <img src="/img/编组 13备份 2@2x.png" /> : null
                                       }</i>
                                     <div className="listCenter">
                                         <p>
                                             {
-                                                v.type == 17 ? 'Null' : v.sender == detailAddr ? this.getSubStr(v.receiver) : v.receiver == detailAddr ? this.getSubStr(v.sender) : null
+                                                v.type == 0 ? this.getSubStr(v.sender) : v.sender == detailAddr ? this.getSubStr(v.receiver) : v.receiver == detailAddr ? this.getSubStr(v.sender) : null
                                             }
                                         </p>
                                         <p>{timeStamp2String(v.expiration_time+'000')}</p>
                                     </div>
                                     <div className="listResult">
-                                        <p className={v.type == 17 ? 'org' : v.receiver == detailAddr ? 'org':'green'}>{v.amount / 1e6}</p>
+                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddr ? 'org':'green'}>{v.amount / 1e6}</p>
                                         {/* <p className="org">交易中</p> */}
                                     </div>
                                 </div>
@@ -194,7 +217,7 @@ class CurrencyDetail extends Component {
                     
                 </div>
                 {
-                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={5} total={Number(total)} onChange={this.onChange} /> : null
+                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={10} total={Number(total)} onChange={this.onChange} /> : null
                 }
             </div>
         );
