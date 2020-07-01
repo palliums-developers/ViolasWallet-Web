@@ -117,7 +117,6 @@ class App extends React.Component {
   async getCurrencies() {
     axios('https://api4.violas.io/1.0/violas/currency')
       .then(async res => {
-        // console.log(res.data.data.currencies);
         await this.setState({ currencies: res.data.data.currencies });
       })
   }
@@ -175,7 +174,7 @@ class App extends React.Component {
       // sequenceNumber: seq,
       gasCurrencyCode: this.state.currencyCode,
     }
-    // console.log(JSON.stringify(tx));
+    console.log(JSON.stringify(tx));
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send transaction ', res);
     }).catch(err => {
@@ -193,7 +192,6 @@ class App extends React.Component {
       payload: {
         code: this.state.publish_code,
         tyArgs: [
-          // '0600000000000000000000000000000000034c4252015400'
           this.state.tyArgs
         ],
         args: [
