@@ -179,7 +179,7 @@ class Home extends Component {
                         }}
                       >
                         <label>Total assets($)</label>
-                        <span>{window.sessionStorage.getItem('balances') && this.getFloat(window.sessionStorage.getItem('balances'),6)}</span>
+                        <span>{window.sessionStorage.getItem('balances') && this.getFloat(window.sessionStorage.getItem('balances'),2)}</span>
                       </div>
                       <div className="icon">
                         <img src="/img/Combined Shape 2@2x.png" />

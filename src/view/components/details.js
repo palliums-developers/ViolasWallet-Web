@@ -46,7 +46,7 @@ class Details extends Component {
                     <i>
                         <img src="/img/编组备份 3@2x.png" />
                     </i>
-               详情
+               Details
                 </h4>
                 <div className="detailsTable">
                     <div className="tableContent">

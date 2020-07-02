@@ -139,7 +139,7 @@ class CurrencyDetail extends Component {
                     <i>
                         <img src="/img/编组备份 3@2x.png" />
                     </i>
-                    币种详情
+                    Currency Detail
                 </h4>
                 <div className="detailContent">
                     <div className="detailNav">

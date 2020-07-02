@@ -321,7 +321,7 @@ class Transfer extends Component {
                     value: ""
                   },
                 ],
-                gasCurrencyCode: this.state.gasCurrencyCode,
+                // gasCurrencyCode: this.state.gasCurrencyCode,
               }
             };
             console.log(JSON.stringify(tx))
@@ -366,7 +366,7 @@ class Transfer extends Component {
                       value: ""
                     },
                   ],
-                  gasCurrencyCode: this.state.gasCurrencyCode,
+                  // gasCurrencyCode: this.state.gasCurrencyCode,
                 }
               };
               console.log(JSON.stringify(tx))
@@ -424,7 +424,7 @@ class Transfer extends Component {
                     value: ""
                   },
                 ],
-                gasCurrencyCode: this.state.gasCurrencyCode,
+                // gasCurrencyCode: this.state.gasCurrencyCode,
               }
             };
             console.log(JSON.stringify(tx))

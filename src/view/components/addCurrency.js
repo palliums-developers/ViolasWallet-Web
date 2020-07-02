@@ -240,7 +240,7 @@ class AddCurrency extends Component {
       }
       
     }
-    console.log(this.state.addCurrencyList1)
+    // console.log(this.state.addCurrencyList1)
     window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
     this.showPolling()
   }
