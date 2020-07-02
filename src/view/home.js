@@ -57,6 +57,15 @@ class Home extends Component {
   //     showMineDialog: false
   //   })
   // }
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = Number(number).toFixed(n); //补足位数
+    return number;
+  }
   onClose = () => {
     this.props.showPolling();
     this.props.showDetails();
@@ -170,7 +179,7 @@ class Home extends Component {
                         }}
                       >
                         <label>Total assets($)</label>
-                        <span>{window.sessionStorage.getItem('balances') && window.sessionStorage.getItem('balances')}</span>
+                        <span>{window.sessionStorage.getItem('balances') && this.getFloat(window.sessionStorage.getItem('balances'),6)}</span>
                       </div>
                       <div className="icon">
                         <img src="/img/Combined Shape 2@2x.png" />

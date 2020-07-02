@@ -115,8 +115,11 @@ class HomeContent extends Component {
                             coinsBalance: amount
                           }, () => {
                             window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                              console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
                             this.setState({
-                              totalAmount: this.state.coinsBalance + this.state.BTCBalance
+                              totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance,6)
+                            },()=>{
+                              
                             })
                           })
                         })
@@ -134,7 +137,7 @@ class HomeContent extends Component {
                           }, () => {
                             window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
                             this.setState({
-                              totalAmount: this.state.coinsBalance + this.state.BTCBalance
+                              totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6)
                             })
                           })
                         })
@@ -151,7 +154,6 @@ class HomeContent extends Component {
     
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
-      // console.log(totalAmount)
         return (
             <div className="content">
               <div className="contentWrap">
@@ -215,13 +217,13 @@ class HomeContent extends Component {
                     {
                       BTCBalances.map((v,i)=>{
                         return <div className="assetListsEvery" key={i} onClick={() => {
-                          // this.props.showDetails({
-                          //   disType: !this.props.display1,
-                          //   detailAddr: BTCAddress,
-                          //   name:v.name
-                          // });
+                          this.props.showDetails({
+                            disType: !this.props.display1,
+                            // detailAddr: BTCAddress,
+                            name:v.name
+                          });
                           // window.sessionStorage.setItem('detailAddr', BTCAddress)
-                          // window.sessionStorage.setItem('name', v.name)
+                          window.sessionStorage.setItem('name', v.name)
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}</span><label>≈$0.00</label></div>

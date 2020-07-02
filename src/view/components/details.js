@@ -38,7 +38,6 @@ class Details extends Component {
     render() {
         let { detailData } = this.props;
         let { reve, tran,deal } = this.state;
-        console.log(detailData,'........')
         return (
             <div className="details">
                 <h4 onClick={() => {

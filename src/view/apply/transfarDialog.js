@@ -8,10 +8,24 @@ class TransfarDialog extends Component {
     constructor(props){
       super()
       this.state = {
-        title:''
+        title:'',
+        address:''
       }
     }
     componentDidMount(){
+      if (this.props.coinName == 'BTC'){
+          this.setState({
+            title:'bitcoin',
+            address: this.props.address,
+            amount:this.props.amount * 1e8
+          })
+      }else{
+        this.setState({
+          title: 'libra-' + this.props.coinName.toLowerCase(),
+          address: this.props.address,
+          amount: this.props.amount * 1e6
+        })
+      }
       if (this.props.location.pathname.split("/")[5]) {
         let type = this.props.location.pathname.split("/")[5];
         this.setState({
@@ -22,8 +36,7 @@ class TransfarDialog extends Component {
     }
 
     render(){
-        let { title } = this.state;
-        let { address,amount } = this.props;
+      let { title, address, amount } = this.state;
         return (
           <div className="transfarDialog">
             <div className="dialogContent">

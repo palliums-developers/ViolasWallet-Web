@@ -59,7 +59,7 @@ class App extends Component {
             "address",
             accounts[0]
           );
-          console.log("you have connected ");
+          // console.log("you have connected ");
       });
       
     });
@@ -69,13 +69,15 @@ class App extends Component {
       }
       const { accounts, chainId } = payload.params[0];
       this.getAccount()
-      console.log("session update ");
+      // console.log("session update ");
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
-      console.log("wallet disconnected");
+      window.localStorage.clear()
+      window.sessionStorage.clear()
+      // console.log("wallet disconnected");
     });
   }
   

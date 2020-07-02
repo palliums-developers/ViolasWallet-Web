@@ -20,7 +20,9 @@ class GetMoney extends Component {
         arr:[],
         BTCBalances:[],
         BTCAddress:'',
-        type:''
+        type:'',
+        coinName:'',
+        coinNameType:''
       }
     }
     getTypeShow = (event) => {
@@ -29,19 +31,38 @@ class GetMoney extends Component {
         showDealType: !this.state.showDealType
       })
     }
-    showTypes = (v,address) => {
-      if(v == 'BTC'){
+    showTypes = (v,address,name) => {
+      console.log(this.state.coinNameType)
+      if(v == 'VLS'){
         this.setState({
           type: v,
-          address: this.state.BTCAddress,
-          showDealType: false
-        })
-      }else{
-        this.setState({
-          type: v,
+          coinName: 'violas-'+name.toLowerCase(),
           address: address,
           showDealType: false
         })
+      }else{
+        if (name.indexOf('VLS') == 0){
+          this.setState({
+            type: v,
+            coinName: 'violas-' + name.toLowerCase(),
+            address: address,
+            showDealType: false
+          })
+        } else if (name == 'BTC'){
+          this.setState({
+            type: v,
+            coinName: 'bitcoin',
+            address: this.state.BTCAddress,
+            showDealType: false
+          })
+         }else{
+          this.setState({
+            type: v,
+            coinName: 'libra-' + name.toLowerCase(),
+            address: address,
+            showDealType: false
+          })
+         }
       }
       
     }
@@ -94,6 +115,7 @@ class GetMoney extends Component {
                     if (this.state.type == "") {
                       this.setState({
                         type: res.data.balances[0].show_name,
+                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
                         address: res.data.balances[0].address
                       })
                     }
@@ -170,7 +192,8 @@ class GetMoney extends Component {
      
     }
     render(){
-      let { address, showDealType, type, dis,arr } = this.state;
+      let { address, showDealType, type, dis, arr, coinName } = this.state;
+      console.log(this.state.coinName,'.........')
         return (
           <div className="getMoney">
             <div className="dialogContent">
@@ -190,7 +213,7 @@ class GetMoney extends Component {
                     </div>
                     {
                       arr.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address)}>
+                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address,v.name)}>
                           <div className="searchEvery">
                             <img src={v.show_icon} />
                             <div className="searchEvery1">
@@ -210,7 +233,7 @@ class GetMoney extends Component {
 
               </div>
                <div className="qrCode">
-                <QRCode value={type.toUpperCase() + ':' + address+'?amount=0'}></QRCode>
+                <QRCode value={coinName + ':' + address+'?amount=1'}></QRCode>
                </div>
                <div className="addressCode">
                    <span id="add">{address}</span>

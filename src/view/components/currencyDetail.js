@@ -57,58 +57,54 @@ class CurrencyDetail extends Component {
 
     getNavData(){
         let {detailAddr,name} = this.state;
-        // console.log(detailAddr, name)
+        console.log(detailAddr, name)
         if (name == 'BTC'){
-            if (this.state.navType == 'all'){
-                fetch(url + '/1.0/violas/transaction?addr='+detailAddr).then(res => res.json()).then(res => {
-                    console.log(res.data.length)
-                    this.setState({
-                        total: res.data.length,
-                        dataList: res.data
-                    })
-                })
-          }
-        }
-        if (this.state.navType == 'all') {
-            if (this.state.total == 0){
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
+            this.setState({
+                dataList: []
+            })
+        }else{
+            if (this.state.navType == 'all') {
+                if (this.state.total == 0) {
+                    fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
 
+                        this.setState({
+                            total: res.data.length
+                        })
+                    })
+                }
+
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
+                    // console.log(res.data.length)
+                    res.data.sort((a, b) => {
+                        return b.amount - a.amount;
+                    })
                     this.setState({
-                        total: res.data.length
+                        dataList: res.data
                     })
                 })
-            }
-            
-            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
-                // console.log(res.data.length)
-                res.data.sort((a,b)=>{
-                    return b.amount - a.amount;
+            } else if (this.state.navType == 'into') {
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=1').then(res => res.json()).then(res => {
+                    res.data.sort((a, b) => {
+                        return b.amount - a.amount;
+                    })
+                    this.setState({
+                        total: res.data.length,
+                        dataList: res.data
+                    })
                 })
-                this.setState({
-                    dataList: res.data
-                })
-            })
-        } else if (this.state.navType == 'into') {
-            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr+'&&flows=1').then(res => res.json()).then(res => {
-                res.data.sort((a, b) => {
-                    return b.amount - a.amount;
-                })
-                this.setState({
-                    total: res.data.length,
-                    dataList: res.data
-                })
-            })
             } else if (this.state.navType == 'out') {
-            fetch(url + '/1.0/violas/transaction?addr=' + detailAddr+'&&flows=0').then(res => res.json()).then(res => {
-                res.data.sort((a, b) => {
-                    return b.amount - a.amount;
-                })
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=0').then(res => res.json()).then(res => {
+                    res.data.sort((a, b) => {
+                        return b.amount - a.amount;
+                    })
                     this.setState({
                         total: res.data.length,
                         dataList: res.data
                     })
                 })
             }
+        }
+        
         
     }
     showDetails = () => {
