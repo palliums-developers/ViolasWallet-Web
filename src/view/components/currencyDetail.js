@@ -162,7 +162,7 @@ class CurrencyDetail extends Component {
                     <div className="detailLists">
                         {
                             dataList.map((v,i)=>{
-                                return <div key={i} className="detailList" onClick={(v) => this.curDataFun(v)}>
+                                return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
                                     <i>
                                      {
                                             v.type == 0 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddr ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddr ? <img src="/img/编组 13备份 2@2x.png" /> : null

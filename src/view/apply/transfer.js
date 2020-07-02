@@ -294,7 +294,7 @@ class Transfer extends Component {
             },
             {
               type: "Number",
-              value: Number(this.state.amount),
+              value: Number(this.state.amount * 1e6),
             },
             {
               type: "Bytes",
@@ -312,10 +312,14 @@ class Transfer extends Component {
       this.state.walletConnector
         .sendTransaction(tx)
         .then((res) => {
-          console.log('111')
+          this.setState({
+            warning: "Transfer success",
+          });
+          // alert('Transfer success！！！！')
           console.log("send transaction ", res);
         })
         .catch((err) => {
+          alert('Transfer failed！！！！')
           console.log("send transaction ", err);
         });
     }

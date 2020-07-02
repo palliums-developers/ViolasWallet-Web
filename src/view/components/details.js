@@ -55,15 +55,15 @@ class Details extends Component {
                             detailData.type == 0 ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : <i><img src="/img/shenhetongguo 4@2x.png" /></i>
                         }
                         {
-                            detailData.type == 0 ? <h3>Stability coin activated successfully</h3> :detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <h3>Payment success</h3> : null
+                            detailData.type == 0 ? <h3>Stability coin activated successfully</h3> : detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <h3>Payment success</h3> : <h3>Transfer success</h3>
                         }
                         
                         <p>{timeStamp2String1(detailData.expiration_time + '000')}</p>
                         <div className="line"><img src="/img/路径 42@2x.png" /></div>
 
                         <div className="tableList">
-                            <p><label>Amount：</label><span>{detailData.amount / 1e6} VETH</span></p>
-                            <p><label>Cost of miners：</label><span>{detailData.gas / 1e6} ether</span></p>
+                            <p><label>Amount：</label><span>{detailData.amount / 1e6} {detailData.currency}</span></p>
+                            <p><label>Cost of miners：</label><span>{detailData.gas / 1e6} {detailData.gas_currency}</span></p>
                             <p><label>Collection address：</label><span><i id="reve">{detailData.receiver == null ? '--' : detailData.receiver}</i><img onClick={() => this.handleCopy('reve')} src="/img/icon- 2@2x.png" />{
                                 reve ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
@@ -76,7 +76,7 @@ class Details extends Component {
                         </div>
                     </div>
                 </div>
-                <p className="goBrower">The browser queries for more details ><img src="/img/go.png"/></p>
+                <p className="goBrower">The browser queries for more details <img src="/img/go.png"/></p>
             </div>
         );
     }
