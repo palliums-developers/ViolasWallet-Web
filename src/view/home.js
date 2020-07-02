@@ -71,6 +71,7 @@ class Home extends Component {
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
     window.localStorage.clear()
+    window.sessionStorage.clear()
     this.props.history.push('/app')
     
   }

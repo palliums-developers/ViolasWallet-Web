@@ -5,6 +5,7 @@ import WalletConnect from '../../packages/browser/src/index';
 import '../app.scss'
 // let url = "https://api.violas.io";
 let url = "https://api4.violas.io";
+let names = []
 
 class AddCurrency extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class AddCurrency extends Component {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   componentDidMount() {
-    this.getBalance()
+    
     
     this.setState({
       addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -41,17 +42,26 @@ class AddCurrency extends Component {
       this.setState({
         addList: this.state.addCurrencyList[2]
       })
+        this.state.addCurrencyList.map((v, i) => {
+          if (v.coinType == 'bitcoin') {
+            this.setState({
+              BTCAddress: v.address
+            },()=>{
+              this.getBalance()
+            })
+          }
+        })
     });
     
   }
   getBalance = () => {
-    fetch(url + "/1.0/btc/balance?address=1CRgedc7Gvf94Ua827QTfAeNnqLD3Ufnz6").then(res => res.json())
+    fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
       .then(res => {
+        console.log(res.data)
         this.setState({
           BTCData:res.data
         })
       })
-    if (window.localStorage.getItem('address')) {
       fetch(url + "/1.0/violas/currency").then(res => res.json())
         .then(res => {
           this.setState({
@@ -71,8 +81,6 @@ class AddCurrency extends Component {
               })
           })
         })
-      
-    }
   }
   showPolling = () => {
     this.props.showPolling();
@@ -210,22 +218,31 @@ class AddCurrency extends Component {
       })
   }
   closePub = (name) =>{
-    window.sessionStorage.setItem('typeName',name)
-    console.log(window.sessionStorage.getItem('typeName'))
+    // fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    //   .then(res => {
+    //     for (let i = 0; i < res.data.published.length; i++){
+    //       for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
+    //         if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
+    //             console.log()
+    //         }
+    //       }
+          
+    //     }
+        
+    //   })
+    names.push(name)
+    window.sessionStorage.setItem('typeName', JSON.stringify(names))
     for (let i = 0; i < this.state.addCurrencyList1.length;i++){
-      if (window.sessionStorage.getItem('typeName')){
-        if (this.state.addCurrencyList1[i].show_name == window.sessionStorage.getItem('typeName')) {
+      for (let j = 0; j < names.length; j++){
+        if (this.state.addCurrencyList1[i].show_name.indexOf(names[j])==0){
           this.state.addCurrencyList1[i].checked = false
         }
       }
       
     }
+    console.log(this.state.addCurrencyList1)
     window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-    // this.setState({
-    //   addCurrencyList2: this.state.addCurrencyList1
-    // },()=>{
-    //     console.log(this.state.addCurrencyList2)
-    // })
+    this.showPolling()
   }
 
   render() {

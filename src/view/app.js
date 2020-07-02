@@ -81,7 +81,6 @@ class App extends Component {
   
   getAccount() {
     this.state.walletConnector.get_accounts().then(res => {
-      console.log(res)
       window.localStorage.setItem(
         "wallet_info",
         JSON.stringify(res)

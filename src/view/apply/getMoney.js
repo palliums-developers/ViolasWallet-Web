@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
+let url = "https://api4.violas.io";
 
 class GetMoney extends Component {
     constructor(props){
@@ -14,7 +15,12 @@ class GetMoney extends Component {
         showDealType: false,
         address:'',
         dis: false,
-        address: ''
+        arr1:[],
+        arr2:[],
+        arr:[],
+        BTCBalances:[],
+        BTCAddress:'',
+        type:''
       }
     }
     getTypeShow = (event) => {
@@ -23,13 +29,21 @@ class GetMoney extends Component {
         showDealType: !this.state.showDealType
       })
     }
-    showTypes = (v) => {
-      this.setState({
-        type: v,
-        showDealType: false
-      },()=>{
-          this.getNewArray()
-      })
+    showTypes = (v,address) => {
+      if(v == 'BTC'){
+        this.setState({
+          type: v,
+          address: this.state.BTCAddress,
+          showDealType: false
+        })
+      }else{
+        this.setState({
+          type: v,
+          address: address,
+          showDealType: false
+        })
+      }
+      
     }
   
     componentWillMount(){
@@ -41,19 +55,68 @@ class GetMoney extends Component {
       }
       
     }
-    getNewArray = ()=>{
-      let wallet_info = JSON.parse(window.localStorage.getItem('wallet_info'));
-      let newArray = wallet_info.filter(v => this.state.type.toLocaleLowerCase()==v.coinType)
-      this.setState({
-        address: newArray[0].address
-      })
-    }
+    // getNewArray = ()=>{
+    //   let wallet_info = JSON.parse(window.localStorage.getItem('wallet_info'));
+    //   let newArray = wallet_info.filter(v => this.state.type.toLocaleLowerCase()==v.coinType)
+    //   this.setState({
+    //     address: newArray[0].address
+    //   })
+    // }
     componentDidMount(){
       document.addEventListener('click', this.closeDialog);
-      this.getNewArray()
+      // this.getNewArray()
       this.setState({
-        address:window.localStorage.getItem('address')
+        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
+      }, () => {
+        this.state.addCurrencyList.map((v, i) => {
+          if (v.coinType == 'bitcoin') {
+            this.setState({
+              BTCAddress: v.address
+            }, () => {
+              this.getBalances()
+            })
+          }
+        })
       })
+      
+    }
+    getBalances(){
+      fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+        .then(res => {
+          this.setState({
+            BTCBalances: res.data
+          },()=>{
+              fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                .then(res => {
+                  this.setState({
+                    arr1: res.data.balances
+                  }, () => {
+                    if (this.state.type == "") {
+                      this.setState({
+                        type: res.data.balances[0].show_name,
+                        address: res.data.balances[0].address
+                      })
+                    }
+                  })
+                })
+              fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                .then(res => {
+                  this.setState({
+                    arr2: res.data.balances
+                  }, () => {
+                    let arr = this.state.arr1.concat(this.state.arr2)
+                    let newArr = arr.concat(this.state.BTCBalances)
+                    newArr.sort((a, b) => {
+                      return b.balance - a.balance
+                    })
+                    this.setState({
+                      arr: newArr
+                    })
+                  })
+                })
+          })
+        })
+      
     }
     handleCopy = () => {
       const spanText = document.getElementById('add').innerText;
@@ -82,8 +145,32 @@ class GetMoney extends Component {
         showDealType: false
       })
     }
+    getFloat(number, n) {
+      n = n ? parseInt(n) : 0;
+      if (n <= 0) {
+        return Math.round(number);
+      }
+      number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+      number = Number(number).toFixed(n); //补足位数
+      return number;
+    }
+    getSearchList=(e)=>{
+      if (e.target.value){
+        let arr = this.state.arr.filter(v => {
+          if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+            return v;
+          }
+        })
+        this.setState({
+          arr: arr
+        })
+      }else{
+        this.getBalances()
+      }
+     
+    }
     render(){
-      let { address, showDealType,types,type,title,dis } = this.state;
+      let { address, showDealType, type, dis,arr } = this.state;
         return (
           <div className="getMoney">
             <div className="dialogContent">
@@ -97,9 +184,24 @@ class GetMoney extends Component {
                 }
                 {
                   showDealType ? <div className='dropdown-content1'>
+                    <div className="formSearch">
+                      <img src="/img/sousuo 2@2x.png" />
+                      <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                    </div>
                     {
-                      types.map((v, i) => {
-                        return <span key={i} className={v == type ? 'active' : null} onClick={() => this.showTypes(v)}>{v}</span>
+                      arr.map((v, i) => {
+                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address)}>
+                          <div className="searchEvery">
+                            <img src={v.show_icon} />
+                            <div className="searchEvery1">
+                              <div>
+                                <h4>{v.show_name}</h4>
+                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                              </div>
+                              <span className={type == v.show_name ? 'check active' : 'check'}></span>
+                            </div>
+                          </div>
+                        </div>
                       })
                     }
                   </div> : null

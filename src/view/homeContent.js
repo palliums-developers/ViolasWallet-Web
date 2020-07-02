@@ -4,6 +4,7 @@ import "./app.scss";
 // let url = "https://api.violas.io";
 let url = "https://api4.violas.io"
 let url1 = "https://tbtc1.trezor.io"
+
 class HomeContent extends Component {
     constructor(){
       super()
@@ -34,7 +35,7 @@ class HomeContent extends Component {
       console.log()
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-        typeName:window.sessionStorage.getItem("typeName")
+        typeName:JSON.parse(window.sessionStorage.getItem("typeName"))
       }, () => {
         this.state.addCurrencyList.map((v, i) => {
           if (v.coinType == 'bitcoin') {
@@ -85,12 +86,25 @@ class HomeContent extends Component {
                        arr.sort((a, b) => {
                          return b.balance - a.balance
                        })
-                       
+                       arr.map((v, i) => {
+                           if (v.checked) {
+                             return v;
+                           } else {
+                             return Object.assign(v, { checked: true })
+                           }
+                         })
                       if (this.state.typeName){
-                        let newArr = []; 
-                        newArr = arr.filter(v => v.show_name != this.state.typeName)
+                        // let newArr = []; 
+                        let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
+                        for (let i = 0; i < arr.length; i++){
+                          for (let j = 0; j < typeNames.length; j++) {
+                            if (arr[i].show_name.indexOf(typeNames[j])==0) {
+                              arr[i].checked = false
+                            }
+                          }
+                        }
                         this.setState({
-                          checkData: newArr
+                          checkData: arr
                         }, () => {
                           let amount = 0;
                           for (let i = 0; i < this.state.checkData.length; i++) {
@@ -100,7 +114,6 @@ class HomeContent extends Component {
                           this.setState({
                             coinsBalance: amount
                           }, () => {
-                            console.log(this.state.coinsBalance, this.state.BTCBalance)
                             window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
                             this.setState({
                               totalAmount: this.state.coinsBalance + this.state.BTCBalance
@@ -119,7 +132,6 @@ class HomeContent extends Component {
                           this.setState({
                             coinsBalance: amount
                           }, () => {
-                             console.log(this.state.coinsBalance, this.state.BTCBalance)
                             window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
                             this.setState({
                               totalAmount: this.state.coinsBalance + this.state.BTCBalance
@@ -139,7 +151,7 @@ class HomeContent extends Component {
     
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
-      console.log(totalAmount)
+      // console.log(totalAmount)
         return (
             <div className="content">
               <div className="contentWrap">
@@ -219,12 +231,13 @@ class HomeContent extends Component {
                     
                     {
                       checkData.map((v, i) => {
-                        return <div className="assetListsEvery" key={i} onClick={() => {
+                        return <div className="assetListsEvery" style={v.checked == false ? {display:"none"} : {display:"flex"}} key={i} onClick={() => {
                           this.props.showDetails({
                             disType: !this.props.display1,
                             detailAddr:v.address,
                             name:v.name
                           });
+                         
                           window.sessionStorage.setItem('detailAddr', v.address)
                           window.sessionStorage.setItem('name', v.name)
                         }}>

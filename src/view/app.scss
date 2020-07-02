@@ -877,11 +877,12 @@ dd {
           font-size:14px;
           font-weight:400;
           color:rgba(255,255,255,1);
-          height: 20px;
+          height: 30px;
           display: flex;
           align-items: center;
           margin-top: 15px;
           cursor: pointer;
+          border-radius: 15px;
           img{
             width: 17px;
             height: 19px;
@@ -889,6 +890,9 @@ dd {
             margin-left: 12px;
             margin-right:10px;
           }
+        }
+        >p:hover{
+          background:rgba(255,255,255,.2);
         }
         .balanceList{
            width: 100%;
@@ -940,10 +944,10 @@ dd {
             background:rgba(255,255,255,.2);
             dt{
               img{
-                width: 23px;
-                height:23px;
-                // margin-left: 10px;
-                // margin-right: 10px;
+                width: 15px;
+                height:15px;
+                margin-left: 5px;
+                margin-right:5px;
               }
             }
             dd{
@@ -952,6 +956,9 @@ dd {
               color:rgba(255,255,255,1);
               
             }
+          }
+          dl:nth-child(2){
+            margin-left: 5px;
           }
           dl:hover{
             background:rgba(255,255,255,.5);
@@ -1326,14 +1333,154 @@ dd {
         }
       }
      
-      h4 {
+      >h4 {
         font-size: 24px;
         font-weight: 600;
         color: rgba(56, 47, 68, 1);
         margin-top: 69px;
         margin-bottom:47px;
       }
-      @include dropdown;
+      .dropdown1 {
+        position: relative;
+        display: flex;
+        // top: -0.05rem;
+        margin-bottom:43px;
+        > span {
+          width: 120px;
+          height: 35px;
+          padding: 0 14px;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(241, 238, 251, 1);
+          font-size: 16px;
+          font-weight: 400;
+          color: rgba(112, 56, 253, 1);
+          border-radius: 16px;
+          cursor: pointer;
+
+          i {
+            display: flex;
+            width: 11px;
+            height: 11px;
+            margin-left: 5px;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        .showClick {
+          background: rgba(97, 49, 171, 1);
+          color: rgba(255, 255, 255, 1);
+          i {
+            margin-top: 5px;
+          }
+        }
+        .dropdown-content1 {
+          width: 375px;
+          height: 338px;
+          padding: 18px 15px;
+          box-sizing: border-box;
+          position: absolute;
+          top: 50px;
+          left: -120px;
+          display: flex;
+          flex-direction: column;
+          background: #FFF;
+          border-radius: 8px;
+          box-shadow:0px 5px 10px 0px rgba(0,0,0,0.07);
+          z-index: 99;
+          overflow: auto;
+          .formSearch{
+            width: 100%;
+            height: 30px;
+            background: rgba(248, 248, 248, 1);
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            img{
+              width: 25px;
+              height: 25px;
+              margin: 0 10px;
+            }
+            input{
+              flex: 1;
+              height: 100%;
+              outline: 0;
+              border: 0;
+              background: rgba(248, 248, 248, 1);
+              font-size:14px;
+              font-weight:400;
+            }
+            ::-webkit-input-placeholder{
+              font-size:14px;
+              font-weight:400;
+              color:rgba(153,153,153,1);
+            }
+          }  
+          .searchList{
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            .searchEvery{
+              display: flex;
+              align-items: center;
+              height: 68px;
+               cursor: pointer;
+              img{
+                width: 44px;
+                height: 44px;
+                margin-right: 10px;
+              }
+              .searchEvery1{
+                margin-top: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex: 1;
+                border-bottom: 1px solid rgba(224, 224, 224, 1);
+                padding-bottom: 10px;
+                box-sizing: border-box;
+                h4{
+                  font-size:14px;
+                  font-weight:400;
+                  color:rgba(0,0,0,1);
+                  margin-bottom: 0;
+                }
+                p{
+                  font-size:12px;
+                  font-weight:400;
+                  color:rgba(153,153,153,1);
+                }
+                .check{
+                  width: 17px;
+                  height: 14px;
+                  display: flex;
+                 
+                  // img{
+                  //   width: 17px;
+                  //   height: 14px;
+                  // }
+                }
+                .active{
+                  background: url('/img/duigou 2@2x.png') no-repeat;
+                background-size: 100% 100%;
+                }
+                // .check{
+                  
+                // }
+              }
+            }
+            .searchEvery:hover .check{
+                background: url('/img/duigou 2@2x.png') no-repeat;
+                background-size: 100% 100%;
+            }
+            
+          }        
+        }
+      }
       .qrCode,
       canvas {
         width: 154px !important;

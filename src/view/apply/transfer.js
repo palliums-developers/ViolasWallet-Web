@@ -308,16 +308,16 @@ class Transfer extends Component {
           gasCurrencyCode: this.state.gasCurrencyCode,
         }
       };
-      console.log(JSON.stringify(tx))
-      // this.state.walletConnector
-      //   .sendTransaction(tx)
-      //   .then((res) => {
-      //     console.log('111')
-      //     console.log("send transaction ", res);
-      //   })
-      //   .catch((err) => {
-      //     console.log("send transaction ", err);
-      //   });
+      // console.log(JSON.stringify(tx))
+      this.state.walletConnector
+        .sendTransaction(tx)
+        .then((res) => {
+          console.log('111')
+          console.log("send transaction ", res);
+        })
+        .catch((err) => {
+          console.log("send transaction ", err);
+        });
     }
     
   };
