@@ -165,6 +165,7 @@ dd {
       }
       .qrCode {
         position: relative;
+        cursor: pointer;
         canvas {
           width: 153px !important;
           height: 153px !important;
@@ -908,7 +909,7 @@ dd {
       display: flex;
       position: relative;
       z-index: 999;
-      
+      margin-right: 50px;
       img {
         width: 24px;
         height:24px;

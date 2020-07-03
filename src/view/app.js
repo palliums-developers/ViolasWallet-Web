@@ -104,7 +104,11 @@ class App extends Component {
               <img src="/img/编组复制 11@2x.png" />
             </div>
             <h3>ViolasPay</h3>
-            <div className="qrCode">
+            <div className="qrCode" onClick={()=>{
+              this.props.history.push('/app')
+              window.localStorage.clear()
+              window.sessionStorage.clear()
+            }}>
               <QRCode value={uri}></QRCode>
               {this.state.status == 1 ?  (
                 <div className="dialog">

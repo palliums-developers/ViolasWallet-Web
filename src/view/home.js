@@ -132,7 +132,7 @@ class Home extends Component {
                 ></i>
                 <label>Wallet</label>
               </span>
-              <span
+              {/* <span
                 onClick={() => {
                   this.props.history.push("/homepage/home/changeContent");
                   this.props.showDetails()
@@ -144,8 +144,8 @@ class Home extends Component {
                   className="noMar"
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
-                <label>Market</label>
-              </span>
+                <label>Market</label> 
+              </span>*/}
             </div>
           }
           {/* <div className="navlist"> */}
@@ -215,7 +215,7 @@ class Home extends Component {
                   </div>
                 ) : null}
               </div>
-              <span>Download</span>
+              {/* <span>Download</span> */}
             </div>
             
           </div>
