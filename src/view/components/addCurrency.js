@@ -56,7 +56,7 @@ class AddCurrency extends Component {
   getBalance = () => {
     fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.setState({
           BTCData:res.data
         })
@@ -130,28 +130,24 @@ class AddCurrency extends Component {
     }
     return str;
   }
-  async getTyArgs(_name,_addr) {
+  async getTyArgs(_name,_addr,ind) {
+
+    
     fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
       .then(res => {
+        let arr = [];
+        let index = ind;
         for (let i = 0; i < res.data.published.length; i++) {
           for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
-            if (this.state.addCurrencyList1[j].show_name == _name) {
-              if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
+            if (this.state.addCurrencyList1[j].name == _name) {
+              if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].name) == 0) {
                 this.state.addCurrencyList1[j].checked = true;
-                // console.log(j)
                 window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-                // if (JSON.parse(window.sessionStorage.getItem('typeName'))){
-                //   let arr = JSON.parse(window.sessionStorage.getItem('typeName')).filter(v => {
-                //     if (v.indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
-                //       console.log(v)
-                //       return v;
-                //     }
-                //   })
-                //   console.log(arr)
-                // }
-               
-                window.sessionStorage.setItem('typeName', JSON.stringify(JSON.parse(window.sessionStorage.getItem('typeName')).splice(j, 1)))
-                this.showPolling()
+                  arr = JSON.parse(window.sessionStorage.getItem('typeName'))
+                  arr.splice(index, 1)
+                  console.log(arr)
+                  window.sessionStorage.setItem('typeName', JSON.stringify(arr))
+                  this.showPolling()
               }
             }else{
               let address = '00000000000000000000000000000001';
@@ -283,14 +279,14 @@ class AddCurrency extends Component {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                 v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
+                 v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address,i)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             }) : addCurrencyList1.map((v, i) => {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
+                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address,i)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             })
