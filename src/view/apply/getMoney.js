@@ -32,7 +32,7 @@ class GetMoney extends Component {
       })
     }
     showTypes = (v,address,name) => {
-      console.log(this.state.coinNameType)
+      
       if(v == 'VLS'){
         this.setState({
           type: v,
@@ -193,7 +193,7 @@ class GetMoney extends Component {
     }
     render(){
       let { address, showDealType, type, dis, arr, coinName } = this.state;
-      console.log(this.state.coinName,'.........')
+      console.log(this.state.showDealType,'.........')
         return (
           <div className="getMoney">
             <div className="dialogContent">

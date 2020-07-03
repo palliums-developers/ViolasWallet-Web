@@ -45,7 +45,7 @@ class TransfarDialog extends Component {
                  <QRCode value={title +':'+ address+'?amount='+amount}></QRCode>
                </div>
                 <div className="del" onClick={()=>{
-                   this.props.getDisplays()
+                   this.props.getDisplays(false)
                 }}><img src="/img/del.png"/></div>
             </div>
           </div>
@@ -57,14 +57,14 @@ let mapStateToProps = (state) =>{
 }
 let mapDispatchToProps = (dispatch) =>{
   return {
-    getDisplays:()=>{
-      dispatch({
-          type:'DISPLAY1',
-          params:{
-            type:false
-          }
-      })
-   }
+  //   getDisplays:()=>{
+  //     dispatch({
+  //         type:'DISPLAY1',
+  //         params:{
+  //           type:false
+  //         }
+  //     })
+  //  }
   }
 }
  

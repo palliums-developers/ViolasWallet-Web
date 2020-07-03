@@ -448,6 +448,11 @@ class Transfer extends Component {
         }
     }
     }
+  getDisplays = (val) =>{
+    this.setState({
+      tranferDig:val
+    })
+  }
   render() {
     let { title, balance, warning, showDealType, type, selData, tranferDig } = this.state;
     // console.log(selData, tranferDig,this.state.coinName , this.state.address )
@@ -536,7 +541,7 @@ class Transfer extends Component {
           </div>
         </div>
         {
-          tranferDig == true ? <TransfarDialog coinName={this.state.coinName} address={this.state.address} amount={this.state.amount}></TransfarDialog> : null
+          tranferDig == true ? <TransfarDialog getDisplays={this.getDisplays} coinName={this.state.coinName} address={this.state.address} amount={this.state.amount}></TransfarDialog> : null
         }
         {/*  */}
       </div>
