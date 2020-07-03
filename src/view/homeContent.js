@@ -154,7 +154,7 @@ class HomeContent extends Component {
                                                                coinsBalance: amount
                                                              }, () => {
                                                                window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                                                               console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+                                                              //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
                                                                this.setState({
                                                                  totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
                                                                }, () => {
@@ -204,7 +204,7 @@ class HomeContent extends Component {
     
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
-      console.log(checkData,'....')
+      // console.log(checkData,'....')
         return (
             <div className="content">
               <div className="contentWrap">
@@ -256,13 +256,7 @@ class HomeContent extends Component {
                 <div className="assetList">
                 <p><label>Funds</label><i onClick={() => {
                   this.props.showPolling(!this.props.display);
-                  // if (this.props.display1) {
-                  //   document.querySelector(".ant-drawer").position =
-                  //     "absolute!important";
-                  // } else {
-                  //   document.querySelector(".ant-drawer").position =
-                  //     "fixed!important";
-                  // }
+                 
                 }}><img src="/img/编组 18@2x.png"/></i></p>
                   <div className="assetLists">
                     {

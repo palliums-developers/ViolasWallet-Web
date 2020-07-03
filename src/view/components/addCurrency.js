@@ -35,7 +35,6 @@ class AddCurrency extends Component {
   }
   componentDidMount() {
     
-    
     this.setState({
       addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
     },()=>{
@@ -132,19 +131,48 @@ class AddCurrency extends Component {
     return str;
   }
   async getTyArgs(_name,_addr) {
-    let address = '00000000000000000000000000000001';
-    let prefix = '07';
-    let suffix = '00';
-    let name_length = _name.length;
-    if (name_length < 10) {
-      name_length = '0' + name_length;
-    }
-    let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
-    let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-    this.setState({ tyArgs: result },async ()=>{
-     
-      await this.sendPublish()
-    });
+    fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+      .then(res => {
+        for (let i = 0; i < res.data.published.length; i++) {
+          for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
+            if (this.state.addCurrencyList1[j].show_name == _name) {
+              if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
+                this.state.addCurrencyList1[j].checked = true;
+                // console.log(j)
+                window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
+                // if (JSON.parse(window.sessionStorage.getItem('typeName'))){
+                //   let arr = JSON.parse(window.sessionStorage.getItem('typeName')).filter(v => {
+                //     if (v.indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
+                //       console.log(v)
+                //       return v;
+                //     }
+                //   })
+                //   console.log(arr)
+                // }
+               
+                window.sessionStorage.setItem('typeName', JSON.stringify(JSON.parse(window.sessionStorage.getItem('typeName')).splice(j, 1)))
+                this.showPolling()
+              }
+            }else{
+              let address = '00000000000000000000000000000001';
+              let prefix = '07';
+              let suffix = '00';
+              let name_length = _name.length;
+              if (name_length < 10) {
+                name_length = '0' + name_length;
+              }
+              let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+              let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+              this.setState({ tyArgs: result }, async () => {
+
+                await this.sendPublish()
+              });
+            }
+
+          }
+
+        }
+      })
   }
   async sendPublish() {
     const tx = {
@@ -178,7 +206,7 @@ class AddCurrency extends Component {
       // sequenceNumber: seq,
       gasCurrencyCode: this.state.gasCurrencyCode,
     }
-    console.log(tx,'tx.........')
+    // console.log(tx,'tx.........')
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send publish ', res);
     }).catch(err => {
@@ -218,31 +246,19 @@ class AddCurrency extends Component {
       })
   }
   closePub = (name) =>{
-    // fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-    //   .then(res => {
-    //     for (let i = 0; i < res.data.published.length; i++){
-    //       for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
-    //         if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].show_name) == 0) {
-    //             console.log()
-    //         }
-    //       }
-          
-    //     }
-        
-    //   })
-    names.push(name)
-    window.sessionStorage.setItem('typeName', JSON.stringify(names))
-    for (let i = 0; i < this.state.addCurrencyList1.length;i++){
-      for (let j = 0; j < names.length; j++){
-        if (this.state.addCurrencyList1[i].show_name.indexOf(names[j])==0){
-          this.state.addCurrencyList1[i].checked = false
+      names.push(name)
+      window.sessionStorage.setItem('typeName', JSON.stringify(names))
+      for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+        for (let j = 0; j < names.length; j++) {
+          if (this.state.addCurrencyList1[i].show_name.indexOf(names[j]) == 0) {
+            this.state.addCurrencyList1[i].checked = false
+          }
         }
+
       }
-      
-    }
-    // console.log(this.state.addCurrencyList1)
-    window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-    this.showPolling()
+      // console.log(this.state.addCurrencyList1)
+      window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
+      this.props.showPolling();
   }
 
   render() {

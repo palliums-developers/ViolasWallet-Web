@@ -184,7 +184,7 @@ class Home extends Component {
                       <div className="icon">
                         <img src="/img/Combined Shape 2@2x.png" />
                       </div>
-                    </div>
+                    </div>trfggggggggg7
                     <div className="btns">
                       <dl onClick={() => {
                         this.props.history.push({

@@ -1099,11 +1099,8 @@ dd {
               }
             }
             dl:hover {
-              background: rgba(75, 30, 144, 1);
+              background: rgba(237, 229, 255, 1);
 
-              dd {
-                color: #fff;
-              }
             }
             dl:nth-child(1) dt {
               background: url("/img/transfer.png") no-repeat;
@@ -1113,16 +1110,16 @@ dd {
               background: url("/img/getMoney.png") no-repeat;
               background-size: 100% 100%;
             }
-            dl:nth-child(1):hover dt {
-              width: 24px;
-                height: 18px;
-              background: url("/img/transfer1.png") no-repeat;
-              background-size: 100% 100%;
-            }
-            dl:nth-child(2):hover dt {
-              background: url("/img/getMoney1.png") no-repeat;
-              background-size: 100% 100%;
-            }
+            // dl:nth-child(1):hover dt {
+            //   width: 24px;
+            //     height: 18px;
+            //   background: url("/img/transfer1.png") no-repeat;
+            //   background-size: 100% 100%;
+            // }
+            // dl:nth-child(2):hover dt {
+            //   background: url("/img/getMoney1.png") no-repeat;
+            //   background-size: 100% 100%;
+            // }
           }
         }
       }
@@ -1252,7 +1249,7 @@ dd {
             outline: none;
             font-size: 18px;
             font-weight: 400;
-            color: rgba(158, 156, 164, 1);
+            color: rgba(60, 56, 72, 1);
             padding-top: 16px;
             padding-left: 20px;
             box-sizing: border-box;
@@ -1289,7 +1286,7 @@ dd {
             box-sizing: border-box;
             outline: none;
             border: 0;
-            color: rgba(158, 156, 164, 1);
+            color: rgba(60, 56, 72, 1);
           }
           input::-webkit-input-placeholder {
             font-size: 18px;

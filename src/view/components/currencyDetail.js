@@ -178,39 +178,7 @@ class CurrencyDetail extends Component {
                                 </div>
                             })
                         }
-                        
-                        {/* <div className="detailList">
-                            <i><img src="/img/编组 13备份 3@2x.png" /></i>
-                            <div className="listCenter">
-                                <p>dhhoiwei…djoiejodjo</p>
-                                <p>01/18  12:06:23</p>
-                            </div>
-                            <div className="listResult">
-                                <p className="gre">99900</p>
-                            </div>
-                        </div>
-                        <div className="detailList">
-                            <i><img src="/img/编组 52@2x.png" /></i>
-                            <div className="listCenter">
-                                <p>dhhoiwei…djoiejodjo</p>
-                                <p>01/18  12:06:23</p>
-                            </div>
-                            <div className="listResult">
-                                <p className="org">99900</p>
-                            </div>
-                        </div>
-                        <div className="detailList">
-                            <i><img src="/img/编组 82@2x.png" /></i>
-                            <div className="listCenter">
-                                <p>dhhoiwei…djoiejodjo</p>
-                                <p>01/18  12:06:23</p>
-                            </div>
-                            <div className="listResult">
-                                <p className="org">99900</p>
-                            </div>
-                        </div> */}
                     </div>
-                    
                 </div>
                 {
                     total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={10} total={Number(total)} onChange={this.onChange} /> : null
