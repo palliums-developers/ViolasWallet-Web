@@ -75,18 +75,14 @@ class CurrencyDetail extends Component {
 
                 fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
                     // console.log(res.data.length)
-                    res.data.sort((a, b) => {
-                        return b.amount - a.amount;
-                    })
+                   
                     this.setState({
                         dataList: res.data
                     })
                 })
             } else if (this.state.navType == 'into') {
                 fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=1').then(res => res.json()).then(res => {
-                    res.data.sort((a, b) => {
-                        return b.amount - a.amount;
-                    })
+                    
                     this.setState({
                         total: res.data.length,
                         dataList: res.data
@@ -94,9 +90,7 @@ class CurrencyDetail extends Component {
                 })
             } else if (this.state.navType == 'out') {
                 fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=0').then(res => res.json()).then(res => {
-                    res.data.sort((a, b) => {
-                        return b.amount - a.amount;
-                    })
+                    
                     this.setState({
                         total: res.data.length,
                         dataList: res.data
@@ -172,7 +166,10 @@ class CurrencyDetail extends Component {
                                         <p>{timeStamp2String(v.expiration_time+'000')}</p>
                                     </div>
                                     <div className="listResult">
-                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddr ? 'org':'green'}>{v.amount / 1e6}</p>
+                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddr ? 'org' : 'green'}>{
+                                            v.type == 0 ? '' : v.sender == detailAddr ? 
+                                            '-' : v.receiver == detailAddr ? '+' : null
+                                        }{v.amount / 1e6}</p>
                                         {/* <p className="org">交易中</p> */}
                                     </div>
                                 </div>

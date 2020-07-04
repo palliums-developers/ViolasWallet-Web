@@ -105,9 +105,10 @@ class App extends Component {
             </div>
             {/* <h3>ViolasPay</h3> */}
             <div className="qrCode" onClick={()=>{
-              this.props.history.push('/app')
               window.localStorage.clear()
               window.sessionStorage.clear()
+              this.props.history.push('/app')
+
             }}>
               <QRCode value={uri}></QRCode>
               {this.state.status == 1 ?  (
