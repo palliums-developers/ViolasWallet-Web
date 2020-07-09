@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
+
 // import { withRouter } from "react-router-dom";
-import '../app.scss'
+import '../app.scss';
 // let url = 'https://api.violas.io'
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
 
 class CurrencyDetail extends Component {
     constructor(props) {
@@ -32,19 +33,15 @@ class CurrencyDetail extends Component {
             page:0,
             pageSize:10,
             curIndex:0,
-            detailAddr:'',
-            name:''
+            dis: false,
         };
         
     }
-    componentDidMount() { 
-        this.setState({
-            detailAddr: window.sessionStorage.getItem('detailAddr')&&window.sessionStorage.getItem('detailAddr'),
-            name: window.sessionStorage.getItem('name') && window.sessionStorage.getItem('name'),
-        },()=>{
-           this.getNavData() 
-        })
+    componentDidMount() {
+        this.getNavData()  
+
     }
+   
     getSubStr(str){
         if(str == null){
          return 'null'
@@ -56,8 +53,8 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
-        let {detailAddr,name} = this.state;
-        console.log(detailAddr, name)
+        let {detailAddrs,name} = this.props;
+        console.log(detailAddrs, name)
         if (name == 'BTC'){
             this.setState({
                 dataList: []
@@ -65,7 +62,7 @@ class CurrencyDetail extends Component {
         }else{
             if (this.state.navType == 'all') {
                 if (this.state.total == 0) {
-                    fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
+                    fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
 
                         this.setState({
                             total: res.data.length
@@ -73,7 +70,7 @@ class CurrencyDetail extends Component {
                     })
                 }
 
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
                     // console.log(res.data.length)
                    
                     this.setState({
@@ -81,7 +78,7 @@ class CurrencyDetail extends Component {
                     })
                 })
             } else if (this.state.navType == 'into') {
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=1').then(res => res.json()).then(res => {
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&flows=1').then(res => res.json()).then(res => {
                     
                     this.setState({
                         total: res.data.length,
@@ -89,7 +86,7 @@ class CurrencyDetail extends Component {
                     })
                 })
             } else if (this.state.navType == 'out') {
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddr + '&&flows=0').then(res => res.json()).then(res => {
+                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&flows=0').then(res => res.json()).then(res => {
                     
                     this.setState({
                         total: res.data.length,
@@ -114,27 +111,52 @@ class CurrencyDetail extends Component {
             this.getNavData()
         });
     };
-    curDataFun = (val) => {
-        console.log(val)
-        this.props.showDetails();
-        this.props.showEveryDetail({
-            display2:true,
-            detailData:val
-        });
-        // this.props.getDetailData(val)
-    }
+
+    handleCopy = () => {
+        const spanText = document.getElementById('add').innerText;
+        const oInput = document.createElement('input');
+        oInput.value = spanText;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand('Copy'); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        document.body.removeChild(oInput);
+        this.setState({
+            dis: true
+        })
+        let Timer = setInterval(() => {
+            this.setState({
+                dis: false
+            })
+        }, 1000);
+    };
+    
     render() {
-        let { types, navType, dataList, total, curPage} = this.state;
-        let { detailAddr } = this.state;
-        // console.log(dataList)
+        let { types, navType, dataList, total, curPage,dis} = this.state;
+        let { detailAddrs,nameType,icon,rate,balance } = this.props;
         return (
             <div className="currencyDetail">
-                <h4 onClick={() => this.showDetails()}>
+                <h4 onClick={() => this.props.showDetails(false)}>
                     <i>
                         <img src="/img/编组备份 3@2x.png" />
                     </i>
                     Currency Detail
                 </h4>
+                
+                <div className="detailsBalance">
+                    <p className="title"><img src={icon}/><label>{nameType}</label></p>
+                    <div className="bal">
+                        <span>{balance}</span>
+                        <span>≈${rate}</span>
+                    </div>
+                    <div className="addressCode">
+                        <span id="add">{detailAddrs}</span>
+                        {
+                            dis ? <i onClick={() => this.handleCopy()}><img src="/img/fuzhi 3@2x.png" /></i> : <i onClick={() => this.handleCopy()}><img src="/img/Fill 3@2x.png" /></i>
+                        }
+                    </div>
+                </div>
                 <div className="detailContent">
                     <div className="detailNav">
                         {
@@ -152,34 +174,40 @@ class CurrencyDetail extends Component {
                     <div className="detailLists">
                         {
                             dataList.map((v,i)=>{
-                                return <div key={i} className="detailList" onClick={() => this.curDataFun(v)}>
+                                return <div key={i} className="detailList" onClick={() => {
+                                    this.props.showDetails(false)
+                                    this.props.curDataFun(v)
+                                    this.props.showDetails1(true)
+                                }}>
                                     <i>
                                      {
-                                            v.type == 0 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddr ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddr ? <img src="/img/编组 13备份 2@2x.png" /> : null
+                                            v.type == 0 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddrs ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddrs ? <img src="/img/编组 13备份 2@2x.png" /> : null
                                       }</i>
                                     <div className="listCenter">
                                         <p>
                                             {
-                                                v.type == 0 ? this.getSubStr(v.sender) : v.sender == detailAddr ? this.getSubStr(v.receiver) : v.receiver == detailAddr ? this.getSubStr(v.sender) : null
+                                                v.type == 0 ? this.getSubStr(v.sender) : v.sender == detailAddrs ? this.getSubStr(v.receiver) : v.receiver == detailAddrs ? this.getSubStr(v.sender) : null
                                             }
                                         </p>
                                         <p>{timeStamp2String(v.expiration_time+'000')}</p>
                                     </div>
                                     <div className="listResult">
-                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddr ? 'org' : 'green'}>{
-                                            v.type == 0 ? '' : v.sender == detailAddr ? 
-                                            '-' : v.receiver == detailAddr ? '+' : null
+                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddrs ? 'org' : 'green'}>{
+                                            v.type == 0 ? '' : v.sender == detailAddrs ? 
+                                            '-' : v.receiver == detailAddrs ? '+' : null
                                         }{v.amount / 1e6}</p>
                                         {/* <p className="org">交易中</p> */}
                                     </div>
                                 </div>
                             })
                         }
+                        
                     </div>
                 </div>
                 {
                     total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={10} total={Number(total)} onChange={this.onChange} /> : null
                 }
+                
             </div>
         );
     }
@@ -189,12 +217,12 @@ let mapStateToProps = (state) => {
 };
 let mapDispatchToProps = (dispatch) => {
     return {
-        showDetails: () => {
-            dispatch({
-                type: "DISPLAY1",
-                payload: false,
-            });
-        },
+        // showDetails: () => {
+        //     dispatch({
+        //         type: "DISPLAY1",
+        //         payload: false,
+        //     });
+        // },
         showEveryDetail: (payload) => {
             dispatch({
                 type: "DISPLAY2",
@@ -204,6 +232,7 @@ let mapDispatchToProps = (dispatch) => {
                 }
             });
         },
+       
         // getDetailData:(payload)=>{
         //     dispatch({
         //         type: "DETAILDATA",

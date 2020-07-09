@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import WalletConnect from '../../packages/browser/src/index';
 import '../app.scss'
 // let url = "https://api.violas.io";
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 let names = []
 
 class AddCurrency extends Component {
@@ -223,7 +223,7 @@ class AddCurrency extends Component {
         })
         for (let i = 0; i < data.length; i++) {
           for (let j = 0; j < res.data.published.length; j++) {
-            if (data[i].name.indexOf(res.data.published[j]) == 0) {
+            if (data[i].name == res.data.published[j]) {
               data[i].checked = true;
               break;
             } else {

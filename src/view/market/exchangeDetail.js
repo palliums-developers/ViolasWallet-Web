@@ -13,13 +13,11 @@ class ExchangeDetail extends Component {
     componentDidMount() {
 
     }
-    onClose = () => {
-        this.props.showDrawer()
-    };
+   
     render() {
         return (
             <div className="exchangeDetail">
-                <h4 onClick={()=>this.onClose()}><i><img src="/img/编组备份 3@2x.png"/></i>兑换详情</h4>
+                <h4 onClick={() => this.props.showDrawer(false)}><i><img src="/img/编组备份 3@2x.png"/></i>兑换详情</h4>
                 <div className="status">
                     <p><img src="/img/shenhetongguo 2@2x.png"/><label>已提交</label><i></i></p>
                     <p><img src="/img/shenhezhong-2 2@2x.png" /><label>兑换中</label><i></i></p>
@@ -51,12 +49,12 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        showDrawer: () => {
-            dispatch({
-                type: 'VISIBLE',
-                payload: false
-            })
-        }
+        // showDrawer: () => {
+        //     dispatch({
+        //         type: 'VISIBLE',
+        //         payload: false
+        //     })
+        // }
     }
 }
 

@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Drawer } from "antd";
+import CurrencyDetail from "./components/currencyDetail";
+import Details from "./components/details";
 import "./app.scss";
 // let url = "https://api.violas.io";
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
 let url1 = "https://tbtc1.trezor.io"
 
 class HomeContent extends Component {
@@ -25,13 +28,15 @@ class HomeContent extends Component {
         BTCBalance:0,
         totalAmount:0.00,
         typeName:'',
-        BTCRate:0
+        BTCRate:0,
+        display1:false,
+        display2: false,
+        disType:false,
+        detailAddr: '',
+        name: ''
       }
     }
-    componentWillMount(){
-      
-      
-    }
+    
     componentDidMount(){
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -58,7 +63,7 @@ class HomeContent extends Component {
       number = Number(number).toFixed(n); //补足位数
       return number;
     }
-     getBalances(){
+    getBalances(){
        fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
          .then(res => {
            this.setState({
@@ -83,6 +88,11 @@ class HomeContent extends Component {
                              this.setState({
                                arr1: res.data.balances
                              },()=>{
+                               this.state.arr1.map((v,i)=>{
+                                 if (v.show_name == 'LBR'){
+                                     v.show_name = 'VLS'
+                                  }
+                               })
                                  let BTCBalance = 0;
                                  this.state.BTCBalances.map((v, i) => {
                                    BTCBalance += Number(this.getFloat((v.BTC/1e8) * v.rate, 8))
@@ -201,7 +211,40 @@ class HomeContent extends Component {
        
       
     }
+    //显示币种详情页面
+    showDetails=(type)=>{
+      this.setState({
+        display1: type
+      })
+    }
+    //显示详情页面
+    showDetails1 = (type) =>{
+      console.log(type)
+      this.setState({
+        display2: type
+      })
+    }
     
+    curDataFun = (val) => {
+      console.log(val)
+
+    }
+    showEveryDetail = (type) =>{
+      this.setState({
+        display2: type,
+        display1:true
+      })
+    }
+    onClose = () => {
+      this.setState({
+        display1:false
+      })
+    };
+    onClose1 = () => {
+      this.setState({
+        display2: false
+      })
+    };
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
       // console.log(checkData,'....')
@@ -235,7 +278,7 @@ class HomeContent extends Component {
                           pathname: '/homepage/home/transfer'
                         })
                       this.props.showPolling(false);
-                      this.props.showDetails(false);
+                      // this.props.showDetails(false);
                       }}>
                         <dt></dt>
                         <dd>Transfer</dd>
@@ -245,7 +288,7 @@ class HomeContent extends Component {
                           pathname: '/homepage/home/getMoney'
                         })
                       this.props.showPolling(false);
-                      this.props.showDetails(false);
+                      // this.props.showDetails(false);
                       }}>
                         <dt></dt>
                         <dd>Receive</dd>
@@ -262,11 +305,14 @@ class HomeContent extends Component {
                     {
                       BTCBalances.map((v,i)=>{
                         return <div className="assetListsEvery" key={i} onClick={() => {
-                          this.props.showDetails({
-                            disType: !this.props.display1,
-                            // detailAddr: BTCAddress,
-                            name:v.name
-                          });
+                          this.setState({
+                            display1: !this.state.display1,
+                            name: v.name,
+                            detailAddr: BTCAddress,
+                            rate: v.BTC == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.BTC / 1e8), 6),
+                            icon:v.show_icon,
+                            balance: v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)
+                          })
                           // window.sessionStorage.setItem('detailAddr', BTCAddress)
                           window.sessionStorage.setItem('name', v.name)
                         }}>
@@ -279,14 +325,14 @@ class HomeContent extends Component {
                     {
                       checkData.map((v, i) => {
                         return <div className="assetListsEvery" style={v.checked == false ? {display:"none"} : {display:"flex"}} key={i} onClick={() => {
-                          this.props.showDetails({
-                            disType: !this.props.display1,
-                            detailAddr:v.address,
-                            name:v.name
-                          });
-                         
-                          window.sessionStorage.setItem('detailAddr', v.address)
-                          window.sessionStorage.setItem('name', v.name)
+                          this.setState({
+                            display1:!this.state.display1,
+                            name: v.show_name == 'VLS' ? 'VLS' : v.show_name,
+                            detailAddr: v.address,
+                            rate: v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6),
+                            icon: v.show_icon,
+                            balance: v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6)
+                          })
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6)}</span><label>≈${v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6)}</label></div>
@@ -297,7 +343,30 @@ class HomeContent extends Component {
                   </div>
                 </div>
               </div>
+              {/* 币种详情 */}
+              <Drawer
+                // title="Basic Drawer"
+                placement="right"
+                closable={false}
+                onClose={this.onClose}
+                visible={this.state.display1}
+                mask={false}
+              >
+              <CurrencyDetail showDetails={this.showDetails} showDetails1={this.showDetails1} curDataFun={this.curDataFun} nameType={this.state.name} detailAddrs={this.state.detailAddr} rate={this.state.rate} icon={this.state.icon} balance={this.state.balance}></CurrencyDetail>
+              </Drawer>
+              { /* 详情 */}
+              <Drawer
+                // title="Basic Drawer"
+                placement="right"
+                closable={false}
+                onClose={this.onClose1}
+                visible={this.state.display2}
+                mask={false}
+              >
+              <Details showEveryDetail={this.showEveryDetail}></Details>
+              </Drawer>
             </div>
+           
         )
     }
 
@@ -312,16 +381,6 @@ let mapDispatchToProps = (dispatch) => {
       dispatch({
         type: "DISPLAY",
         payload: type,
-      });
-    },
-    showDetails: (type) => {
-      dispatch({
-        type: "DISPLAY1",
-        payload: {
-          disType:type.disType,
-          detailAddr: type.detailAddr,
-          name:type.name
-        }
       });
     },
   };

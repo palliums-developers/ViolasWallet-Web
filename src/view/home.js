@@ -4,10 +4,7 @@ import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
 import { Drawer } from "antd";
 import AddCurrency from "./components/addCurrency";
-import CurrencyDetail from "./components/currencyDetail";
-import Details from "./components/details";
 import ExchangeDialog from './market/exchangeDialog'
-import ExchangeDetail from './market/exchangeDetail'
 import MyPoolDialog from './market/myPoolDialog'
 import PoolingDetail from './market/poolingDetail'
 import WalletConnect from "../packages/browser/src/index";
@@ -66,10 +63,6 @@ class Home extends Component {
     number = Number(number).toFixed(n); //补足位数
     return number;
   }
-  onClose = () => {
-    this.props.showPolling();
-    this.props.showDetails();
-  };
   
   async getNewWalletConnect() {
     await this.setState({
@@ -105,8 +98,8 @@ class Home extends Component {
               <span
                 onClick={() => {
                   this.props.history.push("/homepage/home/homeContent");
-                  this.props.showDetails()
-                  this.props.showPolling()
+                  // this.props.showDetails()
+                  // this.props.showPolling()
                 }}
                 className={
                   active == "homeContent"
@@ -132,11 +125,11 @@ class Home extends Component {
                 ></i>
                 <label>Wallet</label>
               </span>
-              {/* <span
+              <span
                 onClick={() => {
                   this.props.history.push("/homepage/home/changeContent");
-                  this.props.showDetails()
-                  this.props.showPolling()
+                  // this.props.showDetails()
+                  // this.props.showPolling()
                 }}
                 className={active == "changeContent" ? "active" : null}
               >
@@ -145,13 +138,9 @@ class Home extends Component {
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
                 <label>Market</label> 
-              </span>*/}
+              </span>
             </div>
           }
-          {/* <div className="navlist"> */}
-            
-            {/*  */}
-          {/* </div> */}
         </div>
 
         <div className="box">
@@ -190,8 +179,7 @@ class Home extends Component {
                         this.props.history.push({
                           pathname: '/homepage/home/transfer'
                         })
-                        this.props.showDetails()
-                        this.props.showPolling()
+                        
                       }} className={active == 'transfer' ? 'act' : null}>
                         <dt>
                           <img src="/img/编组 13备份 4@2x.png" />
@@ -202,8 +190,6 @@ class Home extends Component {
                         this.props.history.push({
                           pathname: '/homepage/home/getMoney'
                         })
-                        this.props.showDetails()
-                        this.props.showPolling()
                       }} className={active == 'getMoney' ? 'act' : null}>
                         <dt>
                           <img src="/img/编组 13备份 5@2x.png" />
@@ -226,45 +212,13 @@ class Home extends Component {
           // title="Basic Drawer"
           placement="right"
           closable={false}
-          onClose={this.onClose}
+          // onClose={this.onClose}
           visible={this.props.display}
           mask={false}
         >
           <AddCurrency></AddCurrency>
         </Drawer>
-        {/* 币种详情 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.props.display1}
-          mask={false}
-        >
-          <CurrencyDetail></CurrencyDetail>
-        </Drawer>
-        {/* 详情 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.props.display2}
-          mask={false}
-        >
-          <Details></Details>
-        </Drawer>
-        {/* 兑换详情 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.props.visible}
-          mask={false}
-        >
-          <ExchangeDetail></ExchangeDetail>
-        </Drawer>
+        
         {/* 我的资金池 */}
         <Drawer
           // title="Basic Drawer"
@@ -306,18 +260,6 @@ let mapDispatchToProps = (dispatch) =>{
       dispatch({
         type: "t_types",
         params: type.types1,
-      });
-    },
-    showDetails: () => {
-      dispatch({
-        type: "DISPLAY1",
-        payload: false,
-      });
-    },
-    showPolling: () => {
-      dispatch({
-        type: "DISPLAY",
-        payload: false,
       });
     },
     showEveryDetail: () => {

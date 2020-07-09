@@ -22,6 +22,7 @@ class App extends Component {
   }
   componentDidMount() {
    this.QRCode();
+  
   }
   async componentWillMount() {
     await this.getNewWalletConnect(); 
@@ -108,7 +109,6 @@ class App extends Component {
               window.localStorage.clear()
               window.sessionStorage.clear()
               this.props.history.push('/app')
-
             }}>
               <QRCode value={uri}></QRCode>
               {this.state.status == 1 ?  (

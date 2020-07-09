@@ -186,7 +186,7 @@ class CashPooling extends Component {
                                     </div>
                             }
                             
-                            <div className="changeImg"><img src="/img/编组 2备份@2x.png" /></div>
+                            <div className="changeImg">&</div>
                             {
                                 type == '转入' ? <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                     <label>转入</label>
@@ -229,7 +229,10 @@ class CashPooling extends Component {
                             <div className="changeRate">你的资金池共有：— —</div>
                         </div>
                         <div className="foot">
-                            <p className="btn" onClick={() => this.showExchangeCode()}>转入</p>
+                            {
+                                type == '转入' ? <p className="btn" onClick={() => this.showExchangeCode()}>转入</p> : <p className="btn" onClick={() => this.showExchangeCode()}>转出</p>
+                            }
+                            
                             <p className="descr">{warning}</p>
                         </div>
                         <div className="changeRecord poolRecord">
@@ -289,6 +292,7 @@ class CashPooling extends Component {
                         </div>
                     </div>
                 </div>
+                
             </div>
         )
     }

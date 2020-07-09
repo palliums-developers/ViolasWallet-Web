@@ -4,7 +4,7 @@ import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 import TransfarDialog from './transfarDialog.js'
 // import {withRouter} from 'react-router-dom'
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
 let url1 = "https://tbtc1.trezor.io"
 // let url = "https://api.violas.io"
 let WAValidator = require('wallet-address-validator');
@@ -44,9 +44,9 @@ class Transfer extends Component {
     if (this.props.display) {
       this.props.showPolling();
     }
-    if (this.props.display1) {
-      this.props.showDetails();
-    }
+    // if (this.props.display1) {
+    //   this.props.showDetails();
+    // }
     await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {
@@ -83,6 +83,11 @@ class Transfer extends Component {
                 this.setState({
                   arr1: res.data.balances
                 }, () => {
+                    this.state.arr1.map((v, i) => {
+                      if (v.show_name == 'LBR') {
+                        v.show_name = 'VLS'
+                      }
+                    })
                   if (this.state.type == "") {
                     this.setState({
                       type: res.data.balances[0].show_name,
@@ -569,12 +574,12 @@ let mapDispatchToProps = (dispatch) =>{
         payload: false,
       });
     },
-    showDetails: () => {
-      dispatch({
-        type: "DISPLAY1",
-        payload: false,
-      });
-    },
+    // showDetails: () => {
+    //   dispatch({
+    //     type: "DISPLAY1",
+    //     payload: false,
+    //   });
+    // },
   }
 }
  

@@ -12,7 +12,7 @@ class ChangeContent extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.location.pathname.split('/')[4])
+        // console.log(this.props.location.pathname.split('/')[4])
         this.setState({
             name: this.props.location.pathname.split('/')[4]
         })

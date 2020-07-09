@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 
 class GetMoney extends Component {
     constructor(props){
@@ -26,7 +26,7 @@ class GetMoney extends Component {
       }
     }
     getTypeShow = (event) => {
-      this.stopPropagation(event)
+      // this.stopPropagation(event)
       this.setState({
         showDealType: !this.state.showDealType
       })
@@ -71,9 +71,9 @@ class GetMoney extends Component {
       if(this.props.display){
         this.props.showPolling();
       }
-      if (this.props.display1){
-        this.props.showDetails();
-      }
+      // if (this.props.display1){
+      //   this.props.showDetails();
+      // }
       
     }
     // getNewArray = ()=>{
@@ -84,7 +84,7 @@ class GetMoney extends Component {
     //   })
     // }
     componentDidMount(){
-      document.addEventListener('click', this.closeDialog);
+      // document.addEventListener('click', this.closeDialog);
       // this.getNewArray()
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
@@ -112,6 +112,11 @@ class GetMoney extends Component {
                   this.setState({
                     arr1: res.data.balances
                   }, () => {
+                      this.state.arr1.map((v, i) => {
+                        if (v.show_name == 'LBR') {
+                          v.show_name = 'VLS'
+                        }
+                      })
                     if (this.state.type == "") {
                       this.setState({
                         type: res.data.balances[0].show_name,
@@ -159,9 +164,9 @@ class GetMoney extends Component {
         })
       }, 1000);
     };
-    stopPropagation(e) {
-      e.nativeEvent.stopImmediatePropagation();
-    }
+    // stopPropagation(e) {
+    //   e.nativeEvent.stopImmediatePropagation();
+    // }
     closeDialog = () => {
       this.setState({
         showDealType: false
@@ -193,7 +198,7 @@ class GetMoney extends Component {
     }
     render(){
       let { address, showDealType, type, dis, arr, coinName } = this.state;
-      console.log(this.state.showDealType,'.........')
+      // console.log(this.state.showDealType,'.........')
         return (
           <div className="getMoney">
             <div className="dialogContent">
@@ -206,13 +211,13 @@ class GetMoney extends Component {
                   showDealType ? <span className="showClick" onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
                 }
                 {
-                  showDealType ? <div className='dropdown-content1'>
+                   showDealType ? <div className='dropdown-content1'>
                     <div className="formSearch">
                       <img src="/img/sousuo 2@2x.png" />
                       <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
                     </div>
                     {
-                      arr.map((v, i) => {
+                   arr.map((v, i) => {
                         return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address,v.name)}>
                           <div className="searchEvery">
                             <img src={v.show_icon} />
@@ -258,12 +263,6 @@ let mapDispatchToProps = (dispatch) =>{
     showPolling: () => {
       dispatch({
         type: "DISPLAY",
-        payload: false,
-      });
-    },
-    showDetails: () => {
-      dispatch({
-        type: "DISPLAY1",
         payload: false,
       });
     },

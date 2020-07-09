@@ -1,6 +1,5 @@
 let initState = {
     display: false,
-    display1: false,
     display2: false,
     detailData: {},
     showExcode: false,
@@ -23,8 +22,6 @@ let ListReducer = (state = initState, action) => {
     switch (action.type) {
         case 'DISPLAY':
             return { display: action.payload };
-        case 'DISPLAY1':
-            return { display1: action.payload.disType, detailAddr: action.payload.detailAddr, name: action.payload.name};
         case 'DISPLAY2':
             return { display2: action.payload.display2, detailData: action.payload.detailData };
         case 'EXCHANGE':

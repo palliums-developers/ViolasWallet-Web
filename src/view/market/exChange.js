@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom'
 import "../app.scss";
 import { connect } from 'react-redux';
-
+import ExchangeDetail from '../market/exchangeDetail';
+import { Drawer } from "antd";
 // import RouterView from '../router/routerView'
 let url = "http://52.27.228.84:4000"
 
@@ -18,8 +19,8 @@ class ExChange extends Component {
             getFocus1: false,
             inputAmount:'',
             outputAmount:'',
-            warning:''
-            // visible:false
+            warning:'',
+            visible:false
         }
     }
     componentWillMount(){
@@ -107,6 +108,16 @@ class ExChange extends Component {
             })
         }
     }
+    onClose = () => {
+        this.setState({
+            visible:false
+        })
+    };
+    showDrawer = (type) =>{
+        this.setState({
+            visible: type
+        })
+    }
     render() {
         let { names, name, ind, getFocus, getFocus1, showMenuViolas, showMenuViolas1,warning } = this.state;
 
@@ -184,7 +195,9 @@ class ExChange extends Component {
                       <div className="changeRecord">
                         <h4>兑换记录</h4>
                          <div className="changeLists" onClick={()=>{
-                                this.props.showDrawer(this.props.visible)
+                             this.setState({
+                                 visible:true
+                             })
                          }}>
                             <div className="changeList">
                               <div className="list1">
@@ -227,6 +240,17 @@ class ExChange extends Component {
                       </div>
                     </div>
                </div>
+                {/* 兑换详情 */}
+                <Drawer
+                    // title="Basic Drawer"
+                    placement="right"
+                    closable={false}
+                    onClose={this.onClose}
+                    visible={this.state.visible}
+                    mask={false}
+                >
+                    <ExchangeDetail showDrawer={this.showDrawer}></ExchangeDetail>
+                </Drawer>
             </div>
         )
     }

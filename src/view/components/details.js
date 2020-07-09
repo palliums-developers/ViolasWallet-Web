@@ -41,7 +41,7 @@ class Details extends Component {
         return (
             <div className="details">
                 <h4 onClick={() => {
-                    this.props.showEveryDetail()
+                    this.props.showEveryDetail(false)
                 }}>
                     <i>
                         <img src="/img/编组备份 3@2x.png" />
@@ -85,14 +85,7 @@ let mapStateToProps = (state) => {
 };
 let mapDispatchToProps = (dispatch) => {
     return {
-        showEveryDetail:()=>{
-            dispatch({
-                type: "DISPLAY1",
-                payload:{
-                    disType:true
-                }
-            });
-        }
+ 
     };
 };
 
