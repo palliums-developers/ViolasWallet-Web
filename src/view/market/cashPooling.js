@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom'
 import "../app.scss";
 import { connect } from 'react-redux';
-
+import { timeStamp2String } from '../../utils/timer';
 // import RouterView from '../router/routerView'
 let url = "http://52.27.228.84:4000"
+let url1 = "https://api4.violas.io"
 
 class CashPooling extends Component {
     constructor() {
@@ -21,7 +22,8 @@ class CashPooling extends Component {
             getFocus1: false,
             inputAmount: '',
             outputAmount: '',
-            warning: ''
+            warning: '',
+            changeRecord:[]
             // visible:false
         }
     }
@@ -32,6 +34,38 @@ class CashPooling extends Component {
     }
     componentDidMount() {
         document.addEventListener('click', this.closeMenu);
+        this.getExchangeRecode()
+    }
+    getExchangeRecode = () => {
+        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.localStorage.getItem('address') + 'offset=0&limit=5').then(res => res.json())
+            .then(res => {
+                this.setState({
+                    changeRecord: [
+                        {
+                            "amounta": 10000,
+                            "amountb": 10014,
+                            "coina": "VLSUSD",
+                            "coinb": "VLSEUR",
+                            "date": 1594323548,
+                            "status": 4001,
+                            "token": 9999,
+                            "transaction_type": "ADD_LIQUIDITY",
+                            "version": 14
+                        },
+                        {
+                            "amounta": 10001,
+                            "amountb": 10015,
+                            "coina": "VLSUSD",
+                            "coinb": "VLSEUR",
+                            "date": 1594323549,
+                            "status": 4001,
+                            "token": 10000,
+                            "transaction_type": "REMOVE_LIQUIDITY",
+                            "version": 15
+                        }
+                    ]
+                })
+            })
     }
     getShow = (event) => {
         this.stopPropagation(event)
@@ -122,7 +156,7 @@ class CashPooling extends Component {
         }
     }
     render() {
-        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType,warning,getFocus,getFocus1 } = this.state;
+        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord } = this.state;
 
         return (
             <div className="exchange cashPooling">
@@ -238,24 +272,29 @@ class CashPooling extends Component {
                         <div className="changeRecord poolRecord">
                             <h4>资金池记录</h4>
                             <div className="poolRecordLists">
-                                <div className="poolRecordList" onClick={() => {
-                                    this.props.showDrawer1(this.props.visible1)
-                                }}>
-                                    <div className="logo"><img src="/img/编组 13备份 2@2x.png"/></div>
-                                    <div className="listContent">
-                                        <div className="listContents">
-                                          <div>
-                                              <p className="green">转入成功</p>
-                                                <p><label>999ETH</label>&nbsp;&nbsp;&&nbsp;&nbsp;<label>99900Violas</label></p>
-                                          </div>
-                                          <div>
-                                              <p>通证：+199 VETH</p>
-                                              <p>01.18 15:42</p>
-                                          </div>
+                                {
+                                    changeRecord.map((v,i)=>{
+                                        return <div key={i} className="poolRecordList" onClick={() => {
+                                            this.props.showDrawer1(this.props.visible1)
+                                        }}>
+                                            <div className="logo"><img src="/img/编组 13备份 2@2x.png" /></div>
+                                            <div className="listContent">
+                                                <div className="listContents">
+                                                    <div>
+                                                        <p className="green">转入成功</p>
+                                                        <p><label>{v.amounta}{v.coina}</label>&nbsp;&nbsp;&&nbsp;&nbsp;<label>{v.amountb}{v.coinb}</label></p>
+                                                    </div>
+                                                    <div>
+                                                        <p>通证：+{v.token}</p>
+                                                        <p>{timeStamp2String(v.date + '000')}</p>
+                                                    </div>
+                                                </div>
+                                                <label><img src="/img/rightArrow.png" /></label>
+                                            </div>
                                         </div>
-                                        <label><img src="/img/rightArrow.png"/></label>
-                                    </div>
-                                </div>
+                                    })
+                                }
+                                
                                 <div className="poolRecordList">
                                     <div className="logo"><img src="/img/编组 13备份 3@2x.png" /></div>
                                     <div className="listContent">

@@ -16,7 +16,7 @@ class Home extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: "https://bridge.walletconnect.org",
+      bridge: "http://47.52.66.26:5000",
       walletConnector: {},
       active: "",
       showMineDialog: false
@@ -30,10 +30,19 @@ class Home extends Component {
   };
   async componentWillMount() {
     await this.getNewWalletConnect();
-    
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      window.localStorage.clear()
+      window.sessionStorage.clear()
+      // this.props.history.push('/app')
+      console.log("wallet disconnected", '////////////2');
+    });
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
+    // console.log(window.localStorage.getItem('walletconnector'),'..............')
     this.setState({
       active: this.props.location.pathname.split("/")[3]
     });
@@ -66,7 +75,7 @@ class Home extends Component {
   
   async getNewWalletConnect() {
     await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
+      walletConnector: new WalletConnect({ bridge: this.state.bridge })
     });
   }
   async logout() {

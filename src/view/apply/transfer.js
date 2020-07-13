@@ -13,7 +13,7 @@ class Transfer extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: 'https://bridge.walletconnect.org',
+      bridge: 'http://47.52.66.26:5000',
       code:'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
       tyArgs: '',
       balance: 0,
@@ -25,7 +25,6 @@ class Transfer extends Component {
       type: "",
       gasCurrencyCode: 'LBR',
       showDealType: false,
-      bridge: "https://bridge.walletconnect.org",
       walletConnector: {},
       getTypeBalance1:0,
       getTypeBalance2:0,
@@ -36,7 +35,8 @@ class Transfer extends Component {
       BTCAddress: '',
       warning1:'',
       coinName:'',
-      tranferDig:false
+      tranferDig:false,
+      ind:0
     };
   }
 
@@ -51,7 +51,7 @@ class Transfer extends Component {
   }
   async getNewWalletConnect() {
     await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
+      walletConnector: new WalletConnect({ bridge: this.state.bridge })
     });
   }
   componentDidMount() {
@@ -83,11 +83,11 @@ class Transfer extends Component {
                 this.setState({
                   arr1: res.data.balances
                 }, () => {
-                    this.state.arr1.map((v, i) => {
-                      if (v.show_name == 'LBR') {
-                        v.show_name = 'VLS'
-                      }
-                    })
+                    // this.state.arr1.map((v, i) => {
+                    //   if (v.show_name == 'LBR') {
+                    //     v.show_name = 'VLS'
+                    //   }
+                    // })
                   if (this.state.type == "") {
                     this.setState({
                       type: res.data.balances[0].show_name,
@@ -104,7 +104,6 @@ class Transfer extends Component {
                 }, () => {
                   let arr = this.state.arr1.concat(this.state.arr2)
                   let arrs = arr.concat(this.state.BTCArr)
-                  console.log(arrs)
                   this.setState({
                     selData: arrs
                   })
@@ -121,12 +120,13 @@ class Transfer extends Component {
     });
   };
 
-  showTypes = (v,bal,name) => {
+  showTypes = (v,bal,name,ind) => {
     this.setState({
       type: v,
       balance:bal,
       showDealType: false,
-      coinName:name
+      coinName:name,
+      ind:ind
     },()=>{
         // this.getTypeBalance()
         this.getTypesBalance()
@@ -510,9 +510,9 @@ class Transfer extends Component {
                       return (
                         <span
                           key={i}
-                          className={v.show_name == type ? "active" : null}
+                          className={i == this.state.ind ? "active" : null}
                           onClick={() => {
-                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name) : this.showTypes(v.show_name, v.balance,v.name)
+                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name,i) : this.showTypes(v.show_name, v.balance,v.name,i)
                           }}
                         >
                           {v.show_name}

@@ -9,15 +9,24 @@ class HomePage extends Component {
     constructor(props){
       super()
       this.state = {
-        bridge: 'https://bridge.walletconnect.org',
+        bridge: 'http://47.52.66.26:5000',
         walletConnector: {},
       }
     }
     async componentWillMount() {
       await this.getNewWalletConnect();
+      this.state.walletConnector.on("disconnect", (error, payload) => {
+        if (error) {
+          throw error;
+        }
+        window.localStorage.clear()
+        window.sessionStorage.clear()
+        // this.props.history.push('/app')
+        console.log("wallet disconnected",'////////////');
+      });
     }
     async getNewWalletConnect() {
-      await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
+      await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge })});
     }
     componentDidMount() {
       window.addEventListener('onbeforeunload', () => {

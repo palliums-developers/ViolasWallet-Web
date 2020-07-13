@@ -4,8 +4,10 @@ import "../app.scss";
 import { connect } from 'react-redux';
 import ExchangeDetail from '../market/exchangeDetail';
 import { Drawer } from "antd";
+import { timeStamp2String } from '../../utils/timer';
 // import RouterView from '../router/routerView'
-let url = "http://52.27.228.84:4000"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 
 class ExChange extends Component {
     constructor() {
@@ -13,14 +15,16 @@ class ExChange extends Component {
         this.state = {
             showMenuViolas: false,
             showMenuViolas1: false,
-            names: ['Violas', 'Libra','Bitcoin'],
-            name:'Violas',
+            type:'',
             getFocus: false,
             getFocus1: false,
             inputAmount:'',
             outputAmount:'',
             warning:'',
-            visible:false
+            visible:false,
+            selData:[],
+            changeRecord:[],
+            changeList:{}
         }
     }
     componentWillMount(){
@@ -31,16 +35,45 @@ class ExChange extends Component {
         }
     }
     componentDidMount() {
-        document.addEventListener('click', this.closeMenu);
+        // document.addEventListener('click', this.closeMenu);
+        this.getSelectTypes()
+        this.getExchangeRecode()
+    }
+    getExchangeRecode = () =>{
+        fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + 'offset=0&limit=5').then(res => res.json())
+            .then(res => {
+               this.setState({
+                   changeRecord: [
+                       {
+                           "date": 1594324849,
+                           "input_amount": 10000,
+                           "input_name": "VLSUSD",
+                           "output_amount": 9951,
+                           "output_name": "VLSEUR",
+                           "status": 4001,
+                           "version": 10
+                       },
+                       {
+                           "date": 1594324849,
+                           "input_amount": 10000,
+                           "input_name": "VLSUSD",
+                           "output_amount": 9951,
+                           "output_name": "VLSEUR",
+                           "status": 4001,
+                           "version": 11
+                       }
+                   ]
+               })
+            })
     }
     getShow = (event) =>{
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showMenuViolas: !this.state.showMenuViolas
         })
     }
     getShow1 = (event) => {
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showMenuViolas1: !this.state.showMenuViolas1
         })
@@ -48,19 +81,47 @@ class ExChange extends Component {
     showMenu = (v) => {
         
         this.setState({
-            name:v,
+            type:v,
             showMenuViolas:false
+        }, () => {
+            this.getSelectTypes()
         })
     }
-    closeMenu = () => {
-        this.setState({
-            showMenuViolas: false
-        })
+    // closeMenu = () => {
+    //     this.setState({
+    //         showMenuViolas: false
+    //     })
+    // }
+    // // stopPropagation(e) {
+    //     e.nativeEvent.stopImmediatePropagation();
+    // }
+    getSelectTypes() {
+        fetch(url + "/1.0/violas/currency").then(res => res.json())
+            .then(res => {
+                let data = res.data.currencies
+                fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
+                    .then(res => {
+                        let data1=[];
+                        for (var i=0;i<data.length;i++) {
+                            for (var j = 0; j < res.data.published.length; j++) {
+                                if(data[i].show_name == res.data.published[j]){
+                                    //  console.log(data[i])
+                                    data1.push(data[i])
+                                }
+                            }
+                        }
+                        this.setState({
+                            selData: data1
+                        },()=>{
+                                if (this.state.type == "") {
+                                    this.setState({
+                                        type: this.state.selData[0].show_name
+                                    })
+                                }
+                        })
+                })
+            })
     }
-    stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
-    
     getInputAmount = (e) =>{
       if (e.target.value){
          this.setState({
@@ -119,8 +180,8 @@ class ExChange extends Component {
         })
     }
     render() {
-        let { names, name, ind, getFocus, getFocus1, showMenuViolas, showMenuViolas1,warning } = this.state;
-
+        let { type, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord } = this.state;
+        // console.log(showMenuViolas,'.......')
         return (
             <div className="exchange">
                <div className="exchangeContent">
@@ -133,10 +194,26 @@ class ExChange extends Component {
                                 <input placeholder="0.00" onChange={(e)=>this.getInputAmount(e)}/>
                                 <div className="dropdown1">
                                     {
-                                            showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径 7@2x.png" /></i></span>
+                                            showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
                                     }
-                                    
-                                    {
+                                    {showMenuViolas ? (
+                                        <div className="dropdown-content1">
+                                            {selData.map((v, i) => {
+                                            return (
+                                                <span
+                                                key={i}
+                                                className={v.show_name == type ? "active" : null}
+                                                onClick={() => {
+                                                    this.showMenu(v.show_name)
+                                                }}
+                                                >
+                                                {v.show_name}
+                                                </span>
+                                            );
+                                            })}
+                                        </div>
+                                        ) : null}
+                                    {/* {
                                         showMenuViolas ? <div className='dropdown-content1'>
                                                 {
                                                     names.map((v, i) => {
@@ -145,7 +222,7 @@ class ExChange extends Component {
                                                 }
                                             </div> : null
                                     }
-                                    
+                                     */}
                                 </div>
                            </div>
                         </div>
@@ -194,23 +271,29 @@ class ExChange extends Component {
                       </div>
                       <div className="changeRecord">
                         <h4>兑换记录</h4>
-                         <div className="changeLists" onClick={()=>{
-                             this.setState({
-                                 visible:true
-                             })
-                         }}>
-                            <div className="changeList">
-                              <div className="list1">
-                                  <span>兑换成功</span>
-                                  <p>999ETH</p>
-                              </div>
-                              <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
-                              <div className="list2">
-                                  <span>99900Violas</span>
-                                  <p>01.18 15:42<i><img src="/img/rightArrow.png"/></i></p>
-                              </div>
-                            </div>
-                        </div>
+                        <div className="changeLists">
+                        {
+                            changeRecord.map((v,i)=>{
+                                return <div className="changeList" key={i} onClick={() => {
+                                        this.setState({
+                                            visible: true,
+                                            changeList: v
+                                        })
+                                    }}>
+                                        <div className="list1">
+                                            <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}</span>
+                                            <p>{v.input_amount}{v.input_name}</p>
+                                        </div>
+                                        <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
+                                        <div className="list2">
+                                            <span>{v.input_amount}{v.input_name}</span>
+                                            <p>{timeStamp2String(v.date+'000')}<i><img src="/img/rightArrow.png" /></i></p>
+                                        </div>
+                                    </div>
+                               
+                            })
+                        }
+                          </div>
                         <div className="changeLists">
                             <div className="changeList">
                               <div className="list1">
@@ -249,7 +332,7 @@ class ExChange extends Component {
                     visible={this.state.visible}
                     mask={false}
                 >
-                    <ExchangeDetail showDrawer={this.showDrawer}></ExchangeDetail>
+                    <ExchangeDetail showDrawer={this.showDrawer} changeList={this.state.changeList}></ExchangeDetail>
                 </Drawer>
             </div>
         )

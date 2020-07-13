@@ -11,7 +11,7 @@ class AddCurrency extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: 'https://bridge.walletconnect.org',
+      bridge: 'http://47.52.66.26:5000',
       addCurrencyList:[],
       addCurrencyList1:[],
       arr1:[],

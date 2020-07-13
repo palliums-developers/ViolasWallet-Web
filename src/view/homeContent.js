@@ -88,11 +88,11 @@ class HomeContent extends Component {
                              this.setState({
                                arr1: res.data.balances
                              },()=>{
-                               this.state.arr1.map((v,i)=>{
-                                 if (v.show_name == 'LBR'){
-                                     v.show_name = 'VLS'
-                                  }
-                               })
+                              //  this.state.arr1.map((v,i)=>{
+                              //    if (v.show_name == 'LBR'){
+                              //        v.show_name = 'VLS'
+                              //     }
+                              //  })
                                  let BTCBalance = 0;
                                  this.state.BTCBalances.map((v, i) => {
                                    BTCBalance += Number(this.getFloat((v.BTC/1e8) * v.rate, 8))
@@ -327,7 +327,7 @@ class HomeContent extends Component {
                         return <div className="assetListsEvery" style={v.checked == false ? {display:"none"} : {display:"flex"}} key={i} onClick={() => {
                           this.setState({
                             display1:!this.state.display1,
-                            name: v.show_name == 'VLS' ? 'VLS' : v.show_name,
+                            name: v.show_name,
                             detailAddr: v.address,
                             rate: v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6),
                             icon: v.show_icon,

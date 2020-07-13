@@ -10,7 +10,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      bridge: 'https://bridge.walletconnect.org',
+      bridge: 'http://47.52.66.26:5000',
+      // bridge: 'https://walletconnect.violas.io',
       walletConnector: {},
       session_id: "",
       status:0,
@@ -55,7 +56,7 @@ class App extends Component {
       },()=>{
           setTimeout(() => {
             this.props.history.push("/homepage");
-          }, 5000);
+          }, 1000);
           window.localStorage.setItem(
             "address",
             accounts[0]
@@ -78,6 +79,7 @@ class App extends Component {
       }
       window.localStorage.clear()
       window.sessionStorage.clear()
+      this.props.history.push('/app')
       // console.log("wallet disconnected");
     });
   }
