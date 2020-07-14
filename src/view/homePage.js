@@ -9,7 +9,8 @@ class HomePage extends Component {
     constructor(props){
       super()
       this.state = {
-        bridge: 'http://47.52.66.26:5000',
+        // bridge: 'http://47.52.66.26:5000',
+        bridge: 'https://walletconnect.violas.io',
         walletConnector: {},
       }
     }

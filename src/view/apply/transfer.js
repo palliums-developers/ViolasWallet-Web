@@ -13,7 +13,8 @@ class Transfer extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: 'http://47.52.66.26:5000',
+      // bridge: 'http://47.52.66.26:5000',
+      bridge: 'https://walletconnect.violas.io',
       code:'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
       tyArgs: '',
       balance: 0,
@@ -56,20 +57,22 @@ class Transfer extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
-    
-    this.setState({
-      addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-    }, () => {
-      this.state.addCurrencyList.map((v, i) => {
-        if (v.coinType == 'bitcoin') {
-          this.setState({
-            BTCAddress: v.address
-          }, () => {
+    if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+      this.setState({
+        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+      }, () => {
+        this.state.addCurrencyList.map((v, i) => {
+          if (v.coinType == 'bitcoin') {
+            this.setState({
+              BTCAddress: v.address
+            }, () => {
               this.getTypesBalance()
-          })
-        }
-      })
-    });
+            })
+          }
+        })
+      });
+    }
+    
 
   }
   getTypesBalance(){

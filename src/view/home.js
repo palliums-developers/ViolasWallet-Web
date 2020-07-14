@@ -6,7 +6,7 @@ import { Drawer } from "antd";
 import AddCurrency from "./components/addCurrency";
 import ExchangeDialog from './market/exchangeDialog'
 import MyPoolDialog from './market/myPoolDialog'
-import PoolingDetail from './market/poolingDetail'
+
 import WalletConnect from "../packages/browser/src/index";
 let url = "https://api.violas.io";
 // let url1 = "http://52.27.228.84:4000"
@@ -16,7 +16,8 @@ class Home extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: "http://47.52.66.26:5000",
+      // bridge: "http://47.52.66.26:5000",
+      bridge: 'https://walletconnect.violas.io',
       walletConnector: {},
       active: "",
       showMineDialog: false
@@ -239,16 +240,7 @@ class Home extends Component {
         >
           <MyPoolDialog></MyPoolDialog>
         </Drawer>
-        {/* 资金池详情 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          visible={this.props.visible1}
-          mask={false}
-        >
-          <PoolingDetail></PoolingDetail>
-        </Drawer>
+        
       </div>
     );
   }

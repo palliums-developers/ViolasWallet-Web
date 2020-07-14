@@ -11,7 +11,8 @@ class AddCurrency extends Component {
   constructor(props) {
     super();
     this.state = {
-      bridge: 'http://47.52.66.26:5000',
+      // bridge: 'http://47.52.66.26:5000',
+      bridge: 'https://walletconnect.violas.io',
       addCurrencyList:[],
       addCurrencyList1:[],
       arr1:[],
@@ -34,24 +35,24 @@ class AddCurrency extends Component {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   componentDidMount() {
-    
-    this.setState({
-      addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-    },()=>{
+    if (JSON.parse(window.localStorage.getItem("wallet_info"))){
       this.setState({
-        addList: this.state.addCurrencyList[2]
-      })
+        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+      }, () => {
+        this.setState({
+          addList: this.state.addCurrencyList[2]
+        })
         this.state.addCurrencyList.map((v, i) => {
           if (v.coinType == 'bitcoin') {
             this.setState({
               BTCAddress: v.address
-            },()=>{
+            }, () => {
               this.getBalance()
             })
           }
         })
-    });
-    
+      });
+    }
   }
   getBalance = () => {
     fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())

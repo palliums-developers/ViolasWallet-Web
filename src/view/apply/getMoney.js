@@ -22,7 +22,8 @@ class GetMoney extends Component {
         BTCAddress:'',
         type:'',
         coinName:'',
-        coinNameType:''
+        coinNameType:'',
+        ind:0
       }
     }
     getTypeShow = (event) => {
@@ -31,14 +32,15 @@ class GetMoney extends Component {
         showDealType: !this.state.showDealType
       })
     }
-    showTypes = (v,address,name) => {
+    showTypes = (v,address,name,ind) => {
       
       if(v == 'VLS'){
         this.setState({
           type: v,
           coinName: 'violas-'+name.toLowerCase(),
           address: address,
-          showDealType: false
+          showDealType: false,
+          ind:ind
         })
       }else{
         if (name.indexOf('VLS') == 0){
@@ -46,21 +48,24 @@ class GetMoney extends Component {
             type: v,
             coinName: 'violas-' + name.toLowerCase(),
             address: address,
-            showDealType: false
+            showDealType: false,
+            ind: ind
           })
         } else if (name == 'BTC'){
           this.setState({
             type: v,
             coinName: 'bitcoin',
             address: this.state.BTCAddress,
-            showDealType: false
+            showDealType: false,
+            ind: ind
           })
          }else{
           this.setState({
             type: v,
             coinName: 'libra-' + name.toLowerCase(),
             address: address,
-            showDealType: false
+            showDealType: false,
+            ind: ind
           })
          }
       }
@@ -86,20 +91,21 @@ class GetMoney extends Component {
     componentDidMount(){
       // document.addEventListener('click', this.closeDialog);
       // this.getNewArray()
-      this.setState({
-        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
-      }, () => {
-        this.state.addCurrencyList.map((v, i) => {
-          if (v.coinType == 'bitcoin') {
-            this.setState({
-              BTCAddress: v.address
-            }, () => {
-              this.getBalances()
-            })
-          }
+      if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+        this.setState({
+          addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
+        }, () => {
+          this.state.addCurrencyList.map((v, i) => {
+            if (v.coinType == 'bitcoin') {
+              this.setState({
+                BTCAddress: v.address
+              }, () => {
+                this.getBalances()
+              })
+            }
+          })
         })
-      })
-      
+      }
     }
     getBalances(){
       fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
@@ -112,16 +118,14 @@ class GetMoney extends Component {
                   this.setState({
                     arr1: res.data.balances
                   }, () => {
-                      this.state.arr1.map((v, i) => {
-                        if (v.show_name == 'LBR') {
-                          v.show_name = 'VLS'
-                        }
-                      })
+                      // this.state.arr1.map((v, i) => {
+                      //   if (v.show_name == 'LBR') {
+                      //     v.show_name = 'VLS'
+                      //   }
+                      // })
                     if (this.state.type == "") {
                       this.setState({
-                        type: res.data.balances[0].show_name,
                         coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                        address: res.data.balances[0].address
                       })
                     }
                   })
@@ -137,7 +141,10 @@ class GetMoney extends Component {
                       return b.balance - a.balance
                     })
                     this.setState({
-                      arr: newArr
+                      arr: newArr,
+                      type: newArr[0].show_name,
+                      address: newArr[0].address,
+                      ind: Object.keys(newArr)[0]
                     })
                   })
                 })
@@ -197,7 +204,7 @@ class GetMoney extends Component {
      
     }
     render(){
-      let { address, showDealType, type, dis, arr, coinName } = this.state;
+      let { address, showDealType, type, dis, arr, coinName,ind } = this.state;
       // console.log(this.state.showDealType,'.........')
         return (
           <div className="getMoney">
@@ -218,7 +225,7 @@ class GetMoney extends Component {
                     </div>
                     {
                    arr.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address,v.name)}>
+                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address,v.name,i)}>
                           <div className="searchEvery">
                             <img src={v.show_icon} />
                             <div className="searchEvery1">
@@ -226,7 +233,7 @@ class GetMoney extends Component {
                                 <h4>{v.show_name}</h4>
                                 <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
                               </div>
-                              <span className={type == v.show_name ? 'check active' : 'check'}></span>
+                              <span className={ind == i ? 'check active' : 'check'}></span>
                             </div>
                           </div>
                         </div>

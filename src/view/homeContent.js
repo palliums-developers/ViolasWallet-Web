@@ -38,21 +38,22 @@ class HomeContent extends Component {
     }
     
     componentDidMount(){
-      this.setState({
-        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-        typeName:JSON.parse(window.sessionStorage.getItem("typeName"))
-      }, () => {
-        this.state.addCurrencyList.map((v, i) => {
-          if (v.coinType == 'bitcoin') {
-            this.setState({
-              BTCAddress: v.address
-            }, () => {
-              this.getBalances()
-            })
-          }
-        })
-      });
-      
+      if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+        this.setState({
+          addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+          typeName: JSON.parse(window.sessionStorage.getItem("typeName"))
+        }, () => {
+          this.state.addCurrencyList.map((v, i) => {
+            if (v.coinType == 'bitcoin') {
+              this.setState({
+                BTCAddress: v.address
+              }, () => {
+                this.getBalances()
+              })
+            }
+          })
+        });
+      }
     }
     getFloat(number, n) {
       n = n ? parseInt(n) : 0;

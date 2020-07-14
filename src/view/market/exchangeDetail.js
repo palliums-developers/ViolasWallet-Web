@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./market.scss";
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
 import { timeStamp2String } from '../../utils/timer';
 
 class ExchangeDetail extends Component {
@@ -16,7 +15,7 @@ class ExchangeDetail extends Component {
    
     render() {
         let { changeList } = this.props;
-        console.log(this.props.changeList,'.......')
+        // console.log(this.props.changeList,'.......')
         return (
             <div className="exchangeDetail">
                 <h4 onClick={() => this.props.showDrawer(false)}><i><img src="/img/编组备份 3@2x.png"/></i>兑换详情</h4>

@@ -16,6 +16,7 @@ class ExChange extends Component {
             showMenuViolas: false,
             showMenuViolas1: false,
             type:'',
+            type1:'选择通证',
             getFocus: false,
             getFocus1: false,
             inputAmount:'',
@@ -24,20 +25,49 @@ class ExChange extends Component {
             visible:false,
             selData:[],
             changeRecord:[],
-            changeList:{}
+            changeList:{},
+            arr1: [],
+            arr2: [],
+            arr: [],
+            ind:-1
         }
     }
     componentWillMount(){
-        if(this.props.showpooling){
-            this.props.showPolling()
-        } else if (this.props.visible1){
-            this.props.showDrawer1()
-        }
+        // if(this.props.showpooling){
+        //     this.props.showPolling()
+        // } else if (this.props.visible1){
+        //     this.props.showDrawer1()
+        // }
     }
     componentDidMount() {
         // document.addEventListener('click', this.closeMenu);
         this.getSelectTypes()
         this.getExchangeRecode()
+        if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+            this.setState({
+                addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+            }, () => {
+                this.state.addCurrencyList.map((v, i) => {
+                    if (v.coinType == 'bitcoin') {
+                        this.setState({
+                            BTCAddress: v.address
+                        }, () => {
+                                this.getBalances()
+                        })
+                    }
+                })
+            });
+        }
+        
+    }
+    getFloat(number, n) {
+        n = n ? parseInt(n) : 0;
+        if (n <= 0) {
+            return Math.round(number);
+        }
+        number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+        number = Number(number).toFixed(n); //补足位数
+        return number;
     }
     getExchangeRecode = () =>{
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + 'offset=0&limit=5').then(res => res.json())
@@ -179,8 +209,76 @@ class ExChange extends Component {
             visible: type
         })
     }
+    showTypes = (v, address, name,ind) => {
+        this.setState({
+            type1: v,
+            ind:ind,
+            // coinName: 'violas-' + name.toLowerCase(),
+            // address: address,
+            showMenuViolas1: false
+        })
+    }
+    getBalances() {
+        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+            .then(res => {
+                this.setState({
+                    BTCBalances: res.data
+                }, () => {
+                    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                        .then(res => {
+                            this.setState({
+                                arr1: res.data.balances
+                            }, () => {
+                                // this.state.arr1.map((v, i) => {
+                                //     if (v.show_name == 'LBR') {
+                                //         v.show_name = 'VLS'
+                                //     }
+                                // })
+                                if (this.state.type == "") {
+                                    this.setState({
+                                        // type: res.data.balances[0].show_name,
+                                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
+                                        // address: res.data.balances[0].address
+                                    })
+                                }
+                            })
+                        })
+                    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                        .then(res => {
+                            this.setState({
+                                arr2: res.data.balances
+                            }, () => {
+                                let arr = this.state.arr1.concat(this.state.arr2)
+                                let newArr = arr.concat(this.state.BTCBalances)
+                                newArr.sort((a, b) => {
+                                    return b.balance - a.balance
+                                })
+                                this.setState({
+                                    arr: newArr
+                                })
+                            })
+                        })
+                })
+            })
+
+    }
+    getSearchList = (e) => {
+        if (e.target.value) {
+            let arr = this.state.arr.filter(v => {
+                if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+                    return v;
+                }
+            })
+            this.setState({
+                arr: arr
+            })
+        } else {
+            this.getBalances()
+        }
+
+    }
     render() {
-        let { type, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord } = this.state;
+        let { arr, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord,ind } = this.state;
         // console.log(showMenuViolas,'.......')
         return (
             <div className="exchange">
@@ -196,7 +294,8 @@ class ExChange extends Component {
                                     {
                                             showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
                                     }
-                                    {showMenuViolas ? (
+                                    {
+                                    showMenuViolas ? (
                                         <div className="dropdown-content1">
                                             {selData.map((v, i) => {
                                             return (
@@ -233,9 +332,32 @@ class ExChange extends Component {
                                     <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)}/>
                                     <div className="dropdown1">
                                         {
-                                            showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>选择通证<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>选择通证<i><img src="/img/路径 7@2x.png" /></i></span>
+                                            showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
                                         }
-
+                                        {
+                                            showMenuViolas1 ? <div className='dropdown-content1'>
+                                                <div className="formSearch">
+                                                    <img src="/img/sousuo 2@2x.png" />
+                                                    <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                                                </div>
+                                                {
+                                                    arr.map((v, i) => {
+                                                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, v.name,i)}>
+                                                            <div className="searchEvery">
+                                                                <img src={v.show_icon} />
+                                                                <div className="searchEvery1">
+                                                                    <div>
+                                                                        <h4>{v.show_name}</h4>
+                                                                        <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                    </div>
+                                                                    <span className={ind == i ? 'check active' : 'check'}></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    })
+                                                }
+                                            </div> : null
+                                        }
                                         <div className='dropdown-content2'>
                                             <div className="search">
                                                 <i><img src="/img/sousuo 2@2x.png"/></i>
@@ -355,24 +477,24 @@ let mapDispatchToProps = (dispatch) => {
                 }
             })
        },
-        showDrawer:(type) => {
-            dispatch({
-                type: 'VISIBLE',
-                payload: !type
-            })
-       },
-        showDrawer1: () => {
-            dispatch({
-                type: 'VISIBLE1',
-                payload: false
-            })
-        },
-        showPolling: () => {
-            dispatch({
-                type: 'SHOWPOOL',
-                payload: false
-            })
-        }
+    //     showDrawer:(type) => {
+    //         dispatch({
+    //             type: 'VISIBLE',
+    //             payload: !type
+    //         })
+    //    },
+        // showDrawer1: () => {
+        //     dispatch({
+        //         type: 'VISIBLE1',
+        //         payload: false
+        //     })
+        // },
+        // showPolling: () => {
+        //     dispatch({
+        //         type: 'SHOWPOOL',
+        //         payload: false
+        //     })
+        // }
 }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ExChange);
