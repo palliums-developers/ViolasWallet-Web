@@ -31,17 +31,33 @@ class CurrencyDetail extends Component {
             dataList:[],
             total:0,
             page:0,
-            pageSize:10,
+            pageSize:6,
             curIndex:0,
             dis: false,
+            detailAddrs:'',
+            name:''
         };
         
     }
-    componentDidMount() {
-        this.getNavData()  
+    async componentWillMount() {
+        // console.log(this.props.detailAddrs)
+        this.setState({
+            detailAddrs: this.props.detailAddrs,
+            name: this.props.name
+        }, () => {
+            this.getNavData()  
+        })
+        
 
     }
-   
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            detailAddrs: nextProps.detailAddrs,
+            name: nextProps.name
+        },()=>{
+            this.getNavData()  
+        })
+    }
     getSubStr(str){
         if(str == null){
          return 'null'
@@ -53,7 +69,7 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
-        let {detailAddrs,name} = this.props;
+        let { detailAddrs, name } = this.state;
         console.log(detailAddrs, name)
         if (name == 'BTC'){
             this.setState({
@@ -135,6 +151,8 @@ class CurrencyDetail extends Component {
     render() {
         let { types, navType, dataList, total, curPage,dis} = this.state;
         let { detailAddrs,nameType,icon,rate,balance } = this.props;
+        // console.log(detailAddrs,'/////////')
+        
         return (
             <div className="currencyDetail">
                 <h4 onClick={() => this.props.showDetails(false)}>
@@ -205,7 +223,7 @@ class CurrencyDetail extends Component {
                     </div>
                 </div>
                 {
-                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={10} total={Number(total)} onChange={this.onChange} /> : null
+                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={6} total={Number(total)} onChange={this.onChange} /> : null
                 }
                 
             </div>

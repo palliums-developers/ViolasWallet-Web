@@ -33,7 +33,8 @@ class HomeContent extends Component {
         display2: false,
         disType:false,
         detailAddr: '',
-        name: ''
+        name: '',
+        detailData:{}
       }
     }
     
@@ -228,7 +229,9 @@ class HomeContent extends Component {
     
     curDataFun = (val) => {
       console.log(val)
-
+      this.setState({
+        detailData:val
+      })
     }
     showEveryDetail = (type) =>{
       this.setState({
@@ -248,7 +251,6 @@ class HomeContent extends Component {
     };
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
-      // console.log(checkData,'....')
         return (
             <div className="content">
               <div className="contentWrap">
@@ -313,9 +315,11 @@ class HomeContent extends Component {
                             rate: v.BTC == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.BTC / 1e8), 6),
                             icon:v.show_icon,
                             balance: v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)
+                          }, () => {
+                              window.sessionStorage.setItem('detailAddr', BTCAddress)
                           })
                           // window.sessionStorage.setItem('detailAddr', BTCAddress)
-                          window.sessionStorage.setItem('name', v.name)
+                          // window.sessionStorage.setItem('name', v.name)
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
                           <div className="rightAsset"><span>{v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}</span><label>≈${v.BTC == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.BTC / 1e8), 6)}</label></div>
@@ -333,6 +337,8 @@ class HomeContent extends Component {
                             rate: v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6),
                             icon: v.show_icon,
                             balance: v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6)
+                          },()=>{
+                              window.sessionStorage.setItem('detailAddr', v.address)
                           })
                         }}>
                           <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
@@ -352,6 +358,7 @@ class HomeContent extends Component {
                 onClose={this.onClose}
                 visible={this.state.display1}
                 mask={false}
+                getContainer={false}
               >
               <CurrencyDetail showDetails={this.showDetails} showDetails1={this.showDetails1} curDataFun={this.curDataFun} nameType={this.state.name} detailAddrs={this.state.detailAddr} rate={this.state.rate} icon={this.state.icon} balance={this.state.balance}></CurrencyDetail>
               </Drawer>
@@ -363,8 +370,9 @@ class HomeContent extends Component {
                 onClose={this.onClose1}
                 visible={this.state.display2}
                 mask={false}
+                getContainer={false}
               >
-              <Details showEveryDetail={this.showEveryDetail}></Details>
+              <Details showEveryDetail={this.showEveryDetail} detailDatas={this.state.detailData}></Details>
               </Drawer>
             </div>
            

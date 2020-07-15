@@ -94,6 +94,9 @@ dd {
 // }
 .ant-drawer-content-wrapper {
   width: 440px !important;
+  // right: 200px !important;
+  height: 100%!important;
+  // transform: translateX(140%)!important;
   // height: 1080px !important;
   // overflow: auto;
   .ant-drawer-content{
@@ -229,7 +232,7 @@ dd {
 }
 .homePage {
   width: 100%;
-  height: 100%;
+  height: 1024px;
   position: relative;
   // overflow-x: hidden;
   .transfarDialog{
@@ -290,7 +293,8 @@ dd {
   height: 100%;
   display: flex;
   // flex-direction: column;
-
+  position: relative;
+  overflow-x: hidden;
   .header {
     width: 272px;
     height:100%;
@@ -372,9 +376,11 @@ dd {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    overflow-x: hidden;
     background: #FFF;
     margin-top: 8px;
     margin-left: 8px;
+    position: relative;
     .leftContent{
       width: 100%;
       height: auto;
@@ -583,13 +589,31 @@ dd {
               flex-direction: column;
               padding:0 18px;
               box-sizing: border-box;
-              label{
-                font-size:14px;
-                font-weight:400;
-                color:rgba(51,51,51,1);
-                margin-top: 10px;
-                margin-bottom: 15px;
+              .showAsset{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                label{
+                  font-size:14px;
+                  font-weight:400;
+                  color:rgba(51,51,51,1);
+                  margin-top: 10px;
+                  margin-bottom: 15px;
+                }
+                p{
+                  display: flex;
+                  align-items: center;
+                  font-size:14px;
+                  font-weight:400;
+                  color:rgba(51,51,51,1);
+                  img{
+                    width: 12px;
+                    height: 13px;
+                    margin-right: 4px;
+                  }
+                }
               }
+             
               .iptContent{
                 width: 100%;
                 display: flex;
@@ -930,6 +954,21 @@ dd {
                   span{
                     font-size:14px;
                     font-weight:400;
+                    display: flex;
+                    align-items: center;
+                    i{
+                      width:40px;
+                      height:16px;
+                      line-height: 14px;
+                      text-align: center;
+                      border-radius:8px;
+                      border:1px solid rgba(112,56,253,1);
+                      font-size:12px;
+                      font-weight:400;
+                      color:rgba(112,56,253,1);
+                      font-style: normal;
+                      margin-left: 8px;
+                    }
                   }
                   .green{
                     color:rgba(19,183,136,1);
@@ -1141,9 +1180,11 @@ dd {
     flex: 1;
     display: flex;
     overflow-y: auto;
+    overflow-x: hidden;
     background: #FFF;
     margin-top: 8px;
     margin-left: 8px;
+    position: relative;
     .contentWrap {
       width: 755px;
       margin: 69px auto;
@@ -1926,7 +1967,7 @@ dd {
     .ant-pagination{
       // width: 100%;
       // position: absolute;
-      margin: 100px 0;
+      margin-top: 80px;
       // left: 1rem;
       // margin: 0 auto;
     }
@@ -2116,4 +2157,21 @@ dd {
   .home{
     margin: 0 auto;
   }
+  
+}
+@media screen and (max-width:1440px){
+  .ant-drawer-content-wrapper {
+    //  right: 0 !important;
+  }
+}
+@media screen and (max-height:1024px){
+  .homePage{
+    height: 100%!important;
+  }
+  // .ant-drawer-content-wrapper {
+  //   height: 100%!important;
+  // }
+  .ant-pagination{
+      margin-bottom: 50px!important;
+    }
 }

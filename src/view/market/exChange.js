@@ -287,7 +287,10 @@ class ExChange extends Component {
                       <div className="form">
                         <p>gas：0.1000%</p>
                         <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
-                           <label>Input</label>
+                           <div className="showAsset">
+                                <label>Input</label>
+                                <p><img src="/img/asset-management.png"/>当前资产：--</p>
+                           </div>
                            <div className="iptContent">
                                 <input placeholder="0.00" onChange={(e)=>this.getInputAmount(e)}/>
                                 <div className="dropdown1">
@@ -327,7 +330,10 @@ class ExChange extends Component {
                         </div>
                         <div className="changeImg"><img src="/img/编组 2备份@2x.png"/></div>
                             <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
-                            <label>Output</label>
+                                <div className="showAsset">
+                                    <label>Output</label>
+                                    <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                </div>
                                 <div className="iptContent">
                                     <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)}/>
                                     <div className="dropdown1">
@@ -403,7 +409,7 @@ class ExChange extends Component {
                                         })
                                     }}>
                                         <div className="list1">
-                                            <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}</span>
+                                        <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i>重试</i>}</span>
                                             <p>{v.input_amount}{v.input_name}</p>
                                         </div>
                                         <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
@@ -453,6 +459,7 @@ class ExChange extends Component {
                     onClose={this.onClose}
                     visible={this.state.visible}
                     mask={false}
+                    getContainer={false}
                 >
                     <ExchangeDetail showDrawer={this.showDrawer} changeList={this.state.changeList}></ExchangeDetail>
                 </Drawer>

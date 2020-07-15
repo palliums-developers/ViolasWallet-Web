@@ -392,7 +392,10 @@ class CashPooling extends Component {
                             </div>
                             {
                                 type == '转入' ? <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
-                                    <label>转入</label>
+                                    <div className="showAsset">
+                                        <label>转入</label>
+                                        <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                    </div>
                                     <div className="iptContent">
                                         <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} />
                                         <div className="dropdown1">
@@ -425,53 +428,11 @@ class CashPooling extends Component {
 
                                         </div>
                                     </div>
-                                </div> : <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
-                                        <label>资金池通证</label>
-                                        <div className="iptContent">
-                                            <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} />
+                                </div> : <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm iptForm1'}>
+                                        <div className="showAsset">
+                                            <label>资金池通证</label>
+                                            <p><img src="/img/asset-management.png" />当前资产：--</p>
                                         </div>
-                                    </div>
-                            }
-                            
-                            <div className="changeImg">&</div>
-                            {
-                                type == '转入' ? <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
-                                    <label>转入</label>
-                                    <div className="iptContent">
-                                        <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
-                                        <div className="dropdown1">
-                                            {
-                                                showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
-                                            }
-                                            {
-                                                showMenuViolas1 ? <div className='dropdown-content1'>
-                                                    <div className="formSearch">
-                                                        <img src="/img/sousuo 2@2x.png" />
-                                                        <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
-                                                    </div>
-                                                    {
-                                                        arr.map((v, i) => {
-                                                            return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, v.name, i)}>
-                                                                <div className="searchEvery">
-                                                                    <img src={v.show_icon} />
-                                                                    <div className="searchEvery1">
-                                                                        <div>
-                                                                            <h4>{v.show_name}</h4>
-                                                                            <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
-                                                                        </div>
-                                                                        <span className={ind == i ? 'check active' : 'check'}></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                    }
-                                                </div> : null
-                                            }
-
-                                        </div>
-                                    </div>
-                                </div> : <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
-                                        <label>转出</label>
                                         <div className="iptContent">
                                             <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
                                             <div className="dropdown1">
@@ -508,6 +469,58 @@ class CashPooling extends Component {
                                         </div>
                                     </div>
                             }
+                            
+                            <div className="changeImg">&</div>
+                            {
+                                type == '转入' ? <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
+                                    <div className="showAsset">
+                                        <label>转入</label>
+                                        <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                    </div>
+                                    <div className="iptContent">
+                                        <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
+                                        <div className="dropdown1">
+                                            {
+                                                showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
+                                            }
+                                            {
+                                                showMenuViolas1 ? <div className='dropdown-content1'>
+                                                    <div className="formSearch">
+                                                        <img src="/img/sousuo 2@2x.png" />
+                                                        <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                                                    </div>
+                                                    {
+                                                        arr.map((v, i) => {
+                                                            return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, v.name, i)}>
+                                                                <div className="searchEvery">
+                                                                    <img src={v.show_icon} />
+                                                                    <div className="searchEvery1">
+                                                                        <div>
+                                                                            <h4>{v.show_name}</h4>
+                                                                            <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                        </div>
+                                                                        <span className={ind == i ? 'check active' : 'check'}></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        })
+                                                    }
+                                                </div> : null
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div> : <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
+                                        <div className="showAsset">
+                                            <label>转出</label>
+                                            {/* <p><img src="/img/asset-management.png" />当前资产：--</p> */}
+                                        </div>
+                                        <div className="iptContent">
+                                            <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
+                                            
+                                        </div>
+                                    </div>
+                            }
                             <div className="changeRate">兑换率：1:100</div>
                             {/* <div className="changeRate">当前资金池大小：— —</div> */}
                             <div className="changeRate">你的资金池共有：— —</div>
@@ -530,7 +543,9 @@ class CashPooling extends Component {
                                                 changeList: v
                                             })
                                         }}>
-                                            <div className="logo"><img src="/img/编组 13备份 2@2x.png" /></div>
+                                            <div className="logo"><img src={this.optionTypes(v.transaction_type, v.status).slice(0, 2) == '转入' ? "/img/编组 9备份 5@2x.png" : "/img/编组 14备份@2x.png"} />{
+                                                
+                                            }</div>
                                             <div className="listContent">
                                                 <div className="listContents">
                                                     <div>
@@ -549,7 +564,7 @@ class CashPooling extends Component {
                                     })
                                 }
                                 
-                                <div className="poolRecordList">
+                                {/* <div className="poolRecordList">
                                     <div className="logo"><img src="/img/编组 13备份 3@2x.png" /></div>
                                     <div className="listContent">
                                         <div className="listContents">
@@ -564,8 +579,8 @@ class CashPooling extends Component {
                                         </div>
                                         <label><img src="/img/rightArrow.png" /></label>
                                     </div>
-                                </div>{}
-                                <div className="poolRecordList">
+                                </div> */}
+                                {/* <div className="poolRecordList">
                                     <div className="logo"><img src="/img/编组 13备份 2@2x.png" /></div>
                                     <div className="listContent">
                                         <div className="listContents">
@@ -580,7 +595,7 @@ class CashPooling extends Component {
                                         </div>
                                         <label><img src="/img/rightArrow.png" /></label>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -592,6 +607,7 @@ class CashPooling extends Component {
                     closable={false}
                     visible={this.state.visible1}
                     mask={false}
+                    getContainer={false}
                 >
                     <PoolingDetail showDrawer={this.showDrawer} changeList={this.state.changeList}></PoolingDetail>
                 </Drawer>

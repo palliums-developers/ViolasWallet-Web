@@ -36,8 +36,9 @@ class Details extends Component {
         }, 1000);
     };
     render() {
-        let { detailData } = this.props;
+        let { detailDatas } = this.props;
         let { reve, tran,deal } = this.state;
+        console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
         return (
             <div className="details">
                 <h4 onClick={() => {
@@ -51,25 +52,25 @@ class Details extends Component {
                 <div className="detailsTable">
                     <div className="tableContent">
                         {
-                            detailData.type == 0 ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : <i><img src="/img/shenhetongguo 4@2x.png" /></i>
+                            detailDatas && detailDatas.type == 0 ? <i><img src="/img/shenhezhong-2 4@2x.png" /></i> : detailDatas.sender == window.sessionStorage.getItem('detailAddr') ? <i><img src="/img/shenhetongguo 4@2x.png" /></i> : <i><img src="/img/shenhetongguo 4@2x.png" /></i>
                         }
                         {
-                            detailData.type == 0 ? <h3>Stability coin activated successfully</h3> : detailData.receiver == window.sessionStorage.getItem('detailAddr') ? <h3>Payment success</h3> : <h3>Transfer success</h3>
+                            detailDatas && detailDatas.type == 0 ? <h3>Stability coin activated successfully</h3> : detailDatas.sender == window.sessionStorage.getItem('detailAddr') ? <h3>Transfer success</h3> : <h3>Payment success</h3>
                         }
-                        
-                        <p>{timeStamp2String1(detailData.expiration_time + '000')}</p>
+
+                        <p>{timeStamp2String1(detailDatas && detailDatas.expiration_time + '000')}</p>
                         <div className="line"><img src="/img/路径 42@2x.png" /></div>
 
                         <div className="tableList">
-                            <p><label>Amount：</label><span>{detailData.amount / 1e6} {detailData.currency}</span></p>
-                            <p><label>Cost of miners：</label><span>{detailData.gas / 1e6} {detailData.gas_currency}</span></p>
-                            <p><label>Collection address：</label><span><i id="reve">{detailData.receiver == null ? '--' : detailData.receiver}</i><img onClick={() => this.handleCopy('reve')} src="/img/icon- 2@2x.png" />{
+                            <p><label>Amount：</label><span>{detailDatas && detailDatas.amount / 1e6} {detailDatas && detailDatas.currency}</span></p>
+                            <p><label>Cost of miners：</label><span>{detailDatas && detailDatas.gas / 1e6} {detailDatas.gas_currency}</span></p>
+                            <p><label>Collection address：</label><span><i id="reve">{detailDatas.receiver == null ? '--' : detailDatas.receiver}</i><img onClick={() => this.handleCopy('reve')} src="/img/icon- 2@2x.png" />{
                                 reve ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
-                            <p><label>Payment address：</label><span><i id="tran">{detailData.sender}</i><img onClick={() => this.handleCopy('tran')} src="/img/icon- 2@2x.png" />{
+                            <p><label>Payment address：</label><span><i id="tran">{detailDatas.sender}</i><img onClick={() => this.handleCopy('tran')} src="/img/icon- 2@2x.png" />{
                                 tran ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
-                            <p><label>Transaction no：</label><span><i id="deal">{detailData.version}</i><img onClick={() => this.handleCopy('deal')} src="/img/icon- 2@2x.png" />{
+                            <p><label>Transaction no：</label><span><i id="deal">{detailDatas.version}</i><img onClick={() => this.handleCopy('deal')} src="/img/icon- 2@2x.png" />{
                                 deal ? <p className="warn">Address copy successful</p> : null
                             }</span></p>
                         </div>

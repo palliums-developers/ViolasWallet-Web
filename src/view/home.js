@@ -225,6 +225,7 @@ class Home extends Component {
           // onClose={this.onClose}
           visible={this.props.display}
           mask={false}
+          getContainer={false}
         >
           <AddCurrency></AddCurrency>
         </Drawer>
@@ -237,6 +238,7 @@ class Home extends Component {
           // onClose={this.onClose}
           mask={false}
           visible={this.props.showpooling}
+          getContainer={false}
         >
           <MyPoolDialog></MyPoolDialog>
         </Drawer>
