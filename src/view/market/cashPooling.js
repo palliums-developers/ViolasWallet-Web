@@ -20,7 +20,7 @@ class CashPooling extends Component {
             names: ['Violas', 'Libra', 'Bitcoin'],
             types:['转入','转出'],
             type:'转入',
-            name: '',
+            name: '选择通证',
             showDealType: false,
             getFocus: false,
             getFocus1: false,
@@ -37,7 +37,10 @@ class CashPooling extends Component {
             type1:'选择通证',
             type2: '选择通证',
             visible1:false,
-            changeList:{}
+            changeList:{},
+            asset:'--',
+            asset1: '--',
+            index:-1
             // visible:false
         }
     }
@@ -47,8 +50,8 @@ class CashPooling extends Component {
         }
     }
     componentDidMount() {
-        document.addEventListener('click', this.closeMenu);
-        this.getSelectTypes()
+        // document.addEventListener('click', this.closeMenu);
+        // this.getSelectTypes()
         this.getExchangeRecode()
         if (JSON.parse(window.localStorage.getItem("wallet_info"))){
             this.setState({
@@ -123,19 +126,19 @@ class CashPooling extends Component {
         }
     }
     getShow = (event) => {
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showMenuViolas: !this.state.showMenuViolas
         })
     }
     getShow1 = (event) => {
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showMenuViolas1: !this.state.showMenuViolas1
         })
     }
     getShow2 = (event) => {
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showMenuViolas2: !this.state.showMenuViolas2
         })
@@ -148,21 +151,45 @@ class CashPooling extends Component {
             this.getSelectTypes()
         })
     }
-    showMenu = (v) => {
+    //显示输入时通证列表
+    showMenu = (v,bal,i) => {
 
         this.setState({
             name: v,
-            showMenuViolas: false
+            showMenuViolas: false,
+            index: i
+        }, () => {
+            if (this.state.type == 'BTC') {
+                if (bal == '0') {
+                    this.setState({
+                        asset: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            } else {
+                if (bal == 0) {
+                    this.setState({
+                        asset: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            }
         })
     }
-    closeMenu = () => {
-        this.setState({
-            showMenuViolas: false
-        })
-    }
-    stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    // closeMenu = () => {
+    //     this.setState({
+    //         showMenuViolas: false
+    //     })
+    // }
+    // stopPropagation(e) {
+    //     e.nativeEvent.stopImmediatePropagation();
+    // }
     
     showType = (v) => {
 
@@ -173,34 +200,34 @@ class CashPooling extends Component {
                 this.getExchangeRecode()
         })
     }
-    //转入下拉列表 第一个输入框
-    getSelectTypes() {
-        fetch(url + "/1.0/violas/currency").then(res => res.json())
-            .then(res => {
-                let data = res.data.currencies
-                fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                    .then(res => {
-                        let data1 = [];
-                        for (var i = 0; i < data.length; i++) {
-                            for (var j = 0; j < res.data.published.length; j++) {
-                                if (data[i].show_name == res.data.published[j]) {
-                                    //  console.log(data[i])
-                                    data1.push(data[i])
-                                }
-                            }
-                        }
-                        this.setState({
-                            selData: data1
-                        }, () => {
-                            if (this.state.name == "") {
-                                this.setState({
-                                    name: this.state.selData[0].show_name
-                                })
-                            }
-                        })
-                    })
-            })
-    }
+    
+    // getSelectTypes() {
+    //     fetch(url + "/1.0/violas/currency").then(res => res.json())
+    //         .then(res => {
+    //             let data = res.data.currencies
+    //             fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    //                 .then(res => {
+    //                     let data1 = [];
+    //                     for (var i = 0; i < data.length; i++) {
+    //                         for (var j = 0; j < res.data.published.length; j++) {
+    //                             if (data[i].show_name == res.data.published[j]) {
+    //                                 //  console.log(data[i])
+    //                                 data1.push(data[i])
+    //                             }
+    //                         }
+    //                     }
+    //                     this.setState({
+    //                         selData: data1
+    //                     }, () => {
+    //                         if (this.state.name == "") {
+    //                             this.setState({
+    //                                 name: this.state.selData[0].show_name
+    //                             })
+    //                         }
+    //                     })
+    //                 })
+    //         })
+    // }
     getInputAmount = (e) => {
         if (e.target.value) {
             this.setState({
@@ -259,15 +286,39 @@ class CashPooling extends Component {
         })
     }
     //显示输出时通证列表
-    showTypes1 = (v, address, name, ind) => {
+    showTypes1 = (v, address, name,bal, ind) => {
         this.setState({
             type2: v,
             ind1: ind,
+            asset1:bal,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas2: false
+        }, () => {
+            if (this.state.type2 == 'BTC') {
+                if (this.state.type2 == '0') {
+                    this.setState({
+                        asset1: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            } else {
+                if (this.state.type2 == '0') {
+                    this.setState({
+                        asset1: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            }
         })
     }
+    //转入下拉列表 第一个输入框
     //转入下拉列表 第二个输入框
     getBalances() {
         fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
@@ -305,7 +356,17 @@ class CashPooling extends Component {
                                     return b.balance - a.balance
                                 })
                                 this.setState({
-                                    arr: newArr
+                                    arr: newArr,
+                                    selData:newArr
+                                }, () => {
+                                    if (this.state.type == "") {
+                                        this.setState({
+                                            index: Object.keys(this.state.selData)[0],
+                                            name: this.state.selData[0].show_name,
+                                            asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
+
+                                        })
+                                    }
                                 })
                             })
                         })
@@ -356,7 +417,8 @@ class CashPooling extends Component {
         })
     }
     render() {
-        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, type2, ind1, showMenuViolas2 } = this.state;
+        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind,index, type2, ind1, showMenuViolas2 } = this.state;
+        // console.log(showMenuViolas,'....')
         return (
             <div className="exchange cashPooling">
                 <div className="exchangeContent">
@@ -391,10 +453,10 @@ class CashPooling extends Component {
                                 <p>gas：0.1000%</p>
                             </div>
                             {
-                                type == '转入' ? <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
+                                type == '转入' ? <div className={getFocus ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                     <div className="showAsset">
                                         <label>转入</label>
-                                        <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                        <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{name == '选择通证' ? '' : name}</p>
                                     </div>
                                     <div className="iptContent">
                                         <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} />
@@ -405,24 +467,50 @@ class CashPooling extends Component {
 
                                             {
                                                 showMenuViolas ? <div className='dropdown-content1'>
-                                                    {selData.map((v, i) => {
+                                                    <div className="formSearch">
+                                                        <img src="/img/sousuo 2@2x.png" />
+                                                        <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                                                    </div>
+                                                    {
+                                                        selData.map((v, i) => {
+                                                            return <div className="searchList" key={i} onClick={() => {
+                                                                if (v.show_name == 'BTC') {
+                                                                    this.showMenu(v.show_name, v.BTC, i)
+                                                                } else {
+                                                                    this.showMenu(v.show_name, v.balance, i)
+                                                                }
+                                                            }}>
+                                                                <div className="searchEvery">
+                                                                    <img src={v.show_icon} />
+                                                                    <div className="searchEvery1">
+                                                                        <div>
+                                                                            <h4>{v.show_name}</h4>
+                                                                            <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                        </div>
+                                                                        <span className={index == i ? 'check active' : 'check'}></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        })
+                                                    }
+                                                    {/* {selData.map((v, i) => {
                                                             return (
                                                                 <span
                                                                     key={i}
-                                                                    className={v.show_name == name ? "active" : null}
+                                                                    className={i == index ? "active" : null}
                                                                     onClick={() => {
-                                                                        this.showMenu(v.show_name)
+                                                                        if (v.show_name == 'BTC') {
+                                                                            this.showMenu(v.show_name, v.BTC, i)
+                                                                        } else {
+                                                                            this.showMenu(v.show_name, v.balance, i)
+                                                                        }
                                                                     }}
                                                                 >
                                                                     {v.show_name}
                                                                 </span>
                                                             );
-                                                        })}
-                                                    {/* {
-                                                        names.map((v, i) => {
-                                                            return <span key={i} className={v == name ? 'active' : null} onClick={() => this.showMenu(v)}>{v}</span>
-                                                        })
-                                                    } */}
+                                                        })} */}
+                                                  
                                                 </div> : null
                                             }
 
@@ -431,7 +519,7 @@ class CashPooling extends Component {
                                 </div> : <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm iptForm1'}>
                                         <div className="showAsset">
                                             <label>资金池通证</label>
-                                            <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                            <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}{type2 == '选择通证' ? '' : type2}</p>
                                         </div>
                                         <div className="iptContent">
                                             <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
@@ -444,11 +532,18 @@ class CashPooling extends Component {
                                                     showMenuViolas2 ? <div className='dropdown-content1'>
                                                         <div className="formSearch">
                                                             <img src="/img/sousuo 2@2x.png" />
-                                                            <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                                                            <input placeholder="Search" onChange={(e) => this.getSearchList1(e)} />
                                                         </div>
                                                         {
                                                             arr.map((v, i) => {
-                                                                return <div className="searchList" key={i} onClick={() => this.showTypes1(v.show_name, v.address, v.name, i)}>
+                                                                return <div className="searchList" key={i} onClick={() => {
+                                                                    if (v.show_name == 'BTC') {
+                                                                        this.showTypes1(v.show_name, v.address, v.name,v.BTC, i)
+                                                                    } else {
+                                                                        this.showTypes1(v.show_name, v.address, v.name, v.balance, i)
+                                                                    }
+                                                                    
+                                                                }}>
                                                                     <div className="searchEvery">
                                                                         <img src={v.show_icon} />
                                                                         <div className="searchEvery1">

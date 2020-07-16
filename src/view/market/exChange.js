@@ -29,19 +29,18 @@ class ExChange extends Component {
             arr1: [],
             arr2: [],
             arr: [],
-            ind:-1
+            ind:-1,
+            index:-1,
+            asset: '--',
+            asset1: '--'
         }
     }
     componentWillMount(){
-        // if(this.props.showpooling){
-        //     this.props.showPolling()
-        // } else if (this.props.visible1){
-        //     this.props.showDrawer1()
-        // }
+       
     }
     componentDidMount() {
         // document.addEventListener('click', this.closeMenu);
-        this.getSelectTypes()
+        // this.getSelectTypes()
         this.getExchangeRecode()
         if (JSON.parse(window.localStorage.getItem("wallet_info"))){
             this.setState({
@@ -108,73 +107,118 @@ class ExChange extends Component {
             showMenuViolas1: !this.state.showMenuViolas1
         })
     }
-    showMenu = (v) => {
-        
+    showMenu = (v,bal,i) => {
         this.setState({
-            type:v,
-            showMenuViolas:false
-        }, () => {
-            this.getSelectTypes()
+            type: v,
+            showMenuViolas: false,
+            index:i
+        },()=>{
+                if (this.state.type == 'BTC') {
+                    if (bal == '0') {
+                        this.setState({
+                            asset: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset: this.getFloat(bal / 1e8, 6)
+                        })
+                    }
+                } else {
+                    if (bal == 0) {
+                        this.setState({
+                            asset: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset: this.getFloat(bal / 1e8, 6)
+                        })
+                    }
+                }
         })
+        
+        
     }
     // closeMenu = () => {
     //     this.setState({
-    //         showMenuViolas: false
+    //         getFocus: true,
+    //         getFocus1: false
     //     })
     // }
-    // // stopPropagation(e) {
+    // stopPropagation(e) {
     //     e.nativeEvent.stopImmediatePropagation();
     // }
-    getSelectTypes() {
-        fetch(url + "/1.0/violas/currency").then(res => res.json())
-            .then(res => {
-                let data = res.data.currencies
-                fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
-                    .then(res => {
-                        let data1=[];
-                        for (var i=0;i<data.length;i++) {
-                            for (var j = 0; j < res.data.published.length; j++) {
-                                if(data[i].show_name == res.data.published[j]){
-                                    //  console.log(data[i])
-                                    data1.push(data[i])
-                                }
-                            }
-                        }
-                        this.setState({
-                            selData: data1
-                        },()=>{
-                                if (this.state.type == "") {
-                                    this.setState({
-                                        type: this.state.selData[0].show_name
-                                    })
-                                }
-                        })
-                })
-            })
-    }
+    // getSelectTypes() {
+    //     fetch(url + "/1.0/violas/currency").then(res => res.json())
+    //         .then(res => {
+    //             let data = res.data.currencies
+    //             fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
+    //                 .then(res => {
+    //                     let data1=[];
+    //                     for (var i=0;i<data.length;i++) {
+    //                         for (var j = 0; j < res.data.published.length; j++) {
+    //                             if(data[i].show_name == res.data.published[j]){
+    //                                 //  console.log(data[i])
+    //                                 data1.push(data[i])
+    //                             }
+    //                         }
+    //                     }
+    //                     this.setState({
+    //                         selData: data1
+    //                     },()=>{
+    //                             if (this.state.type == "") {
+    //                                 this.setState({
+    //                                     type: this.state.selData[0].show_name,
+
+    //                                 })
+    //                             }
+    //                     })
+    //             })
+    //         })
+    // }
     getInputAmount = (e) =>{
       if (e.target.value){
+        if (e.target.value>this.state.asset){
+            this.setState({
+                warning: '资金不足'
+            })
+        }else{
+            this.setState({
+                warning: ''
+            })
+        }
          this.setState({
              inputAmount: e.target.value,
-             getFocus:true
+            //  getFocus:true
          })
       }else{
           this.setState({
-              inputAmount: e.target.value,
-              getFocus: false
+              warning: ''
+            //   getFocus: false
           })
       }
     }
     getOutputAmount = (e) => {
         if (e.target.value) {
+            if (e.target.value > this.state.asset) {
+                this.setState({
+                    warning: '资金不足'
+                })
+            } else {
+                this.setState({
+                    warning: ''
+                })
+            }
             this.setState({
-                outputAmount: e.target.value,
-                getFocus1: true
+                outputAmount: e.target.value
+            },()=>{
+                    // fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+                    //     .then(res => {
+
+                    //     })
             })
         } else {
             this.setState({
-                outputAmount: e.target.value,
-                getFocus1: false
+                warning: ''
             })
         }
     }
@@ -209,13 +253,36 @@ class ExChange extends Component {
             visible: type
         })
     }
-    showTypes = (v, address, name,ind) => {
+    showTypes = (v, address, name,ind,bal) => {
+        
         this.setState({
             type1: v,
             ind:ind,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas1: false
+        },()=>{
+                if (this.state.type1 == 'BTC') {
+                    if (bal == '0') {
+                        this.setState({
+                            asset1: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset1: this.getFloat(bal / 1e8, 6)
+                        })
+                    }
+                } else {
+                    if (bal == 0) {
+                        this.setState({
+                            asset1: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset1: this.getFloat(bal / 1e8, 6)
+                        })
+                    }
+                }
         })
     }
     getBalances() {
@@ -254,7 +321,18 @@ class ExChange extends Component {
                                     return b.balance - a.balance
                                 })
                                 this.setState({
-                                    arr: newArr
+                                    arr: newArr,
+                                    selData:newArr
+                                },()=>{
+                                    if (this.state.type == "") {
+                                        console.log()
+                                        this.setState({
+                                            index: Object.keys(this.state.selData)[0],
+                                            type:this.state.selData[0].show_name,
+                                            asset: this.getFloat(this.state.selData[0].balance / 1e6,6)
+
+                                        })
+                                    }
                                 })
                             })
                         })
@@ -278,8 +356,8 @@ class ExChange extends Component {
 
     }
     render() {
-        let { arr, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord,ind } = this.state;
-        // console.log(showMenuViolas,'.......')
+        let { arr, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord,ind,index } = this.state;
+        // console.log(selData,'....')
         return (
             <div className="exchange">
                <div className="exchangeContent">
@@ -288,11 +366,20 @@ class ExChange extends Component {
                         <p>gas：0.1000%</p>
                         <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
                            <div className="showAsset">
-                                <label>Input</label>
-                                <p><img src="/img/asset-management.png"/>当前资产：--</p>
+                                <label>输入</label>
+                                    <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{type}</p>
                            </div>
                            <div className="iptContent">
-                                <input placeholder="0.00" onChange={(e)=>this.getInputAmount(e)}/>
+                                <input placeholder="0.00" onFocus={()=>{
+                                        this.setState({
+                                            getFocus: true,
+                                            getFocus1:false
+                                        })
+                                    }} onBlur={() => {
+                                        this.setState({
+                                            getFocus: false
+                                        })
+                                    }} onChange={(e)=>this.getInputAmount(e)}/>
                                 <div className="dropdown1">
                                     {
                                             showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -304,9 +391,14 @@ class ExChange extends Component {
                                             return (
                                                 <span
                                                 key={i}
-                                                className={v.show_name == type ? "active" : null}
+                                                    className={i == index ? "active" : null}
                                                 onClick={() => {
-                                                    this.showMenu(v.show_name)
+                                                    if (v.show_name == 'BTC'){
+                                                        this.showMenu(v.show_name, v.BTC,i)
+                                                    }else{
+                                                        this.showMenu(v.show_name, v.balance,i)
+                                                    }
+                                                    
                                                 }}
                                                 >
                                                 {v.show_name}
@@ -331,11 +423,20 @@ class ExChange extends Component {
                         <div className="changeImg"><img src="/img/编组 2备份@2x.png"/></div>
                             <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                 <div className="showAsset">
-                                    <label>Output</label>
-                                    <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                    <label>输出</label>
+                                    <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}{type1 == '选择通证' ? '' : type1}</p>
                                 </div>
                                 <div className="iptContent">
-                                    <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)}/>
+                                    <input placeholder="0.00" onFocus={() => {
+                                        this.setState({
+                                            getFocus1: true,
+                                            getFocus: false
+                                        })
+                                    }} onBlur={() => {
+                                        this.setState({
+                                            getFocus1: false
+                                        })
+                                    }} onChange={(e) => this.getOutputAmount(e)}/>
                                     <div className="dropdown1">
                                         {
                                             showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -348,7 +449,14 @@ class ExChange extends Component {
                                                 </div>
                                                 {
                                                     arr.map((v, i) => {
-                                                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, v.name,i)}>
+                                                        return <div className="searchList" key={i} onClick={() => {
+                                                            if (v.show_name == 'BTC'){
+                                                                this.showTypes(v.show_name, v.address, v.name, i,v.BTC)
+                                                            }else{
+                                                                this.showTypes(v.show_name, v.address, v.name, i, v.balance)
+                                                            }
+                                                            }
+                                                        }>
                                                             <div className="searchEvery">
                                                                 <img src={v.show_icon} />
                                                                 <div className="searchEvery1">
@@ -394,7 +502,7 @@ class ExChange extends Component {
                             <div className="changeRate">矿工费用：—</div>
                       </div>
                       <div className="foot">
-                        <p className="btn" onClick={()=>this.showExchangeCode()}>Exchange</p>
+                        <p className="btn" onClick={()=>this.showExchangeCode()}>兑换</p>
                         <p className="descr">{warning}</p>
                       </div>
                       <div className="changeRecord">

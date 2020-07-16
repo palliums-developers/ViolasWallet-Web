@@ -380,7 +380,7 @@ dd {
     background: #FFF;
     margin-top: 8px;
     margin-left: 8px;
-    position: relative;
+    // position: relative;
     .leftContent{
       width: 100%;
       height: auto;
@@ -589,6 +589,7 @@ dd {
               flex-direction: column;
               padding:0 18px;
               box-sizing: border-box;
+              
               .showAsset{
                 display: flex;
                 justify-content: space-between;
@@ -626,6 +627,8 @@ dd {
                   color:rgba(56,47,68,1);
                   border: 0;
                   outline: 0;
+                  flex: 1;
+                  padding-right: 100px;
                 }
                 ::-webkit-input-placeholder{
                   font-size:28px;
@@ -927,6 +930,7 @@ dd {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            margin-top: 50px;
             h4{
               width: 15px;
               font-size:16px;
