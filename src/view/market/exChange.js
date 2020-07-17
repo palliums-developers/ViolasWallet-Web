@@ -187,13 +187,11 @@ class ExChange extends Component {
             })
         }
          this.setState({
-             inputAmount: e.target.value,
-            //  getFocus:true
+             inputAmount: e.target.value
          })
       }else{
           this.setState({
               warning: ''
-            //   getFocus: false
           })
       }
     }

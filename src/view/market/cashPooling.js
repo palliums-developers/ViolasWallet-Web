@@ -25,6 +25,7 @@ class CashPooling extends Component {
             getFocus: false,
             getFocus1: false,
             inputAmount: '',
+            inputAmount1:'',
             outputAmount: '',
             warning: '',
             changeRecord:[],
@@ -40,7 +41,10 @@ class CashPooling extends Component {
             changeList:{},
             asset:'--',
             asset1: '--',
-            index:-1
+            index:-1,
+            poolArr:[],
+            poolList1: [],
+            total_token:0
             // visible:false
         }
     }
@@ -53,6 +57,7 @@ class CashPooling extends Component {
         // document.addEventListener('click', this.closeMenu);
         // this.getSelectTypes()
         this.getExchangeRecode()
+        this.getOutBalances()
         if (JSON.parse(window.localStorage.getItem("wallet_info"))){
             this.setState({
               addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -144,12 +149,10 @@ class CashPooling extends Component {
         })
     }
     getTypeShow = (event) => {
-        this.stopPropagation(event)
+        // this.stopPropagation(event)
         this.setState({
             showDealType: !this.state.showDealType
-        }, () => {
-            this.getSelectTypes()
-        })
+        },)
     }
     //显示输入时通证列表
     showMenu = (v,bal,i) => {
@@ -228,39 +231,80 @@ class CashPooling extends Component {
     //                 })
     //         })
     // }
+    //第一个输入框 输入金额
     getInputAmount = (e) => {
         if (e.target.value) {
             this.setState({
-                inputAmount: e.target.value,
-                getFocus: true
+                inputAmount: e.target.value
             })
         } else {
             this.setState({
-                inputAmount: e.target.value,
-                getFocus: false
+                inputAmount: e.target.value
             })
         }
     }
-    getOutputAmount = (e) => {
+    //第二个输入框
+    getInputAmount1 = (e) => {
         if (e.target.value) {
             this.setState({
-                outputAmount: e.target.value,
-                getFocus1: true
+                inputAmount1: e.target.value
             })
         } else {
             this.setState({
-                outputAmount: e.target.value,
-                getFocus1: false
+                inputAmount1: e.target.value
             })
         }
     }
+    //第一个输出框 资金池通证
+    getOutputAmount = (e) =>{
+        if (e.target.value) {
+            this.setState({
+                OutputAmount: e.target.value
+            })
+        } else {
+            this.setState({
+                OutputAmount: e.target.value
+            })
+        }
+    }
+    //第二个输出框
+    getOutputAmount1 = (e) => {
+        if (e.target.value) {
+            this.setState({
+                OutputAmount1: e.target.value
+            })
+        } else {
+            this.setState({
+                OutputAmount1: e.target.value
+            })
+        }
+    }
+    //转入
     showExchangeCode = () => {
         if (this.state.inputAmount) {
-            if (this.state.outputAmount) {
+            if (this.state.inputAmount1) {
                 this.setState({
                     warning: ''
-                }, () => {
-                    this.props.showDialog()
+                })
+
+            }
+            else {
+                this.setState({
+                    warning: '请输入兑换数量'
+                })
+            }
+        } else {
+            this.setState({
+                warning: '请输入兑换数量'
+            })
+        }
+    }
+    //转出
+    showExchangeCode1 = () =>{
+        if (this.state.OutputAmount) {
+            if (this.state.OutputAmount1) {
+                this.setState({
+                    warning: ''
                 })
 
             }
@@ -286,36 +330,14 @@ class CashPooling extends Component {
         })
     }
     //显示输出时通证列表
-    showTypes1 = (v, address, name,bal, ind) => {
+    showTypes1 = (aName, bName,bal, ind) => {
         this.setState({
-            type2: v,
+            type2: aName+'/'+bName,
             ind1: ind,
             asset1:bal,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas2: false
-        }, () => {
-            if (this.state.type2 == 'BTC') {
-                if (this.state.type2 == '0') {
-                    this.setState({
-                        asset1: '0.00'
-                    })
-                } else {
-                    this.setState({
-                        asset1: this.getFloat(bal / 1e8, 6)
-                    })
-                }
-            } else {
-                if (this.state.type2 == '0') {
-                    this.setState({
-                        asset1: '0.00'
-                    })
-                } else {
-                    this.setState({
-                        asset1: this.getFloat(bal / 1e8, 6)
-                    })
-                }
-            }
         })
     }
     //转入下拉列表 第一个输入框
@@ -374,7 +396,24 @@ class CashPooling extends Component {
             })
 
     }
+    //第一个输入框搜索
     getSearchList = (e) => {
+        if (e.target.value) {
+            let arr = this.state.arr.filter(v => {
+                if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+                    return v;
+                }
+            })
+            this.setState({
+                selData: arr
+            })
+        } else {
+            this.getBalances()
+        }
+
+    }
+    //第二个输入框搜索
+    getSearchList1 = (e) => {
         if (e.target.value) {
             let arr = this.state.arr.filter(v => {
                 if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
@@ -388,6 +427,42 @@ class CashPooling extends Component {
             this.getBalances()
         }
 
+    }
+    getSearchList2 = (e) => {
+        if (e.target.value){
+            let arrs = this.state.poolArr.filter(v => {
+                if (String(v.token).indexOf(e.target.value) == 0) {
+                    return v;
+                }
+            })
+            this.setState({
+                poolArr: arrs
+            })
+        }else{
+            this.getOutBalances()
+        }
+    }
+    //转出下拉列表 第一个输入框
+    getOutBalances(){
+        fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
+            .then(res => {
+                // console.log(res,'.......')
+                this.setState({
+                    // res.date.balance  res.data.total_token
+                    poolArr: [
+                        {
+                            "coin_a_index": 0,
+                            "coin_a_name": "VLSUSD",
+                            "coin_a_value": 59811,
+                            "coin_b_index": 1,
+                            "coin_b_name": "VLSEUR",
+                            "coin_b_value": 31905,
+                            "token": 43632
+                        }
+                    ],
+                    total_token: 43632
+                })
+            })
     }
     //判断转入/转出成功或失败
     optionTypes(transaction_type, status){
@@ -417,7 +492,7 @@ class CashPooling extends Component {
         })
     }
     render() {
-        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind,index, type2, ind1, showMenuViolas2 } = this.state;
+        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
         // console.log(showMenuViolas,'....')
         return (
             <div className="exchange cashPooling">
@@ -459,7 +534,16 @@ class CashPooling extends Component {
                                         <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{name == '选择通证' ? '' : name}</p>
                                     </div>
                                     <div className="iptContent">
-                                        <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} />
+                                        <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} onFocus={() => {
+                                            this.setState({
+                                                getFocus: true,
+                                                getFocus1: false
+                                            })
+                                        }} onBlur={() => {
+                                            this.setState({
+                                                getFocus: false
+                                            })
+                                        }}/>
                                         <div className="dropdown1">
                                             {
                                                 showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{name}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -519,7 +603,7 @@ class CashPooling extends Component {
                                 </div> : <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm iptForm1'}>
                                         <div className="showAsset">
                                             <label>资金池通证</label>
-                                            <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}{type2 == '选择通证' ? '' : type2}</p>
+                                            <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}</p>
                                         </div>
                                         <div className="iptContent">
                                             <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
@@ -529,27 +613,23 @@ class CashPooling extends Component {
                                                 }
 
                                                 {
-                                                    showMenuViolas2 ? <div className='dropdown-content1'>
+                                                    showMenuViolas2 ? <div className='dropdown-content1 dropdown-content3'>
                                                         <div className="formSearch">
                                                             <img src="/img/sousuo 2@2x.png" />
-                                                            <input placeholder="Search" onChange={(e) => this.getSearchList1(e)} />
+                                                            <input placeholder="Search" onChange={(e) => this.getSearchList2(e)} />
                                                         </div>
                                                         {
-                                                            arr.map((v, i) => {
+                                                            poolArr.map((v, i) => {
                                                                 return <div className="searchList" key={i} onClick={() => {
-                                                                    if (v.show_name == 'BTC') {
-                                                                        this.showTypes1(v.show_name, v.address, v.name,v.BTC, i)
-                                                                    } else {
-                                                                        this.showTypes1(v.show_name, v.address, v.name, v.balance, i)
-                                                                    }
+                                                                    this.showTypes1(v.coin_a_name, v.coin_b_name, v.token, i)
                                                                     
                                                                 }}>
                                                                     <div className="searchEvery">
-                                                                        <img src={v.show_icon} />
+                                                                        {/* <img src={v.show_icon} /> */}
                                                                         <div className="searchEvery1">
                                                                             <div>
-                                                                                <h4>{v.show_name}</h4>
-                                                                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                                <h4>{v.coin_a_name + '/' + v.coin_b_name}</h4>
+                                                                                <p>通证：{v.token}</p>
                                                                             </div>
                                                                             <span className={ind1 == i ? 'check active' : 'check'}></span>
                                                                         </div>
@@ -573,7 +653,16 @@ class CashPooling extends Component {
                                         <p><img src="/img/asset-management.png" />当前资产：--</p>
                                     </div>
                                     <div className="iptContent">
-                                        <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
+                                        <input placeholder="0.00" onFocus={() => {
+                                            this.setState({
+                                                getFocus: false,
+                                                getFocus1: true
+                                            })
+                                        }} onBlur={() => {
+                                            this.setState({
+                                                getFocus1: false
+                                            })
+                                        }} onChange={(e) => this.getInputAmount1(e)} />
                                         <div className="dropdown1">
                                             {
                                                 showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -582,7 +671,7 @@ class CashPooling extends Component {
                                                 showMenuViolas1 ? <div className='dropdown-content1'>
                                                     <div className="formSearch">
                                                         <img src="/img/sousuo 2@2x.png" />
-                                                        <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                                                        <input placeholder="Search" onChange={(e) => this.getSearchList1(e)} />
                                                     </div>
                                                     {
                                                         arr.map((v, i) => {
@@ -611,18 +700,18 @@ class CashPooling extends Component {
                                             {/* <p><img src="/img/asset-management.png" />当前资产：--</p> */}
                                         </div>
                                         <div className="iptContent">
-                                            <input placeholder="0.00" onChange={(e) => this.getOutputAmount(e)} />
+                                            <input placeholder="0.00" onChange={(e) => this.getOutputAmount1(e)} />
                                             
                                         </div>
                                     </div>
                             }
                             <div className="changeRate">兑换率：1:100</div>
                             {/* <div className="changeRate">当前资金池大小：— —</div> */}
-                            <div className="changeRate">你的资金池共有：— —</div>
+                            <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div>
                         </div>
                         <div className="foot">
                             {
-                                type == '转入' ? <p className="btn" onClick={() => this.showExchangeCode()}>转入</p> : <p className="btn" onClick={() => this.showExchangeCode()}>转出</p>
+                                type == '转入' ? <p className="btn" onClick={() => this.showExchangeCode()}>转入</p> : <p className="btn" onClick={() => this.showExchangeCode1()}>转出</p>
                             }
                             
                             <p className="descr">{warning}</p>

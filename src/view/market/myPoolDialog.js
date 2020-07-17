@@ -14,31 +14,23 @@ class MyPoolDialog extends Component {
     }
     //获取资产记录
     componentDidMount() {
-        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.localStorage.getItem('address')).then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
             .then(res => {
+                // console.log(res,'.......')
                 this.setState({
                     // res.date.balance  res.data.total_token
                     poolList: [
                         {
-                            "VLSEUR": 1,
-                            "VLSUSD": 0,
-                            "token": 0
+                            "coin_a_index": 0,
+                            "coin_a_name": "VLSUSD",
+                            "coin_a_value": 59811,
+                            "coin_b_index": 1,
+                            "coin_b_name": "VLSEUR",
+                            "coin_b_value": 31905,
+                            "token": 43632
                         }
                     ],
-                    total_token:0
-                },()=>{
-                    let arr = []
-                        this.state.poolList.map((v)=>{
-                            for (var key in v) {
-                                if(key != 'token'){
-                                    arr.push({[key]:v[key]})
-                                }
-                            }
-                        })
-                        this.setState({
-                            poolList:arr
-                        })
-                        
+                    total_token: 43632
                 })
             })
     }
@@ -47,6 +39,7 @@ class MyPoolDialog extends Component {
     };
     render() {
         let { total_token, poolList } = this.state;
+        console.log(poolList,'.......')
         return (
             <div className="myPoolDialog">
                 <h4 onClick={() => this.showPolling()}><i><img src="/img/编组备份 3@2x.png" /></i>我的资金池</h4>
@@ -63,7 +56,7 @@ class MyPoolDialog extends Component {
                     <div className="listContent">
                         {
                             poolList.map((v,i)=>{
-                                return <p key={i}><label>{Object.keys(v)}</label><span>{Object.values(v)}</span></p>
+                                return <p key={i}><label>{v.coin_a_name +'/'+ v.coin_b_name}</label><span>{v.token}</span></p>
                             })
                         }
                         
