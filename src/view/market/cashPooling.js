@@ -41,10 +41,13 @@ class CashPooling extends Component {
             changeList:{},
             asset:'--',
             asset1: '--',
+            asset2: '--',
             index:-1,
             poolArr:[],
             poolList1: [],
-            total_token:0
+            total_token:0,
+            aName:'',
+            bName:''
             // visible:false
         }
     }
@@ -162,7 +165,9 @@ class CashPooling extends Component {
             showMenuViolas: false,
             index: i
         }, () => {
-            if (this.state.type == 'BTC') {
+            this.opinionInputAmount()
+            this.opinionInputAmount1() 
+            if (this.state.name == 'BTC') {
                 if (bal == '0') {
                     this.setState({
                         asset: '0.00'
@@ -179,7 +184,7 @@ class CashPooling extends Component {
                     })
                 } else {
                     this.setState({
-                        asset: this.getFloat(bal / 1e8, 6)
+                        asset: this.getFloat(bal / 1e6, 6)
                     })
                 }
             }
@@ -234,24 +239,64 @@ class CashPooling extends Component {
     //第一个输入框 输入金额
     getInputAmount = (e) => {
         if (e.target.value) {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+                e.target.value = parseFloat(e.target.value);
+            }
+            if (e.target.value > this.state.asset) {
+                this.setState({
+                    warning: '资金不足'
+                })
+            } else {
+                this.setState({
+                    warning: ''
+                })
+            }
             this.setState({
                 inputAmount: e.target.value
+            }, () => {
+                this.opinionInputAmount()
             })
         } else {
             this.setState({
-                inputAmount: e.target.value
+                warning: '',
+                inputAmount: '',
+                inputAmount1:''
             })
         }
     }
     //第二个输入框
     getInputAmount1 = (e) => {
         if (e.target.value) {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+                e.target.value = parseFloat(e.target.value);
+            }
+            if (e.target.value > this.state.asset) {
+                this.setState({
+                    warning: '资金不足'
+                })
+            } else {
+                this.setState({
+                    warning: ''
+                })
+            }
             this.setState({
                 inputAmount1: e.target.value
+            }, () => {
+                this.opinionInputAmount1()
             })
         } else {
             this.setState({
-                inputAmount1: e.target.value
+                warning: '',
+                inputAmount1: '',
+                inputAmount:''
             })
         }
     }
@@ -263,7 +308,7 @@ class CashPooling extends Component {
             })
         } else {
             this.setState({
-                OutputAmount: e.target.value
+                OutputAmount: ''
             })
         }
     }
@@ -320,24 +365,63 @@ class CashPooling extends Component {
         }
     }
     //显示输入时通证列表
-    showTypes = (v, address, name, ind) => {
+    showTypes = (v, address, name, ind,bal) => {
         this.setState({
             type1: v,
             ind: ind,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas1: false
+        },()=>{
+                this.opinionInputAmount()
+                this.opinionInputAmount1() 
+                console.log(this.state.type1,'.........')
+                if (this.state.type1 == 'BTC') {
+                    if (bal == '0') {
+                        this.setState({
+                            asset2: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset2: this.getFloat(bal / 1e8, 6)
+                        })
+                    }
+                } else {
+                    if (bal == 0) {
+                        this.setState({
+                            asset2: '0.00'
+                        })
+                    } else {
+                        this.setState({
+                            asset2: this.getFloat(bal / 1e6, 6)
+                        })
+                    }
+                }
         })
     }
     //显示输出时通证列表
-    showTypes1 = (aName, bName,bal, ind) => {
+    showTypes1 = (aName, bName,token, ind) => {
         this.setState({
             type2: aName+'/'+bName,
             ind1: ind,
-            asset1:bal,
+            asset1:token,
+            aName:aName,
+            bName:bName,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas2: false
+        },()=>{
+            if (this.state.OutputAmount){
+                fetch(url1 + "/1.0/market/pool/withdrawal/trial?address"+window.localStorage.getItem('address')+'&&amount=' + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
+                    .then(res => {
+                        console.log(res,'............')
+                        // if (res.data) {
+                        //     this.setState({
+                        //         inputAmount1: res.data
+                        //     })
+                        // }
+                    })
+            }   
         })
     }
     //转入下拉列表 第一个输入框
@@ -491,6 +575,31 @@ class CashPooling extends Component {
             visible1: type
         })
     }
+    //获取input换算数量
+    opinionInputAmount = () => {
+        if (this.state.inputAmount) {
+            fetch(url1 + "/1.0/market/pool/deposit/trial?amount=" + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        this.setState({
+                            inputAmount1: res.data
+                        })
+                    }
+                })
+        }
+    }
+    opinionInputAmount1 = () => {
+        if (this.state.inputAmount1) {
+            fetch(url1 + "/1.0/market/pool/deposit/trial?amount=" + this.state.inputAmount1 + '&&coin_a=' + this.state.name + '&&coin_b=' + this.state.type1).then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        this.setState({
+                            inputAmount: res.data
+                        })
+                    }
+                })
+        }
+    }
     render() {
         let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
         // console.log(showMenuViolas,'....')
@@ -534,7 +643,7 @@ class CashPooling extends Component {
                                         <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{name == '选择通证' ? '' : name}</p>
                                     </div>
                                     <div className="iptContent">
-                                        <input placeholder="0.00" onChange={(e) => this.getInputAmount(e)} onFocus={() => {
+                                        <input placeholder="0.00" value={this.state.inputAmount} onChange={(e) => this.getInputAmount(e)} onFocus={() => {
                                             this.setState({
                                                 getFocus: true,
                                                 getFocus1: false
@@ -621,7 +730,11 @@ class CashPooling extends Component {
                                                         {
                                                             poolArr.map((v, i) => {
                                                                 return <div className="searchList" key={i} onClick={() => {
-                                                                    this.showTypes1(v.coin_a_name, v.coin_b_name, v.token, i)
+                                                                    if (v.coin_a_index < v.coin_b_index){
+                                                                        this.showTypes1(v.coin_a_name, v.coin_b_name, v.token, i)
+                                                                    }else{
+                                                                        this.showTypes1(v.coin_b_name, v.coin_a_name, v.token, i)
+                                                                    }
                                                                     
                                                                 }}>
                                                                     <div className="searchEvery">
@@ -650,10 +763,10 @@ class CashPooling extends Component {
                                 type == '转入' ? <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                     <div className="showAsset">
                                         <label>转入</label>
-                                        <p><img src="/img/asset-management.png" />当前资产：--</p>
+                                        <p><img src="/img/asset-management.png" />当前资产：{this.state.asset2}{type1}</p>
                                     </div>
                                     <div className="iptContent">
-                                        <input placeholder="0.00" onFocus={() => {
+                                        <input placeholder="0.00" value={this.state.inputAmount1} onFocus={() => {
                                             this.setState({
                                                 getFocus: false,
                                                 getFocus1: true
@@ -675,7 +788,13 @@ class CashPooling extends Component {
                                                     </div>
                                                     {
                                                         arr.map((v, i) => {
-                                                            return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, v.name, i)}>
+                                                            return <div className="searchList" key={i} onClick={() => {
+                                                                if (v.show_name == 'BTC') {
+                                                                    this.showTypes(v.show_name, v.address, v.name, i, v.BTC)
+                                                                } else {
+                                                                    this.showTypes(v.show_name, v.address, v.name, i, v.balance)
+                                                                }
+                                                            }}>
                                                                 <div className="searchEvery">
                                                                     <img src={v.show_icon} />
                                                                     <div className="searchEvery1">

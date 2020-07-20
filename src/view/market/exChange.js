@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from 'react-router-dom'
+// import { NavLink } from 'react-router-dom'
 import "../app.scss";
 import { connect } from 'react-redux';
 import ExchangeDetail from '../market/exchangeDetail';
@@ -113,6 +113,8 @@ class ExChange extends Component {
             showMenuViolas: false,
             index:i
         },()=>{
+                this.opinionInputAmount()
+                this.opinionOutputAmount() 
                 if (this.state.type == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -130,7 +132,7 @@ class ExChange extends Component {
                         })
                     } else {
                         this.setState({
-                            asset: this.getFloat(bal / 1e8, 6)
+                            asset: this.getFloat(bal / 1e6, 6)
                         })
                     }
                 }
@@ -175,8 +177,41 @@ class ExChange extends Component {
     //             })
     //         })
     // }
+
+    //获取input换算数量
+    opinionInputAmount = () =>{
+        if (this.state.inputAmount) {
+            fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.inputAmount + '&&currencyIn=' + this.state.type + '&&currencyOut=' + this.state.type1).then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        this.setState({
+                            outputAmount: res.data.amount
+                        })
+                    }
+                })
+        }
+    }
+    opinionOutputAmount = () =>{
+        if (this.state.outputAmount) {
+            fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.outputAmount + '&&currencyIn=' + this.state.type1 + '&&currencyOut=' + this.state.type).then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        this.setState({
+                            inputAmount: res.data.amount
+                        })
+                    }
+                })
+        }
+    }
     getInputAmount = (e) =>{
       if (e.target.value){
+          e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+          e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+          e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+          e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+          if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+              e.target.value = parseFloat(e.target.value);
+          }
         if (e.target.value>this.state.asset){
             this.setState({
                 warning: '资金不足'
@@ -188,15 +223,26 @@ class ExChange extends Component {
         }
          this.setState({
              inputAmount: e.target.value
+         },()=>{
+            this.opinionInputAmount()
          })
       }else{
           this.setState({
-              warning: ''
+              warning: '',
+              inputAmount:'',
+              outputAmount:''
           })
       }
     }
     getOutputAmount = (e) => {
         if (e.target.value) {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+                e.target.value = parseFloat(e.target.value);
+            }
             if (e.target.value > this.state.asset) {
                 this.setState({
                     warning: '资金不足'
@@ -209,14 +255,13 @@ class ExChange extends Component {
             this.setState({
                 outputAmount: e.target.value
             },()=>{
-                    // fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-                    //     .then(res => {
-
-                    //     })
+                this.opinionOutputAmount()
             })
         } else {
             this.setState({
-                warning: ''
+                warning: '',
+                outputAmount: '',
+                inputAmount: ''
             })
         }
     }
@@ -260,6 +305,8 @@ class ExChange extends Component {
             // address: address,
             showMenuViolas1: false
         },()=>{
+            this.opinionInputAmount()
+            this.opinionOutputAmount()  
                 if (this.state.type1 == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -277,7 +324,7 @@ class ExChange extends Component {
                         })
                     } else {
                         this.setState({
-                            asset1: this.getFloat(bal / 1e8, 6)
+                            asset1: this.getFloat(bal / 1e6, 6)
                         })
                     }
                 }
@@ -368,7 +415,7 @@ class ExChange extends Component {
                                     <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{type}</p>
                            </div>
                            <div className="iptContent">
-                                <input placeholder="0.00" onFocus={()=>{
+                                    <input placeholder="0.00" value={this.state.inputAmount} onFocus={()=>{
                                         this.setState({
                                             getFocus: true,
                                             getFocus1:false
@@ -425,7 +472,7 @@ class ExChange extends Component {
                                     <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}{type1 == '选择通证' ? '' : type1}</p>
                                 </div>
                                 <div className="iptContent">
-                                    <input placeholder="0.00" onFocus={() => {
+                                    <input placeholder="0.00" value={this.state.outputAmount} onFocus={() => {
                                         this.setState({
                                             getFocus1: true,
                                             getFocus: false

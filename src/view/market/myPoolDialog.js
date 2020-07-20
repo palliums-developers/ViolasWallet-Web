@@ -39,7 +39,7 @@ class MyPoolDialog extends Component {
     };
     render() {
         let { total_token, poolList } = this.state;
-        console.log(poolList,'.......')
+        // console.log(poolList,'.......')
         return (
             <div className="myPoolDialog">
                 <h4 onClick={() => this.showPolling()}><i><img src="/img/编组备份 3@2x.png" /></i>我的资金池</h4>
