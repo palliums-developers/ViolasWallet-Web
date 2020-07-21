@@ -56,7 +56,7 @@ class MyPoolDialog extends Component {
                     <div className="listContent">
                         {
                             poolList.map((v,i)=>{
-                                return <p key={i}><label>{v.coin_a_name +'/'+ v.coin_b_name}</label><span>{v.token}</span></p>
+                                return <p key={i}><label>{v.coin_a_name < v.coin_b_name ? v.coin_a_name + '/' + v.coin_b_name : v.coin_b_name + '/' + v.coin_a_name}</label><span>{v.token}</span></p>
                             })
                         }
                         
