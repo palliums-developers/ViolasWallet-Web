@@ -84,7 +84,7 @@ class CashPooling extends Component {
             return Math.round(number);
         }
         number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
-        number = Number(number).toFixed(n); //补足位数
+        number = parseFloat(Number(number).toFixed(n)); //补足位数
         return number;
     }
     getExchangeRecode = () => {
@@ -763,7 +763,7 @@ class CashPooling extends Component {
                                 type == '转入' ? <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                     <div className="showAsset">
                                         <label>转入</label>
-                                        <p><img src="/img/asset-management.png" />当前资产：{this.state.asset2}{type1}</p>
+                                        <p><img src="/img/asset-management.png" />当前资产：{this.state.asset2}{type1 == '选择通证' ? '' : type1}</p>
                                     </div>
                                     <div className="iptContent">
                                         <input placeholder="0.00" value={this.state.inputAmount1} onFocus={() => {
