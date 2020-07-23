@@ -21,16 +21,26 @@ class MyPoolDialog extends Component {
                     // res.date.balance  res.data.total_token
                     poolList: [
                         {
-                            "coin_a_index": 0,
-                            "coin_a_name": "VLSUSD",
-                            "coin_a_value": 59811,
-                            "coin_b_index": 1,
-                            "coin_b_name": "VLSEUR",
-                            "coin_b_value": 31905,
-                            "token": 43632
+                            "coin_a": {
+                                "index": 0,
+                                "module": "VLSUSD",
+                                "module_address": "00000000000000000000000000000001",
+                                "name": "VLSUSD",
+                                "show_name": "VLSUSD",
+                                "value": 9999
+                            },
+                            "coin_b": {
+                                "index": 1,
+                                "module": "VLSEUR",
+                                "module_address": "00000000000000000000000000000001",
+                                "name": "VLSEUR",
+                                "show_name": "VLSEUR",
+                                "value": 5046
+                            },
+                            "token": 7095
                         }
                     ],
-                    total_token: 43632
+                    total_token: 7095
                 })
             })
     }
@@ -56,7 +66,7 @@ class MyPoolDialog extends Component {
                     <div className="listContent">
                         {
                             poolList.map((v,i)=>{
-                                return <p key={i}><label>{v.coin_a_name < v.coin_b_name ? v.coin_a_name + '/' + v.coin_b_name : v.coin_b_name + '/' + v.coin_a_name}</label><span>{v.token}</span></p>
+                                return <p key={i}><label>{v.coin_a.index < v.coin_b.index ? v.coin_a.show_name + '/' + v.coin_b.show_name : v.coin_b.show_name + '/' + v.coin_a.show_name}</label><span>{v.token}</span></p>
                             })
                         }
                         

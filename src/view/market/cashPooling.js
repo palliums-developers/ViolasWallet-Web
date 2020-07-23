@@ -27,6 +27,7 @@ class CashPooling extends Component {
             inputAmount: '',
             inputAmount1:'',
             outputAmount: '',
+            outputAmount1: '',
             warning: '',
             changeRecord:[],
             selData: [],
@@ -304,11 +305,11 @@ class CashPooling extends Component {
     getOutputAmount = (e) =>{
         if (e.target.value) {
             this.setState({
-                OutputAmount: e.target.value
+                outputAmount: e.target.value
             })
         } else {
             this.setState({
-                OutputAmount: ''
+                outputAmount: ''
             })
         }
     }
@@ -316,11 +317,11 @@ class CashPooling extends Component {
     getOutputAmount1 = (e) => {
         if (e.target.value) {
             this.setState({
-                OutputAmount1: e.target.value
+                outputAmount1: e.target.value
             })
         } else {
             this.setState({
-                OutputAmount1: e.target.value
+                outputAmount1: e.target.value
             })
         }
     }
@@ -411,16 +412,34 @@ class CashPooling extends Component {
             // address: address,
             showMenuViolas2: false
         },()=>{
-            if (this.state.OutputAmount){
-                fetch(url1 + "/1.0/market/pool/withdrawal/trial?address"+window.localStorage.getItem('address')+'&&amount=' + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
-                    .then(res => {
-                        console.log(res,'............')
-                        // if (res.data) {
-                        //     this.setState({
-                        //         inputAmount1: res.data
-                        //     })
-                        // }
-                    })
+            if (this.state.outputAmount){
+                let object = {
+                    "coin_a_name": "VLSUSD",
+                    "coin_a_value": 6854,
+                    "coin_b_name": "VLSEUR",
+                    "coin_b_value": 3656
+                }
+                this.setState({
+                   outputAmount1: object.coin_a_value + object.coin_a_name + '/' + object.coin_b_value + object.coin_b_name
+                })
+                // fetch(url1 + "/1.0/market/pool/withdrawal/trial?address"+window.localStorage.getItem('address')+'&&amount=' + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
+                //     .then(res => {
+                //         let object = {
+                //             "coin_a_name": "VLSUSD",
+                //             "coin_a_value": 6854,
+                //             "coin_b_name": "VLSEUR",
+                //             "coin_b_value": 3656
+                //         }
+                //         this.setState({
+                //             OutputAmount1: object.coin_a_value + object.coin_a_name + '/' + object.coin_b_value + object.coin_b_name
+                //         })
+                //         console.log(res,'............')
+                //         // if (res.data) {
+                //         //     this.setState({
+                //         //         inputAmount1: res.data
+                //         //     })
+                //         // }
+                //     })
             }   
         })
     }
@@ -535,16 +554,26 @@ class CashPooling extends Component {
                     // res.date.balance  res.data.total_token
                     poolArr: [
                         {
-                            "coin_a_index": 0,
-                            "coin_a_name": "VLSUSD",
-                            "coin_a_value": 59811,
-                            "coin_b_index": 1,
-                            "coin_b_name": "VLSEUR",
-                            "coin_b_value": 31905,
-                            "token": 43632
+                            "coin_a": {
+                                "index": 0,
+                                "module": "VLSUSD",
+                                "module_address": "00000000000000000000000000000001",
+                                "name": "VLSUSD",
+                                "show_name": "VLSUSD",
+                                "value": 9999
+                            },
+                            "coin_b": {
+                                "index": 1,
+                                "module": "VLSEUR",
+                                "module_address": "00000000000000000000000000000001",
+                                "name": "VLSEUR",
+                                "show_name": "VLSEUR",
+                                "value": 5046
+                            },
+                            "token": 7095
                         }
                     ],
-                    total_token: 43632
+                    total_token: 7095
                 })
             })
     }
@@ -730,10 +759,10 @@ class CashPooling extends Component {
                                                         {
                                                             poolArr.map((v, i) => {
                                                                 return <div className="searchList" key={i} onClick={() => {
-                                                                    if (v.coin_a_index < v.coin_b_index){
-                                                                        this.showTypes1(v.coin_a_name, v.coin_b_name, v.token, i)
+                                                                    if (v.coin_a.index < v.coin_b.index){
+                                                                        this.showTypes1(v.coin_a.show_name, v.coin_b.show_name, v.token, i)
                                                                     }else{
-                                                                        this.showTypes1(v.coin_b_name, v.coin_a_name, v.token, i)
+                                                                        this.showTypes1(v.coin_b.show_name, v.coin_a.show_name, v.token, i)
                                                                     }
                                                                     
                                                                 }}>
@@ -741,7 +770,7 @@ class CashPooling extends Component {
                                                                         {/* <img src={v.show_icon} /> */}
                                                                         <div className="searchEvery1">
                                                                             <div>
-                                                                                <h4>{v.coin_a_name + '/' + v.coin_b_name}</h4>
+                                                                                <h4>{v.coin_a.show_name + '/' + v.coin_b.show_name}</h4>
                                                                                 <p>通证：{v.token}</p>
                                                                             </div>
                                                                             <span className={ind1 == i ? 'check active' : 'check'}></span>
@@ -819,14 +848,14 @@ class CashPooling extends Component {
                                             {/* <p><img src="/img/asset-management.png" />当前资产：--</p> */}
                                         </div>
                                         <div className="iptContent">
-                                            <input placeholder="0.00" onChange={(e) => this.getOutputAmount1(e)} />
+                                            <input value={this.state.outputAmount1} placeholder="0.00" onChange={(e) => this.getOutputAmount1(e)} />
                                             
                                         </div>
                                     </div>
                             }
                             <div className="changeRate">兑换率：1:100</div>
                             {/* <div className="changeRate">当前资金池大小：— —</div> */}
-                            <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div>
+                            {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}
                         </div>
                         <div className="foot">
                             {
