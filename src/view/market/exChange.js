@@ -357,6 +357,8 @@ class ExChange extends Component {
                         })
                     fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
+                            if (res.data){
+
                             this.setState({
                                 arr2: res.data.balances
                             }, () => {
@@ -380,6 +382,7 @@ class ExChange extends Component {
                                     }
                                 })
                             })
+                        }
                         })
                 })
             })

@@ -87,6 +87,7 @@ class HomeContent extends Component {
                        
                          fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                            .then(res => {
+                             console.log(res.data,'.............')
                              if(res.data){
                                this.setState({
                                  arr1: res.data.balances
