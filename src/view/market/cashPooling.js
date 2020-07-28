@@ -472,28 +472,31 @@ class CashPooling extends Component {
                         })
                     fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
-                            this.setState({
-                                arr2: res.data.balances
-                            }, () => {
-                                let arr = this.state.arr1.concat(this.state.arr2)
-                                let newArr = arr.concat(this.state.BTCBalances)
-                                newArr.sort((a, b) => {
-                                    return b.balance - a.balance
-                                })
+                            if(res.data){
                                 this.setState({
-                                    arr: newArr,
-                                    selData:newArr
+                                    arr2: res.data.balances
                                 }, () => {
-                                    if (this.state.type == "") {
-                                        this.setState({
-                                            index: Object.keys(this.state.selData)[0],
-                                            name: this.state.selData[0].show_name,
-                                            asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
+                                    let arr = this.state.arr1.concat(this.state.arr2)
+                                    let newArr = arr.concat(this.state.BTCBalances)
+                                    newArr.sort((a, b) => {
+                                        return b.balance - a.balance
+                                    })
+                                    this.setState({
+                                        arr: newArr,
+                                        selData: newArr
+                                    }, () => {
+                                        if (this.state.type == "") {
+                                            this.setState({
+                                                index: Object.keys(this.state.selData)[0],
+                                                name: this.state.selData[0].show_name,
+                                                asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
 
-                                        })
-                                    }
+                                            })
+                                        }
+                                    })
                                 })
-                            })
+                            }
+                            
                         })
                 })
             })

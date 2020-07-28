@@ -382,7 +382,25 @@ class ExChange extends Component {
                                     }
                                 })
                             })
-                        }
+                            } else {
+                                let newArr = this.state.arr2.concat(this.state.BTCBalances)
+                                newArr.sort((a, b) => {
+                                    return b.balance - a.balance
+                                })
+                                this.setState({
+                                    arr: newArr,
+                                    selData: newArr
+                                }, () => {
+                                    if (this.state.type == "") {
+                                        this.setState({
+                                            index: Object.keys(this.state.selData)[0],
+                                            type: this.state.selData[0].show_name,
+                                            asset: this.state.selData[0].show_name == 'BTC' ? this.getFloat(this.state.selData[0].BTC / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6)
+
+                                        })
+                                    }
+                                })
+                            }
                         })
                 })
             })

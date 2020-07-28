@@ -83,34 +83,47 @@ class Transfer extends Component {
         },()=>{
             fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
               .then(res => {
-                this.setState({
-                  arr1: res.data.balances
-                }, () => {
+                if(res.data){
+                  this.setState({
+                    arr1: res.data.balances
+                  }, () => {
                     // this.state.arr1.map((v, i) => {
                     //   if (v.show_name == 'LBR') {
                     //     v.show_name = 'VLS'
                     //   }
                     // })
-                  if (this.state.type == "") {
-                    this.setState({
-                      type: res.data.balances[0].show_name,
-                      coinName: res.data.balances[0].name,
-                      balance: res.data.balances[0].balance
-                    })
-                  }
-                })
+                    if (this.state.type == "") {
+                      this.setState({
+                        type: res.data.balances[0].show_name,
+                        coinName: res.data.balances[0].name,
+                        balance: res.data.balances[0].balance
+                      })
+                    }
+                  })
+                }
               })
             fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
               .then(res => {
-                this.setState({
-                  arr2: res.data.balances
-                }, () => {
-                  let arr = this.state.arr1.concat(this.state.arr2)
-                  let arrs = arr.concat(this.state.BTCArr)
+                if(res.data){
                   this.setState({
-                    selData: arrs
+                    arr2: res.data.balances
+                  }, () => {
+                    let arr = this.state.arr1.concat(this.state.arr2)
+                    let arrs = arr.concat(this.state.BTCArr)
+                    this.setState({
+                      selData: arrs
+                    })
                   })
-                })
+                }else{
+                  if (this.state.arr2){
+                    let arrs = this.state.arr2.concat(this.state.BTCArr)
+                    this.setState({
+                      selData: arrs
+                    })
+                  }
+                  
+                }
+                
         })
         
       })
@@ -332,7 +345,7 @@ class Transfer extends Component {
                 // gasCurrencyCode: this.state.gasCurrencyCode,
               }
             };
-            console.log(JSON.stringify(tx))
+            // console.log(JSON.stringify(tx))
             this.state.walletConnector
               .sendTransaction(tx)
               .then((res) => {
