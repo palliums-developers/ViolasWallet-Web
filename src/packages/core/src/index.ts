@@ -19,6 +19,27 @@ import {
   IRequestOptions,
   IInternalRequestOptions
 } from '@walletconnect/types'
+// import {
+//   IConnector,
+//   ICryptoLib,
+//   ITransportLib,
+//   ISessionStorage,
+//   IEncryptionPayload,
+//   ISocketMessage,
+//   ISessionStatus,
+//   ISessionError,
+//   IJsonRpcResponseSuccess,
+//   IJsonRpcResponseError,
+//   IJsonRpcRequest,
+//   ITxData,
+//   IClientMeta,
+//   IParseURIResult,
+//   ISessionParams,
+//   IWalletConnectOptions,
+//   IUpdateChainParams,
+//   IRequestOptions,
+//   IInternalRequestOptions
+// } from '../../types/index/types'
 import {
   parsePersonalSign,
   parseTransactionData,
@@ -563,7 +584,7 @@ class Connector implements IConnector {
   //     throw error
   //   }
   // }
-  public async sendTransaction(tx: ITxData) {
+  public async sendTransaction(chain: string, tx: ITxData) {
     if (!this._connected) {
       throw new Error(ERROR_SESSION_DISCONNECTED)
     }
@@ -571,7 +592,7 @@ class Connector implements IConnector {
     // const parsedTx = parseTransactionData(tx)
 
     const request = this._formatRequest({
-      method: 'violas_sendTransaction',
+      method: chain+'_sendTransaction',
       params: [tx]
     })
 
