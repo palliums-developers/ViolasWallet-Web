@@ -5,7 +5,7 @@ import { bytes2StrHex, string2Byte } from '../util/trans'
 import axios from 'axios';
 import code_data from '../util/code.json';
 
-class Bitcoin extends React.Component {
+class Market extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,10 +20,14 @@ class Bitcoin extends React.Component {
             input_b: '',
             addLiquidityTrial: 0,
             AddLiquidity: {},
+            output_a: '',
+            output_b: '',
             accountPoolInfo: {},
             removeLiquidityList: [],
-            selected_pair:'',
+            selected_pair: '',
+            selected_pair_detail: '',
             removeLiquidityTrial: {},
+            remove_liquidity: 0,
         }
     }
     async componentWillMount() {
@@ -55,18 +59,20 @@ class Bitcoin extends React.Component {
             .then(async res => {
                 await this.setState({ accountPoolInfo: res.data });
                 this.getRemoveLiquidityList();
-                await this.setState({selected_pair:this.state.removeLiquidityList[0].pair_name})
+                await this.setState({ selected_pair: this.state.removeLiquidityList[0] && this.state.removeLiquidityList[0].pair_name })
             })
     }
     async getRemoveLiquidityList() {
-        let tempJson={};
+        let tempJson = [];
         for (let i = 0; i < this.state.accountPoolInfo.data.balance.length; i++) {
-            tempJson[i]={
-                detail:this.state.accountPoolInfo.data.balance[i],
-                pair_name:this.state.accountPoolInfo.data.balance[i].coin_a.name+'/'+this.state.accountPoolInfo.data.balance[i].coin_b.name
-            }
+            tempJson.push(
+                {
+                    detail: this.state.accountPoolInfo.data.balance[i],
+                    pair_name: this.state.accountPoolInfo.data.balance[i].coin_a.name + '/' + this.state.accountPoolInfo.data.balance[i].coin_b.name
+                }
+            )
         }
-        await this.setState({removeLiquidityList:tempJson});
+        await this.setState({ removeLiquidityList: tempJson });
     }
     async getSwapTrial(_amount, _in, _out) {
         axios(`https://api4.violas.io/1.0/market/exchange/trial?amount=${_amount}&currencyIn=${_in}&currencyOut=${_out}`)
@@ -80,8 +86,19 @@ class Bitcoin extends React.Component {
                 await this.setState({ addLiquidityTrial: res.data.data })
             })
     }
+    async before_getRemoveLiquidityTrial(amount, coin_pair) {
+        let coin_pair_detail = {};
+        for (let i in this.state.removeLiquidityList) {
+            if (coin_pair == this.state.removeLiquidityList[i].pair_name) {
+                coin_pair_detail = this.state.removeLiquidityList[i].detail;
+                await this.setState({ selected_pair_detail: coin_pair_detail });
+                break;
+            }
+        }
+        this.getRemoveLiquidityTrial(sessionStorage.getItem('violas_address'), amount, coin_pair_detail.coin_a.module, coin_pair_detail.coin_b.module);
+    }
     async getRemoveLiquidityTrial(_address, _amount, _in, _out) {
-        axios(`https://api4.violas.io/1.0/market/pool/withdrawal/trial?address=${_address}amount=${_amount}&coin_a=${_in}&coin_b=${_out}`)
+        axios(`https://api4.violas.io/1.0/market/pool/withdrawal/trial?address=${_address}&amount=${_amount}&coin_a=${_in}&coin_b=${_out}`)
             .then(async res => {
                 await this.setState({ removeLiquidityTrial: res.data.data })
             })
@@ -134,7 +151,7 @@ class Bitcoin extends React.Component {
                 coin_b_tyArgs: this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
             }
         })
-        console.log(this.state.AddLiquidity)
+        // console.log(this.state.AddLiquidity)
     }
     async getSwap(_type, chainId) {
         const tx = {
@@ -188,15 +205,32 @@ class Bitcoin extends React.Component {
             payload: {
                 code: code_data.violas_p2p,
                 tyArgs: [
-
+                    this.getTyArgs(this.state.selected_pair_detail.coin_a.module, this.state.selected_pair_detail.coin_a.name),
+                    this.getTyArgs(this.state.selected_pair_detail.coin_b.module, this.state.selected_pair_detail.coin_b.name),
                 ],
                 args: [
                     {
-                        type:''
+                        type: 'U64',
+                        value: this.state.remove_liquidity
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
                     }
                 ]
-            }
+            },
+            chainId: chainId
         }
+        console.log('Remove Liquidity ', tx);
+        this.props.walletConnector.sendTransaction('violas', tx).then(res => {
+            console.log('Remove Liquidity ', res);
+        }).catch(err => {
+            console.log('Remove Liquidity ', err);
+        });
     }
     async handleChange(_type, e) {
         e.persist();
@@ -221,7 +255,10 @@ class Bitcoin extends React.Component {
                 await this.setState({ input_a_amount: e.target.value, addLiquidityTrial: 0 });
                 break;
             case 'selected_pair':
-                await this.setState({ selected_pair: e.target.value });
+                await this.setState({ selected_pair: e.target.value, removeLiquidityTrial: {} });
+                break;
+            case 'remove_liquidity':
+                await this.setState({ remove_liquidity: e.target.value, removeLiquidityTrial: {} });
                 break;
         }
     }
@@ -287,23 +324,35 @@ class Bitcoin extends React.Component {
                 </div>
                 <div className='tx'>
                     <h5>Remove Liquidity:</h5>
-                    <select value={this.state.selected_pair} onChange={this.handleChange.bind(this,'selected_pair')}>
-                        {/* {
-                            this.state.removeLiquidityList.length!=0&& this.state.removeLiquidityList.map((v,i)=>{
-                            return <option value={i} key={i}>{v.pair_name}</option>
+                    <select value={this.state.selected_pair} onChange={this.handleChange.bind(this, 'selected_pair')} style={{ width: '160px' }}>
+                        {
+                            this.state.removeLiquidityList.length != 0 && this.state.removeLiquidityList.map((v, i) => {
+                                return <option value={v.pair_name} key={i}>{v.pair_name}</option>
                             })
-                        } */}
+                        }
                     </select>
                     <input type='text' onChange={this.handleChange.bind(this, 'remove_liquidity')} />
-                    <button onClick={() => this.getRemoveLiquidityTrial()}>Remove Trial</button>
-                    <button onClick={() => this.bitcoin_sendTransaction()}>remove Liquidity</button>
+                    <br />
+                    <button onClick={() => this.before_getRemoveLiquidityTrial(this.state.remove_liquidity, this.state.selected_pair)}>Remove Trial</button>
+                    <br />
+                    {
+                        this.state.removeLiquidityTrial.coin_a_name &&
+                        <div>
+                            <h4>Trial amount:</h4>
+                            <h5>coin a: {this.state.removeLiquidityTrial.coin_a_name}&nbsp;
+                            value:{this.state.removeLiquidityTrial.coin_a_value}</h5>
+                            <h5>coin b: {this.state.removeLiquidityTrial.coin_b_name}&nbsp;
+                            value:{this.state.removeLiquidityTrial.coin_b_value}</h5>
+                            <button onClick={() => this.getRemoveLiquidity(1)}>remove Liquidity</button>
+                        </div>
+                    }
                 </div>
             </div>
         )
     }
 }
 
-export default Bitcoin;
+export default Market;
         //https://api4.violas.io/1.0/market/exchange/currency
         //https://api4.violas.io/1.0/market/pool/reserve/infos
         //https://api4.violas.io/1.0/market/exchange/trial?amount=100000&currencyIn=VLSUSD&currencyOut=BTC
