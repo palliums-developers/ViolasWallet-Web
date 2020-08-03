@@ -61,7 +61,8 @@ class Libra extends React.Component {
                 await this.setState({ value: e.target.value });
                 break;
             case 'libra_currency':
-                await this.setState({ libra_currency: e.target.value });
+                // console.log(JSON.parse(e.target.value))
+                await this.setState({ libra_currency: JSON.parse(e.target.value) });
                 await this.getTyArgs(this.state.libra_currency);
                 break;
         }
@@ -111,10 +112,10 @@ class Libra extends React.Component {
                     <h5>Main Net:</h5>
                     <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
                     <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
-                    <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>
+                    <select value={this.state.libra_currency.show_name} onChange={this.handleChange.bind(this, 'libra_currency')}>
                         {
                             this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={v} key={i}>{v.name}</option>
+                                return <option value={v} key={i}>{v.show_name}</option>
                             })
                         }
                     </select>
@@ -127,7 +128,7 @@ class Libra extends React.Component {
                     <select value={this.state.libra_currency.show_name} onChange={this.handleChange.bind(this, 'libra_currency')}>
                         {
                             this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={v} key={i}>{v.show_name}</option>
+                                return <option value={JSON.stringify(v)} key={i}>{v.show_name}</option>
                             })
                         }
                     </select>

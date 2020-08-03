@@ -186,7 +186,6 @@ class Violas extends React.Component {
                         </select>
                     </p>
                     <button onClick={this.sendPublish}>send publish</button>
-                    {/* <button onClick={()=>{console.log(this.props.walletConnector)}}>get wc</button> */}
                 </div>
                 <div className='tx'>
                     <h5>Send Transaction</h5>
@@ -199,7 +198,6 @@ class Violas extends React.Component {
                             })
                         }
                     </select>
-                    {/* <br /> */}
                     <button onClick={() => this.violas_sendTransaction(1)}>send transaction</button>
                 </div>
                 <div className='tx'>
