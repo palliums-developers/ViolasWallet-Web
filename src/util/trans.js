@@ -46,4 +46,6 @@ let bytes2StrHex = (arrBytes) => {
     return str;
 }
 
+//07 000000001 module长度 moduleUTF8bytes name长度 nameUTF8bytes 00
+
 export { string2Byte, bytes2StrHex }

@@ -89,31 +89,36 @@ class Violas extends React.Component {
         //     // sequenceNumber: seq,
         //     gasCurrencyCode: this.state.currencyCode,
         // }
-        const tx={
-            from:sessionStorage.getItem('violas_address'),
-            payload:{
-                code:code_data.violas_p2p,
-                tyArgs:[
+        const tx = {
+            from: sessionStorage.getItem('violas_address'),
+            payload: {
+                code: code_data.violas_p2p,
+                tyArgs: [
                     this.state.tyArgs
                 ],
-                args:[
+                args: [
                     {
-                        type:'Address',
-                        value:this.state.address
+                        type: 'Address',
+                        value: this.state.address
                     },
                     {
-                        type:'Vector',
-                        value:''
+                        type: 'U64',
+                        value: this.state.value
                     },
                     {
-                        type:'U64',
-                        value:this.state.value
+                        type: 'Vector',
+                        value: ''
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
                     }
+
                 ]
             },
-            chainId:chainId
+            chainId: chainId
         }
-        console.log('violas ',tx);
+        console.log('violas ', tx);
         this.props.walletConnector.sendTransaction('violas', tx).then(res => {
             console.log('Violas transaction ', res);
         }).catch(err => {
@@ -173,12 +178,12 @@ class Violas extends React.Component {
                     <h5>Publish:</h5>
                     <p>Select Stable Coin:
                     <select value={this.state.violas_currency} onChange={this.handleChange.bind(this, 'violas_currency')}>
-                        {
-                            this.state.violas_currencies && this.state.violas_currencies.map((v, i) => {
-                                return <option value={v.name} key={i}>{v.name}</option>
-                            })
-                        }
-                    </select>
+                            {
+                                this.state.violas_currencies && this.state.violas_currencies.map((v, i) => {
+                                    return <option value={v.name} key={i}>{v.name}</option>
+                                })
+                            }
+                        </select>
                     </p>
                     <button onClick={this.sendPublish}>send publish</button>
                     {/* <button onClick={()=>{console.log(this.props.walletConnector)}}>get wc</button> */}
@@ -195,7 +200,7 @@ class Violas extends React.Component {
                         }
                     </select>
                     {/* <br /> */}
-                    <button onClick={()=>this.violas_sendTransaction(0)}>send transaction</button>
+                    <button onClick={() => this.violas_sendTransaction(1)}>send transaction</button>
                 </div>
                 <div className='tx'>
                     <h5>Send Signed Transaction</h5>

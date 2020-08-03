@@ -40,7 +40,8 @@ class Libra extends React.Component {
             name_length = '0' + name_length;
         }
         let _name_hex = bytes2StrHex(string2Byte(_name));
-        let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+        // let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+        let result = _name_hex + address + _name_hex;
         await this.setState({ tyArgs: result });
     }
     async handleChange(_type, e) {
@@ -73,12 +74,16 @@ class Libra extends React.Component {
                         value: this.state.address,
                     },
                     {
+                        type: 'U64',
+                        value: this.state.value,
+                    },
+                    {
                         type: 'Vector',
                         value: '',
                     },
                     {
-                        type: 'U64',
-                        value: this.state.value,
+                        type: 'Vector',
+                        value: '',
                     }
                 ]
             },

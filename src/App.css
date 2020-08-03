@@ -21,6 +21,9 @@
   font-size: 17px;
   width: 200px;
 }
+h4{
+  margin: 10px;
+}
 input {
   margin: 10px;
   outline-style: none;
@@ -30,7 +33,7 @@ input {
   width: 200px;
   font-size: 16px;
 }
-select {
+select,option {
   margin: 10px;
   outline-style: none;
   border: 2px solid #ccc;
