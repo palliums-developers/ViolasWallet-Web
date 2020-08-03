@@ -9,8 +9,6 @@ import MyPoolDialog from './market/myPoolDialog'
 
 import WalletConnect from "../packages/browser/src/index";
 let url = "https://api.violas.io";
-// let url1 = "http://52.27.228.84:4000"
-let url1 = "https://tbtc1.trezor.io"
 
 class Home extends Component {
   constructor(props) {
@@ -133,7 +131,7 @@ class Home extends Component {
                   //         : "l"
                   // }
                 ></i>
-                <label>Wallet</label>
+                <label>钱包</label>
               </span>
               <span
                 onClick={() => {
@@ -147,7 +145,21 @@ class Home extends Component {
                   className="noMar"
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
-                <label>Market</label> 
+                <label>市场</label> 
+              </span>
+              <span
+                onClick={() => {
+                  this.props.history.push("/homepage/home/digitalBank");
+                  // this.props.showDetails()
+                  // this.props.showPolling()
+                }}
+                className={active == "digitalBank" ? "active" : null}
+              >
+                <i
+                  className="noBank"
+                // className={active == "changeContent" ? "mar" : "noMar"}
+                ></i>
+                <label>数字银行</label>
               </span>
             </div>
           }

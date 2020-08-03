@@ -4,9 +4,9 @@ import { Drawer } from "antd";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
 import "./app.scss";
-// let url = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io"
-let url1 = "https://tbtc1.trezor.io"
+// let url1 = "https://tbtc1.trezor.io"
 
 class HomeContent extends Component {
     constructor(){
@@ -71,7 +71,7 @@ class HomeContent extends Component {
            this.setState({
              BTCBalances: res.data
            },()=>{
-               fetch(url + "/1.0/violas/value/btc?address=" + this.state.BTCAddress).then(res => res.json())
+               fetch(url1 + "/1.0/violas/value/btc?address=" + this.state.BTCAddress).then(res => res.json())
                  .then(res => {
                    let btcRate = res.data;
                    for (let i = 0; i < this.state.BTCBalances.length;i++){
@@ -85,7 +85,7 @@ class HomeContent extends Component {
                      BTCBalances: this.state.BTCBalances
                    },()=>{
                        
-                         fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                         fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                            .then(res => {
                             //  console.log(res.data,'.............')
                              if(res.data){
@@ -104,7 +104,7 @@ class HomeContent extends Component {
                                  this.setState({
                                    BTCBalance: BTCBalance
                                  })
-                                 fetch(url + "/1.0/violas/value/violas?address=" + window.localStorage.getItem('address')).then(res => res.json())
+                                 fetch(url1 + "/1.0/violas/value/violas?address=" + window.localStorage.getItem('address')).then(res => res.json())
                                    .then(res => {
                                      let vioRate = res.data;
                                      for (let i = 0; i < this.state.arr1.length; i++) {
@@ -117,13 +117,13 @@ class HomeContent extends Component {
                                      this.setState({
                                        arr1: this.state.arr1
                                      }, () => {
-                                       fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                                       fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                                          .then(res => {
                                            if(res.data){
                                             this.setState({
                                              arr2: res.data.balances
                                            }, () => {
-                                                fetch(url + "/1.0/violas/value/libra?address=" + window.localStorage.getItem('address')).then(res => res.json())
+                                                fetch(url1 + "/1.0/violas/value/libra?address=" + window.localStorage.getItem('address')).then(res => res.json())
                                                   .then(res => {
                                                     let libRate = res.data;
                                                     for (let i = 0; i < this.state.arr2.length; i++) {

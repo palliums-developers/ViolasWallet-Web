@@ -6,7 +6,7 @@ import { Pagination } from 'antd';
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
 // let url = 'https://api.violas.io'
-let url = "https://api.violas.io"
+let url = "https://api4.violas.io"
 
 class CurrencyDetail extends Component {
     constructor(props) {
@@ -70,7 +70,7 @@ class CurrencyDetail extends Component {
 
     getNavData(){
         let { detailAddrs, name } = this.state;
-        console.log(detailAddrs, name)
+        // console.log(detailAddrs, name)
         if (name == 'BTC'){
             this.setState({
                 dataList: []

@@ -7,6 +7,7 @@ import Transfer from "../view/apply/transfer";
 import GetMoney from "../view/apply/getMoney";
 import Exchange from '../view/market/exChange';
 import CashPooling from '../view/market/cashPooling';
+import DigitalBank from "../view/digitalBank";
 
 let routes = [
     //首页
@@ -44,6 +45,11 @@ let routes = [
                                 redirect: '/homepage/home/changeContent/exchange'
                             },
                         ]
+                    },
+                    {
+                        path: '/homepage/home/digitalBank',
+                        component: DigitalBank
+
                     },
                     {
                         path: '/homepage/home/transfer',

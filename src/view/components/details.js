@@ -38,7 +38,7 @@ class Details extends Component {
     render() {
         let { detailDatas } = this.props;
         let { reve, tran,deal } = this.state;
-        console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
+        // console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
         return (
             <div className="details">
                 <h4 onClick={() => {

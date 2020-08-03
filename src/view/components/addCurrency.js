@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 // import { withRouter } from "react-router-dom";
 import WalletConnect from '../../packages/browser/src/index';
 import '../app.scss'
-// let url = "https://api.violas.io";
-let url = "https://api.violas.io";
+let url1 = "https://api.violas.io";
+let url = "https://api4.violas.io";
 let names = []
 
 class AddCurrency extends Component {
@@ -55,31 +55,39 @@ class AddCurrency extends Component {
     }
   }
   getBalance = () => {
-    fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
+    fetch(url1 + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
       .then(res => {
         // console.log(res.data)
-        this.setState({
-          BTCData:res.data
-        })
+        if (res.data) {
+          this.setState({
+            BTCData: res.data
+          })
+        }
+        
       })
       fetch(url + "/1.0/violas/currency").then(res => res.json())
         .then(res => {
-          this.setState({
-            arr1:res.data.currencies
-          })
+          if(res.data){
+            this.setState({
+              arr1: res.data.currencies
+            })
+          }
         })
       fetch(url + "/1.0/libra/currency").then(res => res.json())
         .then(res => {
-          this.setState({
-            arr2: res.data.currencies
-          },()=>{
+          if (res.data){
+            this.setState({
+              arr2: res.data.currencies
+            }, () => {
               let arr = this.state.arr1.concat(this.state.arr2)
               this.setState({
                 addCurrencyList1: arr
               }, () => {
-                  this.getPublish()
+                this.getPublish()
               })
-          })
+            })
+          }
+          
         })
   }
   showPolling = () => {

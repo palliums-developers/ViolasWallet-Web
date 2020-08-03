@@ -451,7 +451,7 @@ class CashPooling extends Component {
                 this.setState({
                     BTCBalances: res.data
                 }, () => {
-                    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
                             this.setState({
                                 arr1: res.data.balances
@@ -470,7 +470,7 @@ class CashPooling extends Component {
                                 }
                             })
                         })
-                    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
                             if(res.data){
                                 this.setState({

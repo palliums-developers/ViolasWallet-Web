@@ -328,24 +328,27 @@ dd {
       margin-top:62px;
       span {
         height:80px;
-        font-size: 20px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        
         color: #FFF;
         display: flex;
         align-items: center;
-        justify-content: center;
+        // justify-content: center;
         padding: 0 40px;
+        padding-left: 80px;
         box-sizing: border-box;
         cursor: pointer;
         label{
           margin-top: 13px;
           cursor: pointer;
+          font-size: 16px;
+          font-weight: 400;
+          white-space: nowrap;
         }
         i {
-          width: 31px;
-          height: 34px;
+          width: 24px;
+          height: 24px;
           margin-right: 10px;
+          margin-top: 10px;
         }
         .noWal {
           background: url("/img/编组 17复制 522@2x.png") no-repeat;
@@ -357,6 +360,10 @@ dd {
         }
         .noMar {
           background: url("/img/编组 1422@2x.png") no-repeat;
+          background-size: 100% 100%;
+        }
+        .noBank {
+          background: url("/img/编组 16@2x.png") no-repeat;
           background-size: 100% 100%;
         }
         .mar {
@@ -783,6 +790,7 @@ dd {
                             width: 44px;
                             height: 44px;
                             margin-right: 10px;
+                            border-radius: 10px;
                           }
                           .searchEvery1{
                             margin-top: 10px;
@@ -1336,6 +1344,7 @@ dd {
                 img {
                   width: 40px;
                   height: 40px;
+                  border-radius: 10px;
                 }
               }
               label {

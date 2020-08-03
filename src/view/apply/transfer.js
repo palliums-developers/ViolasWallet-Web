@@ -417,7 +417,7 @@ class Transfer extends Component {
             }
           }
         }else{
-          if (this.state.coinName === 'coni1' || this.state.coinName === 'coin2') {
+          if (this.state.coinName === 'coin1' || this.state.coinName === 'coin2') {
             this.setState({
               tranferDig: true
             })

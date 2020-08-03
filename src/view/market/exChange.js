@@ -336,7 +336,7 @@ class ExChange extends Component {
                 this.setState({
                     BTCBalances: res.data
                 }, () => {
-                    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
                             this.setState({
                                 arr1: res.data.balances
@@ -355,7 +355,7 @@ class ExChange extends Component {
                                 }
                             })
                         })
-                    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                         .then(res => {
                             if (res.data){
 
@@ -384,6 +384,7 @@ class ExChange extends Component {
                             })
                             } else {
                                 let newArr = this.state.arr2.concat(this.state.BTCBalances)
+                                console.log(newArr,'.........')
                                 newArr.sort((a, b) => {
                                     return b.balance - a.balance
                                 })
