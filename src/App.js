@@ -16,9 +16,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       bridge: 'https://walletconnect.violas.io',
-      qwe: 'a11ceb0b0100000006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
       walletConnector: {},
-      tyArgs: '0700000000000000000000000000000001034c4252034c425200',
     }
     this.QRCode = this.QRCode.bind(this);
     this.getAccount = this.getAccount.bind(this);

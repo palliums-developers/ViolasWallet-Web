@@ -11,8 +11,8 @@ class Libra extends React.Component {
         super(props);
         this.state = {
             libra_currencies: [],
-            libra_currency: 'LBR',
-            tyArgs: '',
+            libra_currency: {},
+            tyArgs: {},
             address: '',
             value: '',
             gasCurrencyCode: '',
@@ -29,19 +29,26 @@ class Libra extends React.Component {
         axios('https://api4.violas.io/1.0/libra/currency')
             .then(async res => {
                 await this.setState({ libra_currencies: res.data.data.currencies });
+                let temp=this.state.libra_currencies;
+                await this.setState({libra_currency:temp[0]});
+                this.getTyArgs(this.state.libra_currency)
             })
     }
-    async getTyArgs(_name) {
+    async getTyArgs(temp) {
         let address = '00000000000000000000000000000001';
         let prefix = '07';
         let suffix = '00';
-        let name_length = _name.length;
-        if (name_length < 10) {
-            name_length = '0' + name_length;
-        }
-        let _name_hex = bytes2StrHex(string2Byte(_name));
+        // let name_length = _name.length;
+        // if (name_length < 10) {
+        //     name_length = '0' + name_length;
+        // }
+        // let _name_hex = bytes2StrHex(string2Byte(_name));
         // let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-        let result = _name_hex + address + _name_hex;
+        let result = {
+            'module': temp.module,
+            'address': address,
+            'name': temp.name
+        }
         await this.setState({ tyArgs: result });
     }
     async handleChange(_type, e) {
@@ -107,7 +114,7 @@ class Libra extends React.Component {
                     <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>
                         {
                             this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={v.name} key={i}>{v.name}</option>
+                                return <option value={v} key={i}>{v.name}</option>
                             })
                         }
                     </select>
@@ -117,10 +124,10 @@ class Libra extends React.Component {
                     <h5>Test Net:</h5>
                     <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
                     <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
-                    <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>
+                    <select value={this.state.libra_currency.show_name} onChange={this.handleChange.bind(this, 'libra_currency')}>
                         {
                             this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={v.name} key={i}>{v.name}</option>
+                                return <option value={v} key={i}>{v.show_name}</option>
                             })
                         }
                     </select>
