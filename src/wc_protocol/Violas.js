@@ -15,15 +15,19 @@ class Violas extends React.Component {
             address: '',
             value: 0,
             message: '',
-            gasCurrencyCode: 'LBR',
+            gasCurrencyCode: 'VLS',
             violas_currencies: [],
-            violas_currency: 'LBR',
+            violas_currency: '',
         }
         this.sendPublish = this.sendPublish.bind(this);
         this.violas_sendTransaction = this.violas_sendTransaction.bind(this);
     }
     async componentWillMount() {
-        this.getViolasCurrencies();
+        await this.getViolasCurrencies();
+        await this.getTyArgs(this.state.violas_currencies[0].module, this.state.violas_currencies[0].name);
+        await this.setState({
+            violas_currency: this.state.violas_currencies[0].name,
+        });
     }
     async componentDidMount() {
 
@@ -34,21 +38,26 @@ class Violas extends React.Component {
         });
     }
     async getViolasCurrencies() {
-        axios('https://api4.violas.io/1.0/violas/currency')
+        await axios('https://api4.violas.io/1.0/violas/currency')
             .then(async res => {
                 await this.setState({ violas_currencies: res.data.data.currencies });
             })
     }
-    async getTyArgs(_name) {
+    async getTyArgs(_module, _name) {
         let address = '00000000000000000000000000000001';
         let prefix = '07';
         let suffix = '00';
+        let _module_length = _module.length;
+        if (_module_length < 10) {
+            _module_length = '0' + _module_length;
+        }
+        let _module_hex = bytes2StrHex(string2Byte(_module));
         let name_length = _name.length;
         if (name_length < 10) {
             name_length = '0' + name_length;
         }
         let _name_hex = bytes2StrHex(string2Byte(_name));
-        let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+        let result = prefix + address + _module_length + _module_hex + name_length + _name_hex + suffix;
         await this.setState({ tyArgs: result });
     }
     async violas_sendTransaction(chainId) {
@@ -165,7 +174,7 @@ class Violas extends React.Component {
                 break;
             case 'violas_currency':
                 await this.setState({ violas_currency: e.target.value });
-                await this.getTyArgs(this.state.violas_currency);
+                await this.getTyArgs(this.state.violas_currency, this.state.violas_currency);
                 break;
         }
     }
