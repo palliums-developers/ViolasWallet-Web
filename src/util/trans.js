@@ -1,3 +1,4 @@
+
 let string2Byte = (str) => {
     var bytes = new Array();
     var len, c;
@@ -46,6 +47,24 @@ let bytes2StrHex = (arrBytes) => {
     return str;
 }
 
+let decimal2Hex = (decimal) => {
+    return decimal.toString(16);
+}
+
+// let getTimestamp = _ => {
+//     return (new Date()).valueOf();  //精确到毫秒
+// }
+let getTimestamp = (new Date()).valueOf();  //精确到毫秒
+// let getTimestamp = Date.parse(new Date());   //不精确到毫秒
+
+let timestamp2time = (timestamp) => {
+    let temp = '' + timestamp;
+    if (temp.length < 13) {
+        timestamp = timestamp * 1000;
+    }
+    let result = new Date(timestamp);
+    return result
+}
 //07 000000001 module长度 moduleUTF8bytes name长度 nameUTF8bytes 00
 
-export { string2Byte, bytes2StrHex }
+export { string2Byte, bytes2StrHex, timestamp2time, getTimestamp, decimal2Hex }

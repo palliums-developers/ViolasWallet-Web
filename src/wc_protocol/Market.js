@@ -1,7 +1,7 @@
 
 import React from 'react';
 import '../App.css';
-import { bytes2StrHex, string2Byte } from '../util/trans'
+import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp } from '../util/trans'
 import axios from 'axios';
 import code_data from '../util/code.json';
 
@@ -120,8 +120,40 @@ class Market extends React.Component {
         let result = prefix + address + module_length + _module_hex + name_length + _name_hex + suffix;
         return result;
     }
+    async fullWith16(temp) {
+        temp = '' + temp;
+        let temp_length = temp.length;
+        if (temp < 16) {
+            let zero = '';
+            for (let i = 0; i < 16 - temp_length; i++) {
+                zero += '0';
+            }
+            temp = zero + temp;
+        }
+        return temp
+    }
+    async getBTC2other(_type, _payee_address, _amount) {
+        let op_return_head = '6a';
+        let data_length = '3c';
+        let mark = code_data.btc.violas_mark;
+        let version = code_data.btc.version;
+        let type = '';
+        for (let key in code_data.btc.type.start) {
+            if (key === _type) {
+                type = code_data.btc.type.start.key;
+                break;
+            }
+        }
+        let payee_address = _payee_address;
+        let sequence = this.fullWith16(getTimestamp);
+        let module_address = code_data.btc.violas_module_address;
+        let amount = this.fullWith16(_amount);
+        let time = '0000';
+        return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
+    }
     async orderCurrencies(input_a, input_b) {
-        let index_a, index_b, amount_a, amount_b = 0;
+        let index_a, index_b;
+        let amount_a, amount_b = 0;
         for (let i = 0; i < this.state.violas_currencies.length; i++) {
             if (this.state.violas_currencies[i].show_name == input_a) {
                 index_a = i;
@@ -144,7 +176,7 @@ class Market extends React.Component {
         await this.setState({
             AddLiquidity: {
                 coin_a: this.state.violas_currencies[index_a].show_name,
-                coin_a_amount: amount_a,
+                coin_a_amount: parseInt(amount_a),
                 coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
                 coin_b: this.state.violas_currencies[index_b].show_name,
                 coin_b_amount: amount_b,
@@ -162,7 +194,7 @@ class Market extends React.Component {
         }
     }
     async getAddLiquidity(chainId) {
-        this.orderCurrencies(this.state.input_a, this.state.input_b)
+        await this.orderCurrencies(this.state.input_a, this.state.input_b)
         const tx = {
             from: sessionStorage.getItem('violas_address'),
             payload: {
@@ -182,11 +214,11 @@ class Market extends React.Component {
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: 0
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: 0
                     }
                 ]
             },
