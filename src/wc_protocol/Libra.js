@@ -11,13 +11,12 @@ class Libra extends React.Component {
         super(props);
         this.state = {
             libra_currencies: [],
-            libra_currency: {},
+            libra_currency: '',
             tyArgs: {},
             address: '',
             value: '',
             gasCurrencyCode: '',
         }
-        // this.handleChange=this.handleChange.bind(this);
     }
     async componentWillMount() {
         this.getLibraCurrencies();
@@ -29,25 +28,17 @@ class Libra extends React.Component {
         axios('https://api4.violas.io/1.0/libra/currency')
             .then(async res => {
                 await this.setState({ libra_currencies: res.data.data.currencies });
-                let temp=this.state.libra_currencies;
-                await this.setState({libra_currency:temp[0]});
+                let temp = this.state.libra_currencies;
+                await this.setState({ libra_currency: temp[0].name });
                 this.getTyArgs(this.state.libra_currency)
             })
     }
     async getTyArgs(temp) {
         let address = '00000000000000000000000000000001';
-        let prefix = '07';
-        let suffix = '00';
-        // let name_length = _name.length;
-        // if (name_length < 10) {
-        //     name_length = '0' + name_length;
-        // }
-        // let _name_hex = bytes2StrHex(string2Byte(_name));
-        // let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
         let result = {
-            'module': temp.module,
+            'module': temp,
             'address': address,
-            'name': temp.name
+            'name': temp
         }
         await this.setState({ tyArgs: result });
     }
@@ -61,8 +52,7 @@ class Libra extends React.Component {
                 await this.setState({ value: e.target.value });
                 break;
             case 'libra_currency':
-                // console.log(JSON.parse(e.target.value))
-                await this.setState({ libra_currency: JSON.parse(e.target.value) });
+                await this.setState({ libra_currency: e.target.value });
                 await this.getTyArgs(this.state.libra_currency);
                 break;
         }
@@ -108,7 +98,7 @@ class Libra extends React.Component {
         return (
             <div className='boxs'>
                 <h2>Libra:</h2>
-                <div className='tx'>
+                {/* <div className='tx'>
                     <h5>Main Net:</h5>
                     <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
                     <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
@@ -120,19 +110,19 @@ class Libra extends React.Component {
                         }
                     </select>
                     <button onClick={() => this.libra_sendTransaction(0)}>Send Transaction</button>
-                </div>
+                </div> */}
                 <div className='tx'>
                     <h5>Test Net:</h5>
                     <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
                     <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
-                    <select value={this.state.libra_currency.show_name} onChange={this.handleChange.bind(this, 'libra_currency')}>
+                    <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>
                         {
                             this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={JSON.stringify(v)} key={i}>{v.show_name}</option>
+                                return <option value={v.name} key={i}>{v.show_name}</option>
                             })
                         }
                     </select>
-                    <button onClick={() => this.libra_sendTransaction(1)}>Send Transaction</button>
+                    <button onClick={() => this.libra_sendTransaction(2)}>Send Transaction</button>
                 </div>
             </div>
         )

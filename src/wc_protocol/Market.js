@@ -145,10 +145,10 @@ class Market extends React.Component {
             AddLiquidity: {
                 coin_a: this.state.violas_currencies[index_a].show_name,
                 coin_a_amount: amount_a,
-                coin_a_tyArgs: this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
                 coin_b: this.state.violas_currencies[index_b].show_name,
                 coin_b_amount: amount_b,
-                coin_b_tyArgs: this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
             }
         })
         // console.log(this.state.AddLiquidity)
@@ -205,8 +205,8 @@ class Market extends React.Component {
             payload: {
                 code: code_data.violas_p2p,
                 tyArgs: [
-                    this.getTyArgs(this.state.selected_pair_detail.coin_a.module, this.state.selected_pair_detail.coin_a.name),
-                    this.getTyArgs(this.state.selected_pair_detail.coin_b.module, this.state.selected_pair_detail.coin_b.name),
+                    await this.getTyArgs(this.state.selected_pair_detail.coin_a.module, this.state.selected_pair_detail.coin_a.name),
+                    await this.getTyArgs(this.state.selected_pair_detail.coin_b.module, this.state.selected_pair_detail.coin_b.name),
                 ],
                 args: [
                     {
