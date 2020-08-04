@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import axios from 'axios'
+import code_data from '../../utils/code.json';
 import WalletConnect from "../../packages/browser/src/index";
 import TransfarDialog from './transfarDialog.js'
 // import {withRouter} from 'react-router-dom'
@@ -15,8 +15,8 @@ class Transfer extends Component {
     this.state = {
       // bridge: 'http://47.52.66.26:5000',
       bridge: 'https://walletconnect.violas.io',
-      code:'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
       tyArgs: '',
+      tyArgs1:'',
       balance: 0,
       title: "",
       warning: "",
@@ -295,6 +295,96 @@ class Transfer extends Component {
       this.getNext()
     });
   }
+  async getTyArgs1(temp) {
+    let address = '00000000000000000000000000000001';
+    let result = {
+      'module': temp,
+      'address': address,
+      'name': temp
+    }
+    await this.setState({ tyArgs1: result });
+  }
+  async violas_sendTransaction(chainId){
+    const tx = {
+      from: window.localStorage.getItem('address'),
+      payload: {
+        code: code_data.violas_p2p,
+        tyArgs: [this.state.tyArgs],
+        args: [
+          {
+            type: 'Address',
+            value: this.state.address
+          },
+          {
+            type: 'U64',
+            value: this.state.amount
+          },
+          {
+            type: 'Vector',
+            value: ''
+          },
+          {
+            type: 'Vector',
+            value: ''
+          }
+        ],
+        chainId: chainId
+        // gasCurrencyCode: this.state.gasCurrencyCode,
+      }
+    };
+    // console.log(JSON.stringify(tx))
+    this.state.walletConnector
+      .sendTransaction('violas',tx)
+      .then((res) => {
+        this.setState({
+          warning: "Transfer success",
+        });
+        // alert('Transfer success！！！！')
+        console.log("send transaction ", res);
+      })
+      .catch((err) => {
+        this.setState({
+          warning: "Transfer failed",
+        });
+        console.log("send transaction ", err);
+      });
+  }
+  async libra_sendTransaction(chainId) {
+    const tx = {
+      from: window.localStorage.getItem('address'),
+      payload: {
+        code: code_data.libra_p2p,
+        tyArgs: [
+          this.state.tyArgs1
+        ],
+        args: [
+          {
+            type: 'Address',
+            value: this.state.address,
+          },
+          {
+            type: 'U64',
+            value: this.state.amount,
+          },
+          {
+            type: 'Vector',
+            value: '',
+          },
+          {
+            type: 'Vector',
+            value: '',
+          }
+        ]
+      },
+      chainId: chainId,
+    }
+    console.log('libra ', tx);
+    this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
+      console.log('Libra transaction', res);
+    }).catch(err => {
+      console.log('Libra transaction ', err);
+    });
+  }
   getNext = () => {
     if (this.state.address == "") {
       this.setState({
@@ -319,151 +409,24 @@ class Transfer extends Component {
         if (this.state.type == 'VLS' || this.state.type === 'LBR' || this.state.type === 'BTC'){
           if (this.state.type == 'VLS'){
             // console.log('wallet connect')
-            const tx = {
-              from: window.localStorage.getItem('address'),
-              payload: {
-                code: this.state.code,
-                tyArgs: [this.state.tyArgs],
-                args: [
-                  {
-                    type: "Address",
-                    value: this.state.address,
-                  },
-                  {
-                    type: "Number",
-                    value: "" + (this.state.amount * 1e6)
-                  },
-                  {
-                    type: "Bytes",
-                    value: "",
-                  },
-                  {
-                    type: 'Bytes',
-                    value: ""
-                  },
-                ],
-                // gasCurrencyCode: this.state.gasCurrencyCode,
-              }
-            };
-            // console.log(JSON.stringify(tx))
-            this.state.walletConnector
-              .sendTransaction(tx)
-              .then((res) => {
-                this.setState({
-                  warning: "Transfer success",
-                });
-                // alert('Transfer success！！！！')
-                console.log("send transaction ", res);
-              })
-              .catch((err) => {
-                this.setState({
-                  warning: "Transfer failed",
-                });
-                console.log("send transaction ", err);
-              });
+            this.violas_sendTransaction(1)
           }else{
             if (this.state.coinName.indexOf('VLS') == 0) {
               // console.log('wallet connect')
-              const tx = {
-                from: window.localStorage.getItem('address'),
-                payload: {
-                  code: this.state.code,
-                  tyArgs: [this.state.tyArgs],
-                  args: [
-                    {
-                      type: "Address",
-                      value: this.state.address,
-                    },
-                    {
-                      type: "Number",
-                      value: "" + (this.state.amount * 1e6)
-                    },
-                    {
-                      type: "Bytes",
-                      value: "",
-                    },
-                    {
-                      type: 'Bytes',
-                      value: ""
-                    },
-                  ],
-                  // gasCurrencyCode: this.state.gasCurrencyCode,
-                }
-              };
-              console.log(JSON.stringify(tx))
-              this.state.walletConnector
-                .sendTransaction(tx)
-                .then((res) => {
-                  this.setState({
-                    warning: "Transfer success",
-                  });
-                  // alert('Transfer success！！！！')
-                  console.log("send transaction ", res);
-                })
-                .catch((err) => {
-                  this.setState({
-                    warning: "Transfer failed",
-                  });
-                  console.log("send transaction ", err);
-                });
+              this.violas_sendTransaction(1)
             } else if (this.state.coinName == 'BTC'){
                 this.setState({
                   tranferDig:true
                 })
             }else{
-              this.setState({
-                tranferDig: true
-              })
+              this.libra_sendTransaction(1)
             }
           }
         }else{
           if (this.state.coinName === 'coin1' || this.state.coinName === 'coin2') {
-            this.setState({
-              tranferDig: true
-            })
+            this.libra_sendTransaction(1)
           }else{
-            const tx = {
-              from: window.localStorage.getItem('address'),
-              payload: {
-                code: this.state.code,
-                tyArgs: [this.state.tyArgs],
-                args: [
-                  {
-                    type: "Address",
-                    value: this.state.address,
-                  },
-                  {
-                    type: "Number",
-                    value: "" + (this.state.amount * 1e6)
-                  },
-                  {
-                    type: "Bytes",
-                    value: "",
-                  },
-                  {
-                    type: 'Bytes',
-                    value: ""
-                  },
-                ],
-                // gasCurrencyCode: this.state.gasCurrencyCode,
-              }
-            };
-            console.log(JSON.stringify(tx))
-            this.state.walletConnector
-              .sendTransaction(tx)
-              .then((res) => {
-                this.setState({
-                  warning: "Transfer success",
-                });
-                // alert('Transfer success！！！！')
-                console.log("send transaction ", res);
-              })
-              .catch((err) => {
-                this.setState({
-                  warning: "Transfer failed",
-                });
-                console.log("send transaction ", err);
-              });
+            this.violas_sendTransaction(1)
           }
           }
         }
@@ -549,7 +512,30 @@ class Transfer extends Component {
             </div>
             <div className="foot">
               {this.state.getAct == false ? (
-                <p className="btn" onClick={() => this.getTyArgs(this.state.coinName)}>
+                <p className="btn" onClick={() =>{
+                  if (this.state.type == 'VLS' || this.state.type === 'LBR' || this.state.type === 'BTC') {
+                    if (this.state.type == 'VLS') {
+                      this.getTyArgs(this.state.coinName)
+                    } else {
+                      if (this.state.coinName.indexOf('VLS') == 0) {
+                        // console.log('wallet connect')
+                        this.getTyArgs(this.state.coinName)
+                      } else if (this.state.coinName == 'BTC') {
+                        this.setState({
+                          tranferDig: true
+                        })
+                      } else {
+                        this.getTyArgs1(this.state.coinName)
+                      }
+                    }
+                  } else {
+                    if (this.state.coinName === 'coin1' || this.state.coinName === 'coin2') {
+                      this.getTyArgs1(this.state.coinName)
+                    } else {
+                      this.getTyArgs(this.state.coinName)
+                    }
+                  }
+                } }>
                   Next
                 </p>
               ) : (

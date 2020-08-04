@@ -900,7 +900,7 @@ dd {
                .iptContent{
                  .dropdown1{
                    .dropdown-content3{
-                     height: auto;
+                    //  height: auto;
                   }
                  }
                 }
@@ -1055,6 +1055,9 @@ dd {
         font-size:16px;
         font-weight:400;
         color:rgba(153,153,153,1);
+      }
+      .exchangeContent .exchangeContents .form .iptForm1 .iptContent .dropdown1 .dropdown-content1 .searchList .searchEvery .searchEvery1>div{
+        // display: flex;
       }
     }
   }

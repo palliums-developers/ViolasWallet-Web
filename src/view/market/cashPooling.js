@@ -89,36 +89,17 @@ class CashPooling extends Component {
         return number;
     }
     getExchangeRecode = () => {
-        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.localStorage.getItem('address') + 'offset=0&limit=5').then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-                this.setState({
-                    changeRecord: [
-                        {
-                            "amounta": 10000,
-                            "amountb": 10014,
-                            "coina": "VLSUSD",
-                            "coinb": "VLSEUR",
-                            "date": 1594323548,
-                            "status": 4001,
-                            "token": 9999,
-                            "transaction_type": "ADD_LIQUIDITY",
-                            "version": 14
-                        },
-                        {
-                            "amounta": 10001,
-                            "amountb": 10015,
-                            "coina": "VLSUSD",
-                            "coinb": "VLSEUR",
-                            "date": 1594323549,
-                            "status": 4001,
-                            "token": 10000,
-                            "transaction_type": "REMOVE_LIQUIDITY",
-                            "version": 15
-                        }
-                    ]
-                },()=>{
-                    this.optionType()
-                })
+                // console.log(res,'.....')
+                if(res.data){
+                    this.setState({
+                        changeRecord: res.data
+                    }, () => {
+                        this.optionType()
+                    })
+                }
+                
             })
     }
     optionType(){
@@ -279,7 +260,7 @@ class CashPooling extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (e.target.value > this.state.asset) {
+            if (e.target.value > this.state.asset2) {
                 this.setState({
                     warning: '资金不足'
                 })
@@ -304,14 +285,35 @@ class CashPooling extends Component {
     //第一个输出框 资金池通证
     getOutputAmount = (e) =>{
         if (e.target.value) {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+                e.target.value = parseFloat(e.target.value);
+            }
+            if (e.target.value > this.state.asset1) {
+                this.setState({
+                    warning: '资金不足'
+                })
+            } else {
+                this.setState({
+                    warning: ''
+                })
+            }
             this.setState({
                 outputAmount: e.target.value
+            }, () => {
+                this.opinionOutputAmount()
             })
         } else {
             this.setState({
-                outputAmount: ''
+                warning: '',
+                outputAmount: '',
+                outputAmount1: ''
             })
         }
+        
     }
     //第二个输出框
     getOutputAmount1 = (e) => {
@@ -412,91 +414,32 @@ class CashPooling extends Component {
             // address: address,
             showMenuViolas2: false
         },()=>{
-            if (this.state.outputAmount){
-                let object = {
-                    "coin_a_name": "VLSUSD",
-                    "coin_a_value": 6854,
-                    "coin_b_name": "VLSEUR",
-                    "coin_b_value": 3656
-                }
-                this.setState({
-                   outputAmount1: object.coin_a_value + object.coin_a_name + '/' + object.coin_b_value + object.coin_b_name
-                })
-                // fetch(url1 + "/1.0/market/pool/withdrawal/trial?address"+window.localStorage.getItem('address')+'&&amount=' + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
-                //     .then(res => {
-                //         let object = {
-                //             "coin_a_name": "VLSUSD",
-                //             "coin_a_value": 6854,
-                //             "coin_b_name": "VLSEUR",
-                //             "coin_b_value": 3656
-                //         }
-                //         this.setState({
-                //             OutputAmount1: object.coin_a_value + object.coin_a_name + '/' + object.coin_b_value + object.coin_b_name
-                //         })
-                //         console.log(res,'............')
-                //         // if (res.data) {
-                //         //     this.setState({
-                //         //         inputAmount1: res.data
-                //         //     })
-                //         // }
-                //     })
-            }   
+            // console.log('111111')
+            this.opinionOutputAmount()
+             
         })
     }
     //转入下拉列表 第一个输入框
     //转入下拉列表 第二个输入框
     getBalances() {
-        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+        fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
             .then(res => {
                 this.setState({
-                    BTCBalances: res.data
+                    arr1: res.data.balances
                 }, () => {
-                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                        .then(res => {
-                            this.setState({
-                                arr1: res.data.balances
-                            }, () => {
-                                // this.state.arr1.map((v, i) => {
-                                //     if (v.show_name == 'LBR') {
-                                //         v.show_name = 'VLS'
-                                //     }
-                                // })
-                                if (this.state.type == "") {
-                                    this.setState({
-                                        // type: res.data.balances[0].show_name,
-                                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                                        // address: res.data.balances[0].address
-                                    })
-                                }
-                            })
-                        })
-                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                        .then(res => {
-                            if(res.data){
+                        this.setState({
+                            arr: this.state.arr1,
+                            selData: this.state.arr1
+                        }, () => {
+                            if (this.state.type == "") {
                                 this.setState({
-                                    arr2: res.data.balances
-                                }, () => {
-                                    let arr = this.state.arr1.concat(this.state.arr2)
-                                    let newArr = arr.concat(this.state.BTCBalances)
-                                    newArr.sort((a, b) => {
-                                        return b.balance - a.balance
-                                    })
-                                    this.setState({
-                                        arr: newArr,
-                                        selData: newArr
-                                    }, () => {
-                                        if (this.state.type == "") {
-                                            this.setState({
-                                                index: Object.keys(this.state.selData)[0],
-                                                name: this.state.selData[0].show_name,
-                                                asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
+                                    coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
+                                    index: Object.keys(this.state.selData)[0],
+                                    name: this.state.selData[0].show_name,
+                                    asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
 
-                                            })
-                                        }
-                                    })
                                 })
                             }
-                            
                         })
                 })
             })
@@ -552,32 +495,15 @@ class CashPooling extends Component {
     getOutBalances(){
         fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
             .then(res => {
-                // console.log(res,'.......')
-                this.setState({
-                    // res.date.balance  res.data.total_token
-                    poolArr: [
-                        {
-                            "coin_a": {
-                                "index": 0,
-                                "module": "VLSUSD",
-                                "module_address": "00000000000000000000000000000001",
-                                "name": "VLSUSD",
-                                "show_name": "VLSUSD",
-                                "value": 9999
-                            },
-                            "coin_b": {
-                                "index": 1,
-                                "module": "VLSEUR",
-                                "module_address": "00000000000000000000000000000001",
-                                "name": "VLSEUR",
-                                "show_name": "VLSEUR",
-                                "value": 5046
-                            },
-                            "token": 7095
-                        }
-                    ],
-                    total_token: 7095
-                })
+                console.log(res,'.......')
+                if(res.data){
+                    this.setState({
+                        // res.data.balance  res.data.total_token
+                        poolArr: res.data.balance,
+                        total_token: res.data.total_token
+                    })
+                }
+                
             })
     }
     //判断转入/转出成功或失败
@@ -607,10 +533,11 @@ class CashPooling extends Component {
             visible1: type
         })
     }
-    //获取input换算数量
+    //获取输入换算数量
     opinionInputAmount = () => {
         if (this.state.inputAmount) {
             fetch(url1 + "/1.0/market/pool/deposit/trial?amount=" + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
+            
                 .then(res => {
                     if (res.data) {
                         this.setState({
@@ -632,9 +559,24 @@ class CashPooling extends Component {
                 })
         }
     }
+    //获取输出换算数量
+    opinionOutputAmount=()=>{
+        if (this.state.outputAmount) {
+            fetch(url1 + "/1.0/market/pool/withdrawal/trial?address=" + window.localStorage.getItem('address') + '&amount=' + this.state.outputAmount + '&&coin_a=' + this.state.aName + '&&coin_b=' + this.state.bName).then(res => res.json())
+                .then(res => {
+                    // console.log(res, '.........')
+                    if (res.data) {
+                            this.setState({
+                                outputAmount1: res.data.coin_a_value + res.data.coin_a_name + '/' + res.data.coin_b_value + res.data.coin_b_name
+                            })
+                        
+                    }
+                })
+        }
+    }
     render() {
         let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
-        // console.log(showMenuViolas,'....')
+        // console.log(changeRecord,'....')
         return (
             <div className="exchange cashPooling">
                 <div className="exchangeContent">

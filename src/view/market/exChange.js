@@ -69,30 +69,15 @@ class ExChange extends Component {
         return number;
     }
     getExchangeRecode = () =>{
-        fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + 'offset=0&limit=5').then(res => res.json())
+        fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-               this.setState({
-                   changeRecord: [
-                       {
-                           "date": 1594324849,
-                           "input_amount": 10000,
-                           "input_name": "VLSUSD",
-                           "output_amount": 9951,
-                           "output_name": "VLSEUR",
-                           "status": 4001,
-                           "version": 10
-                       },
-                       {
-                           "date": 1594324849,
-                           "input_amount": 10000,
-                           "input_name": "VLSUSD",
-                           "output_amount": 9951,
-                           "output_name": "VLSEUR",
-                           "status": 4001,
-                           "version": 11
-                       }
-                   ]
-               })
+                // console.log(res,'.........')
+                if(res.data){
+                    this.setState({
+                        changeRecord: res.data
+                    })
+                }
+               
             })
     }
     getShow = (event) =>{
@@ -597,32 +582,6 @@ class ExChange extends Component {
                             })
                         }
                           </div>
-                        <div className="changeLists">
-                            <div className="changeList">
-                              <div className="list1">
-                                  <span className="red">兑换失败</span>
-                                  <p>999ETH</p>
-                              </div>
-                              <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
-                              <div className="list2">
-                                  <span>99900Violas</span>
-                                  <p>01.18 15:42<i><img src="/img/rightArrow.png"/></i></p>
-                              </div>
-                            </div>
-                        </div>
-                        <div className="changeLists">
-                            <div className="changeList">
-                              <div className="list1">
-                                  <span className="yel">兑换中</span>
-                                  <p>999ETH</p>
-                              </div>
-                              <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
-                              <div className="list2">
-                                  <span>99900Violas</span>
-                                  <p>01.18 15:42<i><img src="/img/rightArrow.png"/></i></p>
-                              </div>
-                            </div>
-                        </div>
                       </div>
                     </div>
                </div>
