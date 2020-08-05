@@ -19,6 +19,7 @@ class Market extends React.Component {
             swap_out_name: '',
             swap_in_amount: 0,
             swap_in_type: '',
+            swap_out_type: '',
             swap_address: '',
             swap_trial: {},
             input_a: '',
@@ -160,11 +161,31 @@ class Market extends React.Component {
             }
         }
         let payee_address = _payee_address;
-        let sequence = this.fullWith16(getTimestamp);
+        let sequence = await this.fullWith16(getTimestamp);
+        console.log(sequence)
         let module_address = code_data.btc.violas_module_address;
-        let amount = this.fullWith16(_amount);
+        let amount = await this.fullWith16(_amount);
         let time = '0000';
         return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
+    }
+    async getLibraScript(_flag, _type, _type_list, _address, _amount) {
+        let flag = _flag;
+        let type = '';
+        for (let key in _type_list) {
+            if (key === _type) {
+                type = _type_list[key];
+                break;
+            }
+        }
+        let to_address = '00000000000000000000000000000000' + _address;
+        return {
+            flag: flag,
+            type: type,
+            times: 0,
+            to_address: to_address,
+            out_amount: _amount,
+            state: 'start'
+        }
     }
     async orderCurrencies(input_a, input_b) {
         let index_a, index_b;
@@ -198,6 +219,22 @@ class Market extends React.Component {
             }
         })
     }
+    async getSwapType(_temp) {
+        if (_temp === 'BTC') {
+            return 'btc';
+        } else {
+            for (let j in this.state.currenciesWithType.libra) {
+                if (this.state.currenciesWithType.libra[j].name === _temp) {
+                    return 'libra';
+                }
+            }
+            for (let k in this.state.currenciesWithType.violas) {
+                if (this.state.currenciesWithType.violas[k].name === _temp) {
+                    return 'violas';
+                }
+            }
+        }
+    }
     async before_getSwap(input_type, output_type) {
         //change show name to name
         for (let i in this.state.currencies) {
@@ -209,63 +246,86 @@ class Market extends React.Component {
             }
         }
         //get input type
-        if (this.state.swap_in_name === 'BTC') {
-            await this.setState({ swap_in_type: 'btc' })
-        } else {
-            for (let j in this.state.currenciesWithType.libra) {
-                if (this.state.currenciesWithType.libra[j].name === this.state.swap_in_name) {
-                    await this.setState({ swap_in_type: 'libra' })
-                }
-            }
-            for (let k in this.state.currenciesWithType.violas) {
-                if (this.state.currenciesWithType.violas[k].name === this.state.swap_in_name) {
-                    await this.setState({ swap_in_type: 'violas' })
-                }
-            }
-        }
+        await this.setState({ swap_in_type: await this.getSwapType(this.state.swap_in_name) })
+        //get output type
+        await this.setState({ swap_out_type: await this.getSwapType(this.state.swap_out_name) })
         //get receiver address
-        for(let l in this.state.crossChainInfo){
-            if(this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_name){
-                if(this.state.crossChainInfo[l].to_coin.assets.name===this.state.swap_out_name){
-                    await this.setState({swap_address:this.state.crossChainInfo[l].to_coin.assets.address});
+        for (let l in this.state.crossChainInfo) {
+            if (this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type) {
+                if (this.state.crossChainInfo[l].to_coin.assets.name === this.state.swap_out_name) {
+                    // console.log(l, this.state.crossChainInfo[l].input_coin_type, this.state.crossChainInfo[l].to_coin.assets.name)
+                    await this.setState({ swap_address: this.state.crossChainInfo[l].receiver_address });
                     break;
                 }
             }
         }
     }
-    async getBitcoinSwap(_address, _amount, input_type, output_type) {
+    getPayeeAddress() {
+        let payee_address = '';
+        if (this.state.swap_out_type === 'violas') {
+            payee_address = sessionStorage.getItem('violas_address');
+        } else if (this.state.swap_out_type === 'libra') {
+            payee_address = sessionStorage.getItem('libra_address');
+        } else {
+            payee_address = sessionStorage.getItem('bitcoin_address')
+        }
+        return payee_address;
+    }
+    async getBitcoinSwap() {
         return {
-            from: _address,
-            amount: _amount,
-            changeAddress: _address,
-            payeeAddress: '',
-            script: this.state.script
+            from: sessionStorage.getItem('bitcoin_address'),
+            amount: this.state.swap_in_amount,
+            changeAddress: sessionStorage.getItem('bitcoin_address'),
+            payeeAddress: this.state.swap_address,
+            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.data.amount)
         }
     }
-    async getLibraSwap() {
-
+    async getLibraSwap(chainId) {
+        return {
+            from: sessionStorage.getItem('libra_address'),
+            payload: {
+                code: code_data.libra.p2p,
+                tyArgs: [
+                    {
+                        module: this.state.swap_in_name,
+                        address: code_data.btc.libra_module_address,
+                        name: this.state.swap_in_name
+                    }
+                ],
+                args: [
+                    {
+                        type: 'Address',
+                        value: this.state.swap_address
+                    },
+                    {
+                        type: 'U64',
+                        value: this.state.swap_in_amount
+                    },
+                    {
+                        type: 'Vector',
+                        value: bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_in, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
+                    }
+                ]
+            },
+            chainId: chainId
+        }
     }
     async getViolasSwap() {
 
     }
-    async getSwap(input_type, output__type, chainId) {
-        let address_from = '';
-        switch (input_type) {
-            case 'bitcoin':
-                address_from = sessionStorage.getItem('bitcoin_address');
-                break;
-            case 'libra':
-                address_from = sessionStorage.getItem('libra_address');
-                break;
-            case 'violas':
-                address_from = sessionStorage.getItem('violas_address');
-                break;
-        }
-        const tx = {
-            from: address_from,
-            payload: {
-
-            }
+    async getSwap(chainId) {
+        if (this.state.swap_in_type === 'btc') {
+            const tx = await this.getBitcoinSwap();
+            console.log('bitcoin swag', tx)
+            this.props.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
+                console.log('Bitcoin Swap ', res);
+            }).catch(err => {
+                console.log('Bitcoin Swap ', err);
+            });
         }
     }
     async getAddLiquidity(chainId) {
@@ -398,7 +458,7 @@ class Market extends React.Component {
                     <br />
                     {
                         this.state.swap_trial.code == 2000 &&
-                        <button onClick={() => this.getSwap(this.state.swap_in, this.state.swap_out, 2)}>Swap</button>
+                        <button onClick={() => this.getSwap(2)}>Swap</button>
                     }
                 </div>
                 <div className='tx'>
