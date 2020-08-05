@@ -9,11 +9,17 @@ class Market extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            crossChainInfo: {},
+            currenciesWithType: {},
             currencies: [],
             violas_currencies: [],
             swap_in: '',
             swap_out: '',
+            swap_in_name: '',
+            swap_out_name: '',
             swap_in_amount: 0,
+            swap_in_type: '',
+            swap_address: '',
             swap_trial: {},
             input_a: '',
             input_a_amount: 0,
@@ -33,13 +39,21 @@ class Market extends React.Component {
     async componentWillMount() {
         this.getMarketCurrencies();
         this.getAccountPoolInfo();
+        this.getCrossChainInfo();
     }
     async componentDidMount() {
 
     }
+    async getCrossChainInfo() {
+        axios('https://api4.violas.io/1.0/market/exchange/crosschain/address/info')
+            .then(async res => {
+                await this.setState({ crossChainInfo: res.data.data })
+            })
+    }
     async getMarketCurrencies() {
         axios('https://api4.violas.io/1.0/market/exchange/currency')
             .then(async res => {
+                await this.setState({ currenciesWithType: res.data.data })
                 let temp = [];
                 temp = res.data.data.btc.concat(res.data.data.libra);
                 temp = temp.concat(res.data.data.violas)
@@ -79,6 +93,7 @@ class Market extends React.Component {
             .then(async res => {
                 await this.setState({ swap_trial: res.data });
             })
+        this.before_getSwap(_in, _out);
     }
     async getAddLiquidityTrial(_amount, _in, _out) {
         axios(`https://api4.violas.io/1.0/market/pool/deposit/trial?amount=${_amount}&coin_a=${_in}&coin_b=${_out}`)
@@ -132,7 +147,7 @@ class Market extends React.Component {
         }
         return temp
     }
-    async getBTC2other(_type, _payee_address, _amount) {
+    async getBitcoinScript(_type, _payee_address, _amount) {
         let op_return_head = '6a';
         let data_length = '3c';
         let mark = code_data.btc.violas_mark;
@@ -162,7 +177,6 @@ class Market extends React.Component {
                 index_b = i;
             }
         }
-
         if (index_a > index_b) {
             let temp = index_a;
             index_a = index_b;
@@ -183,10 +197,50 @@ class Market extends React.Component {
                 coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
             }
         })
-        // console.log(this.state.AddLiquidity)
     }
-    async getBitcoinSwap() {
-
+    async before_getSwap(input_type, output_type) {
+        //change show name to name
+        for (let i in this.state.currencies) {
+            if (this.state.currencies[i].show_name === input_type) {
+                await this.setState({ swap_in_name: this.state.currencies[i].name })
+            }
+            if (this.state.currencies[i].show_name === output_type) {
+                await this.setState({ swap_out_name: this.state.currencies[i].name })
+            }
+        }
+        //get input type
+        if (this.state.swap_in_name === 'BTC') {
+            await this.setState({ swap_in_type: 'btc' })
+        } else {
+            for (let j in this.state.currenciesWithType.libra) {
+                if (this.state.currenciesWithType.libra[j].name === this.state.swap_in_name) {
+                    await this.setState({ swap_in_type: 'libra' })
+                }
+            }
+            for (let k in this.state.currenciesWithType.violas) {
+                if (this.state.currenciesWithType.violas[k].name === this.state.swap_in_name) {
+                    await this.setState({ swap_in_type: 'violas' })
+                }
+            }
+        }
+        //get receiver address
+        for(let l in this.state.crossChainInfo){
+            if(this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_name){
+                if(this.state.crossChainInfo[l].to_coin.assets.name===this.state.swap_out_name){
+                    await this.setState({swap_address:this.state.crossChainInfo[l].to_coin.assets.address});
+                    break;
+                }
+            }
+        }
+    }
+    async getBitcoinSwap(_address, _amount, input_type, output_type) {
+        return {
+            from: _address,
+            amount: _amount,
+            changeAddress: _address,
+            payeeAddress: '',
+            script: this.state.script
+        }
     }
     async getLibraSwap() {
 
@@ -290,7 +344,6 @@ class Market extends React.Component {
         switch (_type) {
             case 'swap_in':
                 await this.setState({ swap_in: e.target.value });
-                console.log(this.state.swap_in)
                 break;
             case 'swap_out':
                 await this.setState({ swap_out: e.target.value });

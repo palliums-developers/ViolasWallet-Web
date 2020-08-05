@@ -201,10 +201,10 @@ let qwe={
     "VLSEUR": 4010,
     "VLSSGD": 4020,
     "VLSGBP": 4030,
-    "USD": 5000,
-    "EUR": 5010,
-    "SGD": 5020,
-    "GBP": 5030
+    "USD": '0x5000',
+    "EUR": 0x5010,
+    "SGD": 0x5020,
+    "GBP": 0x5030
 };
 let type='';
 for (let key in qwe) {
@@ -214,4 +214,4 @@ for (let key in qwe) {
         break;
     }
 }
-console.log(type)
+console.log(type.split('x')[1])
