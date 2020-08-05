@@ -195,3 +195,23 @@ console.log(app01 == app02);
 let libra01 = '{"cryptoLib":{},"protocol":"wc","version":1,"_bridge":"https://walletconnect.violas.io","_key":{},"_nextKey":null,"_clientId":"42c962ca-0448-44bd-91da-a215f1c560a8","_clientMeta":null,"_peerId":"","_peerMeta":null,"_handshakeId":1596016392089184,"_handshakeTopic":"74f70c66-26a9-4882-a375-40ad4bc04044","_accounts":[],"_chainId":0,"_networkId":0,"_rpcUrl":"","_eventManager":{"_eventEmitters":[{"event":"response:1596016392089184"},{"event":"wc_sessionRequest"},{"event":"wc_sessionUpdate"}]},"_connected":false,"_storage":{},"_transport":{"_events":[{"event":"message"},{"event":"open"},{"event":"close"}],"_initiating":true,"_bridge":"https://walletconnect.violas.io","_socket":null,"_queue":[{"topic":"42c962ca-0448-44bd-91da-a215f1c560a8","type":"sub","payload":"","silent":true}],"_clientId":"42c962ca-0448-44bd-91da-a215f1c560a8"}}'
 console.log(app01 == libra01);
 let app03 = '{"cryptoLib":{},"protocol":"wc","version":1,"_bridge":"https://walletconnect.violas.io","_key":{},"_nextKey":null,"_clientId":"42c962ca-0448-44bd-91da-a215f1c560a8","_clientMeta":{"description":"","url":"http://localhost:10088","icons":["http://localhost:10088/favicon.ico","http://localhost:10088/logo192.png"],"name":"WalletConnect Demo"},"_peerId":"0a22e918-0cf4-44a6-8b1c-93fcd1ec0468","_peerMeta":{"description":null,"icons":[""],"name":"violasPay","url":"https://www.violas.io"},"_handshakeId":1596016392089184,"_handshakeTopic":"74f70c66-26a9-4882-a375-40ad4bc04044","_accounts":["d4f4001fba6d8b9e696cfd6ca8e47a91"],"_chainId":"violasTest","_networkId":0,"_rpcUrl":"","_eventManager":{"_eventEmitters":[{"event":"response:1596016392089184"},{"event":"wc_sessionRequest"},{"event":"wc_sessionUpdate"},{"event":"connect"},{"event":"session_update"},{"event":"disconnect"}]},"_connected":true,"_storage":{},"_transport":{"_events":[{"event":"message"},{"event":"open"},{"event":"close"}],"_initiating":false,"_bridge":"https://walletconnect.violas.io","_socket":{},"_queue":[],"_clientId":"42c962ca-0448-44bd-91da-a215f1c560a8"}}'
+let qwe={
+    "VLS": 3000,
+    "VLSUSD": 4000,
+    "VLSEUR": 4010,
+    "VLSSGD": 4020,
+    "VLSGBP": 4030,
+    "USD": 5000,
+    "EUR": 5010,
+    "SGD": 5020,
+    "GBP": 5030
+};
+let type='';
+for (let key in qwe) {
+    if (key === 'USD') {
+        console.log(key)
+        type=qwe[key]
+        break;
+    }
+}
+console.log(type)

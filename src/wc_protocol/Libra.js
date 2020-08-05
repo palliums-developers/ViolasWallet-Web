@@ -62,7 +62,7 @@ class Libra extends React.Component {
         const tx = {
             from: sessionStorage.getItem('libra_address'),
             payload: {
-                code: code_data.libra_p2p,
+                code: code_data.libra.p2p,
                 tyArgs: [
                     this.state.tyArgs
                 ],

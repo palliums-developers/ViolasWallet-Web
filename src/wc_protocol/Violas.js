@@ -101,7 +101,7 @@ class Violas extends React.Component {
         const tx = {
             from: sessionStorage.getItem('violas_address'),
             payload: {
-                code: code_data.violas_p2p,
+                code: code_data.violas.p2p,
                 tyArgs: [
                     this.state.tyArgs
                 ],
@@ -138,7 +138,7 @@ class Violas extends React.Component {
         const tx = {
             from: this.state.violas_address,
             payload: {
-                code: code_data.violas_publish,
+                code: code_data.violas.publish,
                 tyArgs: [
                     this.state.tyArgs
                 ],

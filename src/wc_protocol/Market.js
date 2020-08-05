@@ -123,7 +123,7 @@ class Market extends React.Component {
     async fullWith16(temp) {
         temp = '' + temp;
         let temp_length = temp.length;
-        if (temp < 16) {
+        if (temp_length < 16) {
             let zero = '';
             for (let i = 0; i < 16 - temp_length; i++) {
                 zero += '0';
@@ -140,7 +140,7 @@ class Market extends React.Component {
         let type = '';
         for (let key in code_data.btc.type.start) {
             if (key === _type) {
-                type = code_data.btc.type.start.key;
+                type = code_data.btc.type.start[key];
                 break;
             }
         }
@@ -179,15 +179,36 @@ class Market extends React.Component {
                 coin_a_amount: parseInt(amount_a),
                 coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
                 coin_b: this.state.violas_currencies[index_b].show_name,
-                coin_b_amount: amount_b,
+                coin_b_amount: parseInt(amount_b),
                 coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
             }
         })
         // console.log(this.state.AddLiquidity)
     }
-    async getSwap(_type, chainId) {
+    async getBitcoinSwap() {
+
+    }
+    async getLibraSwap() {
+
+    }
+    async getViolasSwap() {
+
+    }
+    async getSwap(input_type, output__type, chainId) {
+        let address_from = '';
+        switch (input_type) {
+            case 'bitcoin':
+                address_from = sessionStorage.getItem('bitcoin_address');
+                break;
+            case 'libra':
+                address_from = sessionStorage.getItem('libra_address');
+                break;
+            case 'violas':
+                address_from = sessionStorage.getItem('violas_address');
+                break;
+        }
         const tx = {
-            from: sessionStorage.getItem('violas_address'),
+            from: address_from,
             payload: {
 
             }
@@ -198,7 +219,7 @@ class Market extends React.Component {
         const tx = {
             from: sessionStorage.getItem('violas_address'),
             payload: {
-                code: code_data.violas_p2p,
+                code: code_data.violas.add_liquidity,
                 tyArgs: [
                     this.state.AddLiquidity.coin_a_tyArgs,
                     this.state.AddLiquidity.coin_b_tyArgs
@@ -206,11 +227,11 @@ class Market extends React.Component {
                 args: [
                     {
                         type: 'U64',
-                        value: this.state.AddLiquidity.coin_a_amount
+                        value: (this.state.AddLiquidity.coin_a_amount)
                     },
                     {
                         type: 'U64',
-                        value: this.state.AddLiquidity.coin_b_amount
+                        value: (this.state.AddLiquidity.coin_b_amount)
                     },
                     {
                         type: 'U64',
@@ -235,7 +256,7 @@ class Market extends React.Component {
         const tx = {
             from: sessionStorage.getItem('violas_address'),
             payload: {
-                code: code_data.violas_p2p,
+                code: code_data.violas.remove_liquidity,
                 tyArgs: [
                     await this.getTyArgs(this.state.selected_pair_detail.coin_a.module, this.state.selected_pair_detail.coin_a.name),
                     await this.getTyArgs(this.state.selected_pair_detail.coin_b.module, this.state.selected_pair_detail.coin_b.name),
@@ -247,11 +268,11 @@ class Market extends React.Component {
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: 0
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: 0
                     }
                 ]
             },
@@ -290,7 +311,7 @@ class Market extends React.Component {
                 await this.setState({ selected_pair: e.target.value, removeLiquidityTrial: {} });
                 break;
             case 'remove_liquidity':
-                await this.setState({ remove_liquidity: e.target.value, removeLiquidityTrial: {} });
+                await this.setState({ remove_liquidity: parseInt(e.target.value), removeLiquidityTrial: {} });
                 break;
         }
     }
@@ -324,7 +345,7 @@ class Market extends React.Component {
                     <br />
                     {
                         this.state.swap_trial.code == 2000 &&
-                        <button onClick={() => this.getSwap(this.state.swap_in, 1)}>Swap</button>
+                        <button onClick={() => this.getSwap(this.state.swap_in, this.state.swap_out, 2)}>Swap</button>
                     }
                 </div>
                 <div className='tx'>
@@ -351,7 +372,7 @@ class Market extends React.Component {
                     <button onClick={() => this.getAddLiquidityTrial(this.state.input_a_amount, this.state.input_a, this.state.input_b)}>Add Trial</button>
                     <br />
                     {
-                        this.state.addLiquidityTrial != 0 && <button onClick={() => this.getAddLiquidity(1)}>add Liquidity</button>
+                        this.state.addLiquidityTrial != 0 && <button onClick={() => this.getAddLiquidity(2)}>add Liquidity</button>
                     }
                 </div>
                 <div className='tx'>
@@ -375,7 +396,7 @@ class Market extends React.Component {
                             value:{this.state.removeLiquidityTrial.coin_a_value}</h5>
                             <h5>coin b: {this.state.removeLiquidityTrial.coin_b_name}&nbsp;
                             value:{this.state.removeLiquidityTrial.coin_b_value}</h5>
-                            <button onClick={() => this.getRemoveLiquidity(1)}>remove Liquidity</button>
+                            <button onClick={() => this.getRemoveLiquidity(2)}>remove Liquidity</button>
                         </div>
                     }
                 </div>
