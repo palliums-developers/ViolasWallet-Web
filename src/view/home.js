@@ -36,7 +36,7 @@ class Home extends Component {
       window.localStorage.clear()
       window.sessionStorage.clear()
       // this.props.history.push('/app')
-      console.log("wallet disconnected", '////////////2');
+      // console.log("wallet disconnected", '////////////2');
     });
   }
   componentDidMount() {

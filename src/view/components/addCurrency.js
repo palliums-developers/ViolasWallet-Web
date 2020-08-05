@@ -79,6 +79,7 @@ class AddCurrency extends Component {
             this.setState({
               arr2: res.data.currencies
             }, () => {
+                // console.log(this.state.arr1, this.state.arr2,'........')
               let arr = this.state.arr1.concat(this.state.arr2)
               this.setState({
                 addCurrencyList1: arr

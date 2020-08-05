@@ -5,15 +5,19 @@ import { connect } from 'react-redux';
 import { timeStamp2String } from '../../utils/timer';
 import PoolingDetail from '../market/poolingDetail'
 import { Drawer } from "antd";
+import { bytes2StrHex, string2Byte } from '../../utils/trans'
+import code_data from '../../utils/code.json';
+import WalletConnect from "../../packages/browser/src/index";
 // import RouterView from '../router/routerView'
 // let url = "http://52.27.228.84:4000"
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
-
+let newArr = [];
 class CashPooling extends Component {
     constructor() {
         super()
         this.state = {
+            bridge: 'https://walletconnect.violas.io',
             showMenuViolas: false,
             showMenuViolas1: false,
             showMenuViolas2: false,
@@ -48,14 +52,22 @@ class CashPooling extends Component {
             poolList1: [],
             total_token:0,
             aName:'',
-            bName:''
+            bName:'',
+            violasArr:[],
+            AddLiquidity: {}
             // visible:false
         }
     }
-    componentWillMount(){
+    async componentWillMount() {
         if (this.props.visible) {
             this.props.showDrawer()
         }
+        await this.getNewWalletConnect();
+    }
+    async getNewWalletConnect() {
+        await this.setState({
+            walletConnector: new WalletConnect({ bridge: this.state.bridge })
+        });
     }
     componentDidMount() {
         // document.addEventListener('click', this.closeMenu);
@@ -218,6 +230,7 @@ class CashPooling extends Component {
     //                 })
     //         })
     // }
+
     //第一个输入框 输入金额
     getInputAmount = (e) => {
         if (e.target.value) {
@@ -228,15 +241,18 @@ class CashPooling extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (e.target.value > this.state.asset) {
-                this.setState({
-                    warning: '资金不足'
-                })
-            } else {
-                this.setState({
-                    warning: ''
-                })
+            if (this.state.asset != '--'){
+                if (e.target.value > this.state.asset) {
+                    this.setState({
+                        warning: '资金不足'
+                    })
+                } else {
+                    this.setState({
+                        warning: ''
+                    })
+                }
             }
+            
             this.setState({
                 inputAmount: e.target.value
             }, () => {
@@ -260,15 +276,18 @@ class CashPooling extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (e.target.value > this.state.asset2) {
-                this.setState({
-                    warning: '资金不足'
-                })
-            } else {
-                this.setState({
-                    warning: ''
-                })
+            if (this.state.asset2 != '--'){
+                if (e.target.value > this.state.asset2) {
+                    this.setState({
+                        warning: '资金不足'
+                    })
+                } else {
+                    this.setState({
+                        warning: ''
+                    })
+                }
             }
+            
             this.setState({
                 inputAmount1: e.target.value
             }, () => {
@@ -327,10 +346,108 @@ class CashPooling extends Component {
             })
         }
     }
-    //转入
-    showExchangeCode = () => {
+    //
+    async getTyArgs(_module, _name) {
+        let address = '00000000000000000000000000000001';
+        let prefix = '07';
+        let suffix = '00';
+        let module_length = _module.length;
+        if (module_length < 10) {
+            module_length = '0' + module_length;
+        }
+        let _module_hex = bytes2StrHex(string2Byte(_module));
+        let name_length = _name.length;
+        if (name_length < 10) {
+            name_length = '0' + name_length;
+        }
+        let _name_hex = bytes2StrHex(string2Byte(_name));
+        let result = prefix + address + module_length + _module_hex + name_length + _name_hex + suffix;
+        return result;
+    }
+    //点击转入前的判断
+    async orderCurrencies(input_a, input_b) {
+        let index_a, index_b, amount_a,amount_b = 0;
+        for (let i = 0; i < this.state.violasArr.length; i++) {
+            if (this.state.violasArr[i].show_name == input_a) {
+                index_a = i;
+            }
+            if (this.state.violasArr[i].show_name == input_b) {
+                index_b = i;
+            }
+        }
+        if (index_a > index_b) {
+            let temp = index_a;
+            index_a = index_b;
+            index_b = temp;
+            amount_a = this.state.inputAmount1;
+            amount_b = this.state.inputAmount;
+        } else {
+            amount_a = this.state.inputAmount1;
+            amount_b = this.state.inputAmount;
+        }
+        this.setState({
+            AddLiquidity: {
+                coin_a: this.state.violasArr[index_a].show_name,
+                coin_a_amount: amount_a,
+                coin_a_tyArgs: await this.getTyArgs(this.state.violasArr[index_a].module, this.state.violasArr[index_a].name),
+                coin_b: this.state.violasArr[index_b].show_name,
+                coin_b_amount: amount_b,
+                coin_b_tyArgs: await this.getTyArgs(this.state.violasArr[index_b].module, this.state.violasArr[index_b].name),
+            }
+        })
+        // console.log(this.state.AddLiquidity)
+    }
+    //点击转入
+    async getAddLiquidity(chainId) {
+        
+        await this.orderCurrencies(this.state.name, this.state.type1)
+        // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
+        const tx = {
+            from: localStorage.getItem('address'),
+            payload: {
+                code: code_data.violas.add_liquidity,
+                tyArgs: [
+                    this.state.AddLiquidity.coin_a_tyArgs,
+                    this.state.AddLiquidity.coin_b_tyArgs
+                ],
+                args: [
+                    {
+                        type: 'U64',
+                        value: parseInt(this.state.AddLiquidity.coin_a_amount)
+                    },
+                    {
+                        type: 'U64',
+                        value: parseInt(this.state.AddLiquidity.coin_b_amount)
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+        console.log('Add Liquidity ', tx);
+        this.state.walletConnector.sendTransaction('violas', tx).then(res => {
+            console.log('Add Liquidity ', res);
+            if(res.data){
+                this.setState({
+                    warning: '转入成功'
+                })
+            }
+            
+        }).catch(err => {
+            console.log('Add Liquidity ', err);
+        });
+    }
+    showExchangeCode = ()  => {
         if (this.state.inputAmount) {
             if (this.state.inputAmount1) {
+                this.getAddLiquidity(1)
                 this.setState({
                     warning: ''
                 })
@@ -422,27 +539,52 @@ class CashPooling extends Component {
     //转入下拉列表 第一个输入框
     //转入下拉列表 第二个输入框
     getBalances() {
-        fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-            .then(res => {
-                this.setState({
-                    arr1: res.data.balances
-                }, () => {
-                        this.setState({
-                            arr: this.state.arr1,
-                            selData: this.state.arr1
-                        }, () => {
-                            if (this.state.type == "") {
-                                this.setState({
-                                    coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                                    index: Object.keys(this.state.selData)[0],
-                                    name: this.state.selData[0].show_name,
-                                    asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
+        fetch(url1 + "/1.0/market/exchange/currency").then(res => res.json())
+        .then(res => {
+            let temp = [];
+            temp = res.data.btc.concat(res.data.libra);
+            temp = temp.concat(res.data.violas)
+            
+             this.setState({
+                 violasArr: res.data.violas,
+                 currencies: temp,
+             },()=>{
+                     fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                         .then(res => {
+                             console.log(res, '...........')
+                             this.setState({
+                                 arr1: res.data.balances
+                             }, () => {
+                                //  console.log(this.state.arr1)
+                                for (let i = 0; i < this.state.violasArr.length;i++){
+                                    for (let j = 0; j < this.state.arr1.length; j++) {
+                                        if (this.state.violasArr[i].name == this.state.arr1[j].name){
+                                            newArr.push(this.state.arr1[j])
+                                            
+                                            
+                                       }
+                                    }
+                                 }
+                                     this.setState({
+                                         arr: newArr,
+                                         selData: newArr
+                                     }, () => {
+                                         if (this.state.type == "") {
+                                             this.setState({
+                                                 coinName: 'violas-' + this.state.selData[0].name.toLowerCase(),
+                                                 index: Object.keys(this.state.selData)[0],
+                                                 name: this.state.selData[0].show_name,
+                                                 asset: this.getFloat(this.state.selData[0].balance / 1e6, 6)
 
-                                })
-                            }
-                        })
-                })
-            })
+                                             })
+                                         }
+                                     })
+                             })
+                         })
+             })
+         })
+
+        
 
     }
     //第一个输入框搜索
@@ -495,7 +637,7 @@ class CashPooling extends Component {
     getOutBalances(){
         fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
             .then(res => {
-                console.log(res,'.......')
+                // console.log(res,'.......')
                 if(res.data){
                     this.setState({
                         // res.data.balance  res.data.total_token
@@ -576,7 +718,7 @@ class CashPooling extends Component {
     }
     render() {
         let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
-        // console.log(changeRecord,'....')
+        // console.log(selData,arr,'....')
         return (
             <div className="exchange cashPooling">
                 <div className="exchangeContent">

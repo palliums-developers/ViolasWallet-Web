@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import code_data from '../../utils/code.json';
 import WalletConnect from "../../packages/browser/src/index";
 import TransfarDialog from './transfarDialog.js'
+import { bytes2StrHex, string2Byte } from '../../utils/trans'
 // import {withRouter} from 'react-router-dom'
-let url = "https://api.violas.io"
-let url1 = "https://tbtc1.trezor.io"
-// let url = "https://api.violas.io"
+let url1 = "https://api.violas.io"
+let url = "https://api4.violas.io"
+// let url1 = "https://tbtc1.trezor.io"
 let WAValidator = require('wallet-address-validator');
 
 class Transfer extends Component {
@@ -37,7 +38,8 @@ class Transfer extends Component {
       warning1:'',
       coinName:'',
       tranferDig:false,
-      ind:0
+      ind:0,
+      opinionType:''
     };
   }
 
@@ -75,8 +77,9 @@ class Transfer extends Component {
     
 
   }
+  //获取到每个币种及余额
   getTypesBalance(){
-    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+    fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
       .then(res => {
         this.setState({
          BTCArr: res.data
@@ -86,19 +89,6 @@ class Transfer extends Component {
                 if(res.data){
                   this.setState({
                     arr1: res.data.balances
-                  }, () => {
-                    // this.state.arr1.map((v, i) => {
-                    //   if (v.show_name == 'LBR') {
-                    //     v.show_name = 'VLS'
-                    //   }
-                    // })
-                    if (this.state.type == "") {
-                      this.setState({
-                        type: res.data.balances[0].show_name,
-                        coinName: res.data.balances[0].name,
-                        balance: res.data.balances[0].balance
-                      })
-                    }
                   })
                 }
               })
@@ -112,6 +102,15 @@ class Transfer extends Component {
                     let arrs = arr.concat(this.state.BTCArr)
                     this.setState({
                       selData: arrs
+                    },()=>{
+                        if (this.state.type == "") {
+                          this.setState({
+                            type: this.state.selData[0].show_name,
+                            coinName: this.state.selData[0].name,
+                            balance: this.state.selData[0].balance,
+                            opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                          })
+                        }
                     })
                   })
                 }else{
@@ -119,6 +118,15 @@ class Transfer extends Component {
                     let arrs = this.state.arr2.concat(this.state.BTCArr)
                     this.setState({
                       selData: arrs
+                    }, () => {
+                      if (this.state.type == "") {
+                        this.setState({
+                          type: this.state.selData[0].show_name,
+                          coinName: this.state.selData[0].name,
+                          balance: this.state.selData[0].balance,
+                          opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                        })
+                      }
                     })
                   }
                   
@@ -136,13 +144,15 @@ class Transfer extends Component {
     });
   };
 
-  showTypes = (v,bal,name,ind) => {
+  showTypes = (v,bal,name,ind,opinionType) => {
+    console.log(opinionType,'...opinionType')
     this.setState({
       type: v,
       balance:bal,
       showDealType: false,
       coinName:name,
-      ind:ind
+      ind:ind,
+      opinionType: opinionType
     },()=>{
         // this.getTypeBalance()
         this.getTypesBalance()
@@ -166,6 +176,7 @@ class Transfer extends Component {
     number = parseFloat(Number(number).toFixed(n)); //补足位数
     return number;
   }
+  //获取到输入地址
   getTransAddress = (e) => {
     this.setState(
       {
@@ -182,6 +193,18 @@ class Transfer extends Component {
       }
     );
   };
+  //获取到输入数量
+  getTransAmount = (e) => {
+    this.setState(
+      {
+        amount: e.target.value,
+      },
+      () => {
+        this.amountWarn()
+      }
+    );
+  };
+  //输入警告
   addressWarn(){
     if (this.state.type == "BTC") {
       let valid = WAValidator.validate(
@@ -222,62 +245,8 @@ class Transfer extends Component {
       });
     }
   }
-  getTransAmount = (e) => {
-    this.setState(
-      {
-        amount: e.target.value,
-      },
-      () => {
-       this.amountWarn()
-      }
-    );
-  };
-  string2Byte(str) {
-    var bytes = new Array();
-    var len, c;
-    len = str.length;
-    for (var i = 0; i < len; i++) {
-      c = str.charCodeAt(i);
-      if (c >= 0x010000 && c <= 0x10FFFF) {
-        bytes.push(((c >> 18) & 0x07) | 0xF0);
-        bytes.push(((c >> 12) & 0x3F) | 0x80);
-        bytes.push(((c >> 6) & 0x3F) | 0x80);
-        bytes.push((c & 0x3F) | 0x80);
-      } else if (c >= 0x000800 && c <= 0x00FFFF) {
-        bytes.push(((c >> 12) & 0x0F) | 0xE0);
-        bytes.push(((c >> 6) & 0x3F) | 0x80);
-        bytes.push((c & 0x3F) | 0x80);
-      } else if (c >= 0x000080 && c <= 0x0007FF) {
-        bytes.push(((c >> 6) & 0x1F) | 0xC0);
-        bytes.push((c & 0x3F) | 0x80);
-      } else {
-        bytes.push(c & 0xFF);
-      }
-    }
-    return bytes;
-  }
-  bytes2StrHex(arrBytes) {
-    var str = "";
-    for (var i = 0; i < arrBytes.length; i++) {
-      var tmp;
-      var num = arrBytes[i];
-      if (num < 0) {
-        //此处填坑，当byte因为符合位导致数值为负时候，需要对数据进行处理
-        tmp = (255 + num + 1).toString(16);
-      } else {
-        tmp = num.toString(16);
-      }
-      if (tmp.length == 1) {
-        tmp = "0" + tmp;
-      }
-      if (i > 0) {
-        str += tmp;
-      } else {
-        str += tmp;
-      }
-    }
-    return str;
-  }
+
+  //获取violas的tyArgs,并转账
   async getTyArgs(_name) {
     // console.log(_name)
     let address = '00000000000000000000000000000001';
@@ -292,9 +261,10 @@ class Transfer extends Component {
     // console.log(_name_hex);
     // console.log(result);
     this.setState({ tyArgs: result },()=>{
-      this.getNext()
+      this.getViolasNext()
     });
   }
+  //获取libra的tyArgs,并转账
   async getTyArgs1(temp) {
     let address = '00000000000000000000000000000001';
     let result = {
@@ -302,8 +272,11 @@ class Transfer extends Component {
       'address': address,
       'name': temp
     }
-    await this.setState({ tyArgs1: result });
+    await this.setState({ tyArgs1: result }, () => {
+      this.getLibraNext()
+    });
   }
+  //violas转账
   async violas_sendTransaction(chainId){
     const tx = {
       from: window.localStorage.getItem('address'),
@@ -317,7 +290,7 @@ class Transfer extends Component {
           },
           {
             type: 'U64',
-            value: this.state.amount
+            value: this.state.amount * 1e6
           },
           {
             type: 'Vector',
@@ -332,7 +305,7 @@ class Transfer extends Component {
         // gasCurrencyCode: this.state.gasCurrencyCode,
       }
     };
-    // console.log(JSON.stringify(tx))
+    console.log(JSON.stringify(tx))
     this.state.walletConnector
       .sendTransaction('violas',tx)
       .then((res) => {
@@ -349,6 +322,7 @@ class Transfer extends Component {
         console.log("send transaction ", err);
       });
   }
+  //libra转账
   async libra_sendTransaction(chainId) {
     const tx = {
       from: window.localStorage.getItem('address'),
@@ -364,7 +338,7 @@ class Transfer extends Component {
           },
           {
             type: 'U64',
-            value: this.state.amount,
+            value: this.state.amount * 1e6
           },
           {
             type: 'Vector',
@@ -379,13 +353,29 @@ class Transfer extends Component {
       chainId: chainId,
     }
     console.log('libra ', tx);
-    this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
+    this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
       console.log('Libra transaction', res);
     }).catch(err => {
       console.log('Libra transaction ', err);
     });
   }
-  getNext = () => {
+  //btc转账
+  async bitcoin_sendTransaction() {
+    const tx = {
+      from: this.state.BTCAddress,
+      amount: this.state.amount,
+      changeAddress: this.state.BTCAddress,
+      payeeAddress: this.state.address,
+      // script: this.state.script
+    }
+    console.log('bitcoin ', tx);
+    this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
+      console.log('Bitcoin transaction ', res);
+    }).catch(err => {
+      console.log('Bitcoin transaction ', err);
+    });
+  }
+  getViolasNext = () => {
     if (this.state.address == "") {
       this.setState({
         warning: "Please input address",
@@ -402,44 +392,81 @@ class Transfer extends Component {
           warning: "Insufficient available balance",
         });
       } else {
+        this.violas_sendTransaction(1)
         this.setState({
             warning: "",
           });
-        // console.log(this.state.type,this.state.coinName)
-        if (this.state.type == 'VLS' || this.state.type === 'LBR' || this.state.type === 'BTC'){
-          if (this.state.type == 'VLS'){
-            // console.log('wallet connect')
-            this.violas_sendTransaction(1)
-          }else{
-            if (this.state.coinName.indexOf('VLS') == 0) {
-              // console.log('wallet connect')
-              this.violas_sendTransaction(1)
-            } else if (this.state.coinName == 'BTC'){
-                this.setState({
-                  tranferDig:true
-                })
-            }else{
-              this.libra_sendTransaction(1)
-            }
-          }
-        }else{
-          if (this.state.coinName === 'coin1' || this.state.coinName === 'coin2') {
-            this.libra_sendTransaction(1)
-          }else{
-            this.violas_sendTransaction(1)
-          }
-          }
         }
     }
+  }
+  getLibraNext = () => {
+    if (this.state.address == "") {
+      this.setState({
+        warning: "Please input address",
+      });
+      // alert('Please input address')
+    } else if (this.state.amount == "") {
+      this.setState({
+        warning: "Please input amount",
+      });
+      // alert('Please input amount')
+    } else {
+      if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+        this.setState({
+          warning: "Insufficient available balance",
+        });
+      } else {
+        this.libra_sendTransaction(1)
+        this.setState({
+          warning: "",
+        });
+      }
     }
+  }
+  getBTCNext = () => {
+    if (this.state.address == "") {
+      this.setState({
+        warning: "Please input address",
+      });
+      // alert('Please input address')
+    } else if (this.state.amount == "") {
+      this.setState({
+        warning: "Please input amount",
+      });
+      // alert('Please input amount')
+    } else {
+      if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+        this.setState({
+          warning: "Insufficient available balance",
+        });
+      } else {
+        this.bitcoin_sendTransaction()
+        this.setState({
+          warning: "",
+        });
+      }
+    }
+  }
   getDisplays = (val) =>{
     this.setState({
       tranferDig:val
     })
   }
+  //转账时判断是哪个币种然后在发起转账
+  opinionCurNextContent = ()=>{
+    // console.log(this.state.opinionType,'/.........')
+    if (this.state.opinionType.indexOf('violas') == 0){
+      this.getTyArgs(this.state.coinName)
+    } else if (this.state.opinionType.indexOf('libra') == 0){
+      this.getTyArgs1(this.state.coinName)
+    }else{
+      this.bitcoin_sendTransaction()
+    }
+  }
   render() {
     let { title, balance, warning, showDealType, type, selData, tranferDig } = this.state;
     // console.log(selData, tranferDig,this.state.coinName , this.state.address )
+    // console.log(selData,'.....')
     return (
       <div className="transfer">
         <div className="transferContent">
@@ -491,7 +518,7 @@ class Transfer extends Component {
                           key={i}
                           className={i == this.state.ind ? "active" : null}
                           onClick={() => {
-                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name,i) : this.showTypes(v.show_name, v.balance,v.name,i)
+                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1])
                           }}
                         >
                           {v.show_name}
@@ -512,34 +539,11 @@ class Transfer extends Component {
             </div>
             <div className="foot">
               {this.state.getAct == false ? (
-                <p className="btn" onClick={() =>{
-                  if (this.state.type == 'VLS' || this.state.type === 'LBR' || this.state.type === 'BTC') {
-                    if (this.state.type == 'VLS') {
-                      this.getTyArgs(this.state.coinName)
-                    } else {
-                      if (this.state.coinName.indexOf('VLS') == 0) {
-                        // console.log('wallet connect')
-                        this.getTyArgs(this.state.coinName)
-                      } else if (this.state.coinName == 'BTC') {
-                        this.setState({
-                          tranferDig: true
-                        })
-                      } else {
-                        this.getTyArgs1(this.state.coinName)
-                      }
-                    }
-                  } else {
-                    if (this.state.coinName === 'coin1' || this.state.coinName === 'coin2') {
-                      this.getTyArgs1(this.state.coinName)
-                    } else {
-                      this.getTyArgs(this.state.coinName)
-                    }
-                  }
-                } }>
+                <p className="btn" onClick={() => this.opinionCurNextContent() }>
                   Next
                 </p>
               ) : (
-                  <p className="btn active" onClick={() => this.getTyArgs(this.state.coinName)}>
+                  <p className="btn active" onClick={() => this.opinionCurNextContent()}>
                   Next
                 </p>
               )}
