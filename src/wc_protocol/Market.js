@@ -1,7 +1,7 @@
 
 import React from 'react';
 import '../App.css';
-import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp } from '../util/trans'
+import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp, int2Byte } from '../util/trans'
 import axios from 'axios';
 import code_data from '../util/code.json';
 
@@ -178,7 +178,7 @@ class Market extends React.Component {
                 break;
             }
         }
-        console.log(_type)
+        // console.log(_type)
         let to_address = '00000000000000000000000000000000' + _address;
         let result = {
             flag: flag,
@@ -359,8 +359,15 @@ class Market extends React.Component {
             chainId: chainId
         }
     }
+    async getBytePath(arr) {
+        let result = [];
+        for (let i in arr) {
+            result.push(int2Byte(arr[i]))
+        }
+        return result
+    }
     async getUniswap(chainId) {
-        await this.orderCurrencies('uniswap',this.state.swap_in_name,this.state.swap_out_name);
+        await this.orderCurrencies('uniswap', this.state.swap_in_name, this.state.swap_out_name);
         return {
             from: sessionStorage.getItem('violas_address'),
             payload: {
@@ -376,15 +383,15 @@ class Market extends React.Component {
                     },
                     {
                         type: 'U64',
-                        value: parseInt(this.state.swap_in_amount)
+                        value: ''+this.state.swap_in_amount
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: '10'
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(this.state.swap_trial.data.path.toString()))
+                        value: await bytes2StrHex(await this.getBytePath(this.state.swap_trial.data.path))
                     },
                     {
                         type: 'Vector',
@@ -444,19 +451,19 @@ class Market extends React.Component {
                 args: [
                     {
                         type: 'U64',
-                        value: (this.state.AddLiquidity.coin_a_amount)
+                        value: '' + (this.state.AddLiquidity.coin_a_amount)
                     },
                     {
                         type: 'U64',
-                        value: (this.state.AddLiquidity.coin_b_amount)
+                        value: '' + (this.state.AddLiquidity.coin_b_amount)
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     }
                 ]
             },
@@ -481,15 +488,15 @@ class Market extends React.Component {
                 args: [
                     {
                         type: 'U64',
-                        value: this.state.remove_liquidity
+                        value: '' + this.state.remove_liquidity
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     }
                 ]
             },
