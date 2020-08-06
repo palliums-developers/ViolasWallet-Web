@@ -22,6 +22,7 @@ class Market extends React.Component {
             swap_out_type: '',
             swap_address: '',
             swap_trial: {},
+            uniswap: {},
             input_a: '',
             input_a_amount: 0,
             input_b: '',
@@ -187,10 +188,10 @@ class Market extends React.Component {
             out_amount: _amount,
             state: 'start'
         }
-        console.log('script ',result)
+        console.log('script ', result)
         return JSON.stringify(result);
     }
-    async orderCurrencies(input_a, input_b) {
+    async orderCurrencies(type, input_a, input_b) {
         let index_a, index_b;
         let amount_a, amount_b = 0;
         for (let i = 0; i < this.state.violas_currencies.length; i++) {
@@ -211,16 +212,27 @@ class Market extends React.Component {
             amount_a = this.state.input_a_amount;
             amount_b = this.state.addLiquidityTrial;
         }
-        await this.setState({
-            AddLiquidity: {
-                coin_a: this.state.violas_currencies[index_a].show_name,
-                coin_a_amount: parseInt(amount_a),
-                coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
-                coin_b: this.state.violas_currencies[index_b].show_name,
-                coin_b_amount: parseInt(amount_b),
-                coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
-            }
-        })
+        if (type === 'add_liquidity') {
+            await this.setState({
+                AddLiquidity: {
+                    coin_a: this.state.violas_currencies[index_a].show_name,
+                    coin_a_amount: parseInt(amount_a),
+                    coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_b: this.state.violas_currencies[index_b].show_name,
+                    coin_b_amount: parseInt(amount_b),
+                    coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                }
+            })
+        } else if (type == 'uniswap') {
+            await this.setState({
+                uniswap: {
+                    coin_a: this.state.violas_currencies[index_a].show_name,
+                    coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_b: this.state.violas_currencies[index_b].show_name,
+                    coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                }
+            })
+        }
     }
     async getSwapType(_temp) {
         if (_temp === 'BTC') {
@@ -348,18 +360,23 @@ class Market extends React.Component {
         }
     }
     async getUniswap(chainId) {
+        await this.orderCurrencies('uniswap',this.state.swap_in_name,this.state.swap_out_name);
         return {
             from: sessionStorage.getItem('violas_address'),
             payload: {
                 code: code_data.violas.swap,
                 tyArgs: [
-                    await this.getTyArgs(this.state.swap_in_name, this.state.swap_in_name),
-                    await this.getTyArgs(this.state.swap_out_name, this.state.swap_out_name)
+                    this.state.uniswap.coin_a_tyArgs,
+                    this.state.uniswap.coin_b_tyArgs
                 ],
                 args: [
                     {
+                        type: 'Address',
+                        value: sessionStorage.getItem('violas_address')
+                    },
+                    {
                         type: 'U64',
-                        value: this.state.swap_in_amount
+                        value: parseInt(this.state.swap_in_amount)
                     },
                     {
                         type: 'U64',
@@ -368,6 +385,10 @@ class Market extends React.Component {
                     {
                         type: 'Vector',
                         value: await bytes2StrHex(string2Byte(this.state.swap_trial.data.path.toString()))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
                     }
                 ]
             },
@@ -411,7 +432,7 @@ class Market extends React.Component {
         }
     }
     async getAddLiquidity(chainId) {
-        await this.orderCurrencies(this.state.input_a, this.state.input_b)
+        await this.orderCurrencies('add_liquidity', this.state.input_a, this.state.input_b)
         const tx = {
             from: sessionStorage.getItem('violas_address'),
             payload: {
