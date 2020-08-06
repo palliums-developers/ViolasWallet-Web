@@ -162,7 +162,7 @@ class Market extends React.Component {
         }
         let payee_address = _payee_address;
         let sequence = await this.fullWith16(getTimestamp);
-        console.log(sequence)
+        console.log('sequence ', sequence)
         let module_address = code_data.btc.violas_module_address;
         let amount = await this.fullWith16(_amount);
         let time = '0000';
@@ -177,6 +177,7 @@ class Market extends React.Component {
                 break;
             }
         }
+        console.log(_type)
         let to_address = '00000000000000000000000000000000' + _address;
         let result = {
             flag: flag,
@@ -186,6 +187,7 @@ class Market extends React.Component {
             out_amount: _amount,
             state: 'start'
         }
+        console.log('script ',result)
         return JSON.stringify(result);
     }
     async orderCurrencies(input_a, input_b) {
@@ -304,7 +306,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_in, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_out, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
                     },
                     {
                         type: 'Vector',
@@ -334,7 +336,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_in, code_data.violas.type.start, sessionStorage.getItem('violas_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, sessionStorage.getItem('violas_address'), this.state.swap_trial.data.amount)))
                     },
                     {
                         type: 'Vector',
