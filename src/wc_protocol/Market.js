@@ -178,7 +178,7 @@ class Market extends React.Component {
             }
         }
         let to_address = '00000000000000000000000000000000' + _address;
-        return {
+        let result = {
             flag: flag,
             type: type,
             times: 0,
@@ -186,6 +186,7 @@ class Market extends React.Component {
             out_amount: _amount,
             state: 'start'
         }
+        return JSON.stringify(result);
     }
     async orderCurrencies(input_a, input_b) {
         let index_a, index_b;
@@ -303,7 +304,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'Vector',
-                        value: bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_in, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_in, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
                     },
                     {
                         type: 'Vector',
@@ -314,18 +315,97 @@ class Market extends React.Component {
             chainId: chainId
         }
     }
-    async getViolasSwap() {
-
+    async getViolas2otherSwap(chainId) {
+        return {
+            from: sessionStorage.getItem('violas_address'),
+            payload: {
+                code: code_data.violas.p2p,
+                tyArgs: [
+                    await this.getTyArgs(this.state.swap_in_name, this.state.swap_in_name)
+                ],
+                args: [
+                    {
+                        type: 'Address',
+                        value: this.state.swap_address
+                    },
+                    {
+                        type: 'U64',
+                        value: this.state.swap_in_amount
+                    },
+                    {
+                        type: 'Vector',
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_in, code_data.violas.type.start, sessionStorage.getItem('violas_address'), this.state.swap_trial.data.amount)))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+    }
+    async getUniswap(chainId) {
+        return {
+            from: sessionStorage.getItem('violas_address'),
+            payload: {
+                code: code_data.violas.swap,
+                tyArgs: [
+                    await this.getTyArgs(this.state.swap_in_name, this.state.swap_in_name),
+                    await this.getTyArgs(this.state.swap_out_name, this.state.swap_out_name)
+                ],
+                args: [
+                    {
+                        type: 'U64',
+                        value: this.state.swap_in_amount
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    },
+                    {
+                        type: 'Vector',
+                        value: await bytes2StrHex(string2Byte(this.state.swap_trial.data.path.toString()))
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+    }
+    async getViolasSwap(_out_type, chainId) {
+        let tx;
+        if (_out_type === 'violas') {
+            tx = await this.getUniswap(chainId);
+        } else {
+            tx = await this.getViolas2otherSwap(chainId);
+        }
+        return tx;
     }
     async getSwap(chainId) {
         if (this.state.swap_in_type === 'btc') {
             const tx = await this.getBitcoinSwap();
-            console.log('bitcoin swag', tx)
+            console.log('bitcoin swag', tx);
             this.props.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
             }).catch(err => {
                 console.log('Bitcoin Swap ', err);
             });
+        } else if (this.state.swap_in_type === 'libra') {
+            const tx = await this.getLibraSwap(chainId);
+            console.log('libra swag ', tx);
+            this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
+                console.log('Libra Swap ', res);
+            }).catch(err => {
+                console.log('Libra Swap ', err);
+            })
+        } else if (this.state.swap_in_type === 'violas') {
+            const tx = await this.getViolasSwap(this.state.swap_out_type, chainId);
+            console.log('violas swag ', tx);
+            this.props.walletConnector.sendTransaction('violas', tx).then(res => {
+                console.log('Violas Swap ', res);
+            }).catch(err => {
+                console.log('Violas Swag ', err);
+            })
         }
     }
     async getAddLiquidity(chainId) {
@@ -403,13 +483,13 @@ class Market extends React.Component {
         e.persist();
         switch (_type) {
             case 'swap_in':
-                await this.setState({ swap_in: e.target.value });
+                await this.setState({ swap_in: e.target.value, swap_trial: {} });
                 break;
             case 'swap_out':
-                await this.setState({ swap_out: e.target.value });
+                await this.setState({ swap_out: e.target.value, swap_trial: {} });
                 break;
             case 'swap_in_amount':
-                await this.setState({ swap_in_amount: e.target.value });
+                await this.setState({ swap_in_amount: e.target.value, swap_trial: {} });
                 break;
             case 'input_a':
                 await this.setState({ input_a: e.target.value, addLiquidityTrial: 0 });
