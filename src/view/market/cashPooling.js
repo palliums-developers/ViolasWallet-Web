@@ -54,7 +54,9 @@ class CashPooling extends Component {
             aName:'',
             bName:'',
             violasArr:[],
-            AddLiquidity: {}
+            AddLiquidity: {},
+            aModule: '',
+            bModule: ''
             // visible:false
         }
     }
@@ -72,6 +74,14 @@ class CashPooling extends Component {
     componentDidMount() {
         // document.addEventListener('click', this.closeMenu);
         // this.getSelectTypes()
+        if (!window.sessionStorage.getItem('curDealType')){
+            window.sessionStorage.setItem('curDealType', this.state.type)
+        }else{
+            this.setState({
+                type: window.sessionStorage.getItem('curDealType')
+            })
+        }
+        
         this.getExchangeRecode()
         this.getOutBalances()
         if (JSON.parse(window.localStorage.getItem("wallet_info"))){
@@ -194,12 +204,12 @@ class CashPooling extends Component {
     // }
     
     showType = (v) => {
-
+        window.sessionStorage.setItem('curDealType',v)
         this.setState({
-            type: v,
+            type: window.sessionStorage.getItem('curDealType'),
             showDealType: false
         },()=>{
-                this.getExchangeRecode()
+            this.getExchangeRecode()
         })
     }
     
@@ -311,15 +321,19 @@ class CashPooling extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (e.target.value > this.state.asset1) {
-                this.setState({
-                    warning: '资金不足'
-                })
-            } else {
-                this.setState({
-                    warning: ''
-                })
+            
+            if (this.state.asset1 != '--'){
+                if (e.target.value > this.state.asset1) {
+                    this.setState({
+                        warning: '资金不足'
+                    })
+                } else {
+                    this.setState({
+                        warning: ''
+                    })
+                }
             }
+            
             this.setState({
                 outputAmount: e.target.value
             }, () => {
@@ -346,144 +360,8 @@ class CashPooling extends Component {
             })
         }
     }
-    //
-    async getTyArgs(_module, _name) {
-        let address = '00000000000000000000000000000001';
-        let prefix = '07';
-        let suffix = '00';
-        let module_length = _module.length;
-        if (module_length < 10) {
-            module_length = '0' + module_length;
-        }
-        let _module_hex = bytes2StrHex(string2Byte(_module));
-        let name_length = _name.length;
-        if (name_length < 10) {
-            name_length = '0' + name_length;
-        }
-        let _name_hex = bytes2StrHex(string2Byte(_name));
-        let result = prefix + address + module_length + _module_hex + name_length + _name_hex + suffix;
-        return result;
-    }
-    //点击转入前的判断
-    async orderCurrencies(input_a, input_b) {
-        let index_a, index_b, amount_a,amount_b = 0;
-        for (let i = 0; i < this.state.violasArr.length; i++) {
-            if (this.state.violasArr[i].show_name == input_a) {
-                index_a = i;
-            }
-            if (this.state.violasArr[i].show_name == input_b) {
-                index_b = i;
-            }
-        }
-        if (index_a > index_b) {
-            let temp = index_a;
-            index_a = index_b;
-            index_b = temp;
-            amount_a = this.state.inputAmount1;
-            amount_b = this.state.inputAmount;
-        } else {
-            amount_a = this.state.inputAmount1;
-            amount_b = this.state.inputAmount;
-        }
-        this.setState({
-            AddLiquidity: {
-                coin_a: this.state.violasArr[index_a].show_name,
-                coin_a_amount: amount_a,
-                coin_a_tyArgs: await this.getTyArgs(this.state.violasArr[index_a].module, this.state.violasArr[index_a].name),
-                coin_b: this.state.violasArr[index_b].show_name,
-                coin_b_amount: amount_b,
-                coin_b_tyArgs: await this.getTyArgs(this.state.violasArr[index_b].module, this.state.violasArr[index_b].name),
-            }
-        })
-        // console.log(this.state.AddLiquidity)
-    }
-    //点击转入
-    async getAddLiquidity(chainId) {
-        
-        await this.orderCurrencies(this.state.name, this.state.type1)
-        // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
-        const tx = {
-            from: localStorage.getItem('address'),
-            payload: {
-                code: code_data.violas.add_liquidity,
-                tyArgs: [
-                    this.state.AddLiquidity.coin_a_tyArgs,
-                    this.state.AddLiquidity.coin_b_tyArgs
-                ],
-                args: [
-                    {
-                        type: 'U64',
-                        value: parseInt(this.state.AddLiquidity.coin_a_amount)
-                    },
-                    {
-                        type: 'U64',
-                        value: parseInt(this.state.AddLiquidity.coin_b_amount)
-                    },
-                    {
-                        type: 'U64',
-                        value: 10
-                    },
-                    {
-                        type: 'U64',
-                        value: 10
-                    }
-                ]
-            },
-            chainId: chainId
-        }
-        console.log('Add Liquidity ', tx);
-        this.state.walletConnector.sendTransaction('violas', tx).then(res => {
-            console.log('Add Liquidity ', res);
-            if(res.data){
-                this.setState({
-                    warning: '转入成功'
-                })
-            }
-            
-        }).catch(err => {
-            console.log('Add Liquidity ', err);
-        });
-    }
-    showExchangeCode = ()  => {
-        if (this.state.inputAmount) {
-            if (this.state.inputAmount1) {
-                this.getAddLiquidity(1)
-                this.setState({
-                    warning: ''
-                })
-
-            }
-            else {
-                this.setState({
-                    warning: '请输入兑换数量'
-                })
-            }
-        } else {
-            this.setState({
-                warning: '请输入兑换数量'
-            })
-        }
-    }
-    //转出
-    showExchangeCode1 = () =>{
-        if (this.state.OutputAmount) {
-            if (this.state.OutputAmount1) {
-                this.setState({
-                    warning: ''
-                })
-
-            }
-            else {
-                this.setState({
-                    warning: '请输入兑换数量'
-                })
-            }
-        } else {
-            this.setState({
-                warning: '请输入兑换数量'
-            })
-        }
-    }
+    
+    
     //显示输入时通证列表
     showTypes = (v, address, name, ind,bal) => {
         this.setState({
@@ -520,13 +398,15 @@ class CashPooling extends Component {
         })
     }
     //显示输出时通证列表
-    showTypes1 = (aName, bName,token, ind) => {
+    showTypes1 = (aModule,bModule,aName, bName,token, ind) => {
         this.setState({
             type2: aName+'/'+bName,
             ind1: ind,
             asset1:token,
             aName:aName,
             bName:bName,
+            aModule: aModule,
+            bModule: bModule,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas2: false
@@ -551,7 +431,7 @@ class CashPooling extends Component {
              },()=>{
                      fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
                          .then(res => {
-                             console.log(res, '...........')
+                            //  console.log(res, '...........')
                              this.setState({
                                  arr1: res.data.balances
                              }, () => {
@@ -716,9 +596,183 @@ class CashPooling extends Component {
                 })
         }
     }
+    //转入转出tyargs
+    async getTyArgs(_module, _name) {
+        let address = '00000000000000000000000000000001';
+        let prefix = '07';
+        let suffix = '00';
+        let module_length = _module.length;
+        if (module_length < 10) {
+            module_length = '0' + module_length;
+        }
+        let _module_hex = bytes2StrHex(string2Byte(_module));
+        let name_length = _name.length;
+        if (name_length < 10) {
+            name_length = '0' + name_length;
+        }
+        let _name_hex = bytes2StrHex(string2Byte(_name));
+        let result = prefix + address + module_length + _module_hex + name_length + _name_hex + suffix;
+        return result;
+    }
+    //点击转入前的判断
+    async orderCurrencies(input_a, input_b) {
+        let index_a, index_b, amount_a, amount_b = 0;
+        for (let i = 0; i < this.state.violasArr.length; i++) {
+            if (this.state.violasArr[i].show_name == input_a) {
+                index_a = i;
+            }
+            if (this.state.violasArr[i].show_name == input_b) {
+                index_b = i;
+            }
+        }
+        if (index_a > index_b) {
+            let temp = index_a;
+            index_a = index_b;
+            index_b = temp;
+            amount_a = this.state.inputAmount1;
+            amount_b = this.state.inputAmount;
+        } else {
+            amount_a = this.state.inputAmount1;
+            amount_b = this.state.inputAmount;
+        }
+        this.setState({
+            AddLiquidity: {
+                coin_a: this.state.violasArr[index_a].show_name,
+                coin_a_amount: amount_a,
+                coin_a_tyArgs: await this.getTyArgs(this.state.violasArr[index_a].module, this.state.violasArr[index_a].name),
+                coin_b: this.state.violasArr[index_b].show_name,
+                coin_b_amount: amount_b,
+                coin_b_tyArgs: await this.getTyArgs(this.state.violasArr[index_b].module, this.state.violasArr[index_b].name),
+            }
+        })
+        // console.log(this.state.AddLiquidity)
+    }
+    //点击转入
+    async getAddLiquidity(chainId) {
+
+        await this.orderCurrencies(this.state.name, this.state.type1)
+        // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
+        const tx = {
+            from: localStorage.getItem('address'),
+            payload: {
+                code: code_data.violas.add_liquidity,
+                tyArgs: [
+                    this.state.AddLiquidity.coin_a_tyArgs,
+                    this.state.AddLiquidity.coin_b_tyArgs
+                ],
+                args: [
+                    {
+                        type: 'U64',
+                        value: parseInt(this.state.AddLiquidity.coin_a_amount)
+                    },
+                    {
+                        type: 'U64',
+                        value: parseInt(this.state.AddLiquidity.coin_b_amount)
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    },
+                    {
+                        type: 'U64',
+                        value: 10
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+        console.log('Add Liquidity ', tx);
+        this.state.walletConnector.sendTransaction('violas', tx).then(res => {
+            console.log('Add Liquidity ', res);
+            if (res.data) {
+                this.setState({
+                    warning: '转入成功'
+                })
+            }
+
+        }).catch(err => {
+            console.log('Add Liquidity ', err);
+        });
+    }
+    showExchangeCode = () => {
+        if (this.state.inputAmount) {
+            if (this.state.inputAmount1) {
+                this.getAddLiquidity(1)
+                this.setState({
+                    warning: ''
+                })
+
+            }
+            else {
+                this.setState({
+                    warning: '请输入兑换数量'
+                })
+            }
+        } else {
+            this.setState({
+                warning: '请输入兑换数量'
+            })
+        }
+    }
+    //点击转出
+    async getRemoveLiquidity(chainId) {
+        const tx = {
+            from: localStorage.getItem('address'),
+            payload: {
+                code: code_data.violas.remove_liquidity,
+                tyArgs: [
+                    await this.getTyArgs(this.state.aModule, this.state.aName),
+                    await this.getTyArgs(this.state.bModule, this.state.bName),
+                ],
+                args: [
+                    {
+                        type: 'U64',
+                        value: parseInt(this.state.outputAmount)
+                    },
+                    {
+                        type: 'U64',
+                        value: 0
+                    },
+                    {
+                        type: 'U64',
+                        value: 0
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+        console.log('Remove Liquidity ', tx);
+        this.state.walletConnector.sendTransaction('violas', tx).then(res => {
+            console.log('Remove Liquidity ', res);
+        }).catch(err => {
+            console.log('Remove Liquidity ', err);
+        });
+    }
+    showExchangeCode1 = () => {
+        if (this.state.outputAmount) {
+            if (this.state.outputAmount1) {
+                this.getRemoveLiquidity(2)
+                this.setState({
+                    warning: ''
+                })
+
+            }
+            else {
+                console.log(111)
+                this.setState({
+                    warning: '请输入兑换数量'
+                })
+            }
+        } else {
+            console.log(222)
+            this.setState({
+                warning: '请输入兑换数量'
+            })
+        }
+    }
     render() {
         let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
-        // console.log(selData,arr,'....')
+        // console.log(poolArr,'....')
         return (
             <div className="exchange cashPooling">
                 <div className="exchangeContent">
@@ -847,9 +901,9 @@ class CashPooling extends Component {
                                                             poolArr.map((v, i) => {
                                                                 return <div className="searchList" key={i} onClick={() => {
                                                                     if (v.coin_a.index < v.coin_b.index){
-                                                                        this.showTypes1(v.coin_a.show_name, v.coin_b.show_name, v.token, i)
+                                                                        this.showTypes1(v.coin_a.module, v.coin_b.module,v.coin_a.show_name, v.coin_b.show_name, v.token, i)
                                                                     }else{
-                                                                        this.showTypes1(v.coin_b.show_name, v.coin_a.show_name, v.token, i)
+                                                                        this.showTypes1(v.coin_a.module, v.coin_b.module,v.coin_b.show_name, v.coin_a.show_name, v.token, i)
                                                                     }
                                                                     
                                                                 }}>
@@ -970,10 +1024,11 @@ class CashPooling extends Component {
                                                     <div>
                                                         <p className={this.optionTypes(v.transaction_type, v.status).slice(2,4) == '成功' ?'green':'red'}>{this.optionTypes(v.transaction_type, v.status)
                                                         }</p>
-                                                        <p><label>{v.amounta}{v.coina}</label>&nbsp;&nbsp;&&nbsp;&nbsp;<label>{v.amountb}{v.coinb}</label></p>
+                                                        {this.optionTypes(v.transaction_type, v.status).slice(2, 4) == '成功' ? <p><label>{v.amounta / 1e6}{v.coina}</label>&nbsp;&nbsp;&&nbsp;&nbsp;<label>{v.amountb / 1e6}{v.coinb}</label></p> : <p>-- & --</p>}
                                                     </div>
                                                     <div>
-                                                        <p>通证：+{v.token}</p>
+                                                        {this.optionTypes(v.transaction_type, v.status).slice(2, 4) == '成功' ? <p>通证：+{v.token / 1e6}</p> : <p>--</p>}
+                                                        
                                                         <p>{timeStamp2String(v.date + '000')}</p>
                                                     </div>
                                                 </div>
