@@ -212,34 +212,6 @@ class CashPooling extends Component {
             this.getExchangeRecode()
         })
     }
-    
-    // getSelectTypes() {
-    //     fetch(url + "/1.0/violas/currency").then(res => res.json())
-    //         .then(res => {
-    //             let data = res.data.currencies
-    //             fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-    //                 .then(res => {
-    //                     let data1 = [];
-    //                     for (var i = 0; i < data.length; i++) {
-    //                         for (var j = 0; j < res.data.published.length; j++) {
-    //                             if (data[i].show_name == res.data.published[j]) {
-    //                                 //  console.log(data[i])
-    //                                 data1.push(data[i])
-    //                             }
-    //                         }
-    //                     }
-    //                     this.setState({
-    //                         selData: data1
-    //                     }, () => {
-    //                         if (this.state.name == "") {
-    //                             this.setState({
-    //                                 name: this.state.selData[0].show_name
-    //                             })
-    //                         }
-    //                     })
-    //                 })
-    //         })
-    // }
 
     //第一个输入框 输入金额
     getInputAmount = (e) => {
@@ -440,7 +412,7 @@ class CashPooling extends Component {
                                     for (let j = 0; j < this.state.arr1.length; j++) {
                                         if (this.state.violasArr[i].name == this.state.arr1[j].name){
                                             newArr.push(this.state.arr1[j])
-                                            
+                                            // return;
                                             
                                        }
                                     }
@@ -559,7 +531,6 @@ class CashPooling extends Component {
     opinionInputAmount = () => {
         if (this.state.inputAmount) {
             fetch(url1 + "/1.0/market/pool/deposit/trial?amount=" + this.state.inputAmount + '&&coin_a=' + this.state.type1 + '&&coin_b=' + this.state.name).then(res => res.json())
-            
                 .then(res => {
                     if (res.data) {
                         this.setState({
@@ -663,19 +634,19 @@ class CashPooling extends Component {
                 args: [
                     {
                         type: 'U64',
-                        value: parseInt(this.state.AddLiquidity.coin_a_amount)
+                        value: ''+(parseInt(this.state.AddLiquidity.coin_a_amount) * 1e6)
                     },
                     {
                         type: 'U64',
-                        value: parseInt(this.state.AddLiquidity.coin_b_amount)
+                        value: ''+(parseInt(this.state.AddLiquidity.coin_b_amount) * 1e6)
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: '10'
                     },
                     {
                         type: 'U64',
-                        value: 10
+                        value: '10'
                     }
                 ]
             },
@@ -684,7 +655,7 @@ class CashPooling extends Component {
         console.log('Add Liquidity ', tx);
         this.state.walletConnector.sendTransaction('violas', tx).then(res => {
             console.log('Add Liquidity ', res);
-            if (res.data) {
+            if (res == 'success') {
                 this.setState({
                     warning: '转入成功'
                 })
@@ -697,7 +668,7 @@ class CashPooling extends Component {
     showExchangeCode = () => {
         if (this.state.inputAmount) {
             if (this.state.inputAmount1) {
-                this.getAddLiquidity(1)
+                this.getAddLiquidity(2)
                 this.setState({
                     warning: ''
                 })
@@ -727,15 +698,15 @@ class CashPooling extends Component {
                 args: [
                     {
                         type: 'U64',
-                        value: parseInt(this.state.outputAmount)
+                        value: ''+(parseInt(this.state.outputAmount)*1e6)
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     },
                     {
                         type: 'U64',
-                        value: 0
+                        value: '0'
                     }
                 ]
             },
@@ -744,6 +715,11 @@ class CashPooling extends Component {
         console.log('Remove Liquidity ', tx);
         this.state.walletConnector.sendTransaction('violas', tx).then(res => {
             console.log('Remove Liquidity ', res);
+            if (res == 'success') {
+                this.setState({
+                    warning: '转出成功'
+                })
+            }
         }).catch(err => {
             console.log('Remove Liquidity ', err);
         });
@@ -758,13 +734,11 @@ class CashPooling extends Component {
 
             }
             else {
-                console.log(111)
                 this.setState({
                     warning: '请输入兑换数量'
                 })
             }
         } else {
-            console.log(222)
             this.setState({
                 warning: '请输入兑换数量'
             })

@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 import ExchangeDetail from '../market/exchangeDetail';
 import { Drawer } from "antd";
 import { timeStamp2String } from '../../utils/timer';
+import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp, int2Byte } from '../../utils/trans'
+import axios from 'axios'
+import WalletConnect from "../../packages/browser/src/index";
+import code_data from '../../utils/code.json';
 // import RouterView from '../router/routerView'
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
@@ -13,6 +17,7 @@ class ExChange extends Component {
     constructor() {
         super()
         this.state = {
+            bridge: 'https://walletconnect.violas.io',
             showMenuViolas: false,
             showMenuViolas1: false,
             type:'',
@@ -32,11 +37,25 @@ class ExChange extends Component {
             ind:-1,
             index:-1,
             asset: '--',
-            asset1: '--'
+            asset1: '--',
+            currenciesWithType:[],
+            currencies:[],
+            violas_currencies:[],
+            swap_in_name:'',
+            swap_out_name:'',
+            AddLiquidity:{},
+            uniswap:{},
+            swap_trial:[]
         }
     }
-    componentWillMount(){
-       
+    async componentWillMount(){
+        await this.getMarketCurrencies()
+        await this.getNewWalletConnect();
+    }
+    async getNewWalletConnect() {
+        await this.setState({
+            walletConnector: new WalletConnect({ bridge: this.state.bridge })
+        });
     }
     componentDidMount() {
         // document.addEventListener('click', this.closeMenu);
@@ -59,6 +78,408 @@ class ExChange extends Component {
         }
         
     }
+    //按链获取币种信息
+    async getMarketCurrencies() {
+        axios('https://api4.violas.io/1.0/market/exchange/currency')
+            .then(res => {
+                this.setState({ currenciesWithType: res.data.data })
+                let temp = [];
+                temp = res.data.data.btc.concat(res.data.data.libra);
+                temp = temp.concat(res.data.data.violas)
+                this.setState({
+                    currencies: temp,
+                    violas_currencies: res.data.data.violas,
+                    // swap_in: temp[0].show_name,
+                    // swap_out: temp[0].show_name
+                },()=>{
+                    this.getBalances()
+                });
+            })
+    }
+    //获取币种资产
+    getBalances() {
+
+        console.log(this.state.currencies,'.........')
+        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+            .then(res => {
+                this.setState({
+                    BTCBalances: res.data
+                }, () => {
+                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                        .then(res => {
+                            this.setState({
+                                arr1: res.data.balances
+                            }, () => {
+                                if (this.state.type == "") {
+                                    this.setState({
+                                        // type: res.data.balances[0].show_name,
+                                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
+                                        // address: res.data.balances[0].address
+                                    })
+                                }
+                            })
+                        })
+                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(res => {
+                            if (res.data) {
+                                this.setState({
+                                    arr2: res.data.balances
+                                }, () => {
+                                    let arr = this.state.arr1.concat(this.state.arr2)
+                                    let newArr = arr.concat(this.state.BTCBalances)
+                                    newArr.sort((a, b) => {
+                                        return b.balance - a.balance
+                                    })
+                                    let newArray = newArr.filter((item)=>{
+                                        let idList = this.state.currencies.map(v => v.name)
+                                        return idList.includes(item.name)
+                                    });
+                                    this.setState({
+                                        arr: newArray,
+                                        selData: newArray
+                                    }, () => {
+                                        if (this.state.type == "") {
+                                            this.setState({
+                                                index: Object.keys(this.state.selData)[0],
+                                                type: this.state.selData[0].show_name,
+                                                asset: this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                                                swap_in_name: this.state.selData[0].show_name
+
+                                            })
+                                        }
+                                    })
+                                })
+                            } else {
+                                let newArr = this.state.arr2.concat(this.state.BTCBalances)
+                                newArr.sort((a, b) => {
+                                    return b.balance - a.balance
+                                })
+                                this.setState({
+                                    arr: newArr,
+                                    selData: newArr
+                                }, () => {
+                                    if (this.state.type == "") {
+                                        this.setState({
+                                            index: Object.keys(this.state.selData)[0],
+                                            type: this.state.selData[0].show_name,
+                                            asset: this.state.selData[0].show_name == 'BTC' ? this.getFloat(this.state.selData[0].BTC / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                                            swap_in_name: this.state.selData[0].show_name
+
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                })
+            })
+
+    }
+    async getTyArgs(_module, _name) {
+        let address = '00000000000000000000000000000001';
+        let prefix = '07';
+        let suffix = '00';
+        let module_length = _module.length;
+        if (module_length < 10) {
+            module_length = '0' + module_length;
+        }
+        let _module_hex = bytes2StrHex(string2Byte(_module));
+        let name_length = _name.length;
+        if (name_length < 10) {
+            name_length = '0' + name_length;
+        }
+        let _name_hex = bytes2StrHex(string2Byte(_name));
+        let result = prefix + address + module_length + _module_hex + name_length + _name_hex + suffix;
+        return result;
+    }
+    async getCrossChainInfo() {
+        axios('https://api4.violas.io/1.0/market/exchange/crosschain/address/info')
+            .then(async res => {
+                await this.setState({ crossChainInfo: res.data.data })
+            })
+    }
+    async getBytePath(arr) {
+        let result = [];
+        for (let i in arr) {
+            result.push(int2Byte(arr[i]))
+        }
+        return result
+    }
+    async getSwapType(_temp) {
+        if (_temp === 'BTC') {
+            return 'btc';
+        } else {
+            for (let j in this.state.currenciesWithType.libra) {
+                if (this.state.currenciesWithType.libra[j].name === _temp) {
+                    return 'libra';
+                }
+            }
+            for (let k in this.state.currenciesWithType.violas) {
+                if (this.state.currenciesWithType.violas[k].name === _temp) {
+                    return 'violas';
+                }
+            }
+        }
+    }
+    async before_getSwap(input_type, output_type) {
+        //change show name to name
+        for (let i in this.state.currencies) {
+            if (this.state.currencies[i].show_name === input_type) {
+                await this.setState({ swap_in_name: this.state.currencies[i].name })
+            }
+            if (this.state.currencies[i].show_name === output_type) {
+                await this.setState({ swap_out_name: this.state.currencies[i].name })
+            }
+        }
+        //get input type
+        await this.setState({ swap_in_type: await this.getSwapType(this.state.swap_in_name) })
+        //get output type
+        await this.setState({ swap_out_type: await this.getSwapType(this.state.swap_out_name) })
+        //get receiver address
+        for (let l in this.state.crossChainInfo) {
+            if (this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type) {
+                if (this.state.crossChainInfo[l].to_coin.assets.name === this.state.swap_out_name) {
+                    // console.log(l, this.state.crossChainInfo[l].input_coin_type, this.state.crossChainInfo[l].to_coin.assets.name)
+                    await this.setState({ swap_address: this.state.crossChainInfo[l].receiver_address });
+                    break;
+                }
+            }
+        }
+    }
+    async orderCurrencies(type, input_a, input_b) {
+        let index_a, index_b;
+        let amount_a, amount_b = 0;
+
+        for (let i = 0; i < this.state.violas_currencies.length; i++) {
+            if (this.state.violas_currencies[i].show_name == input_a) {
+                index_a = i;
+            }
+            if (this.state.violas_currencies[i].show_name == input_b) {
+                index_b = i;
+            }
+        }
+        if (index_a > index_b) {
+            let temp = index_a;
+            index_a = index_b;
+            index_b = temp;
+            amount_a = this.state.addLiquidityTrial;
+            amount_b = this.state.input_a_amount;
+        } else {
+            amount_a = this.state.input_a_amount;
+            amount_b = this.state.addLiquidityTrial;
+        }
+        if (type === 'add_liquidity') {
+            await this.setState({
+                AddLiquidity: {
+                    coin_a: this.state.violas_currencies[index_a].show_name,
+                    coin_a_amount: parseInt(amount_a),
+                    coin_a_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_b: this.state.violas_currencies[index_b].show_name,
+                    coin_b_amount: parseInt(amount_b),
+                    coin_b_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                }
+            })
+        } else if (type == 'uniswap') {
+            await this.setState({
+                uniswap: {
+                    coin_a: this.state.violas_currencies[index_a].show_name,
+                    coin_a_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_b: this.state.violas_currencies[index_b].show_name,
+                    coin_b_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                }
+            })
+            console.log(this.state.uniswap,'swap')
+        }
+    }
+    //violas兑换
+    async getUniswap(chainId) {
+        await this.orderCurrencies('uniswap', this.state.swap_in_name, this.state.swap_out_name);
+        console.log(this.state.uniswap, '........')
+
+        // return {
+        //     from: localStorage.getItem('address'),
+        //     payload: {
+        //         code: code_data.violas.swap,
+        //         tyArgs: [
+        //             this.state.uniswap.coin_a_tyArgs,
+        //             this.state.uniswap.coin_b_tyArgs
+        //         ],
+        //         args: [
+        //             {
+        //                 type: 'Address',
+        //                 value: localStorage.getItem('address')
+        //             },
+        //             {
+        //                 type: 'U64',
+        //                 value: '' + this.state.inputAmount
+        //             },
+        //             {
+        //                 type: 'U64',
+        //                 value: '10'
+        //             },
+        //             {
+        //                 type: 'Vector',
+        //                 value: await bytes2StrHex(await this.getBytePath(this.state.swap_trial.path))
+        //             },
+        //             {
+        //                 type: 'Vector',
+        //                 value: ''
+        //             }
+        //         ]
+        //     },
+        //     chainId: chainId
+        // }
+    }
+    async getBitcoinScript(_type, _payee_address, _amount) {
+        let op_return_head = '6a';
+        let data_length = '3c';
+        let mark = code_data.btc.violas_mark;
+        let version = code_data.btc.version;
+        let type = '';
+        for (let key in code_data.btc.type.start) {
+            if (key === _type) {
+                type = code_data.btc.type.start[key];
+                break;
+            }
+        }
+        let payee_address = _payee_address;
+        let sequence = await this.fullWith16(getTimestamp);
+        console.log('sequence ', sequence)
+        let module_address = code_data.btc.violas_module_address;
+        let amount = await this.fullWith16(_amount);
+        let time = '0000';
+        return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
+    }
+    async getBitcoinSwap() {
+        return {
+            from: this.state.BTCAddress,
+            amount: this.state.inputAmount,
+            changeAddress: this.state.BTCAddress,
+            payeeAddress: this.state.swap_address,
+            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.data.amount)
+        }
+    }
+    async getLibraScript(_flag, _type, _type_list, _address, _amount) {
+        let flag = _flag;
+        let type = '';
+        for (let key in _type_list) {
+            if (key === _type) {
+                type = _type_list[key];
+                break;
+            }
+        }
+        // console.log(_type)
+        let to_address = '00000000000000000000000000000000' + _address;
+        let result = {
+            flag: flag,
+            type: type,
+            times: 0,
+            to_address: to_address,
+            out_amount: _amount,
+            state: 'start'
+        }
+        console.log('script ', result)
+        return JSON.stringify(result);
+    }
+    async getLibraSwap(chainId) {
+        return {
+            from: sessionStorage.getItem('libra_address'),
+            payload: {
+                code: code_data.libra.p2p,
+                tyArgs: [
+                    {
+                        module: this.state.swap_in_name,
+                        address: code_data.btc.libra_module_address,
+                        name: this.state.swap_in_name
+                    }
+                ],
+                args: [
+                    {
+                        type: 'Address',
+                        value: this.state.swap_address
+                    },
+                    {
+                        type: 'U64',
+                        value: this.state.swap_in_amount
+                    },
+                    {
+                        type: 'Vector',
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_out, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+    }
+    async getViolas2otherSwap(chainId) {
+        return {
+            from: sessionStorage.getItem('violas_address'),
+            payload: {
+                code: code_data.violas.p2p,
+                tyArgs: [
+                    await this.getTyArgs(this.state.swap_in_name, this.state.swap_in_name)
+                ],
+                args: [
+                    {
+                        type: 'Address',
+                        value: this.state.swap_address
+                    },
+                    {
+                        type: 'U64',
+                        value: this.state.swap_in_amount
+                    },
+                    {
+                        type: 'Vector',
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, localStorage.getItem('address'), this.state.swap_trial.data.amount)))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
+                    }
+                ]
+            },
+            chainId: chainId
+        }
+    }
+    async getViolasSwap(_out_type, chainId) {
+        let tx;
+        if (_out_type === 'violas') {
+            tx = await this.getUniswap(chainId);
+        } else {
+            tx = await this.getViolas2otherSwap(chainId);
+        }
+        return tx;
+    }
+    //兑换
+    async getSwap(chainId) {
+        if (this.state.swap_in_type === 'btc') {
+            const tx = await this.getBitcoinSwap();
+            console.log('bitcoin swag', tx);
+            this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
+                console.log('Bitcoin Swap ', res);
+            }).catch(err => {
+                console.log('Bitcoin Swap ', err);
+            });
+        } else if (this.state.swap_in_type === 'libra') {
+            const tx = await this.getLibraSwap(chainId);
+            console.log('libra swag ', tx);
+            this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
+                console.log('Libra Swap ', res);
+            }).catch(err => {
+                console.log('Libra Swap ', err);
+            })
+        } else if (this.state.swap_in_type === 'violas') {
+            const tx = await this.getViolasSwap(this.state.swap_out_type, chainId);
+            console.log('violas swag ', tx);
+            this.state.walletConnector.sendTransaction('violas', tx).then(res => {
+                console.log('Violas Swap ', res);
+            }).catch(err => {
+                console.log('Violas Swag ', err);
+            })
+        }
+    }
     getFloat(number, n) {
         n = n ? parseInt(n) : 0;
         if (n <= 0) {
@@ -71,7 +492,7 @@ class ExChange extends Component {
     getExchangeRecode = () =>{
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-                // console.log(res,'.........')
+                console.log(res,'.........')
                 if(res.data){
                     this.setState({
                         changeRecord: res.data
@@ -94,6 +515,7 @@ class ExChange extends Component {
     }
     showMenu = (v,bal,i) => {
         this.setState({
+            swap_in_name:v,
             type: v,
             showMenuViolas: false,
             index:i
@@ -166,22 +588,27 @@ class ExChange extends Component {
     //获取input换算数量
     opinionInputAmount = () =>{
         if (this.state.inputAmount) {
+            this.before_getSwap(this.state.type, this.state.type1);
             fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.inputAmount + '&&currencyIn=' + this.state.type + '&&currencyOut=' + this.state.type1).then(res => res.json())
                 .then(res => {
                     if (res.data) {
                         this.setState({
+                            swap_trial:res.data,
                             outputAmount: res.data.amount
                         })
                     }
                 })
         }
     }
+    //获取output换算数量
     opinionOutputAmount = () =>{
         if (this.state.outputAmount) {
-            fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.outputAmount + '&&currencyIn=' + this.state.type1 + '&&currencyOut=' + this.state.type).then(res => res.json())
+            this.before_getSwap(this.state.type, this.state.type1);
+            fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.outputAmount + '&&currencyIn=' + this.state.type + '&&currencyOut=' + this.state.type1).then(res => res.json())
                 .then(res => {
                     if (res.data) {
                         this.setState({
+                            swap_trial: res.data,
                             inputAmount: res.data.amount
                         })
                     }
@@ -228,15 +655,18 @@ class ExChange extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (e.target.value > this.state.asset) {
-                this.setState({
-                    warning: '资金不足'
-                })
-            } else {
-                this.setState({
-                    warning: ''
-                })
+            if (this.state.asset1!='--'){
+                if (e.target.value > this.state.asset1) {
+                    this.setState({
+                        warning: '资金不足'
+                    })
+                } else {
+                    this.setState({
+                        warning: ''
+                    })
+                }
             }
+            
             this.setState({
                 outputAmount: e.target.value
             },()=>{
@@ -250,9 +680,11 @@ class ExChange extends Component {
             })
         }
     }
+    //点击兑换
     showExchangeCode = () => {
         if (this.state.inputAmount){
             if (this.state.outputAmount) {
+                this.getSwap(1)
                 this.setState({
                     warning: ''
                 }, () => {
@@ -281,11 +713,12 @@ class ExChange extends Component {
             visible: type
         })
     }
-    showTypes = (v, address, name,ind,bal) => {
+    showTypes = (v, address,ind,bal) => {
         
         this.setState({
             type1: v,
             ind:ind,
+            swap_out_name:v,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas1: false
@@ -315,83 +748,7 @@ class ExChange extends Component {
                 }
         })
     }
-    getBalances() {
-        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-            .then(res => {
-                this.setState({
-                    BTCBalances: res.data
-                }, () => {
-                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                        .then(res => {
-                            this.setState({
-                                arr1: res.data.balances
-                            }, () => {
-                                // this.state.arr1.map((v, i) => {
-                                //     if (v.show_name == 'LBR') {
-                                //         v.show_name = 'VLS'
-                                //     }
-                                // })
-                                if (this.state.type == "") {
-                                    this.setState({
-                                        // type: res.data.balances[0].show_name,
-                                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                                        // address: res.data.balances[0].address
-                                    })
-                                }
-                            })
-                        })
-                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                        .then(res => {
-                            if (res.data){
-
-                            this.setState({
-                                arr2: res.data.balances
-                            }, () => {
-                                let arr = this.state.arr1.concat(this.state.arr2)
-                                let newArr = arr.concat(this.state.BTCBalances)
-                                newArr.sort((a, b) => {
-                                    return b.balance - a.balance
-                                })
-                                this.setState({
-                                    arr: newArr,
-                                    selData:newArr
-                                },()=>{
-                                    if (this.state.type == "") {
-                                        console.log()
-                                        this.setState({
-                                            index: Object.keys(this.state.selData)[0],
-                                            type:this.state.selData[0].show_name,
-                                            asset: this.getFloat(this.state.selData[0].balance / 1e6,6)
-
-                                        })
-                                    }
-                                })
-                            })
-                            } else {
-                                let newArr = this.state.arr2.concat(this.state.BTCBalances)
-                                console.log(newArr,'.........')
-                                newArr.sort((a, b) => {
-                                    return b.balance - a.balance
-                                })
-                                this.setState({
-                                    arr: newArr,
-                                    selData: newArr
-                                }, () => {
-                                    if (this.state.type == "") {
-                                        this.setState({
-                                            index: Object.keys(this.state.selData)[0],
-                                            type: this.state.selData[0].show_name,
-                                            asset: this.state.selData[0].show_name == 'BTC' ? this.getFloat(this.state.selData[0].BTC / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6)
-
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                })
-            })
-
-    }
+    
     getSearchList = (e) => {
         if (e.target.value) {
             let arr = this.state.arr.filter(v => {
@@ -503,9 +860,9 @@ class ExChange extends Component {
                                                     arr.map((v, i) => {
                                                         return <div className="searchList" key={i} onClick={() => {
                                                             if (v.show_name == 'BTC'){
-                                                                this.showTypes(v.show_name, v.address, v.name, i,v.BTC)
+                                                                this.showTypes(v.show_name, v.address, i,v.BTC)
                                                             }else{
-                                                                this.showTypes(v.show_name, v.address, v.name, i, v.balance)
+                                                                this.showTypes(v.show_name, v.address, i, v.balance)
                                                             }
                                                             }
                                                         }>
