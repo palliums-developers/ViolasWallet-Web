@@ -45,12 +45,18 @@ class ExChange extends Component {
             swap_out_name:'',
             AddLiquidity:{},
             uniswap:{},
-            swap_trial:[]
+            swap_trial:[],
+            btc_currencies:[],
+            libra_currencies:[],
+            swap_address:'',
+            crossChainInfo:[]
+
         }
     }
     async componentWillMount(){
         await this.getMarketCurrencies()
         await this.getNewWalletConnect();
+        this.getCrossChainInfo();
     }
     async getNewWalletConnect() {
         await this.setState({
@@ -69,8 +75,6 @@ class ExChange extends Component {
                     if (v.coinType == 'bitcoin') {
                         this.setState({
                             BTCAddress: v.address
-                        }, () => {
-                                this.getBalances()
                         })
                     }
                 })
@@ -89,91 +93,95 @@ class ExChange extends Component {
                 this.setState({
                     currencies: temp,
                     violas_currencies: res.data.data.violas,
+                    libra_currencies: res.data.data.libra,
+                    btc_currencies: res.data.data.btc
                     // swap_in: temp[0].show_name,
                     // swap_out: temp[0].show_name
                 },()=>{
-                    this.getBalances()
-                });
-            })
-    }
-    //获取币种资产
-    getBalances() {
-
-        console.log(this.state.currencies,'.........')
-        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-            .then(res => {
-                this.setState({
-                    BTCBalances: res.data
-                }, () => {
-                    fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                        .then(res => {
-                            this.setState({
-                                arr1: res.data.balances
-                            }, () => {
-                                if (this.state.type == "") {
-                                    this.setState({
-                                        // type: res.data.balances[0].show_name,
-                                        coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                                        // address: res.data.balances[0].address
-                                    })
-                                }
-                            })
-                        })
-                    fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(res => {
+                        //获取violas币种的余额
+                        fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(async res => {
                             if (res.data) {
-                                this.setState({
-                                    arr2: res.data.balances
-                                }, () => {
-                                    let arr = this.state.arr1.concat(this.state.arr2)
-                                    let newArr = arr.concat(this.state.BTCBalances)
-                                    newArr.sort((a, b) => {
-                                        return b.balance - a.balance
-                                    })
-                                    let newArray = newArr.filter((item)=>{
-                                        let idList = this.state.currencies.map(v => v.name)
-                                        return idList.includes(item.name)
-                                    });
-                                    this.setState({
-                                        arr: newArray,
-                                        selData: newArray
-                                    }, () => {
-                                        if (this.state.type == "") {
-                                            this.setState({
-                                                index: Object.keys(this.state.selData)[0],
-                                                type: this.state.selData[0].show_name,
-                                                asset: this.getFloat(this.state.selData[0].balance / 1e6, 6),
-                                                swap_in_name: this.state.selData[0].show_name
-
-                                            })
+                                let arr = this.state.violas_currencies;
+                                for (let i = 0; i < arr.length; i++) {
+                                    for (let j = 0; j <= res.data.balances.length; j++) {
+                                        if (!res.data.balances[j]) {
+                                            arr[i].balance = 0;
+                                            break;
                                         }
-                                    })
+                                        else if (arr[i].name == res.data.balances[j].name) {
+                                            arr[i].balance = res.data.balances[j].balance;
+                                            break;
+                                        }
+                                    }
+                                }
+                                await this.setState({
+                                    violas_currencies:arr
                                 })
-                            } else {
-                                let newArr = this.state.arr2.concat(this.state.BTCBalances)
-                                newArr.sort((a, b) => {
-                                    return b.balance - a.balance
-                                })
+                            }
+
+                        })
+                        //获取libra币种的余额
+                        fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(res => {
+                            if (res.data) {
+                                let arr1 = this.state.libra_currencies;
+                                for (let i = 0; i < arr1.length; i++) {
+                                    for (let j = 0; j <= res.data.balances.length; j++) {
+                                        if (!res.data.balances[j]) {
+                                            arr1[i].balance = 0;
+                                            break;
+                                        }
+                                        else if (arr1[i].name == res.data.balances[j].name) {
+                                            arr1[i].balance = res.data.balances[j].balance;
+                                            break;
+                                        } 
+                                    }
+                                }
+                            }
+                        })
+                        //获取btc的余额
+                        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+                            .then(res => {
+                                if (res.data) {
+                                    this.state.btc_currencies[0].balance = res.data[0].BTC
+                                }
+
+                                let arr = this.state.violas_currencies.concat(this.state.libra_currencies)
+                                let newArr = arr.concat(this.state.btc_currencies)
+                                // console.log(newArr[0] && newArr[0].balance)
                                 this.setState({
                                     arr: newArr,
                                     selData: newArr
                                 }, () => {
-                                    if (this.state.type == "") {
-                                        this.setState({
-                                            index: Object.keys(this.state.selData)[0],
-                                            type: this.state.selData[0].show_name,
-                                            asset: this.state.selData[0].show_name == 'BTC' ? this.getFloat(this.state.selData[0].BTC / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
-                                            swap_in_name: this.state.selData[0].show_name
+                                    if (this.state.selData) {
+                                        if (this.state.type == "") {
+                                            this.setState({
+                                                index: Object.keys(this.state.selData)[0],
+                                                type: this.state.selData[0].show_name,
+                                                asset: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
+                                                swap_in_name: this.state.selData[0].show_name
 
-                                        })
+                                            },()=>{
+                                                    let arr = this.state.selData.filter(v=>{
+                                                        if(this.state.type != v.show_name){
+                                                           return v;
+                                                        }
+                                                    })
+                                                    this.setState({
+                                                        arr:arr
+                                                    })
+                                            })
+                                        }
                                     }
                                 })
-                            }
-                        })
+                            })
+
+                        
+
                 })
             })
-
     }
-    async getTyArgs(_module, _name) {
+    
+    getTyArgs(_module, _name) {
         let address = '00000000000000000000000000000001';
         let prefix = '07';
         let suffix = '00';
@@ -220,6 +228,7 @@ class ExChange extends Component {
         }
     }
     async before_getSwap(input_type, output_type) {
+        
         //change show name to name
         for (let i in this.state.currencies) {
             if (this.state.currencies[i].show_name === input_type) {
@@ -229,6 +238,7 @@ class ExChange extends Component {
                 await this.setState({ swap_out_name: this.state.currencies[i].name })
             }
         }
+       
         //get input type
         await this.setState({ swap_in_type: await this.getSwapType(this.state.swap_in_name) })
         //get output type
@@ -237,12 +247,24 @@ class ExChange extends Component {
         for (let l in this.state.crossChainInfo) {
             if (this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type) {
                 if (this.state.crossChainInfo[l].to_coin.assets.name === this.state.swap_out_name) {
+                    
                     // console.log(l, this.state.crossChainInfo[l].input_coin_type, this.state.crossChainInfo[l].to_coin.assets.name)
                     await this.setState({ swap_address: this.state.crossChainInfo[l].receiver_address });
                     break;
                 }
             }
         }
+    }
+    getPayeeAddress() {
+        let payee_address = '';
+        if (this.state.swap_out_type === 'violas') {
+            payee_address = sessionStorage.getItem('violas_address');
+        } else if (this.state.swap_out_type === 'libra') {
+            payee_address = sessionStorage.getItem('libra_address');
+        } else {
+            payee_address = sessionStorage.getItem('bitcoin_address')
+        }
+        return payee_address;
     }
     async orderCurrencies(type, input_a, input_b) {
         let index_a, index_b;
@@ -278,55 +300,54 @@ class ExChange extends Component {
                 }
             })
         } else if (type == 'uniswap') {
+            
             await this.setState({
                 uniswap: {
                     coin_a: this.state.violas_currencies[index_a].show_name,
-                    coin_a_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_a_tyArgs: this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
                     coin_b: this.state.violas_currencies[index_b].show_name,
-                    coin_b_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                    coin_b_tyArgs: this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
                 }
             })
-            console.log(this.state.uniswap,'swap')
         }
     }
     //violas兑换
     async getUniswap(chainId) {
         await this.orderCurrencies('uniswap', this.state.swap_in_name, this.state.swap_out_name);
-        console.log(this.state.uniswap, '........')
 
-        // return {
-        //     from: localStorage.getItem('address'),
-        //     payload: {
-        //         code: code_data.violas.swap,
-        //         tyArgs: [
-        //             this.state.uniswap.coin_a_tyArgs,
-        //             this.state.uniswap.coin_b_tyArgs
-        //         ],
-        //         args: [
-        //             {
-        //                 type: 'Address',
-        //                 value: localStorage.getItem('address')
-        //             },
-        //             {
-        //                 type: 'U64',
-        //                 value: '' + this.state.inputAmount
-        //             },
-        //             {
-        //                 type: 'U64',
-        //                 value: '10'
-        //             },
-        //             {
-        //                 type: 'Vector',
-        //                 value: await bytes2StrHex(await this.getBytePath(this.state.swap_trial.path))
-        //             },
-        //             {
-        //                 type: 'Vector',
-        //                 value: ''
-        //             }
-        //         ]
-        //     },
-        //     chainId: chainId
-        // }
+        return {
+            from: localStorage.getItem('address'),
+            payload: {
+                code: code_data.violas.swap,
+                tyArgs: [
+                    this.state.uniswap.coin_a_tyArgs,
+                    this.state.uniswap.coin_b_tyArgs
+                ],
+                args: [
+                    {
+                        type: 'Address',
+                        value: localStorage.getItem('address')
+                    },
+                    {
+                        type: 'U64',
+                        value: '' + (parseInt(this.state.inputAmount) * 1e6)
+                    },
+                    {
+                        type: 'U64',
+                        value: '10'
+                    },
+                    {
+                        type: 'Vector',
+                        value: await bytes2StrHex(await this.getBytePath(this.state.swap_trial.path))
+                    },
+                    {
+                        type: 'Vector',
+                        value: ''
+                    }
+                ]
+            },
+            chainId: chainId
+        }
     }
     async getBitcoinScript(_type, _payee_address, _amount) {
         let op_return_head = '6a';
@@ -342,7 +363,7 @@ class ExChange extends Component {
         }
         let payee_address = _payee_address;
         let sequence = await this.fullWith16(getTimestamp);
-        console.log('sequence ', sequence)
+        // console.log('sequence ', sequence)
         let module_address = code_data.btc.violas_module_address;
         let amount = await this.fullWith16(_amount);
         let time = '0000';
@@ -351,12 +372,13 @@ class ExChange extends Component {
     async getBitcoinSwap() {
         return {
             from: this.state.BTCAddress,
-            amount: this.state.inputAmount,
+            amount: '' + this.state.inputAmount,
             changeAddress: this.state.BTCAddress,
             payeeAddress: this.state.swap_address,
-            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.data.amount)
+            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.amount)
         }
     }
+    //libra兑换
     async getLibraScript(_flag, _type, _type_list, _address, _amount) {
         let flag = _flag;
         let type = '';
@@ -376,12 +398,12 @@ class ExChange extends Component {
             out_amount: _amount,
             state: 'start'
         }
-        console.log('script ', result)
+        // console.log('script ', result)
         return JSON.stringify(result);
     }
     async getLibraSwap(chainId) {
         return {
-            from: sessionStorage.getItem('libra_address'),
+            from: localStorage.getItem('address'),
             payload: {
                 code: code_data.libra.p2p,
                 tyArgs: [
@@ -398,11 +420,11 @@ class ExChange extends Component {
                     },
                     {
                         type: 'U64',
-                        value: this.state.swap_in_amount
+                        value: ''+this.state.inputAmount
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_out, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.type1, code_data.libra.type.start, localStorage.getItem('address'), this.state.swap_trial.amount)))
                     },
                     {
                         type: 'Vector',
@@ -413,9 +435,10 @@ class ExChange extends Component {
             chainId: chainId
         }
     }
+    //violas链兑换其他测试链的币种
     async getViolas2otherSwap(chainId) {
         return {
-            from: sessionStorage.getItem('violas_address'),
+            from: localStorage.getItem('address'),
             payload: {
                 code: code_data.violas.p2p,
                 tyArgs: [
@@ -428,11 +451,11 @@ class ExChange extends Component {
                     },
                     {
                         type: 'U64',
-                        value: this.state.swap_in_amount
+                        value: ''+this.state.inputAmount
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, localStorage.getItem('address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, localStorage.getItem('address'), this.state.swap_trial.amount)))
                     },
                     {
                         type: 'Vector',
@@ -456,7 +479,7 @@ class ExChange extends Component {
     async getSwap(chainId) {
         if (this.state.swap_in_type === 'btc') {
             const tx = await this.getBitcoinSwap();
-            console.log('bitcoin swag', tx);
+            console.log('bitcoin swap', tx);
             this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
             }).catch(err => {
@@ -464,7 +487,7 @@ class ExChange extends Component {
             });
         } else if (this.state.swap_in_type === 'libra') {
             const tx = await this.getLibraSwap(chainId);
-            console.log('libra swag ', tx);
+            console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
             }).catch(err => {
@@ -492,7 +515,6 @@ class ExChange extends Component {
     getExchangeRecode = () =>{
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-                console.log(res,'.........')
                 if(res.data){
                     this.setState({
                         changeRecord: res.data
@@ -522,6 +544,14 @@ class ExChange extends Component {
         },()=>{
                 this.opinionInputAmount()
                 this.opinionOutputAmount() 
+                let arr = this.state.selData.filter(v => {
+                    if (this.state.type != v.show_name) {
+                        return v;
+                    }
+                })
+                this.setState({
+                    arr: arr
+                })
                 if (this.state.type == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -609,7 +639,7 @@ class ExChange extends Component {
                     if (res.data) {
                         this.setState({
                             swap_trial: res.data,
-                            inputAmount: res.data.amount
+                            inputAmount: this.getFloat(this.state.outputAmount * res.data.rate,6)
                         })
                     }
                 })
@@ -684,7 +714,7 @@ class ExChange extends Component {
     showExchangeCode = () => {
         if (this.state.inputAmount){
             if (this.state.outputAmount) {
-                this.getSwap(1)
+                this.getSwap(2)
                 this.setState({
                     warning: ''
                 }, () => {
@@ -723,8 +753,18 @@ class ExChange extends Component {
             // address: address,
             showMenuViolas1: false
         },()=>{
+            //换算
             this.opinionInputAmount()
-            this.opinionOutputAmount()  
+            this.opinionOutputAmount() 
+            //判断 
+            let selData = this.state.arr.filter(v => {
+                    if (this.state.type1 != v.show_name) {
+                        return v;
+                    }
+                })
+                this.setState({
+                    selData: selData
+                })
                 if (this.state.type1 == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -867,7 +907,7 @@ class ExChange extends Component {
                                                             }
                                                         }>
                                                             <div className="searchEvery">
-                                                                <img src={v.show_icon} />
+                                                                <img src={v.icon} />
                                                                 <div className="searchEvery1">
                                                                     <div>
                                                                         <h4>{v.show_name}</h4>
