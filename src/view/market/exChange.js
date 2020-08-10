@@ -98,89 +98,91 @@ class ExChange extends Component {
                     // swap_in: temp[0].show_name,
                     // swap_out: temp[0].show_name
                 },()=>{
-                        //获取violas币种的余额
-                        fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(async res => {
-                            if (res.data) {
-                                let arr = this.state.violas_currencies;
-                                for (let i = 0; i < arr.length; i++) {
-                                    for (let j = 0; j <= res.data.balances.length; j++) {
-                                        if (!res.data.balances[j]) {
-                                            arr[i].balance = 0;
-                                            break;
-                                        }
-                                        else if (arr[i].name == res.data.balances[j].name) {
-                                            arr[i].balance = res.data.balances[j].balance;
-                                            break;
-                                        }
-                                    }
-                                }
-                                await this.setState({
-                                    violas_currencies:arr
-                                })
-                            }
-
-                        })
-                        //获取libra币种的余额
-                        fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(res => {
-                            if (res.data) {
-                                let arr1 = this.state.libra_currencies;
-                                for (let i = 0; i < arr1.length; i++) {
-                                    for (let j = 0; j <= res.data.balances.length; j++) {
-                                        if (!res.data.balances[j]) {
-                                            arr1[i].balance = 0;
-                                            break;
-                                        }
-                                        else if (arr1[i].name == res.data.balances[j].name) {
-                                            arr1[i].balance = res.data.balances[j].balance;
-                                            break;
-                                        } 
-                                    }
-                                }
-                            }
-                        })
-                        //获取btc的余额
-                        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-                            .then(res => {
-                                if (res.data) {
-                                    this.state.btc_currencies[0].balance = res.data[0].BTC
-                                }
-
-                                let arr = this.state.violas_currencies.concat(this.state.libra_currencies)
-                                let newArr = arr.concat(this.state.btc_currencies)
-                                // console.log(newArr[0] && newArr[0].balance)
-                                this.setState({
-                                    arr: newArr,
-                                    selData: newArr
-                                }, () => {
-                                    if (this.state.selData) {
-                                        if (this.state.type == "") {
-                                            this.setState({
-                                                index: Object.keys(this.state.selData)[0],
-                                                type: this.state.selData[0].show_name,
-                                                asset: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
-                                                swap_in_name: this.state.selData[0].show_name
-
-                                            },()=>{
-                                                    let arr = this.state.selData.filter(v=>{
-                                                        if(this.state.type != v.show_name){
-                                                           return v;
-                                                        }
-                                                    })
-                                                    this.setState({
-                                                        arr:arr
-                                                    })
-                                            })
-                                        }
-                                    }
-                                })
-                            })
-
+                    this.getBalances()
                         
-
                 })
             })
     }
-    
+    //获取余额
+    getBalances = () => {
+        //获取violas币种的余额
+        fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(async res => {
+            if (res.data) {
+                let arr = this.state.violas_currencies;
+                for (let i = 0; i < arr.length; i++) {
+                    for (let j = 0; j <= res.data.balances.length; j++) {
+                        if (!res.data.balances[j]) {
+                            arr[i].balance = 0;
+                            break;
+                        }
+                        else if (arr[i].name == res.data.balances[j].name) {
+                            arr[i].balance = res.data.balances[j].balance;
+                            break;
+                        }
+                    }
+                }
+                await this.setState({
+                    violas_currencies: arr
+                })
+            }
+
+        })
+        //获取libra币种的余额
+        fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                let arr1 = this.state.libra_currencies;
+                for (let i = 0; i < arr1.length; i++) {
+                    for (let j = 0; j <= res.data.balances.length; j++) {
+                        if (!res.data.balances[j]) {
+                            arr1[i].balance = 0;
+                            break;
+                        }
+                        else if (arr1[i].name == res.data.balances[j].name) {
+                            arr1[i].balance = res.data.balances[j].balance;
+                            break;
+                        }
+                    }
+                }
+            }
+        })
+        //获取btc的余额
+        fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.state.btc_currencies[0].balance = res.data[0].BTC
+                }
+
+                let arr = this.state.violas_currencies.concat(this.state.libra_currencies)
+                let newArr = arr.concat(this.state.btc_currencies)
+                // console.log(newArr[0] && newArr[0].balance)
+                this.setState({
+                    arr: newArr,
+                    selData: newArr
+                }, () => {
+                    if (this.state.selData) {
+                        if (this.state.type == "") {
+                            this.setState({
+                                index: Object.keys(this.state.selData)[0],
+                                type: this.state.selData[0].show_name,
+                                asset: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
+                                swap_in_name: this.state.selData[0].show_name
+
+                            }, () => {
+                                let arr = this.state.selData.filter(v => {
+                                    if (this.state.type != v.show_name) {
+                                        return v;
+                                    }
+                                })
+                                this.setState({
+                                    arr: arr
+                                })
+                            })
+                        }
+                    }
+                })
+            })
+
+    }
     getTyArgs(_module, _name) {
         let address = '00000000000000000000000000000001';
         let prefix = '07';
@@ -227,6 +229,7 @@ class ExChange extends Component {
             }
         }
     }
+    //兑换前
     async before_getSwap(input_type, output_type) {
         
         //change show name to name
@@ -349,6 +352,7 @@ class ExChange extends Component {
             chainId: chainId
         }
     }
+    //btc兑换
     async getBitcoinScript(_type, _payee_address, _amount) {
         let op_return_head = '6a';
         let data_length = '3c';
@@ -512,6 +516,7 @@ class ExChange extends Component {
         number = parseFloat(Number(number).toFixed(n)); //补足位数
         return number;
     }
+    //获取兑换记录
     getExchangeRecode = () =>{
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
@@ -535,6 +540,7 @@ class ExChange extends Component {
             showMenuViolas1: !this.state.showMenuViolas1
         })
     }
+    //输入选中的币种
     showMenu = (v,bal,i) => {
         this.setState({
             swap_in_name:v,
@@ -577,43 +583,6 @@ class ExChange extends Component {
         
         
     }
-    // closeMenu = () => {
-    //     this.setState({
-    //         getFocus: true,
-    //         getFocus1: false
-    //     })
-    // }
-    // stopPropagation(e) {
-    //     e.nativeEvent.stopImmediatePropagation();
-    // }
-    // getSelectTypes() {
-    //     fetch(url + "/1.0/violas/currency").then(res => res.json())
-    //         .then(res => {
-    //             let data = res.data.currencies
-    //             fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
-    //                 .then(res => {
-    //                     let data1=[];
-    //                     for (var i=0;i<data.length;i++) {
-    //                         for (var j = 0; j < res.data.published.length; j++) {
-    //                             if(data[i].show_name == res.data.published[j]){
-    //                                 //  console.log(data[i])
-    //                                 data1.push(data[i])
-    //                             }
-    //                         }
-    //                     }
-    //                     this.setState({
-    //                         selData: data1
-    //                     },()=>{
-    //                             if (this.state.type == "") {
-    //                                 this.setState({
-    //                                     type: this.state.selData[0].show_name,
-
-    //                                 })
-    //                             }
-    //                     })
-    //             })
-    //         })
-    // }
 
     //获取input换算数量
     opinionInputAmount = () =>{
@@ -645,6 +614,7 @@ class ExChange extends Component {
                 })
         }
     }
+    //输入框输入的金额
     getInputAmount = (e) =>{
       if (e.target.value){
           e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
@@ -676,6 +646,7 @@ class ExChange extends Component {
           })
       }
     }
+    //输出框输入的金额
     getOutputAmount = (e) => {
         if (e.target.value) {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
@@ -743,6 +714,7 @@ class ExChange extends Component {
             visible: type
         })
     }
+    //输出框选中的币种
     showTypes = (v, address,ind,bal) => {
         
         this.setState({
