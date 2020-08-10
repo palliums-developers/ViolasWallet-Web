@@ -156,8 +156,9 @@ class ExChange extends Component {
                 let newArr = arr.concat(this.state.btc_currencies)
                 // console.log(newArr[0] && newArr[0].balance)
                 this.setState({
-                    arr: newArr,
-                    selData: newArr
+                    selData: newArr,
+                    arr: newArr
+                    
                 }, () => {
                     if (this.state.selData) {
                         if (this.state.type == "") {
@@ -168,15 +169,18 @@ class ExChange extends Component {
                                 swap_in_name: this.state.selData[0].show_name
 
                             }, () => {
-                                let arr = this.state.selData.filter(v => {
-                                    if (this.state.type != v.show_name) {
-                                        return v;
-                                    }
-                                })
-                                this.setState({
-                                    arr: arr
-                                })
-                            })
+                                       //判断
+                                       let oldArr = this.state.arr;
+                                       let newArr = [];
+                                       oldArr.map((v) => {
+                                           if (this.state.type != v.show_name) {
+                                               newArr.push(v);
+                                           }
+                                       });
+                                       this.setState({
+                                         arr: newArr,
+                                       });
+                                     })
                         }
                     }
                 })
@@ -550,14 +554,16 @@ class ExChange extends Component {
         },()=>{
                 this.opinionInputAmount()
                 this.opinionOutputAmount() 
-                let arr = this.state.selData.filter(v => {
-                    if (this.state.type != v.show_name) {
-                        return v;
-                    }
-                })
+               
+                let oldArr = this.state.arr;
+                console.log(oldArr, "输入");
+                let newArr = oldArr.filter((v) => {
+                  return this.state.type1 != v.show_name;
+                });
+                console.log(oldArr, "输入");
                 this.setState({
-                    arr: arr
-                })
+                  arr: newArr,
+                });
                 if (this.state.type == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -729,35 +735,36 @@ class ExChange extends Component {
             this.opinionInputAmount()
             this.opinionOutputAmount() 
             //判断 
-            let selData = this.state.arr.filter(v => {
-                    if (this.state.type1 != v.show_name) {
-                        return v;
-                    }
-                })
-                this.setState({
-                    selData: selData
-                })
-                if (this.state.type1 == 'BTC') {
-                    if (bal == '0') {
-                        this.setState({
-                            asset1: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset1: this.getFloat(bal / 1e8, 6)
-                        })
-                    }
+            let oldArr = this.state.selData;
+            console.log(oldArr,'输出');
+            let newArr1 = oldArr.filter((v) => {
+              return this.state.type != v.show_name;
+            });
+            console.log(newArr1, "输出");
+            this.setState({
+              selData: newArr1,
+            });
+            if (this.state.type1 == 'BTC') {
+                if (bal == '0') {
+                    this.setState({
+                        asset1: '0.00'
+                    })
                 } else {
-                    if (bal == 0) {
-                        this.setState({
-                            asset1: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset1: this.getFloat(bal / 1e6, 6)
-                        })
-                    }
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e8, 6)
+                    })
                 }
+            } else {
+                if (bal == 0) {
+                    this.setState({
+                        asset1: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e6, 6)
+                    })
+                }
+            }
         })
     }
     
@@ -813,14 +820,7 @@ class ExChange extends Component {
                                                 <span
                                                 key={i}
                                                     className={i == index ? "active" : null}
-                                                onClick={() => {
-                                                    if (v.show_name == 'BTC'){
-                                                        this.showMenu(v.show_name, v.BTC,i)
-                                                    }else{
-                                                        this.showMenu(v.show_name, v.balance,i)
-                                                    }
-                                                    
-                                                }}
+                                                onClick={() =>  this.showMenu(v.show_name, v.balance,i)}
                                                 >
                                                 {v.show_name}
                                                 </span>
@@ -870,20 +870,14 @@ class ExChange extends Component {
                                                 </div>
                                                 {
                                                     arr.map((v, i) => {
-                                                        return <div className="searchList" key={i} onClick={() => {
-                                                            if (v.show_name == 'BTC'){
-                                                                this.showTypes(v.show_name, v.address, i,v.BTC)
-                                                            }else{
-                                                                this.showTypes(v.show_name, v.address, i, v.balance)
-                                                            }
-                                                            }
+                                                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, i, v.balance)
                                                         }>
                                                             <div className="searchEvery">
                                                                 <img src={v.icon} />
                                                                 <div className="searchEvery1">
                                                                     <div>
                                                                         <h4>{v.show_name}</h4>
-                                                                        <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                        <p>余额：{v.show_name == 'BTC' ? (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
                                                                     </div>
                                                                     <span className={ind == i ? 'check active' : 'check'}></span>
                                                                 </div>
