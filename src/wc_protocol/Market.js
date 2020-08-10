@@ -179,7 +179,7 @@ class Market extends React.Component {
             }
         }
         // console.log(_type)
-        let to_address = '00000000000000000000000000000000' + _address;
+        let to_address = _address;
         let result = {
             flag: flag,
             type: type,
@@ -295,7 +295,16 @@ class Market extends React.Component {
             script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.data.amount)
         }
     }
-    async getLibraSwap(chainId) {
+    async getLibraSwap(out_type, chainId) {
+        let address_temp = '';
+        if (out_type === 'violas') {
+            address_temp = '00000000000000000000000000000000' + sessionStorage.getItem('violas_address');
+        } else if (out_type === 'btc') {
+            address_temp = sessionStorage.getItem('bitcoin_address');
+        } else {
+            console.log('Could not swap between libra');
+            return;
+        }
         return {
             from: sessionStorage.getItem('libra_address'),
             payload: {
@@ -318,7 +327,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_out, code_data.libra.type.start, sessionStorage.getItem('libra_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.swap_out, code_data.libra.type.start, address_temp, this.state.swap_trial.data.amount)))
                     },
                     {
                         type: 'Vector',
@@ -329,7 +338,13 @@ class Market extends React.Component {
             chainId: chainId
         }
     }
-    async getViolas2otherSwap(chainId) {
+    async getViolas2otherSwap(out_type, chainId) {
+        let address_temp = '';
+        if (out_type === 'libra') {
+            address_temp = '00000000000000000000000000000000' + sessionStorage.getItem('libra_address');
+        } else if (out_type === 'btc') {
+            address_temp = sessionStorage.getItem('bitcoin_address');
+        }
         return {
             from: sessionStorage.getItem('violas_address'),
             payload: {
@@ -348,7 +363,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, sessionStorage.getItem('violas_address'), this.state.swap_trial.data.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, address_temp, this.state.swap_trial.data.amount)))
                     },
                     {
                         type: 'Vector',
@@ -383,7 +398,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'U64',
-                        value: ''+this.state.swap_in_amount
+                        value: '' + this.state.swap_in_amount
                     },
                     {
                         type: 'U64',
@@ -407,22 +422,22 @@ class Market extends React.Component {
         if (_out_type === 'violas') {
             tx = await this.getUniswap(chainId);
         } else {
-            tx = await this.getViolas2otherSwap(chainId);
+            tx = await this.getViolas2otherSwap(_out_type, chainId);
         }
         return tx;
     }
     async getSwap(chainId) {
         if (this.state.swap_in_type === 'btc') {
             const tx = await this.getBitcoinSwap();
-            console.log('bitcoin swag', tx);
+            console.log('bitcoin Swap', tx);
             this.props.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
             }).catch(err => {
                 console.log('Bitcoin Swap ', err);
             });
         } else if (this.state.swap_in_type === 'libra') {
-            const tx = await this.getLibraSwap(chainId);
-            console.log('libra swag ', tx);
+            const tx = await this.getLibraSwap(this.state.swap_out_type, chainId);
+            console.log('libra Swap ', tx);
             this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
             }).catch(err => {
@@ -430,11 +445,11 @@ class Market extends React.Component {
             })
         } else if (this.state.swap_in_type === 'violas') {
             const tx = await this.getViolasSwap(this.state.swap_out_type, chainId);
-            console.log('violas swag ', tx);
+            console.log('violas Swap ', tx);
             this.props.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
             }).catch(err => {
-                console.log('Violas Swag ', err);
+                console.log('Violas Swap ', err);
             })
         }
     }
