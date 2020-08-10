@@ -7,6 +7,7 @@ let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
 let names = []
 
+//添加币种
 class AddCurrency extends Component {
   constructor(props) {
     super();

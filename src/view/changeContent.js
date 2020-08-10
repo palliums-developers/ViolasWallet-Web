@@ -4,6 +4,7 @@ import RouterView from '../router/routerView'
 import './market/market.scss'
 let url = "http://52.27.228.84:4000"
 
+//市场首页
 class ChangeContent extends Component {
     constructor() {
         super()

@@ -8,6 +8,7 @@ import '../app.scss';
 // let url = 'https://api.violas.io'
 let url = "https://api4.violas.io"
 
+//币种详情
 class CurrencyDetail extends Component {
     constructor(props) {
         super(props);

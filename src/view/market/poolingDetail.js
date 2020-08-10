@@ -3,6 +3,7 @@ import "./market.scss";
 import { connect } from 'react-redux';
 import { timeStamp2String } from '../../utils/timer';
 
+//资金池详情
 class PoolingDetail extends Component {
     constructor(props) {
         super()

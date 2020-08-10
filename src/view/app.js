@@ -6,6 +6,7 @@ import "./app.scss";
 import QRCode from "qrcode.react"
 let url = "https://api4.violas.io"
 
+//登录页面
 class App extends Component {
   constructor() {
     super();

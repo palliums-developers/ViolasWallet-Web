@@ -6,10 +6,10 @@ import { Drawer } from "antd";
 import AddCurrency from "./components/addCurrency";
 import ExchangeDialog from './market/exchangeDialog'
 import MyPoolDialog from './market/myPoolDialog'
-
 import WalletConnect from "../packages/browser/src/index";
 let url = "https://api.violas.io";
 
+//首页 包括左侧栏，头部我的
 class Home extends Component {
   constructor(props) {
     super();
@@ -113,10 +113,10 @@ class Home extends Component {
                   active == "homeContent"
                     ? "active"
                     : active == "transfer"
-                      ? "active"
-                      : active == "getMoney"
-                        ? "active"
-                        : null
+                    ? "active"
+                    : active == "getMoney"
+                    ? "active"
+                    : null
                 }
               >
                 <i
@@ -145,7 +145,7 @@ class Home extends Component {
                   className="noMar"
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
-                <label>市场</label> 
+                <label>市场</label>
               </span>
               <span
                 onClick={() => {
@@ -157,7 +157,7 @@ class Home extends Component {
               >
                 <i
                   className="noBank"
-                // className={active == "changeContent" ? "mar" : "noMar"}
+                  // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
                 <label>数字银行</label>
               </span>
@@ -175,11 +175,11 @@ class Home extends Component {
                     src="/img/wode备份 3@2x.png"
                   />
                 ) : (
-                    <img
-                      onClick={(e) => this.getMineDialog(e)}
-                      src="/img/wode备份 2@2x.png"
-                    />
-                  )}
+                  <img
+                    onClick={(e) => this.getMineDialog(e)}
+                    src="/img/wode备份 2@2x.png"
+                  />
+                )}
                 {showMineDialog ? (
                   <div className="mineList">
                     <div className="balanceList">
@@ -189,43 +189,57 @@ class Home extends Component {
                           this.props.history.push("/homepage/home");
                         }}
                       >
-                        <label>Total assets($)</label>
-                        <span>{window.sessionStorage.getItem('balances') && this.getFloat(window.sessionStorage.getItem('balances'),2)}</span>
+                        <label>总资产($)</label>
+                        <span>
+                          {window.sessionStorage.getItem("balances") &&
+                            this.getFloat(
+                              window.sessionStorage.getItem("balances"),
+                              2
+                            )}
+                        </span>
                       </div>
                       <div className="icon">
                         <img src="/img/Combined Shape 2@2x.png" />
                       </div>
                     </div>
                     <div className="btns">
-                      <dl onClick={() => {
-                        this.props.history.push({
-                          pathname: '/homepage/home/transfer'
-                        })
-                        
-                      }} className={active == 'transfer' ? 'act' : null}>
+                      <dl
+                        onClick={() => {
+                          this.props.history.push({
+                            pathname: "/homepage/home/transfer",
+                          });
+                        }}
+                        className={active == "transfer" ? "act" : null}
+                      >
                         <dt>
                           <img src="/img/编组 13备份 4@2x.png" />
                         </dt>
-                        <dd>Transfer</dd>
+                        <dd>转账</dd>
                       </dl>
-                      <dl onClick={() => {
-                        this.props.history.push({
-                          pathname: '/homepage/home/getMoney'
-                        })
-                      }} className={active == 'getMoney' ? 'act' : null}>
+                      <dl
+                        onClick={() => {
+                          this.props.history.push({
+                            pathname: "/homepage/home/getMoney",
+                          });
+                        }}
+                        className={active == "getMoney" ? "act" : null}
+                      >
                         <dt>
                           <img src="/img/编组 13备份 5@2x.png" />
                         </dt>
-                        <dd>Receive</dd>
+                        <dd>收款</dd>
                       </dl>
+                     
                     </div>
-                    <p onClick={() => this.logout()}><img src="/img/tuichu 2@2x.png"/>Log out</p>
+                    <p onClick={() => this.logout()}>
+                      <img src="/img/tuichu 2@2x.png" />
+                      退出
+                    </p>
                   </div>
                 ) : null}
               </div>
               {/* <span>Download</span> */}
             </div>
-            
           </div>
           <RouterView routes={routes}></RouterView>
         </div>
@@ -241,7 +255,7 @@ class Home extends Component {
         >
           <AddCurrency></AddCurrency>
         </Drawer>
-        
+
         {/* 我的资金池 */}
         <Drawer
           // title="Basic Drawer"
@@ -254,7 +268,6 @@ class Home extends Component {
         >
           <MyPoolDialog></MyPoolDialog>
         </Drawer>
-        
       </div>
     );
   }

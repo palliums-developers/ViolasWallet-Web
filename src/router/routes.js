@@ -8,6 +8,7 @@ import GetMoney from "../view/apply/getMoney";
 import Exchange from '../view/market/exChange';
 import CashPooling from '../view/market/cashPooling';
 import DigitalBank from "../view/digitalBank";
+import Mapping from '../view/digitalBank/mapping'
 
 let routes = [
     //首页
@@ -48,7 +49,13 @@ let routes = [
                     },
                     {
                         path: '/homepage/home/digitalBank',
-                        component: DigitalBank
+                        component: DigitalBank,
+                        children:[
+                            {
+                                path: '/homepage/home/digitalBank/mapping',
+                                component: Mapping
+                            },
+                        ]
 
                     },
                     {

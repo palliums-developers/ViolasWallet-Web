@@ -3,6 +3,7 @@ import "./market.scss";
 import { connect } from 'react-redux';
 import { timeStamp2String } from '../../utils/timer';
 
+//兑换详情
 class ExchangeDetail extends Component {
     constructor(props) {
         super()

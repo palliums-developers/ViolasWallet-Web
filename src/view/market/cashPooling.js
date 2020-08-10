@@ -13,6 +13,8 @@ import WalletConnect from "../../packages/browser/src/index";
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
 let newArr = [];
+
+//资金池页面
 class CashPooling extends Component {
     constructor() {
         super()

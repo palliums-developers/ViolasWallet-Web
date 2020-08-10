@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import RouterView from '../router/routerView';
 import WalletConnect from "../packages/browser/src/index";
 import 'antd/dist/antd.css'
-
+//首页 首个路由
 class HomePage extends Component {
     constructor(props){
       super()

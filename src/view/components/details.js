@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { timeStamp2String1 } from '../../utils/timer1';
 // import { withRouter } from "react-router-dom";
 import '../app.scss'
+
+//点击每个币种进入到每个币种的详情
 class Details extends Component {
     constructor(props) {
         super();

@@ -1,0 +1,23 @@
+.mapping{
+    width: 100%;
+    height: 100%;
+    .ant-breadcrumb {
+        display: flex;
+        align-items: center;
+        margin-top: 63px;
+        margin-left: 60px;
+        
+        a{
+            font-size: 14px;
+            // color: #5C5C5C;
+            img{
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+            }
+        }
+        a:hover{
+            color: #5C5C5C;
+        }
+    }
+}

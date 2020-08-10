@@ -4,7 +4,7 @@ import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 let url = "https://api.violas.io";
-
+//收款
 class GetMoney extends Component {
     constructor(props){
       super()

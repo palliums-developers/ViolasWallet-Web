@@ -8,6 +8,7 @@ let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io"
 // let url1 = "https://tbtc1.trezor.io"
 
+//钱包首页
 class HomeContent extends Component {
     constructor(){
       super()
@@ -323,7 +324,7 @@ class HomeContent extends Component {
             <div className="content">
               <div className="contentWrap">
                 <div className="apply">
-                  <p>Total assets
+                  <p>总资产
                   <i>
                   {
                       visible ? <img onClick={()=>{
@@ -352,7 +353,7 @@ class HomeContent extends Component {
                       // this.props.showDetails(false);
                       }}>
                         <dt></dt>
-                        <dd>Transfer</dd>
+                        <dd>转账</dd>
                       </dl>
                       <dl onClick={() => {
                         this.props.history.push({
@@ -362,13 +363,21 @@ class HomeContent extends Component {
                       // this.props.showDetails(false);
                       }}>
                         <dt></dt>
-                        <dd>Receive</dd>
+                        <dd>收款</dd>
+                      </dl>
+                       <dl
+                        onClick={() => {
+                          this.props.history.push("/homepage/home/digitalBank/mapping");
+                        }}
+                      >
+                        <dt></dt>
+                        <dd>映射</dd>
                       </dl>
                     </div>
                   </div>
                 </div>
                 <div className="assetList">
-                <p><label>Funds</label><i onClick={() => {
+                <p><label>资产</label><i onClick={() => {
                   this.props.showPolling(!this.props.display);
                  
                 }}><img src="/img/编组 18@2x.png"/></i></p>

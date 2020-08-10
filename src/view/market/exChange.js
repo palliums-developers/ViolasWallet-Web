@@ -13,6 +13,7 @@ import code_data from '../../utils/code.json';
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
 
+//兑换页面
 class ExChange extends Component {
     constructor() {
         super()
@@ -394,7 +395,7 @@ class ExChange extends Component {
             }
         }
         // console.log(_type)
-        let to_address = '00000000000000000000000000000000' + _address;
+        let to_address = _address;
         let result = {
             flag: flag,
             type: type,
@@ -406,7 +407,16 @@ class ExChange extends Component {
         // console.log('script ', result)
         return JSON.stringify(result);
     }
-    async getLibraSwap(chainId) {
+    async getLibraSwap(out_type,chainId) {
+        let address_temp = '';
+        if (out_type === 'violas') {
+            address_temp = '00000000000000000000000000000000' + localStorage.getItem('address');
+        } else if (out_type === 'btc') {
+            address_temp = this.state.BTCAddress;
+        } else {
+            alert('Could not swap between libra');
+            return;
+        }
         return {
             from: localStorage.getItem('address'),
             payload: {
@@ -429,7 +439,7 @@ class ExChange extends Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.type1, code_data.libra.type.start, localStorage.getItem('address'), this.state.swap_trial.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('libra', this.state.type1, code_data.libra.type.start, address_temp, this.state.swap_trial.amount)))
                     },
                     {
                         type: 'Vector',
@@ -441,7 +451,13 @@ class ExChange extends Component {
         }
     }
     //violas链兑换其他测试链的币种
-    async getViolas2otherSwap(chainId) {
+    async getViolas2otherSwap(out_type,chainId) {
+         let address_temp = '';
+        if (out_type === 'libra') {
+            address_temp = '00000000000000000000000000000000' + localStorage.getItem('address');
+        } else if (out_type === 'btc') {
+            address_temp = this.state.BTCAddress;
+        }
         return {
             from: localStorage.getItem('address'),
             payload: {
@@ -460,7 +476,7 @@ class ExChange extends Component {
                     },
                     {
                         type: 'Vector',
-                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, localStorage.getItem('address'), this.state.swap_trial.amount)))
+                        value: await bytes2StrHex(string2Byte(await this.getLibraScript('violas', this.state.swap_out, code_data.violas.type.start, address_temp, this.state.swap_trial.amount)))
                     },
                     {
                         type: 'Vector',
@@ -476,7 +492,7 @@ class ExChange extends Component {
         if (_out_type === 'violas') {
             tx = await this.getUniswap(chainId);
         } else {
-            tx = await this.getViolas2otherSwap(chainId);
+            tx = await this.getViolas2otherSwap(_out_type,chainId);
         }
         return tx;
     }
@@ -487,24 +503,48 @@ class ExChange extends Component {
             console.log('bitcoin swap', tx);
             this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
+                if (res == 'success') {
+                    this.setState({
+                        warning:'兑换成功'
+                    })
+                }
             }).catch(err => {
                 console.log('Bitcoin Swap ', err);
+                 this.setState({
+                   warning: "兑换失败",
+                 });
             });
         } else if (this.state.swap_in_type === 'libra') {
-            const tx = await this.getLibraSwap(chainId);
+            const tx = await this.getLibraSwap(this.state.swap_out_type,chainId);
             console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
+                if (res == "success") {
+                  this.setState({
+                    warning: "兑换成功",
+                  });
+                }
             }).catch(err => {
                 console.log('Libra Swap ', err);
+                this.setState({
+                  warning: "兑换失败",
+                });
             })
         } else if (this.state.swap_in_type === 'violas') {
             const tx = await this.getViolasSwap(this.state.swap_out_type, chainId);
-            console.log('violas swag ', tx);
+            console.log('violas swap ', tx);
             this.state.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
+                if (res == "success") {
+                  this.setState({
+                    warning: "兑换成功",
+                  });
+                }
             }).catch(err => {
-                console.log('Violas Swag ', err);
+                console.log('Violas Swap ', err);
+                this.setState({
+                  warning: "兑换失败",
+                });
             })
         }
     }
