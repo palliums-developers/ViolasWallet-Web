@@ -20,40 +20,40 @@ class ExChange extends Component {
             bridge: 'https://walletconnect.violas.io',
             showMenuViolas: false,
             showMenuViolas1: false,
-            type:'',
-            type1:'选择通证',
+            type: '',
+            type1: '选择通证',
             getFocus: false,
             getFocus1: false,
-            inputAmount:'',
-            outputAmount:'',
-            warning:'',
-            visible:false,
-            selData:[],
-            changeRecord:[],
-            changeList:{},
+            inputAmount: '',
+            outputAmount: '',
+            warning: '',
+            visible: false,
+            selData: [],
+            changeRecord: [],
+            changeList: {},
             arr1: [],
             arr2: [],
             arr: [],
-            ind:-1,
-            index:-1,
+            ind: -1,
+            index: -1,
             asset: '--',
             asset1: '--',
-            currenciesWithType:[],
-            currencies:[],
-            violas_currencies:[],
-            swap_in_name:'',
-            swap_out_name:'',
-            AddLiquidity:{},
-            uniswap:{},
-            swap_trial:[],
-            btc_currencies:[],
-            libra_currencies:[],
-            swap_address:'',
-            crossChainInfo:[]
+            currenciesWithType: [],
+            currencies: [],
+            violas_currencies: [],
+            swap_in_name: '',
+            swap_out_name: '',
+            AddLiquidity: {},
+            uniswap: {},
+            swap_trial: [],
+            btc_currencies: [],
+            libra_currencies: [],
+            swap_address: '',
+            crossChainInfo: []
 
         }
     }
-    async componentWillMount(){
+    async componentWillMount() {
         await this.getMarketCurrencies()
         await this.getNewWalletConnect();
         this.getCrossChainInfo();
@@ -67,7 +67,7 @@ class ExChange extends Component {
         // document.addEventListener('click', this.closeMenu);
         // this.getSelectTypes()
         this.getExchangeRecode()
-        if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+        if (JSON.parse(window.localStorage.getItem("wallet_info"))) {
             this.setState({
                 addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
             }, () => {
@@ -80,7 +80,7 @@ class ExChange extends Component {
                 })
             });
         }
-        
+
     }
     //按链获取币种信息
     async getMarketCurrencies() {
@@ -97,9 +97,9 @@ class ExChange extends Component {
                     btc_currencies: res.data.data.btc
                     // swap_in: temp[0].show_name,
                     // swap_out: temp[0].show_name
-                },()=>{
+                }, () => {
                     this.getBalances()
-                        
+
                 })
             })
     }
@@ -157,6 +157,7 @@ class ExChange extends Component {
                 // console.log(newArr[0] && newArr[0].balance)
                 this.setState({
                     arr: newArr,
+                    arr1: newArr,
                     selData: newArr
                 }, () => {
                     if (this.state.selData) {
@@ -168,13 +169,13 @@ class ExChange extends Component {
                                 swap_in_name: this.state.selData[0].show_name
 
                             }, () => {
-                                let arr = this.state.selData.filter(v => {
+                                let arr1 = this.state.selData.filter(v => {
                                     if (this.state.type != v.show_name) {
                                         return v;
                                     }
                                 })
                                 this.setState({
-                                    arr: arr
+                                    arr1: arr1
                                 })
                             })
                         }
@@ -231,7 +232,7 @@ class ExChange extends Component {
     }
     //兑换前
     async before_getSwap(input_type, output_type) {
-        
+
         //change show name to name
         for (let i in this.state.currencies) {
             if (this.state.currencies[i].show_name === input_type) {
@@ -241,7 +242,7 @@ class ExChange extends Component {
                 await this.setState({ swap_out_name: this.state.currencies[i].name })
             }
         }
-       
+
         //get input type
         await this.setState({ swap_in_type: await this.getSwapType(this.state.swap_in_name) })
         //get output type
@@ -250,7 +251,7 @@ class ExChange extends Component {
         for (let l in this.state.crossChainInfo) {
             if (this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type) {
                 if (this.state.crossChainInfo[l].to_coin.assets.name === this.state.swap_out_name) {
-                    
+
                     // console.log(l, this.state.crossChainInfo[l].input_coin_type, this.state.crossChainInfo[l].to_coin.assets.name)
                     await this.setState({ swap_address: this.state.crossChainInfo[l].receiver_address });
                     break;
@@ -296,14 +297,14 @@ class ExChange extends Component {
                 AddLiquidity: {
                     coin_a: this.state.violas_currencies[index_a].show_name,
                     coin_a_amount: parseInt(amount_a),
-                    coin_a_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
+                    coin_a_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_a].module, this.state.violas_currencies[index_a].name),
                     coin_b: this.state.violas_currencies[index_b].show_name,
                     coin_b_amount: parseInt(amount_b),
-                    coin_b_tyArgs:await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
+                    coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
                 }
             })
         } else if (type == 'uniswap') {
-            
+
             await this.setState({
                 uniswap: {
                     coin_a: this.state.violas_currencies[index_a].show_name,
@@ -424,7 +425,7 @@ class ExChange extends Component {
                     },
                     {
                         type: 'U64',
-                        value: ''+this.state.inputAmount
+                        value: '' + this.state.inputAmount
                     },
                     {
                         type: 'Vector',
@@ -455,7 +456,7 @@ class ExChange extends Component {
                     },
                     {
                         type: 'U64',
-                        value: ''+this.state.inputAmount
+                        value: '' + this.state.inputAmount
                     },
                     {
                         type: 'Vector',
@@ -517,18 +518,18 @@ class ExChange extends Component {
         return number;
     }
     //获取兑换记录
-    getExchangeRecode = () =>{
+    getExchangeRecode = () => {
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-                if(res.data){
+                if (res.data) {
                     this.setState({
                         changeRecord: res.data
                     })
                 }
-               
+
             })
     }
-    getShow = (event) =>{
+    getShow = (event) => {
         // this.stopPropagation(event)
         this.setState({
             showMenuViolas: !this.state.showMenuViolas
@@ -541,58 +542,59 @@ class ExChange extends Component {
         })
     }
     //输入选中的币种
-    showMenu = (v,bal,i) => {
+    showMenu = (v, bal, i) => {
         this.setState({
-            swap_in_name:v,
+            swap_in_name: v,
             type: v,
             showMenuViolas: false,
-            index:i
-        },()=>{
-                this.opinionInputAmount()
-                this.opinionOutputAmount() 
-                let arr = this.state.selData.filter(v => {
-                    if (this.state.type != v.show_name) {
-                        return v;
-                    }
-                })
-                this.setState({
-                    arr: arr
-                })
-                if (this.state.type == 'BTC') {
-                    if (bal == '0') {
-                        this.setState({
-                            asset: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset: this.getFloat(bal / 1e8, 6)
-                        })
-                    }
-                } else {
-                    if (bal == 0) {
-                        this.setState({
-                            asset: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset: this.getFloat(bal / 1e6, 6)
-                        })
-                    }
+            index: i
+        }, async () => {
+            this.opinionInputAmount()
+            this.opinionOutputAmount()
+            let arr1 = this.state.selData.filter(v => {
+                if (this.state.type != v.show_name) {
+                    // console.log('arr: ',v.name)
+                    return v;
                 }
+            })
+            await this.setState({
+                arr1: arr1
+            })
+            if (this.state.type == 'BTC') {
+                if (bal == '0') {
+                    this.setState({
+                        asset: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            } else {
+                if (bal == 0) {
+                    this.setState({
+                        asset: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset: this.getFloat(bal / 1e6, 6)
+                    })
+                }
+            }
         })
-        
-        
+
+
     }
 
     //获取input换算数量
-    opinionInputAmount = () =>{
+    opinionInputAmount = () => {
         if (this.state.inputAmount) {
             this.before_getSwap(this.state.type, this.state.type1);
             fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.inputAmount + '&&currencyIn=' + this.state.type + '&&currencyOut=' + this.state.type1).then(res => res.json())
                 .then(res => {
                     if (res.data) {
                         this.setState({
-                            swap_trial:res.data,
+                            swap_trial: res.data,
                             outputAmount: res.data.amount
                         })
                     }
@@ -600,7 +602,7 @@ class ExChange extends Component {
         }
     }
     //获取output换算数量
-    opinionOutputAmount = () =>{
+    opinionOutputAmount = () => {
         if (this.state.outputAmount) {
             this.before_getSwap(this.state.type, this.state.type1);
             fetch(url1 + "/1.0/market/exchange/trial?amount=" + this.state.outputAmount + '&&currencyIn=' + this.state.type + '&&currencyOut=' + this.state.type1).then(res => res.json())
@@ -608,43 +610,43 @@ class ExChange extends Component {
                     if (res.data) {
                         this.setState({
                             swap_trial: res.data,
-                            inputAmount: this.getFloat(this.state.outputAmount * res.data.rate,6)
+                            inputAmount: this.getFloat(this.state.outputAmount * res.data.rate, 6)
                         })
                     }
                 })
         }
     }
     //输入框输入的金额
-    getInputAmount = (e) =>{
-      if (e.target.value){
-          e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
-          e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
-          e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-          e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
-          if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
-              e.target.value = parseFloat(e.target.value);
-          }
-        if (e.target.value>this.state.asset){
+    getInputAmount = (e) => {
+        if (e.target.value) {
+            e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
+            e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
+            e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+                e.target.value = parseFloat(e.target.value);
+            }
+            if (e.target.value > this.state.asset) {
+                this.setState({
+                    warning: '资金不足'
+                })
+            } else {
+                this.setState({
+                    warning: ''
+                })
+            }
             this.setState({
-                warning: '资金不足'
+                inputAmount: e.target.value
+            }, () => {
+                this.opinionInputAmount()
             })
-        }else{
+        } else {
             this.setState({
-                warning: ''
+                warning: '',
+                inputAmount: '',
+                outputAmount: ''
             })
         }
-         this.setState({
-             inputAmount: e.target.value
-         },()=>{
-            this.opinionInputAmount()
-         })
-      }else{
-          this.setState({
-              warning: '',
-              inputAmount:'',
-              outputAmount:''
-          })
-      }
     }
     //输出框输入的金额
     getOutputAmount = (e) => {
@@ -656,7 +658,7 @@ class ExChange extends Component {
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
-            if (this.state.asset1!='--'){
+            if (this.state.asset1 != '--') {
                 if (e.target.value > this.state.asset1) {
                     this.setState({
                         warning: '资金不足'
@@ -667,10 +669,10 @@ class ExChange extends Component {
                     })
                 }
             }
-            
+
             this.setState({
                 outputAmount: e.target.value
-            },()=>{
+            }, () => {
                 this.opinionOutputAmount()
             })
         } else {
@@ -683,7 +685,7 @@ class ExChange extends Component {
     }
     //点击兑换
     showExchangeCode = () => {
-        if (this.state.inputAmount){
+        if (this.state.inputAmount) {
             if (this.state.outputAmount) {
                 this.getSwap(2)
                 this.setState({
@@ -692,7 +694,7 @@ class ExChange extends Component {
                     this.props.showDialog()
                 })
 
-            } 
+            }
             else {
                 this.setState({
                     warning: '请输入兑换数量'
@@ -706,61 +708,70 @@ class ExChange extends Component {
     }
     onClose = () => {
         this.setState({
-            visible:false
+            visible: false
         })
     };
-    showDrawer = (type) =>{
+    showDrawer = (type) => {
         this.setState({
             visible: type
         })
     }
     //输出框选中的币种
-    showTypes = (v, address,ind,bal) => {
-        
+    showTypes = (v, address, ind, bal) => {
+
         this.setState({
             type1: v,
-            ind:ind,
-            swap_out_name:v,
+            ind: ind,
+            swap_out_name: v,
             // coinName: 'violas-' + name.toLowerCase(),
             // address: address,
             showMenuViolas1: false
-        },()=>{
+        }, async () => {
             //换算
             this.opinionInputAmount()
-            this.opinionOutputAmount() 
+            this.opinionOutputAmount()
             //判断 
-            let selData = this.state.arr.filter(v => {
-                    if (this.state.type1 != v.show_name) {
-                        return v;
-                    }
-                })
-                this.setState({
-                    selData: selData
-                })
-                if (this.state.type1 == 'BTC') {
-                    if (bal == '0') {
-                        this.setState({
-                            asset1: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset1: this.getFloat(bal / 1e8, 6)
-                        })
-                    }
-                } else {
-                    if (bal == 0) {
-                        this.setState({
-                            asset1: '0.00'
-                        })
-                    } else {
-                        this.setState({
-                            asset1: this.getFloat(bal / 1e6, 6)
-                        })
-                    }
+            // let selData = this.state.arr.filter(v => {
+            //     if (this.state.type1 != v.show_name) {
+            //         return v;
+            //     }
+            // })
+            // this.setState({
+            //     selData: selData
+            // })
+            let arr = this.state.selData.filter(v => {
+                if (this.state.type1 != v.show_name) {
+                    // console.log('arr: ',v.name)
+                    return v;
                 }
+            })
+            await this.setState({
+                arr: arr
+            })
+            if (this.state.type1 == 'BTC') {
+                if (bal == '0') {
+                    this.setState({
+                        asset1: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e8, 6)
+                    })
+                }
+            } else {
+                if (bal == 0) {
+                    this.setState({
+                        asset1: '0.00'
+                    })
+                } else {
+                    this.setState({
+                        asset1: this.getFloat(bal / 1e6, 6)
+                    })
+                }
+            }
         })
     }
-    
+
     getSearchList = (e) => {
         if (e.target.value) {
             let arr = this.state.arr.filter(v => {
@@ -777,58 +788,51 @@ class ExChange extends Component {
 
     }
     render() {
-        let { arr, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord,ind,index } = this.state;
+        let { arr, arr1, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord, ind, index } = this.state;
         // console.log(selData,'....')
         return (
             <div className="exchange">
-               <div className="exchangeContent">
+                <div className="exchangeContent">
                     <div className="exchangeContents">
-                      <div className="form">
-                        <p>gas：0.1000%</p>
-                        <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
-                           <div className="showAsset">
-                                <label>输入</label>
+                        <div className="form">
+                            <p>gas：0.1000%</p>
+                            <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
+                                <div className="showAsset">
+                                    <label>输入</label>
                                     <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{type}</p>
-                           </div>
-                           <div className="iptContent">
-                                    <input placeholder="0.00" value={this.state.inputAmount} onFocus={()=>{
+                                </div>
+                                <div className="iptContent">
+                                    <input placeholder="0.00" value={this.state.inputAmount} onFocus={() => {
                                         this.setState({
                                             getFocus: true,
-                                            getFocus1:false
+                                            getFocus1: false
                                         })
                                     }} onBlur={() => {
                                         this.setState({
                                             getFocus: false
                                         })
-                                    }} onChange={(e)=>this.getInputAmount(e)}/>
-                                <div className="dropdown1">
-                                    {
+                                    }} onChange={(e) => this.getInputAmount(e)} />
+                                    <div className="dropdown1">
+                                        {
                                             showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
-                                    }
-                                    {
-                                    showMenuViolas ? (
-                                        <div className="dropdown-content1">
-                                            {selData.map((v, i) => {
-                                            return (
-                                                <span
-                                                key={i}
-                                                    className={i == index ? "active" : null}
-                                                onClick={() => {
-                                                    if (v.show_name == 'BTC'){
-                                                        this.showMenu(v.show_name, v.BTC,i)
-                                                    }else{
-                                                        this.showMenu(v.show_name, v.balance,i)
-                                                    }
-                                                    
-                                                }}
-                                                >
-                                                {v.show_name}
-                                                </span>
-                                            );
-                                            })}
-                                        </div>
-                                        ) : null}
-                                    {/* {
+                                        }
+                                        {
+                                            showMenuViolas ? (
+                                                <div className="dropdown-content1">
+                                                    {arr.map((v, i) => {
+                                                        return (
+                                                            <span
+                                                                key={i}
+                                                                className={i == index ? "active" : null}
+                                                                onClick={() => this.showMenu(v.show_name, v.balance, i)}
+                                                            >
+                                                                {v.show_name}
+                                                            </span>
+                                                        );
+                                                    })}
+                                                </div>
+                                            ) : null}
+                                        {/* {
                                         showMenuViolas ? <div className='dropdown-content1'>
                                                 {
                                                     names.map((v, i) => {
@@ -838,10 +842,10 @@ class ExChange extends Component {
                                             </div> : null
                                     }
                                      */}
+                                    </div>
                                 </div>
-                           </div>
-                        </div>
-                        <div className="changeImg"><img src="/img/编组 2备份@2x.png"/></div>
+                            </div>
+                            <div className="changeImg"><img src="/img/编组 2备份@2x.png" /></div>
                             <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
                                 <div className="showAsset">
                                     <label>输出</label>
@@ -857,7 +861,7 @@ class ExChange extends Component {
                                         this.setState({
                                             getFocus1: false
                                         })
-                                    }} onChange={(e) => this.getOutputAmount(e)}/>
+                                    }} onChange={(e) => this.getOutputAmount(e)} />
                                     <div className="dropdown1">
                                         {
                                             showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
@@ -869,21 +873,15 @@ class ExChange extends Component {
                                                     <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
                                                 </div>
                                                 {
-                                                    arr.map((v, i) => {
-                                                        return <div className="searchList" key={i} onClick={() => {
-                                                            if (v.show_name == 'BTC'){
-                                                                this.showTypes(v.show_name, v.address, i,v.BTC)
-                                                            }else{
-                                                                this.showTypes(v.show_name, v.address, i, v.balance)
-                                                            }
-                                                            }
+                                                    arr1.map((v, i) => {
+                                                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, i, v.balance)
                                                         }>
                                                             <div className="searchEvery">
                                                                 <img src={v.icon} />
                                                                 <div className="searchEvery1">
                                                                     <div>
                                                                         <h4>{v.show_name}</h4>
-                                                                        <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                                                        <p>余额：{v.show_name == 'BTC' ? (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
                                                                     </div>
                                                                     <span className={ind == i ? 'check active' : 'check'}></span>
                                                                 </div>
@@ -895,17 +893,17 @@ class ExChange extends Component {
                                         }
                                         <div className='dropdown-content2'>
                                             <div className="search">
-                                                <i><img src="/img/sousuo 2@2x.png"/></i>
-                                                <input placeholder="搜索token"/>
+                                                <i><img src="/img/sousuo 2@2x.png" /></i>
+                                                <input placeholder="搜索token" />
                                             </div>
                                             <div className="searchLists">
-                                               <div className="searchList">
-                                                   <div className="img"><img /></div>
-                                                   <div className="listContent">
-                                                       <label>ETH</label>
-                                                       <p>余额：0 ETH</p>
-                                                   </div>
-                                               </div>
+                                                <div className="searchList">
+                                                    <div className="img"><img /></div>
+                                                    <div className="listContent">
+                                                        <label>ETH</label>
+                                                        <p>余额：0 ETH</p>
+                                                    </div>
+                                                </div>
                                                 <div className="searchList">
                                                     <div className="img"><img /></div>
                                                     <div className="listContent">
@@ -921,39 +919,39 @@ class ExChange extends Component {
                             </div>
                             <div className="changeRate">兑换率：—</div>
                             <div className="changeRate">矿工费用：—</div>
-                      </div>
-                      <div className="foot">
-                        <p className="btn" onClick={()=>this.showExchangeCode()}>兑换</p>
-                        <p className="descr">{warning}</p>
-                      </div>
-                      <div className="changeRecord">
-                        <h4>兑换记录</h4>
-                        <div className="changeLists">
-                        {
-                            changeRecord.map((v,i)=>{
-                                return <div className="changeList" key={i} onClick={() => {
-                                        this.setState({
-                                            visible: true,
-                                            changeList: v
-                                        })
-                                    }}>
-                                        <div className="list1">
-                                        <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i>重试</i>}</span>
-                                            <p>{v.input_amount}{v.input_name}</p>
+                        </div>
+                        <div className="foot">
+                            <p className="btn" onClick={() => this.showExchangeCode()}>兑换</p>
+                            <p className="descr">{warning}</p>
+                        </div>
+                        <div className="changeRecord">
+                            <h4>兑换记录</h4>
+                            <div className="changeLists">
+                                {
+                                    changeRecord.map((v, i) => {
+                                        return <div className="changeList" key={i} onClick={() => {
+                                            this.setState({
+                                                visible: true,
+                                                changeList: v
+                                            })
+                                        }}>
+                                            <div className="list1">
+                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i>重试</i>}</span>
+                                                <p>{v.input_amount}{v.input_name}</p>
+                                            </div>
+                                            <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
+                                            <div className="list2">
+                                                <span>{v.input_amount}{v.input_name}</span>
+                                                <p>{timeStamp2String(v.date + '000')}<i><img src="/img/rightArrow.png" /></i></p>
+                                            </div>
                                         </div>
-                                        <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
-                                        <div className="list2">
-                                            <span>{v.input_amount}{v.input_name}</span>
-                                            <p>{timeStamp2String(v.date+'000')}<i><img src="/img/rightArrow.png" /></i></p>
-                                        </div>
-                                    </div>
-                               
-                            })
-                        }
-                          </div>
-                      </div>
+
+                                    })
+                                }
+                            </div>
+                        </div>
                     </div>
-               </div>
+                </div>
                 {/* 兑换详情 */}
                 <Drawer
                     // title="Basic Drawer"
@@ -978,21 +976,21 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        showDialog: ()=>{
+        showDialog: () => {
             dispatch({
                 type: 'EXCHANGE',
                 params: {
                     type: true,
-                    vis:true
+                    vis: true
                 }
             })
-       },
-    //     showDrawer:(type) => {
-    //         dispatch({
-    //             type: 'VISIBLE',
-    //             payload: !type
-    //         })
-    //    },
+        },
+        //     showDrawer:(type) => {
+        //         dispatch({
+        //             type: 'VISIBLE',
+        //             payload: !type
+        //         })
+        //    },
         // showDrawer1: () => {
         //     dispatch({
         //         type: 'VISIBLE1',
@@ -1005,6 +1003,6 @@ let mapDispatchToProps = (dispatch) => {
         //         payload: false
         //     })
         // }
-}
+    }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ExChange);
