@@ -1667,11 +1667,12 @@ dd {
               display: flex;
               align-items: center;
               height: 68px;
-               cursor: pointer;
+              cursor: pointer;
               img{
                 width: 44px;
                 height: 44px;
                 margin-right: 10px;
+                border-radius: 10px;
               }
               .searchEvery1{
                 margin-top: 10px;

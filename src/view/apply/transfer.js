@@ -39,7 +39,8 @@ class Transfer extends Component {
       coinName:'',
       tranferDig:false,
       ind:0,
-      opinionType:''
+      opinionType:'',
+      BTCArr:[]
     };
   }
 
@@ -81,60 +82,60 @@ class Transfer extends Component {
   getTypesBalance(){
     fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
       .then(res => {
-        this.setState({
-         BTCArr: res.data
-        },()=>{
-            fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-              .then(res => {
-                if(res.data){
-                  this.setState({
-                    arr1: res.data.balances
-                  })
-                }
-              })
-            fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-              .then(res => {
-                if(res.data){
-                  this.setState({
-                    arr2: res.data.balances
-                  }, () => {
-                    let arr = this.state.arr1.concat(this.state.arr2)
-                    let arrs = arr.concat(this.state.BTCArr)
-                    this.setState({
-                      selData: arrs
-                    },()=>{
-                        if (this.state.type == "") {
-                          this.setState({
-                            type: this.state.selData[0].show_name,
-                            coinName: this.state.selData[0].name,
-                            balance: this.state.selData[0].balance,
-                            opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
-                          })
-                        }
-                    })
-                  })
-                }else{
-                  if (this.state.arr2){
-                    let arrs = this.state.arr2.concat(this.state.BTCArr)
-                    this.setState({
-                      selData: arrs
-                    }, () => {
-                      if (this.state.type == "") {
-                        this.setState({
-                          type: this.state.selData[0].show_name,
-                          coinName: this.state.selData[0].name,
-                          balance: this.state.selData[0].balance,
-                          opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
-                        })
-                      }
-                    })
-                  }
-                  
-                }
-                
-        })
-        
+        if(res.data){
+          this.setState({
+            BTCArr: res.data
+          })
+        }
       })
+    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+      .then(res => {
+        if (res.data) {
+          this.setState({
+            arr1: res.data.balances
+          })
+        }
+      })
+    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+      .then(res => {
+        if (res.data) {
+          this.setState({
+            arr2: res.data.balances
+          }, () => {
+            let arr = this.state.arr1.concat(this.state.arr2)
+            let arrs = arr.concat(this.state.BTCArr)
+            this.setState({
+              selData: arrs
+            }, () => {
+              if (this.state.type == "") {
+                this.setState({
+                  type: this.state.selData[0].show_name,
+                  coinName: this.state.selData[0].name,
+                  balance: this.state.selData[0].balance,
+                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                })
+              }
+            })
+          })
+        } else {
+          if (this.state.arr2) {
+            let arrs = this.state.arr2.concat(this.state.BTCArr)
+            this.setState({
+              selData: arrs
+            }, () => {
+              if (this.state.type == "") {
+                this.setState({
+                  type: this.state.selData[0].show_name,
+                  coinName: this.state.selData[0].name,
+                  balance: this.state.selData[0].balance,
+                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                })
+              }
+            })
+          }
+
+        }
+
       })
   }
   getTypeShow = (event) => {

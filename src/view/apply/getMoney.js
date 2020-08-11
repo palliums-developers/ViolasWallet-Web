@@ -4,6 +4,7 @@ import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 let url = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
 //收款
 class GetMoney extends Component {
     constructor(props){
@@ -81,16 +82,8 @@ class GetMoney extends Component {
       // }
       
     }
-    // getNewArray = ()=>{
-    //   let wallet_info = JSON.parse(window.localStorage.getItem('wallet_info'));
-    //   let newArray = wallet_info.filter(v => this.state.type.toLocaleLowerCase()==v.coinType)
-    //   this.setState({
-    //     address: newArray[0].address
-    //   })
-    // }
     componentDidMount(){
       // document.addEventListener('click', this.closeDialog);
-      // this.getNewArray()
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
         this.setState({
           addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
@@ -110,65 +103,67 @@ class GetMoney extends Component {
     getBalances(){
       fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
         .then(res => {
-          this.setState({
-            BTCBalances: res.data
-          },()=>{
-              fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                .then(res => {
-                  if(res.data){
-                    this.setState({
-                      arr1: res.data.balances
-                    }, () => {
-                      // this.state.arr1.map((v, i) => {
-                      //   if (v.show_name == 'LBR') {
-                      //     v.show_name = 'VLS'
-                      //   }
-                      // })
-                      if (this.state.type == "") {
-                        this.setState({
-                          coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                        })
-                      }
-                    })
-                  }
-                })
-              fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
-                .then(res => {
-                  if(res.data){
-                    this.setState({
-                      arr2: res.data.balances
-                    }, () => {
-                      let arr = this.state.arr1.concat(this.state.arr2)
-                      let newArr = arr.concat(this.state.BTCBalances)
-                      newArr.sort((a, b) => {
-                        return b.balance - a.balance
-                      })
-                      this.setState({
-                        arr: newArr,
-                        type: newArr[0].show_name,
-                        address: newArr[0].address,
-                        ind: Object.keys(newArr)[0]
-                      })
-                    })
-                  }else{
-                    if (this.state.arr2){
-                      let newArr = this.state.arr1.concat(this.state.BTCBalances)
-                      console.log(newArr,'.....')
-                      newArr.sort((a, b) => {
-                        return b.balance - a.balance
-                      })
-                      this.setState({
-                        arr: newArr,
-                        type: newArr[0].show_name,
-                        address: newArr[0].show_name == 'BTC' ? this.state.BTCAddress : newArr[0].address,
-                        ind: Object.keys(newArr)[0]
-                      })
-                    }
-                  }
-                })
-          })
+          if(res.data){
+            this.setState({
+              BTCBalances: res.data
+            })
+          }
+         
         })
-      
+      fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+        .then(res => {
+          if (res.data) {
+            this.setState({
+              arr1: res.data.balances
+            }, () => {
+              // this.state.arr1.map((v, i) => {
+              //   if (v.show_name == 'LBR') {
+              //     v.show_name = 'VLS'
+              //   }
+              // })
+              if (this.state.type == "") {
+                this.setState({
+                  coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
+                })
+              }
+            })
+          }
+        })
+      fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+        .then(res => {
+          if (res.data) {
+            this.setState({
+              arr2: res.data.balances
+            }, () => {
+              let arr = this.state.arr1.concat(this.state.arr2)
+              let newArr = arr.concat(this.state.BTCBalances)
+              console.log(newArr, '........')
+              newArr.sort((a, b) => {
+                return b.balance - a.balance
+              })
+              this.setState({
+                arr: newArr,
+                type: newArr[0].show_name,
+                address: newArr[0].address,
+                ind: Object.keys(newArr)[0]
+              })
+            })
+          } else {
+            if (this.state.arr2) {
+              let newArr = this.state.arr1.concat(this.state.BTCBalances)
+              console.log(newArr, '.....')
+              newArr.sort((a, b) => {
+                return b.balance - a.balance
+              })
+              this.setState({
+                arr: newArr,
+                type: newArr[0].show_name,
+                address: newArr[0].show_name == 'BTC' ? this.state.BTCAddress : newArr[0].address,
+                ind: Object.keys(newArr)[0]
+              })
+            }
+          }
+        })
     }
     handleCopy = () => {
       const spanText = document.getElementById('add').innerText;

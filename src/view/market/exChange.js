@@ -124,6 +124,37 @@ class ExChange extends Component {
                 }
                 await this.setState({
                     violas_currencies: arr
+                },()=>{
+                        let arr = this.state.violas_currencies.concat(this.state.libra_currencies)
+                        let newArr = arr.concat(this.state.btc_currencies)
+                        // console.log(newArr[0] && newArr[0].balance)
+                        this.setState({
+                            arr: newArr,
+                            arr1: newArr,
+                            selData: newArr
+                        }, () => {
+                            console.log(this.state.selData,'/////////')
+                            if (this.state.selData) {
+                                if (this.state.type == "") {
+                                    this.setState({
+                                        index: Object.keys(this.state.selData)[0],
+                                        type: this.state.selData[0].show_name,
+                                        asset: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
+                                        swap_in_name: this.state.selData[0].show_name
+
+                                    }, () => {
+                                        let arr1 = this.state.selData.filter(v => {
+                                            if (this.state.type != v.show_name) {
+                                                return v;
+                                            }
+                                        })
+                                        this.setState({
+                                            arr1: arr1
+                                        })
+                                    })
+                                }
+                            }
+                        })
                 })
             }
 
@@ -149,40 +180,16 @@ class ExChange extends Component {
         //获取btc的余额
         fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
             .then(res => {
+                console.log(res.data,'.....')
                 if (res.data) {
                     this.state.btc_currencies[0].balance = res.data[0].BTC
+                }else{
+                    return;
                 }
 
-                let arr = this.state.violas_currencies.concat(this.state.libra_currencies)
-                let newArr = arr.concat(this.state.btc_currencies)
-                // console.log(newArr[0] && newArr[0].balance)
-                this.setState({
-                    arr: newArr,
-                    arr1: newArr,
-                    selData: newArr
-                }, () => {
-                    if (this.state.selData) {
-                        if (this.state.type == "") {
-                            this.setState({
-                                index: Object.keys(this.state.selData)[0],
-                                type: this.state.selData[0].show_name,
-                                asset: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
-                                swap_in_name: this.state.selData[0].show_name
-
-                            }, () => {
-                                let arr1 = this.state.selData.filter(v => {
-                                    if (this.state.type != v.show_name) {
-                                        return v;
-                                    }
-                                })
-                                this.setState({
-                                    arr1: arr1
-                                })
-                            })
-                        }
-                    }
-                })
+                
             })
+        
 
     }
     getTyArgs(_module, _name) {
