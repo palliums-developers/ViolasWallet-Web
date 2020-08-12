@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import './digitalBank.scss';
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
+import { timeStamp2String } from '../../utils/timer';
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
 
@@ -23,12 +24,14 @@ class DigitalBank extends Component {
       addCurrencyList: [],
       BTCAddress: '',
       opinionType: '',
-      BTCArr:[]
+      BTCArr:[],
+      mappingRecord:[]
       
     };
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
+    this.getMappingRecord()
     //获取到三种钱包
     if (JSON.parse(window.localStorage.getItem("wallet_info"))) {
       this.setState({
@@ -45,6 +48,15 @@ class DigitalBank extends Component {
         })
       });
     }
+  }
+  //获取映射记录
+  getMappingRecord = () =>{
+    fetch(url + "/1.0/mapping/transaction?address=" +localStorage.getItem('address')+'&offset=0&limit=5').then(res => res.json())
+    .then(res => {
+      this.setState({
+        mappingRecord:res.data
+      })
+    })
   }
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
@@ -140,7 +152,7 @@ class DigitalBank extends Component {
   };
   //转出数量选中
   showTypes = (v, bal, name, ind, opinionType) => {
-    console.log(opinionType, '...opinionType')
+    // console.log(opinionType, '...opinionType')
     this.setState({
       type: v,
       balance: bal,
@@ -172,7 +184,7 @@ class DigitalBank extends Component {
   }
   render() {
     let { routes } = this.props;
-    let { showDealType,type,warning,balance,selData,ind} = this.state;
+    let { showDealType,type,warning,selData,ind,mappingRecord} = this.state;
     return (
       <div className="mapping">
         <Breadcrumb separator=">">
@@ -247,22 +259,27 @@ class DigitalBank extends Component {
             <p><label>矿工费用：</label><span>0.11 BTC</span></p>
             <div className="foot">
               <p className="btn active" onClick={()=>this.confirmMapping()}>确定映射</p>
-              <p className={"descr descrRed"}>{'warning'}</p>
+              <p className={"descr descrRed"}>{warning}</p>
             </div>
           </div>
           <div className="mappingRecord">
             <h4>映射记录</h4>
             <div className="recordLists">
-              <div className="recordList">
-                <div>
-                  <span className="spanGre">映射成功</span>
-                  <label>18:22 01/24</label>
-                </div>
-                <div>
-                  <p>999BTC<img src="/img/路径 2@2x.png" />99900V-BTC</p>
-                  <label>旷工费：0.01 BTC</label>
-                </div>
-              </div>
+            {
+              mappingRecord.map((item,index)=>{
+                  return <div className="recordList" key={index}>
+                          <div>
+                            <span className={item.status == '4001' ? 'spanGre':'spanRed'}>{item.status == '4001' ? '映射成功' : '映射失败'}</span>
+                            <label>{timeStamp2String(item.confirmed_time + '000')}</label>
+                          </div>
+                          <div>
+                            <p>{item.amount}{item.show_name}<img src="/img/路径 2@2x.png" />{item.amount}{item.show_name}</p>
+                            <label>旷工费：0.01 BTC</label>
+                          </div>
+                        </div>
+              })
+            }
+              
               <div className="recordList">
                 <div>
                   <span className="spanRed">映射失败</span>
