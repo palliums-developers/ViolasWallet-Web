@@ -110,7 +110,7 @@ class DigitalBank extends Component {
                 this.setState({
                   type: this.state.selData[0].show_name,
                   coinName: this.state.selData[0].name,
-                  balance: this.state.selData[0].balance,
+                  balance: this.state.selData[0].show_name == 'BTC' ? Number(this.getFloat(this.state.selData[0].balance / 1e8, 6)) : Number(this.getFloat(this.state.selData[0].balance / 1e6, 6)),
                   opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
                 })
               }
@@ -184,7 +184,7 @@ class DigitalBank extends Component {
   }
   render() {
     let { routes } = this.props;
-    let { showDealType,type,warning,selData,ind,mappingRecord} = this.state;
+    let { showDealType,type,warning,selData,ind,balance,mappingRecord} = this.state;
     return (
       <div className="mapping">
         <Breadcrumb separator=">">
@@ -198,7 +198,7 @@ class DigitalBank extends Component {
         </Breadcrumb>
         <div className="mappingContent">
           <div className="mappingList">
-            <h3><img src="/img/kyye.png" />可用余额：<label>10BTC</label></h3>
+            <h3><img src="/img/kyye.png" />可用余额：<label>{type == 'BTC' ? Number(this.getFloat(balance / 1e8, 6)) : Number(this.getFloat(balance / 1e6, 6))} {type}</label></h3>
             <div className="iptAmount">
               <input
                 placeholder="转出数量"
@@ -230,7 +230,7 @@ class DigitalBank extends Component {
                     </div>
                     {
                       selData.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, i, v.balance)
+                        return <div className="searchList" key={i} onClick={() =>  v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1])
                         }>
                           <div className="searchEvery">
                             <img src={v.show_icon} />
