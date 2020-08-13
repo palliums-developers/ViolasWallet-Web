@@ -140,7 +140,6 @@ class DigitalBank extends Component {
   };
   //转出数量选中
   showTypes = (v, bal, name, ind, opinionType) => {
-    console.log(opinionType, '...opinionType')
     this.setState({
       type: v,
       balance: bal,
