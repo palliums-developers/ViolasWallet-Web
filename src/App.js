@@ -10,6 +10,7 @@ import Violas from './wc_protocol/Violas';
 import Libra from './wc_protocol/Libra';
 import Bitcoin from './wc_protocol/Bitcoin';
 import Market from './wc_protocol/Market';
+import Bank from './wc_protocol/Bank';
 
 class App extends React.Component {
   constructor(props) {
@@ -153,10 +154,13 @@ class App extends React.Component {
             <button onClick={this.logout}>Log out</button>
             <button onClick={this.showNotification}>Show Notification</button>
           </div>
-          <Violas walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
+          <Bank walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
           <Market walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
-          <Libra walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
-          <Bitcoin walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
+          <Violas walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
+          <div className='lb'>
+            <Libra walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
+            <Bitcoin walletConnector={this.state.walletConnector.connected && this.state.walletConnector} />
+          </div>
         </header>
       </div>
     )

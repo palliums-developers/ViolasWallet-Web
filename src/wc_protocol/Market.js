@@ -623,6 +623,7 @@ class Market extends React.Component {
                             })
                         }
                     </select>
+                    <br/>
                     <input type='text' onChange={this.handleChange.bind(this, 'remove_liquidity')} />
                     <br />
                     <button onClick={() => this.before_getRemoveLiquidityTrial(this.state.remove_liquidity, this.state.selected_pair)}>Remove Trial</button>
