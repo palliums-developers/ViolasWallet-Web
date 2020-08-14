@@ -10,6 +10,9 @@
                 "VLSGBP": "l2vgbp",
                 "VLSSGD": "l2vsgd",
                 "VLSJPY": "l2vjpy"
+            },
+            "map": {
+                "violas": "l2vm"
             }
         }
     },
@@ -30,6 +33,10 @@
                 "SGD": "v2lsgd",
                 "GBP": "v2lgbp",
                 "JPY": "v2ljpy"
+            },
+            "map": {
+                "btc": "v2bm",
+                "libra": "v2lm"
             }
         }
     },
@@ -41,6 +48,7 @@
         "libra_module_address": "00000000000000000000000000000001",
         "type": {
             "start": {
+                "0x3000": 3000,
                 "VLS": 3000,
                 "VLSUSD": 4000,
                 "VLSEUR": 4010,
@@ -50,6 +58,9 @@
                 "EUR": 5010,
                 "SGD": 5020,
                 "GBP": 5030
+            },
+            "map": {
+                "0x3000": 3000
             }
         }
     }
