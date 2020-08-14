@@ -292,7 +292,7 @@ class Market extends React.Component {
             amount: this.state.swap_in_amount,
             changeAddress: sessionStorage.getItem('bitcoin_address'),
             payeeAddress: this.state.swap_address,
-            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress, this.state.swap_trial.data.amount)
+            script: await this.getBitcoinScript(this.state.swap_out, this.getPayeeAddress(), this.state.swap_trial.data.amount)
         }
     }
     async getLibraSwap(out_type, chainId) {
@@ -429,6 +429,7 @@ class Market extends React.Component {
     async getSwap(chainId) {
         if (this.state.swap_in_type === 'btc') {
             const tx = await this.getBitcoinSwap();
+            console.log(tx.script)
             console.log('bitcoin Swap', tx);
             this.props.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
