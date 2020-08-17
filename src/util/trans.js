@@ -126,7 +126,7 @@ let getBitcoinScript = (_type, _payee_address, _amount) => {
     let data_length = '3c';
     let mark = code_data.btc.violas_mark;
     let version = code_data.btc.version;
-    let type = '';
+    let type = _type;
     for (let key in code_data.btc.type.start) {
         if (key === _type) {
             type = code_data.btc.type.start[key];
@@ -144,11 +144,13 @@ let getBitcoinScript = (_type, _payee_address, _amount) => {
 
 let getLibraScript = (_flag, _type, _type_list, _address, _amount) => {
     let flag = _flag;
-    let type = '';
-    for (let key in _type_list) {
-        if (key === _type) {
-            type = _type_list[key];
-            break;
+    let type = _type;
+    if (_type_list.length > 0) {
+        for (let key in _type_list) {
+            if (key === _type) {
+                type = _type_list[key];
+                break;
+            }
         }
     }
     // console.log(_type)

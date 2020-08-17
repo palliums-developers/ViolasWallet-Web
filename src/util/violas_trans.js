@@ -32,4 +32,4 @@ let getViolasTx = (_from, _to, _amount, _module, _name, _chainId, _script) => {
     }
     return tx;
 }
-export {getViolasTx}
+export default getViolasTx;
