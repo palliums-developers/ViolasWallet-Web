@@ -977,7 +977,7 @@ class ExChange extends Component {
                                             })
                                         }}>
                                             <div className="list1">
-                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i>重试</i>}</span>
+                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i onClick={() => this.showExchangeCode()}>重试</i>}</span>
                                                 <p>{v.input_amount}{v.input_name}</p>
                                             </div>
                                             <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>

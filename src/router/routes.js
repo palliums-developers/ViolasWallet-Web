@@ -9,6 +9,8 @@ import Exchange from '../view/market/exChange';
 import CashPooling from '../view/market/cashPooling';
 import DigitalBank from "../view/digitalBank";
 import Mapping from '../view/digitalBank/mapping'
+import DigitalBankPage from "../view/digitalBank/digitalBankPage";
+import SaveDetails from "../view/digitalBank/saveDetails";
 
 let routes = [
     //首页
@@ -52,9 +54,21 @@ let routes = [
                         component: DigitalBank,
                         children:[
                             {
+                                path: '/homepage/home/digitalBank/digitalBankPage',
+                                component: DigitalBankPage
+                            },
+                            {
                                 path: '/homepage/home/digitalBank/mapping',
                                 component: Mapping
                             },
+                            {
+                                path: '/homepage/home/digitalBank/saveDetails',
+                                component: SaveDetails
+                            },
+                            {
+                                path: '/homepage/home/digitalBank',
+                                redirect: '/homepage/home/digitalBank/digitalBankPage'
+                            }
                         ]
 
                     },
