@@ -49,6 +49,9 @@ let bytes2StrHex = (arrBytes) => {
 }
 
 let decimal2Hex = (decimal) => {
+    if (typeof decimal !== 'number') {
+        decimal = parseInt(decimal)
+    }
     return decimal.toString(16);
 }
 
@@ -137,7 +140,7 @@ let getBitcoinScript = (_type, _payee_address, _amount) => {
     let sequence = fullWith16(getTimestamp);
     console.log('sequence ', sequence)
     let module_address = code_data.btc.violas_module_address;
-    let amount = fullWith16(_amount);
+    let amount = fullWith16(decimal2Hex(_amount));
     let time = '0000';
     return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
 }
