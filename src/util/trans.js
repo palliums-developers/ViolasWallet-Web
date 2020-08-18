@@ -49,9 +49,7 @@ let bytes2StrHex = (arrBytes) => {
 }
 
 let decimal2Hex = (decimal) => {
-    if (typeof decimal !== 'number') {
-        decimal = parseInt(decimal)
-    }
+    decimal = parseInt(decimal)
     return decimal.toString(16);
 }
 

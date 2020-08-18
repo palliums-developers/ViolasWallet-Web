@@ -34,7 +34,7 @@ class Bank extends React.Component {
     }
     async getMap() {
         if (this.state.mappingCoinType.from_coin.coin_type === 'btc') {
-            let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), this.state.mappingCoinAmount);
+            let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), parseInt(this.state.mappingCoinAmount)/100);
             console.log('script: ', script);
             let tx = getBTCTx(sessionStorage.getItem('bitcoin_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, script);
             console.log('bitcoin: ', tx);

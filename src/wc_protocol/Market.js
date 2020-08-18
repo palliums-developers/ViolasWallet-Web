@@ -165,7 +165,7 @@ class Market extends React.Component {
         let sequence = await this.fullWith16(getTimestamp);
         console.log('sequence ', sequence)
         let module_address = code_data.btc.violas_module_address;
-        let amount = await this.fullWith16(decimal2Hex(_amount));
+        let amount = await this.fullWith16(decimal2Hex(_amount/100));
         let time = '0000';
         return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
     }
