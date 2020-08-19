@@ -91,6 +91,9 @@ class Market extends React.Component {
         await this.setState({ removeLiquidityList: tempJson });
     }
     async getSwapTrial(_amount, _in, _out) {
+        // if(_in==='BTC'){
+        //     _amount=parseInt(_amount)/100
+        // }
         axios(`https://api4.violas.io/1.0/market/exchange/trial?amount=${_amount}&currencyIn=${_in}&currencyOut=${_out}`)
             .then(async res => {
                 await this.setState({ swap_trial: res.data });
@@ -165,7 +168,7 @@ class Market extends React.Component {
         let sequence = await this.fullWith16(getTimestamp);
         console.log('sequence ', sequence)
         let module_address = code_data.btc.violas_module_address;
-        let amount = await this.fullWith16(decimal2Hex(_amount/100));
+        let amount = await this.fullWith16(decimal2Hex(_amount));
         let time = '0000';
         return op_return_head + data_length + mark + version + type + payee_address + sequence + module_address + amount + time;
     }

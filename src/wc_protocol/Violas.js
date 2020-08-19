@@ -134,9 +134,9 @@ class Violas extends React.Component {
             console.log('Violas transaction ', err);
         });
     }
-    async sendPublish() {
+    async sendPublish(chainId) {
         const tx = {
-            from: this.state.violas_address,
+            from: sessionStorage.getItem('violas_address'),
             payload: {
                 code: code_data.violas.publish,
                 tyArgs: [
@@ -144,8 +144,10 @@ class Violas extends React.Component {
                 ],
                 args: []
             },
-            gasCurrencyCode: this.state.currencyCode,
+            // gasCurrencyCode: this.state.currencyCode,
+            chainId: chainId
         }
+        console.log(tx)
         this.props.walletConnector.sendTransaction('violas', tx).then(res => {
             console.log('send publish ', res);
         }).catch(err => {
@@ -194,7 +196,7 @@ class Violas extends React.Component {
                             }
                         </select>
                     </p>
-                    <button onClick={this.sendPublish}>send publish</button>
+                    <button onClick={() => this.sendPublish(2)}>send publish</button>
                 </div>
                 <div className='tx'>
                     <h5>Send Transaction</h5>

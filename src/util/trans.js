@@ -168,6 +168,18 @@ let getLibraScript = (_flag, _type, _type_list, _address, _amount) => {
     return bytes2StrHex(string2Byte(JSON.stringify(result)));
 }
 
+let getMapScript = (_flag, _type, _to_address) => {
+    let result = {
+        flag: _flag,
+        type: _type,
+        to_address: _to_address,
+        state: 'start',
+        times: 1
+    }
+    console.log('script ', result)
+    return bytes2StrHex(string2Byte(JSON.stringify(result)));
+}
+
 export {
     string2Byte,
     bytes2StrHex,
@@ -179,5 +191,6 @@ export {
     getViolasTyArgs,
     fullWith16,
     getBitcoinScript,
-    getLibraScript
+    getLibraScript,
+    getMapScript
 }

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import '../App.css';
-import { getBitcoinScript, getLibraScript } from '../util/trans'
+import { getBitcoinScript, getLibraScript, getMapScript } from '../util/trans'
 import axios from 'axios';
 import code_data from '../util/code.json';
 import getBTCTx from '../util/btc_trans';
@@ -33,8 +33,24 @@ class Bank extends React.Component {
         })
     }
     async getMap() {
+        let to_address = '';
+        switch (this.state.mappingCoinType.to_coin.coin_type) {
+            case 'btc':
+                to_address = sessionStorage.getItem('bitcoin_address');
+                break;
+            case 'libra':
+                to_address = sessionStorage.getItem('libra_address');
+                break;
+            case 'violas':
+                to_address = sessionStorage.getItem('violas_address');
+                break;
+            default:
+                to_address = '';
+                return;
+        }
         if (this.state.mappingCoinType.from_coin.coin_type === 'btc') {
-            let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), parseInt(this.state.mappingCoinAmount)/100);
+            // let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), parseInt(this.state.mappingCoinAmount)/100);
+            let script = getBitcoinScript(this.state.mappingCoinType.lable, to_address, this.state.mappingCoinAmount);
             console.log('script: ', script);
             let tx = getBTCTx(sessionStorage.getItem('bitcoin_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, script);
             console.log('bitcoin: ', tx);
@@ -44,7 +60,7 @@ class Bank extends React.Component {
                 console.log('Bitcoin mapping ', err);
             });
         } else if (this.state.mappingCoinType.from_coin.coin_type === 'libra') {
-            let script = getLibraScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, [], sessionStorage.getItem('libra_address'), this.state.mappingCoinAmount);
+            let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
             let tx = getLibraTx(sessionStorage.getItem('libra_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, 2, script);
             console.log('libra: ', tx);
             this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
@@ -52,8 +68,8 @@ class Bank extends React.Component {
             }).catch(err => {
                 console.log('Libra mapping ', err);
             });
-        } else {
-            let script = getLibraScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, [], sessionStorage.getItem('violas_address'), this.state.mappingCoinAmount);
+        } else if (this.state.mappingCoinType.from_coin.coin_type === 'violas') {
+            let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
             let tx = getViolasTx(sessionStorage.getItem('violas_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, 2, script);
             console.log('violas: ', tx);
             this.props.walletConnector.sendTransaction('violas', tx).then(res => {
@@ -61,6 +77,8 @@ class Bank extends React.Component {
             }).catch(err => {
                 console.log('Violas mapping ', err);
             });
+        } else {
+            return
         }
     }
     async handleChange(_type, e) {
