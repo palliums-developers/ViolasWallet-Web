@@ -14,7 +14,7 @@ class MyPoolDialog extends Component {
     }
     //获取资产记录
     componentDidMount() {
-        fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
             .then(res => {
                 // console.log(res,'.......')
                 if(res.data){

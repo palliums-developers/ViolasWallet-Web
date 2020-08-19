@@ -52,6 +52,7 @@ class CurrencyDetail extends Component {
 
     }
     componentWillReceiveProps(nextProps){
+        
         this.setState({
             detailAddrs: nextProps.detailAddrs,
             name: nextProps.name

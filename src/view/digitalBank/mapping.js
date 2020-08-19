@@ -12,7 +12,7 @@ class DigitalBank extends Component {
     super();
     this.state = {
       type:'',
-      amount: "",
+      amount:0,
       warning: '',
       showDealType: false,
       balance: 0,
@@ -21,7 +21,6 @@ class DigitalBank extends Component {
       arr1: [],
       arr2: [],
       selData: [],
-      addCurrencyList: [],
       BTCAddress: '',
       opinionType: '',
       BTCArr:[],
@@ -33,25 +32,17 @@ class DigitalBank extends Component {
     document.addEventListener("click", this.closeDialog);
     this.getMappingRecord()
     //获取到三种钱包
-    if (JSON.parse(window.localStorage.getItem("wallet_info"))) {
+    if (window.sessionStorage.getItem("btc_address")) {
       this.setState({
-        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+        BTCAddress: window.sessionStorage.getItem("btc_address")
       }, () => {
-        this.state.addCurrencyList.map((v, i) => {
-          if (v.coinType == 'bitcoin') {
-            this.setState({
-              BTCAddress: v.address
-            }, () => {
-              this.getTypesBalance()
-            })
-          }
-        })
-      });
+        this.getTypesBalance()
+      })
     }
   }
   //获取映射记录
   getMappingRecord = () =>{
-    fetch(url + "/1.0/mapping/transaction?address=" +localStorage.getItem('address')+'&offset=0&limit=5').then(res => res.json())
+    fetch(url + "/1.0/mapping/transaction?address=" + sessionStorage.getItem('violas_address')+'&offset=0&limit=5').then(res => res.json())
     .then(res => {
       this.setState({
         mappingRecord:res.data
@@ -63,13 +54,24 @@ class DigitalBank extends Component {
   }
   //获取到每个币种及余额
   getTypesBalance() {
-    fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
       .then(res => {
-        this.setState({
-          BTCArr: res.data
-        })
+        console.log(res)
+        if (res.data) {
+          this.setState({
+            BTCArr: res.data
+          },()=>{
+              this.getVLBalance()
+          })
+        }else{
+          this.getVLBalance()
+        }
+        
       })
-    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+   
+  }
+  getVLBalance(){
+    fetch(url + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
         if (res.data) {
           this.setState({
@@ -77,7 +79,7 @@ class DigitalBank extends Component {
           })
         }
       })
-    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    fetch(url + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
       .then(res => {
         if (res.data) {
           this.setState({
@@ -85,10 +87,11 @@ class DigitalBank extends Component {
           }, () => {
             let arr = this.state.arr1.concat(this.state.arr2)
             let arrs = arr.concat(this.state.BTCArr)
+            console.log(this.state.BTCArr, arrs, '.......')
             this.setState({
               selData: arrs
             }, () => {
-                console.log(this.state.selData[0].show_name)
+              console.log(this.state.selData[0].show_name)
               if (this.state.type == "") {
                 this.setState({
                   type: this.state.selData[0].show_name,
@@ -105,7 +108,7 @@ class DigitalBank extends Component {
             this.setState({
               selData: arrs
             }, () => {
-               
+
               if (this.state.type == "") {
                 this.setState({
                   type: this.state.selData[0].show_name,
@@ -236,7 +239,7 @@ class DigitalBank extends Component {
                             <div className="searchEvery1">
                               <div>
                                 <h4>{v.show_name}</h4>
-                                <p>余额：{v.show_name == 'BTC' ? (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
                               </div>
                               <span className={ind == i ? 'check active' : 'check'}></span>
                             </div>
@@ -250,8 +253,8 @@ class DigitalBank extends Component {
             </div>
             <div className="arrow"><img src="/img/ai28 4@2x.png" /></div>
             <div className="showAmount">
-              <label>0</label>
-              <span>V-BTC</span>
+              <label>{this.state.amount}</label>
+              <span>{type}</span>
             </div>
             <div className="line"></div>
             <p><label>汇率：</label><span>1 BTC = 100 V-BTC</span></p>

@@ -36,6 +36,13 @@ class AddCurrency extends Component {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
   componentDidMount() {
+    if (window.sessionStorage.getItem("btc_address")){
+      this.setState({
+        BTCAddress: window.sessionStorage.getItem("btc_address")
+      }, () => {
+        this.getBalance()
+      })
+    }
     if (JSON.parse(window.localStorage.getItem("wallet_info"))){
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -43,20 +50,11 @@ class AddCurrency extends Component {
         this.setState({
           addList: this.state.addCurrencyList[2]
         })
-        this.state.addCurrencyList.map((v, i) => {
-          if (v.coinType == 'bitcoin') {
-            this.setState({
-              BTCAddress: v.address
-            }, () => {
-              this.getBalance()
-            })
-          }
-        })
       });
     }
   }
   getBalance = () => {
-    fetch(url1 + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
+    fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
       .then(res => {
         // console.log(res.data)
         if (res.data) {
@@ -144,7 +142,7 @@ class AddCurrency extends Component {
   async getTyArgs(_name,_addr,ind) {
 
     
-    fetch(url + "/1.0/violas/currency/published?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
         let arr = [];
         let index = ind;
@@ -183,7 +181,7 @@ class AddCurrency extends Component {
   }
   async sendPublish() {
     const tx = {
-      from: window.localStorage.getItem('address'),
+      from: window.sessionStorage.getItem('violas_address'),
       payload: {
         code: this.state.publish_code,
         tyArgs: [
@@ -223,7 +221,7 @@ class AddCurrency extends Component {
 
   getPublish(){
     
-    fetch(url + "/1.0/violas/currency/published?addr="+window.localStorage.getItem('address')).then(res => res.json())
+    fetch(url + "/1.0/violas/currency/published?addr="+window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
         let data = this.state.addCurrencyList1.map((v, i) => {
           if (v.checked) {

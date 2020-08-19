@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,12 +10,15 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+html,body{
+  font-family:Open-Sans!important;
 }
 #root{
   width: 100%;
   height: 100%;
 }
-/* @font-face {
-  font-family: "Open-Sans";
-  src: url("font/Open-Sans-2.ttf");
-} */
+@font-face {
+  font-family: Open-Sans;
+  src: url("./font/OpenSans-Regular.ttf");
+}

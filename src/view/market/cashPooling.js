@@ -86,20 +86,12 @@ class CashPooling extends Component {
         
         this.getExchangeRecode()
         this.getOutBalances()
-        if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+        if (window.sessionStorage.getItem("btc_address")){
             this.setState({
-              addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+                BTCAddress: window.sessionStorage.getItem("btc_address")
             }, () => {
-                this.state.addCurrencyList.map((v, i) => {
-                    if (v.coinType == 'bitcoin') {
-                        this.setState({
-                            BTCAddress: v.address
-                        }, () => {
-                            this.getBalances()
-                        })
-                    }
-                })
-            });
+                this.getBalances()
+            })
         }
         
     }
@@ -113,7 +105,7 @@ class CashPooling extends Component {
         return number;
     }
     getExchangeRecode = () => {
-        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.localStorage.getItem('address') + '&offset=0&limit=5').then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/transaction?address=" + window.sessionStorage.getItem('violas_address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
                 // console.log(res,'.....')
                 if(res.data){
@@ -403,7 +395,7 @@ class CashPooling extends Component {
                  violasArr: res.data.violas,
                  currencies: temp,
              },()=>{
-                     fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+                     fetch(url1 + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
                          .then(res => {
                             //  console.log(res, '...........')
                              this.setState({
@@ -489,7 +481,7 @@ class CashPooling extends Component {
     }
     //转出下拉列表 第一个输入框
     getOutBalances(){
-        fetch(url1 + "/1.0/market/pool/info?address=" + window.localStorage.getItem('address')).then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
             .then(res => {
                 // console.log(res,'.......')
                 if(res.data){
@@ -557,7 +549,7 @@ class CashPooling extends Component {
     //获取输出换算数量
     opinionOutputAmount=()=>{
         if (this.state.outputAmount) {
-            fetch(url1 + "/1.0/market/pool/withdrawal/trial?address=" + window.localStorage.getItem('address') + '&amount=' + this.state.outputAmount + '&&coin_a=' + this.state.aName + '&&coin_b=' + this.state.bName).then(res => res.json())
+            fetch(url1 + "/1.0/market/pool/withdrawal/trial?address=" + window.sessionStorage.getItem('violas_address') + '&amount=' + this.state.outputAmount + '&&coin_a=' + this.state.aName + '&&coin_b=' + this.state.bName).then(res => res.json())
                 .then(res => {
                     // console.log(res, '.........')
                     if (res.data) {
@@ -626,7 +618,7 @@ class CashPooling extends Component {
         await this.orderCurrencies(this.state.name, this.state.type1)
         // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
         const tx = {
-            from: localStorage.getItem('address'),
+            from: sessionStorage.getItem('violas_address'),
             payload: {
                 code: code_data.violas.add_liquidity,
                 tyArgs: [
@@ -690,7 +682,7 @@ class CashPooling extends Component {
     //点击转出
     async getRemoveLiquidity(chainId) {
         const tx = {
-            from: localStorage.getItem('address'),
+            from: sessionStorage.getItem('violas_address'),
             payload: {
                 code: code_data.violas.remove_liquidity,
                 tyArgs: [

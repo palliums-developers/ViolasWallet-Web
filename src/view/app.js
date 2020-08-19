@@ -58,8 +58,8 @@ class App extends Component {
           setTimeout(() => {
             this.props.history.push("/homepage");
           }, 1000);
-          window.localStorage.setItem(
-            "address",
+          window.sessionStorage.setItem(
+            "violas_address",
             accounts[0]
           );
           // console.log("you have connected ");
@@ -90,6 +90,14 @@ class App extends Component {
       window.localStorage.setItem(
         "wallet_info",
         JSON.stringify(res)
+      );
+      window.sessionStorage.setItem(
+        "libra_address",
+        res[1].address
+      );
+      window.sessionStorage.setItem(
+        "btc_address",
+        res[2].address
       );
     }).catch(err => {
       console.log('get account ', err)

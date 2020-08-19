@@ -11,6 +11,8 @@ import DigitalBank from "../view/digitalBank";
 import Mapping from '../view/digitalBank/mapping'
 import DigitalBankPage from "../view/digitalBank/digitalBankPage";
 import SaveDetails from "../view/digitalBank/saveDetails";
+import SaveOrder from "../view/digitalBank/saveOrder";
+import BorrowOrder from "../view/digitalBank/borrowOrder";
 
 let routes = [
     //首页
@@ -64,6 +66,14 @@ let routes = [
                             {
                                 path: '/homepage/home/digitalBank/saveDetails',
                                 component: SaveDetails
+                            },
+                            {
+                                path: '/homepage/home/digitalBank/saveOrder',
+                                component: SaveOrder
+                            },
+                            {
+                                path: '/homepage/home/digitalBank/borrowOrder',
+                                component: BorrowOrder
                             },
                             {
                                 path: '/homepage/home/digitalBank',

@@ -84,24 +84,16 @@ class GetMoney extends Component {
     }
     componentDidMount(){
       // document.addEventListener('click', this.closeDialog);
-      if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+      if (window.sessionStorage.getItem("btc_address")){
         this.setState({
-          addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info"))
+          BTCAddress: window.sessionStorage.getItem("btc_address")
         }, () => {
-          this.state.addCurrencyList.map((v, i) => {
-            if (v.coinType == 'bitcoin') {
-              this.setState({
-                BTCAddress: v.address
-              }, () => {
-                this.getBalances()
-              })
-            }
-          })
+          this.getBalances()
         })
       }
     }
     getBalances(){
-      fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+      fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
         .then(res => {
           if(res.data){
             this.setState({
@@ -110,7 +102,7 @@ class GetMoney extends Component {
           }
          
         })
-      fetch(url1 + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+      fetch(url1 + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
         .then(res => {
           if (res.data) {
             this.setState({
@@ -129,7 +121,7 @@ class GetMoney extends Component {
             })
           }
         })
-      fetch(url1 + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+      fetch(url1 + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
         .then(res => {
           if (res.data) {
             this.setState({

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 
 //映射
 class DigitalBankPage extends Component {
@@ -8,7 +9,19 @@ class DigitalBankPage extends Component {
             visible:true,
             type:'存款市场',
             types:['存款市场','借款市场'],
-            ind:0
+            ind:0,
+            orders:[
+                {
+                    name:'存款订单',
+                    imgUrl:'/img/saveOrder.png',
+                    pathname:'/homepage/home/digitalBank/saveOrder'
+                },
+                {
+                    name: '借款订单',
+                    imgUrl: '/img/borrowOrder.png',
+                    pathname: '/homepage/home/digitalBank/borrowOrder'
+                }
+            ]
         }
     }
     componentDidMount() {
@@ -21,7 +34,7 @@ class DigitalBankPage extends Component {
     }
     render() {
         let { routes } = this.props;
-        let { visible,types,ind } = this.state
+        let { visible, types, ind, orders } = this.state
         return (
             <div className="digitalBankPage">
                 <div className="apply">
@@ -41,7 +54,17 @@ class DigitalBankPage extends Component {
                         }
                         </i>
                         </p> 
-                        <span><img src="/img/编组 9@2x.png"/></span>
+                        <div className="dropdown">
+                            <span><img src="/img/编组 9@2x.png" /></span>
+                            <div className="dropdown-content">
+                                {
+                                    orders.map((v,i)=>{
+                                    return <NavLink key={i} to={v.pathname}><img src={v.imgUrl} /><label>{v.name}</label></NavLink>
+                                    })
+                                }
+                                
+                            </div>
+                        </div>
                    </div>
                     <p>{
                         visible ? <span>≈2041.76</span> : <span>******</span>

@@ -33,7 +33,6 @@ class Transfer extends Component {
       arr1:[],
       arr2:[],
       selData:[],
-      addCurrencyList:[],
       BTCAddress: '',
       warning1:'',
       coinName:'',
@@ -60,35 +59,34 @@ class Transfer extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
-    if (JSON.parse(window.localStorage.getItem("wallet_info"))){
+    if (window.sessionStorage.getItem("btc_address")){
       this.setState({
-        addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
+        BTCAddress: window.sessionStorage.getItem("btc_address")
       }, () => {
-        this.state.addCurrencyList.map((v, i) => {
-          if (v.coinType == 'bitcoin') {
-            this.setState({
-              BTCAddress: v.address
-            }, () => {
-              this.getTypesBalance()
-            })
-          }
-        })
-      });
+        this.getTypesBalance()
+      })
     }
     
 
   }
   //获取到每个币种及余额
   getTypesBalance(){
-    fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
+    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
       .then(res => {
         if(res.data){
           this.setState({
             BTCArr: res.data
+          },()=>{
+              this.getVLBalance()
           })
+        }else{
+          this.getVLBalance()
         }
       })
-    fetch(url + "/1.0/violas/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    
+  }
+  getVLBalance(){
+    fetch(url + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
         if (res.data) {
           this.setState({
@@ -96,7 +94,7 @@ class Transfer extends Component {
           })
         }
       })
-    fetch(url + "/1.0/libra/balance?addr=" + window.localStorage.getItem('address')).then(res => res.json())
+    fetch(url + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
       .then(res => {
         if (res.data) {
           this.setState({
@@ -139,7 +137,7 @@ class Transfer extends Component {
       })
   }
   getTypeShow = (event) => {
-    this.stopPropagation(event);
+    // this.stopPropagation(event);
     this.setState({
       showDealType: !this.state.showDealType,
     });
@@ -159,11 +157,11 @@ class Transfer extends Component {
         this.getTypesBalance()
     });
   };
-  closeDialog = () => {
-    this.setState({
-      showDealType: false,
-    });
-  };
+  // closeDialog = () => {
+  //   this.setState({
+  //     showDealType: false,
+  //   });
+  // };
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
   }
@@ -280,7 +278,7 @@ class Transfer extends Component {
   //violas转账
   async violas_sendTransaction(chainId){
     const tx = {
-      from: window.localStorage.getItem('address'),
+      from: window.sessionStorage.getItem('violas_address'),
       payload: {
         code: code_data.violas_p2p,
         tyArgs: [this.state.tyArgs],
@@ -326,7 +324,7 @@ class Transfer extends Component {
   //libra转账
   async libra_sendTransaction(chainId) {
     const tx = {
-      from: window.localStorage.getItem('address'),
+      from: window.sessionStorage.getItem('libra_address'),
       payload: {
         code: code_data.libra_p2p,
         tyArgs: [
@@ -464,10 +462,25 @@ class Transfer extends Component {
       this.bitcoin_sendTransaction()
     }
   }
+  getSearchList = (e) => {
+    if (e.target.value) {
+      let arr = this.state.selData.filter(v => {
+        if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+          return v;
+        }
+      })
+      this.setState({
+        selData: arr
+      })
+    } else {
+      this.getTypesBalance()
+    }
+
+  }
   render() {
-    let { title, balance, warning, showDealType, type, selData, tranferDig } = this.state;
+    let { title, balance, warning, showDealType, type, selData, tranferDig ,ind} = this.state;
     // console.log(selData, tranferDig,this.state.coinName , this.state.address )
-    // console.log(selData,'.....')
+    console.log(selData,'.....')
     return (
       <div className="transfer">
         <div className="transferContent">
@@ -500,7 +513,7 @@ class Transfer extends Component {
                   >
                     {type}
                     <i>
-                      <img src="/img/路径备份 6@2x.png" />
+                      <img src="/img/路径备份 3@2x.png" />
                     </i>
                   </span>
                 ) : (
@@ -513,19 +526,27 @@ class Transfer extends Component {
                 )}
                 {showDealType ? (
                   <div className="dropdown-content1">
-                    {selData.map((v, i) => {
-                      return (
-                        <span
-                          key={i}
-                          className={i == this.state.ind ? "active" : null}
-                          onClick={() => {
-                            v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1])
-                          }}
-                        >
-                          {v.show_name}
-                        </span>
-                      );
-                    })}
+                    <div className="formSearch">
+                      <img src="/img/sousuo 2@2x.png" />
+                      <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                    </div>
+                    {
+                      selData.map((v, i) => {
+                        return <div className="searchList" key={i} onClick={() => v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1])
+                        }>
+                          <div className="searchEvery">
+                            <img src={v.show_icon} />
+                            <div className="searchEvery1">
+                              <div>
+                                <h4>{v.show_name}</h4>
+                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                              </div>
+                              <span className={ind == i ? 'check active' : 'check'}></span>
+                            </div>
+                          </div>
+                        </div>
+                      })
+                    }
                   </div>
                 ) : null}
               </div>
