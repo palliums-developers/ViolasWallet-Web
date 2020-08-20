@@ -7,7 +7,7 @@ let getLibraTx = (_from, _to, _amount, _module, _name, _chainId, _script) => {
         payload: {
             code: code_data.libra.p2p,
             tyArgs: [
-                { tyArgs: getLibraTyArgs(_module, _name) }
+                getLibraTyArgs(_module, _name)
             ],
             args: [
                 {

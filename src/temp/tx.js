@@ -228,9 +228,59 @@ let scri1 = '6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a910000017400b
 let scri2 = '6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100015977403082960000000000000000000000000000000100000000000000350000'
 let scri3 = '6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100015977420618570000000000000000000000000000000100000000000000230000'
 
-let aug_19_1='6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100000174058fb8ac0000000000000000000000000000000100000000000000390000'
-let aug_19_2='6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100015978211391160000000000000000000000000000000100000000000000390000'
+let aug_19_1 = '6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100000174058fb8ac0000000000000000000000000000000100000000000000390000'
+let aug_19_2 = '6a3c76696f6c617300034000d4f4001fba6d8b9e696cfd6ca8e47a9100015978211391160000000000000000000000000000000100000000000000390000'
 
-let aug_19_3='6a3c76696f6c617300033000d4f4001fba6d8b9e696cfd6ca8e47a910000017405d29a670000000000000000000000000000000100000000000001310000'
-let aug_19_4='6a3c76696f6c617300033000myvep7AM2SDfPjgCtoCSjB6piSMrjUpW5x00015978255222790000000000000000000000000000000100000000000001310000'
-let aug_19_5='6a3c76696f6c617300033000d4f4001fba6d8b9e696cfd6ca8e47a9100015978258985930000000000000000000000000000000100000000000001310000'
+let aug_19_3 = '6a3c76696f6c617300033000d4f4001fba6d8b9e696cfd6ca8e47a910000017405d29a670000000000000000000000000000000100000000000001310000'
+let aug_19_4 = '6a3c76696f6c617300033000myvep7AM2SDfPjgCtoCSjB6piSMrjUpW5x00015978255222790000000000000000000000000000000100000000000001310000'
+let aug_19_5 = '6a3c76696f6c617300033000d4f4001fba6d8b9e696cfd6ca8e47a9100015978258985930000000000000000000000000000000100000000000001310000'
+
+video.addEventListener('timeupdate', function (e) {
+    var currentTime = parseInt(video.currentTime);
+    if (currentTime - maxTime > 1 && currentTime > learnDuration) {
+        video.currentTime = maxTime;
+        currentTime = maxTime;
+    }
+    if (currentTime > maxTime) {
+        maxTime = currentTime;
+    }
+    if (currentTime > faceSignTime) {
+        if (isface == 1) {
+            $.each(faceTime, function (i, n) {
+                if (faceSign == i && currentTime == n) {
+                    faceSign++;
+                    video.pause();
+                    canvas();
+                }
+            });
+            if (currentTime > faceTime[faceSign] && faceSignTime < faceTime[faceSign]) {
+                video.pause();
+            }
+        } else if (isface == 2) {
+            $.each(faceTime, function (i, n) {
+                if (faceSign == i && currentTime == n) {
+                    video.pause();
+                    faceSign++;
+                    faceSignTime=currentTime;
+                    video.play();
+
+                }
+            });
+            if (currentTime > faceTime[faceSign] && faceSignTime < faceTime[faceSign]) {
+                video.pause();
+            }
+        }
+    }
+    if (beginFaceSign == 1 && currentTime > 0) video.pause();
+    if (currentTime - oldTime >= 70 && currentTime > learnDuration) {
+        oldTime = currentTime;
+        $.post("/addstudentTaskVer2/" + courseid + "/" + lessonid, { "learnTime": currentTime, "push_event": "update" }, function (data) {
+            if (data.code != 200) {
+                video.pause();
+                layer.alert(data.msg, { icon: 5 }, function () {
+                    window.history.go(-1);
+                });
+            }
+        });
+    }
+})
