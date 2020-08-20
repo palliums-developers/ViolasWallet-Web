@@ -19,6 +19,9 @@
           }
         .dropdown{
           position: relative;
+          span{
+            cursor: pointer;
+          }
           .dropdown-content{
             width: 110px;
             background:rgba(247,247,247,1);
@@ -69,6 +72,7 @@
               display: flex;
               margin-left: 5px;
               margin-top: 2px;
+              cursor: pointer;
               img{
                 width: 100%;
                 height: 100%;
@@ -898,4 +902,60 @@
         }
       }    
     }
+}
+//存款订单
+.saveOrder{
+  width: 100%;
+  .ant-breadcrumb {
+          display: flex;
+          align-items: center;
+          margin-top: 63px;
+          margin-left: 60px;
+          span{
+            display: flex;
+            align-items: center;
+          }
+          a{
+              font-size: 14px;
+              // color: #5C5C5C;
+              display: flex;
+              align-items: center;
+              img{
+                  width: 24px;
+                  height: 24px;
+                  margin-right: 8px;
+              }
+          }
+          a:hover{
+              color: #5C5C5C;
+          }
+      }
+  .curSaveLists{
+    width: 1071px;
+    height: 717px;
+    background: #FFF;
+    margin: 0 auto;
+    margin-top: 17px;
+    padding:39px 28px;
+    box-sizing: border-box;
+    .tab{
+      margin-left: 26px;
+      display: flex;
+      span{
+        width: 22px;
+        margin-right: 87px;
+        font-size:16px;
+        font-weight:400;
+        color:rgba(153,153,153,1);
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .active{
+        font-size:16px;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        border-bottom: 2px solid rgba(112, 56, 253, 1);
+      }
+    }
   }
+}

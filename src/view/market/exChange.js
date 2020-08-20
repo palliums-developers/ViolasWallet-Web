@@ -50,6 +50,7 @@ class ExChange extends Component {
             btc_currencies: [],
             libra_currencies: [],
             swap_address: '',
+            walletConnector: {},
             crossChainInfo: []
 
         }
@@ -336,7 +337,7 @@ class ExChange extends Component {
                     },
                     {
                         type: 'U64',
-                        value: '10'
+                        value: '' + (parseInt(this.state.inputAmount) * 1e6)
                     },
                     {
                         type: 'Vector',
@@ -532,11 +533,9 @@ class ExChange extends Component {
             console.log('violas swap ', tx);
             this.state.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
-                if (res == "success") {
                   this.setState({
                     warning: "兑换成功",
                   });
-                }
             }).catch(err => {
                 console.log('Violas Swap ', err);
                 this.setState({
@@ -558,6 +557,7 @@ class ExChange extends Component {
     getExchangeRecode = () => {
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.sessionStorage.getItem('violas_address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
+                console.log(res.data)
                 if (res.data) {
                     this.setState({
                         changeRecord: res.data
@@ -972,7 +972,7 @@ class ExChange extends Component {
                                             </div>
                                             <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
                                             <div className="list2">
-                                                <span>{v.input_amount}{v.input_name}</span>
+                                                <span>{v.output_amount}{v.output_name}</span>
                                                 <p>{timeStamp2String(v.date + '000')}<i><img src="/img/rightArrow.png" /></i></p>
                                             </div>
                                         </div>

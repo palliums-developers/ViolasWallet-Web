@@ -57,8 +57,11 @@ class CashPooling extends Component {
             bName:'',
             violasArr:[],
             AddLiquidity: {},
+            walletConnector: {},
             aModule: '',
-            bModule: ''
+            bModule: '',
+            coin_a_value:'',
+            coin_b_value:''
             // visible:false
         }
     }
@@ -152,7 +155,8 @@ class CashPooling extends Component {
     getTypeShow = (event) => {
         // this.stopPropagation(event)
         this.setState({
-            showDealType: !this.state.showDealType
+            showDealType: !this.state.showDealType,
+            warning: ''
         },)
     }
     //显示输入时通证列表
@@ -554,7 +558,9 @@ class CashPooling extends Component {
                     // console.log(res, '.........')
                     if (res.data) {
                             this.setState({
-                                outputAmount1: res.data.coin_a_value + res.data.coin_a_name + '/' + res.data.coin_b_value + res.data.coin_b_name
+                                outputAmount1: res.data.coin_a_value + res.data.coin_a_name + '/' + res.data.coin_b_value + res.data.coin_b_name,
+                                coin_a_value: res.data.coin_a_value,
+                                coin_b_value: res.data.coin_b_value
                             })
                         
                     }
@@ -696,11 +702,11 @@ class CashPooling extends Component {
                     },
                     {
                         type: 'U64',
-                        value: '0'
+                        value: ''+this.state.coin_a_value
                     },
                     {
                         type: 'U64',
-                        value: '0'
+                        value: '' + this.state.coin_b_value
                     }
                 ]
             },
@@ -740,7 +746,7 @@ class CashPooling extends Component {
     }
     render() {
         let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
-        // console.log(poolArr,'....')
+        // console.log(this.state.outputAmount1,'....')
         return (
             <div className="exchange cashPooling">
                 <div className="exchangeContent">

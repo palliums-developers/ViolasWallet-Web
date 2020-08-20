@@ -7,6 +7,7 @@ class DigitalBankPage extends Component {
         super()
         this.state = {
             visible:true,
+            visible1:false,
             type:'存款市场',
             types:['存款市场','借款市场'],
             ind:0,
@@ -34,7 +35,7 @@ class DigitalBankPage extends Component {
     }
     render() {
         let { routes } = this.props;
-        let { visible, types, ind, orders } = this.state
+        let { visible, types, ind, orders, visible1 } = this.state
         return (
             <div className="digitalBankPage">
                 <div className="apply">
@@ -55,15 +56,21 @@ class DigitalBankPage extends Component {
                         </i>
                         </p> 
                         <div className="dropdown">
-                            <span><img src="/img/编组 9@2x.png" /></span>
-                            <div className="dropdown-content">
-                                {
-                                    orders.map((v,i)=>{
-                                    return <NavLink key={i} to={v.pathname}><img src={v.imgUrl} /><label>{v.name}</label></NavLink>
-                                    })
-                                }
-                                
-                            </div>
+                            <span onClick={()=>{
+                                this.setState({
+                                    visible1:!this.state.visible1
+                                })
+                            }}><img src="/img/编组 9@2x.png" /></span>
+                            {
+                                visible1 ? <div className="dropdown-content">
+                                    {
+                                        orders.map((v, i) => {
+                                            return <NavLink key={i} to={v.pathname}><img src={v.imgUrl} /><label>{v.name}</label></NavLink>
+                                        })
+                                    }
+
+                                </div> : null
+                            }
                         </div>
                    </div>
                     <p>{
