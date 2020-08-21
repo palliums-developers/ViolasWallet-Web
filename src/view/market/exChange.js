@@ -501,11 +501,9 @@ class ExChange extends Component {
             console.log('bitcoin swap', tx);
             this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
-                if (res == 'success') {
                     this.setState({
                         warning:'兑换成功'
                     })
-                }
             }).catch(err => {
                 console.log('Bitcoin Swap ', err);
                  this.setState({
@@ -517,11 +515,9 @@ class ExChange extends Component {
             console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
-                if (res == "success") {
                   this.setState({
                     warning: "兑换成功",
                   });
-                }
             }).catch(err => {
                 console.log('Libra Swap ', err);
                 this.setState({
@@ -968,11 +964,17 @@ class ExChange extends Component {
                                         }}>
                                             <div className="list1">
                                                 <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i onClick={() => this.showExchangeCode()}>重试</i>}</span>
-                                                <p>{v.input_amount}{v.input_name}</p>
+                                                {
+                                                    v.status == 4001 ?  <p>{v.input_amount}{v.input_name}</p> :<p>--</p>
+                                                }
+                                               
                                             </div>
                                             <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
                                             <div className="list2">
-                                                <span>{v.output_amount}{v.output_name}</span>
+                                                {
+                                                    v.status == 4001 ? <span>{v.output_amount}{v.output_name}</span> :<span>--</span>
+                                                }
+                                               
                                                 <p>{timeStamp2String(v.date + '000')}<i><img src="/img/rightArrow.png" /></i></p>
                                             </div>
                                         </div>

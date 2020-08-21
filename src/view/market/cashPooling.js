@@ -663,6 +663,9 @@ class CashPooling extends Component {
 
         }).catch(err => {
             console.log('Add Liquidity ', err);
+            this.setState({
+                warning: '转入失败'
+            })
         });
     }
     showExchangeCode = () => {
@@ -722,6 +725,9 @@ class CashPooling extends Component {
             }
         }).catch(err => {
             console.log('Remove Liquidity ', err);
+            this.setState({
+                warning: '转出失败'
+            })
         });
     }
     showExchangeCode1 = () => {

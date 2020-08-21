@@ -252,13 +252,19 @@ class DigitalBank extends Component {
     if (this.state.mappingCoinType.from_coin.coin_type === 'btc') {
       // let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), parseInt(this.state.mappingCoinAmount)/100);
       let script = getBitcoinScript(this.state.mappingCoinType.lable, to_address, this.state.amount);
-      console.log('script: ', script);
+      // console.log('script: ', script);
       let tx = getBTCTx(sessionStorage.getItem('bitcoin_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, script);
       console.log('bitcoin: ', tx);
       this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
         console.log('Bitcoin mapping ', res);
+        this.setState({
+          warning: '映射成功'
+        })
       }).catch(err => {
         console.log('Bitcoin mapping ', err);
+        this.setState({
+          warning: '映射失败'
+        })
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'libra') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
@@ -266,8 +272,14 @@ class DigitalBank extends Component {
       console.log('libra: ', tx);
       this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
         console.log('Libra mapping ', res);
+        this.setState({
+          warning: '映射成功'
+        })
       }).catch(err => {
         console.log('Libra mapping ', err);
+        this.setState({
+          warning: '映射失败'
+        })
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'violas') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
@@ -275,8 +287,14 @@ class DigitalBank extends Component {
       console.log('violas: ', tx);
       this.state.walletConnector.sendTransaction('violas', tx).then(res => {
         console.log('Violas mapping ', res);
+        this.setState({
+          warning: '映射成功'
+        })
       }).catch(err => {
         console.log('Violas mapping ', err);
+        this.setState({
+          warning: '映射失败'
+        })
       });
     } else {
       return
