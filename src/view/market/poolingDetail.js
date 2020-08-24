@@ -78,7 +78,7 @@ class PoolingDetail extends Component {
                     {/* {
                         changeList.status == 4001 ? <p><img src="/img/shenhetongguo 2@2x.png" /><label style={{ 'color': '#333333' }}>兑换成功</label></p> : <p><img src="/img/编组 6@2x.png" /><label style={{ 'color': 'red' }}>兑换失败</label></p>
                     } */}
-                    <p><img src={type.slice(2, 4) == '成功' ? "/img/shenhetongguo 2@2x.png" : "/img/编组 6@2x.png"} /><label className={type.slice(2, 4) == '成功' ? 'gr' : 'red'}>{type}{type.slice(2, 4) == '成功' ? null : <i>重试</i>}</label></p>
+                    <p><img src={type.slice(2, 4) == '成功' ? "/img/shenhetongguo 2@2x.png" : "/img/编组 6@2x.png"} /><label className={type.slice(2, 4) == '成功' ? 'gr' : 'red'}>{type}</label></p>
                 </div>
             </div>
         )

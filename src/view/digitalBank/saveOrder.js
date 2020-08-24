@@ -3,60 +3,14 @@ import './digitalBank.scss';
 import { Breadcrumb, Table, Tag, Space } from "antd";
 import { NavLink } from "react-router-dom";
 // import 'antd.css'
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <a>{text}</a>,
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: tags => (
-            <>
-                {tags.map(tag => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (text, record) => (
-            <Space size="middle">
-                <a>Invite {record.name}</a>
-                <a>Delete</a>
-            </Space>
-        ),
-    },
-];
+
 //存款订单
 class SaveOrder extends Component {
     constructor() {
         super()
         this.state = {
             saveId:0,
+            showDialog:false,
             types:[
                 {
                     id:0,
@@ -70,59 +24,150 @@ class SaveOrder extends Component {
             data:[
                 {
                     key: '1',
-                    name: 'John Brown',
-                    age: 32,
-                    address: 'New York No. 1 Lake Park',
-                    tags: ['nice', 'developer'],
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield:'5.00%',
+                    status:'收益中',
+                    option: '提取',
                 },
                 {
                     key: '2',
-                    name: 'Jim Green',
-                    age: 42,
-                    address: 'London No. 1 Lake Park',
-                    tags: ['loser'],
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
                     key: '3',
-                    name: 'Joe Black',
-                    age: 32,
-                    address: 'Sidney No. 1 Lake Park',
-                    tags: ['cool', 'teacher'],
+                    coin: 'CAA',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
+                    key: '4',
+                    coin: 'EEB',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
+                },
+                {
+                    key: '5',
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
+                },
+                {
+                    key: '6',
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
+                }, {
                     key: '1',
-                    name: 'John Brown',
-                    age: 32,
-                    address: 'New York No. 1 Lake Park',
-                    tags: ['nice', 'developer'],
+                    coin: 'CAA',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
                     key: '2',
-                    name: 'Jim Green',
-                    age: 42,
-                    address: 'London No. 1 Lake Park',
-                    tags: ['loser'],
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
                     key: '3',
-                    name: 'Joe Black',
-                    age: 32,
-                    address: 'Sidney No. 1 Lake Park',
-                    tags: ['cool', 'teacher'],
+                    coin: 'CAA',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
-                    key: '2',
-                    name: 'Jim Green',
-                    age: 42,
-                    address: 'London No. 1 Lake Park',
-                    tags: ['loser'],
+                    key: '4',
+                    coin: 'EEB',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
                 },
                 {
-                    key: '3',
-                    name: 'Joe Black',
-                    age: 32,
-                    address: 'Sidney No. 1 Lake Park',
-                    tags: ['cool', 'teacher'],
+                    key: '5',
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
+                },
+                {
+                    key: '6',
+                    coin: 'VLS',
+                    money: '1000.0',
+                    income: '1000.0',
+                    yield: '5.00%',
+                    status: '收益中',
+                    option: '提取',
+                }
+            ],
+            columns:[
+                {
+                    title: '币种',
+                    dataIndex: 'coin',
+                    key: 'coin'
+                },
+                {
+                    title: '本金',
+                    dataIndex: 'money',
+                    key: 'money',
+                },
+                {
+                    title: '收益',
+                    dataIndex: 'income',
+                    key: 'income',
+                },
+                {
+                    title: '年化收益率',
+                    key: 'yield',
+                    dataIndex: 'yield',
+                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
+                },
+                {
+                    title: '状态',
+                    key: 'status',
+                    dataIndex: 'status',
+                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
+                },
+                {
+                    title: '操作',
+                    key: 'option',
+                    dataIndex: 'option',
+
+                    render: text => <label onClick={() => {
+                        this.setState({
+                            showDialog:true
+                        })
+                    }} style={{ color: 'rgba(112, 56, 253, 1)', cursor: 'pointer'}}>{text}</label>,
                 },
             ]
         }
@@ -130,9 +175,10 @@ class SaveOrder extends Component {
     componentDidMount() {
 
     }
-
+    
     render() {
         let { types } = this.state;
+        // console.log(getDialog())
         return (
             <div className="saveOrder">
                 <Breadcrumb separator=">">
@@ -156,8 +202,34 @@ class SaveOrder extends Component {
                            })
                        }
                    </div>
-                    <Table columns={columns} dataSource={this.state.data} pagination={{ pageSize:6,position:['bottomCenter']}}/>
+                    <Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize:6,position:['bottomCenter']}}/>
                 </div>
+                {
+                    this.state.showDialog ? <div className="extractMark">
+                        <div className="extractContent">
+                            <div className="extractList">
+                                <div className="head"><h4>提取</h4><i onClick={()=>{
+                                    this.setState({
+                                        showDialog:false
+                                    })
+                                }}><img src="/img/chahao.png" /></i></div>
+                                <div className="inputDiv">
+                                    <input placeholder="请输入提取数量" /><label>VLS</label>
+                                </div>
+                                <div className="inputDescr">
+                                    <p><img src="/img/kyye.png" />可提数量：<span>20VLS</span></p>
+                                    <p>全部</p>
+                                </div>
+                                <div className="extractDescr"><img src="/img/编组 4@2x.png" /><p>如果您当前有借贷操作，则需将部分存款作为质押金。提取质押金需还对应数量的借款金额。</p></div>
+                                <div className="foot">
+                                    <p className="btn" onClick={() => { }}>提 取</p>
+                                    <p className="descr">{'请输入提取数量'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> : null
+                }
+                
             </div>
         )
     }

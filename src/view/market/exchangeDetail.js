@@ -44,7 +44,7 @@ class ExchangeDetail extends Component {
                     <p><img src="/img/shenhetongguo 2@2x.png" /><label>已提交</label></p><i></i>
                     <p><img src="/img/shenhezhong-2 2@2x.png" /><label>兑换中</label></p><i></i>
                     {
-                        changeList.status == 4001 ? <p><img src="/img/shenhetongguo 2@2x.png" /><label style={{ 'color': '#333333' }}>兑换成功</label></p> : <p><img src="/img/编组 6@2x.png" /><label style={{ 'color': 'red' }}>兑换失败<i>重试</i></label></p>
+                        changeList.status == 4001 ? <p><img src="/img/shenhetongguo 2@2x.png" /><label style={{ 'color': '#333333' }}>兑换成功</label></p> : <p><img src="/img/编组 6@2x.png" /><label style={{ 'color': 'red' }}>兑换失败</label></p>
                     }
 
                 </div>

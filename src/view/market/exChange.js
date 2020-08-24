@@ -553,7 +553,7 @@ class ExChange extends Component {
     getExchangeRecode = () => {
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.sessionStorage.getItem('violas_address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data) {
                     this.setState({
                         changeRecord: res.data
@@ -963,7 +963,7 @@ class ExChange extends Component {
                                             })
                                         }}>
                                             <div className="list1">
-                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}{v.status == 4001 ? null : <i onClick={() => this.showExchangeCode()}>重试</i>}</span>
+                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}</span>
                                                 {
                                                     v.status == 4001 ?  <p>{v.input_amount}{v.input_name}</p> :<p>--</p>
                                                 }

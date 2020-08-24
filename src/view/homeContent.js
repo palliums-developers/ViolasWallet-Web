@@ -91,11 +91,7 @@ class HomeContent extends Component {
                   this.setState({
                     arr1: res.data.balances
                   }, () => {
-                    //  this.state.arr1.map((v,i)=>{
-                    //    if (v.show_name == 'LBR'){
-                    //        v.show_name = 'VLS'
-                    //     }
-                    //  })
+                   
                     let BTCBalance = 0;
                     this.state.BTCBalances.map((v, i) => {
                       BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
