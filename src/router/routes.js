@@ -13,6 +13,8 @@ import DigitalBankPage from "../view/digitalBank/digitalBankPage";
 import SaveDetails from "../view/digitalBank/saveDetails";
 import SaveOrder from "../view/digitalBank/saveOrder";
 import BorrowOrder from "../view/digitalBank/borrowOrder";
+import BorrowDetails from "../view/digitalBank/borrowDetails";
+import Repayment from "../view/digitalBank/repayment";
 
 let routes = [
     //首页
@@ -66,6 +68,14 @@ let routes = [
                             {
                                 path: '/homepage/home/digitalBank/saveDetails',
                                 component: SaveDetails
+                            },
+                            {
+                                path: '/homepage/home/digitalBank/borrowDetails',
+                                component: BorrowDetails
+                            },
+                            {
+                                path: '/homepage/home/digitalBank/repayment',
+                                component: Repayment
                             },
                             {
                                 path: '/homepage/home/digitalBank/saveOrder',

@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import './digitalBank.scss';
-import { Breadcrumb, Table, Tag, Space } from "antd";
+import { DatePicker, Breadcrumb, Table, Tag, Space, Select  } from "antd";
 import { NavLink } from "react-router-dom";
-// import 'antd.css'
+import 'antd/dist/antd.css'
+import 'moment/locale/zh-cn';
+import locale from 'antd/es/date-picker/locale/zh_CN';
+const { RangePicker } = DatePicker;
+const { Option } = Select;
+
 
 //存款订单
 class SaveOrder extends Component {
@@ -130,6 +135,91 @@ class SaveOrder extends Component {
                     option: '提取',
                 }
             ],
+            data1: [
+                {
+                    key: '1',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time:'18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '2',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '3',
+                    coin: 'CAA',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '4',
+                    coin: 'EEB',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '5',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '6',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                }, {
+                    key: '1',
+                    coin: 'CAA',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '2',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '3',
+                    coin: 'CAA',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '4',
+                    coin: 'EEB',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '5',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                },
+                {
+                    key: '6',
+                    coin: 'VLS',
+                    amount: '1000.0',
+                    time: '18:22  01/24/2018',
+                    status: '收益中'
+                }
+            ],
             columns:[
                 {
                     title: '币种',
@@ -169,13 +259,43 @@ class SaveOrder extends Component {
                         })
                     }} style={{ color: 'rgba(112, 56, 253, 1)', cursor: 'pointer'}}>{text}</label>,
                 },
+            ],
+            columns1: [
+                {
+                    title: '时间',
+                    dataIndex: 'time',
+                    key: 'time'
+                },
+                {
+                    title: '币种',
+                    dataIndex: 'coin',
+                    key: 'coin',
+                },
+                {
+                    title: '数量',
+                    dataIndex: 'amount',
+                    key: 'amount',
+                },
+                {
+                    title: '状态',
+                    key: 'status',
+                    dataIndex: 'status',
+                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
+                }
             ]
         }
     }
     componentDidMount() {
 
     }
-    
+    onChange = (value, dateString)=>{
+    console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+    }
+
+    onOk = (value) => {
+        console.log('onOk: ', value);
+    }
     render() {
         let { types } = this.state;
         // console.log(getDialog())
@@ -202,7 +322,59 @@ class SaveOrder extends Component {
                            })
                        }
                    </div>
-                    <Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize:6,position:['bottomCenter']}}/>
+                   {
+                        this.state.saveId == 0 ? <Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> : 
+                        <div className="saveDetail">
+                                <div className="selector">
+                                    <Space direction="vertical" size={12}>
+                                        <RangePicker
+                                            locale={locale}
+                                            showTime={{ format: 'HH:mm' }}
+                                            format="YYYY-MM-DD HH:mm"
+                                            onChange={this.onChange}
+                                            onOk={this.onOk}
+                                        />
+                                    </Space>
+                                    <Select
+                                        showSearch
+                                        style={{ width: 200 }}
+                                        placeholder="全部币种"
+                                        optionFilterProp="children"
+                                        // onChange={onChange}
+                                        // onFocus={onFocus}
+                                        // onBlur={onBlur}
+                                        // onSearch={onSearch}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        <Option value="jack">Jack</Option>
+                                        <Option value="lucy">Lucy</Option>
+                                        <Option value="tom">Tom</Option>
+                                    </Select>
+                                    <Select
+                                        showSearch
+                                        style={{ width: 200 }}
+                                        placeholder="全部状态"
+                                        optionFilterProp="children"
+                                        // onChange={onChange}
+                                        // onFocus={onFocus}
+                                        // onBlur={onBlur}
+                                        // onSearch={onSearch}
+                                        filterOption={(input, option) =>
+                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        <Option value="jack">Jack</Option>
+                                        <Option value="lucy">Lucy</Option>
+                                        <Option value="tom">Tom</Option>
+                                    </Select>
+                                    <button>搜索</button>
+                                </div>
+                                <Table locale={locale} columns={this.state.columns1} dataSource={this.state.data1} pagination={{ pageSize: 6, position: ['bottomCenter'] }} />
+                        </div>
+                   }
+                    
                 </div>
                 {
                     this.state.showDialog ? <div className="extractMark">

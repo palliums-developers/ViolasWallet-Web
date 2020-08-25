@@ -99,6 +99,12 @@ class DigitalBankPage extends Component {
                             <p><img src="/img/BTC复制 2@2x.png" /><span>BTC</span><label>持币生息的BTC</label></p> 
                             <p><span>3.70%</span><label>年化收益率</label></p>
                         </div>
+                        <div className="everyList" onClick={() => {
+                            this.props.history.push('/homepage/home/digitalBank/borrowDetails')
+                        }}>
+                            <p><img src="/img/BTC复制 2@2x.png" /><span>BTC</span><label>持币生息的BTC</label></p>
+                            <p><span>3.70%</span><label>年化收益率</label></p>
+                        </div>
                     </div>
                 </div>
             </div>

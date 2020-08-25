@@ -171,6 +171,7 @@
             padding: 0 12px;
             box-sizing: border-box;
             cursor: pointer;
+            margin-bottom:10px;
             p:nth-child(1){
               display: flex;
               align-items: center;
@@ -586,8 +587,8 @@
         }
     }
 }
-//存款页面
-.saveDetails{
+//存款,借款页面
+.borrowDetails,.saveDetails{
     width: 100%;
     // height: 100%;
     background: rgba(247, 247, 249, 1);
@@ -734,7 +735,7 @@
       }
       .saveDetailsList1{
         width: 100%;
-        height: 219px;
+        // height: 219px;
         background:rgba(255,255,255,1);
         box-shadow:0px -5px 10px 0px rgba(0,0,0,0.06);
         margin-top: 10px;
@@ -932,6 +933,7 @@
       }
   .curSaveLists{
     width: 1071px;
+    min-height: 700px;
     background: #FFF;
     margin: 0 auto;
     margin-top: 17px;
@@ -954,6 +956,26 @@
         font-weight:500;
         color:rgba(51,51,51,1);
         border-bottom: 2px solid rgba(112, 56, 253, 1);
+      }
+    }
+    .saveDetail{
+      .selector{
+        margin-top: 40px;
+        .ant-select{
+          margin-left:20px;
+        }
+        button{
+          width:50px;
+          height:30px;
+          background:rgba(112,56,253,1);
+          border-radius:2px;
+          font-size:12px;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          border: 0;
+          outline: 0;
+          margin-left: 20px;
+        }
       }
     }
     .ant-table-wrapper{
@@ -1154,4 +1176,53 @@
         }
       }
     }
+}
+//借款
+.borrowDetails{
+.saveDetailsWrap{
+  .agreest{
+    width: 100%;
+    font-size:12px;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    // margin: 0 auto;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+    img{
+      width: 12px;
+      height: 12px;
+      margin-right: 4px;
+      cursor: pointer;
+    }
+    span{
+      color: rgba(112, 56, 253, 1);
+    }
+  }
+  .saveDetailsList1{
+    >p:last-child{
+          height: 79px;
+          p{
+            display: flex;
+            flex-direction: column;
+             label{
+              font-size:14px;
+              font-weight:400;
+              color:rgba(92,92,92,1);
+            }
+            span{
+              font-size:12px;
+              font-weight:400;
+              color:rgba(186,186,186,1);
+            }
+          }
+        }
+  }
+  .foot{
+    .btn{
+      margin-top: 24px;
+    }
+  }
+}
 }
