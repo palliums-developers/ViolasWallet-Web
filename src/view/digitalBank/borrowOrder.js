@@ -15,15 +15,32 @@ class BorrowOrder extends Component {
         super()
         this.state = {
             saveId: 0,
+            detailId:0,
             showDialog: false,
+            expandedRowKeys: [],
+            displayMenu:false,
+            borrowDetails: [
+            {
+                id:0,
+                type: '借款明细',
+            }, 
+            {
+                id: 1,
+                type: '还款明细',
+            },
+            {
+                id: 2,
+                type: '清算明细',
+            }
+            ],
             types: [
                 {
                     id: 0,
-                    type: '当前存款'
+                    type: '当前借款'
                 },
                 {
                     id: 1,
-                    type: '存款明细'
+                    type: '借款明细'
                 }
             ],
             data: [
@@ -32,83 +49,251 @@ class BorrowOrder extends Component {
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款','借款','详情'],
+                    option: [
+                        {
+                            id:0,
+                            name:'还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
                     key: '2',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
                     key: '3',
                     coin: 'CAA',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
                     key: '4',
                     coin: 'EEB',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
                     key: '5',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
                     key: '6',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 }, {
-                    key: '1',
+                    key: '7',
                     coin: 'CAA',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
-                    key: '2',
+                    key: '8',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
-                    key: '3',
+                    key: '9',
                     coin: 'CAA',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
-                    key: '4',
+                    key: '10',
                     coin: 'EEB',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu:false
+                        }
+                    ],
                 },
                 {
-                    key: '5',
+                    key: '11',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 },
                 {
-                    key: '6',
+                    key: '12',
                     coin: 'VLS',
                     money: '1000.0',
                     income: '1000.0',
-                    option: ['还款', '借款', '详情'],
+                    option: [
+                        {
+                            id: 0,
+                            name: '还款'
+                        },
+                        {
+                            id: 1,
+                            name: '借款'
+                        },
+                        {
+                            id: 2,
+                            name: '详情',
+                            displayMenu: false
+                        }
+                    ],
                 }
             ],
             data1: [
@@ -232,19 +417,31 @@ class BorrowOrder extends Component {
                     render: texts => (
                         <div style={{ display: 'flex'}}>
                             {
-                                texts.map((val)=>{
-                                    if (val == '详情'){
-                                        return <label style={{ display: 'flex', alignItems: 'center', marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val}<img expandable= '111' style={{ width: '12px', height: '12px',marginLeft:'5px' }} src="/img/编组 16@2x (2).png"/></label>
-                                    } else if (val == '还款'){
-                                        return <label onClick={()=>{
+                                texts.map((val,i)=>{
+                                    if (val.name == '详情'){
+                                        return <label key={i} style={{ display: 'flex', alignItems: 'center', marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}
+                                        {
+                                                val.displayMenu ? <img style={{ width: '12px', height: '12px', marginLeft: '5px' }} src="/img/编组 16@2x (3).png" /> : <img style={{ width: '12px', height: '12px', marginLeft: '5px' }} src="/img/编组 16@2x (2).png" />
+                                        }
+                                        </label>
+                                    } else if (val.name == '还款'){
+                                        return <label key={i} onClick={()=>{
                                             this.props.history.push('/homepage/home/digitalBank/repayment')
-                                        }} style={{ marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val}</label>
+                                        }} style={{ marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}</label>
                                     }
-                                   return <label style={{ marginRight:'50px',color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val}</label>
+                                    return <label key={i} onClick={() => {
+                                        this.props.history.push('/homepage/home/digitalBank/borrowDetails')
+                                    }} style={{ marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}</label>
                                 })
                             }
                         </div>
-                    )
+                    ),
+                    onCell: (record) => {
+                        return {
+                            onClick: () => this.expandRowByKey(record.key),
+                        };
+                        
+                    },
                 },
             ],
             columns1: [
@@ -280,26 +477,98 @@ class BorrowOrder extends Component {
     componentDidMount() {
 
     }
+    //弹出二级菜单
+    expandRowByKey = (key) => {
+        if (this.state.data[key - 1].option[2].displayMenu == false) {
+            this.state.data[key - 1].option[2].displayMenu = true
+        } else {
+            this.state.data[key - 1].option[2].displayMenu = false
+        }
+
+        const { expandedRowKeys } = this.state;
+        const index = expandedRowKeys.findIndex((item) => key === item);
+        let keys = [...expandedRowKeys]; 
+        if (index > -1) keys = keys.filter((item) => key !== item);
+        else keys.push(key);
+        this.setState({ expandedRowKeys: keys });
+    };
+    onExpand = (expanded, record) => {
+        this.expandRowByKey(record.key);
+    };
     onChange = (value, dateString) => {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
     }
-
+    //二级菜单内容
+    expandedRowRender = (record, index, indent, expanded) => {
+        let columns = [
+            {
+                title: '时间',
+                dataIndex: 'time',
+                key: 'time'
+            },
+            {
+                title: '数量',
+                dataIndex: 'amount',
+                key: 'amount',
+            },
+            {
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
+            }
+        ]
+        let data = [
+            {
+                key: '1',
+                time: '1:00',
+                amount: '1000.0',
+                status: '借款中'
+            },
+            {
+                key: '2',
+                time: '1:00',
+                amount: '1000.0',
+                status: '借款中'
+            },
+            {
+                key: '3',
+                time: '1:00',
+                amount: '1000.0',
+                status: '借款中'
+            }
+        ]
+        return <div className="secendMenu">
+            <div className="tab">
+                {
+                    this.state.borrowDetails.map((v,i)=>{
+                    return <span key={i} className={v.id == this.state.detailId ? 'active1' : null} onClick={()=>{
+                        this.setState({
+                            detailId:v.id
+                        })
+                    }}>{v.type}</span>
+                    })
+                }
+            </div>
+            <Table columns={columns} dataSource={data} pagination={false} />
+        </div>
+    };
     onOk = (value) => {
         console.log('onOk: ', value);
     }
+    
     render() {
-        let { types } = this.state;
+        let { types, expandedRowKeys } = this.state;
         // console.log(getDialog())
         return (
-            <div className="saveOrder">
+            <div className="borrowOrder">
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item>
                         <NavLink to="/homepage/home/digitalBank"> <img src="/img/fanhui 2@2x.png" />
               数字银行</NavLink>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <NavLink to="/homepage/home/digitalBank/saveOrder">存款订单</NavLink>
+                        <NavLink to="/homepage/home/digitalBank/saveOrder">借款订单</NavLink>
                     </Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="curSaveLists">
@@ -315,7 +584,11 @@ class BorrowOrder extends Component {
                         }
                     </div>
                     {
-                        this.state.saveId == 0 ? <Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> :
+                        this.state.saveId == 0 ? <Table expandable={{
+                            expandedRowKeys: expandedRowKeys,
+                            onExpand: () =>this.onExpand(),
+                            expandedRowRender:()=>this.expandedRowRender()
+                        }}  columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> :
                             <div className="saveDetail">
                                 <div className="selector">
                                     <Space direction="vertical" size={12}>

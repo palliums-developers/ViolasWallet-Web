@@ -41,7 +41,7 @@ class CurrencyDetail extends Component {
         
     }
     async componentWillMount() {
-        // console.log(this.props.detailAddrs)
+        console.log(this.props.detailAddrs)
         this.setState({
             detailAddrs: this.props.detailAddrs,
             name: this.props.name
@@ -225,7 +225,7 @@ class CurrencyDetail extends Component {
                     </div>
                 </div>
                 {
-                    total > 0 ? <Pagination defaultCurrent={1} defaultPageSize={6} total={Number(total)} onChange={this.onChange} /> : null
+                    dataList.length > 0 ? <Pagination defaultCurrent={1} defaultPageSize={6} total={Number(total)} onChange={this.onChange} /> : null
                 }
                 
             </div>
