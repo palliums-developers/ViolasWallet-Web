@@ -591,6 +591,7 @@
 .borrowDetails,.saveDetails{
     width: 100%;
     // height: 100%;
+    padding-bottom: 40px;
     background: rgba(247, 247, 249, 1);
     .ant-breadcrumb {
         display: flex;
@@ -816,22 +817,22 @@
       }
       .productDescr{
         width:100%;
-        height:275px;
+        // height:275px;
         background:rgba(255,255,255,1);
         box-shadow:0px -5px 10px 0px rgba(0,0,0,0.06);
-        padding: 0 50px;
-        padding-top: 31px;
+        padding: 31px 50px;
         box-sizing: border-box;
         margin-top: 30px;
         .h3{
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 40px;
+          // margin-bottom: 40px;
           i{
             width: 12px;
             height: 12px;
             display: flex;
+            cursor: pointer;
             img{
               width: 100%;
             }
@@ -849,6 +850,9 @@
             }
           }
           
+        }
+        .descr:nth-child(2){
+          margin-top:40px;
         }
         .descr{
           margin-bottom: 15px;
@@ -867,22 +871,24 @@
       }
       .question{
         width:100%;
-        height:77px;
+        // height:77px;
         background:rgba(255,255,255,1);
         box-shadow:0px 5px 10px 0px rgba(0,0,0,0.06);
         padding: 0 50px;
         padding-top: 31px;
+        padding-bottom: 30px;
         box-sizing: border-box;
         margin-top: 10px;
         .h3{
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 40px;
+          // margin-bottom: 40px;
           i{
             width: 12px;
             height: 12px;
             display: flex;
+            cursor: pointer;
             img{
               width: 100%;
             }
@@ -900,6 +906,23 @@
             }
           }
           
+        }
+        >.descr:nth-child(2){
+          margin-top:30px;
+        }
+        .descr{
+          margin-bottom: 15px;
+          h4{
+            font-size:12px;
+            font-weight:400;
+            color:rgba(92,92,92,1);
+          }
+          p{
+            font-size:10px;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            margin-top: 3px;
+          }
         }
       }    
     }
@@ -1223,6 +1246,18 @@
     .btn{
       margin-top: 24px;
     }
+  }
+}
+.productDescr{
+  .descr{
+    h4{
+      margin-bottom: 15px;
+    }
+  }
+}
+.question{
+  .descrs{
+    margin-top: 30px;
   }
 }
 }

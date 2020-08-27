@@ -78,8 +78,12 @@ class DigitalBankPage extends Component {
                     }</p>
                     <div className="applyContent">
                         <div>
-                            <p><img src="/img/meiyuan8 2@2x.png" /><label>可借总额（$）</label><span>≈1041.76/1500</span></p>
-                            <p><img src="/img/形状结合备份 2@2x.png" /><label>累计收益（$）</label><span>≈41.76</span></p>
+                            <p><img src="/img/meiyuan8 2@2x.png" /><label>可借总额（$）</label>{
+                                visible ? <span>≈1041.76/1500</span> : <span>******</span>
+                            }</p>
+                            <p><img src="/img/形状结合备份 2@2x.png" /><label>累计收益（$）</label>{
+                                visible ? <span>≈41.76</span> : <span>******</span>
+                            }</p>
                         </div>
                         <div className="earnings"><img src="/img/形状结合 2@2x.png" />昨日收益 0.60 $</div>
                     </div>

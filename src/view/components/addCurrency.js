@@ -223,30 +223,32 @@ class AddCurrency extends Component {
     
     fetch(url + "/1.0/violas/currency/published?addr="+window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
-        let data = this.state.addCurrencyList1.map((v, i) => {
-          if (v.checked) {
-            return v;
-          } else {
-            return Object.assign(v,{ checked: false })
-          }
-        })
-        for (let i = 0; i < data.length; i++) {
-          for (let j = 0; j < res.data.published.length; j++) {
-            if (data[i].name == res.data.published[j]) {
-              data[i].checked = true;
-              break;
+        if(res.data){
+          let data = this.state.addCurrencyList1.map((v, i) => {
+            if (v.checked) {
+              return v;
             } else {
-              data[i].checked = false;
+              return Object.assign(v, { checked: false })
+            }
+          })
+          for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < res.data.published.length; j++) {
+              if (data[i].name == res.data.published[j]) {
+                data[i].checked = true;
+                break;
+              } else {
+                data[i].checked = false;
+              }
             }
           }
+
+          data.sort((a, b) => {
+            return b.checked - a.checked
+          })
+          this.setState({
+            addCurrencyList1: data
+          })
         }
-        
-        data.sort((a, b) => {
-          return b.checked - a.checked
-        })
-        this.setState({
-          addCurrencyList1:data
-        })
         
       })
   }
