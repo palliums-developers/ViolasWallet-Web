@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
+import { timeStamp2String } from '../../utils/timer';
+let url = "https://api4.violas.io";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -18,6 +20,8 @@ class BorrowOrder extends Component {
             detailId:0,
             showDialog: false,
             expandedRowKeys: [],
+            allCoin:[],
+            allStatus:[],
             displayMenu:false,
             borrowDetails: [
             {
@@ -43,356 +47,8 @@ class BorrowOrder extends Component {
                     type: '借款明细'
                 }
             ],
-            data: [
-                {
-                    key: '1',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id:0,
-                            name:'还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                }, {
-                    key: '7',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '8',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '9',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '10',
-                    coin: 'EEB',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu:false
-                        }
-                    ],
-                },
-                {
-                    key: '11',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                },
-                {
-                    key: '12',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    option: [
-                        {
-                            id: 0,
-                            name: '还款'
-                        },
-                        {
-                            id: 1,
-                            name: '借款'
-                        },
-                        {
-                            id: 2,
-                            name: '详情',
-                            displayMenu: false
-                        }
-                    ],
-                }
-            ],
-            data1: [
-                {
-                    key: '1',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas:'0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                }, {
-                    key: '1',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    gas: '0.1',
-                    status: '收益中'
-                }
-            ],
+            data: [],
+            data1: [],
             columns: [
                 {
                     title: '币种',
@@ -405,7 +61,7 @@ class BorrowOrder extends Component {
                     key: 'money',
                 },
                 {
-                    title: '剩余金额',
+                    title: '剩余可借',
                     dataIndex: 'income',
                     key: 'income',
                 },
@@ -475,7 +131,96 @@ class BorrowOrder extends Component {
         }
     }
     componentDidMount() {
+        // 当前借款
+        fetch(url + "/1.0/violas/bank/borrow/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                let newData = [];
+                for (let i = 0; i < res.data.length; i++) {
+                    newData.push({
+                        coin: res.data[i].name,
+                        key: i + 1,
+                        money: res.data[i].amount,
+                        income: res.data[i].amount,
+                        option: [
+                            {
+                                id: 0,
+                                name: '还款'
+                            },
+                            {
+                                id: 1,
+                                name: '借款'
+                            },
+                            {
+                                id: 2,
+                                name: '详情',
+                                displayMenu: false
+                            }
+                        ],
+                    })
 
+                }
+                this.setState({
+                    data: newData
+                })
+            } else {
+                this.setState({
+                    data: res.data
+                })
+            }
+
+        })
+        this.getBorrowDetail()
+    }
+    //借款明细
+    getBorrowDetail = ()=>{
+        fetch(url + "/1.0/violas/bank/borrow/order/list?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                let newData = [];
+                let allCoin = [];
+                let allStatus = []
+                for (let i = 0; i < res.data.length; i++) {
+                    newData.push({
+                        time: timeStamp2String(res.data[i].date),
+                        gas: '--',
+                        coin: res.data[i].currency,
+                        key: i + 1,
+                        amount: res.data[i].value,
+                        status: res.data[i].status == 1 ? '收益中' : null,
+                    })
+                    if (allCoin.length>0){
+                        for (let j = 0; j < allCoin.length; j++){
+                            if (allCoin[j] != res.data[i].currency) {
+                                allCoin.push(res.data[i].currency)
+                            }
+                        }
+                        
+                    }else{
+                        allCoin.push(res.data[i].currency)
+                    }
+                    if (allStatus.length > 0) {
+                        for (let j = 0; j < allStatus.length; j++) {
+                            if (allStatus[j] != res.data[i].status) {
+                                allStatus.push(res.data[i].status)
+                            }
+                        }
+
+                    } else {
+                        allStatus.push(res.data[i].status)
+                    }
+
+                }
+                this.setState({
+                    data1: newData,
+                    allCoin: allCoin,
+                    allStatus: allStatus
+                })
+            } else{
+                this.setState({
+                    data1: res.data
+                })
+            }
+
+        })
     }
     //弹出二级菜单
     expandRowByKey = (key) => {
@@ -558,7 +303,7 @@ class BorrowOrder extends Component {
     }
     
     render() {
-        let { types, expandedRowKeys } = this.state;
+        let { types, expandedRowKeys, allStatus,allCoin } = this.state;
         // console.log(getDialog())
         return (
             <div className="borrowOrder">
@@ -613,9 +358,11 @@ class BorrowOrder extends Component {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="jack">Jack</Option>
-                                        <Option value="lucy">Lucy</Option>
-                                        <Option value="tom">Tom</Option>
+                                        {
+                                            allCoin.map((v,i)=>{
+                                                return <Option key={i} value={v}>{v}</Option>
+                                            })
+                                        }
                                     </Select>
                                     <Select
                                         showSearch
@@ -630,9 +377,11 @@ class BorrowOrder extends Component {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="jack">Jack</Option>
-                                        <Option value="lucy">Lucy</Option>
-                                        <Option value="tom">Tom</Option>
+                                        {
+                                            allStatus.map((v, i) => {
+                                                return <Option key={i} value={v}>{v == 1 ? '收益中': null}</Option>
+                                            })
+                                        }
                                     </Select>
                                     <button>搜索</button>
                                 </div>

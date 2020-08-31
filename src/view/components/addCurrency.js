@@ -140,46 +140,64 @@ class AddCurrency extends Component {
     return str;
   }
   async getTyArgs(_name,_addr,ind) {
-
     
-    fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
-      .then(res => {
+    
+    fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+        
         let arr = [];
         let index = ind;
-        for (let i = 0; i < res.data.published.length; i++) {
-          for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
-            if (this.state.addCurrencyList1[j].name == _name) {
-              if (res.data.published[i].indexOf(this.state.addCurrencyList1[j].name) == 0) {
-                this.state.addCurrencyList1[j].checked = true;
-                window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
+        if (res.data.published.length > 0){
+          for (let i = 0; i < res.data.published.length; i++) {
+            for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
+              if (this.state.addCurrencyList1[j].name == _name) {
+
+                if (res.data.published[i] == this.state.addCurrencyList1[j].name) {
+                  this.state.addCurrencyList1[j].checked = true;
+                  window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
                   arr = JSON.parse(window.sessionStorage.getItem('typeName'))
                   arr.splice(index, 1)
                   console.log(arr)
                   window.sessionStorage.setItem('typeName', JSON.stringify(arr))
                   this.showPolling()
-              }
-            }else{
-              let address = '00000000000000000000000000000001';
-              let prefix = '07';
-              let suffix = '00';
-              let name_length = _name.length;
-              if (name_length < 10) {
-                name_length = '0' + name_length;
-              }
-              let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
-              let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-              this.setState({ tyArgs: result }, async () => {
+                }
+              } else {
+                let address = '00000000000000000000000000000001';
+                let prefix = '07';
+                let suffix = '00';
+                let name_length = _name.length;
+                if (name_length < 10) {
+                  name_length = '0' + name_length;
+                }
+                let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+                let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+                this.setState({ tyArgs: result }, async () => {
 
-                await this.sendPublish()
-              });
+                  await this.sendPublish()
+                });
+              }
+
             }
 
           }
+        } else {
+          let address = '00000000000000000000000000000001';
+          let prefix = '07';
+          let suffix = '00';
+          let name_length = _name.length;
+          if (name_length < 10) {
+            name_length = '0' + name_length;
+          }
+          let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+          let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+          this.setState({ tyArgs: result }, async () => {
 
+            await this.sendPublish(2)
+          });
         }
+        
       })
   }
-  async sendPublish() {
+  async sendPublish(chainId) {
     const tx = {
       from: window.sessionStorage.getItem('violas_address'),
       payload: {
@@ -209,9 +227,9 @@ class AddCurrency extends Component {
       // maxGasAmount: 400000,
       // gasUnitPrice: 0,
       // sequenceNumber: seq,
-      gasCurrencyCode: this.state.gasCurrencyCode,
+      chainId: chainId
     }
-    // console.log(tx,'tx.........')
+    console.log(tx,'tx.........')
     this.state.walletConnector.sendTransaction(tx).then(res => {
       console.log('send publish ', res);
     }).catch(err => {

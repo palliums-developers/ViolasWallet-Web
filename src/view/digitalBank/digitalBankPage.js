@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+let url = "https://api4.violas.io";
 
 //映射
 class DigitalBankPage extends Component {
@@ -22,11 +23,26 @@ class DigitalBankPage extends Component {
                     imgUrl: '/img/borrowOrder.png',
                     pathname: '/homepage/home/digitalBank/borrowOrder'
                 }
-            ]
+            ],
+            amount:0.00,
+            borrow: 0.00,
+            borrows: [],
+            deposits: [],
+            total: 0.00,
+            yesterday: 0.00
         }
     }
     componentDidMount() {
-
+        fetch(url + "/1.0/violas/bank/account/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+         this.setState({
+             amount:res.data.amount,
+             borrow: res.data.borrow,
+             borrows: res.data.borrows,
+             deposits: res.data.deposits,
+             total: res.data.total,
+             yesterday: res.data.yesterday
+         })
+        })
     }
     getMarketType = (i) =>{
       this.setState({
@@ -35,7 +51,7 @@ class DigitalBankPage extends Component {
     }
     render() {
         let { routes } = this.props;
-        let { visible, types, ind, orders, visible1 } = this.state
+        let { visible, types, ind, orders, visible1, amount, borrow, borrows, deposits, total, yesterday} = this.state
         return (
             <div className="digitalBankPage">
                 <div className="apply">
@@ -74,18 +90,18 @@ class DigitalBankPage extends Component {
                         </div>
                    </div>
                     <p>{
-                        visible ? <span>≈2041.76</span> : <span>******</span>
+                        visible ? <span>≈ {amount}</span> : <span>******</span>
                     }</p>
                     <div className="applyContent">
                         <div>
                             <p><img src="/img/meiyuan8 2@2x.png" /><label>可借总额（$）</label>{
-                                visible ? <span>≈1041.76/1500</span> : <span>******</span>
+                                visible ? <span>≈ {borrow}</span> : <span>******</span>
                             }</p>
                             <p><img src="/img/形状结合备份 2@2x.png" /><label>累计收益（$）</label>{
-                                visible ? <span>≈41.76</span> : <span>******</span>
+                                visible ? <span>≈ {total}</span> : <span>******</span>
                             }</p>
                         </div>
-                        <div className="earnings"><img src="/img/形状结合 2@2x.png" />昨日收益 0.60 $</div>
+                        <div className="earnings"><img src="/img/形状结合 2@2x.png" />昨日收益 {yesterday} $</div>
                     </div>
                 </div>
                 <div className="tabList">
@@ -97,18 +113,23 @@ class DigitalBankPage extends Component {
                         }
                     </div>
                     <div className="tabLists">
-                        <div className="everyList" onClick={()=>{
-                            this.props.history.push('/homepage/home/digitalBank/saveDetails')
-                        }}>
-                            <p><img src="/img/BTC复制 2@2x.png" /><span>BTC</span><label>持币生息的BTC</label></p> 
-                            <p><span>3.70%</span><label>年化收益率</label></p>
-                        </div>
-                        <div className="everyList" onClick={() => {
-                            this.props.history.push('/homepage/home/digitalBank/borrowDetails')
-                        }}>
-                            <p><img src="/img/BTC复制 2@2x.png" /><span>BTC</span><label>持币生息的BTC</label></p>
-                            <p><span>3.70%</span><label>年化收益率</label></p>
-                        </div>
+                    {
+                        ind == 0 ? deposits.map((v,i)=>{
+                            return <div className="everyList" key={i} onClick={() => {
+                                this.props.history.push('/homepage/home/digitalBank/saveDetails')
+                            }}>
+                                <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
+                                <p><span>{v.rate}%</span><label>年化收益率</label></p>
+                            </div>
+                        }) : borrows.map((v, i) => {
+                            return <div className="everyList" key={i} onClick={() => {
+                                this.props.history.push('/homepage/home/digitalBank/borrowDetails')
+                            }}>
+                                <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
+                                <p><span>{v.rate}%</span><label>年化收益率</label></p>
+                            </div>
+                        })
+                    }
                     </div>
                 </div>
             </div>

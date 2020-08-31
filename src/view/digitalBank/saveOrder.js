@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
+let url = "https://api4.violas.io";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -26,115 +27,7 @@ class SaveOrder extends Component {
                     type: '存款明细'
                 }
             ],
-            data:[
-                {
-                    key: '1',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield:'5.00%',
-                    status:'收益中',
-                    option: '提取',
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                }, {
-                    key: '1',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    money: '1000.0',
-                    income: '1000.0',
-                    yield: '5.00%',
-                    status: '收益中',
-                    option: '提取',
-                }
-            ],
+            data:[],
             data1: [
                 {
                     key: '1',
@@ -286,7 +179,32 @@ class SaveOrder extends Component {
         }
     }
     componentDidMount() {
-
+        fetch(url + "/1.0/violas/bank/deposit/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            // console.log(res)
+            if(res.data){
+                let newData = [];
+                for (let i = 0; i < res.data.length; i++) {
+                    newData.push({
+                        coin:res.data[i].currency,
+                        key:i + 1,
+                        money:res.data[i].principal,
+                        income:res.data[i].earnings,
+                        yield:res.data[i].rate + '%',
+                        status:res.data[i].status == 1 ? '收益中' : null,
+                        option:'提取'
+                    })
+                    
+                }
+                this.setState({
+                    data:newData
+                })
+            }else{
+                this.setState({
+                    data: res.data
+                })
+            }
+          
+        })
     }
     onChange = (value, dateString)=>{
     console.log('Selected Time: ', value);
