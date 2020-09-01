@@ -23,6 +23,7 @@ class BorrowOrder extends Component {
             allCoin:[],
             allStatus:[],
             displayMenu:false,
+            borrowId:'',
             borrowDetails: [
             {
                 id:0,
@@ -49,6 +50,9 @@ class BorrowOrder extends Component {
             ],
             data: [],
             data1: [],
+            secondData:[],
+            secondData1: [],
+            secondData2: [],
             columns: [
                 {
                     title: '币种',
@@ -127,6 +131,70 @@ class BorrowOrder extends Component {
                     dataIndex: 'status',
                     render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
                 }
+            ],
+            secondColumns:[
+                {
+                    title: '时间',
+                    dataIndex: 'date',
+                    key: 'date',
+                    render: text => <label>{timeStamp2String(text)}</label>
+                },
+                {
+                    title: '数量',
+                    dataIndex: 'amount',
+                    key: 'amount',
+                },
+                {
+                    title: '状态',
+                    dataIndex: 'status',
+                    key: 'status',
+                }
+            ],
+            secondColumns1: [
+                {
+                    title: '时间',
+                    dataIndex: 'date',
+                    key: 'date',
+                    render: text => <label>{timeStamp2String(text)}</label>
+                },
+                {
+                    title: '数量',
+                    dataIndex: 'amount',
+                    key: 'amount',
+                },
+                {
+                    title: '旷工费用',
+                    dataIndex: 'gas',
+                    key: 'gas',
+                },
+                {
+                    title: '状态',
+                    dataIndex: 'status',
+                    key: 'status',
+                }
+            ],
+            secondColumns2: [
+                {
+                    title: '时间',
+                    dataIndex: 'date',
+                    key: 'date',
+                    render: text => <label>{timeStamp2String(text)}</label>
+                },
+                {
+                    title: '被清算',
+                    dataIndex: 'cleared',
+                    key: 'cleared',
+                },
+                {
+                    title: '已抵扣',
+                    dataIndex: 'deductioned',
+                    key: 'deductioned',
+                },
+                {
+                    title: '状态',
+                    dataIndex: 'status',
+                    key: 'status',
+                }
             ]
         }
     }
@@ -136,11 +204,13 @@ class BorrowOrder extends Component {
             if (res.data) {
                 let newData = [];
                 for (let i = 0; i < res.data.length; i++) {
+                    console.log(res.data)
                     newData.push({
                         coin: res.data[i].name,
                         key: i + 1,
                         money: res.data[i].amount,
                         income: res.data[i].amount,
+                        id: res.data[i].id,
                         option: [
                             {
                                 id: 0,
@@ -222,8 +292,37 @@ class BorrowOrder extends Component {
 
         })
     }
+    //当前借款中子菜单
+    getCurBorrowMenu = (id) =>{
+        console.log(this.state.borrowId,id)
+        fetch(url + "/1.0/violas/bank/borrow/order/detail?address=" + sessionStorage.getItem('violas_address') + '&&id=' + this.state.borrowId+'&&q=' + id).then(res => res.json()).then(res => {
+            if (res.data) {
+                if(id == 0){
+                    this.setState({
+                        secondData: res.data.list
+                    })
+                } else if (id == 1) {
+                    this.setState({
+                        secondData1: res.data.list
+                    })
+                } else if (id == 2) {
+                    this.setState({
+                        secondData2: res.data.list
+                    })
+                }
+                
+            }
+        })
+    }
     //弹出二级菜单
     expandRowByKey = (key) => {
+        // console.log(this.state.data[key-1].id,key,'.......')
+        this.setState({
+            borrowId: this.state.data[key - 1].id
+        },()=>{
+            this.getCurBorrowMenu(this.state.detailId)
+
+        })
         if (this.state.data[key - 1].option[2].displayMenu == false) {
             this.state.data[key - 1].option[2].displayMenu = true
         } else {
@@ -237,57 +336,24 @@ class BorrowOrder extends Component {
         else keys.push(key);
         this.setState({ expandedRowKeys: keys });
     };
-    onExpand = (expanded, record) => {
-        this.expandRowByKey(record.key);
-    };
+    // onExpand = (expanded, record) => {
+    //     console.log(expanded, record.key,'........')
+    //     this.expandRowByKey(record.key);
+    // };
     onChange = (value, dateString) => {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
     }
     //二级菜单内容
     expandedRowRender = (record, index, indent, expanded) => {
-        let columns = [
-            {
-                title: '时间',
-                dataIndex: 'time',
-                key: 'time'
-            },
-            {
-                title: '数量',
-                dataIndex: 'amount',
-                key: 'amount',
-            },
-            {
-                title: '状态',
-                dataIndex: 'status',
-                key: 'status',
-            }
-        ]
-        let data = [
-            {
-                key: '1',
-                time: '1:00',
-                amount: '1000.0',
-                status: '借款中'
-            },
-            {
-                key: '2',
-                time: '1:00',
-                amount: '1000.0',
-                status: '借款中'
-            },
-            {
-                key: '3',
-                time: '1:00',
-                amount: '1000.0',
-                status: '借款中'
-            }
-        ]
+        console.log(this.state.secondData2)
+
         return <div className="secendMenu">
             <div className="tab">
                 {
                     this.state.borrowDetails.map((v,i)=>{
                     return <span key={i} className={v.id == this.state.detailId ? 'active1' : null} onClick={()=>{
+                        this.getCurBorrowMenu(v.id)
                         this.setState({
                             detailId:v.id
                         })
@@ -295,7 +361,19 @@ class BorrowOrder extends Component {
                     })
                 }
             </div>
-            <Table columns={columns} dataSource={data} pagination={false} />
+            {
+                this.state.detailId == 0 ? <Table columns={this.state.secondColumns} dataSource={this.state.secondData} pagination={false} /> : this.state.detailId == 1 ? <Table columns={this.state.secondColumns1} dataSource={this.state.secondData1} pagination={false} /> : this.state.detailId == 2 ? <Table columns={this.state.secondColumns2} dataSource={this.state.secondData2} pagination={false} /> : null
+            }
+           
+            <div className="pageBtns">
+                <span><img src="/img/pageAllLeft.png"/></span>
+                <div className="pageBtn">
+                    <span><img src="/img/pageLeft.png" /></span>
+                    <span><img src="/img/pageRight.png" /></span>
+                </div>
+                <span><img src="/img/pageAllRight.png" /></span>
+            </div>
+            
         </div>
     };
     onOk = (value) => {
@@ -303,8 +381,7 @@ class BorrowOrder extends Component {
     }
     
     render() {
-        let { types, expandedRowKeys, allStatus,allCoin } = this.state;
-        // console.log(getDialog())
+        let { types, expandedRowKeys, allStatus, allCoin, secondData } = this.state;
         return (
             <div className="borrowOrder">
                 <Breadcrumb separator=">">
@@ -331,8 +408,8 @@ class BorrowOrder extends Component {
                     {
                         this.state.saveId == 0 ? <Table expandable={{
                             expandedRowKeys: expandedRowKeys,
-                            onExpand: () =>this.onExpand(),
-                            expandedRowRender:()=>this.expandedRowRender()
+                            // onExpand: (expanded) => this.onExpand(expanded),
+                            expandedRowRender: (record) => this.expandedRowRender(record)
                         }}  columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> :
                             <div className="saveDetail">
                                 <div className="selector">

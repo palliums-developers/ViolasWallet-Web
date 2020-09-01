@@ -33,15 +33,36 @@ class DigitalBankPage extends Component {
         }
     }
     componentDidMount() {
+        //账户信息
         fetch(url + "/1.0/violas/bank/account/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-         this.setState({
-             amount:res.data.amount,
-             borrow: res.data.borrow,
-             borrows: res.data.borrows,
-             deposits: res.data.deposits,
-             total: res.data.total,
-             yesterday: res.data.yesterday
-         })
+            if (res.data){
+             this.setState({
+                 amount: res.data.amount,
+                 borrow: res.data.borrow,
+                //  borrows: res.data.borrows,
+                //  deposits: res.data.deposits,
+                 total: res.data.total,
+                 yesterday: res.data.yesterday
+             })
+         }
+        })
+        //存款产品列表
+        fetch(url + "/1.0/violas/bank/product/deposit").then(res => res.json()).then(res => {
+            if (res.data) {
+                // console.log(res.data,'.........1')
+                this.setState({
+                     deposits: res.data
+                })
+            }
+        })
+        //借贷产品列表
+        fetch(url + "/1.0/violas/bank/product/borrow").then(res => res.json()).then(res => {
+            if (res.data) {
+                // console.log(res.data, '.........2')
+                this.setState({
+                    borrows: res.data
+                })
+            }
         })
     }
     getMarketType = (i) =>{
@@ -117,16 +138,18 @@ class DigitalBankPage extends Component {
                         ind == 0 ? deposits.map((v,i)=>{
                             return <div className="everyList" key={i} onClick={() => {
                                 this.props.history.push('/homepage/home/digitalBank/saveDetails')
+                                window.sessionStorage.setItem('id',v.id)
                             }}>
                                 <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
-                                <p><span>{v.rate}%</span><label>年化收益率</label></p>
+                                <p><span>{v.rate}%</span><label>{v.rate_desc}</label></p>
                             </div>
                         }) : borrows.map((v, i) => {
                             return <div className="everyList" key={i} onClick={() => {
                                 this.props.history.push('/homepage/home/digitalBank/borrowDetails')
+                                window.sessionStorage.setItem('id', v.id)
                             }}>
                                 <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
-                                <p><span>{v.rate}%</span><label>年化收益率</label></p>
+                                <p><span>{v.rate}%</span><label>{v.rate_desc}</label></p>
                             </div>
                         })
                     }

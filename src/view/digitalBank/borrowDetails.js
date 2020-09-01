@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import './digitalBank.scss';
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
+let url = "https://api4.violas.io";
 
 //借款详情
 class BorrowDetails extends Component {
@@ -12,16 +13,31 @@ class BorrowDetails extends Component {
             showList: false,
             active:false,
             descrContent: true,
-            descrContent1: true
+            descrContent1: true, 
+            borrowList:{},
+            productIntor: [],
+            question:[],
         }
     }
     componentDidMount() {
-
+        //获取存款产品信息
+        fetch(url + "/1.0/violas/bank/borrow/info?id=" + sessionStorage.getItem('id') + '&&address=' + sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                this.setState({
+                    borrowList: {
+                        pledge_rate: res.data.pledge_rate,
+                        rate: res.data.rate
+                    },
+                    productIntor: res.data.intor,
+                    question: res.data.question,
+                })
+            }
+        })
     }
 
     render() {
         let { routes } = this.props;
-        let { showList } = this.state;
+        let { showList, borrowList, productIntor,question } = this.state;
         return (
             <div className="borrowDetails">
                 <Breadcrumb separator=">">
@@ -62,8 +78,8 @@ class BorrowDetails extends Component {
                         </div>
                     </div>
                     <div className="saveDetailsList1">
-                        <p><label>借款利率</label><span>0.50%</span></p>
-                        <p><p><label>质押率</label><span>质押率=借贷数量/存款数量</span></p><span>50%</span></p>
+                        <p><label>借款利率</label><span>{borrowList.pledge_rate}%</span></p>
+                        <p><p><label>质押率</label><span>质押率=借贷数量/存款数量</span></p><span>{borrowList.rate}%</span></p>
                         <p><p><label>质押账户</label><span>清算部分将从存款账户扣除</span></p><span>银行余额</span></p>
                     </div>
                     <div className="agreest">
@@ -96,9 +112,17 @@ class BorrowDetails extends Component {
                         </div>
                         {
                             this.state.descrContent ? <div className="descr">
-                                <h4>① 最大可借额度：用户所有币种价值乘以抵押率的总和就是最大可贷款价值。 例如： 用户存款有价值100$的日元(抵押率10%)，价值100$的欧元(抵押率20%)，此时，用户最大可贷款价值为 100*10%+100*20% == 30 $</h4>
+                                {
+                                    productIntor.map((v, i) => {
+                                        return <div key={i}>
+                                            {v.tital ? <h4> {v.tital}</h4> : null}
+                                            {v.text ? <p>{v.text}</p> : null}
+                                        </div>
+                                    })
+                                }
+                                {/* <h4>① 最大可借额度：用户所有币种价值乘以抵押率的总和就是最大可贷款价值。 例如： 用户存款有价值100$的日元(抵押率10%)，价值100$的欧元(抵押率20%)，此时，用户最大可贷款价值为 100*10%+100*20% == 30 $</h4>
                                 <h4>② 抵押率：目前区块链上没有负债和信用的概念，需要超额抵押资产才能完成借贷行为。例如 想要借出价值100美元的资产B，则需要抵押价值150美元的资产A。抵押率是币种可贷价值与存款价值的比例， 例如：存款100美元，抵押率设定为0.2，则最大可贷款20美元，每个币种都有自己的抵押率。 </h4>
-                                <h4>③ 清算罚金：清算发生时，清算人代表借款人偿还部分或全部未偿还的借款额，作为回报，他们可以收取额外的清算价值的10%罚金 </h4>
+                                <h4>③ 清算罚金：清算发生时，清算人代表借款人偿还部分或全部未偿还的借款额，作为回报，他们可以收取额外的清算价值的10%罚金 </h4> */}
                             </div> : null
                         }
 
@@ -116,7 +140,15 @@ class BorrowDetails extends Component {
                         </div>
                         {
                             this.state.descrContent1 ? <div className="descrs">
-                                <div className="descr">
+                                {
+                                    question.map((v, i) => {
+                                        return <div key={i}>
+                                            {v.tital ? <h4> {v.tital}</h4> : null}
+                                            {v.text ? <p>{v.text}</p> : null}
+                                        </div>
+                                    })
+                                }
+                                {/* <div className="descr">
                                     <h4>如何增加可借额度？</h4>
                                     <p>可通过存款增加可借额度</p>
                                 </div>
@@ -131,7 +163,7 @@ class BorrowDetails extends Component {
                                 <div className="descr">
                                     <h4>什么情况下资产将被清算？</h4>
                                     <p>用户当前已借贷价值超过了最大可借贷价值，则可被清算，清算只清算超出最大可借贷价值的部分</p>
-                                </div>
+                                </div> */}
                             </div> : null
                         }
                     </div>

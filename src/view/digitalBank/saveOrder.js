@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
+import { timeStamp2String } from '../../utils/timer';
 let url = "https://api4.violas.io";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -17,6 +18,8 @@ class SaveOrder extends Component {
         this.state = {
             saveId:0,
             showDialog:false,
+            allCoin: [],
+            allStatus: [],
             types:[
                 {
                     id:0,
@@ -205,6 +208,58 @@ class SaveOrder extends Component {
             }
           
         })
+        this.getSaveDetail()
+    }
+    //存款明细
+    getSaveDetail = () => {
+        fetch(url + "/1.0/violas/bank/deposit/order/list?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                // console.log(res.data,'......')
+                let newData = [];
+                let allCoin = [];
+                let allStatus = []
+                for (let i = 0; i < res.data.length; i++) {
+                    newData.push({
+                        time: timeStamp2String(res.data[i].date),
+                        coin: res.data[i].currency,
+                        key: i + 1,
+                        amount: res.data[i].value,
+                        status: res.data[i].status == 1 ? '收益中' : null,
+                    })
+                    if (allCoin.length > 0) {
+                        for (let j = 0; j < allCoin.length; j++) {
+                            if (allCoin[j] != res.data[i].currency) {
+                                allCoin.push(res.data[i].currency)
+                            }
+                        }
+
+                    } else {
+                        allCoin.push(res.data[i].currency)
+                    }
+                    if (allStatus.length > 0) {
+                        for (let j = 0; j < allStatus.length; j++) {
+                            if (allStatus[j] != res.data[i].status) {
+                                allStatus.push(res.data[i].status)
+                            }
+                        }
+
+                    } else {
+                        allStatus.push(res.data[i].status)
+                    }
+
+                }
+                this.setState({
+                    data1: newData,
+                    allCoin: allCoin,
+                    allStatus: allStatus
+                })
+            } else {
+                this.setState({
+                    data1: res.data
+                })
+            }
+
+        })
     }
     onChange = (value, dateString)=>{
     console.log('Selected Time: ', value);
@@ -215,7 +270,7 @@ class SaveOrder extends Component {
         console.log('onOk: ', value);
     }
     render() {
-        let { types } = this.state;
+        let { types, allCoin,allStatus } = this.state;
         // console.log(getDialog())
         return (
             <div className="saveOrder">
@@ -266,9 +321,11 @@ class SaveOrder extends Component {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="jack">Jack</Option>
-                                        <Option value="lucy">Lucy</Option>
-                                        <Option value="tom">Tom</Option>
+                                        {
+                                            allCoin.map((v, i) => {
+                                                return <Option key={i} value={v}>{v}</Option>
+                                            })
+                                        }
                                     </Select>
                                     <Select
                                         showSearch
@@ -283,9 +340,11 @@ class SaveOrder extends Component {
                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="jack">Jack</Option>
-                                        <Option value="lucy">Lucy</Option>
-                                        <Option value="tom">Tom</Option>
+                                        {
+                                            allStatus.map((v, i) => {
+                                                return <Option key={i} value={v}>{v == 1 ? '收益中' : null}</Option>
+                                            })
+                                        }
                                     </Select>
                                     <button>搜索</button>
                                 </div>
