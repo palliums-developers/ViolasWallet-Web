@@ -16,6 +16,8 @@ class SaveDetails extends Component {
             saveList: '',
             productIntor: [],
             question: [],
+            amount:'',
+            warning:''
         }
     }
     componentDidMount() {
@@ -35,7 +37,25 @@ class SaveDetails extends Component {
             }
         })
     }
-
+    //获取输入框value
+    getInputValue = (e) =>{
+        // console.log(e.target.value,'.......')
+        if (e.target.value){
+            this.setState({
+                amount: e.target.value,
+                warning:''
+            })
+        }
+      
+    }
+    //立即存款
+    depositImmediately = () =>{
+       if(this.state.amount == ''){
+          this.setState({
+              warning:'请输入存款数量'
+          })
+       }
+    }
     render() {
         let { routes } = this.props;
         let { showList, saveList, productIntor, question} = this.state;
@@ -73,7 +93,7 @@ class SaveDetails extends Component {
                                 }
                             </div>
                         </h4>
-                        <input placeholder="500 V-AAA起，每1V-AAA递增"/>
+                        <input placeholder="500 V-AAA起，每1V-AAA递增" className={this.state.warning ? 'activeInput':null} onChange={(e)=>this.getInputValue(e)}/>
                         <div className="saveDetailsShow">
                             <p><img src="/img/kyye.png" /><label>可用余额 ：</label> <label>0V-AAA</label><span>全部</span></p>
                             <p><img src="/img/编组 15@2x.png" /><label>每日限额 ： </label><label>{saveList.limit} {saveList.saveName}</label></p>
@@ -85,8 +105,8 @@ class SaveDetails extends Component {
                         <p><label>支付方式</label><span>钱包余额</span></p>
                     </div>
                     <div className="foot">
-                        <p className="btn" onClick={() => {}}>立即存款</p>
-                        <p className="descr">{'warning'}</p>
+                        <p className="btn" onClick={() => this.depositImmediately()}>立即存款</p>
+                        <p className="descr">{this.state.warning}</p>
                     </div>
                     <div className="productDescr">
                       <div className="h3">

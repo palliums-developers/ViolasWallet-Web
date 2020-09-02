@@ -41,13 +41,16 @@ class CurrencyDetail extends Component {
         
     }
     async componentWillMount() {
-        console.log(this.props.detailAddrs)
-        this.setState({
-            detailAddrs: this.props.detailAddrs,
-            name: this.props.name
-        }, () => {
-            this.getNavData()  
-        })
+        // console.log(this.props.detailAddrs)
+        if (this.props.detailAddrs){
+            this.setState({
+                detailAddrs: this.props.detailAddrs,
+                name: this.props.name
+            }, () => {
+                this.getNavData()
+            })
+        }
+        
         
 
     }

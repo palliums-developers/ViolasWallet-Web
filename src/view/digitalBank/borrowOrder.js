@@ -166,6 +166,7 @@ class BorrowOrder extends Component {
                     title: '旷工费用',
                     dataIndex: 'gas',
                     key: 'gas',
+                    render: () => <label>--</label>
                 },
                 {
                     title: '状态',
@@ -204,7 +205,7 @@ class BorrowOrder extends Component {
             if (res.data) {
                 let newData = [];
                 for (let i = 0; i < res.data.length; i++) {
-                    console.log(res.data)
+                    // console.log(res.data)
                     newData.push({
                         coin: res.data[i].name,
                         key: i + 1,
@@ -226,6 +227,21 @@ class BorrowOrder extends Component {
                                 displayMenu: false
                             }
                         ],
+                        borrowDetails: [
+                            {
+                                id: 0,
+                                type: '借款明细',
+                            },
+                            {
+                                id: 1,
+                                type: '还款明细',
+                            },
+                            {
+                                id: 2,
+                                type: '清算明细',
+                            }
+                        ],
+                        detailId:0
                     })
 
                 }
@@ -294,7 +310,6 @@ class BorrowOrder extends Component {
     }
     //当前借款中子菜单
     getCurBorrowMenu = (id) =>{
-        console.log(this.state.borrowId,id)
         fetch(url + "/1.0/violas/bank/borrow/order/detail?address=" + sessionStorage.getItem('violas_address') + '&&id=' + this.state.borrowId+'&&q=' + id).then(res => res.json()).then(res => {
             if (res.data) {
                 if(id == 0){
@@ -346,33 +361,34 @@ class BorrowOrder extends Component {
     }
     //二级菜单内容
     expandedRowRender = (record, index, indent, expanded) => {
-        console.log(this.state.secondData2)
 
         return <div className="secendMenu">
             <div className="tab">
                 {
-                    this.state.borrowDetails.map((v,i)=>{
-                    return <span key={i} className={v.id == this.state.detailId ? 'active1' : null} onClick={()=>{
+                    this.state.data[record.key-1].borrowDetails.map((v,i)=>{
+                        return <span key={i} className={v.id == this.state.data[record.key - 1].detailId ? 'active1' : null} onClick={()=>{
                         this.getCurBorrowMenu(v.id)
-                        this.setState({
-                            detailId:v.id
-                        })
+                        this.state.data[record.key - 1]. detailId = v.id
+                        
                     }}>{v.type}</span>
                     })
                 }
             </div>
+            
             {
-                this.state.detailId == 0 ? <Table columns={this.state.secondColumns} dataSource={this.state.secondData} pagination={false} /> : this.state.detailId == 1 ? <Table columns={this.state.secondColumns1} dataSource={this.state.secondData1} pagination={false} /> : this.state.detailId == 2 ? <Table columns={this.state.secondColumns2} dataSource={this.state.secondData2} pagination={false} /> : null
+                this.state.data[record.key - 1].detailId == 0 ? <Table columns={this.state.secondColumns} dataSource={this.state.secondData} pagination={false} /> : this.state.data[record.key - 1].detailId == 1 ? <Table columns={this.state.secondColumns1} dataSource={this.state.secondData1} pagination={false} /> : this.state.data[record.key - 1].detailId == 2 ? <Table columns={this.state.secondColumns2} dataSource={this.state.secondData2} pagination={false} /> : null
             }
            
-            <div className="pageBtns">
-                <span><img src="/img/pageAllLeft.png"/></span>
-                <div className="pageBtn">
-                    <span><img src="/img/pageLeft.png" /></span>
-                    <span><img src="/img/pageRight.png" /></span>
+            {
+                this.state.data <= 0 ? null : <div className="pageBtns">
+                    <span><img src="/img/pageAllLeft.png" /></span>
+                    <div className="pageBtn">
+                        <span><img src="/img/pageLeft.png" /></span>
+                        <span><img src="/img/pageRight.png" /></span>
+                    </div>
+                    <span><img src="/img/pageAllRight.png" /></span>
                 </div>
-                <span><img src="/img/pageAllRight.png" /></span>
-            </div>
+            }
             
         </div>
     };
