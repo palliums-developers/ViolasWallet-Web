@@ -16,11 +16,25 @@ class SaveDetails extends Component {
             saveList: '',
             productIntor: [],
             question: [],
+            showLists:[],
+            showType:'',
+            extra:0,
             amount:'',
             warning:''
         }
     }
     componentDidMount() {
+        //获取币种列表
+        fetch(url + "/1.0/violas/bank/deposit/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+          if(res.data){
+              this.setState({
+                  showLists: res.data,
+                  showType: res.data[0].currency,
+                  extra: res.data[0].principal
+              })
+          }
+          
+        })
         //获取存款产品信息
         fetch(url + "/1.0/violas/bank/deposit/info?id=" +sessionStorage.getItem('id')+'&&address='+sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
             if (res.data) {
@@ -58,7 +72,7 @@ class SaveDetails extends Component {
     }
     render() {
         let { routes } = this.props;
-        let { showList, saveList, productIntor, question} = this.state;
+        let { showList, saveList, productIntor, question, showLists, showType, extra} = this.state;
         return (
             <div className="saveDetails">
                 <Breadcrumb separator=">">
@@ -80,22 +94,31 @@ class SaveDetails extends Component {
                                         showList:!this.state.showList
                                     })
                                 }}>
-                                    <img src="/img/kyye.png" />VLS
+                                    <img src="/img/kyye.png" />{showType}
                                     <i>
                                         <img src="/img/rightArrow1.png" />
                                     </i>
                                 </span>
                                 {
                                     showList ? <div className="dropdown-content1">
-                                        <span><img src="/img/kyye.png" /><label>VLS</label></span>
-                                        <span><img src="/img/kyye.png" /><label>BLR</label></span>
+                                        {
+                                            showLists.map((v,i)=>{
+                                            return <span key={i} onClick={()=>{
+                                                this.setState({
+                                                    showType:v.currency,
+                                                    showList: false
+                                                })
+                                            }}><img src="/img/kyye.png" /><label>{v.currency}</label></span>
+                                            })
+                                        }
+                                        
                                     </div> : null
                                 }
                             </div>
                         </h4>
                         <input placeholder="500 V-AAA起，每1V-AAA递增" className={this.state.warning ? 'activeInput':null} onChange={(e)=>this.getInputValue(e)}/>
                         <div className="saveDetailsShow">
-                            <p><img src="/img/kyye.png" /><label>可用余额 ：</label> <label>0V-AAA</label><span>全部</span></p>
+                            <p><img src="/img/kyye.png" /><label>可用余额 ：</label> <label>{extra} {showType}</label><span>全部</span></p>
                             <p><img src="/img/编组 15@2x.png" /><label>每日限额 ： </label><label>{saveList.limit} {saveList.saveName}</label></p>
                         </div>
                     </div>

@@ -15,17 +15,29 @@ class Repayment extends Component {
             amount: '',
             warning: '',
             borrowList: {},
+            showLists: [],
+            showType: '',
+            extra: 0,
         }
     }
     componentDidMount() {
+        //币种列表
+        fetch(url + "/1.0/violas/bank/borrow/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+            if (res.data) {
+                // console.log(res.data,'.........')
+                this.setState({
+                    showLists: res.data,
+                    showType: res.data[0].name,
+                    extra: res.data[0].available_borrow
+                })
+            }
+
+        })
         //获取借款产品信息
-        fetch(url + "/1.0/violas/bank/borrow/info?id=" + sessionStorage.getItem('id') + '&&address=' + sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+        fetch(url + "/1.0/violas/bank/borrow/repayment?address=" + sessionStorage.getItem('violas_address') + '&&=id' + sessionStorage.getItem('id')).then(res => res.json()).then(res => {
             if (res.data) {
                 this.setState({
-                    borrowList: {
-                        pledge_rate: res.data.pledge_rate,
-                        rate: res.data.rate
-                    }
+                    borrowList: res.data
                 })
             }
         })
@@ -51,7 +63,7 @@ class Repayment extends Component {
     }
     render() {
 
-        let { showList, borrowList } = this.state;
+        let { showList, borrowList, showLists, showType, extra } = this.state;
         return (
             <div className="borrowDetails">
                 <Breadcrumb separator=">">
@@ -76,27 +88,35 @@ class Repayment extends Component {
                                         showList: !this.state.showList
                                     })
                                 }}>
-                                    <img src="/img/kyye.png" />VLS
+                                    <img src="/img/kyye.png" />{showType}
                                     <i>
                                         <img src="/img/rightArrow1.png" />
                                     </i>
                                 </span>
                                 {
                                     showList ? <div className="dropdown-content1">
-                                        <span><img src="/img/kyye.png" /><label>VLS</label></span>
-                                        <span><img src="/img/kyye.png" /><label>BLR</label></span>
+                                        {
+                                            showLists.map((v, i) => {
+                                                return <span key={i} onClick={() => {
+                                                    this.setState({
+                                                        showType: v.name,
+                                                        showList: false
+                                                    })
+                                                }}><img src="/img/kyye.png" /><label>{v.name}</label></span>
+                                            })
+                                        }
                                     </div> : null
                                 }
                             </div>
                         </h4>
                         <input placeholder="500 V-AAA起，每1V-AAA递增" className={this.state.warning ? 'activeInput' : null} onChange={(e) => this.getInputValue(e)}/>
                         <div className="saveDetailsShow">
-                            <p><img src="/img/kyye.png" /><label>待还余额 ：</label> <label>0V-AAA</label><span>全部</span></p>
+                            <p><img src="/img/kyye.png" /><label>待还余额 ：</label> <label>{extra} {showType}</label><span>全部</span></p>
                         </div>
                     </div>
                     <div className="saveDetailsList1">
                         <p><label>借贷率</label><span>{borrowList.rate}%</span></p>
-                        <p><p><label>矿工费</label><span></span></p><span>50%</span></p>
+                        <p><p><label>矿工费</label><span></span></p><span>--</span></p>
                         <p><p><label>还款账户</label><span></span></p><span>银行余额</span></p>
                     </div>
                     <div className="foot">

@@ -204,13 +204,14 @@ class BorrowOrder extends Component {
         fetch(url + "/1.0/violas/bank/borrow/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
             if (res.data) {
                 let newData = [];
+                console.log(res.data)
                 for (let i = 0; i < res.data.length; i++) {
                     // console.log(res.data)
                     newData.push({
                         coin: res.data[i].name,
                         key: i + 1,
                         money: res.data[i].amount,
-                        income: res.data[i].amount,
+                        income: res.data[i].available_borrow,
                         id: res.data[i].id,
                         option: [
                             {
@@ -406,7 +407,7 @@ class BorrowOrder extends Component {
               数字银行</NavLink>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <NavLink to="/homepage/home/digitalBank/saveOrder">借款订单</NavLink>
+                        <NavLink to="/homepage/home/digitalBank/borrowOrder">借款订单</NavLink>
                     </Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="curSaveLists">

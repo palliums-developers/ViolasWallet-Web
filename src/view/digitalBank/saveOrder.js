@@ -20,6 +20,10 @@ class SaveOrder extends Component {
             showDialog:false,
             allCoin: [],
             allStatus: [],
+            getId:'',
+            withdrawalsList:{},
+            withdrawalsAmount:'',
+            warning:'',
             types:[
                 {
                     id:0,
@@ -149,11 +153,7 @@ class SaveOrder extends Component {
                     key: 'option',
                     dataIndex: 'option',
 
-                    render: text => <label onClick={() => {
-                        this.setState({
-                            showDialog:true
-                        })
-                    }} style={{ color: 'rgba(112, 56, 253, 1)', cursor: 'pointer'}}>{text}</label>,
+                    render: text => <label onClick={() => this.getOptions()} style={{ color: 'rgba(112, 56, 253, 1)', cursor: 'pointer'}}>{text}</label>,
                 },
             ],
             columns1: [
@@ -181,19 +181,36 @@ class SaveOrder extends Component {
             ]
         }
     }
+    getOptions = () =>{
+        this.setState({
+            showDialog: true
+        },()=>{
+            //存款提取
+                fetch(url + "/1.0/violas/bank/deposit/withdrawal?address=" + window.sessionStorage.getItem('violas_address')+'&&id='+this.state.getId).then(res => res.json()).then(res => {
+                    // console.log(res.data,'.........')
+                    if (res.data){
+                       this.setState({
+                           withdrawalsList:res.data
+                       })
+                    }
+                    
+                })
+        })
+    }
     componentDidMount() {
+        //当前存款
         fetch(url + "/1.0/violas/bank/deposit/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-            // console.log(res)
             if(res.data){
                 let newData = [];
                 for (let i = 0; i < res.data.length; i++) {
                     newData.push({
                         coin:res.data[i].currency,
                         key:i + 1,
+                        id: res.data[i].id,
                         money:res.data[i].principal,
                         income:res.data[i].earnings,
                         yield:res.data[i].rate + '%',
-                        status:res.data[i].status == 1 ? '收益中' : null,
+                        status: res.data[i].status == 0 ? '已存款' : res.data[i].status == 1 ? '已提取' : res.data[i].status == -1 ? '提取失败':res.data[i].status == -2 ? '存款失败':null,
                         option:'提取'
                     })
                     
@@ -223,8 +240,9 @@ class SaveOrder extends Component {
                         time: timeStamp2String(res.data[i].date),
                         coin: res.data[i].currency,
                         key: i + 1,
+                        
                         amount: res.data[i].value,
-                        status: res.data[i].status == 1 ? '收益中' : null,
+                        status: res.data[i].status == 0 ? '已存款' : res.data[i].status == 1 ? '已提取' : res.data[i].status == -1 ? '提取失败' : res.data[i].status == -2 ? '存款失败' : null,
                     })
                     if (allCoin.length > 0) {
                         for (let j = 0; j < allCoin.length; j++) {
@@ -269,8 +287,25 @@ class SaveOrder extends Component {
     onOk = (value) => {
         console.log('onOk: ', value);
     }
+    //输入提取数量
+    inputWithdrawalsAmount=(e)=>{
+        if (e.target.value){
+            this.setState({
+                withdrawalsAmount: e.target.value,
+                warning:''
+            })
+        }
+        
+    }
+    withdrawals = () =>{
+        if (this.state.withdrawalsAmount == ''){
+            this.setState({
+                warning: '请输入提取数量'
+            })
+        }
+    }
     render() {
-        let { types, allCoin,allStatus } = this.state;
+        let { types, allCoin, allStatus, withdrawalsList,warning } = this.state;
         // console.log(getDialog())
         return (
             <div className="saveOrder">
@@ -296,7 +331,17 @@ class SaveOrder extends Component {
                        }
                    </div>
                    {
-                        this.state.saveId == 0 ? <Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> : 
+                        this.state.saveId == 0 ? <Table onRow= { record => {
+                        return {
+                            onClick: () => { 
+                                if(this.state.showDialog){
+                                   this.setState({
+                                      getId:record.id
+                                   })
+                                }
+                            }, // 点击行
+                        };
+                    }} columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 6, position: ['bottomCenter'] }} /> : 
                         <div className="saveDetail">
                                 <div className="selector">
                                     <Space direction="vertical" size={12}>
@@ -363,16 +408,16 @@ class SaveOrder extends Component {
                                     })
                                 }}><img src="/img/chahao.png" /></i></div>
                                 <div className="inputDiv">
-                                    <input placeholder="请输入提取数量" /><label>VLS</label>
+                                    <input placeholder="请输入提取数量" onChange={(e) => this.inputWithdrawalsAmount(e)}/><label>{withdrawalsList.token_show_name}</label>
                                 </div>
                                 <div className="inputDescr">
-                                    <p><img src="/img/kyye.png" />可提数量：<span>20VLS</span></p>
+                                    <p><img src="/img/kyye.png" />可提数量：<span>{withdrawalsList.available_quantity}{withdrawalsList.token_show_name}</span></p>
                                     <p>全部</p>
                                 </div>
                                 <div className="extractDescr"><img src="/img/编组 4@2x.png" /><p>如果您当前有借贷操作，则需将部分存款作为质押金。提取质押金需还对应数量的借款金额。</p></div>
                                 <div className="foot">
-                                    <p className="btn" onClick={() => { }}>提 取</p>
-                                    <p className="descr">{'请输入提取数量'}</p>
+                                    <p className="btn" onClick={() => this.withdrawals()}>提 取</p>
+                                    <p className="descr descrRed">{warning}</p>
                                 </div>
                             </div>
                         </div>
