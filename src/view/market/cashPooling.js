@@ -485,7 +485,7 @@ class CashPooling extends Component {
     }
     //转出下拉列表 第一个输入框
     getOutBalances(){
-        fetch(url1 + "/1.0/market/pool/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
+        fetch(url1 + "/1.0/market/pool/info?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
             .then(res => {
                 // console.log(res,'.......')
                 if(res.data){

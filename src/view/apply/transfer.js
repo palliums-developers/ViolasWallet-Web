@@ -144,7 +144,7 @@ class Transfer extends Component {
   };
 
   showTypes = (v,bal,name,ind,opinionType) => {
-    console.log(opinionType,'...opinionType')
+    // console.log(opinionType,'...opinionType')
     this.setState({
       type: v,
       balance:bal,
@@ -255,7 +255,7 @@ class Transfer extends Component {
     if (name_length < 10) {
       name_length = '0' + name_length;
     }
-    let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+    let _name_hex = bytes2StrHex(string2Byte(_name));
     let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
     // console.log(_name_hex);
     // console.log(result);
@@ -391,7 +391,7 @@ class Transfer extends Component {
           warning: "Insufficient available balance",
         });
       } else {
-        this.violas_sendTransaction(1)
+        this.violas_sendTransaction(2)
         this.setState({
             warning: "",
           });
@@ -480,7 +480,7 @@ class Transfer extends Component {
   render() {
     let { title, balance, warning, showDealType, type, selData, tranferDig ,ind} = this.state;
     // console.log(selData, tranferDig,this.state.coinName , this.state.address )
-    console.log(selData,'.....')
+    // console.log(selData,'.....')
     return (
       <div className="transfer">
         <div className="transferContent">

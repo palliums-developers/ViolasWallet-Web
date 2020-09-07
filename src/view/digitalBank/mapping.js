@@ -61,7 +61,7 @@ class DigitalBank extends Component {
   }
   //获取映射记录
   getMappingRecord = () =>{
-    fetch(url + "/1.0/mapping/transaction?address=" + sessionStorage.getItem('violas_address')+'&offset=0&limit=5').then(res => res.json())
+    fetch(url + "/1.0/mapping/transaction?addresses=" + sessionStorage.getItem('violas_address')+'&offset=0&limit=5').then(res => res.json())
     .then(res => {
       this.setState({
         mappingRecord:res.data
@@ -104,7 +104,6 @@ class DigitalBank extends Component {
     //获取violas币种的余额
     fetch(url + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(async res => {
       if (res.data) {
-        
         let arr = this.state.violas_mappingInfo;
         for (let i = 0; i < arr.length; i++) {
           for (let j = 0; j <= res.data.balances.length; j++) {
@@ -118,7 +117,6 @@ class DigitalBank extends Component {
             }
           }
         }
-        
         await this.setState({
           violas_mappingInfo: arr
         }, () => {
@@ -381,8 +379,10 @@ class DigitalBank extends Component {
               <span>{type}</span>
             </div>
             <div className="line"></div>
-            <p><label>汇率：</label><span>1 BTC = 100 V-BTC</span></p>
-            <p><label>矿工费用：</label><span>0.11 BTC</span></p>
+                  <p><label>汇率：</label><span>{
+              this.state.amount == '' ? '-- ' : this.state.amount == '0' ? '--' : (this.state.amount / this.state.amount + type + '=' + this.state.amount / this.state.amount + type)
+                    }</span></p>
+            <p><label>矿工费用：</label><span>--</span></p>
             <div className="foot">
               <p className="btn active" onClick={()=>this.confirmMapping()}>确定映射</p>
               <p className={"descr descrRed"}>{warning}</p>
