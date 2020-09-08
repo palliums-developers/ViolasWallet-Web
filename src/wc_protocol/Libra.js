@@ -30,15 +30,15 @@ class Libra extends React.Component {
                 await this.setState({ libra_currencies: res.data.data.currencies });
                 let temp = this.state.libra_currencies;
                 await this.setState({ libra_currency: temp[0].name });
-                this.getTyArgs(this.state.libra_currency)
+                this.getTyArgs(this.state.libra_currency, this.state.libra_currency)
             })
     }
-    async getTyArgs(temp) {
+    async getTyArgs(_module, _name) {
         let address = '00000000000000000000000000000001';
         let result = {
-            'module': temp,
+            'module': _module,
             'address': address,
-            'name': temp
+            'name': _name
         }
         await this.setState({ tyArgs: result });
     }
@@ -53,9 +53,29 @@ class Libra extends React.Component {
                 break;
             case 'libra_currency':
                 await this.setState({ libra_currency: e.target.value });
-                await this.getTyArgs(this.state.libra_currency);
+                await this.getTyArgs(this.state.libra_currency, this.state.libra_currency);
                 break;
         }
+    }
+    async libra_sendPublish(_chainId) {
+        console.log('You send Libra transaction with ', sessionStorage.getItem('libra_address'));
+        let tx = {
+            from: sessionStorage.getItem('libra_address'),
+            payload: {
+                code: code_data.libra.publish,
+                tyArgs: [
+                    this.state.tyArgs
+                ],
+                args: []
+            },
+            chainId: _chainId
+        }
+        console.log('libra ', tx);
+        this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
+            console.log('Libra transaction', res);
+        }).catch(err => {
+            console.log('Libra transaction ', err);
+        });
     }
     async libra_sendTransaction(chainId) {
         console.log('You send Libra transaction with ', sessionStorage.getItem('libra_address'));
@@ -98,21 +118,21 @@ class Libra extends React.Component {
         return (
             <div className='boxs'>
                 <h2>Libra:</h2>
-                {/* <div className='tx'>
-                    <h5>Main Net:</h5>
-                    <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
-                    <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
-                    <select value={this.state.libra_currency.show_name} onChange={this.handleChange.bind(this, 'libra_currency')}>
-                        {
-                            this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
-                                return <option value={v} key={i}>{v.show_name}</option>
-                            })
-                        }
-                    </select>
-                    <button onClick={() => this.libra_sendTransaction(0)}>Send Transaction</button>
-                </div> */}
                 <div className='tx'>
-                    <h5>Test Net:</h5>
+                    <h5>Test Net Publish</h5>
+                    <p>Select Stable Coin:
+                    <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>
+                            {
+                                this.state.libra_currencies && this.state.libra_currencies.map((v, i) => {
+                                    return <option value={v.name} key={i}>{v.show_name}</option>
+                                })
+                            }
+                        </select>
+                    </p>
+                    <button onClick={() => this.libra_sendPublish(sessionStorage.getItem('libra_chainId'))}>send publish</button>
+                </div>
+                <div className='tx'>
+                    <h5>Test Net Transaction:</h5>
                     <p>Address :<input type='text' onChange={this.handleChange.bind(this, 'libra_address')} /></p>
                     <p>Value :<input type='text' onChange={this.handleChange.bind(this, 'libra_value')} /></p>
                     <select value={this.state.libra_currency} onChange={this.handleChange.bind(this, 'libra_currency')}>

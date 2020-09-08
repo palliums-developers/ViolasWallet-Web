@@ -32,4 +32,19 @@ let getLibraTx = (_from, _to, _amount, _module, _name, _chainId, _script) => {
     }
     return tx;
 }
+
+let getLibraPub = (_from, _module, _name, _chainId) => {
+    let tx = {
+        from: _from,
+        payload: {
+            code: code_data.libra.publish,
+            tyArgs: [
+                getLibraTyArgs(_module, _name)
+            ],
+            args: []
+        },
+        chainId: _chainId
+    }
+    return tx;
+}
 export default getLibraTx;
