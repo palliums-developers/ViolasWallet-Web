@@ -102,6 +102,7 @@ class Transfer extends Component {
           }, () => {
             let arr = this.state.arr1.concat(this.state.arr2)
             let arrs = arr.concat(this.state.BTCArr)
+            console.log(this.state.selData,'..........')
             this.setState({
               selData: arrs
             }, () => {
@@ -110,7 +111,7 @@ class Transfer extends Component {
                   type: this.state.selData[0].show_name,
                   coinName: this.state.selData[0].name,
                   balance: this.state.selData[0].balance,
-                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1].split('.')[0]
                 })
               }
             })
@@ -126,7 +127,7 @@ class Transfer extends Component {
                   type: this.state.selData[0].show_name,
                   coinName: this.state.selData[0].name,
                   balance: this.state.selData[0].balance,
-                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1].split('.')[0]
                 })
               }
             })
@@ -144,7 +145,7 @@ class Transfer extends Component {
   };
 
   showTypes = (v,bal,name,ind,opinionType) => {
-    // console.log(opinionType,'...opinionType')
+    console.log(opinionType,'...opinionType')
     this.setState({
       type: v,
       balance:bal,
@@ -280,7 +281,7 @@ class Transfer extends Component {
     const tx = {
       from: window.sessionStorage.getItem('violas_address'),
       payload: {
-        code: code_data.violas_p2p,
+        code: code_data.violas.p2p,
         tyArgs: [this.state.tyArgs],
         args: [
           {
@@ -304,7 +305,7 @@ class Transfer extends Component {
         // gasCurrencyCode: this.state.gasCurrencyCode,
       }
     };
-    console.log(JSON.stringify(tx))
+    console.log(tx,'violas')
     this.state.walletConnector
       .sendTransaction('violas',tx)
       .then((res) => {
@@ -326,7 +327,7 @@ class Transfer extends Component {
     const tx = {
       from: window.sessionStorage.getItem('libra_address'),
       payload: {
-        code: code_data.libra_p2p,
+        code: code_data.libra.p2p,
         tyArgs: [
           this.state.tyArgs1
         ],
@@ -391,7 +392,7 @@ class Transfer extends Component {
           warning: "Insufficient available balance",
         });
       } else {
-        this.violas_sendTransaction(2)
+        this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"))
         this.setState({
             warning: "",
           });
@@ -415,7 +416,7 @@ class Transfer extends Component {
           warning: "Insufficient available balance",
         });
       } else {
-        this.libra_sendTransaction(1)
+        this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"))
         this.setState({
           warning: "",
         });
@@ -454,9 +455,9 @@ class Transfer extends Component {
   //转账时判断是哪个币种然后在发起转账
   opinionCurNextContent = ()=>{
     // console.log(this.state.opinionType,'/.........')
-    if (this.state.opinionType.indexOf('violas') == 0){
+    if (this.state.opinionType =='violas'){
       this.getTyArgs(this.state.coinName)
-    } else if (this.state.opinionType.indexOf('libra') == 0){
+    } else if (this.state.opinionType == 'libra'){
       this.getTyArgs1(this.state.coinName)
     }else{
       this.bitcoin_sendTransaction()
@@ -532,7 +533,7 @@ class Transfer extends Component {
                     </div>
                     {
                       selData.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1])
+                        return <div className="searchList" key={i} onClick={() => v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1].split('.')[0]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1].split('.')[0])
                         }>
                           <div className="searchEvery">
                             <img src={v.show_icon} />

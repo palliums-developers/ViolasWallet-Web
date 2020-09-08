@@ -37,6 +37,7 @@ class DigitalBank extends Component {
       violas_mappingInfo:[],
       libra_mappingInfo: [],
       btc_mappingInfo: [],
+      focusActive:false
     };
   }
   async componentWillMount() {
@@ -223,7 +224,8 @@ class DigitalBank extends Component {
   confirmMapping = () =>{
     if(this.state.amount == ''){
         this.setState({
-          warning:'请输入转出数量'
+          warning:'请输入转出数量',
+          focusActive:true
         })
     }else{
       this.getMap()
@@ -308,7 +310,7 @@ class DigitalBank extends Component {
     return number;
   }
   render() {
-    let { showDealType,type,warning,selData,ind,balance,mappingRecord} = this.state;
+    let { showDealType, type, warning, selData, ind, balance, mappingRecord, focusActive} = this.state;
     return (
       <div className="mapping">
         <Breadcrumb separator=">">
@@ -384,7 +386,7 @@ class DigitalBank extends Component {
                     }</span></p>
             <p><label>矿工费用：</label><span>--</span></p>
             <div className="foot">
-              <p className="btn active" onClick={()=>this.confirmMapping()}>确定映射</p>
+              <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={()=>this.confirmMapping()}>确定映射</p>
               <p className={"descr descrRed"}>{warning}</p>
             </div>
           </div>

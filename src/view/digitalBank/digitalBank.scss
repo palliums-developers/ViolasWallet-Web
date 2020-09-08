@@ -492,7 +492,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #6131AB;
+          background: rgba(97, 49, 171, 1);
           border-radius: 27px;
           font-size:16px;
           font-weight:500;
@@ -501,9 +501,12 @@
           margin-bottom: 8px!important;
           cursor: pointer;
         }
-        .active {
-          background: rgba(135, 108, 192, 1);
-        }
+        .focusActive{
+            background: rgba(75, 30, 144, 1);
+          }
+        // .active {
+        //   background: rgba(135, 108, 192, 1);
+        // }
         .descr {
           font-size: 14px;
           font-weight: 400;

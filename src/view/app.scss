@@ -928,13 +928,16 @@ dd {
             display: flex;
             align-items: center;
             justify-content: center;
-            background:rgba(96,66,158,1);
+            background:rgba(97, 49, 171, 1);
             border-radius:27px;
             font-size:18px;
             font-weight:500;
             color:rgba(255,255,255,1);
             margin-top: 30px;
             cursor: pointer;
+          }
+          .focusActive{
+            background: rgba(75, 30, 144, 1);
           }
           .active{
             background:rgba(135,108,192,1);

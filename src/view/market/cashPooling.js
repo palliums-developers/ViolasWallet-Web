@@ -61,7 +61,8 @@ class CashPooling extends Component {
             aModule: '',
             bModule: '',
             coin_a_value:'',
-            coin_b_value:''
+            coin_b_value: '',
+            focusActive: false
             // visible:false
         }
     }
@@ -671,9 +672,10 @@ class CashPooling extends Component {
     showExchangeCode = () => {
         if (this.state.inputAmount) {
             if (this.state.inputAmount1) {
-                this.getAddLiquidity(2)
+                this.getAddLiquidity(sessionStorage.getItem("violas_chainId"))
                 this.setState({
-                    warning: ''
+                    warning: '',
+                    focusActive:true
                 })
 
             }
@@ -733,9 +735,10 @@ class CashPooling extends Component {
     showExchangeCode1 = () => {
         if (this.state.outputAmount) {
             if (this.state.outputAmount1) {
-                this.getRemoveLiquidity(2)
+                this.getRemoveLiquidity(sessionStorage.getItem("violas_chainId"))
                 this.setState({
-                    warning: ''
+                    warning: '',
+                    focusActive: true
                 })
 
             }
@@ -751,7 +754,7 @@ class CashPooling extends Component {
         }
     }
     render() {
-        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr,total_token } = this.state;
+        let { names, name, showMenuViolas, showMenuViolas1, types, type, showDealType, warning, getFocus, getFocus1, changeRecord, selData, type1, arr, ind, index, type2, ind1, showMenuViolas2, poolArr, focusActive } = this.state;
         // console.log(this.state.outputAmount1,'....')
         return (
             <div className="exchange cashPooling">
@@ -784,7 +787,7 @@ class CashPooling extends Component {
                                     
 
                                 </div>
-                                <p>gas：0.1000%</p>
+                                <p>费率：--</p>
                             </div>
                             {
                                 type == '转入' ? <div className={getFocus ? 'iptForm1 getFormBorder' : 'iptForm1'}>
@@ -974,13 +977,13 @@ class CashPooling extends Component {
                                         </div>
                                     </div>
                             }
-                            <div className="changeRate">兑换率：1:100</div>
+                            <div className="changeRate">兑换率：--</div>
                             {/* <div className="changeRate">当前资金池大小：— —</div> */}
                             {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}
                         </div>
                         <div className="foot">
                             {
-                                type == '转入' ? <p className="btn" onClick={() => this.showExchangeCode()}>转入</p> : <p className="btn" onClick={() => this.showExchangeCode1()}>转出</p>
+                                type == '转入' ? <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode()}>转入</p> : <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode1()}>转出</p>
                             }
                             
                             <p className="descr">{warning}</p>

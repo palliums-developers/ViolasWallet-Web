@@ -58,10 +58,7 @@ class App extends Component {
           setTimeout(() => {
             this.props.history.push("/homepage");
           }, 1000);
-          window.sessionStorage.setItem(
-            "violas_address",
-            accounts[0]
-          );
+          
           // console.log("you have connected ");
       });
       
@@ -92,14 +89,17 @@ class App extends Component {
         "wallet_info",
         JSON.stringify(res)
       );
-      window.sessionStorage.setItem(
-        "libra_address",
-        res[1].address
-      );
-      window.sessionStorage.setItem(
-        "btc_address",
-        res[2].address
-      );
+      for (let i of res) {
+        if (i.coinType === "violas") {
+          window.sessionStorage.setItem("violas_address", i.address);
+          window.sessionStorage.setItem("violas_chainId", i.chainId);
+        } else if (i.coinType === "libra") {
+          window.sessionStorage.setItem("libra_address", i.address);
+          window.sessionStorage.setItem("libra_chainId", i.chainId);
+        } else if (i.coinType === "bitcoin") {
+          window.sessionStorage.setItem("btc_address", i.address);
+        }
+      }
     }).catch(err => {
       console.log('get account ', err)
     })

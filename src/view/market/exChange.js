@@ -51,7 +51,10 @@ class ExChange extends Component {
             libra_currencies: [],
             swap_address: '',
             walletConnector: {},
-            crossChainInfo: []
+            crossChainInfo: [],
+            gasFee:'--',
+            exchangeRate:'--',
+            focusActive:false
 
         }
     }
@@ -495,7 +498,7 @@ class ExChange extends Component {
         return tx;
     }
     //兑换
-    async getSwap(chainId) {
+    async getSwap() {
         if (this.state.swap_in_type === 'btc') {
             const tx = await this.getBitcoinSwap();
             console.log('bitcoin swap', tx);
@@ -511,7 +514,7 @@ class ExChange extends Component {
                  });
             });
         } else if (this.state.swap_in_type === 'libra') {
-            const tx = await this.getLibraSwap(this.state.swap_out_type,chainId);
+            const tx = await this.getLibraSwap(this.state.swap_out_type, sessionStorage.getItem("libra_chainId"));
             console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
@@ -525,7 +528,7 @@ class ExChange extends Component {
                 });
             })
         } else if (this.state.swap_in_type === 'violas') {
-            const tx = await this.getViolasSwap(this.state.swap_out_type, chainId);
+            const tx = await this.getViolasSwap(this.state.swap_out_type, sessionStorage.getItem("violas_chainId"));
             console.log('violas swap ', tx);
             this.state.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
@@ -630,7 +633,9 @@ class ExChange extends Component {
                     if (res.data) {
                         this.setState({
                             swap_trial: res.data,
-                            outputAmount: res.data.amount
+                            outputAmount: res.data.amount,
+                            exchangeRate: res.data.rate,
+                            gasFee: res.data.fee
                         })
                     }
                 })
@@ -645,7 +650,9 @@ class ExChange extends Component {
                     if (res.data) {
                         this.setState({
                             swap_trial: res.data,
-                            inputAmount: this.getFloat(this.state.outputAmount * res.data.rate, 6)
+                            inputAmount: this.getFloat(this.state.outputAmount * res.data.rate, 6),
+                            exchangeRate: res.data.rate,
+                            gasFee: res.data.fee
                         })
                     }
                 })
@@ -679,7 +686,8 @@ class ExChange extends Component {
             this.setState({
                 warning: '',
                 inputAmount: '',
-                outputAmount: ''
+                outputAmount: '',
+                exchangeRate:'--'
             })
         }
     }
@@ -714,7 +722,8 @@ class ExChange extends Component {
             this.setState({
                 warning: '',
                 outputAmount: '',
-                inputAmount: ''
+                inputAmount: '',
+                exchangeRate: '--'
             })
         }
     }
@@ -722,9 +731,10 @@ class ExChange extends Component {
     showExchangeCode = () => {
         if (this.state.inputAmount) {
             if (this.state.outputAmount) {
-                this.getSwap(2)
+                this.getSwap()
                 this.setState({
-                    warning: ''
+                    warning: '',
+                    focusActive:true
                 }, () => {
                     this.props.showDialog()
                 })
@@ -815,14 +825,17 @@ class ExChange extends Component {
 
     }
     render() {
-        let { arr, arr1, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord, ind, index } = this.state;
+        let { arr, arr1, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord, ind, index, gasFee, exchangeRate, focusActive } = this.state;
         // console.log(selData,'....')
         return (
             <div className="exchange">
                 <div className="exchangeContent">
                     <div className="exchangeContents">
                         <div className="form">
-                            <p>gas：0.1000%</p>
+                            {
+                                gasFee == '--' || '0' ? <p>费率：--</p> : <p>费率：{gasFee}%</p>
+                            }
+                            
                             <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
                                 <div className="showAsset">
                                     <label>输入</label>
@@ -944,11 +957,13 @@ class ExChange extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="changeRate">兑换率：—</div>
-                            <div className="changeRate">矿工费用：—</div>
+                            {
+                                exchangeRate == '--' ? < div className="changeRate">兑换率：--</div> : < div className="changeRate">兑换率：1:{exchangeRate}</div>
+                            }
+                            <div className="changeRate">矿工费用：--</div>
                         </div>
                         <div className="foot">
-                            <p className="btn" onClick={() => this.showExchangeCode()}>兑换</p>
+                            <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode()}>兑换</p>
                             <p className="descr">{warning}</p>
                         </div>
                         <div className="changeRecord">

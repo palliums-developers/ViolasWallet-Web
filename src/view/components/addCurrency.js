@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { withRouter } from "react-router-dom";
 import WalletConnect from '../../packages/browser/src/index';
+import code_data from '../../utils/code.json';
 import '../app.scss'
 let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
@@ -23,7 +24,8 @@ class AddCurrency extends Component {
       checkData:[],
       code: 'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
       publish_code: 'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
-      tyArgs: '0700000000000000000000000000000001034c4252034c425200',
+      tyArgs: '',
+      tyArgs1: {},
       walletConnector: {},
       BTCData:[],
       addCurrencyList2:[]
@@ -139,9 +141,24 @@ class AddCurrency extends Component {
     }
     return str;
   }
-  async getTyArgs(_name,_addr,ind) {
-    
-    
+  async violas_getTyArgs(_name){
+    let address = '00000000000000000000000000000001';
+    let prefix = '07';
+    let suffix = '00';
+    let name_length = _name.length;
+    if (name_length < 10) {
+      name_length = '0' + name_length;
+    }
+    let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
+    let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+    this.setState({ tyArgs: result }, async () => {
+
+      await this.sendPublish(sessionStorage.getItem("violas_chainId"))
+    });
+  }
+  async getTyArgs(_name,_addr,ind,icon) {
+    let type = icon.split('/')[icon.split('/').length - 1].split('.')[0];
+    // console.log(this.state.addCurrencyList1, _name, icon.split('/')[icon.split('/').length - 1].split('.')[0],'.........')
     fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
         
         let arr = [];
@@ -154,89 +171,83 @@ class AddCurrency extends Component {
                 if (res.data.published[i] == this.state.addCurrencyList1[j].name) {
                   this.state.addCurrencyList1[j].checked = true;
                   window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-                  arr = JSON.parse(window.sessionStorage.getItem('typeName'))
-                  arr.splice(index, 1)
-                  console.log(arr)
-                  window.sessionStorage.setItem('typeName', JSON.stringify(arr))
+                  // arr = JSON.parse(window.sessionStorage.getItem('typeName'))
+                  // arr.splice(index, 1)
+                  // // console.log(arr)
+                  // window.sessionStorage.setItem('typeName', JSON.stringify(arr))
                   this.showPolling()
+                } else {
+                  if (type == 'violas'){
+                    this.violas_getTyArgs(_name)
+                    this.showPolling()
+                  } else if (type == 'libra'){
+                    this.violas_getTyArgs(_name)
+                    this.showPolling()
+                  }
+                  
                 }
-              } else {
-                let address = '00000000000000000000000000000001';
-                let prefix = '07';
-                let suffix = '00';
-                let name_length = _name.length;
-                if (name_length < 10) {
-                  name_length = '0' + name_length;
-                }
-                let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
-                let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-                this.setState({ tyArgs: result }, async () => {
-
-                  await this.sendPublish()
-                });
-              }
+              } 
 
             }
 
           }
-        } else {
-          let address = '00000000000000000000000000000001';
-          let prefix = '07';
-          let suffix = '00';
-          let name_length = _name.length;
-          if (name_length < 10) {
-            name_length = '0' + name_length;
-          }
-          let _name_hex = this.bytes2StrHex(this.string2Byte(_name));
-          let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
-          this.setState({ tyArgs: result }, async () => {
-
-            await this.sendPublish(2)
-          });
-        }
+        } 
         
       })
   }
+  //violas币激活
   async sendPublish(chainId) {
     const tx = {
       from: window.sessionStorage.getItem('violas_address'),
       payload: {
-        code: this.state.publish_code,
+        code: code_data.violas.publish,
         tyArgs: [
           this.state.tyArgs
         ],
         args: [
-          // {
-          //   type: 'Address',
-          //   value: ''
-          // },
-          // {
-          //   type: 'Number',
-          //   value: ''
-          // },
-          // {
-          //   type: 'Bytes',
-          //   value: ''
-          // },
-          // {
-          //   type: 'Bytes',
-          //   value: ''
-          // },
         ]
       },
-      // maxGasAmount: 400000,
-      // gasUnitPrice: 0,
-      // sequenceNumber: seq,
       chainId: chainId
     }
     console.log(tx,'tx.........')
-    this.state.walletConnector.sendTransaction(tx).then(res => {
+    this.state.walletConnector.sendTransaction('violas', tx).then(res => {
       console.log('send publish ', res);
     }).catch(err => {
       console.log('send publish ', err);
     })
   }
-
+  //libra激活
+  async libra_getTyArgs(_module, _name) {
+    let address = '00000000000000000000000000000001';
+    let result = {
+      'module': _module,
+      'address': address,
+      'name': _name
+    }
+    await this.setState({ tyArgs1: result },async ()=>{
+      await this.libra_sendPublish(sessionStorage.getItem("libra_chainId"))
+    });
+  }
+  async libra_sendPublish(_chainId) {
+    console.log('You send Libra transaction with ', sessionStorage.getItem('libra_address'));
+    let tx = {
+      from: sessionStorage.getItem('libra_address'),
+      payload: {
+        code: code_data.libra.publish,
+        tyArgs: [
+          this.state.tyArgs1
+        ],
+        args: []
+      },
+      chainId: _chainId
+    }
+    console.log('libra ', tx);
+    this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
+      console.log('Libra transaction', res);
+    }).catch(err => {
+      console.log('Libra transaction ', err);
+    });
+  }
   getPublish(){
     
     fetch(url + "/1.0/violas/currency/published?addr="+window.sessionStorage.getItem('violas_address')).then(res => res.json())
@@ -249,9 +260,11 @@ class AddCurrency extends Component {
               return Object.assign(v, { checked: false })
             }
           })
+
+          // console.log(data,'...........')
           for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < res.data.published.length; j++) {
-              if (data[i].name == res.data.published[j]) {
+              if (data[i].show_name == res.data.published[j]) {
                 data[i].checked = true;
                 break;
               } else {
@@ -308,14 +321,14 @@ class AddCurrency extends Component {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                 v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address,i)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
+                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address, i, v.show_icon)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             }) : addCurrencyList1.map((v, i) => {
               return <div className="addCurrencyList" key={i}>
                 <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
                 <p>{
-                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address,i)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
+                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address, i, v.show_icon)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
                 }</p>
               </div>
             })
