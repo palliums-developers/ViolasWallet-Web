@@ -122,7 +122,7 @@ class Libra extends React.Component {
                             })
                         }
                     </select>
-                    <button onClick={() => this.libra_sendTransaction(2)}>Send Transaction</button>
+                    <button onClick={() => this.libra_sendTransaction(sessionStorage.getItem('libra_chainId'))}>Send Transaction</button>
                 </div>
             </div>
         )
