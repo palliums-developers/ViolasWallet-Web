@@ -735,8 +735,6 @@ class ExChange extends Component {
                 this.setState({
                     warning: '',
                     focusActive:true
-                }, () => {
-                    this.props.showDialog()
                 })
 
             }
@@ -964,7 +962,8 @@ class ExChange extends Component {
                         </div>
                         <div className="foot">
                             <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode()}>兑换</p>
-                            <p className="descr">{warning}</p>
+                            {/* <p className="descr">{warning}</p> */}
+                            <p className={warning == "兑换成功" ? "descr descrWarn" : "descr descrRed"}>{warning}</p>
                         </div>
                         <div className="changeRecord">
                             <h4>兑换记录</h4>
@@ -1024,15 +1023,15 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        showDialog: () => {
-            dispatch({
-                type: 'EXCHANGE',
-                params: {
-                    type: true,
-                    vis: true
-                }
-            })
-        },
+        // showDialog: () => {
+        //     dispatch({
+        //         type: 'EXCHANGE',
+        //         params: {
+        //             type: true,
+        //             vis: true
+        //         }
+        //     })
+        // },
         //     showDrawer:(type) => {
         //         dispatch({
         //             type: 'VISIBLE',

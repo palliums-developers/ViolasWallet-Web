@@ -344,7 +344,7 @@ class CashPooling extends Component {
         },()=>{
                 this.opinionInputAmount()
                 this.opinionInputAmount1() 
-                console.log(this.state.type1,'.........')
+                // console.log(this.state.type1,'.........')
                 if (this.state.type1 == 'BTC') {
                     if (bal == '0') {
                         this.setState({
@@ -985,8 +985,10 @@ class CashPooling extends Component {
                             {
                                 type == '转入' ? <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode()}>转入</p> : <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode1()}>转出</p>
                             }
+                            {
+                                type == '转入' ? <p className={warning == "转入成功" ? "descr descrWarn" : "descr descrRed"}>{warning}</p> : <p className={warning == "转出成功" ? "descr descrWarn" : "descr descrRed"}>{warning}</p>
+                            }
                             
-                            <p className="descr">{warning}</p>
                         </div>
                         <div className="changeRecord poolRecord">
                             <h4>资金池记录</h4>

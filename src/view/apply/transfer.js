@@ -102,7 +102,6 @@ class Transfer extends Component {
           }, () => {
             let arr = this.state.arr1.concat(this.state.arr2)
             let arrs = arr.concat(this.state.BTCArr)
-            console.log(this.state.selData,'..........')
             this.setState({
               selData: arrs
             }, () => {
@@ -145,7 +144,6 @@ class Transfer extends Component {
   };
 
   showTypes = (v,bal,name,ind,opinionType) => {
-    console.log(opinionType,'...opinionType')
     this.setState({
       type: v,
       balance:bal,
@@ -300,10 +298,9 @@ class Transfer extends Component {
             type: 'Vector',
             value: ''
           }
-        ],
-        chainId: chainId
-        // gasCurrencyCode: this.state.gasCurrencyCode,
-      }
+        ]
+      },
+      chainId: chainId
     };
     console.log(tx,'violas')
     this.state.walletConnector
@@ -355,7 +352,13 @@ class Transfer extends Component {
     console.log('libra ', tx);
     this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
       console.log('Libra transaction', res);
+      this.setState({
+        warning: "Transfer success",
+      });
     }).catch(err => {
+      this.setState({
+        warning: "Transfer failed",
+      });
       console.log('Libra transaction ', err);
     });
   }
