@@ -268,7 +268,7 @@ class DigitalBank extends Component {
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'libra') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
-      let tx = getLibraTx(sessionStorage.getItem('libra_address'), this.state.mappingCoinType.receiver_address, this.state.amount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, 2, script);
+      let tx = getLibraTx(sessionStorage.getItem('libra_address'), this.state.mappingCoinType.receiver_address, this.state.amount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, sessionStorage.getItem('libra_chainId'), script);
       console.log('libra: ', tx);
       this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
         console.log('Libra mapping ', res);
@@ -283,7 +283,7 @@ class DigitalBank extends Component {
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'violas') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
-      let tx = getViolasTx(sessionStorage.getItem('violas_address'), this.state.mappingCoinType.receiver_address, this.state.amount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, 2, script);
+      let tx = getViolasTx(sessionStorage.getItem('violas_address'), this.state.mappingCoinType.receiver_address, this.state.amount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, sessionStorage.getItem('violas_chainId'), script);
       console.log('violas: ', tx);
       this.state.walletConnector.sendTransaction('violas', tx).then(res => {
         console.log('Violas mapping ', res);
