@@ -178,6 +178,8 @@ class Violas extends React.Component {
                 await this.setState({ violas_currency: e.target.value });
                 await this.getTyArgs(this.state.violas_currency, this.state.violas_currency);
                 break;
+            default:
+                break;
         }
     }
     render() {

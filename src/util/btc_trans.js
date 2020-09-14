@@ -1,6 +1,3 @@
-import { getTyArgs, fullWith16, getTimestamp } from './trans';
-import code_data from './code.json';
-
 let getBTCTx = (_from, _to, _amount, _script) => {
     let tx = {
         from: _from,

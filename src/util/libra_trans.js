@@ -47,4 +47,4 @@ let getLibraPub = (_from, _module, _name, _chainId) => {
     }
     return tx;
 }
-export default getLibraTx;
+export { getLibraTx, getLibraPub };

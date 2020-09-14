@@ -29,6 +29,8 @@ class Bitcoin extends React.Component {
             case 'script':
                 await this.setState({ script: e.target.value });
                 break;
+            default:
+                break;
         }
     }
     async bitcoin_sendTransaction() {
@@ -40,11 +42,11 @@ class Bitcoin extends React.Component {
             payeeAddress: this.state.address,
             script: this.state.script
         }
-        console.log('bitcoin ',tx);
-        this.props.walletConnector.sendTransaction('_bitcoin',tx).then(res=>{
-            console.log('Bitcoin transaction ',res);
-        }).catch(err=>{
-            console.log('Bitcoin transaction ',err);
+        console.log('bitcoin ', tx);
+        this.props.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
+            console.log('Bitcoin transaction ', res);
+        }).catch(err => {
+            console.log('Bitcoin transaction ', err);
         });
     }
     render() {

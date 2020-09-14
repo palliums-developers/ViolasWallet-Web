@@ -1,7 +1,8 @@
 import code_data from './code.json';
 
 let string2Byte = (str) => {
-    var bytes = new Array();
+    // var bytes = new Array();
+    var bytes = [];
     var len, c;
     len = str.length;
     for (var i = 0; i < len; i++) {
@@ -36,7 +37,7 @@ let bytes2StrHex = (arrBytes) => {
         } else {
             tmp = num.toString(16);
         }
-        if (tmp.length == 1) {
+        if (tmp.length === 1) {
             tmp = "0" + tmp;
         }
         if (i > 0) {

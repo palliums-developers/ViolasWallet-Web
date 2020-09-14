@@ -2,7 +2,6 @@
 import React from 'react';
 import '../App.css';
 import code_data from '../util/code.json';
-import { bytes2StrHex, string2Byte } from '../util/trans'
 import axios from 'axios';
 // import WalletConnect from '../packages/browser/dist/index';
 
@@ -54,6 +53,8 @@ class Libra extends React.Component {
             case 'libra_currency':
                 await this.setState({ libra_currency: e.target.value });
                 await this.getTyArgs(this.state.libra_currency, this.state.libra_currency);
+                break;
+            default:
                 break;
         }
     }

@@ -109,7 +109,7 @@ class Market extends React.Component {
     async before_getRemoveLiquidityTrial(amount, coin_pair) {
         let coin_pair_detail = {};
         for (let i in this.state.removeLiquidityList) {
-            if (coin_pair == this.state.removeLiquidityList[i].pair_name) {
+            if (coin_pair === this.state.removeLiquidityList[i].pair_name) {
                 coin_pair_detail = this.state.removeLiquidityList[i].detail;
                 await this.setState({ selected_pair_detail: coin_pair_detail });
                 break;
@@ -198,10 +198,10 @@ class Market extends React.Component {
         let index_a, index_b;
         let amount_a, amount_b = 0;
         for (let i = 0; i < this.state.violas_currencies.length; i++) {
-            if (this.state.violas_currencies[i].show_name == input_a) {
+            if (this.state.violas_currencies[i].show_name === input_a) {
                 index_a = i;
             }
-            if (this.state.violas_currencies[i].show_name == input_b) {
+            if (this.state.violas_currencies[i].show_name === input_b) {
                 index_b = i;
             }
         }
@@ -226,7 +226,7 @@ class Market extends React.Component {
                     coin_b_tyArgs: await this.getTyArgs(this.state.violas_currencies[index_b].module, this.state.violas_currencies[index_b].name),
                 }
             })
-        } else if (type == 'uniswap') {
+        } else if (type === 'uniswap') {
             await this.setState({
                 uniswap: {
                     coin_a: this.state.violas_currencies[index_a].show_name,
@@ -555,6 +555,8 @@ class Market extends React.Component {
             case 'remove_liquidity':
                 await this.setState({ remove_liquidity: parseInt(e.target.value), removeLiquidityTrial: {} });
                 break;
+            default:
+                break;
         }
     }
     render() {
@@ -582,11 +584,11 @@ class Market extends React.Component {
                             }
                         </select>
                     </p>
-                    <h4>{this.state.swap_trial.code == 2000 ? this.state.swap_trial.data.amount : 0}</h4>
+                    <h4>{this.state.swap_trial.code === 2000 ? this.state.swap_trial.data.amount : 0}</h4>
                     <button onClick={() => this.getSwapTrial(this.state.swap_in_amount, this.state.swap_in, this.state.swap_out)}>Get trial</button>
                     <br />
                     {
-                        this.state.swap_trial.code == 2000 &&
+                        this.state.swap_trial.code === 2000 &&
                         <button onClick={() => this.getSwap(2)}>Swap</button>
                     }
                 </div>
@@ -614,14 +616,14 @@ class Market extends React.Component {
                     <button onClick={() => this.getAddLiquidityTrial(this.state.input_a_amount, this.state.input_a, this.state.input_b)}>Add Trial</button>
                     <br />
                     {
-                        this.state.addLiquidityTrial != 0 && <button onClick={() => this.getAddLiquidity(sessionStorage.getItem('violas_chainId'))}>add Liquidity</button>
+                        this.state.addLiquidityTrial !== 0 && <button onClick={() => this.getAddLiquidity(sessionStorage.getItem('violas_chainId'))}>add Liquidity</button>
                     }
                 </div>
                 <div className='tx'>
                     <h5>Remove Liquidity:</h5>
                     <select value={this.state.selected_pair} onChange={this.handleChange.bind(this, 'selected_pair')} style={{ width: '160px' }}>
                         {
-                            this.state.removeLiquidityList.length != 0 && this.state.removeLiquidityList.map((v, i) => {
+                            this.state.removeLiquidityList.length !== 0 && this.state.removeLiquidityList.map((v, i) => {
                                 return <option value={v.pair_name} key={i}>{v.pair_name}</option>
                             })
                         }
