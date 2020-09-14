@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 // import { withRouter } from "react-router-dom";
 import WalletConnect from '../../packages/browser/src/index';
 import code_data from '../../utils/code.json';
+import intl from "react-intl-universal";
 import '../app.scss'
 let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
@@ -307,32 +308,79 @@ class AddCurrency extends Component {
           <i>
             <img src="/img/编组备份 3@2x.png" />
           </i>
-          Add Digital Currency
+          {intl.get("Add Digital Currency")}
         </h4>
         <div className="addCurrencyLists">
-          {
-            BTCData.map((v,i)=>{
-              return <div key={i} className="addCurrencyList"><p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p></div>
-            })
-          }
-          
-          {
-            JSON.parse(window.sessionStorage.getItem('addCurrencyList1')) ? JSON.parse(window.sessionStorage.getItem('addCurrencyList1')).map((v, i) => {
-              return <div className="addCurrencyList" key={i}>
-                <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
-                <p>{
-                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address, i, v.show_icon)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
-                }</p>
+          {BTCData.map((v, i) => {
+            return (
+              <div key={i} className="addCurrencyList">
+                <p>
+                  <i>
+                    <img src={v.show_icon} />
+                  </i>
+                  <label>{v.show_name}</label>
+                </p>
               </div>
-            }) : addCurrencyList1.map((v, i) => {
-              return <div className="addCurrencyList" key={i}>
-                <p><i><img src={v.show_icon} /></i><label>{v.show_name}</label></p>
-                <p>{
-                  v.checked == false ? <img src="/img/编组 4复制 2@2x.png" onClick={() => this.getTyArgs(v.name, v.address, i, v.show_icon)} /> : <img onClick={() => this.closePub(v.show_name)} src="/img/Rectangle 2@2x.png" />
-                }</p>
-              </div>
-            })
-          }
+            );
+          })}
+
+          {JSON.parse(window.sessionStorage.getItem("addCurrencyList1"))
+            ? JSON.parse(window.sessionStorage.getItem("addCurrencyList1")).map(
+                (v, i) => {
+                  return (
+                    <div className="addCurrencyList" key={i}>
+                      <p>
+                        <i>
+                          <img src={v.show_icon} />
+                        </i>
+                        <label>{v.show_name}</label>
+                      </p>
+                      <p>
+                        {v.checked == false ? (
+                          <img
+                            src="/img/编组 4复制 2@2x.png"
+                            onClick={() =>
+                              this.getTyArgs(v.name, v.address, i, v.show_icon)
+                            }
+                          />
+                        ) : (
+                          <img
+                            onClick={() => this.closePub(v.show_name)}
+                            src="/img/Rectangle 2@2x.png"
+                          />
+                        )}
+                      </p>
+                    </div>
+                  );
+                }
+              )
+            : addCurrencyList1.map((v, i) => {
+                return (
+                  <div className="addCurrencyList" key={i}>
+                    <p>
+                      <i>
+                        <img src={v.show_icon} />
+                      </i>
+                      <label>{v.show_name}</label>
+                    </p>
+                    <p>
+                      {v.checked == false ? (
+                        <img
+                          src="/img/编组 4复制 2@2x.png"
+                          onClick={() =>
+                            this.getTyArgs(v.name, v.address, i, v.show_icon)
+                          }
+                        />
+                      ) : (
+                        <img
+                          onClick={() => this.closePub(v.show_name)}
+                          src="/img/Rectangle 2@2x.png"
+                        />
+                      )}
+                    </p>
+                  </div>
+                );
+              })}
           {/* <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList">

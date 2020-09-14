@@ -26,7 +26,7 @@ class SaveDetails extends Component {
     componentDidMount() {
         //获取币种列表
         fetch(url + "/1.0/violas/bank/deposit/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-          if(res.data){
+          if(res.data.length > 0 ){
               this.setState({
                   showLists: res.data,
                   showType: res.data[0].currency,
@@ -38,6 +38,7 @@ class SaveDetails extends Component {
         //获取存款产品信息
         fetch(url + "/1.0/violas/bank/deposit/info?id=" +sessionStorage.getItem('id')+'&&address='+sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
             if (res.data) {
+                console.log(res.data);
                 this.setState({
                     saveList:{
                         limit: res.data.minimum_amount + '/' + res.data.quota_limit,

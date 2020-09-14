@@ -8,6 +8,7 @@ import { Drawer } from "antd";
 import { bytes2StrHex, string2Byte } from '../../utils/trans'
 import code_data from '../../utils/code.json';
 import WalletConnect from "../../packages/browser/src/index";
+import intl from "react-intl-universal";
 // import RouterView from '../router/routerView'
 // let url = "http://52.27.228.84:4000"
 let url = "https://api.violas.io"

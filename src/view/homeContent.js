@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Drawer } from "antd";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
+import intl from "react-intl-universal";
 import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io"
@@ -312,154 +313,264 @@ class HomeContent extends Component {
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
         return (
-            <div className="content">
-              <div className="contentWrap">
-                <div className="apply">
-                  <p>总资产
+          <div className="content">
+            <div className="contentWrap">
+              <div className="apply">
+                <p>
+                  {intl.get("Total assets")}
                   <i>
-                  {
-                      visible ? <img onClick={()=>{
-                        this.setState({
-                          visible:!this.state.visible
-                        })
-                      }} src="/img/jurassic_openeyes 3@2x.png"/> :<img onClick={()=>{
-                        this.setState({
-                          visible:!this.state.visible
-                        })
-                      }} src="/img/biyanjing 2@2x.png"/>
-                  }
-                  </i>
-                  </p>
-                  <div className="applyContent">
-                  {
-                    visible ? <span>$ {totalAmount}</span> : <span>******</span>
-                  }
-                    
-                    <div className="btns">
-                      <dl onClick={() => {
-                        this.props.history.push({
-                          pathname: '/homepage/home/transfer'
-                        })
-                      this.props.showPolling(false);
-                      // this.props.showDetails(false);
-                      }}>
-                        <dt></dt>
-                        <dd>转账</dd>
-                      </dl>
-                      <dl onClick={() => {
-                        this.props.history.push({
-                          pathname: '/homepage/home/getMoney'
-                        })
-                      this.props.showPolling(false);
-                      // this.props.showDetails(false);
-                      }}>
-                        <dt></dt>
-                        <dd>收款</dd>
-                      </dl>
-                       <dl
+                    {visible ? (
+                      <img
                         onClick={() => {
-                          this.props.history.push("/homepage/home/digitalBank/mapping");
+                          this.setState({
+                            visible: !this.state.visible,
+                          });
                         }}
-                      >
-                        <dt></dt>
-                        <dd>映射</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-                <div className="assetList">
-                <p><label>资产</label><i onClick={() => {
-                  this.props.showPolling(!this.props.display);
-                 
-                }}><img src="/img/编组 18@2x.png"/></i></p>
-                  <div className="assetLists">
-                    {
-                      BTCBalances.map((v,i)=>{
-                        return <div className="assetListsEvery" key={i} onClick={() => {
+                        src="/img/jurassic_openeyes 3@2x.png"
+                      />
+                    ) : (
+                      <img
+                        onClick={() => {
                           this.setState({
-                            display1: !this.state.display1,
-                            name: v.name,
-                            detailAddr: BTCAddress,
-                            rate: v.BTC == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.BTC / 1e8), 6),
-                            icon:v.show_icon,
-                            balance: v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)
-                          }, () => {
-                              window.sessionStorage.setItem('detailAddr', BTCAddress)
-                          })
-                          // window.sessionStorage.setItem('detailAddr', BTCAddress)
-                          // window.sessionStorage.setItem('name', v.name)
-                        }}>
-                          <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
-                          <div className="rightAsset">
-                            {
-                              visible ? <span>{v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}</span> : <span>******</span>
-                            }
-                            
-                          {
-                              visible ? <label>≈${v.BTC == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.BTC / 1e8), 6)}</label> : <label>******</label>
-                          }</div>
-                        </div>
-                      })
-                    }
-                    
-                    {
-                      checkData.map((v, i) => {
-                        return <div className="assetListsEvery" style={v.checked == false ? {display:"none"} : {display:"flex"}} key={i} onClick={() => {
-                          this.setState({
-                            display1:!this.state.display1,
-                            name: v.show_name,
-                            detailAddr: v.address,
-                            rate: v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6),
-                            icon: v.show_icon,
-                            balance: v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6)
-                          },()=>{
-                              window.sessionStorage.setItem('detailAddr', v.address)
-                          })
-                        }}>
-                          <div className="leftAsset"><i><img src={v.show_icon} /></i><label>{v.show_name}</label></div>
-                          <div className="rightAsset">
-                            {
-                              visible ? <span>{v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6)}</span> : <span>******</span>
-                            }
-                            
-                            {
-                              visible ? <label>≈${v.balance == 0 ? '0.00' : v.rate == 0 ? "0.00" : this.getFloat(v.rate * (v.balance / 1e6), 6)}</label> : <label>******</label>
-                            }
-                      </div>
-                        </div>
-                      })
-                    }  
-                     
+                            visible: !this.state.visible,
+                          });
+                        }}
+                        src="/img/biyanjing 2@2x.png"
+                      />
+                    )}
+                  </i>
+                </p>
+                <div className="applyContent">
+                  {visible ? <span>$ {totalAmount}</span> : <span>******</span>}
+
+                  <div className="btns">
+                    <dl
+                      onClick={() => {
+                        this.props.history.push({
+                          pathname: "/homepage/home/transfer",
+                        });
+                        this.props.showPolling(false);
+                        // this.props.showDetails(false);
+                      }}
+                    >
+                      <dt></dt>
+                      <dd>{intl.get("Transfer")}</dd>
+                    </dl>
+                    <dl
+                      onClick={() => {
+                        this.props.history.push({
+                          pathname: "/homepage/home/getMoney",
+                        });
+                        this.props.showPolling(false);
+                        // this.props.showDetails(false);
+                      }}
+                    >
+                      <dt></dt>
+                      <dd>{intl.get("Receive")}</dd>
+                    </dl>
+                    <dl
+                      onClick={() => {
+                        this.props.history.push(
+                          "/homepage/home/digitalBank/mapping"
+                        );
+                      }}
+                    >
+                      <dt></dt>
+                      <dd>{intl.get("Mapping")}</dd>
+                    </dl>
                   </div>
                 </div>
               </div>
-              {/* 币种详情 */}
-              <Drawer
-                // title="Basic Drawer"
-                placement="right"
-                closable={false}
-                onClose={this.onClose}
-                visible={this.state.display1}
-                mask={false}
-                getContainer={false}
-              >
-              <CurrencyDetail showDetails={this.showDetails} showDetails1={this.showDetails1} curDataFun={this.curDataFun} nameType={this.state.name} detailAddrs={this.state.detailAddr} rate={this.state.rate} icon={this.state.icon} balance={this.state.balance}></CurrencyDetail>
-              </Drawer>
-              { /* 详情 */}
-              <Drawer
-                // title="Basic Drawer"
-                placement="right"
-                closable={false}
-                onClose={this.onClose1}
-                visible={this.state.display2}
-                mask={false}
-                getContainer={false}
-              >
-              <Details showEveryDetail={this.showEveryDetail} detailDatas={this.state.detailData}></Details>
-              </Drawer>
+              <div className="assetList">
+                <p>
+                  <label>{intl.get("Funds")}</label>
+                  <i
+                    onClick={() => {
+                      this.props.showPolling(!this.props.display);
+                    }}
+                  >
+                    <img src="/img/编组 18@2x.png" />
+                  </i>
+                </p>
+                <div className="assetLists">
+                  {BTCBalances.map((v, i) => {
+                    return (
+                      <div
+                        className="assetListsEvery"
+                        key={i}
+                        onClick={() => {
+                          this.setState(
+                            {
+                              display1: !this.state.display1,
+                              name: v.name,
+                              detailAddr: BTCAddress,
+                              rate:
+                                v.BTC == 0
+                                  ? "0.00"
+                                  : v.rate == 0
+                                  ? "0.00"
+                                  : this.getFloat(v.rate * (v.BTC / 1e8), 6),
+                              icon: v.show_icon,
+                              balance:
+                                v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6),
+                            },
+                            () => {
+                              window.sessionStorage.setItem(
+                                "detailAddr",
+                                BTCAddress
+                              );
+                            }
+                          );
+                          // window.sessionStorage.setItem('detailAddr', BTCAddress)
+                          // window.sessionStorage.setItem('name', v.name)
+                        }}
+                      >
+                        <div className="leftAsset">
+                          <i>
+                            <img src={v.show_icon} />
+                          </i>
+                          <label>{v.show_name}</label>
+                        </div>
+                        <div className="rightAsset">
+                          {visible ? (
+                            <span>
+                              {v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}
+                            </span>
+                          ) : (
+                            <span>******</span>
+                          )}
+
+                          {visible ? (
+                            <label>
+                              ≈$
+                              {v.BTC == 0
+                                ? "0.00"
+                                : v.rate == 0
+                                ? "0.00"
+                                : this.getFloat(v.rate * (v.BTC / 1e8), 6)}
+                            </label>
+                          ) : (
+                            <label>******</label>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {checkData.map((v, i) => {
+                    return (
+                      <div
+                        className="assetListsEvery"
+                        style={
+                          v.checked == false
+                            ? { display: "none" }
+                            : { display: "flex" }
+                        }
+                        key={i}
+                        onClick={() => {
+                          this.setState(
+                            {
+                              display1: !this.state.display1,
+                              name: v.show_name,
+                              detailAddr: v.address,
+                              rate:
+                                v.balance == 0
+                                  ? "0.00"
+                                  : v.rate == 0
+                                  ? "0.00"
+                                  : this.getFloat(
+                                      v.rate * (v.balance / 1e6),
+                                      6
+                                    ),
+                              icon: v.show_icon,
+                              balance:
+                                v.balance == 0
+                                  ? 0
+                                  : this.getFloat(v.balance / 1e6, 6),
+                            },
+                            () => {
+                              window.sessionStorage.setItem(
+                                "detailAddr",
+                                v.address
+                              );
+                            }
+                          );
+                        }}
+                      >
+                        <div className="leftAsset">
+                          <i>
+                            <img src={v.show_icon} />
+                          </i>
+                          <label>{v.show_name}</label>
+                        </div>
+                        <div className="rightAsset">
+                          {visible ? (
+                            <span>
+                              {v.balance == 0
+                                ? 0
+                                : this.getFloat(v.balance / 1e6, 6)}
+                            </span>
+                          ) : (
+                            <span>******</span>
+                          )}
+
+                          {visible ? (
+                            <label>
+                              ≈$
+                              {v.balance == 0
+                                ? "0.00"
+                                : v.rate == 0
+                                ? "0.00"
+                                : this.getFloat(v.rate * (v.balance / 1e6), 6)}
+                            </label>
+                          ) : (
+                            <label>******</label>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-           
-        )
+            {/* 币种详情 */}
+            <Drawer
+              // title="Basic Drawer"
+              placement="right"
+              closable={false}
+              onClose={this.onClose}
+              visible={this.state.display1}
+              mask={false}
+              getContainer={false}
+            >
+              <CurrencyDetail
+                showDetails={this.showDetails}
+                showDetails1={this.showDetails1}
+                curDataFun={this.curDataFun}
+                nameType={this.state.name}
+                detailAddrs={this.state.detailAddr}
+                rate={this.state.rate}
+                icon={this.state.icon}
+                balance={this.state.balance}
+              ></CurrencyDetail>
+            </Drawer>
+            {/* 详情 */}
+            <Drawer
+              // title="Basic Drawer"
+              placement="right"
+              closable={false}
+              onClose={this.onClose1}
+              visible={this.state.display2}
+              mask={false}
+              getContainer={false}
+            >
+              <Details
+                showEveryDetail={this.showEveryDetail}
+                detailDatas={this.state.detailData}
+              ></Details>
+            </Drawer>
+          </div>
+        );
     }
 
  

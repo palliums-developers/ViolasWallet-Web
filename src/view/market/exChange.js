@@ -557,7 +557,7 @@ class ExChange extends Component {
         fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.sessionStorage.getItem('violas_address') + '&offset=0&limit=5').then(res => res.json())
             .then(res => {
                 // console.log(res.data)
-                if (res.data) {
+                if (res.data.length > 0) {
                     this.setState({
                         changeRecord: res.data
                     })

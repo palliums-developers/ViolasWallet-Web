@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import code_data from '../../utils/code.json';
 import WalletConnect from "../../packages/browser/src/index";
-import TransfarDialog from './transfarDialog.js'
-import { bytes2StrHex, string2Byte } from '../../utils/trans'
+import TransfarDialog from './transfarDialog.js';
+import { bytes2StrHex, string2Byte } from '../../utils/trans';
+import intl from "react-intl-universal";
 // import {withRouter} from 'react-router-dom'
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -307,14 +308,13 @@ class Transfer extends Component {
       .sendTransaction('violas',tx)
       .then((res) => {
         this.setState({
-          warning: "Transfer success",
+          warning: intl.get("Transfer success"),
         });
-        // alert('Transfer success！！！！')
         console.log("send transaction ", res);
       })
       .catch((err) => {
         this.setState({
-          warning: "Transfer failed",
+          warning: intl.get("Transfer failed")
         });
         console.log("send transaction ", err);
       });
@@ -353,11 +353,11 @@ class Transfer extends Component {
     this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
       console.log('Libra transaction', res);
       this.setState({
-        warning: "Transfer success",
+        warning: intl.get("Transfer success"),
       });
     }).catch(err => {
       this.setState({
-        warning: "Transfer failed",
+        warning: intl.get("Transfer failed"),
       });
       console.log('Libra transaction ', err);
     });
@@ -497,16 +497,19 @@ class Transfer extends Component {
             <img src="/img/编组 10@2x.png" />
           </i>
           <div className="transferList">
-            <h4>{title}Transfer</h4>
+            <h4>
+              {title}
+              {intl.get("Transfer")}
+            </h4>
             <div className="iptAddress">
               <textarea
-                placeholder={"Please input your " + title + " address"}
+                placeholder={intl.get("Input Receving Address")}
                 onChange={(e) => this.getTransAddress(e)}
               ></textarea>
             </div>
             <div className="iptAmount">
               <input
-                placeholder="Please input amount"
+                placeholder={intl.get("Input Amount")}
                 onChange={(e) => this.getTransAmount(e)}
               />
               <div className="dropdown1">
@@ -532,54 +535,110 @@ class Transfer extends Component {
                   <div className="dropdown-content1">
                     <div className="formSearch">
                       <img src="/img/sousuo 2@2x.png" />
-                      <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                      <input
+                        placeholder={intl.get("Search")}
+                        onChange={(e) => this.getSearchList(e)}
+                      />
                     </div>
-                    {
-                      selData.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => v.show_name == 'BTC' ? this.showTypes(v.show_name, v.BTC, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1].split('.')[0]) : this.showTypes(v.show_name, v.balance, v.name, i, v.show_icon.split('/')[v.show_icon.split('/').length - 1].split('.')[0])
-                        }>
+                    {selData.map((v, i) => {
+                      return (
+                        <div
+                          className="searchList"
+                          key={i}
+                          onClick={() =>
+                            v.show_name == "BTC"
+                              ? this.showTypes(
+                                  v.show_name,
+                                  v.BTC,
+                                  v.name,
+                                  i,
+                                  v.show_icon
+                                    .split("/")
+                                    [v.show_icon.split("/").length - 1].split(
+                                      "."
+                                    )[0]
+                                )
+                              : this.showTypes(
+                                  v.show_name,
+                                  v.balance,
+                                  v.name,
+                                  i,
+                                  v.show_icon
+                                    .split("/")
+                                    [v.show_icon.split("/").length - 1].split(
+                                      "."
+                                    )[0]
+                                )
+                          }
+                        >
                           <div className="searchEvery">
                             <img src={v.show_icon} />
                             <div className="searchEvery1">
                               <div>
                                 <h4>{v.show_name}</h4>
-                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                <p>
+                                  {intl.get("Balance")}：
+                                  {v.show_name == "BTC"
+                                    ? v.BTC == 0
+                                      ? 0
+                                      : this.getFloat(v.BTC / 1e8, 6)
+                                    : v.balance == 0
+                                    ? 0
+                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
+                                  {v.show_name}
+                                </p>
                               </div>
-                              <span className={ind == i ? 'check active' : 'check'}></span>
+                              <span
+                                className={ind == i ? "check active" : "check"}
+                              ></span>
                             </div>
                           </div>
                         </div>
-                      })
-                    }
+                      );
+                    })}
                   </div>
                 ) : null}
               </div>
             </div>
             <div className="amountShow">
               <p>
-                Balance{" "}
+                {intl.get("Balance")}{" "}
                 <span>
-                  {balance == 0 ? 0 : this.getFloat(balance/1e6,6)}
+                  {balance == 0 ? 0 : this.getFloat(balance / 1e6, 6)}
                 </span>
               </p>
             </div>
             <div className="foot">
               {this.state.getAct == false ? (
-                <p className="btn" onClick={() => this.opinionCurNextContent() }>
-                  Next
+                <p className="btn" onClick={() => this.opinionCurNextContent()}>
+                  {intl.get("Transfer")}
                 </p>
               ) : (
-                  <p className="btn active" onClick={() => this.opinionCurNextContent()}>
-                  Next
+                <p
+                  className="btn active"
+                  onClick={() => this.opinionCurNextContent()}
+                >
+                  {intl.get("Transfer")}
                 </p>
               )}
-              <p className={warning == "Transfer success" ? "descr descrWarn" : "descr descrRed"}>{warning}</p>
+              <p
+                className={
+                  warning == intl.get("Transfer success") ? "descr descrWarn" : "descr descrRed"
+                }
+              >
+                {warning}
+              </p>
             </div>
           </div>
         </div>
-        {
-          tranferDig == true ? <TransfarDialog getDisplays={this.getDisplays} coinName={this.state.coinName} address={this.state.address} amount={this.state.amount}></TransfarDialog> : null
-        }
+        {tranferDig == true ? (
+          <TransfarDialog
+            getDisplays={this.getDisplays}
+            coinName={this.state.coinName}
+            address={this.state.address}
+            amount={this.state.amount}
+          ></TransfarDialog>
+        ) : null}
         {/*  */}
       </div>
     );

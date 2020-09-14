@@ -7,6 +7,7 @@ import AddCurrency from "./components/addCurrency";
 import ExchangeDialog from './market/exchangeDialog'
 import MyPoolDialog from './market/myPoolDialog'
 import WalletConnect from "../packages/browser/src/index";
+import intl from "react-intl-universal";
 let url = "https://api.violas.io";
 
 //首页 包括左侧栏，头部我的
@@ -15,10 +16,23 @@ class Home extends Component {
     super();
     this.state = {
       // bridge: "http://47.52.66.26:5000",
-      bridge: 'https://walletconnect.violas.io',
+      bridge: "https://walletconnect.violas.io",
       walletConnector: {},
       active: "",
-      showMineDialog: false
+      showMineDialog: false,
+      changeLang: false,
+      changeLangLists: [
+        {
+          local: "简体中文",
+          lang: "CN",
+        },
+        {
+          local: "English",
+          lang: "EN",
+        },
+      ],
+      local: "",
+      ind: 0,
     };
   }
   getMineDialog = (event) => {
@@ -28,13 +42,26 @@ class Home extends Component {
     });
   };
   async componentWillMount() {
+    intl.options.currentLocale = localStorage.getItem("local");
+    let lang = intl.options.currentLocale;
+    switch (lang) {
+      case "zh":
+        this.setState({ local: "简体中文", ind: 0 });
+        break;
+      case "CN":
+        this.setState({ local: "简体中文", ind: 0 });
+        break;
+      default:
+        this.setState({ local: "English", ind: 1 });
+        break;
+    }
     await this.getNewWalletConnect();
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
-      window.localStorage.clear()
-      window.sessionStorage.clear()
+      window.localStorage.clear();
+      window.sessionStorage.clear();
       // this.props.history.push('/app')
       // console.log("wallet disconnected", '////////////2');
     });
@@ -43,15 +70,14 @@ class Home extends Component {
     // document.addEventListener('click', this.closeDialog);
     // console.log(window.localStorage.getItem('walletconnector'),'..............')
     this.setState({
-      active: this.props.location.pathname.split("/")[3]
+      active: this.props.location.pathname.split("/")[3],
     });
-     this.state.walletConnector.on("disconnect", (error, payload) => {
-       if (error) {
-         throw error;
-       }
-       console.log("wallet disconnected");
-     });
-
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      console.log("wallet disconnected");
+    });
   }
 
   // stopPropagation(e) {
@@ -71,24 +97,26 @@ class Home extends Component {
     number = parseFloat(Number(number).toFixed(n)); //补足位数
     return number;
   }
-  
+
   async getNewWalletConnect() {
     await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge })
+      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
   async logout() {
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
-    window.localStorage.clear()
-    window.sessionStorage.clear()
-    this.props.history.push('/app')
-    
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    this.props.history.push("/app");
   }
-  
+  changeLanguage(lang) {
+    intl.options.currentLocale = lang;
+    this.forceUpdate();
+  }
   render() {
     let { routes } = this.props;
-    let { active, showMineDialog } = this.state;
+    let { active, showMineDialog, local, changeLangLists } = this.state;
     return (
       <div className="home">
         {/* <div style={{position:'absolute'}}>log out</div> */}
@@ -131,7 +159,7 @@ class Home extends Component {
                   //         : "l"
                   // }
                 ></i>
-                <label>钱包</label>
+                <label>{intl.get("Wallet")}</label>
               </span>
               <span
                 onClick={() => {
@@ -145,7 +173,7 @@ class Home extends Component {
                   className="noMar"
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
-                <label>市场</label>
+                <label>{intl.get("Market")}</label>
               </span>
               <span
                 onClick={() => {
@@ -159,7 +187,7 @@ class Home extends Component {
                   className="noBank"
                   // className={active == "changeContent" ? "mar" : "noMar"}
                 ></i>
-                <label>数字银行</label>
+                <label>{intl.get("Bank")}</label>
               </span>
             </div>
           }
@@ -189,13 +217,13 @@ class Home extends Component {
                           this.props.history.push("/homepage/home");
                         }}
                       >
-                        <label>总资产($)</label>
+                        <label>{intl.get("Total assets")}($)</label>
                         <span>
-                          {window.sessionStorage.getItem("balances") &&
+                          {window.sessionStorage.getItem("balances") ?
                             this.getFloat(
                               window.sessionStorage.getItem("balances"),
                               2
-                            )}
+                            ) : '0'}
                         </span>
                       </div>
                       <div className="icon">
@@ -214,7 +242,7 @@ class Home extends Component {
                         <dt>
                           <img src="/img/编组 13备份 4@2x.png" />
                         </dt>
-                        <dd>转账</dd>
+                        <dd>{intl.get("Transfer")}</dd>
                       </dl>
                       <dl
                         onClick={() => {
@@ -227,18 +255,67 @@ class Home extends Component {
                         <dt>
                           <img src="/img/编组 13备份 5@2x.png" />
                         </dt>
-                        <dd>收款</dd>
+                        <dd>{intl.get("Receive")}</dd>
                       </dl>
-                     
                     </div>
                     <p onClick={() => this.logout()}>
                       <img src="/img/tuichu 2@2x.png" />
-                      退出
+                      {intl.get("Logout")}
                     </p>
                   </div>
                 ) : null}
               </div>
               {/* <span>Download</span> */}
+              <div className="changeLangList">
+                {this.state.changeLang ? (
+                  <div
+                    className="changeLang changeLangAct"
+                    onClick={() => {
+                      this.setState({
+                        changeLang: !this.state.changeLang,
+                      });
+                    }}
+                  >
+                    <label>{local}</label>
+                    <img src="/img/qiehuan-2 2@2x (1).png" />
+                  </div>
+                ) : (
+                  <div
+                    className="changeLang"
+                    onClick={() => {
+                      this.setState({
+                        changeLang: !this.state.changeLang,
+                      });
+                    }}
+                  >
+                    <label>{local}</label>
+                    <img src="/img/qiehuan-2 2@2x.png" />
+                  </div>
+                )}
+                {this.state.changeLang ? (
+                  <div className="changeLangLists">
+                    {changeLangLists.map((v, i) => {
+                      return (
+                        <span
+                          key={i}
+                          className={i == this.state.ind ? "active" : ""}
+                          onClick={() => {
+                            this.changeLanguage(v.lang);
+                            localStorage.setItem("local", v.lang);
+                            this.setState({
+                              local: v.local,
+                              ind: i,
+                              changeLang: false,
+                            });
+                          }}
+                        >
+                          {v.local}
+                        </span>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
           <RouterView routes={routes}></RouterView>

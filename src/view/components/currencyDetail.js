@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
-
+import intl from "react-intl-universal";
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
 // let url = 'https://api.violas.io'
@@ -15,15 +15,15 @@ class CurrencyDetail extends Component {
         this.state = {
             types:[
                 {
-                    name:'ALL',
+                    name:'全部',
                     type:'all'
                 },
                 {
-                    name: 'INTO',
+                    name: '转入',
                     type: 'into'
                 },
                 {
-                    name: 'ROLL OUT',
+                    name: '转出',
                     type: 'out'
                 }
             ],
@@ -159,79 +159,127 @@ class CurrencyDetail extends Component {
         // console.log(detailAddrs,'/////////')
         
         return (
-            <div className="currencyDetail">
-                <h4 onClick={() => this.props.showDetails(false)}>
-                    <i>
-                        <img src="/img/编组备份 3@2x.png" />
-                    </i>
-                    Currency Detail
-                </h4>
-                
-                <div className="detailsBalance">
-                    <p className="title"><img src={icon}/><label>{nameType}</label></p>
-                    <div className="bal">
-                        <span>{balance}</span>
-                        <span>≈${rate}</span>
-                    </div>
-                    <div className="addressCode">
-                        <span id="add">{detailAddrs}</span>
-                        {
-                            dis ? <i onClick={() => this.handleCopy()}><img src="/img/fuzhi 3@2x.png" /></i> : <i onClick={() => this.handleCopy()}><img src="/img/Fill 3@2x.png" /></i>
-                        }
-                    </div>
-                </div>
-                <div className="detailContent">
-                    <div className="detailNav">
-                        {
-                           types.map((val,ind)=>{
-                             return <span key={ind} onClick={()=>{
-                                 this.setState({
-                                     navType:val.type
-                                 },()=>{
-                                     this.getNavData()
-                                 })
-                             }} className={navType == val.type ? 'active':null}>{val.name}</span>
-                           })
-                        }
-                    </div>
-                    <div className="detailLists">
-                        {
-                            dataList.map((v,i)=>{
-                                return <div key={i} className="detailList" onClick={() => {
-                                    this.props.showDetails(false)
-                                    this.props.curDataFun(v)
-                                    this.props.showDetails1(true)
-                                }}>
-                                    <i>
-                                     {
-                                            v.type == 0 ? <img src="/img/编组 82@2x.png" /> : v.sender == detailAddrs ? <img src="/img/编组 13备份 3@2x.png" /> : v.receiver == detailAddrs ? <img src="/img/编组 13备份 2@2x.png" /> : null
-                                      }</i>
-                                    <div className="listCenter">
-                                        <p>
-                                            {
-                                                v.type == 0 ? this.getSubStr(v.sender) : v.sender == detailAddrs ? this.getSubStr(v.receiver) : v.receiver == detailAddrs ? this.getSubStr(v.sender) : null
-                                            }
-                                        </p>
-                                        <p>{timeStamp2String(v.expiration_time+'000')}</p>
-                                    </div>
-                                    <div className="listResult">
-                                        <p className={v.type == 0 ? 'org' : v.receiver == detailAddrs ? 'org' : 'green'}>{
-                                            v.type == 0 ? '' : v.sender == detailAddrs ? 
-                                            '-' : v.receiver == detailAddrs ? '+' : null
-                                        }{v.amount / 1e6}</p>
-                                        {/* <p className="org">交易中</p> */}
-                                    </div>
-                                </div>
-                            })
-                        }
-                        
-                    </div>
-                </div>
-                {
-                    dataList.length > 0 ? <Pagination defaultCurrent={1} defaultPageSize={6} total={Number(total)} onChange={this.onChange} /> : null
-                }
-                
+          <div className="currencyDetail">
+            <h4 onClick={() => this.props.showDetails(false)}>
+              <i>
+                <img src="/img/编组备份 3@2x.png" />
+              </i>
+              {intl.get("Currency Detail")}
+            </h4>
+
+            <div className="detailsBalance">
+              <p className="title">
+                <img src={icon} />
+                <label>{nameType}</label>
+              </p>
+              <div className="bal">
+                <span>{balance}</span>
+                <span>≈${rate}</span>
+              </div>
+              <div className="addressCode">
+                <span id="add">{detailAddrs}</span>
+                {dis ? (
+                  <i onClick={() => this.handleCopy()}>
+                    <img src="/img/fuzhi 3@2x.png" />
+                  </i>
+                ) : (
+                  <i onClick={() => this.handleCopy()}>
+                    <img src="/img/Fill 3@2x.png" />
+                  </i>
+                )}
+              </div>
             </div>
+            <div className="detailContent">
+              <div className="detailNav">
+                {types.map((val, ind) => {
+                  return (
+                    <span
+                      key={ind}
+                      onClick={() => {
+                        this.setState(
+                          {
+                            navType: val.type,
+                          },
+                          () => {
+                            this.getNavData();
+                          }
+                        );
+                      }}
+                      className={navType == val.type ? "active" : null}
+                    >
+                      {val.name}
+                    </span>
+                  );
+                })}
+              </div>
+              <div className="detailLists">
+                {dataList.map((v, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="detailList"
+                      onClick={() => {
+                        this.props.showDetails(false);
+                        this.props.curDataFun(v);
+                        this.props.showDetails1(true);
+                      }}
+                    >
+                      <i>
+                        {v.type == 0 ? (
+                          <img src="/img/编组 82@2x.png" />
+                        ) : v.sender == detailAddrs ? (
+                          <img src="/img/编组 13备份 3@2x.png" />
+                        ) : v.receiver == detailAddrs ? (
+                          <img src="/img/编组 13备份 2@2x.png" />
+                        ) : null}
+                      </i>
+                      <div className="listCenter">
+                        <p>
+                          {v.type == 0
+                            ? this.getSubStr(v.sender)
+                            : v.sender == detailAddrs
+                            ? this.getSubStr(v.receiver)
+                            : v.receiver == detailAddrs
+                            ? this.getSubStr(v.sender)
+                            : null}
+                        </p>
+                        <p>{timeStamp2String(v.expiration_time + "000")}</p>
+                      </div>
+                      <div className="listResult">
+                        <p
+                          className={
+                            v.type == 0
+                              ? "org"
+                              : v.receiver == detailAddrs
+                              ? "org"
+                              : "green"
+                          }
+                        >
+                          {v.type == 0
+                            ? ""
+                            : v.sender == detailAddrs
+                            ? "-"
+                            : v.receiver == detailAddrs
+                            ? "+"
+                            : null}
+                          {v.amount / 1e6}
+                        </p>
+                        {/* <p className="org">交易中</p> */}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            {dataList.length > 0 ? (
+              <Pagination
+                defaultCurrent={1}
+                defaultPageSize={6}
+                total={Number(total)}
+                onChange={this.onChange}
+              />
+            ) : null}
+          </div>
         );
     }
 }

@@ -27,7 +27,7 @@ class BorrowDetails extends Component {
     componentDidMount() {
         //币种列表
         fetch(url + "/1.0/violas/bank/borrow/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-            if (res.data) {
+            if (res.data.length > 0) {
                 // console.log(res.data,'.........')
                 this.setState({
                     showLists: res.data,

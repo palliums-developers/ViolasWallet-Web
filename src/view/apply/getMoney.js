@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import intl from "react-intl-universal";
 let url = "https://api.violas.io";
 let url1 = "https://api4.violas.io";
 //收款
@@ -214,57 +215,102 @@ class GetMoney extends Component {
         return (
           <div className="getMoney">
             <div className="dialogContent">
-              <i className="jt" onClick={() => {
-                window.history.go(-1);
-              }}><img src="/img/编组 10@2x.png"/></i>
-              <h4>Receive</h4>
+              <i
+                className="jt"
+                onClick={() => {
+                  window.history.go(-1);
+                }}
+              >
+                <img src="/img/编组 10@2x.png" />
+              </i>
+              <h4>{intl.get("Receive")}</h4>
               <div className="dropdown1">
-                {
-                  showDealType ? <span className="showClick" onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getTypeShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
-                }
-                {
-                   showDealType ? <div className='dropdown-content1'>
+                {showDealType ? (
+                  <span
+                    className="showClick"
+                    onClick={(e) => this.getTypeShow(e)}
+                  >
+                    {type}
+                    <i>
+                      <img src="/img/路径备份 6@2x.png" />
+                    </i>
+                  </span>
+                ) : (
+                  <span onClick={(e) => this.getTypeShow(e)}>
+                    {type}
+                    <i>
+                      <img src="/img/路径 7@2x.png" />
+                    </i>
+                  </span>
+                )}
+                {showDealType ? (
+                  <div className="dropdown-content1">
                     <div className="formSearch">
                       <img src="/img/sousuo 2@2x.png" />
-                      <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                      <input
+                        placeholder={intl.get("Search")}
+                        onChange={(e) => this.getSearchList(e)}
+                      />
                     </div>
-                    {
-                   arr.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address,v.name,i)}>
+                    {arr.map((v, i) => {
+                      return (
+                        <div
+                          className="searchList"
+                          key={i}
+                          onClick={() =>
+                            this.showTypes(v.show_name, v.address, v.name, i)
+                          }
+                        >
                           <div className="searchEvery">
                             <img src={v.show_icon} />
                             <div className="searchEvery1">
                               <div>
                                 <h4>{v.show_name}</h4>
-                                <p>余额：{v.show_name == 'BTC' ? (v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
+                                <p>
+                                  {intl.get("Balance")}：
+                                  {v.show_name == "BTC"
+                                    ? v.BTC == 0
+                                      ? 0
+                                      : this.getFloat(v.BTC / 1e8, 6)
+                                    : v.balance == 0
+                                    ? 0
+                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
+                                  {v.show_name}
+                                </p>
                               </div>
-                              <span className={ind == i ? 'check active' : 'check'}></span>
+                              <span
+                                className={ind == i ? "check active" : "check"}
+                              ></span>
                             </div>
                           </div>
                         </div>
-                      })
-                    }
-                  </div> : null
-                }
-
-
+                      );
+                    })}
+                  </div>
+                ) : null}
               </div>
-               <div className="qrCode">
-                <QRCode value={coinName + ':' + address+'?amount=1'}></QRCode>
-               </div>
-               <div className="addressCode">
-                   <span id="add">{address}</span>
-                   {
-                     dis ? <i onClick={()=>this.handleCopy()}><img src="/img/fuzhi 3@2x.png"/></i> : <i onClick={()=>this.handleCopy()}><img src="/img/Fill 3@2x.png"/></i>
-                   }
-                    
-                    {/* {
+              <div className="qrCode">
+                <QRCode value={coinName + ":" + address + "?amount=1"}></QRCode>
+              </div>
+              <div className="addressCode">
+                <span id="add">{address}</span>
+                {dis ? (
+                  <i onClick={() => this.handleCopy()}>
+                    <img src="/img/fuzhi 3@2x.png" />
+                  </i>
+                ) : (
+                  <i onClick={() => this.handleCopy()}>
+                    <img src="/img/Fill 3@2x.png" />
+                  </i>
+                )}
+
+                {/* {
                       dis ? <div className="warn"><img src="/img/suc.png"/></div> : null
                     } */}
-                </div>
+              </div>
             </div>
           </div>
-        )
+        );
     }
 }
 let mapStateToProps = (state) =>{
