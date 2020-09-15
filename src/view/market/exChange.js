@@ -504,44 +504,88 @@ class ExChange extends Component {
             console.log('bitcoin swap', tx);
             this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
                 console.log('Bitcoin Swap ', res);
-                    this.setState({
-                        warning:'兑换成功'
-                    })
+                  this.setState({
+                    warning: "兑换成功",
+                  });
+                  setTimeout(() => {
+                      this.setState({
+                        warning: "",
+                        inputAmount:'',
+                        outputAmount:''
+                      });
+                    }, 500);
             }).catch(err => {
                 console.log('Bitcoin Swap ', err);
-                 this.setState({
-                   warning: "兑换失败",
-                 });
+                  this.setState({
+                    warning: "兑换失败",
+                  });
+                 setTimeout(() => {
+                   this.setState({
+                     warning: "",
+                     inputAmount: "",
+                     outputAmount: "",
+                   });
+                 }, 500);
             });
         } else if (this.state.swap_in_type === 'libra') {
             const tx = await this.getLibraSwap(this.state.swap_out_type, sessionStorage.getItem("libra_chainId"));
             console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
-                  this.setState({
-                    warning: "兑换成功",
-                  });
+                     this.setState({
+                       warning: "兑换成功",
+                     });
+                     setTimeout(() => {
+                       this.setState({
+                         warning: "",
+                         inputAmount: "",
+                         outputAmount: "",
+                       });
+                     }, 500);
             }).catch(err => {
                 console.log('Libra Swap ', err);
-                this.setState({
-                  warning: "兑换失败",
-                });
+                   this.setState({
+                     warning: "兑换失败",
+                   });
+                   setTimeout(() => {
+                     this.setState({
+                       warning: "",
+                       inputAmount: "",
+                       outputAmount: "",
+                     });
+                   }, 500);
+                
             })
         } else if (this.state.swap_in_type === 'violas') {
             const tx = await this.getViolasSwap(this.state.swap_out_type, sessionStorage.getItem("violas_chainId"));
             console.log('violas swap ', tx);
             this.state.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
-                  this.setState({
-                    warning: "兑换成功",
-                  });
+                    this.setState({
+                      warning: "兑换成功",
+                    });
+                    setTimeout(() => {
+                      this.setState({
+                        warning: "",
+                        inputAmount: "",
+                        outputAmount: "",
+                      });
+                    }, 500);
             }).catch(err => {
                 console.log('Violas Swap ', err);
-                this.setState({
-                  warning: "兑换失败",
-                });
+                    this.setState({
+                    warning: "兑换失败",
+                    });
+                setTimeout(() => {
+                    this.setState({
+                      warning: "",
+                      inputAmount: "",
+                      outputAmount: "",
+                    });
+                    }, 500);
             })
         }
+        
     }
     getFloat(number, n) {
         n = n ? parseInt(n) : 0;

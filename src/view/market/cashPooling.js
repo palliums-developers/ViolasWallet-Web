@@ -657,17 +657,29 @@ class CashPooling extends Component {
         console.log('Add Liquidity ', tx);
         this.state.walletConnector.sendTransaction('violas', tx).then(res => {
             console.log('Add Liquidity ', res);
-            if (res == 'success') {
                 this.setState({
                     warning: '转入成功'
                 })
-            }
+            setTimeout(() => {
+              this.setState({
+                warning: "",
+                inputAmount: "",
+                inputAmount1: "",
+              });
+            }, 500);
 
         }).catch(err => {
             console.log('Add Liquidity ', err);
             this.setState({
                 warning: '转入失败'
             })
+            setTimeout(() => {
+              this.setState({
+                warning: "",
+                inputAmount: "",
+                inputAmount1: "",
+              });
+            }, 500);
         });
     }
     showExchangeCode = () => {
@@ -725,12 +737,26 @@ class CashPooling extends Component {
                 this.setState({
                     warning: '转出成功'
                 })
+                setTimeout(() => {
+                  this.setState({
+                    warning: "",
+                    outputAmount: "",
+                    outputAmount1: "",
+                  });
+                }, 500);
             }
         }).catch(err => {
             console.log('Remove Liquidity ', err);
             this.setState({
                 warning: '转出失败'
             })
+            setTimeout(() => {
+              this.setState({
+                warning: "",
+                outputAmount: "",
+                outputAmount1: "",
+              });
+            }, 500);
         });
     }
     showExchangeCode1 = () => {

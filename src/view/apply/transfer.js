@@ -307,15 +307,17 @@ class Transfer extends Component {
     this.state.walletConnector
       .sendTransaction('violas',tx)
       .then((res) => {
-        this.setState({
-          warning: intl.get("Transfer success"),
-        });
+          this.setState({
+            warning: intl.get("Transfer success"),
+          });
+        
         console.log("send transaction ", res);
       })
       .catch((err) => {
-        this.setState({
-          warning: intl.get("Transfer failed")
-        });
+          this.setState({
+            warning: intl.get("Transfer failed"),
+          });
+        
         console.log("send transaction ", err);
       });
   }
@@ -352,13 +354,14 @@ class Transfer extends Component {
     console.log('libra ', tx);
     this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
       console.log('Libra transaction', res);
-      this.setState({
-        warning: intl.get("Transfer success"),
-      });
+        this.setState({
+          warning: intl.get("Transfer success"),
+        });
     }).catch(err => {
-      this.setState({
-        warning: intl.get("Transfer failed"),
-      });
+        this.setState({
+          warning: intl.get("Transfer failed"),
+        });
+      
       console.log('Libra transaction ', err);
     });
   }
@@ -374,8 +377,14 @@ class Transfer extends Component {
     console.log('bitcoin ', tx);
     this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
       console.log('Bitcoin transaction ', res);
+        this.setState({
+          warning: intl.get("Transfer success"),
+        });
     }).catch(err => {
       console.log('Bitcoin transaction ', err);
+        this.setState({
+          warning: intl.get("Transfer failed"),
+        });
     });
   }
   getViolasNext = () => {

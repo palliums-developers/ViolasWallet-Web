@@ -17,27 +17,28 @@ class DigitalBank extends Component {
   constructor() {
     super();
     this.state = {
-      bridge: 'https://walletconnect.violas.io',
-      type:'',
-      amount:0,
-      warning: '',
+      bridge: "https://walletconnect.violas.io",
+      type: "",
+      amount: '',
+      amount1: 0,
+      warning: "",
       showDealType: false,
       balance: 0,
-      ind:0,
-      coinName: '',
+      ind: 0,
+      coinName: "",
       arr1: [],
       arr2: [],
       selData: [],
-      BTCAddress: '',
-      opinionType: '',
-      BTCArr:[],
-      mappingRecord:[],
-      mappingInfo:[],
-      mappingCoinType:{},
-      violas_mappingInfo:[],
+      BTCAddress: "",
+      opinionType: "",
+      BTCArr: [],
+      mappingRecord: [],
+      mappingInfo: [],
+      mappingCoinType: {},
+      violas_mappingInfo: [],
       libra_mappingInfo: [],
       btc_mappingInfo: [],
-      focusActive:false
+      focusActive: false,
     };
   }
   async componentWillMount() {
@@ -181,9 +182,10 @@ class DigitalBank extends Component {
     this.setState(
       {
         amount: e.target.value,
+        amount1: e.target.value,
       },
       () => {
-        this.amountWarn()
+        this.amountWarn();
       }
     );
   };
@@ -260,11 +262,25 @@ class DigitalBank extends Component {
         this.setState({
           warning: '映射成功'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       }).catch(err => {
         console.log('Bitcoin mapping ', err);
         this.setState({
           warning: '映射失败'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'libra') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
@@ -275,11 +291,25 @@ class DigitalBank extends Component {
         this.setState({
           warning: '映射成功'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       }).catch(err => {
         console.log('Libra mapping ', err);
         this.setState({
           warning: '映射失败'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       });
     } else if (this.state.mappingCoinType.from_coin.coin_type === 'violas') {
       let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
@@ -290,11 +320,25 @@ class DigitalBank extends Component {
         this.setState({
           warning: '映射成功'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       }).catch(err => {
         console.log('Violas mapping ', err);
         this.setState({
           warning: '映射失败'
         })
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+            amount1: 0,
+          });
+        }, 500);
       });
     } else {
       return
@@ -315,8 +359,11 @@ class DigitalBank extends Component {
       <div className="mapping">
         <Breadcrumb separator=">">
           <Breadcrumb.Item>
-            <NavLink to="/homepage"> <img src="/img/fanhui 2@2x.png" />
-              钱包</NavLink>
+            <NavLink to="/homepage">
+              {" "}
+              <img src="/img/fanhui 2@2x.png" />
+              钱包
+            </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <NavLink to="/homepage/home/digitalBank/mapping">映射</NavLink>
@@ -324,97 +371,160 @@ class DigitalBank extends Component {
         </Breadcrumb>
         <div className="mappingContent">
           <div className="mappingList">
-            <h3><img src="/img/kyye.png" />可用余额：<label>{balance} {type}</label></h3>
+            <h3>
+              <img src="/img/kyye.png" />
+              可用余额：
+              <label>
+                {balance} {type}
+              </label>
+            </h3>
             <div className="iptAmount">
               <input
+                value={this.state.amount}
                 placeholder="转出数量"
                 onChange={(e) => this.getTransAmount(e)}
               />
               <div className="dropdown1">
                 {showDealType ? (
-                  <span
-                    onClick={(e) => this.getTypeShow(e)}
-                  >
+                  <span onClick={(e) => this.getTypeShow(e)}>
                     {type}
                     <i>
                       <img src="/img/路径备份 3@2x.png" />
                     </i>
                   </span>
                 ) : (
-                    <span onClick={(e) => this.getTypeShow(e)}>
-                      {type}
-                      <i>
-                        <img src="/img/路径 7@2x.png" />
-                      </i>
-                    </span>
-                  )}
+                  <span onClick={(e) => this.getTypeShow(e)}>
+                    {type}
+                    <i>
+                      <img src="/img/路径 7@2x.png" />
+                    </i>
+                  </span>
+                )}
                 {showDealType ? (
                   <div className="dropdown-content1">
                     <div className="formSearch">
                       <img src="/img/sousuo 2@2x.png" />
-                      <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
+                      <input
+                        placeholder="Search"
+                        onChange={(e) => this.getSearchList(e)}
+                      />
                     </div>
-                    {
-                      selData.map((v, i) => {
-                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.from_coin.assert.show_name, v.balance, v.from_coin.assert.name, i,v)
-                        }>
+                    {selData.map((v, i) => {
+                      return (
+                        <div
+                          className="searchList"
+                          key={i}
+                          onClick={() =>
+                            this.showTypes(
+                              v.from_coin.assert.show_name,
+                              v.balance,
+                              v.from_coin.assert.name,
+                              i,
+                              v
+                            )
+                          }
+                        >
                           <div className="searchEvery">
                             <img src={v.from_coin.assert.icon} />
                             <div className="searchEvery1">
                               <div>
                                 <h4>{v.from_coin.assert.show_name}</h4>
-                                <p>余额：{v.balance / 1e6} {v.from_coin.assert.show_name}</p>
+                                <p>
+                                  余额：{v.balance / 1e6}{" "}
+                                  {v.from_coin.assert.show_name}
+                                </p>
                               </div>
-                              <span className={ind == i ? 'check active' : 'check'}></span>
+                              <span
+                                className={ind == i ? "check active" : "check"}
+                              ></span>
                             </div>
                           </div>
                         </div>
-                      })
-                    }
+                      );
+                    })}
                   </div>
                 ) : null}
               </div>
             </div>
-            <div className="arrow"><img src="/img/ai28 4@2x.png" /></div>
+            <div className="arrow">
+              <img src="/img/ai28 4@2x.png" />
+            </div>
             <div className="showAmount">
-              <label>{this.state.amount}</label>
+              <label>{this.state.amount1}</label>
               <span>{type}</span>
             </div>
             <div className="line"></div>
-                  <p><label>汇率：</label><span>{
-              this.state.amount == '' ? '-- ' : this.state.amount == '0' ? '--' : (this.state.amount / this.state.amount + type + '=' + this.state.amount / this.state.amount + type)
-                    }</span></p>
-            <p><label>矿工费用：</label><span>--</span></p>
+            <p>
+              <label>汇率：</label>
+              <span>
+                {this.state.amount == ""
+                  ? "-- "
+                  : this.state.amount == "0"
+                  ? "--"
+                  : this.state.amount / this.state.amount +
+                    type +
+                    "=" +
+                    this.state.amount / this.state.amount +
+                    type}
+              </span>
+            </p>
+            <p>
+              <label>矿工费用：</label>
+              <span>--</span>
+            </p>
             <div className="foot">
-              <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={()=>this.confirmMapping()}>确定映射</p>
+              <p
+                className={focusActive == false ? "btn" : "btn focusActive"}
+                onClick={() => this.confirmMapping()}
+              >
+                确定映射
+              </p>
               <p className={"descr descrRed"}>{warning}</p>
             </div>
           </div>
           <div className="mappingRecord">
             <h4>映射记录</h4>
             <div className="recordLists">
-            {
-              mappingRecord.map((item,index)=>{
-                  return <div className="recordList" key={index}>
-                          <div>
-                            <span className={item.status == '4001' ? 'spanGre':'spanRed'}>{item.status == '4001' ? '映射成功' : '映射失败'}</span>
-                            <label>{timeStamp2String(item.confirmed_time + '000')}</label>
-                          </div>
-                          <div>
-                      <p>{item.amount_from.amount}{item.amount_from.show_name}<img src="/img/路径 2@2x.png" />{item.amount_to.amount}{item.amount_to.show_name}</p>
-                            <label>旷工费：0.01 BTC</label>
-                          </div>
-                        </div>
-              })
-            }
-              
+              {mappingRecord.map((item, index) => {
+                return (
+                  <div className="recordList" key={index}>
+                    <div>
+                      <span
+                        className={
+                          item.status == "4001" ? "spanGre" : "spanRed"
+                        }
+                      >
+                        {item.status == "4001" ? "映射成功" : "映射失败"}
+                      </span>
+                      <label>
+                        {timeStamp2String(item.confirmed_time + "000")}
+                      </label>
+                    </div>
+                    <div>
+                      <p>
+                        {item.amount_from.amount}
+                        {item.amount_from.show_name}
+                        <img src="/img/路径 2@2x.png" />
+                        {item.amount_to.amount}
+                        {item.amount_to.show_name}
+                      </p>
+                      <label>旷工费：0.01 BTC</label>
+                    </div>
+                  </div>
+                );
+              })}
+
               <div className="recordList">
                 <div>
                   <span className="spanRed">映射失败</span>
                   <label>18:22 01/24</label>
                 </div>
                 <div>
-                  <p>999BTC<img src="/img/路径 2@2x.png" />99900V-BTC</p>
+                  <p>
+                    999BTC
+                    <img src="/img/路径 2@2x.png" />
+                    99900V-BTC
+                  </p>
                   <label>旷工费：0.01 BTC</label>
                 </div>
               </div>
