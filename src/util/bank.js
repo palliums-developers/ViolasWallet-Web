@@ -2,7 +2,7 @@ import code_data from './code.json';
 import { getViolasTyArgs } from './trans'
 
 let digitalBank = (operation, coinType, amount, violas_address, chainId) => {
-    bank_code = ''
+    let bank_code = ''
     switch (operation) {
         case 'lock':
             bank_code = code_data.bank.lock;

@@ -154,6 +154,9 @@ class Bank extends React.Component {
                 await this.setState({ digitalBankAmount: e.target.value });
                 break;
             case 'digitalBankCurrency':
+                // if(!this.state.digitalBankCurrenciesList.length>0){
+                //     this.getPublishViolas();
+                // }
                 await this.setState({ digitalBankCurrency: e.target.value });
             default:
                 break;
