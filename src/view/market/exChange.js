@@ -9,6 +9,7 @@ import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp, int2Byte } from '
 import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 import code_data from '../../utils/code.json';
+import WalletconnectDialog from "../components/walletconnectDialog";
 // import RouterView from '../router/routerView'
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
@@ -18,45 +19,45 @@ class ExChange extends Component {
     constructor() {
         super()
         this.state = {
-            bridge: 'https://walletconnect.violas.io',
-            showMenuViolas: false,
-            showMenuViolas1: false,
-            type: '',
-            type1: '选择通证',
-            getFocus: false,
-            getFocus1: false,
-            inputAmount: '',
-            outputAmount: '',
-            warning: '',
-            visible: false,
-            selData: [],
-            changeRecord: [],
-            changeList: {},
-            arr1: [],
-            arr2: [],
-            arr: [],
-            ind: -1,
-            index: -1,
-            asset: '--',
-            asset1: '--',
-            currenciesWithType: [],
-            currencies: [],
-            violas_currencies: [],
-            swap_in_name: '',
-            swap_out_name: '',
-            AddLiquidity: {},
-            uniswap: {},
-            swap_trial: [],
-            btc_currencies: [],
-            libra_currencies: [],
-            swap_address: '',
-            walletConnector: {},
-            crossChainInfo: [],
-            gasFee:'--',
-            exchangeRate:'--',
-            focusActive:false
-
-        }
+          bridge: "https://walletconnect.violas.io",
+          showMenuViolas: false,
+          showMenuViolas1: false,
+          type: "",
+          type1: "选择通证",
+          getFocus: false,
+          getFocus1: false,
+          inputAmount: "",
+          outputAmount: "",
+          warning: "",
+          visible: false,
+          selData: [],
+          changeRecord: [],
+          changeList: {},
+          arr1: [],
+          arr2: [],
+          arr: [],
+          ind: -1,
+          index: -1,
+          asset: "--",
+          asset1: "--",
+          currenciesWithType: [],
+          currencies: [],
+          violas_currencies: [],
+          swap_in_name: "",
+          swap_out_name: "",
+          AddLiquidity: {},
+          uniswap: {},
+          swap_trial: [],
+          btc_currencies: [],
+          libra_currencies: [],
+          swap_address: "",
+          walletConnector: {},
+          crossChainInfo: [],
+          gasFee: "--",
+          exchangeRate: "--",
+          focusActive: false,
+          showWallet: false,
+        };
     }
     async componentWillMount() {
         await this.getMarketCurrencies()
@@ -506,6 +507,7 @@ class ExChange extends Component {
                 console.log('Bitcoin Swap ', res);
                   this.setState({
                     warning: "兑换成功",
+                    showWallet: false,
                   });
                   setTimeout(() => {
                       this.setState({
@@ -518,6 +520,7 @@ class ExChange extends Component {
                 console.log('Bitcoin Swap ', err);
                   this.setState({
                     warning: "兑换失败",
+                    showWallet: false,
                   });
                  setTimeout(() => {
                    this.setState({
@@ -534,6 +537,7 @@ class ExChange extends Component {
                 console.log('Libra Swap ', res);
                      this.setState({
                        warning: "兑换成功",
+                       showWallet: false,
                      });
                      setTimeout(() => {
                        this.setState({
@@ -546,6 +550,7 @@ class ExChange extends Component {
                 console.log('Libra Swap ', err);
                    this.setState({
                      warning: "兑换失败",
+                     showWallet: false,
                    });
                    setTimeout(() => {
                      this.setState({
@@ -563,6 +568,7 @@ class ExChange extends Component {
                 console.log('Violas Swap ', res);
                     this.setState({
                       warning: "兑换成功",
+                      showWallet: false,
                     });
                     setTimeout(() => {
                       this.setState({
@@ -574,7 +580,8 @@ class ExChange extends Component {
             }).catch(err => {
                 console.log('Violas Swap ', err);
                     this.setState({
-                    warning: "兑换失败",
+                      warning: "兑换失败",
+                      showWallet: false,
                     });
                 setTimeout(() => {
                     this.setState({
@@ -778,7 +785,8 @@ class ExChange extends Component {
                 this.getSwap()
                 this.setState({
                     warning: '',
-                    focusActive:true
+                    focusActive:true,
+                    showWallet:true
                 })
 
             }
@@ -854,8 +862,10 @@ class ExChange extends Component {
     getSearchList = (e) => {
         if (e.target.value) {
             let arr = this.state.arr.filter(v => {
-                if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
-                    return v;
+                if (v.show_name.indexOf(e.target.value.toUpperCase()) >= 0) {
+                  return v;
+                } else {
+                  return;
                 }
             })
             this.setState({
@@ -866,55 +876,90 @@ class ExChange extends Component {
         }
 
     }
+    closeWallet = (val) =>{
+        this.setState({
+          showWallet: val
+        });
+    }
     render() {
         let { arr, arr1, type, type1, getFocus, getFocus1, showMenuViolas, showMenuViolas1, warning, selData, changeRecord, ind, index, gasFee, exchangeRate, focusActive } = this.state;
         // console.log(selData,'....')
         return (
-            <div className="exchange">
-                <div className="exchangeContent">
-                    <div className="exchangeContents">
-                        <div className="form">
-                            {
-                                gasFee == '--' || '0' ? <p>费率：--</p> : <p>费率：{gasFee}%</p>
-                            }
-                            
-                            <div className={getFocus ? 'iptForm getFormBorder' : 'iptForm'}>
-                                <div className="showAsset">
-                                    <label>输入</label>
-                                    <p><img src="/img/asset-management.png" />当前资产：{this.state.asset}{type}</p>
-                                </div>
-                                <div className="iptContent">
-                                    <input placeholder="0.00" value={this.state.inputAmount} onFocus={() => {
-                                        this.setState({
-                                            getFocus: true,
-                                            getFocus1: false
-                                        })
-                                    }} onBlur={() => {
-                                        this.setState({
-                                            getFocus: false
-                                        })
-                                    }} onChange={(e) => this.getInputAmount(e)} />
-                                    <div className="dropdown1">
-                                        {
-                                            showMenuViolas ? <span className="showClick" onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow(e)}>{type}<i><img src="/img/路径 7@2x.png" /></i></span>
-                                        }
-                                        {
-                                            showMenuViolas ? (
-                                                <div className="dropdown-content1">
-                                                    {arr.map((v, i) => {
-                                                        return (
-                                                            <span
-                                                                key={i}
-                                                                className={i == index ? "active" : null}
-                                                                onClick={() => this.showMenu(v.show_name, v.balance, i)}
-                                                            >
-                                                                {v.show_name}
-                                                            </span>
-                                                        );
-                                                    })}
-                                                </div>
-                                            ) : null}
-                                        {/* {
+          <div className="exchange">
+            <div className="exchangeContent">
+              <div className="exchangeContents">
+                <div className="form">
+                  {gasFee == "--" || "0" ? (
+                    <p>费率：--</p>
+                  ) : (
+                    <p>费率：{gasFee}%</p>
+                  )}
+
+                  <div
+                    className={getFocus ? "iptForm getFormBorder" : "iptForm"}
+                  >
+                    <div className="showAsset">
+                      <label>输入</label>
+                      <p>
+                        <img src="/img/asset-management.png" />
+                        当前资产：{this.state.asset}
+                        {type}
+                      </p>
+                    </div>
+                    <div className="iptContent">
+                      <input
+                        placeholder="0.00"
+                        value={this.state.inputAmount}
+                        onFocus={() => {
+                          this.setState({
+                            getFocus: true,
+                            getFocus1: false,
+                          });
+                        }}
+                        onBlur={() => {
+                          this.setState({
+                            getFocus: false,
+                          });
+                        }}
+                        onChange={(e) => this.getInputAmount(e)}
+                      />
+                      <div className="dropdown1">
+                        {showMenuViolas ? (
+                          <span
+                            className="showClick"
+                            onClick={(e) => this.getShow(e)}
+                          >
+                            {type}
+                            <i>
+                              <img src="/img/路径备份 6@2x.png" />
+                            </i>
+                          </span>
+                        ) : (
+                          <span onClick={(e) => this.getShow(e)}>
+                            {type}
+                            <i>
+                              <img src="/img/路径 7@2x.png" />
+                            </i>
+                          </span>
+                        )}
+                        {showMenuViolas ? (
+                          <div className="dropdown-content1">
+                            {arr.map((v, i) => {
+                              return (
+                                <span
+                                  key={i}
+                                  className={i == index ? "active" : null}
+                                  onClick={() =>
+                                    this.showMenu(v.show_name, v.balance, i)
+                                  }
+                                >
+                                  {v.show_name}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        ) : null}
+                        {/* {
                                         showMenuViolas ? <div className='dropdown-content1'>
                                                 {
                                                     names.map((v, i) => {
@@ -924,139 +969,254 @@ class ExChange extends Component {
                                             </div> : null
                                     }
                                      */}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="changeImg"><img src="/img/编组 2备份@2x.png" /></div>
-                            <div className={getFocus1 ? 'iptForm1 getFormBorder' : 'iptForm1'}>
-                                <div className="showAsset">
-                                    <label>输出</label>
-                                    <p><img src="/img/asset-management.png" />当前资产：{this.state.asset1}{type1 == '选择通证' ? '' : type1}</p>
-                                </div>
-                                <div className="iptContent">
-                                    <input placeholder="0.00" value={this.state.outputAmount} onFocus={() => {
-                                        this.setState({
-                                            getFocus1: true,
-                                            getFocus: false
-                                        })
-                                    }} onBlur={() => {
-                                        this.setState({
-                                            getFocus1: false
-                                        })
-                                    }} onChange={(e) => this.getOutputAmount(e)} />
-                                    <div className="dropdown1">
-                                        {
-                                            showMenuViolas1 ? <span className="showClick" onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径备份 6@2x.png" /></i></span> : <span onClick={(e) => this.getShow1(e)}>{type1}<i><img src="/img/路径 7@2x.png" /></i></span>
-                                        }
-                                        {
-                                            showMenuViolas1 ? <div className='dropdown-content1'>
-                                                <div className="formSearch">
-                                                    <img src="/img/sousuo 2@2x.png" />
-                                                    <input placeholder="Search" onChange={(e) => this.getSearchList(e)} />
-                                                </div>
-                                                {
-                                                    arr1.map((v, i) => {
-                                                        return <div className="searchList" key={i} onClick={() => this.showTypes(v.show_name, v.address, i, v.balance)
-                                                        }>
-                                                            <div className="searchEvery">
-                                                                <img src={v.icon} />
-                                                                <div className="searchEvery1">
-                                                                    <div>
-                                                                        <h4>{v.show_name}</h4>
-                                                                        <p>余额：{v.show_name == 'BTC' ? (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e8, 6)) : (v.balance == 0 ? 0 : this.getFloat(v.balance / 1e6, 6))} {v.show_name}</p>
-                                                                    </div>
-                                                                    <span className={ind == i ? 'check active' : 'check'}></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    })
-                                                }
-                                            </div> : null
-                                        }
-                                        <div className='dropdown-content2'>
-                                            <div className="search">
-                                                <i><img src="/img/sousuo 2@2x.png" /></i>
-                                                <input placeholder="搜索token" />
-                                            </div>
-                                            <div className="searchLists">
-                                                <div className="searchList">
-                                                    <div className="img"><img /></div>
-                                                    <div className="listContent">
-                                                        <label>ETH</label>
-                                                        <p>余额：0 ETH</p>
-                                                    </div>
-                                                </div>
-                                                <div className="searchList">
-                                                    <div className="img"><img /></div>
-                                                    <div className="listContent">
-                                                        <label>ETH</label>
-                                                        <p>余额：0 ETH</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            {
-                                exchangeRate == '--' ? < div className="changeRate">兑换率：--</div> : < div className="changeRate">兑换率：1:{exchangeRate}</div>
-                            }
-                            <div className="changeRate">矿工费用：--</div>
-                        </div>
-                        <div className="foot">
-                            <p className={focusActive == false ? 'btn' : 'btn focusActive'} onClick={() => this.showExchangeCode()}>兑换</p>
-                            {/* <p className="descr">{warning}</p> */}
-                            <p className={warning == "兑换成功" ? "descr descrWarn" : "descr descrRed"}>{warning}</p>
-                        </div>
-                        <div className="changeRecord">
-                            <h4>兑换记录</h4>
-                            <div className="changeLists">
-                                {
-                                    changeRecord.map((v, i) => {
-                                        return <div className="changeList" key={i} onClick={() => {
-                                            this.setState({
-                                                visible: true,
-                                                changeList: v
-                                            })
-                                        }}>
-                                            <div className="list1">
-                                                <span className={v.status == 4001 ? 'green' : 'red'}>{v.status == 4001 ? '兑换成功' : '兑换失败'}</span>
-                                                {
-                                                    v.status == 4001 ?  <p>{v.input_amount}{v.input_name}</p> :<p>--</p>
-                                                }
-                                               
-                                            </div>
-                                            <div className="changeImg"><img src="/img/jixuduihuan备份 7@2x.png" /></div>
-                                            <div className="list2">
-                                                {
-                                                    v.status == 4001 ? <span>{v.output_amount}{v.output_name}</span> :<span>--</span>
-                                                }
-                                               
-                                                <p>{timeStamp2String(v.date + '000')}<i><img src="/img/rightArrow.png" /></i></p>
-                                            </div>
-                                        </div>
-
-                                    })
-                                }
-                            </div>
-                        </div>
+                      </div>
                     </div>
+                  </div>
+                  <div className="changeImg">
+                    <img src="/img/编组 2备份@2x.png" />
+                  </div>
+                  <div
+                    className={
+                      getFocus1 ? "iptForm1 getFormBorder" : "iptForm1"
+                    }
+                  >
+                    <div className="showAsset">
+                      <label>输出</label>
+                      <p>
+                        <img src="/img/asset-management.png" />
+                        当前资产：{this.state.asset1}
+                        {type1 == "选择通证" ? "" : type1}
+                      </p>
+                    </div>
+                    <div className="iptContent">
+                      <input
+                        placeholder="0.00"
+                        value={this.state.outputAmount}
+                        onFocus={() => {
+                          this.setState({
+                            getFocus1: true,
+                            getFocus: false,
+                          });
+                        }}
+                        onBlur={() => {
+                          this.setState({
+                            getFocus1: false,
+                          });
+                        }}
+                        onChange={(e) => this.getOutputAmount(e)}
+                      />
+                      <div className="dropdown1">
+                        {showMenuViolas1 ? (
+                          <span
+                            className="showClick"
+                            onClick={(e) => this.getShow1(e)}
+                          >
+                            {type1}
+                            <i>
+                              <img src="/img/路径备份 6@2x.png" />
+                            </i>
+                          </span>
+                        ) : (
+                          <span onClick={(e) => this.getShow1(e)}>
+                            {type1}
+                            <i>
+                              <img src="/img/路径 7@2x.png" />
+                            </i>
+                          </span>
+                        )}
+                        {showMenuViolas1 ? (
+                          <div className="dropdown-content1">
+                            <div className="formSearch">
+                              <img src="/img/sousuo 2@2x.png" />
+                              <input
+                                placeholder="Search"
+                                onChange={(e) => this.getSearchList(e)}
+                              />
+                            </div>
+                            {arr1.map((v, i) => {
+                              return (
+                                <div
+                                  className="searchList"
+                                  key={i}
+                                  onClick={() =>
+                                    this.showTypes(
+                                      v.show_name,
+                                      v.address,
+                                      i,
+                                      v.balance
+                                    )
+                                  }
+                                >
+                                  <div className="searchEvery">
+                                    <img src={v.icon} />
+                                    <div className="searchEvery1">
+                                      <div>
+                                        <h4>{v.show_name}</h4>
+                                        <p>
+                                          余额：
+                                          {v.show_name == "BTC"
+                                            ? v.balance == 0
+                                              ? 0
+                                              : this.getFloat(
+                                                  v.balance / 1e8,
+                                                  6
+                                                )
+                                            : v.balance == 0
+                                            ? 0
+                                            : this.getFloat(
+                                                v.balance / 1e6,
+                                                6
+                                              )}{" "}
+                                          {v.show_name}
+                                        </p>
+                                      </div>
+                                      <span
+                                        className={
+                                          ind == i ? "check active" : "check"
+                                        }
+                                      ></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : null}
+                        <div className="dropdown-content2">
+                          <div className="search">
+                            <i>
+                              <img src="/img/sousuo 2@2x.png" />
+                            </i>
+                            <input placeholder="搜索token" />
+                          </div>
+                          <div className="searchLists">
+                            <div className="searchList">
+                              <div className="img">
+                                <img />
+                              </div>
+                              <div className="listContent">
+                                <label>ETH</label>
+                                <p>余额：0 ETH</p>
+                              </div>
+                            </div>
+                            <div className="searchList">
+                              <div className="img">
+                                <img />
+                              </div>
+                              <div className="listContent">
+                                <label>ETH</label>
+                                <p>余额：0 ETH</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {exchangeRate == "--" ? (
+                    <div className="changeRate">兑换率：--</div>
+                  ) : (
+                    <div className="changeRate">兑换率：1:{exchangeRate}</div>
+                  )}
+                  <div className="changeRate">矿工费用：--</div>
                 </div>
-                {/* 兑换详情 */}
-                <Drawer
-                    // title="Basic Drawer"
-                    placement="right"
-                    closable={false}
-                    onClose={this.onClose}
-                    visible={this.state.visible}
-                    mask={false}
-                    getContainer={false}
-                >
-                    <ExchangeDetail showDrawer={this.showDrawer} changeList={this.state.changeList}></ExchangeDetail>
-                </Drawer>
+                <div className="foot">
+                  <p
+                    className={focusActive == false ? "btn" : "btn focusActive"}
+                    onClick={() => this.showExchangeCode()}
+                  >
+                    兑换
+                  </p>
+                  {/* <p className="descr">{warning}</p> */}
+                  <p
+                    className={
+                      warning == "兑换成功"
+                        ? "descr descrWarn"
+                        : "descr descrRed"
+                    }
+                  >
+                    {warning}
+                  </p>
+                </div>
+                <div className="changeRecord">
+                  <h4>兑换记录</h4>
+                  <div className="changeLists">
+                    {changeRecord.map((v, i) => {
+                      return (
+                        <div
+                          className="changeList"
+                          key={i}
+                          onClick={() => {
+                            this.setState({
+                              visible: true,
+                              changeList: v,
+                            });
+                          }}
+                        >
+                          <div className="list1">
+                            <span
+                              className={v.status == 4001 ? "green" : "red"}
+                            >
+                              {v.status == 4001 ? "兑换成功" : "兑换失败"}
+                            </span>
+                            {v.status == 4001 ? (
+                              <p>
+                                {v.input_amount}
+                                {v.input_name}
+                              </p>
+                            ) : (
+                              <p>--</p>
+                            )}
+                          </div>
+                          <div className="changeImg">
+                            <img src="/img/jixuduihuan备份 7@2x.png" />
+                          </div>
+                          <div className="list2">
+                            {v.status == 4001 ? (
+                              <span>
+                                {v.output_amount}
+                                {v.output_name}
+                              </span>
+                            ) : (
+                              <span>--</span>
+                            )}
+
+                            <p>
+                              {timeStamp2String(v.date + "000")}
+                              <i>
+                                <img src="/img/rightArrow.png" />
+                              </i>
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </div>
-        )
+            {/* 兑换详情 */}
+            <Drawer
+              // title="Basic Drawer"
+              placement="right"
+              closable={false}
+              onClose={this.onClose}
+              visible={this.state.visible}
+              mask={false}
+              getContainer={false}
+            >
+              <ExchangeDetail
+                showDrawer={this.showDrawer}
+                changeList={this.state.changeList}
+              ></ExchangeDetail>
+            </Drawer>
+            {this.state.showWallet ? (
+              <WalletconnectDialog
+                getCloseWallet={this.closeWallet}
+              ></WalletconnectDialog>
+            ) : null}
+          </div>
+        );
     }
 
 

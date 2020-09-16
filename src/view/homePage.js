@@ -3,6 +3,7 @@ import "./app.scss";
 import { connect } from 'react-redux';
 import RouterView from '../router/routerView';
 import WalletConnect from "../packages/browser/src/index";
+import intl from "react-intl-universal";
 import 'antd/dist/antd.css'
 //首页 首个路由
 class HomePage extends Component {
@@ -15,6 +16,21 @@ class HomePage extends Component {
       }
     }
     async componentWillMount() {
+      let lang = intl.options.currentLocale;
+      console.log(lang);
+      switch (lang) {
+        case "zh":
+          lang = "CN";
+          break;
+        case "CN":
+          lang = "CN";
+          break;
+        default:
+          lang = "EN";
+          break;
+      }
+      localStorage.setItem("local", lang);
+      intl.options.currentLocale = localStorage.getItem("local");
       await this.getNewWalletConnect();
       this.state.walletConnector.on("disconnect", (error, payload) => {
         if (error) {

@@ -197,7 +197,7 @@ class GetMoney extends Component {
     getSearchList=(e)=>{
       if (e.target.value){
         let arr = this.state.arr.filter(v => {
-          if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+          if (v.show_name.indexOf(e.target.value.toUpperCase()) >= 0) {
             return v;
           }
         })

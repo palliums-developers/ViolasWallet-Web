@@ -5,6 +5,7 @@ import WalletConnect from "../../packages/browser/src/index";
 import TransfarDialog from './transfarDialog.js';
 import { bytes2StrHex, string2Byte } from '../../utils/trans';
 import intl from "react-intl-universal";
+import WalletconnectDialog from '../components/walletconnectDialog'
 // import {withRouter} from 'react-router-dom'
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -16,9 +17,9 @@ class Transfer extends Component {
     super();
     this.state = {
       // bridge: 'http://47.52.66.26:5000',
-      bridge: 'https://walletconnect.violas.io',
-      tyArgs: '',
-      tyArgs1:'',
+      bridge: "https://walletconnect.violas.io",
+      tyArgs: "",
+      tyArgs1: "",
       balance: 0,
       title: "",
       warning: "",
@@ -26,21 +27,22 @@ class Transfer extends Component {
       address: "",
       amount: "",
       type: "",
-      gasCurrencyCode: 'LBR',
+      gasCurrencyCode: "LBR",
       showDealType: false,
       walletConnector: {},
-      getTypeBalance1:0,
-      getTypeBalance2:0,
-      arr1:[],
-      arr2:[],
-      selData:[],
-      BTCAddress: '',
-      warning1:'',
-      coinName:'',
-      tranferDig:false,
-      ind:0,
-      opinionType:'',
-      BTCArr:[]
+      getTypeBalance1: 0,
+      getTypeBalance2: 0,
+      arr1: [],
+      arr2: [],
+      selData: [],
+      BTCAddress: "",
+      warning1: "",
+      coinName: "",
+      tranferDig: false,
+      ind: 0,
+      opinionType: "",
+      BTCArr: [],
+      showWallet: false,
     };
   }
 
@@ -55,87 +57,116 @@ class Transfer extends Component {
   }
   async getNewWalletConnect() {
     await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge })
+      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
-    if (window.sessionStorage.getItem("btc_address")){
-      this.setState({
-        BTCAddress: window.sessionStorage.getItem("btc_address")
-      }, () => {
-        this.getTypesBalance()
-      })
+    if (window.sessionStorage.getItem("btc_address")) {
+      this.setState(
+        {
+          BTCAddress: window.sessionStorage.getItem("btc_address"),
+        },
+        () => {
+          this.getTypesBalance();
+        }
+      );
     }
-    
-
   }
   //获取到每个币种及余额
-  getTypesBalance(){
-    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-      .then(res => {
-        if(res.data){
-          this.setState({
-            BTCArr: res.data
-          },()=>{
-              this.getVLBalance()
-          })
-        }else{
-          this.getVLBalance()
+  getTypesBalance() {
+    fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          this.setState(
+            {
+              BTCArr: res.data,
+            },
+            () => {
+              this.getVLBalance();
+            }
+          );
+        } else {
+          this.getVLBalance();
         }
-      })
-    
+      });
   }
-  getVLBalance(){
-    fetch(url + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
-      .then(res => {
+  getVLBalance() {
+    fetch(
+      url +
+        "/1.0/violas/balance?addr=" +
+        window.sessionStorage.getItem("violas_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
         if (res.data) {
           this.setState({
-            arr1: res.data.balances
-          })
+            arr1: res.data.balances,
+          });
         }
-      })
-    fetch(url + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
-      .then(res => {
+      });
+    fetch(
+      url +
+        "/1.0/libra/balance?addr=" +
+        window.sessionStorage.getItem("libra_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
         if (res.data) {
-          this.setState({
-            arr2: res.data.balances
-          }, () => {
-            let arr = this.state.arr1.concat(this.state.arr2)
-            let arrs = arr.concat(this.state.BTCArr)
-            this.setState({
-              selData: arrs
-            }, () => {
-              if (this.state.type == "") {
-                this.setState({
-                  type: this.state.selData[0].show_name,
-                  coinName: this.state.selData[0].name,
-                  balance: this.state.selData[0].balance,
-                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1].split('.')[0]
-                })
-              }
-            })
-          })
+          this.setState(
+            {
+              arr2: res.data.balances,
+            },
+            () => {
+              let arr = this.state.arr1.concat(this.state.arr2);
+              let arrs = arr.concat(this.state.BTCArr);
+              this.setState(
+                {
+                  selData: arrs,
+                },
+                () => {
+                  if (this.state.type == "") {
+                    this.setState({
+                      type: this.state.selData[0].show_name,
+                      coinName: this.state.selData[0].name,
+                      balance: this.state.selData[0].balance,
+                      opinionType: this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0],
+                    });
+                  }
+                }
+              );
+            }
+          );
         } else {
           if (this.state.arr2) {
-            let arrs = this.state.arr2.concat(this.state.BTCArr)
-            this.setState({
-              selData: arrs
-            }, () => {
-              if (this.state.type == "") {
-                this.setState({
-                  type: this.state.selData[0].show_name,
-                  coinName: this.state.selData[0].name,
-                  balance: this.state.selData[0].balance,
-                  opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1].split('.')[0]
-                })
+            let arrs = this.state.arr2.concat(this.state.BTCArr);
+            this.setState(
+              {
+                selData: arrs,
+              },
+              () => {
+                if (this.state.type == "") {
+                  this.setState({
+                    type: this.state.selData[0].show_name,
+                    coinName: this.state.selData[0].name,
+                    balance: this.state.selData[0].balance,
+                    opinionType: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0],
+                  });
+                }
               }
-            })
+            );
           }
-
         }
-
-      })
+      });
   }
   getTypeShow = (event) => {
     // this.stopPropagation(event);
@@ -144,18 +175,21 @@ class Transfer extends Component {
     });
   };
 
-  showTypes = (v,bal,name,ind,opinionType) => {
-    this.setState({
-      type: v,
-      balance:bal,
-      showDealType: false,
-      coinName:name,
-      ind:ind,
-      opinionType: opinionType
-    },()=>{
+  showTypes = (v, bal, name, ind, opinionType) => {
+    this.setState(
+      {
+        type: v,
+        balance: bal,
+        showDealType: false,
+        coinName: name,
+        ind: ind,
+        opinionType: opinionType,
+      },
+      () => {
         // this.getTypeBalance()
-        this.getTypesBalance()
-    });
+        this.getTypesBalance();
+      }
+    );
   };
   // closeDialog = () => {
   //   this.setState({
@@ -165,7 +199,7 @@ class Transfer extends Component {
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
   }
-  
+
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
     if (n <= 0) {
@@ -183,7 +217,7 @@ class Transfer extends Component {
       },
       () => {
         if (this.state.address) {
-          this.addressWarn()
+          this.addressWarn();
         } else {
           this.setState({
             warning: "",
@@ -199,12 +233,12 @@ class Transfer extends Component {
         amount: e.target.value,
       },
       () => {
-        this.amountWarn()
+        this.amountWarn();
       }
     );
   };
   //输入警告
-  addressWarn(){
+  addressWarn() {
     if (this.state.type == "BTC") {
       let valid = WAValidator.validate(
         this.state.address,
@@ -220,7 +254,6 @@ class Transfer extends Component {
           warning: "address error",
         });
       }
-
     } else {
       if (this.state.address.length != 32) {
         this.setState({
@@ -233,8 +266,11 @@ class Transfer extends Component {
       }
     }
   }
-  amountWarn(){
-    if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+  amountWarn() {
+    if (
+      Number(this.state.amount) >
+      Number(this.getFloat(this.state.balance / 1e6, 6))
+    ) {
       this.setState({
         warning: "Insufficient available balance",
       });
@@ -248,122 +284,134 @@ class Transfer extends Component {
   //获取violas的tyArgs,并转账
   async getTyArgs(_name) {
     // console.log(_name)
-    let address = '00000000000000000000000000000001';
-    let prefix = '07';
-    let suffix = '00';
+    let address = "00000000000000000000000000000001";
+    let prefix = "07";
+    let suffix = "00";
     let name_length = _name.length;
     if (name_length < 10) {
-      name_length = '0' + name_length;
+      name_length = "0" + name_length;
     }
     let _name_hex = bytes2StrHex(string2Byte(_name));
-    let result = prefix + address + name_length + _name_hex + name_length + _name_hex + suffix;
+    let result =
+      prefix +
+      address +
+      name_length +
+      _name_hex +
+      name_length +
+      _name_hex +
+      suffix;
     // console.log(_name_hex);
     // console.log(result);
-    this.setState({ tyArgs: result },()=>{
-      this.getViolasNext()
+    this.setState({ tyArgs: result, showWallet: true }, () => {
+      this.getViolasNext();
     });
   }
   //获取libra的tyArgs,并转账
   async getTyArgs1(temp) {
-    let address = '00000000000000000000000000000001';
+    let address = "00000000000000000000000000000001";
     let result = {
-      'module': temp,
-      'address': address,
-      'name': temp
-    }
+      module: temp,
+      address: address,
+      name: temp,
+    };
     await this.setState({ tyArgs1: result }, () => {
-      this.getLibraNext()
+      this.getLibraNext();
     });
   }
   //violas转账
-  async violas_sendTransaction(chainId){
+  async violas_sendTransaction(chainId) {
     const tx = {
-      from: window.sessionStorage.getItem('violas_address'),
+      from: window.sessionStorage.getItem("violas_address"),
       payload: {
         code: code_data.violas.p2p,
         tyArgs: [this.state.tyArgs],
         args: [
           {
-            type: 'Address',
-            value: this.state.address
+            type: "Address",
+            value: this.state.address,
           },
           {
-            type: 'U64',
-            value: this.state.amount * 1e6
+            type: "U64",
+            value: this.state.amount * 1e6,
           },
           {
-            type: 'Vector',
-            value: ''
+            type: "Vector",
+            value: "",
           },
           {
-            type: 'Vector',
-            value: ''
-          }
-        ]
+            type: "Vector",
+            value: "",
+          },
+        ],
       },
-      chainId: chainId
+      chainId: chainId,
     };
-    console.log(tx,'violas')
+    console.log(tx, "violas");
     this.state.walletConnector
-      .sendTransaction('violas',tx)
+      .sendTransaction("violas", tx)
       .then((res) => {
-          this.setState({
-            warning: intl.get("Transfer success"),
-          });
-        
+        this.setState({
+          warning: intl.get("Transfer success"),
+          showWallet: false,
+        });
+
         console.log("send transaction ", res);
       })
       .catch((err) => {
-          this.setState({
-            warning: intl.get("Transfer failed"),
-          });
-        
+        this.setState({
+          warning: intl.get("Transfer failed"),
+          showWallet: false,
+        });
+
         console.log("send transaction ", err);
       });
   }
   //libra转账
   async libra_sendTransaction(chainId) {
     const tx = {
-      from: window.sessionStorage.getItem('libra_address'),
+      from: window.sessionStorage.getItem("libra_address"),
       payload: {
         code: code_data.libra.p2p,
-        tyArgs: [
-          this.state.tyArgs1
-        ],
+        tyArgs: [this.state.tyArgs1],
         args: [
           {
-            type: 'Address',
+            type: "Address",
             value: this.state.address,
           },
           {
-            type: 'U64',
-            value: this.state.amount * 1e6
+            type: "U64",
+            value: this.state.amount * 1e6,
           },
           {
-            type: 'Vector',
-            value: '',
+            type: "Vector",
+            value: "",
           },
           {
-            type: 'Vector',
-            value: '',
-          }
-        ]
+            type: "Vector",
+            value: "",
+          },
+        ],
       },
       chainId: chainId,
-    }
-    console.log('libra ', tx);
-    this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
-      console.log('Libra transaction', res);
+    };
+    console.log("libra ", tx);
+    this.state.walletConnector
+      .sendTransaction("_libra", tx)
+      .then((res) => {
+        console.log("Libra transaction", res);
         this.setState({
           warning: intl.get("Transfer success"),
+          showWallet: false,
         });
-    }).catch(err => {
+      })
+      .catch((err) => {
         this.setState({
           warning: intl.get("Transfer failed"),
+          showWallet: false,
         });
-      
-      console.log('Libra transaction ', err);
-    });
+
+        console.log("Libra transaction ", err);
+      });
   }
   //btc转账
   async bitcoin_sendTransaction() {
@@ -373,19 +421,24 @@ class Transfer extends Component {
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.address,
       // script: this.state.script
-    }
-    console.log('bitcoin ', tx);
-    this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
-      console.log('Bitcoin transaction ', res);
+    };
+    console.log("bitcoin ", tx);
+    this.state.walletConnector
+      .sendTransaction("_bitcoin", tx)
+      .then((res) => {
+        console.log("Bitcoin transaction ", res);
         this.setState({
           warning: intl.get("Transfer success"),
+          showWallet: false,
         });
-    }).catch(err => {
-      console.log('Bitcoin transaction ', err);
+      })
+      .catch((err) => {
+        console.log("Bitcoin transaction ", err);
         this.setState({
           warning: intl.get("Transfer failed"),
+          showWallet: false,
         });
-    });
+      });
   }
   getViolasNext = () => {
     if (this.state.address == "") {
@@ -399,18 +452,21 @@ class Transfer extends Component {
       });
       // alert('Please input amount')
     } else {
-      if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+      if (
+        Number(this.state.amount) >
+        Number(this.getFloat(this.state.balance / 1e6, 6))
+      ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"))
+        this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"));
         this.setState({
-            warning: "",
-          });
-        }
+          warning: "",
+        });
+      }
     }
-  }
+  };
   getLibraNext = () => {
     if (this.state.address == "") {
       this.setState({
@@ -423,18 +479,21 @@ class Transfer extends Component {
       });
       // alert('Please input amount')
     } else {
-      if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+      if (
+        Number(this.state.amount) >
+        Number(this.getFloat(this.state.balance / 1e6, 6))
+      ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"))
+        this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"));
         this.setState({
           warning: "",
         });
       }
     }
-  }
+  };
   getBTCNext = () => {
     if (this.state.address == "") {
       this.setState({
@@ -447,51 +506,67 @@ class Transfer extends Component {
       });
       // alert('Please input amount')
     } else {
-      if (Number(this.state.amount) > Number(this.getFloat(this.state.balance / 1e6, 6))) {
+      if (
+        Number(this.state.amount) >
+        Number(this.getFloat(this.state.balance / 1e6, 6))
+      ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.bitcoin_sendTransaction()
+        this.bitcoin_sendTransaction();
         this.setState({
           warning: "",
         });
       }
     }
-  }
-  getDisplays = (val) =>{
+  };
+  getDisplays = (val) => {
     this.setState({
-      tranferDig:val
-    })
-  }
+      tranferDig: val,
+    });
+  };
   //转账时判断是哪个币种然后在发起转账
-  opinionCurNextContent = ()=>{
+  opinionCurNextContent = () => {
     // console.log(this.state.opinionType,'/.........')
-    if (this.state.opinionType =='violas'){
-      this.getTyArgs(this.state.coinName)
-    } else if (this.state.opinionType == 'libra'){
-      this.getTyArgs1(this.state.coinName)
-    }else{
-      this.bitcoin_sendTransaction()
+    if (this.state.opinionType == "violas") {
+      this.getTyArgs(this.state.coinName);
+    } else if (this.state.opinionType == "libra") {
+      this.getTyArgs1(this.state.coinName);
+    } else {
+      this.bitcoin_sendTransaction();
     }
-  }
+  };
   getSearchList = (e) => {
     if (e.target.value) {
-      let arr = this.state.selData.filter(v => {
-        if (v.show_name.indexOf(e.target.value.toUpperCase()) == 0) {
+      let arr = this.state.selData.filter((v) => {
+        if (v.show_name.indexOf(e.target.value.toUpperCase()) >= 0) {
           return v;
         }
-      })
+      });
       this.setState({
-        selData: arr
-      })
+        selData: arr,
+      });
     } else {
-      this.getTypesBalance()
+      this.getTypesBalance();
     }
-
-  }
+  };
+  closeWallet = (val) => {
+    this.setState({
+      showWallet: val,
+    });
+  };
   render() {
-    let { title, balance, warning, showDealType, type, selData, tranferDig ,ind} = this.state;
+    let {
+      title,
+      balance,
+      warning,
+      showDealType,
+      type,
+      selData,
+      tranferDig,
+      ind,
+    } = this.state;
     // console.log(selData, tranferDig,this.state.coinName , this.state.address )
     // console.log(selData,'.....')
     return (
@@ -632,7 +707,9 @@ class Transfer extends Component {
               )}
               <p
                 className={
-                  warning == intl.get("Transfer success") ? "descr descrWarn" : "descr descrRed"
+                  warning == intl.get("Transfer success")
+                    ? "descr descrWarn"
+                    : "descr descrRed"
                 }
               >
                 {warning}
@@ -649,6 +726,9 @@ class Transfer extends Component {
           ></TransfarDialog>
         ) : null}
         {/*  */}
+        {this.state.showWallet ? (
+          <WalletconnectDialog></WalletconnectDialog>
+        ) : null}
       </div>
     );
   }
