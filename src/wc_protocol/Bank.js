@@ -6,7 +6,8 @@ import axios from 'axios';
 import getBTCTx from '../util/btc_trans';
 import { getLibraTx } from '../util/libra_trans';
 import { getViolasTx } from '../util/violas_trans';
-import { digitalBank } from '../util/bank'
+import { digitalBank, getProductId } from '../util/bank'
+import code_data from '../util/code.json';
 
 class Bank extends React.Component {
     constructor(props) {
@@ -20,14 +21,17 @@ class Bank extends React.Component {
             digitalBankOperationList: ['lock', 'redeem', 'borrow', 'repay'],
             digitalBankAmount: 0,
             digitalBankCurrenciesList: [],
+            digitalBankCurrencyDetail: {},
             digitalBankCurrency: '',
             depositProduct: [],
+            available: '',
         }
     }
     async componentWillMount() {
         this.getMappingInfo();
         this.getDepositProduct();
-        this.getPublishViolas();
+        sessionStorage.getItem('violas_address') && this.getPublishViolas();
+        await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct)
     }
     async componentDidMount() {
     }
@@ -80,6 +84,13 @@ class Bank extends React.Component {
             })
         })
     }
+    async getDigitalBankCurrencyDetail(id) {
+        await axios.get('https://api4.violas.io/1.0/violas/bank/deposit/info?id=' + id).then(
+            async res => {
+                await this.setState({ digitalBankCurrencyDetail: res.data.data })
+            }
+        )
+    }
     async getMap() {
         let to_address = '';
         switch (this.state.mappingCoinType.to_coin.coin_type) {
@@ -129,14 +140,66 @@ class Bank extends React.Component {
             return
         }
     }
+    async getBankBroadcast(address, operation, product_id, value, sigtxn) {
+        let api = '';
+        switch (operation) {
+            case 'lock':
+                api = code_data.bank.broadcast.lock;
+                break;
+            case 'redeem':
+                api = code_data.bank.broadcast.redeem;
+                break;
+            case 'borrow':
+                api = code_data.bank.broadcast.borrow;
+                break;
+            case 'repay':
+                api = code_data.bank.broadcast.repay;
+                break;
+            default:
+                break
+        }
+        let parm = {
+            address: address,
+            product_id: product_id,
+            value: value,
+            sigtxn: sigtxn
+        }
+        console.log(parm)
+        axios.post(`https://api4.violas.io${api}`, parm).then(res => {
+            console.log(res)
+        })
+    }
     async getDigitalBank() {
-        let tx = digitalBank(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.digitalBankAmount, sessionStorage.getItem('violas_address'), sessionStorage.getItem('violas_chainId'))
+        let productId = getProductId(this.state.digitalBankCurrency, this.state.depositProduct);
+        if (productId === 0) {
+            console.log('Cannot find match product, please select other coin.');
+            return;
+        }
+        this.getDigitalBankCurrencyDetail(productId);
+        let tx = digitalBank(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.digitalBankAmount, sessionStorage.getItem('violas_address'), this.state.digitalBankCurrencyDetail.token_address, sessionStorage.getItem('violas_chainId'))
         console.log('Digital Bank ', this.state.digitalBankOperation, tx);
-        this.props.walletConnector.sendTransaction('violas', tx).then(res => {
-            console.log('Digital Bank ', this.state.digitalBankOperation, res);
+        this.props.walletConnector.signTransaction(tx).then(async res => {
+            // console.log('Digital Bank ', this.state.digitalBankOperation, res);
+            await this.getBankBroadcast(sessionStorage.getItem('violas_address'), this.state.digitalBankOperation, productId, this.state.digitalBankAmount, res);
         }).catch(err => {
             console.log('Digital Bank ', this.state.digitalBankOperation, err);
         });
+    }
+    async getAvailableQuantity(operation, currency, depositProduct) {
+        let product_id = getProductId(currency, depositProduct);
+        if (product_id === 0) {
+            await this.setState({ available: ` Cannot find match ${currency} product, please select other coin. ` })
+            return;
+        }
+        if (operation === 'redeem') {
+            await axios.get(`https://api4.violas.io/1.0/violas/bank/deposit/withdrawal?id=${product_id}&address=${sessionStorage.getItem('violas_address')}`).then(async res => {
+                await this.setState({ available: 'Available redeem quantity: ' + res.data.data.available_quantity })
+            })
+        } else if (operation === 'repay') {
+            await axios.get(`https://api4.violas.io/1.0/violas/bank/borrow/repayment?id=${product_id}&address=${sessionStorage.getItem('violas_address')}`).then(async res => {
+                await this.setState({ available: 'Available redeem quantity: ' + res.data.data.available_quantity })
+            })
+        }
     }
     async handleChange(_type, e) {
         e.persist();
@@ -148,7 +211,8 @@ class Bank extends React.Component {
                 await this.setState({ mappingCoinAmount: e.target.value });
                 break;
             case 'digitalBankOperation':
-                await this.setState({ digitalBankOperation: e.target.value });
+                await this.setState({ digitalBankOperation: e.target.value, available: '' });
+                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct)
                 break;
             case 'digitalBankAmount':
                 await this.setState({ digitalBankAmount: e.target.value });
@@ -157,7 +221,8 @@ class Bank extends React.Component {
                 // if(!this.state.digitalBankCurrenciesList.length>0){
                 //     this.getPublishViolas();
                 // }
-                await this.setState({ digitalBankCurrency: e.target.value });
+                await this.setState({ digitalBankCurrency: e.target.value, available: '' });
+                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct)
             default:
                 break;
         }
@@ -208,6 +273,7 @@ class Bank extends React.Component {
                         }
                     </select>
                     <input type='text' onChange={this.handleChange.bind(this, 'digitalBankAmount')} />
+                    <h5>{this.state.available}</h5>
                     <br />
                     <button onClick={() => this.getDigitalBank()}>Submit</button>
                 </div>

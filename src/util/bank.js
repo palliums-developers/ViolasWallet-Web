@@ -1,7 +1,7 @@
 import code_data from './code.json';
 import { getViolasTyArgs } from './trans'
 
-let digitalBank = (operation, coinType, amount, violas_address, chainId) => {
+let digitalBank = (operation, coinType, amount, violas_address, token_address, chainId) => {
     let bank_code = ''
     switch (operation) {
         case 'lock':
@@ -24,7 +24,7 @@ let digitalBank = (operation, coinType, amount, violas_address, chainId) => {
         payload: {
             code: bank_code,
             tyArgs: [
-                getViolasTyArgs(coinType, coinType)
+                getViolasTyArgs(coinType, coinType, token_address)
             ],
             args: [
                 {
@@ -42,4 +42,14 @@ let digitalBank = (operation, coinType, amount, violas_address, chainId) => {
     return tx;
 }
 
-export { digitalBank }
+let getProductId = (token_module, product_list) => {
+    let result = 0;
+    for (let i in product_list) {
+        if (token_module === product_list[i].token_module) {
+            result = product_list[i].id
+        }
+    }
+    return result
+}
+
+export { digitalBank, getProductId }

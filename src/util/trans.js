@@ -82,9 +82,9 @@ let timestamp2time = (timestamp) => {
 }
 //07 000000001 module长度 moduleUTF8bytes name长度 nameUTF8bytes 00
 
-let getViolasTyArgs = (_module, _name) => {
+let getViolasTyArgs = (_module, _name, _address) => {
     // let address = '00000000000000000000000000000001';
-    let address = code_data.btc.violas_module_address;
+    let address = _address ? _address : code_data.btc.violas_module_address;
     let prefix = '07';
     let suffix = '00';
     let _module_length = _module.length;
