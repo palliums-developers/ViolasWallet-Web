@@ -78,8 +78,8 @@
         "broadcast": {
             "lock": "/1.0/violas/bank/deposit",
             "redeem": "/1.0/violas/bank/deposit/withdrawal",
-            "borrow": "/1.0/violas/bank/deposit/borrow",
-            "repay": "/1.0/violas/bank/deposit/repayment"
+            "borrow": "/1.0/violas/bank/borrow",
+            "repay": "/1.0/violas/bank/borrow/repayment"
         }
     }
 }

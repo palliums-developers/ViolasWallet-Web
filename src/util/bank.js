@@ -24,7 +24,7 @@ let digitalBank = (operation, coinType, amount, violas_address, token_address, c
         payload: {
             code: bank_code,
             tyArgs: [
-                getViolasTyArgs(coinType, coinType, token_address)
+                getViolasTyArgs(coinType, coinType,token_address)
             ],
             args: [
                 {
@@ -42,11 +42,11 @@ let digitalBank = (operation, coinType, amount, violas_address, token_address, c
     return tx;
 }
 
-let getProductId = (token_module, product_list) => {
+let getProductId = (token_module, _list) => {
     let result = 0;
-    for (let i in product_list) {
-        if (token_module === product_list[i].token_module) {
-            result = product_list[i].id
+    for (let i in _list) {
+        if (token_module === _list[i].token_module) {
+            result = _list[i].id
         }
     }
     return result
