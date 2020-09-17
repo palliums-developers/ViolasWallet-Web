@@ -6,6 +6,7 @@ import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { timeStamp2String } from '../../utils/timer';
+import { timeStamp2String2 } from "../../utils/timer2";
 let url = "https://api4.violas.io";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -16,188 +17,350 @@ class BorrowOrder extends Component {
     constructor() {
         super()
         this.state = {
-            saveId: 0,
-            detailId:0,
-            showDialog: false,
-            expandedRowKeys: [],
-            allCoin:[],
-            allStatus:[],
-            displayMenu:false,
-            borrowId:'',
-            borrowDetails: [
+          saveId: 0,
+          detailId: 0,
+          showDialog: false,
+          expandedRowKeys: [],
+          allCoin: [],
+          allStatus: [],
+          displayMenu: false,
+          borrowId: "",
+          borrowDetails: [
             {
-                id:0,
-                type: '借款明细',
-            }, 
-            {
-                id: 1,
-                type: '还款明细',
+              id: 0,
+              type: "借款明细",
             },
             {
-                id: 2,
-                type: '清算明细',
-            }
-            ],
-            types: [
-                {
-                    id: 0,
-                    type: '当前借款'
-                },
-                {
-                    id: 1,
-                    type: '借款明细'
-                }
-            ],
-            data: [],
-            data1: [],
-            secondData:[],
-            secondData1: [],
-            secondData2: [],
-            columns: [
-                {
-                    title: '币种',
-                    dataIndex: 'coin',
-                    key: 'coin'
-                },
-                {
-                    title: '待还金额',
-                    dataIndex: 'money',
-                    key: 'money',
-                },
-                {
-                    title: '剩余可借',
-                    dataIndex: 'income',
-                    key: 'income',
-                },
-                {
-                    title: '操作',
-                    key: 'option',
-                    dataIndex: 'option',
+              id: 1,
+              type: "还款明细",
+            },
+            {
+              id: 2,
+              type: "清算明细",
+            },
+          ],
+          types: [
+            {
+              id: 0,
+              type: "当前借款",
+            },
+            {
+              id: 1,
+              type: "借款明细",
+            },
+          ],
+          data: [],
+          data1: [],
+          secondData: [],
+          secondData1: [],
+          secondData2: [],
+          columns: [
+            {
+              title: "币种",
+              dataIndex: "coin",
+              key: "coin",
+            },
+            {
+              title: "待还金额",
+              dataIndex: "money",
+              key: "money",
+            },
+            {
+              title: "剩余可借",
+              dataIndex: "income",
+              key: "income",
+            },
+            {
+              title: "操作",
+              key: "option",
+              dataIndex: "option",
 
-                    render: texts => (
-                        <div style={{ display: 'flex'}}>
-                            {
-                                texts.map((val,i)=>{
-                                    if (val.name == '详情'){
-                                        return <label key={i} style={{ display: 'flex', alignItems: 'center', marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}
-                                        {
-                                                val.displayMenu ? <img style={{ width: '12px', height: '12px', marginLeft: '5px' }} src="/img/编组 16@2x (3).png" /> : <img style={{ width: '12px', height: '12px', marginLeft: '5px' }} src="/img/编组 16@2x (2).png" />
-                                        }
-                                        </label>
-                                    } else if (val.name == '还款'){
-                                        return <label key={i} onClick={()=>{
-                                            this.props.history.push('/homepage/home/digitalBank/repayment')
-                                        }} style={{ marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}</label>
-                                    }
-                                    return <label key={i} onClick={() => {
-                                        this.props.history.push('/homepage/home/digitalBank/borrowDetails')
-                                    }} style={{ marginRight: '50px', color: 'rgba(112, 56, 253, 1)', cursor: 'pointer' }}>{val.name}</label>
-                                })
-                            }
-                        </div>
-                    ),
-                    onCell: (record) => {
-                        return {
-                            onClick: () => this.expandRowByKey(record.key),
-                        };
-                        
-                    },
-                },
-            ],
-            columns1: [
-                {
-                    title: '时间',
-                    dataIndex: 'time',
-                    key: 'time'
-                },
-                {
-                    title: '币种',
-                    dataIndex: 'coin',
-                    key: 'coin',
-                },
-                {
-                    title: '数量',
-                    dataIndex: 'amount',
-                    key: 'amount',
-                },
-                {
-                    title: '矿工费用',
-                    dataIndex: 'gas',
-                    key: 'gas',
-                },
-                {
-                    title: '状态',
-                    key: 'status',
-                    dataIndex: 'status',
-                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
-                }
-            ],
-            secondColumns:[
-                {
-                    title: '时间',
-                    dataIndex: 'date',
-                    key: 'date',
-                    render: text => <label>{timeStamp2String(text)}</label>
-                },
-                {
-                    title: '数量',
-                    dataIndex: 'amount',
-                    key: 'amount',
-                },
-                {
-                    title: '状态',
-                    dataIndex: 'status',
-                    key: 'status',
-                }
-            ],
-            secondColumns1: [
-                {
-                    title: '时间',
-                    dataIndex: 'date',
-                    key: 'date',
-                    render: text => <label>{timeStamp2String(text)}</label>
-                },
-                {
-                    title: '数量',
-                    dataIndex: 'amount',
-                    key: 'amount',
-                },
-                {
-                    title: '旷工费用',
-                    dataIndex: 'gas',
-                    key: 'gas',
-                    render: () => <label>--</label>
-                },
-                {
-                    title: '状态',
-                    dataIndex: 'status',
-                    key: 'status',
-                }
-            ],
-            secondColumns2: [
-                {
-                    title: '时间',
-                    dataIndex: 'date',
-                    key: 'date',
-                    render: text => <label>{timeStamp2String(text)}</label>
-                },
-                {
-                    title: '被清算',
-                    dataIndex: 'cleared',
-                    key: 'cleared',
-                },
-                {
-                    title: '已抵扣',
-                    dataIndex: 'deductioned',
-                    key: 'deductioned',
-                },
-                {
-                    title: '状态',
-                    dataIndex: 'status',
-                    key: 'status',
-                }
-            ]
-        }
+              render: (texts) => (
+                <div style={{ display: "flex" }}>
+                  {texts.map((val, i) => {
+                    if (val.name == "详情") {
+                      return (
+                        <label
+                          key={i}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginRight: "50px",
+                            color: "rgba(112, 56, 253, 1)",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {val.name}
+                          {val.displayMenu ? (
+                            <img
+                              style={{
+                                width: "12px",
+                                height: "12px",
+                                marginLeft: "5px",
+                              }}
+                              src="/img/编组 16@2x (3).png"
+                            />
+                          ) : (
+                            <img
+                              style={{
+                                width: "12px",
+                                height: "12px",
+                                marginLeft: "5px",
+                              }}
+                              src="/img/编组 16@2x (2).png"
+                            />
+                          )}
+                        </label>
+                      );
+                    } else if (val.name == "还款") {
+                      return (
+                        <label
+                          key={i}
+                          onClick={() => {
+                            this.props.history.push(
+                              "/homepage/home/digitalBank/repayment"
+                            );
+                          }}
+                          style={{
+                            marginRight: "50px",
+                            color: "rgba(112, 56, 253, 1)",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {val.name}
+                        </label>
+                      );
+                    }
+                    return (
+                      <label
+                        key={i}
+                        onClick={() => {
+                          this.props.history.push(
+                            "/homepage/home/digitalBank/borrowDetails"
+                          );
+                        }}
+                        style={{
+                          marginRight: "50px",
+                          color: "rgba(112, 56, 253, 1)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {val.name}
+                      </label>
+                    );
+                  })}
+                </div>
+              ),
+              onCell: (record) => {
+                return {
+                  onClick: () => this.expandRowByKey(record.key),
+                };
+              },
+            },
+          ],
+          columns1: [
+            {
+              title: "时间",
+              dataIndex: "time",
+              key: "time",
+            },
+            {
+              title: "币种",
+              dataIndex: "coin",
+              key: "coin",
+            },
+            {
+              title: "数量",
+              dataIndex: "amount",
+              key: "amount",
+            },
+            {
+              title: "矿工费用",
+              dataIndex: "gas",
+              key: "gas",
+            },
+            {
+              title: "状态",
+              key: "status",
+              dataIndex: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == 2
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已借款"
+                    : text == 1
+                    ? "已还款"
+                    : text == 2
+                    ? "已清算"
+                    : text == -1
+                    ? "借款失败"
+                    : text == -2
+                    ? "还款失败"
+                    : null}
+                </label>
+              ),
+            },
+          ],
+          secondColumns: [
+            {
+              title: "时间",
+              dataIndex: "date",
+              key: "date",
+              render: (text) => <label>{timeStamp2String(text + "000")}</label>,
+            },
+            {
+              title: "数量",
+              dataIndex: "amount",
+              key: "amount",
+              render: (text) => <label>{text / 1e6}</label>,
+            },
+            {
+              title: "状态",
+              dataIndex: "status",
+              key: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已借款"
+                    : text == 1
+                    ? "已还款"
+                    : text == -1
+                    ? "借款失败"
+                    : text == -2
+                    ? "还款失败"
+                    : null}
+                </label>
+              ),
+            },
+          ],
+          secondColumns1: [
+            {
+              title: "时间",
+              dataIndex: "date",
+              key: "date",
+              render: (text) => <label>{timeStamp2String(text)}</label>,
+            },
+            {
+              title: "数量",
+              dataIndex: "amount",
+              key: "amount",
+              render: (text) => <label>{text / 1e6}</label>,
+            },
+            {
+              title: "旷工费用",
+              dataIndex: "gas",
+              key: "gas",
+              render: () => <label>--</label>,
+            },
+            {
+              title: "状态",
+              dataIndex: "status",
+              key: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : text == 2
+                      ? "colorGre"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已借款"
+                    : text == 1
+                    ? "已还款"
+                    : text == -1
+                    ? "借款失败"
+                    : text == -2
+                    ? "还款失败"
+                    : text == 2
+                    ? "已清算"
+                    : null}
+                </label>
+              ),
+            },
+          ],
+          secondColumns2: [
+            {
+              title: "时间",
+              dataIndex: "date",
+              key: "date",
+              render: (text) => <label>{timeStamp2String(text + "000")}</label>,
+            },
+            {
+              title: "被清算",
+              dataIndex: "cleared",
+              key: "cleared",
+            },
+            {
+              title: "已抵扣",
+              dataIndex: "deductioned",
+              key: "deductioned",
+            },
+            {
+              title: "状态",
+              dataIndex: "status",
+              key: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已借款"
+                    : text == 1
+                    ? "已还款"
+                    : text == -1
+                    ? "借款失败"
+                    : text == -2
+                    ? "还款失败"
+                    : null}
+                </label>
+              ),
+            },
+          ],
+        };
     }
     componentDidMount() {
         // 当前借款
@@ -208,42 +371,45 @@ class BorrowOrder extends Component {
                 for (let i = 0; i < res.data.length; i++) {
                     // console.log(res.data)
                     newData.push({
-                        coin: res.data[i].name,
-                        key: i + 1,
-                        money: res.data[i].amount,
-                        income: res.data[i].available_borrow,
-                        id: res.data[i].id,
-                        option: [
-                            {
-                                id: 0,
-                                name: '还款'
-                            },
-                            {
-                                id: 1,
-                                name: '借款'
-                            },
-                            {
-                                id: 2,
-                                name: '详情',
-                                displayMenu: false
-                            }
-                        ],
-                        borrowDetails: [
-                            {
-                                id: 0,
-                                type: '借款明细',
-                            },
-                            {
-                                id: 1,
-                                type: '还款明细',
-                            },
-                            {
-                                id: 2,
-                                type: '清算明细',
-                            }
-                        ],
-                        detailId:0
-                    })
+                      coin: res.data[i].name,
+                      key: i + 1,
+                      money:
+                        res.data[i].amount < 0
+                          ? -(res.data[i].amount / 1e6)
+                          : res.data[i].amountres.data[i].amount / 1e6,
+                      income: res.data[i].available_borrow / 1e6,
+                      id: res.data[i].id,
+                      option: [
+                        {
+                          id: 0,
+                          name: "还款",
+                        },
+                        {
+                          id: 1,
+                          name: "借款",
+                        },
+                        {
+                          id: 2,
+                          name: "详情",
+                          displayMenu: false,
+                        },
+                      ],
+                      borrowDetails: [
+                        {
+                          id: 0,
+                          type: "借款明细",
+                        },
+                        {
+                          id: 1,
+                          type: "还款明细",
+                        },
+                        {
+                          id: 2,
+                          type: "清算明细",
+                        },
+                      ],
+                      detailId: 0,
+                    });
 
                 }
                 this.setState({
@@ -267,29 +433,29 @@ class BorrowOrder extends Component {
                 let allStatus = []
                 for (let i = 0; i < res.data.length; i++) {
                     newData.push({
-                        time: timeStamp2String(res.data[i].date),
+                        time: timeStamp2String2(res.data[i].date + '000'),
                         gas: '--',
                         coin: res.data[i].currency,
                         key: i + 1,
-                        amount: res.data[i].value,
-                        status: res.data[i].status == 1 ? '收益中' : null,
+                        amount: res.data[i].value / 1e6,
+                        status: res.data[i].status,
                     })
                     if (allCoin.length>0){
-                        for (let j = 0; j < allCoin.length; j++){
-                            if (allCoin[j] != res.data[i].currency) {
-                                allCoin.push(res.data[i].currency)
-                            }
-                        }
+                        allCoin.push(res.data[i].currency);
+                        let newCoin = [...new Set(allCoin)];
+                        this.setState({
+                          allCoin: newCoin,
+                        });
                         
                     }else{
                         allCoin.push(res.data[i].currency)
                     }
                     if (allStatus.length > 0) {
-                        for (let j = 0; j < allStatus.length; j++) {
-                            if (allStatus[j] != res.data[i].status) {
-                                allStatus.push(res.data[i].status)
-                            }
-                        }
+                        allStatus.push(res.data[i].status);
+                        let newStatus = [...new Set(allStatus)];
+                        this.setState({
+                          allStatus: newStatus,
+                        });
 
                     } else {
                         allStatus.push(res.data[i].status)
@@ -297,9 +463,7 @@ class BorrowOrder extends Component {
 
                 }
                 this.setState({
-                    data1: newData,
-                    allCoin: allCoin,
-                    allStatus: allStatus
+                    data1: newData
                 })
             } else{
                 this.setState({
@@ -473,7 +637,21 @@ class BorrowOrder extends Component {
                                     >
                                         {
                                             allStatus.map((v, i) => {
-                                                return <Option key={i} value={v}>{v == 1 ? '收益中': null}</Option>
+                                                return (
+                                                  <Option key={i} value={v}>
+                                                    {v == 0
+                                                      ? "已借款"
+                                                      : v == 1
+                                                      ? "已还款"
+                                                      : v == 2
+                                                      ? "已清算"
+                                                      : v == -1
+                                                      ? "借款失败"
+                                                      : v == -2
+                                                      ? "还款失败"
+                                                      : null}
+                                                  </Option>
+                                                );
                                             })
                                         }
                                     </Select>

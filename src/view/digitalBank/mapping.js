@@ -19,6 +19,7 @@ class DigitalBank extends Component {
     super();
     this.state = {
       bridge: "https://walletconnect.violas.io",
+      walletConnector: {},
       type: "",
       amount: "",
       amount1: 0,
@@ -601,7 +602,13 @@ class DigitalBank extends Component {
               >
                 确定映射
               </p>
-              <p className={"descr descrRed"}>{warning}</p>
+              <p
+                className={
+                  warning == "映射成功" ? "descr descrWarn" : "descr descrRed"
+                }
+              >
+                {warning}
+              </p>
             </div>
           </div>
           <div className="mappingRecord">
@@ -654,7 +661,9 @@ class DigitalBank extends Component {
           </div>
         </div>
         {this.state.showWallet ? (
-          <WalletconnectDialog></WalletconnectDialog>
+          <WalletconnectDialog
+            getCloseWallet={this.closeWallet}
+          ></WalletconnectDialog>
         ) : null}
       </div>
     );

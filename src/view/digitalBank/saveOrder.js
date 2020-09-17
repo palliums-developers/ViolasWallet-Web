@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import { timeStamp2String } from '../../utils/timer';
+import { timeStamp2String2 } from '../../utils/timer2';
 let url = "https://api4.violas.io";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -16,170 +16,230 @@ class SaveOrder extends Component {
     constructor() {
         super()
         this.state = {
-            saveId:0,
-            showDialog:false,
-            allCoin: [],
-            allStatus: [],
-            getId:'',
-            withdrawalsList:{},
-            withdrawalsAmount:'',
-            warning:'',
-            types:[
-                {
-                    id:0,
-                    type:'当前存款'
-                },
-                {
-                    id: 1,
-                    type: '存款明细'
-                }
-            ],
-            data:[],
-            data1: [
-                {
-                    key: '1',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time:'18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                }, {
-                    key: '1',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '2',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '3',
-                    coin: 'CAA',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '4',
-                    coin: 'EEB',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '5',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                },
-                {
-                    key: '6',
-                    coin: 'VLS',
-                    amount: '1000.0',
-                    time: '18:22  01/24/2018',
-                    status: '收益中'
-                }
-            ],
-            columns:[
-                {
-                    title: '币种',
-                    dataIndex: 'coin',
-                    key: 'coin'
-                },
-                {
-                    title: '本金',
-                    dataIndex: 'money',
-                    key: 'money',
-                },
-                {
-                    title: '收益',
-                    dataIndex: 'income',
-                    key: 'income',
-                },
-                {
-                    title: '年化收益率',
-                    key: 'yield',
-                    dataIndex: 'yield',
-                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
-                },
-                {
-                    title: '状态',
-                    key: 'status',
-                    dataIndex: 'status',
-                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
-                },
-                {
-                    title: '操作',
-                    key: 'option',
-                    dataIndex: 'option',
+          saveId: 0,
+          showDialog: false,
+          allCoin: [],
+          allStatus: [],
+          getId: "",
+          withdrawalsList: {},
+          withdrawalsAmount: "",
+          warning: "",
+          types: [
+            {
+              id: 0,
+              type: "当前存款",
+            },
+            {
+              id: 1,
+              type: "存款明细",
+            },
+          ],
+          data: [],
+          data1: [
+            {
+              key: "1",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "2",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "3",
+              coin: "CAA",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "4",
+              coin: "EEB",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "5",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "6",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "1",
+              coin: "CAA",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "2",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "3",
+              coin: "CAA",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "4",
+              coin: "EEB",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "5",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+            {
+              key: "6",
+              coin: "VLS",
+              amount: "1000.0",
+              time: "18:22  01/24/2018",
+              status: "收益中",
+            },
+          ],
+          columns: [
+            {
+              title: "币种",
+              dataIndex: "coin",
+              key: "coin",
+            },
+            {
+              title: "本金",
+              dataIndex: "money",
+              key: "money",
+            },
+            {
+              title: "收益",
+              dataIndex: "income",
+              key: "income",
+            },
+            {
+              title: "年化收益率",
+              key: "yield",
+              dataIndex: "yield",
+              render: (text) => (
+                <label style={{ color: "rgba(19, 183, 136, 1)" }}>
+                  {Number(text * 100).toFixed(2)}%
+                </label>
+              ),
+            },
+            {
+              title: "状态",
+              key: "status",
+              dataIndex: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已存款"
+                    : text == 1
+                    ? "已提取"
+                    : text == -1
+                    ? "提取失败"
+                    : text == -2
+                    ? "存款失败"
+                    : null}
+                </label>
+              ),
+            },
+            {
+              title: "操作",
+              key: "option",
+              dataIndex: "option",
 
-                    render: text => <label onClick={() => this.getOptions()} style={{ color: 'rgba(112, 56, 253, 1)', cursor: 'pointer'}}>{text}</label>,
-                },
-            ],
-            columns1: [
-                {
-                    title: '时间',
-                    dataIndex: 'time',
-                    key: 'time'
-                },
-                {
-                    title: '币种',
-                    dataIndex: 'coin',
-                    key: 'coin',
-                },
-                {
-                    title: '数量',
-                    dataIndex: 'amount',
-                    key: 'amount',
-                },
-                {
-                    title: '状态',
-                    key: 'status',
-                    dataIndex: 'status',
-                    render: text => <label style={{ color: 'rgba(19, 183, 136, 1)' }}>{text}</label>,
-                }
-            ]
-        }
+              render: (text) => (
+                <label
+                  onClick={() => this.getOptions()}
+                  style={{ color: "rgba(112, 56, 253, 1)", cursor: "pointer" }}
+                >
+                  {text}
+                </label>
+              ),
+            },
+          ],
+          columns1: [
+            {
+              title: "时间",
+              dataIndex: "time",
+              key: "time",
+            },
+            {
+              title: "币种",
+              dataIndex: "coin",
+              key: "coin",
+            },
+            {
+              title: "数量",
+              dataIndex: "amount",
+              key: "amount",
+            },
+            {
+              title: "状态",
+              key: "status",
+              dataIndex: "status",
+              render: (text) => (
+                <label
+                  className={
+                    text == 0
+                      ? "colorGre"
+                      : text == 1
+                      ? "colorGre"
+                      : text == -1
+                      ? "colorRed"
+                      : text == -2
+                      ? "colorRed"
+                      : null
+                  }
+                >
+                  {text == 0
+                    ? "已存款"
+                    : text == 1
+                    ? "已提取"
+                    : text == -1
+                    ? "提取失败"
+                    : text == -2
+                    ? "存款失败"
+                    : null}
+                </label>
+              ),
+            },
+          ],
+        };
     }
     getOptions = () =>{
         this.setState({
@@ -207,10 +267,10 @@ class SaveOrder extends Component {
                         coin:res.data[i].currency,
                         key:i + 1,
                         id: res.data[i].id,
-                        money:res.data[i].principal,
+                        money:res.data[i].principal / 1e6,
                         income:res.data[i].earnings,
-                        yield:res.data[i].rate + '%',
-                        status: res.data[i].status == 0 ? '已存款' : res.data[i].status == 1 ? '已提取' : res.data[i].status == -1 ? '提取失败':res.data[i].status == -2 ? '存款失败':null,
+                        yield:res.data[i].rate,
+                        status: res.data[i].status,
                         option:'提取'
                     })
                     
@@ -237,29 +297,29 @@ class SaveOrder extends Component {
                 let allStatus = []
                 for (let i = 0; i < res.data.length; i++) {
                     newData.push({
-                        time: timeStamp2String(res.data[i].date),
+                        time: timeStamp2String2(res.data[i].date + '000'),
                         coin: res.data[i].currency,
                         key: i + 1,
                         
-                        amount: res.data[i].value,
-                        status: res.data[i].status == 0 ? '已存款' : res.data[i].status == 1 ? '已提取' : res.data[i].status == -1 ? '提取失败' : res.data[i].status == -2 ? '存款失败' : null,
+                        amount: res.data[i].value / 1e6,
+                        status: res.data[i].status,
                     })
                     if (allCoin.length > 0) {
-                        for (let j = 0; j < allCoin.length; j++) {
-                            if (allCoin[j] != res.data[i].currency) {
-                                allCoin.push(res.data[i].currency)
-                            }
-                        }
+                        allCoin.push(res.data[i].currency);
+                        let newCoin = [...new Set(allCoin)];
+                        this.setState({
+                          allCoin: newCoin,
+                        });
 
                     } else {
                         allCoin.push(res.data[i].currency)
                     }
                     if (allStatus.length > 0) {
-                        for (let j = 0; j < allStatus.length; j++) {
-                            if (allStatus[j] != res.data[i].status) {
-                                allStatus.push(res.data[i].status)
-                            }
-                        }
+                        allStatus.push(res.data[i].status);
+                        let newStatus = [...new Set(allStatus)];
+                        this.setState({
+                          allStatus: newStatus,
+                        });
 
                     } else {
                         allStatus.push(res.data[i].status)
@@ -268,8 +328,6 @@ class SaveOrder extends Component {
                 }
                 this.setState({
                     data1: newData,
-                    allCoin: allCoin,
-                    allStatus: allStatus
                 })
             } else {
                 this.setState({
@@ -387,7 +445,7 @@ class SaveOrder extends Component {
                                     >
                                         {
                                             allStatus.map((v, i) => {
-                                                return <Option key={i} value={v}>{v == 1 ? '收益中' : null}</Option>
+                                                return <Option key={i} value={v}>{v == 0 ? '已存款' : v == 1 ? '已提取' : v == -1 ? '提取失败' : v == -2 ? '存款失败' : null}</Option>
                                             })
                                         }
                                     </Select>

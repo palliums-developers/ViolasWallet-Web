@@ -136,20 +136,42 @@ class DigitalBankPage extends Component {
                     <div className="tabLists">
                     {
                         ind == 0 ? deposits.map((v,i)=>{
-                            return <div className="everyList" key={i} onClick={() => {
-                                this.props.history.push('/homepage/home/digitalBank/saveDetails')
-                                window.sessionStorage.setItem('id',v.id)
-                            }}>
-                                <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
-                                <p><span>{v.rate}%</span><label>{v.rate_desc}</label></p>
-                            </div>
+                            return (
+                              <div
+                                className="everyList"
+                                key={i}
+                                onClick={() => {
+                                  this.props.history.push(
+                                    "/homepage/home/digitalBank/saveDetails"
+                                  );
+                                  window.sessionStorage.setItem("id", v.id);
+                                  window.sessionStorage.setItem(
+                                    "token_module",
+                                    v.token_module
+                                  );
+                                }}
+                              >
+                                <p>
+                                  <img src="/img/BTC复制 2@2x.png" />
+                                  <span>{v.name}</span>
+                                  <label>{v.desc}</label>
+                                </p>
+                                <p>
+                                  <span>
+                                    {Number(v.rate * 100).toFixed(2)}%
+                                  </span>
+                                  <label>{v.rate_desc}</label>
+                                </p>
+                              </div>
+                            );
                         }) : borrows.map((v, i) => {
                             return <div className="everyList" key={i} onClick={() => {
                                 this.props.history.push('/homepage/home/digitalBank/borrowDetails')
                                 window.sessionStorage.setItem('id', v.id)
+                                window.sessionStorage.setItem("token_module", v.token_module);
                             }}>
                                 <p><img src="/img/BTC复制 2@2x.png" /><span>{v.name}</span><label>{v.desc}</label></p>
-                                <p><span>{v.rate}%</span><label>{v.rate_desc}</label></p>
+                                <p><span>{Number(v.rate * 100).toFixed(2)}%</span><label>{v.rate_desc}</label></p>
                             </div>
                         })
                     }
