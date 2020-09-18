@@ -39,7 +39,7 @@ class SaveDetails extends Component {
     this.getCurrenciesList()
   }
   getCurrenciesList(){
-      console.log(sessionStorage.getItem("token_module"),'.....');
+    //   console.log(sessionStorage.getItem("token_module"),'.....');
         fetch(
         "https://api4.violas.io/1.0/violas/balance?addr=" +
             sessionStorage.getItem("violas_address")

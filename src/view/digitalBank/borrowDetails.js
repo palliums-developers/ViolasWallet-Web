@@ -357,7 +357,11 @@ class BorrowDetails extends Component {
             <p className="btn" onClick={() => this.borrowingImmediately()}>
               立即借款
             </p>
-            <p className="descr">{this.state.warning}</p>
+            <p className={
+                this.state.warning == "借款成功"
+                  ? "descr descrWarn"
+                  : "descr descrRed"
+              }>{this.state.warning}</p>
           </div>
           <div className="productDescr">
             <div className="h3">

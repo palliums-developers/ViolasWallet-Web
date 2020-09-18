@@ -120,6 +120,7 @@ class BorrowOrder extends Component {
                             this.props.history.push(
                               "/homepage/home/digitalBank/repayment"
                             );
+                            
                           }}
                           style={{
                             marginRight: "50px",
@@ -360,65 +361,62 @@ class BorrowOrder extends Component {
               ),
             },
           ],
+          secondAllData:[]
         };
     }
     componentDidMount() {
         // 当前借款
         fetch(url + "/1.0/violas/bank/borrow/orders?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-            if (res.data) {
-                let newData = [];
-                console.log(res.data)
-                for (let i = 0; i < res.data.length; i++) {
-                    // console.log(res.data)
-                    newData.push({
-                      coin: res.data[i].name,
-                      key: i + 1,
-                      money:
-                        res.data[i].amount < 0
-                          ? -(res.data[i].amount / 1e6)
-                          : res.data[i].amountres.data[i].amount / 1e6,
-                      income: res.data[i].available_borrow / 1e6,
-                      id: res.data[i].id,
-                      option: [
-                        {
-                          id: 0,
-                          name: "还款",
-                        },
-                        {
-                          id: 1,
-                          name: "借款",
-                        },
-                        {
-                          id: 2,
-                          name: "详情",
-                          displayMenu: false,
-                        },
-                      ],
-                      borrowDetails: [
-                        {
-                          id: 0,
-                          type: "借款明细",
-                        },
-                        {
-                          id: 1,
-                          type: "还款明细",
-                        },
-                        {
-                          id: 2,
-                          type: "清算明细",
-                        },
-                      ],
-                      detailId: 0,
-                    });
-
-                }
-                this.setState({
-                    data: newData
-                })
+            if (res.data.length>0) {
+              let newData = [];
+              console.log(res.data);
+              for (let i = 0; i < res.data.length; i++) {
+                // console.log(res.data)
+                newData.push({
+                  coin: res.data[i].name,
+                  key: i + 1,
+                  money: res.data[i].amount / 1e6,
+                  id: res.data[i].id,
+                  income: res.data[i].available_borrow / 1e6,
+                  option: [
+                    {
+                      id: 0,
+                      name: "还款",
+                    },
+                    {
+                      id: 1,
+                      name: "借款",
+                    },
+                    {
+                      id: 2,
+                      name: "详情",
+                      displayMenu: false,
+                    },
+                  ],
+                  borrowDetails: [
+                    {
+                      id: 0,
+                      type: "借款明细",
+                    },
+                    {
+                      id: 1,
+                      type: "还款明细",
+                    },
+                    {
+                      id: 2,
+                      type: "清算明细",
+                    },
+                  ],
+                  detailId: 0,
+                });
+              }
+              this.setState({
+                data: newData,
+              });
             } else {
-                this.setState({
-                    data: res.data
-                })
+              this.setState({
+                data: res.data,
+              });
             }
 
         })
@@ -477,6 +475,9 @@ class BorrowOrder extends Component {
     getCurBorrowMenu = (id) =>{
         fetch(url + "/1.0/violas/bank/borrow/order/detail?address=" + sessionStorage.getItem('violas_address') + '&&id=' + this.state.borrowId+'&&q=' + id).then(res => res.json()).then(res => {
             if (res.data) {
+                this.setState({
+                  secondAllData: res.data.list,
+                });
                 if(id == 0){
                     this.setState({
                         secondData: res.data.list
@@ -526,7 +527,7 @@ class BorrowOrder extends Component {
     }
     //二级菜单内容
     expandedRowRender = (record, index, indent, expanded) => {
-
+      //  console.log(this.state.secondColumns);
         return <div className="secendMenu">
             <div className="tab">
                 {
@@ -545,7 +546,8 @@ class BorrowOrder extends Component {
             }
            
             {
-                this.state.data <= 0 ? null : <div className="pageBtns">
+              
+                this.state.secondAllData.length <= 0 ? null : <div className="pageBtns">
                     <span><img src="/img/pageAllLeft.png" /></span>
                     <div className="pageBtn">
                         <span><img src="/img/pageLeft.png" /></span>
@@ -554,7 +556,6 @@ class BorrowOrder extends Component {
                     <span><img src="/img/pageAllRight.png" /></span>
                 </div>
             }
-            
         </div>
     };
     onOk = (value) => {
@@ -587,7 +588,14 @@ class BorrowOrder extends Component {
                         }
                     </div>
                     {
-                        this.state.saveId == 0 ? <Table expandable={{
+                        this.state.saveId == 0 ? <Table onRow={(record) => {
+                        return {
+                         
+                          onClick: () => {
+                            sessionStorage.setItem("repayCurList", JSON.stringify(record));
+                          }, // 点击行
+                        };
+                      }} expandable={{
                             expandedRowKeys: expandedRowKeys,
                             // onExpand: (expanded) => this.onExpand(expanded),
                             expandedRowRender: (record) => this.expandedRowRender(record)

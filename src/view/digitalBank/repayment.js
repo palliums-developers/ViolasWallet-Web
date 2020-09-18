@@ -27,52 +27,114 @@ class Repayment extends Component {
       extra: 0,
       showWallet: false,
       borrowProduct: [],
-      token_address: "",
       depositProduct: [],
+      repayCurList: {},
+      available: 0,
     };
   }
   async componentWillMount() {
+    this.setState({
+      repayCurList: JSON.parse(sessionStorage.getItem("repayCurList")),
+    });
     await this.getNewWalletConnect();
-    // await this.getBorrowProduct();
+    await this.getDepositProduct();
+    await this.getBorrowProduct();
+    await this.getCurrenciesList();
+  }
+  async getDepositProduct() {
+    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
+      async (res) => {
+        await this.setState({ depositProduct: res.data.data });
+      }
+    );
   }
   async getNewWalletConnect() {
     await this.setState({
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
-  componentDidMount() {
+  async getCurrenciesList() {
+    let { repayCurList } = this.state;
     //币种列表
-    fetch(
-      url +
-        "/1.0/violas/bank/borrow/orders?address=" +
-        window.sessionStorage.getItem("violas_address")
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          // console.log(res.data,'.........')
-          this.setState({
-            showLists: res.data,
-            showType: res.data[0].name,
-            extra: res.data[0].available_borrow / 1e6,
-          });
+    axios(
+      "https://api4.violas.io/1.0/violas/currency/published?addr=" +
+        sessionStorage.getItem("violas_address")
+    ).then(async (res) => {
+      let temp = [];
+      for (let i in this.state.depositProduct) {
+        for (let j in res.data.data.published) {
+          if (
+            this.state.depositProduct[i].token_module ===
+            res.data.data.published[j]
+          ) {
+            temp.push(this.state.depositProduct[i].token_module);
+          }
         }
-      });
-    //获取借款产品信息
-    fetch(
-      url +
-        "/1.0/violas/bank/borrow/repayment?address=" +
-        sessionStorage.getItem("violas_address") +
-        "&&=id" +
-        sessionStorage.getItem("id")
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          this.setState({
-            borrowList: res.data,
-          });
+      }
+      await this.setState(
+        {
+          showLists: temp,
+        },
+        () => {
+          for (let i = 0; i < this.state.showLists.length; i++) {
+            if (this.state.showLists[i] == repayCurList.coin) {
+              this.setState(
+                {
+                  showType: this.state.showLists[i],
+                },
+                () => {
+                  this.getAvailableQuantity(
+                    this.state.showType,
+                    this.state.borrowProduct
+                  );
+                }
+              );
+            }
+          }
         }
+      );
+    });
+  }
+  componentDidMount() {
+    // let { repayCurList } = this.state;
+    // //获取借款产品信息
+    // fetch(
+    //   url +
+    //     "/1.0/violas/bank/borrow/repayment?address=" +
+    //     sessionStorage.getItem("violas_address") +
+    //     "&&id=" +
+    //     repayCurList.id
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     if (res.data) {
+    //       console.log(res.data, ".....");
+    //       this.setState({
+    //         borrowList: res.data,
+    //       });
+    //     }
+    //   });
+  }
+  //获取还款产品信息
+  async getAvailableQuantity(currency, borrowProductList) {
+    let product_id = 0;
+    product_id = getProductId(currency, borrowProductList);
+    //   console.log(product_id,'..........')
+    if (product_id === 0) {
+      await this.setState({ extra: 0 });
+      return;
+    }
+    await axios
+      .get(
+        `https://api4.violas.io/1.0/violas/bank/borrow/repayment?id=${product_id}&address=${sessionStorage.getItem(
+          "violas_address"
+        )}`
+      )
+      .then(async (res) => {
+        await this.setState({
+          borrowList: res.data.data,
+          extra: res.data.data.balance / 1e6,
+        });
       });
   }
   //获取输入框value
@@ -82,6 +144,10 @@ class Repayment extends Component {
       this.setState({
         amount: e.target.value,
         warning: "",
+      });
+    } else {
+      this.setState({
+        amount: "",
       });
     }
   };
@@ -98,6 +164,81 @@ class Repayment extends Component {
       this.getDigitalBank();
     }
   };
+  async getBorrowProduct() {
+    axios("https://api4.violas.io/1.0/violas/bank/product/borrow").then(
+      async (res) => {
+        await this.setState({ borrowProduct: res.data.data });
+      }
+    );
+  }
+  async getDigitalBank() {
+    let productId = 0;
+    let tx = "";
+    productId = getProductId(this.state.showType, this.state.borrowProduct);
+    tx = digitalBank(
+      "repay",
+      this.state.showType,
+      this.state.amount * 1e6,
+      sessionStorage.getItem("violas_address"),
+      this.state.borrowList.token_address,
+      sessionStorage.getItem("violas_chainId")
+    );
+    if (productId === 0) {
+      console.log("Cannot find match product, please select other coin.");
+      return;
+    }
+    console.log("Digital Bank ", "repay", tx);
+    this.state.walletConnector
+      .signTransaction(tx)
+      .then(async (res) => {
+        // console.log('Digital Bank ', 'repay', res);
+        await this.getBankBroadcast(
+          sessionStorage.getItem("violas_address"),
+          productId,
+          Number(this.state.amount * 1e6),
+          res
+        );
+      })
+      .catch((err) => {
+        console.log("Digital Bank ", "repay", err);
+      });
+  }
+  async getBankBroadcast(address, product_id, value, sigtxn) {
+    let api = code_data.bank.broadcast.repay;
+    let parm = {
+      address: address,
+      product_id: product_id,
+      value: parseInt(value),
+      sigtxn: sigtxn,
+    };
+    console.log(parm);
+    axios.post(`https://api4.violas.io${api}`, parm).then((res) => {
+        
+      if (res.data.code == 2000) {
+        this.setState({
+          warning: "还款成功",
+          showWallet: false,
+        });
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+          });
+        }, 500);
+      } else {
+        this.setState({
+          warning: "还款失败",
+          showWallet: false,
+        });
+        setTimeout(() => {
+          this.setState({
+            warning: "",
+            amount: "",
+          });
+        }, 500);
+      }
+    });
+  }
   closeWallet = (val) => {
     this.setState({
       showWallet: val,
@@ -105,6 +246,7 @@ class Repayment extends Component {
   };
   render() {
     let { showList, borrowList, showLists, showType, extra } = this.state;
+    // console.log(borrowList);
     return (
       <div className="borrowDetails">
         <Breadcrumb separator=">">
@@ -149,14 +291,22 @@ class Repayment extends Component {
                         <span
                           key={i}
                           onClick={() => {
-                            this.setState({
-                              showType: v.name,
-                              showList: false,
-                            });
+                            this.setState(
+                              {
+                                showType: v,
+                                showList: false,
+                              },
+                              () => {
+                                this.getAvailableQuantity(
+                                  this.state.showType,
+                                  this.state.borrowProductList
+                                );
+                              }
+                            );
                           }}
                         >
                           <img src="/img/kyye.png" />
-                          <label>{v.name}</label>
+                          <label>{v}</label>
                         </span>
                       );
                     })}
@@ -176,14 +326,26 @@ class Repayment extends Component {
                 <label>
                   {extra} {showType}
                 </label>
-                <span>全部</span>
+                <span
+                  onClick={() => {
+                    this.setState({
+                      amount: extra,
+                    });
+                  }}
+                >
+                  全部
+                </span>
               </p>
             </div>
           </div>
           <div className="saveDetailsList1">
             <p>
               <label>借贷率</label>
-              <span>{borrowList.rate ? borrowList.rate + "%" : "--"}</span>
+              <span>
+                {borrowList.rate
+                  ? Number(borrowList.rate * 100).toFixed(2) + "%"
+                  : "--"}
+              </span>
             </p>
             <p>
               <p>
@@ -204,7 +366,15 @@ class Repayment extends Component {
             <p className="btn" onClick={() => this.repaymentImmediately()}>
               立即还款
             </p>
-            <p className="descr">{this.state.warning}</p>
+            <p
+              className={
+                this.state.warning == "还款成功"
+                  ? "descr descrWarn"
+                  : "descr descrRed"
+              }
+            >
+              {this.state.warning}
+            </p>
           </div>
         </div>
         {this.state.showWallet ? (

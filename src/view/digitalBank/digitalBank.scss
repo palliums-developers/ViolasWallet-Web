@@ -1006,7 +1006,10 @@
           margin-left:20px;
         }
         
-        button{
+        .btn{
+          display: inline-block;
+          text-align: center;
+          line-height: 30px;
           width:50px;
           height:30px;
           background:rgba(112,56,253,1);
@@ -1017,6 +1020,7 @@
           border: 0;
           outline: 0;
           margin-left: 20px;
+          cursor: pointer;
         }
       }
     }
@@ -1164,6 +1168,7 @@
                 font-size:12px;
                 font-weight:400;
                 color:rgba(112,56,253,1);
+                cursor: pointer;
             }
           }
           .extractDescr{
@@ -1221,7 +1226,7 @@
 
         }
         .descrWarn{
-            color: green;
+            color: #13b788;
           }
         }
         
