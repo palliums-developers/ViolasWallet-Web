@@ -605,16 +605,26 @@ class ExChange extends Component {
     }
     //获取兑换记录
     getExchangeRecode = () => {
-        fetch(url1 + "/1.0/market/exchange/transaction?address=" + window.sessionStorage.getItem('violas_address') + '&offset=0&limit=5').then(res => res.json())
-            .then(res => {
-                // console.log(res.data)
-                if (res.data.length > 0) {
-                    this.setState({
-                        changeRecord: res.data
-                    })
-                }
-
-            })
+        fetch(
+          url1 +
+            "/1.0/market/crosschain/transaction?addresses=" +
+            sessionStorage.getItem("violas_address") +
+            "_violas," +
+            sessionStorage.getItem("libra_address") +
+            "_libra," +
+            sessionStorage.getItem("btc_address") +
+            "_btc" +
+            "&offset=0&limit=5"
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            // console.log(res.data);
+            if (res.data.length > 0) {
+              this.setState({
+                changeRecord: res.data,
+              });
+            }
+          });
     }
     getShow = (event) => {
         // this.stopPropagation(event)
@@ -715,7 +725,10 @@ class ExChange extends Component {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
             e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
             e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            e.target.value = e.target.value.replace(
+              /^(\-)*(\d+)\.(\d\d\d).*$/,
+              "$1$2.$3"
+            );//只能输入两个小数   
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
@@ -748,7 +761,10 @@ class ExChange extends Component {
             e.target.value = e.target.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符   
             e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的   
             e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-            e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数   
+            e.target.value = e.target.value.replace(
+              /^(\-)*(\d+)\.(\d\d\d).*$/,
+              "$1$2.$3"
+            );//只能输入两个小数   
             if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
                 e.target.value = parseFloat(e.target.value);
             }
@@ -1155,34 +1171,37 @@ class ExChange extends Component {
                         >
                           <div className="list1">
                             <span
-                              className={v.status == 4001 ? "green" : "red"}
+                              className={v.status == 4001 ? "green" : v.status == 4003 ? 'red' : v.status == 4002 ? 'yel' :null}
                             >
-                              {v.status == 4001 ? "兑换成功" : "兑换失败"}
+                              {v.status == 4001 ? "兑换成功" : v.status == 4003 ? '兑换失败' : v.status == 4002 ? '兑换中' :null}
                             </span>
-                            {v.status == 4001 ? (
-                              <p>
-                                {v.input_amount}
-                                {v.input_name}
+                            <p>
+                                {v.input_shown_name == null
+                                  ? null
+                                  : v.input_amount / 1e6}
+                                &nbsp;
+                                {v.input_shown_name == null
+                                  ? "--"
+                                  : v.input_shown_name}
                               </p>
-                            ) : (
-                              <p>--</p>
-                            )}
                           </div>
                           <div className="changeImg">
                             <img src="/img/jixuduihuan备份 7@2x.png" />
                           </div>
                           <div className="list2">
-                            {v.status == 4001 ? (
                               <span>
-                                {v.output_amount}
-                                {v.output_name}
+                                {v.output_shown_name == null
+                                  ? null
+                                  : v.output_amount / 1e6}
+                                &nbsp;
+                                {v.output_shown_name == null
+                                  ? "--"
+                                  : v.output_shown_name}
                               </span>
-                            ) : (
-                              <span>--</span>
-                            )}
+                            
 
                             <p>
-                              {timeStamp2String(v.date + "000")}
+                              {timeStamp2String(v.data + "000")}
                               <i>
                                 <img src="/img/rightArrow.png" />
                               </i>

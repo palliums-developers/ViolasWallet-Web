@@ -323,7 +323,7 @@ class CashPooling extends Component {
       });
     }
   };
-  //第一个输出框 资金池通证
+  //第一个转出框 资金池通证
   getOutputAmount = (e) => {
     if (e.target.value) {
       e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
@@ -369,7 +369,7 @@ class CashPooling extends Component {
       });
     }
   };
-  //第二个输出框
+  //第二个转出框
   getOutputAmount1 = (e) => {
     if (e.target.value) {
       this.setState({
@@ -382,7 +382,7 @@ class CashPooling extends Component {
     }
   };
 
-  //显示输入时通证列表
+  //显示转入时通证列表
   showTypes = (v, address, name, ind, bal) => {
     this.setState(
       {
@@ -420,13 +420,13 @@ class CashPooling extends Component {
       }
     );
   };
-  //显示输出时通证列表
+  //显示转出时通证列表
   showTypes1 = (aModule, bModule, aName, bName, token, ind) => {
     this.setState(
       {
         type2: aName + "/" + bName,
         ind1: ind,
-        asset1: token,
+        asset1: token / 1e6,
         aName: aName,
         bName: bName,
         aModule: aModule,
@@ -441,8 +441,8 @@ class CashPooling extends Component {
       }
     );
   };
-  //转入下拉列表 第一个输入框
-  //转入下拉列表 第二个输入框
+  //转入下拉列表 第一个转入框
+  //转入下拉列表 第二个转入框
   getBalances() {
     fetch(url1 + "/1.0/market/exchange/currency")
       .then((res) => res.json())
@@ -501,7 +501,7 @@ class CashPooling extends Component {
       });
   }
 
-  //第一个输入框搜索
+  //第一个转入框搜索
   getSearchList = (e) => {
     if (e.target.value) {
       let arr = this.state.selData.filter((v) => {
@@ -523,7 +523,7 @@ class CashPooling extends Component {
       this.getBalances();
     }
   };
-  //第二个输入框搜索
+  //第二个转入框搜索
   getSearchList1 = (e) => {
     if (e.target.value) {
       let arr = this.state.arr.filter((v) => {
@@ -556,7 +556,7 @@ class CashPooling extends Component {
   getOutBalances() {
     fetch(
       url1 +
-        "/1.0/market/pool/info?addr=" +
+        "/1.0/market/pool/info?address=" +
         window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
@@ -566,7 +566,7 @@ class CashPooling extends Component {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
-            total_token: res.data.total_token,
+            total_token: res.data.balance[0].token,
           });
         }
       });
@@ -743,7 +743,7 @@ class CashPooling extends Component {
   //点击转入
   async getAddLiquidity(chainId) {
     await this.orderCurrencies(this.state.name, this.state.type1);
-    
+
     // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
     const tx = {
       from: sessionStorage.getItem("violas_address"),
@@ -843,11 +843,11 @@ class CashPooling extends Component {
           },
           {
             type: "U64",
-            value: "" + this.state.coin_a_value,
+            value: "" + this.state.coin_a_value * 1e6,
           },
           {
             type: "U64",
-            value: "" + this.state.coin_b_value,
+            value: "" + this.state.coin_b_value * 1e6,
           },
         ],
       },
@@ -936,7 +936,6 @@ class CashPooling extends Component {
       poolArr,
       focusActive,
     } = this.state;
-    console.log(this.state.selData, "....");
     return (
       <div className="exchange cashPooling">
         <div className="exchangeContent">
@@ -1208,7 +1207,7 @@ class CashPooling extends Component {
                                           "/" +
                                           v.coin_b.show_name}
                                       </h4>
-                                      <p>通证：{v.token}</p>
+                                      <p>通证：{v.token / 1e6}</p>
                                     </div>
                                     <span
                                       className={
@@ -1443,10 +1442,7 @@ class CashPooling extends Component {
                             >
                               {this.optionTypes(v.transaction_type, v.status)}
                             </p>
-                            {this.optionTypes(
-                              v.transaction_type,
-                              v.status
-                            ).slice(2, 4) == "成功" ? (
+                            {
                               <p>
                                 <label>
                                   {v.amounta / 1e6}
@@ -1458,19 +1454,12 @@ class CashPooling extends Component {
                                   {v.coinb}
                                 </label>
                               </p>
-                            ) : (
-                              <p>-- & --</p>
-                            )}
+                            }
                           </div>
                           <div>
-                            {this.optionTypes(
-                              v.transaction_type,
-                              v.status
-                            ).slice(2, 4) == "成功" ? (
+                            {
                               <p>通证：+{v.token / 1e6}</p>
-                            ) : (
-                              <p>--</p>
-                            )}
+                            }
 
                             <p>{timeStamp2String(v.date + "000")}</p>
                           </div>

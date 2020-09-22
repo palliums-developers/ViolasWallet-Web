@@ -12,6 +12,7 @@ class RouterView extends Component {
             <Switch>
                 {
                     routes.map((v, i) => {
+                        // console.log(routes,'.........');
                         if (v.component) {
                             return <Route path={v.path} component={(apiRouter) => {
                                 return <v.component routes={v.children} {...apiRouter}></v.component>

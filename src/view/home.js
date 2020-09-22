@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,PureComponent } from "react";
 import "./app.scss";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
@@ -11,7 +11,7 @@ import intl from "react-intl-universal";
 let url = "https://api.violas.io";
 
 //首页 包括左侧栏，头部我的
-class Home extends Component {
+class Home extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {
@@ -36,11 +36,14 @@ class Home extends Component {
     };
   }
   getMineDialog = (event) => {
-    // this.stopPropagation(event)
+    // event.stopPropagation();
     this.setState({
       showMineDialog: !this.state.showMineDialog,
     });
   };
+  // shouldComponentUpdate(nextProps,nextState) {
+  //   return nextProps.location !== this.props.location;
+  // }
   async componentWillMount() {
     intl.options.currentLocale = localStorage.getItem("local");
     let lang = intl.options.currentLocale;
@@ -63,7 +66,6 @@ class Home extends Component {
       window.localStorage.clear();
       window.sessionStorage.clear();
       // this.props.history.push('/app')
-      // console.log("wallet disconnected", '////////////2');
     });
   }
   componentDidMount() {
@@ -80,9 +82,6 @@ class Home extends Component {
     });
   }
 
-  // stopPropagation(e) {
-  //   e.nativeEvent.stopImmediatePropagation();
-  // }
   // closeDialog = () => {
   //   this.setState({
   //     showMineDialog: false
@@ -117,6 +116,7 @@ class Home extends Component {
   render() {
     let { routes } = this.props;
     let { active, showMineDialog, local, changeLangLists } = this.state;
+    // console.log(showMineDialog, "..........");
     return (
       <div className="home">
         {/* <div style={{position:'absolute'}}>log out</div> */}
@@ -134,8 +134,6 @@ class Home extends Component {
               <span
                 onClick={() => {
                   this.props.history.push("/homepage/home/homeContent");
-                  // this.props.showDetails()
-                  // this.props.showPolling()
                 }}
                 className={
                   active == "homeContent"
@@ -169,24 +167,16 @@ class Home extends Component {
                 }}
                 className={active == "changeContent" ? "active" : null}
               >
-                <i
-                  className="noMar"
-                  // className={active == "changeContent" ? "mar" : "noMar"}
-                ></i>
+                <i className="noMar"></i>
                 <label>{intl.get("Market")}</label>
               </span>
               <span
                 onClick={() => {
                   this.props.history.push("/homepage/home/digitalBank");
-                  // this.props.showDetails()
-                  // this.props.showPolling()
                 }}
                 className={active == "digitalBank" ? "active" : null}
               >
-                <i
-                  className="noBank"
-                  // className={active == "changeContent" ? "mar" : "noMar"}
-                ></i>
+                <i className="noBank"></i>
                 <label>{intl.get("Bank")}</label>
               </span>
             </div>
@@ -219,11 +209,12 @@ class Home extends Component {
                       >
                         <label>{intl.get("Total assets")}($)</label>
                         <span>
-                          {window.sessionStorage.getItem("balances") ?
-                            this.getFloat(
-                              window.sessionStorage.getItem("balances"),
-                              2
-                            ) : '0'}
+                          {window.sessionStorage.getItem("balances")
+                            ? this.getFloat(
+                                window.sessionStorage.getItem("balances"),
+                                2
+                              )
+                            : "0"}
                         </span>
                       </div>
                       <div className="icon">

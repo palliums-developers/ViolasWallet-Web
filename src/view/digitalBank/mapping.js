@@ -73,6 +73,11 @@ class DigitalBank extends Component {
       url +
         "/1.0/mapping/transaction?addresses=" +
         sessionStorage.getItem("violas_address") +
+        "_violas," +
+        sessionStorage.getItem("libra_address") +
+        "_libra," +
+        sessionStorage.getItem("btc_address") +
+        "_btc" +
         "&offset=0&limit=5"
     )
       .then((res) => res.json())
@@ -109,9 +114,10 @@ class DigitalBank extends Component {
               libra_mappingInfo: libraArr,
               btc_mappingInfo: btcArr,
               mappingInfo: res.data,
-              mappingCoinType: res.data[0],
+              
             },
             () => {
+              
               this.getBalances();
             }
           );
@@ -161,12 +167,16 @@ class DigitalBank extends Component {
                 () => {
                   if (this.state.selData) {
                     if (this.state.type == "") {
-                      this.setState({
-                        type: this.state.selData[0].from_coin.assert.show_name,
-                        coinName: this.state.selData[0].from_coin.assert.name,
-                        balance: this.state.selData[0].balance / 1e6,
-                        // opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
-                      });
+                      this.setState(
+                        {
+                          type: this.state.selData[0].from_coin.assert
+                            .show_name,
+                          coinName: this.state.selData[0].from_coin.assert.name,
+                          balance: this.state.selData[0].balance / 1e6,
+                          mappingCoinType: this.state.selData[0],
+                          // opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                        },
+                      );
                     }
                   }
                 }
@@ -227,7 +237,7 @@ class DigitalBank extends Component {
   //输出数量提示
   amountWarn() {
     if (
-      Number(this.state.amount) > Number(this.getFloat(this.state.balance, 6))
+      Number(this.state.amount / 1e8) > Number(this.getFloat(this.state.balance, 6))
     ) {
       this.setState({
         warning: "余额不足",
@@ -246,11 +256,11 @@ class DigitalBank extends Component {
   };
   //转出数量选中
   showTypes = (v, bal, name, ind, val) => {
-    console.log("......");
+    // console.log(val.from_coin.coin_type, "........");
     this.setState(
       {
         type: v,
-        balance: bal / 1e6,
+        balance: val.from_coin.coin_type == 'btc' ? bal / 1e8 : bal / 1e6,
         showDealType: false,
         coinName: name,
         ind: ind,
@@ -279,7 +289,7 @@ class DigitalBank extends Component {
   //确认映射
   async getMap() {
     let to_address = "";
-    console.log(this.state.mappingCoinType, "......");
+    // console.log(this.state.mappingCoinType, "......");
     switch (this.state.mappingCoinType.to_coin.coin_type) {
       case "btc":
         to_address = sessionStorage.getItem("btc_address");
@@ -299,13 +309,13 @@ class DigitalBank extends Component {
       let script = getBitcoinScript(
         this.state.mappingCoinType.lable,
         to_address,
-        this.state.amount
+        this.state.amount * 1e6
       );
-      // console.log('script: ', script);
+      console.log('script: ', script);
       let tx = getBTCTx(
-        sessionStorage.getItem("bitcoin_address"),
+        sessionStorage.getItem("btc_address"),
         this.state.mappingCoinType.receiver_address,
-        this.state.mappingCoinAmount,
+        this.state.amount * 1e8,
         script
       );
       console.log("bitcoin: ", tx);
@@ -323,7 +333,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         })
         .catch((err) => {
           console.log("Bitcoin mapping ", err);
@@ -337,7 +347,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         });
     } else if (this.state.mappingCoinType.from_coin.coin_type === "libra") {
       let script = getMapScript(
@@ -348,7 +358,7 @@ class DigitalBank extends Component {
       let tx = getLibraTx(
         sessionStorage.getItem("libra_address"),
         this.state.mappingCoinType.receiver_address,
-        this.state.amount,
+        this.state.amount * 1e6,
         this.state.mappingCoinType.from_coin.assert.module,
         this.state.mappingCoinType.from_coin.assert.name,
         sessionStorage.getItem("libra_chainId"),
@@ -369,7 +379,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         })
         .catch((err) => {
           console.log("Libra mapping ", err);
@@ -383,7 +393,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         });
     } else if (this.state.mappingCoinType.from_coin.coin_type === "violas") {
       let script = getMapScript(
@@ -394,7 +404,7 @@ class DigitalBank extends Component {
       let tx = getViolasTx(
         sessionStorage.getItem("violas_address"),
         this.state.mappingCoinType.receiver_address,
-        this.state.amount,
+        this.state.amount * 1e6,
         this.state.mappingCoinType.from_coin.assert.module,
         this.state.mappingCoinType.from_coin.assert.name,
         sessionStorage.getItem("violas_chainId"),
@@ -415,7 +425,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         })
         .catch((err) => {
           console.log("Violas mapping ", err);
@@ -429,7 +439,7 @@ class DigitalBank extends Component {
               amount: "",
               amount1: 0,
             });
-          }, 500);
+          }, 1000);
         });
     } else {
       return;
@@ -553,7 +563,7 @@ class DigitalBank extends Component {
                               <div>
                                 <h4>{v.from_coin.assert.show_name}</h4>
                                 <p>
-                                  余额：{v.balance / 1e6}{" "}
+                                  余额：{v.from_coin.coin_type == 'btc' ? v.balance / 1e8 : v.balance / 1e6}{" "}
                                   {v.from_coin.assert.show_name}
                                 </p>
                               </div>
@@ -620,24 +630,32 @@ class DigitalBank extends Component {
                     <div>
                       <span
                         className={
-                          item.status == "4001" ? "spanGre" : "spanRed"
+                          item.state == "start"
+                            ? "spanYel"
+                            : item.state == "end"
+                            ? "spanGre"
+                            : "spanRed"
                         }
                       >
-                        {item.status == "4001" ? "映射成功" : "映射失败"}
+                        {item.state == "start"
+                          ? "映射中"
+                          : item.state == "end"
+                          ? "映射成功"
+                          : "映射失败"}
                       </span>
                       <label>
-                        {timeStamp2String(item.confirmed_time + "000")}
+                        {timeStamp2String(item.expiration_time + "000")}
                       </label>
                     </div>
                     <div>
                       <p>
-                        {item.amount_from.amount}
-                        {item.amount_from.show_name}
+                        {item.in_amount / 1e6}
+                        {item.in_show_name}
                         <img src="/img/路径 2@2x.png" />
-                        {item.amount_to.amount}
-                        {item.amount_to.show_name}
+                        {item.out_amount / 1e6}
+                        {item.out_show_name}
                       </p>
-                      <label>旷工费：0.01 BTC</label>
+                      <label>旷工费：--</label>
                     </div>
                   </div>
                 );
