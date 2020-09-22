@@ -1,8 +1,8 @@
 export default {
   "Please use your ViolasPay scan code to log in":
     "请使用手机ViolasPay扫码登录",
-  Success: "转账成功",
-  Failed: "转账失败",
+  Success: "登录成功",
+  Failed: "登录失败",
   Wallet: "钱包",
   Market: "市场",
   Bank: "数字银行",

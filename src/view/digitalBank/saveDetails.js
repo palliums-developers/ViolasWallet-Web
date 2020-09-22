@@ -184,20 +184,35 @@ class SaveDetails extends Component {
       sigtxn: sigtxn,
     };
     // console.log(parm)
-    axios.post(`https://api4.violas.io${api}`, parm).then((res) => {
-      // console.log(res.data)
-      if (res.data.code == 2000) {
-        this.setState({
-          warning: "存款成功",
-          showWallet: false,
-        });
-        setTimeout(() => {
+    axios
+      .post(`https://api4.violas.io${api}`, parm)
+      .then((res) => {
+        // console.log(res.data)
+        if (res.data.code == 2000) {
           this.setState({
-            warning: "",
-            amount: "",
+            warning: "存款成功",
+            showWallet: false,
           });
-        }, 500);
-      } else {
+          setTimeout(() => {
+            this.setState({
+              warning: "",
+              amount: "",
+            });
+          }, 500);
+        } else {
+          this.setState({
+            warning: "存款失败",
+            showWallet: false,
+          });
+          setTimeout(() => {
+            this.setState({
+              warning: "",
+              amount: "",
+            });
+          }, 500);
+        }
+      })
+      .catch((error)=>{
         this.setState({
           warning: "存款失败",
           showWallet: false,
@@ -208,8 +223,7 @@ class SaveDetails extends Component {
             amount: "",
           });
         }, 500);
-      }
-    });
+      });
   }
   closeWallet = (val) => {
     this.setState({

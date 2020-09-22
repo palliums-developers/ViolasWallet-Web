@@ -31,6 +31,7 @@ class SaveOrder extends Component {
       withdrawalsList: {},
       withdrawalsAmount: "",
       warning: "",
+      total:0,
       types: [
         {
           id: 0,
@@ -264,6 +265,10 @@ class SaveOrder extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          // console.log(res.data,'.........')
+          this.setState({
+            total:res.data.length
+          })
           let allCoin = ["全部"];
           let allStatus = ["全部"];
           for (let i = 0; i < res.data.length; i++) {
@@ -298,7 +303,7 @@ class SaveOrder extends Component {
       });
   };
   //存款明细
-  getSaveDetail1 = (curreny, status) => {
+  getSaveDetail1 = (start,end,curreny, status) => {
     let { page,pageSize} = this.state;
     fetch(
       url +
@@ -308,6 +313,10 @@ class SaveOrder extends Component {
         curreny +
         "&status=" +
         status +
+        "&start=" +
+        start +
+        "&end=" +
+        end +
         "&limit=" +
         pageSize +
         "&offset=" +
@@ -329,6 +338,7 @@ class SaveOrder extends Component {
             });
           }
           this.setState({
+            // total: newData.length,
             data1: newData,
           });
         } else {
@@ -456,7 +466,9 @@ class SaveOrder extends Component {
   //点击搜索
   searchFunction = () => {
     let { selectTime1, selectTime2, selectCoin, selectStatus } = this.state;
-    this.getSaveDetail1(selectCoin, selectStatus);
+    this.getSaveDetail1(selectTime1, selectTime2, selectCoin, selectStatus);
+
+    // this.getSaveDetail1(selectCoin, selectStatus);
   };
   //获取每页的页码和条数
   getPage = (page,pageSize) =>{
@@ -600,7 +612,7 @@ class SaveOrder extends Component {
                 pagination={{
                   pageSize: 6,
                   position: ["bottomCenter"],
-                  total:20,
+                  total: this.state.total,
                   onChange: (page, pageSize) => this.getPage(page, pageSize),
                 }}
               />
