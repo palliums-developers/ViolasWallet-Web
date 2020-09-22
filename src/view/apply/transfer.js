@@ -93,6 +93,7 @@ class Transfer extends Component {
       });
   }
   getVLBalance() {
+    // console.log(this.state.BTCArr);
     fetch(
       url +
         "/1.0/violas/balance?addr=" +
@@ -103,48 +104,9 @@ class Transfer extends Component {
         if (res.data) {
           this.setState({
             arr1: res.data.balances,
-          });
-        }
-      });
-    fetch(
-      url +
-        "/1.0/libra/balance?addr=" +
-        window.sessionStorage.getItem("libra_address")
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          this.setState(
-            {
-              arr2: res.data.balances,
-            },
-            () => {
-              let arr = this.state.arr1.concat(this.state.arr2);
-              let arrs = arr.concat(this.state.BTCArr);
-              this.setState(
-                {
-                  selData: arrs,
-                },
-                () => {
-                  if (this.state.type == "") {
-                    this.setState({
-                      type: this.state.selData[0].show_name,
-                      coinName: this.state.selData[0].name,
-                      balance: this.state.selData[0].balance,
-                      opinionType: this.state.selData[0].show_icon
-                        .split("/")
-                        [
-                          this.state.selData[0].show_icon.split("/").length - 1
-                        ].split(".")[0],
-                    });
-                  }
-                }
-              );
-            }
-          );
-        } else {
-          if (this.state.arr2) {
-            let arrs = this.state.arr2.concat(this.state.BTCArr);
+          },()=>{
+            let arrs = this.state.arr1.concat(this.state.BTCArr);
+            // console.log(arrs,'.....')
             this.setState(
               {
                 selData: arrs,
@@ -164,9 +126,70 @@ class Transfer extends Component {
                 }
               }
             );
-          }
+          });
         }
       });
+    // fetch(
+    //   url +
+    //     "/1.0/libra/balance?addr=" +
+    //     window.sessionStorage.getItem("libra_address")
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     if (res.data) {
+    //       this.setState(
+    //         {
+    //           arr2: res.data.balances,
+    //         },
+    //         () => {
+    //           let arr = this.state.arr1.concat(this.state.arr2);
+    //           let arrs = arr.concat(this.state.BTCArr);
+    //           this.setState(
+    //             {
+    //               selData: arrs,
+    //             },
+    //             () => {
+    //               if (this.state.type == "") {
+    //                 this.setState({
+    //                   type: this.state.selData[0].show_name,
+    //                   coinName: this.state.selData[0].name,
+    //                   balance: this.state.selData[0].balance,
+    //                   opinionType: this.state.selData[0].show_icon
+    //                     .split("/")
+    //                     [
+    //                       this.state.selData[0].show_icon.split("/").length - 1
+    //                     ].split(".")[0],
+    //                 });
+    //               }
+    //             }
+    //           );
+    //         }
+    //       );
+    //     } else {
+    //       if (this.state.arr1) {
+    //         let arrs = this.state.arr1.concat(this.state.BTCArr);
+    //         this.setState(
+    //           {
+    //             selData: arrs,
+    //           },
+    //           () => {
+    //             if (this.state.type == "") {
+    //               this.setState({
+    //                 type: this.state.selData[0].show_name,
+    //                 coinName: this.state.selData[0].name,
+    //                 balance: this.state.selData[0].balance,
+    //                 opinionType: this.state.selData[0].show_icon
+    //                   .split("/")
+    //                   [
+    //                     this.state.selData[0].show_icon.split("/").length - 1
+    //                   ].split(".")[0],
+    //               });
+    //             }
+    //           }
+    //         );
+    //       }
+    //     }
+    //   });
   }
   getTypeShow = (event) => {
     // this.stopPropagation(event);
@@ -662,7 +685,11 @@ class Transfer extends Component {
                                 <h4>{v.show_name}</h4>
                                 <p>
                                   {intl.get("Balance")}：
-                                  {v.show_name == "BTC"
+                                  {v.show_icon
+                                    .split("/")
+                                    [v.show_icon.split("/").length - 1].split(
+                                      "."
+                                    )[0] == "btc"
                                     ? v.BTC == 0
                                       ? 0
                                       : this.getFloat(v.BTC / 1e8, 6)

@@ -224,6 +224,20 @@ class DigitalBank extends Component {
 
   //获取到输出数量
   getTransAmount = (e) => {
+    e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
+    e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+    e.target.value = e.target.value
+      .replace(".", "$#$")
+      .replace(/\./g, "")
+      .replace("$#$", ".");
+    e.target.value = e.target.value.replace(
+      /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
+      "$1$2.$3"
+    ); //只能输入两个小数
+    if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      e.target.value = parseFloat(e.target.value);
+    }
     this.setState(
       {
         amount: e.target.value,
