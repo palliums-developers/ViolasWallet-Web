@@ -17,7 +17,7 @@ class HomePage extends Component {
   }
   async componentWillMount() {
     let lang = intl.options.currentLocale;
-    console.log(lang);
+    // console.log(lang);
     switch (lang) {
       case "zh":
         lang = "CN";
@@ -38,8 +38,8 @@ class HomePage extends Component {
       }
       window.localStorage.clear();
       window.sessionStorage.clear();
-      // this.props.history.push('/app')
-      console.log("wallet disconnected", "////////////");
+      this.props.history.push('/app')
+      // console.log("wallet disconnected", "////////////");
     });
   }
   async getNewWalletConnect() {
