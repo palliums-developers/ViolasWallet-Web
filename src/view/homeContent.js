@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { Drawer } from "antd";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
-import intl from "react-intl-universal";
+import intl, { init } from "react-intl-universal";
+import AddCurrency from "./components/addCurrency";
 import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io"
@@ -31,16 +32,24 @@ class HomeContent extends Component {
         totalAmount:0.00,
         typeName:'',
         BTCRate:0,
+        display:false,
         display1:false,
         display2: false,
         disType:false,
         detailAddr: '',
         name: '',
-        detailData:{}
+        detailData:{},
+        init:false
       }
     }
     
     componentDidMount(){
+
+      // if (JSON.parse(window.sessionStorage.getItem("checkData")).length>1) {
+      //   this.setState({
+      //     checkData: JSON.parse(window.sessionStorage.getItem("checkData")),
+      //   });
+      // }
       if (window.sessionStorage.getItem("btc_address")){
         this.setState({
           BTCAddress: window.sessionStorage.getItem("btc_address")
@@ -51,7 +60,7 @@ class HomeContent extends Component {
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
         this.setState({
           addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-          typeName: JSON.parse(window.sessionStorage.getItem("typeName"))
+          // typeName: JSON.parse(window.sessionStorage.getItem("typeName"))
         });
       }
     }
@@ -65,6 +74,11 @@ class HomeContent extends Component {
       return number;
     }
     getBalances(){
+       let initCoinsList = [];
+      //  window.sessionStorage.setItem(
+      //    "checkData",
+      //    []
+      //  );
        fetch(url1 + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
          .then(res => {
 
@@ -72,16 +86,26 @@ class HomeContent extends Component {
              BTCBalances: res.data
            },()=>{
              fetch(url1 + "/1.0/violas/value/btc").then(res => res.json())
-        .then(res => {
-          let btcRate = res.data;
-          // console.log(res.data)
-          for (let i = 0; i < this.state.BTCBalances.length; i++) {
-            for (let j = 0; j < btcRate.length; j++) {
-              if (this.state.BTCBalances[i].name == btcRate[i].name) {
-                this.state.BTCBalances[i].rate = btcRate[i].rate
+            .then(res => {
+              let btcRate = res.data;
+              let { BTCBalances } = this.state;
+              let BTCBalance = 0;
+              // console.log(res.data)
+              for (let i = 0; i < BTCBalances.length; i++) {
+                for (let j = 0; j < btcRate.length; j++) {
+                  if (BTCBalances[i].name == btcRate[i].name) {
+                    BTCBalances[i].rate = btcRate[i].rate
+                  }
+                }
+              } 
+              for (let i = 0; i < BTCBalances.length; i++) {
+                BTCBalance += Number(
+                  this.getFloat((BTCBalances[i].BTC / 1e8) * BTCBalances[i].rate, 8)
+                );
               }
-            }
-          } 
+              this.setState({
+                BTCBalance: BTCBalance,
+              });
             fetch(url1 + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
               .then(res => {
                 //  console.log(res.data,'.............')
@@ -90,13 +114,13 @@ class HomeContent extends Component {
                     arr1: res.data.balances
                   }, () => {
                    
-                    let BTCBalance = 0;
-                    this.state.BTCBalances.map((v, i) => {
-                      BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
-                    })
-                    this.setState({
-                      BTCBalance: BTCBalance
-                    })
+                    // let BTCBalance = 0;
+                    // this.state.BTCBalances.map((v, i) => {
+                    //   BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
+                    // })
+                    // this.setState({
+                    //   BTCBalance: BTCBalance
+                    // })
                     fetch(url1 + "/1.0/violas/value/violas?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
                       .then(res => {
                         let vioRate = res.data;
@@ -111,121 +135,79 @@ class HomeContent extends Component {
                           arr1: this.state.arr1
                         }, () => {
                           let { arr1 } = this.state;
+                          window.sessionStorage.setItem(
+                            "violas_Balances",
+                            JSON.stringify(arr1)
+                          );
                           if (arr1) {
                             arr1.sort((a, b) => {
                               return b.balance - a.balance;
                             });
                             arr1.map((v, i) => {
+                              if (v.name == 'LBR') {
+                                initCoinsList.push(v);
+                                
+                              }
+                            });
+                            ;
+                            console.log(initCoinsList);
+                            initCoinsList.map((v, i) => {
                               if (v.checked) {
                                 return v;
                               } else {
                                 return Object.assign(v, { checked: true });
                               }
                             });
-                            if (this.state.typeName) {
-                              // let newArr = [];
-                              let typeNames = JSON.parse(
-                                window.sessionStorage.getItem("typeName")
-                              );
-                              for (let i = 0; i < arr1.length; i++) {
-                                for (let j = 0; j < typeNames.length; j++) {
-                                  if (
-                                    arr1[i].show_name.indexOf(typeNames[j]) == 0
-                                  ) {
-                                    arr1[i].checked = false;
-                                  }
-                                }
-                              }
-                              this.setState(
-                                {
-                                  checkData: arr1,
-                                },
-                                () => {
-                                  let amount = 0;
-                                  for (
-                                    let i = 0;
-                                    i < this.state.checkData.length;
-                                    i++
-                                  ) {
-                                    amount += Number(
-                                      this.getFloat(
-                                        (this.state.checkData[i].balance /
-                                          1e6) *
-                                          this.state.checkData[i].rate,
-                                        6
-                                      )
-                                    );
-                                  }
-
-                                  this.setState(
-                                    {
-                                      coinsBalance: amount,
-                                    },
-                                    () => {
-                                      window.sessionStorage.setItem(
-                                        "balances",
-                                        this.state.coinsBalance +
-                                          this.state.BTCBalance
-                                      );
-                                      //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
-                                      this.setState(
-                                        {
-                                          totalAmount: this.getFloat(
-                                            this.state.coinsBalance +
-                                              this.state.BTCBalance,
-                                            2
-                                          ),
-                                        },
-                                        () => {}
-                                      );
-                                    }
+                            window.sessionStorage.setItem('init',false)
+                            if(window.sessionStorage.getItem('init') == false){
+                              window.sessionStorage.setItem("checkData", JSON.stringify(initCoinsList))
+                            }
+                            
+                            this.setState(
+                              {
+                                checkData: initCoinsList,
+                              },
+                              () => {
+                                let amount = 0;
+                                for (
+                                  let i = 0;
+                                  i < this.state.checkData.length;
+                                  i++
+                                ) {
+                                  amount += Number(
+                                    this.getFloat(
+                                      (this.state.checkData[i].balance / 1e6) *
+                                        this.state.checkData[i].rate,
+                                      6
+                                    )
                                   );
                                 }
-                              );
-                            } else {
-                              this.setState(
-                                {
-                                  checkData: arr1,
-                                },
-                                () => {
-                                  let amount = 0;
-                                  for (
-                                    let i = 0;
-                                    i < this.state.checkData.length;
-                                    i++
-                                  ) {
-                                    amount += Number(
-                                      this.getFloat(
-                                        (this.state.checkData[i].balance /
-                                          1e6) *
-                                          this.state.checkData[i].rate,
-                                        6
-                                      )
-                                    );
-                                  }
 
-                                  this.setState(
-                                    {
-                                      coinsBalance: amount,
-                                    },
-                                    () => {
-                                      window.sessionStorage.setItem(
-                                        "balances",
-                                        this.state.coinsBalance +
-                                          this.state.BTCBalance
-                                      );
-                                      this.setState({
+                                this.setState(
+                                  {
+                                    coinsBalance: amount,
+                                  },
+                                  () => {
+                                    window.sessionStorage.setItem(
+                                      "balances",
+                                      this.state.coinsBalance +
+                                        this.state.BTCBalance
+                                    );
+                                    //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+                                    this.setState(
+                                      {
                                         totalAmount: this.getFloat(
                                           this.state.coinsBalance +
                                             this.state.BTCBalance,
                                           2
                                         ),
-                                      });
-                                    }
-                                  );
-                                }
-                              );
-                            }
+                                      },
+                                      () => {}
+                                    );
+                                  }
+                                );
+                              }
+                            );
                           }
                           // fetch(url1 + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
                           //   .then(res => {
@@ -391,6 +373,12 @@ class HomeContent extends Component {
       
       
     }
+    //显示添加币种页面
+    showAddCoins=(type)=>{
+      this.setState({
+        display: type
+      })
+    }
     //显示币种详情页面
     showDetails=(type)=>{
       this.setState({
@@ -466,7 +454,7 @@ class HomeContent extends Component {
                         this.props.history.push({
                           pathname: "/homepage/home/transfer",
                         });
-                        this.props.showPolling(false);
+                        // this.props.showPolling(false);
                         // this.props.showDetails(false);
                       }}
                     >
@@ -478,7 +466,7 @@ class HomeContent extends Component {
                         this.props.history.push({
                           pathname: "/homepage/home/getMoney",
                         });
-                        this.props.showPolling(false);
+                        // this.props.showPolling(false);
                         // this.props.showDetails(false);
                       }}
                     >
@@ -503,7 +491,10 @@ class HomeContent extends Component {
                   <label>{intl.get("Funds")}</label>
                   <i
                     onClick={() => {
-                      this.props.showPolling(!this.props.display);
+                      this.setState({
+                        display: !this.state.display,
+                      });
+                      // this.props.showPolling(!this.props.display);
                     }}
                   >
                     <img src="/img/编组 18@2x.png" />
@@ -564,7 +555,7 @@ class HomeContent extends Component {
                                 ? "0.00"
                                 : v.rate == 0
                                 ? "0.00"
-                                : this.getFloat(v.rate * (v.BTC / 1e8), 6)}
+                                : this.getFloat(v.rate * (v.BTC / 1e8), 2)}
                             </label>
                           ) : (
                             <label>******</label>
@@ -574,82 +565,101 @@ class HomeContent extends Component {
                     );
                   })}
 
-                  {checkData.map((v, i) => {
-                    return (
-                      <div
-                        className="assetListsEvery"
-                        style={
-                          v.checked == false
-                            ? { display: "none" }
-                            : { display: "flex" }
-                        }
-                        key={i}
-                        onClick={() => {
-                          this.setState(
-                            {
-                              display1: !this.state.display1,
-                              name: v.show_name,
-                              detailAddr: v.address,
-                              rate:
-                                v.balance == 0
+                  {JSON.parse(sessionStorage.getItem("checkData")) &&
+                    JSON.parse(sessionStorage.getItem("checkData")).map((v, i) => {
+                      return (
+                        <div
+                          className="assetListsEvery"
+                          style={
+                            v.checked == false
+                              ? { display: "none" }
+                              : { display: "flex" }
+                          }
+                          key={i}
+                          onClick={() => {
+                            this.setState(
+                              {
+                                display1: !this.state.display1,
+                                name: v.show_name,
+                                detailAddr: v.address,
+                                rate:
+                                  v.balance == 0
+                                    ? "0.00"
+                                    : v.rate == 0
+                                    ? "0.00"
+                                    : this.getFloat(
+                                        v.rate * (v.balance / 1e6),
+                                        6
+                                      ),
+                                icon: v.show_icon,
+                                balance:
+                                  v.balance == 0
+                                    ? 0
+                                    : this.getFloat(v.balance / 1e6, 6),
+                              },
+                              () => {
+                                window.sessionStorage.setItem(
+                                  "detailAddr",
+                                  v.address
+                                );
+                              }
+                            );
+                          }}
+                        >
+                          <div className="leftAsset">
+                            <i>
+                              <img src={v.show_icon} />
+                            </i>
+                            <label>{v.show_name}</label>
+                          </div>
+                          <div className="rightAsset">
+                            {visible ? (
+                              <span>
+                                {v.balance == 0
+                                  ? 0
+                                  : this.getFloat(v.balance / 1e6, 6)}
+                              </span>
+                            ) : (
+                              <span>******</span>
+                            )}
+
+                            {visible ? (
+                              <label>
+                                ≈$
+                                {v.balance == 0
                                   ? "0.00"
                                   : v.rate == 0
                                   ? "0.00"
                                   : this.getFloat(
                                       v.rate * (v.balance / 1e6),
-                                      6
-                                    ),
-                              icon: v.show_icon,
-                              balance:
-                                v.balance == 0
-                                  ? 0
-                                  : this.getFloat(v.balance / 1e6, 6),
-                            },
-                            () => {
-                              window.sessionStorage.setItem(
-                                "detailAddr",
-                                v.address
-                              );
-                            }
-                          );
-                        }}
-                      >
-                        <div className="leftAsset">
-                          <i>
-                            <img src={v.show_icon} />
-                          </i>
-                          <label>{v.show_name}</label>
+                                      2
+                                    )}
+                              </label>
+                            ) : (
+                              <label>******</label>
+                            )}
+                          </div>
                         </div>
-                        <div className="rightAsset">
-                          {visible ? (
-                            <span>
-                              {v.balance == 0
-                                ? 0
-                                : this.getFloat(v.balance / 1e6, 6)}
-                            </span>
-                          ) : (
-                            <span>******</span>
-                          )}
-
-                          {visible ? (
-                            <label>
-                              ≈$
-                              {v.balance == 0
-                                ? "0.00"
-                                : v.rate == 0
-                                ? "0.00"
-                                : this.getFloat(v.rate * (v.balance / 1e6), 6)}
-                            </label>
-                          ) : (
-                            <label>******</label>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </div>
             </div>
+            {/* 添加币种 */}
+            <Drawer
+              // title="Basic Drawer"
+              placement="right"
+              closable={false}
+              // onClose={this.onClose}
+              visible={this.state.display}
+              mask={false}
+              getContainer={false}
+            >
+              <AddCurrency
+                showAddCoins={this.showAddCoins}
+                checkData={this.state.checkData}
+              ></AddCurrency>
+            </Drawer>
             {/* 币种详情 */}
             <Drawer
               // title="Basic Drawer"

@@ -15,21 +15,23 @@ class AddCurrency extends Component {
     super();
     this.state = {
       // bridge: 'http://47.52.66.26:5000',
-      bridge: 'https://walletconnect.violas.io',
-      addCurrencyList:[],
-      addCurrencyList1:[],
-      arr1:[],
-      arr2:[],
-      foc:false,
-      addList:[],
-      checkData:[],
-      code: 'a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202',
-      publish_code: 'a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002',
-      tyArgs: '',
+      bridge: "https://walletconnect.violas.io",
+      addCurrencyList: [],
+      addCurrencyList1: [],
+      arr1: [],
+      arr2: [],
+      foc: false,
+      checkData: [],
+      code:
+        "a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202",
+      publish_code:
+        "a11ceb0b010006010002030206040802050a0707111a082b100000000100010101000201060c000109000c4c696272614163636f756e740c6164645f63757272656e63790000000000000000000000000000000101010001030b00380002",
+      tyArgs: "",
       tyArgs1: {},
       walletConnector: {},
-      BTCData:[],
-      addCurrencyList2:[]
+      BTCData: [],
+      addCurrencyList2: [],
+      publishedArr:[],
     };
   }
   async componentWillMount() {
@@ -38,25 +40,25 @@ class AddCurrency extends Component {
   async getNewWalletConnect() {
     await this.setState({ walletConnector: new WalletConnect({ bridge: this.state.bridge }) });
   }
+
   componentDidMount() {
+    this.getBalance();
     if (window.sessionStorage.getItem("btc_address")){
       this.setState({
         BTCAddress: window.sessionStorage.getItem("btc_address")
       }, () => {
-        this.getBalance()
+        
       })
     }
     if (JSON.parse(window.localStorage.getItem("wallet_info"))){
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
-      }, () => {
-        this.setState({
-          addList: this.state.addCurrencyList[2]
-        })
       });
     }
   }
   getBalance = () => {
+    let checkData = JSON.parse(sessionStorage.getItem("checkData"));
+    this.forceUpdate()
     fetch(url + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
       .then(res => {
         // console.log(res.data)
@@ -81,21 +83,43 @@ class AddCurrency extends Component {
             this.setState({
               arr2: res.data.currencies
             }, () => {
-                // console.log(this.state.arr1, this.state.arr2,'........')
               let arr = this.state.arr1.concat(this.state.arr2)
-              this.setState({
-                addCurrencyList1: arr
-              }, () => {
-                this.getPublish()
-              })
+              
+              arr.map((v, i) => {
+                    if (v.checked) {
+                      return v;
+                    } else {
+                      return Object.assign(v, { checked: false });
+                    }
+              });
+              for(let i=0;i<arr.length;i++){
+                for (let j = 0; j < checkData.length; j++) {
+                  if (
+                    arr[i].show_icon
+                      .split("/")
+                      [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
+                    "violas"
+                  ) {
+                    if (arr[i].show_name == checkData[j].show_name) {
+                      // console.log(checkData[j].checked,'........');
+                      arr[i].checked = checkData[j].checked;
+                      // console.log(arr[i].checked, "........");
+                      this.setState(
+                        {
+                          addCurrencyList1: arr,
+                        }
+                      );
+                    }
+                  }
+                }
+                
+              }
+              
             })
           }
           
         })
   }
-  showPolling = () => {
-    this.props.showPolling();
-  };
   string2Byte(str) {
     var bytes = new Array();
     var len, c;
@@ -157,43 +181,59 @@ class AddCurrency extends Component {
       await this.sendPublish(sessionStorage.getItem("violas_chainId"))
     });
   }
+  //点击激活
   async getTyArgs(_name,_addr,ind,icon) {
     let type = icon.split('/')[icon.split('/').length - 1].split('.')[0];
+     window.sessionStorage.setItem("init", true);
     // console.log(this.state.addCurrencyList1, _name, icon.split('/')[icon.split('/').length - 1].split('.')[0],'.........')
     fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
-        
-        let arr = [];
+        let checkData = JSON.parse(sessionStorage.getItem("checkData"));
+        let violas_Balances = JSON.parse(sessionStorage.getItem('violas_Balances'));
         let index = ind;
         if (res.data.published.length > 0){
+         
+          let temp = {
+            pd: false,
+            violas_balance: {},
+            published: {},
+          };
           for (let i = 0; i < res.data.published.length; i++) {
-            for (let j = 0; j < this.state.addCurrencyList1.length; j++) {
-              if (this.state.addCurrencyList1[j].name == _name) {
-
-                if (res.data.published[i] == this.state.addCurrencyList1[j].name) {
-                  this.state.addCurrencyList1[j].checked = true;
-                  window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-                  // arr = JSON.parse(window.sessionStorage.getItem('typeName'))
-                  // arr.splice(index, 1)
-                  // // console.log(arr)
-                  // window.sessionStorage.setItem('typeName', JSON.stringify(arr))
-                  this.showPolling()
-                } else {
-                  if (type == 'violas'){
-                    this.violas_getTyArgs(_name)
-                    this.showPolling()
-                  } else if (type == 'libra'){
-                    this.violas_getTyArgs(_name)
-                    this.showPolling()
-                  }
+            for(let j=0;j < violas_Balances.length;j++){
+                if (res.data.published[i] == _name) {
+                  temp.pd = true;
+                  temp.violas_balance = violas_Balances[i];
+                  temp.published = res.data.published[i];
                   
-                }
-              } 
-
+                  break;
+                } 
+               
             }
+            
+          }
+              if (temp.pd) {
+                if (temp.violas_balance.show_name == temp.published) {
+                  temp.violas_balance.checked = true;
+                  checkData.push(temp.violas_balance);
+                  console.log(checkData);
+                  window.sessionStorage.setItem(
+                    "checkData",
+                    JSON.stringify(checkData)
+                  );
+                  this.props.showAddCoins(false);
+                  this.forceUpdate()
+                }
+              }else{
+                if (type == 'violas'){
+                  this.violas_getTyArgs(_name)
+                 this.props.showAddCoins(false);
+                } else if (type == 'libra'){
+                  this.violas_getTyArgs(_name)
+                  this.props.showAddCoins(false);
+                }
+              }
 
           }
-        } 
-        
+          
       })
   }
   //violas币激活
@@ -250,43 +290,66 @@ class AddCurrency extends Component {
     });
   }
   getPublish(){
-    
     fetch(url + "/1.0/violas/currency/published?addr="+window.sessionStorage.getItem('violas_address')).then(res => res.json())
       .then(res => {
         if(res.data){
-          let data = this.state.addCurrencyList1.map((v, i) => {
-            if (v.checked) {
-              return v;
-            } else {
-              return Object.assign(v, { checked: false })
-            }
-          })
 
-          // console.log(data,'...........')
-          for (let i = 0; i < data.length; i++) {
-            for (let j = 0; j < res.data.published.length; j++) {
-              if (data[i].show_name == res.data.published[j]) {
-                data[i].checked = true;
-                break;
-              } else {
-                data[i].checked = false;
-              }
-            }
-          }
 
-          data.sort((a, b) => {
-            return b.checked - a.checked
-          })
-          this.setState({
-            addCurrencyList1: data
-          })
+        //   // console.log(data,'...........')
+        //   for (let i = 0; i < data.length; i++) {
+        //     for (let j = 0; j < res.data.published.length; j++) {
+        //       if (data[i].show_name == res.data.published[j]) {
+        //         data[i].checked = true;
+        //         break;
+        //       } else {
+        //         data[i].checked = false;
+        //       }
+        //     }
+        //   }
+
+        //   data.sort((a, b) => {
+        //     return b.checked - a.checked
+        //   })
+        //   this.setState({
+        //     addCurrencyList1: data
+        //   })
         }
         
       })
   }
-  closePub = (name) =>{
-      names.push(name)
-      window.sessionStorage.setItem('typeName', JSON.stringify(names))
+  closePub = (_name) =>{
+    fetch(url + "/1.0/violas/currency/published?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
+    let checkData = JSON.parse(sessionStorage.getItem("checkData"));
+    let violas_Balances = JSON.parse(sessionStorage.getItem("violas_Balances"));
+       let temp = {
+         pd: false,
+         violas_balance: {},
+         published: {},
+       };
+       console.log(res.data.published);
+      for (let i = 0; i < res.data.published.length; i++) {
+        for (let j = 0; j < violas_Balances.length; j++) {
+          if (res.data.published[i] == _name) {
+            temp.pd = true;
+            temp.violas_balance = violas_Balances[i];
+            temp.published = res.data.published[i];
+
+            break;
+          }
+        }
+      }
+      if (temp.pd) {
+        if (temp.violas_balance.show_name == temp.published) {
+          temp.violas_balance.checked = false;
+          let arrlist = checkData.filter((v) => v.name !=temp.violas_balance.name);
+          console.log(arrlist, "......");
+          window.sessionStorage.setItem("checkData", JSON.stringify(arrlist));
+          this.props.showAddCoins(false);
+          this.forceUpdate();
+          
+        }
+      } 
+      // window.sessionStorage.setItem('typeName', JSON.stringify(names))
       for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
         for (let j = 0; j < names.length; j++) {
           if (this.state.addCurrencyList1[i].show_name.indexOf(names[j]) == 0) {
@@ -297,14 +360,16 @@ class AddCurrency extends Component {
       }
       // console.log(this.state.addCurrencyList1)
       window.sessionStorage.setItem('addCurrencyList1', JSON.stringify(this.state.addCurrencyList1))
-      this.props.showPolling();
+      this.props.showAddCoins(false);
+    })
   }
 
   render() {
     let { addCurrencyList1, addCurrencyList2, BTCData } = this.state;
+    
     return (
       <div className="addCurrency">
-        <h4 onClick={() => this.showPolling()}>
+        <h4 onClick={() => this.props.showAddCoins(false)}>
           <i>
             <img src="/img/编组备份 3@2x.png" />
           </i>
@@ -324,63 +389,33 @@ class AddCurrency extends Component {
             );
           })}
 
-          {JSON.parse(window.sessionStorage.getItem("addCurrencyList1"))
-            ? JSON.parse(window.sessionStorage.getItem("addCurrencyList1")).map(
-                (v, i) => {
-                  return (
-                    <div className="addCurrencyList" key={i}>
-                      <p>
-                        <i>
-                          <img src={v.show_icon} />
-                        </i>
-                        <label>{v.show_name}</label>
-                      </p>
-                      <p>
-                        {v.checked == false ? (
-                          <img
-                            src="/img/编组 4复制 2@2x.png"
-                            onClick={() =>
-                              this.getTyArgs(v.name, v.address, i, v.show_icon)
-                            }
-                          />
-                        ) : (
-                          <img
-                            onClick={() => this.closePub(v.show_name)}
-                            src="/img/Rectangle 2@2x.png"
-                          />
-                        )}
-                      </p>
-                    </div>
-                  );
-                }
-              )
-            : addCurrencyList1.map((v, i) => {
-                return (
-                  <div className="addCurrencyList" key={i}>
-                    <p>
-                      <i>
-                        <img src={v.show_icon} />
-                      </i>
-                      <label>{v.show_name}</label>
-                    </p>
-                    <p>
-                      {v.checked == false ? (
-                        <img
-                          src="/img/编组 4复制 2@2x.png"
-                          onClick={() =>
-                            this.getTyArgs(v.name, v.address, i, v.show_icon)
-                          }
-                        />
-                      ) : (
-                        <img
-                          onClick={() => this.closePub(v.show_name)}
-                          src="/img/Rectangle 2@2x.png"
-                        />
-                      )}
-                    </p>
-                  </div>
-                );
-              })}
+          {addCurrencyList1.map((v, i) => {
+            return (
+              <div className="addCurrencyList" key={i}>
+                <p>
+                  <i>
+                    <img src={v.show_icon} />
+                  </i>
+                  <label>{v.show_name}</label>
+                </p>
+                <p>
+                  {v.checked == false ? (
+                    <img
+                      src="/img/编组 4复制 2@2x.png"
+                      onClick={() =>
+                        this.getTyArgs(v.name, v.address, i, v.show_icon)
+                      }
+                    />
+                  ) : (
+                    <img
+                      onClick={() => this.closePub(v.show_name)}
+                      src="/img/Rectangle 2@2x.png"
+                    />
+                  )}
+                </p>
+              </div>
+            );
+          })}
           {/* <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
           <div className="addCurrencyList">

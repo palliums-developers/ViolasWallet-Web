@@ -3,7 +3,7 @@ import "./app.scss";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
 import { Drawer } from "antd";
-import AddCurrency from "./components/addCurrency";
+
 import ExchangeDialog from './market/exchangeDialog'
 import MyPoolDialog from './market/myPoolDialog'
 import WalletConnect from "../packages/browser/src/index";
@@ -311,18 +311,7 @@ class Home extends React.PureComponent {
           </div>
           <RouterView routes={routes}></RouterView>
         </div>
-        {/* 添加币种 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          // onClose={this.onClose}
-          visible={this.props.display}
-          mask={false}
-          getContainer={false}
-        >
-          <AddCurrency></AddCurrency>
-        </Drawer>
+        
 
         {/* 我的资金池 */}
         <Drawer
