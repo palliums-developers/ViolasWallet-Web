@@ -42,21 +42,12 @@ class HomeContent extends Component {
         init:false
       }
     }
-    
+    componentWillMount(){
+     
+      window.sessionStorage.setItem("init", false);
+      this.getBalances();
+    }
     componentDidMount(){
-
-      // if (JSON.parse(window.sessionStorage.getItem("checkData")).length>1) {
-      //   this.setState({
-      //     checkData: JSON.parse(window.sessionStorage.getItem("checkData")),
-      //   });
-      // }
-      if (window.sessionStorage.getItem("btc_address")){
-        this.setState({
-          BTCAddress: window.sessionStorage.getItem("btc_address")
-        }, () => {
-          this.getBalances()
-        })
-      }
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
         this.setState({
           addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -75,300 +66,338 @@ class HomeContent extends Component {
     }
     getBalances(){
        let initCoinsList = [];
-      //  window.sessionStorage.setItem(
-      //    "checkData",
-      //    []
-      //  );
-       fetch(url1 + "/1.0/btc/balance?address="+this.state.BTCAddress).then(res => res.json())
-         .then(res => {
+       fetch(
+         url1 +
+           "/1.0/btc/balance?address=" +
+           window.sessionStorage.getItem("btc_address")
+       )
+         .then((res) => res.json())
+         .then((res) => {
+           this.setState(
+             {
+               BTCBalances: res.data,
+             },
+             () => {
+               fetch(url1 + "/1.0/violas/value/btc")
+                 .then((res) => res.json())
+                 .then((res) => {
+                   let btcRate = res.data;
+                   let { BTCBalances } = this.state;
+                   let BTCBalance = 0;
+                   // console.log(res.data)
+                   for (let i = 0; i < BTCBalances.length; i++) {
+                     for (let j = 0; j < btcRate.length; j++) {
+                       if (BTCBalances[i].name == btcRate[i].name) {
+                         BTCBalances[i].rate = btcRate[i].rate;
+                       }
+                     }
+                   }
+                   for (let i = 0; i < BTCBalances.length; i++) {
+                     BTCBalance += Number(
+                       this.getFloat(
+                         (BTCBalances[i].BTC / 1e8) * BTCBalances[i].rate,
+                         8
+                       )
+                     );
+                   }
+                   this.setState({
+                     BTCBalance: BTCBalance,
+                   });
+                   fetch(
+                     url1 +
+                       "/1.0/violas/balance?addr=" +
+                       window.sessionStorage.getItem("violas_address")
+                   )
+                     .then((res) => res.json())
+                     .then((res) => {
+                       //  console.log(res.data,'.............')
+                       if (res.data) {
+                         this.setState(
+                           {
+                             arr1: res.data.balances,
+                           },
+                           () => {
+                             // let BTCBalance = 0;
+                             // this.state.BTCBalances.map((v, i) => {
+                             //   BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
+                             // })
+                             // this.setState({
+                             //   BTCBalance: BTCBalance
+                             // })
+                             fetch(
+                               url1 +
+                                 "/1.0/violas/value/violas?address=" +
+                                 window.sessionStorage.getItem("violas_address")
+                             )
+                               .then((res) => res.json())
+                               .then((res) => {
+                                 let vioRate = res.data;
+                                 for (
+                                   let i = 0;
+                                   i < this.state.arr1.length;
+                                   i++
+                                 ) {
+                                   for (let j = 0; j < vioRate.length; j++) {
+                                     if (
+                                       this.state.arr1[i].name ==
+                                       vioRate[i].name
+                                     ) {
+                                       this.state.arr1[i].rate =
+                                         vioRate[i].rate;
+                                     }
+                                   }
+                                 }
+                                 this.setState(
+                                   {
+                                     arr1: this.state.arr1,
+                                   },
+                                   () => {
+                                     let { arr1 } = this.state;
+                                     window.sessionStorage.setItem(
+                                       "violas_Balances",
+                                       JSON.stringify(arr1)
+                                     );
+                                     if (arr1) {
+                                       arr1.sort((a, b) => {
+                                         return b.balance - a.balance;
+                                       });
+                                       arr1.map((v, i) => {
+                                         if (v.name == "LBR") {
+                                           initCoinsList.push(v);
+                                         }
+                                       });
+                                       console.log(initCoinsList);
+                                       initCoinsList.map((v, i) => {
+                                         if (v.checked) {
+                                          //  return v;
+                                         } else {
+                                           Object.assign(v, {
+                                             checked: true,
+                                           });
+                                         }
+                                       });
+                                       if(window.sessionStorage.getItem(
+                                           "checkData")){
+                                          // if (
+                                          //   JSON.parse(
+                                          //     window.sessionStorage.getItem(
+                                          //       "checkData"
+                                          //     )
+                                          //   ).length > initCoinsList.length
+                                          // ) {
 
-           this.setState({
-             BTCBalances: res.data
-           },()=>{
-             fetch(url1 + "/1.0/violas/value/btc").then(res => res.json())
-            .then(res => {
-              let btcRate = res.data;
-              let { BTCBalances } = this.state;
-              let BTCBalance = 0;
-              // console.log(res.data)
-              for (let i = 0; i < BTCBalances.length; i++) {
-                for (let j = 0; j < btcRate.length; j++) {
-                  if (BTCBalances[i].name == btcRate[i].name) {
-                    BTCBalances[i].rate = btcRate[i].rate
-                  }
-                }
-              } 
-              for (let i = 0; i < BTCBalances.length; i++) {
-                BTCBalance += Number(
-                  this.getFloat((BTCBalances[i].BTC / 1e8) * BTCBalances[i].rate, 8)
-                );
-              }
-              this.setState({
-                BTCBalance: BTCBalance,
-              });
-            fetch(url1 + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
-              .then(res => {
-                //  console.log(res.data,'.............')
-                if (res.data) {
-                  this.setState({
-                    arr1: res.data.balances
-                  }, () => {
-                   
-                    // let BTCBalance = 0;
-                    // this.state.BTCBalances.map((v, i) => {
-                    //   BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
-                    // })
-                    // this.setState({
-                    //   BTCBalance: BTCBalance
-                    // })
-                    fetch(url1 + "/1.0/violas/value/violas?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
-                      .then(res => {
-                        let vioRate = res.data;
-                        for (let i = 0; i < this.state.arr1.length; i++) {
-                          for (let j = 0; j < vioRate.length; j++) {
-                            if (this.state.arr1[i].name == vioRate[i].name) {
-                              this.state.arr1[i].rate = vioRate[i].rate
-                            }
-                          }
-                        }
-                        this.setState({
-                          arr1: this.state.arr1
-                        }, () => {
-                          let { arr1 } = this.state;
-                          window.sessionStorage.setItem(
-                            "violas_Balances",
-                            JSON.stringify(arr1)
-                          );
-                          if (arr1) {
-                            arr1.sort((a, b) => {
-                              return b.balance - a.balance;
-                            });
-                            arr1.map((v, i) => {
-                              if (v.name == 'LBR') {
-                                initCoinsList.push(v);
-                                
-                              }
-                            });
-                            ;
-                            console.log(initCoinsList);
-                            initCoinsList.map((v, i) => {
-                              if (v.checked) {
-                                return v;
-                              } else {
-                                return Object.assign(v, { checked: true });
-                              }
-                            });
-                            window.sessionStorage.setItem('init',false)
-                            if(window.sessionStorage.getItem('init') == false){
-                              window.sessionStorage.setItem("checkData", JSON.stringify(initCoinsList))
-                            }
-                            
-                            this.setState(
-                              {
-                                checkData: initCoinsList,
-                              },
-                              () => {
-                                let amount = 0;
-                                for (
-                                  let i = 0;
-                                  i < this.state.checkData.length;
-                                  i++
-                                ) {
-                                  amount += Number(
-                                    this.getFloat(
-                                      (this.state.checkData[i].balance / 1e6) *
-                                        this.state.checkData[i].rate,
-                                      6
-                                    )
-                                  );
-                                }
+                                          // }
+                                       }else{
+                                           window.sessionStorage.setItem("checkData", JSON.stringify(initCoinsList));
+                                       }
+                                      
+                                       this.setState(
+                                         {
+                                           checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
+                                         },
+                                         () => {
+                                           let amount = 0;
+                                           for (
+                                             let i = 0;
+                                             i < this.state.checkData.length;
+                                             i++
+                                           ) {
+                                             amount += Number(
+                                               this.getFloat(
+                                                 (this.state.checkData[i]
+                                                   .balance /
+                                                   1e6) *
+                                                   this.state.checkData[i].rate,
+                                                 6
+                                               )
+                                             );
+                                           }
+                                           console.log(amount,'.........');
+                                           this.setState(
+                                             {
+                                               coinsBalance: amount,
+                                             },
+                                             () => {
+                                               window.sessionStorage.setItem(
+                                                 "balances",
+                                                 this.state.coinsBalance +
+                                                   this.state.BTCBalance
+                                               );
+                                               //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+                                               this.setState(
+                                                 {
+                                                   totalAmount: this.getFloat(
+                                                     this.state.coinsBalance +
+                                                       this.state.BTCBalance,
+                                                     2
+                                                   ),
+                                                 },
+                                                 () => {}
+                                               );
+                                             }
+                                           );
+                                         }
+                                       );
+                                     }
+                                     // fetch(url1 + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
+                                     //   .then(res => {
+                                     //     if (res.data) {
+                                     //       this.setState({
+                                     //         arr2: res.data.balances
+                                     //       }, () => {
+                                     //         fetch(url1 + "/1.0/violas/value/libra?address=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
+                                     //           .then(res => {
+                                     //             let libRate = res.data;
+                                     //             for (let i = 0; i < this.state.arr2.length; i++) {
+                                     //               for (let j = 0; j < libRate.length; j++) {
+                                     //                 if (this.state.arr2[i].name == libRate[i].name) {
+                                     //                   this.state.arr2[i].rate = libRate[i].rate
+                                     //                 }
+                                     //               }
+                                     //             }
+                                     //             this.setState({
+                                     //               arr2: this.state.arr2
+                                     //             }, () => {
+                                     //               let arr = this.state.arr1.concat(this.state.arr2)
+                                     //               arr.sort((a, b) => {
+                                     //                 return b.balance - a.balance
+                                     //               })
+                                     //               arr.map((v, i) => {
+                                     //                 if (v.checked) {
+                                     //                   return v;
+                                     //                 } else {
+                                     //                   return Object.assign(v, { checked: true })
+                                     //                 }
+                                     //               })
+                                     //               if (this.state.typeName) {
+                                     //                 // let newArr = [];
+                                     //                 let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
+                                     //                 for (let i = 0; i < arr.length; i++) {
+                                     //                   for (let j = 0; j < typeNames.length; j++) {
+                                     //                     if (arr[i].show_name.indexOf(typeNames[j]) == 0) {
+                                     //                       arr[i].checked = false
+                                     //                     }
+                                     //                   }
+                                     //                 }
+                                     //                 this.setState({
+                                     //                   checkData: arr
+                                     //                 }, () => {
+                                     //                   let amount = 0;
+                                     //                   for (let i = 0; i < this.state.checkData.length; i++) {
+                                     //                     amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
+                                     //                   }
 
-                                this.setState(
-                                  {
-                                    coinsBalance: amount,
-                                  },
-                                  () => {
-                                    window.sessionStorage.setItem(
-                                      "balances",
-                                      this.state.coinsBalance +
-                                        this.state.BTCBalance
-                                    );
-                                    //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
-                                    this.setState(
-                                      {
-                                        totalAmount: this.getFloat(
-                                          this.state.coinsBalance +
-                                            this.state.BTCBalance,
-                                          2
-                                        ),
-                                      },
-                                      () => {}
-                                    );
-                                  }
-                                );
-                              }
-                            );
-                          }
-                          // fetch(url1 + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
-                          //   .then(res => {
-                          //     if (res.data) {
-                          //       this.setState({
-                          //         arr2: res.data.balances
-                          //       }, () => {
-                          //         fetch(url1 + "/1.0/violas/value/libra?address=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
-                          //           .then(res => {
-                          //             let libRate = res.data;
-                          //             for (let i = 0; i < this.state.arr2.length; i++) {
-                          //               for (let j = 0; j < libRate.length; j++) {
-                          //                 if (this.state.arr2[i].name == libRate[i].name) {
-                          //                   this.state.arr2[i].rate = libRate[i].rate
-                          //                 }
-                          //               }
-                          //             }
-                          //             this.setState({
-                          //               arr2: this.state.arr2
-                          //             }, () => {
-                          //               let arr = this.state.arr1.concat(this.state.arr2)
-                          //               arr.sort((a, b) => {
-                          //                 return b.balance - a.balance
-                          //               })
-                          //               arr.map((v, i) => {
-                          //                 if (v.checked) {
-                          //                   return v;
-                          //                 } else {
-                          //                   return Object.assign(v, { checked: true })
-                          //                 }
-                          //               })
-                          //               if (this.state.typeName) {
-                          //                 // let newArr = []; 
-                          //                 let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
-                          //                 for (let i = 0; i < arr.length; i++) {
-                          //                   for (let j = 0; j < typeNames.length; j++) {
-                          //                     if (arr[i].show_name.indexOf(typeNames[j]) == 0) {
-                          //                       arr[i].checked = false
-                          //                     }
-                          //                   }
-                          //                 }
-                          //                 this.setState({
-                          //                   checkData: arr
-                          //                 }, () => {
-                          //                   let amount = 0;
-                          //                   for (let i = 0; i < this.state.checkData.length; i++) {
-                          //                     amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-                          //                   }
+                                     //                   this.setState({
+                                     //                     coinsBalance: amount
+                                     //                   }, () => {
+                                     //                     window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                                     //                     //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+                                     //                     this.setState({
+                                     //                       totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
+                                     //                     }, () => {
 
-                          //                   this.setState({
-                          //                     coinsBalance: amount
-                          //                   }, () => {
-                          //                     window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                          //                     //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
-                          //                     this.setState({
-                          //                       totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-                          //                     }, () => {
+                                     //                     })
+                                     //                   })
+                                     //                 })
+                                     //               } else {
+                                     //                 this.setState({
+                                     //                   checkData: arr
+                                     //                 }, () => {
+                                     //                   let amount = 0;
+                                     //                   for (let i = 0; i < this.state.checkData.length; i++) {
+                                     //                     amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
+                                     //                   }
 
-                          //                     })
-                          //                   })
-                          //                 })
-                          //               } else {
-                          //                 this.setState({
-                          //                   checkData: arr
-                          //                 }, () => {
-                          //                   let amount = 0;
-                          //                   for (let i = 0; i < this.state.checkData.length; i++) {
-                          //                     amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-                          //                   }
+                                     //                   this.setState({
+                                     //                     coinsBalance: amount
+                                     //                   }, () => {
+                                     //                     window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                                     //                     this.setState({
+                                     //                       totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
+                                     //                     })
+                                     //                   })
+                                     //                 })
+                                     //               }
+                                     //             })
+                                     //           })
 
-                          //                   this.setState({
-                          //                     coinsBalance: amount
-                          //                   }, () => {
-                          //                     window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                          //                     this.setState({
-                          //                       totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-                          //                     })
-                          //                   })
-                          //                 })
-                          //               }
-                          //             })
-                          //           })
+                                     //       })
+                                     //     } else {
+                                     //       let { arr1 } = this.state;
+                                     //       if (arr1) {
+                                     //         arr1.sort((a, b) => {
+                                     //           return b.balance - a.balance
+                                     //         })
+                                     //         arr1.map((v, i) => {
+                                     //           if (v.checked) {
+                                     //             return v;
+                                     //           } else {
+                                     //             return Object.assign(v, { checked: true })
+                                     //           }
+                                     //         })
+                                     //         if (this.state.typeName) {
+                                     //           // let newArr = [];
+                                     //           let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
+                                     //           for (let i = 0; i < arr1.length; i++) {
+                                     //             for (let j = 0; j < typeNames.length; j++) {
+                                     //               if (arr1[i].show_name.indexOf(typeNames[j]) == 0) {
+                                     //                 arr1[i].checked = false
+                                     //               }
+                                     //             }
+                                     //           }
+                                     //           this.setState({
+                                     //             checkData: arr1
+                                     //           }, () => {
+                                     //             let amount = 0;
+                                     //             for (let i = 0; i < this.state.checkData.length; i++) {
+                                     //               amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
+                                     //             }
 
+                                     //             this.setState({
+                                     //               coinsBalance: amount
+                                     //             }, () => {
+                                     //               window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                                     //               //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+                                     //               this.setState({
+                                     //                 totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
+                                     //               }, () => {
 
-                          //       })
-                          //     } else {
-                          //       let { arr1 } = this.state;
-                          //       if (arr1) {
-                          //         arr1.sort((a, b) => {
-                          //           return b.balance - a.balance
-                          //         })
-                          //         arr1.map((v, i) => {
-                          //           if (v.checked) {
-                          //             return v;
-                          //           } else {
-                          //             return Object.assign(v, { checked: true })
-                          //           }
-                          //         })
-                          //         if (this.state.typeName) {
-                          //           // let newArr = []; 
-                          //           let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
-                          //           for (let i = 0; i < arr1.length; i++) {
-                          //             for (let j = 0; j < typeNames.length; j++) {
-                          //               if (arr1[i].show_name.indexOf(typeNames[j]) == 0) {
-                          //                 arr1[i].checked = false
-                          //               }
-                          //             }
-                          //           }
-                          //           this.setState({
-                          //             checkData: arr1
-                          //           }, () => {
-                          //             let amount = 0;
-                          //             for (let i = 0; i < this.state.checkData.length; i++) {
-                          //               amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-                          //             }
+                                     //               })
+                                     //             })
+                                     //           })
+                                     //         } else {
+                                     //           this.setState({
+                                     //             checkData: arr1
+                                     //           }, () => {
+                                     //             let amount = 0;
+                                     //             for (let i = 0; i < this.state.checkData.length; i++) {
+                                     //               amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
+                                     //             }
 
-                          //             this.setState({
-                          //               coinsBalance: amount
-                          //             }, () => {
-                          //               window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                          //               //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
-                          //               this.setState({
-                          //                 totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-                          //               }, () => {
-
-                          //               })
-                          //             })
-                          //           })
-                          //         } else {
-                          //           this.setState({
-                          //             checkData: arr1
-                          //           }, () => {
-                          //             let amount = 0;
-                          //             for (let i = 0; i < this.state.checkData.length; i++) {
-                          //               amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-                          //             }
-
-                          //             this.setState({
-                          //               coinsBalance: amount
-                          //             }, () => {
-                          //               window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-                          //               this.setState({
-                          //                 totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-                          //               })
-                          //             })
-                          //           })
-                          //         }
-                          //       }
-                          //     }
-                          //   })
-                        })
-                      })
-                  })
-                }
-              })
-
-          })
-
-        })
-
-           })
+                                     //             this.setState({
+                                     //               coinsBalance: amount
+                                     //             }, () => {
+                                     //               window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
+                                     //               this.setState({
+                                     //                 totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
+                                     //               })
+                                     //             })
+                                     //           })
+                                     //         }
+                                     //       }
+                                     //     }
+                                     //   })
+                                   }
+                                 );
+                               });
+                           }
+                         );
+                       }
+                     });
+                 });
+             }
+           );
+         });
          
       
       
