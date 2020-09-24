@@ -50,13 +50,14 @@ class AddCurrency extends Component {
         {
           checkData: nextProps.checkData,
         },
-        async () => {
-          await this.getBalance(this.state.checkData);
-        }
+        // async () => {
+        //   await this.getBalance(this.state.checkData);
+        // }
       );
     }
   }
   componentDidMount() {
+    // this.forceUpdate()
     let checkData = JSON.parse(sessionStorage.getItem("checkData"));
     // this.getBalance();
     if (checkData) {
@@ -123,11 +124,14 @@ class AddCurrency extends Component {
                     "violas"
                   ) {
                     if (v.show_name == checkData[j].show_name) {
+                      // console.log(1,v.checked , checkData[j].checked);
                       v.checked = checkData[j].checked;
+                      // console.log(2, v.checked, checkData[j].checked);
                     }
                   }
                 }
               });
+              // console.log(arr,'......')
               this.setState({
                 addCurrencyList1: arr,
               });
@@ -240,7 +244,9 @@ class AddCurrency extends Component {
           if (temp.pd) {
             if (temp.violas_balance.show_name == temp.published) {
               temp.violas_balance.checked = true;
+              // console.log(temp.violas_balance,'......');
               checkData.push(temp.violas_balance);
+              // console.log(checkData, "......1");
               window.sessionStorage.setItem(
                 "checkData",
                 JSON.stringify(checkData)

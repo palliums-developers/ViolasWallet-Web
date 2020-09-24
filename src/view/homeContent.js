@@ -44,8 +44,19 @@ class HomeContent extends Component {
     }
     componentWillMount(){
      
-      window.sessionStorage.setItem("init", false);
+      // window.sessionStorage.setItem("init", false);
       this.getBalances();
+    }
+    componentWillUpdate(){ 
+      // if (
+      //   (this.state.checkData!=JSON.parse(sessionStorage.getItem("checkData")))
+      // ) {
+      //   this.getBalances();
+      //   // this.setState({
+      //   //   checkData: JSON.parse(sessionStorage.getItem("checkData")),
+      //   // });
+      // }
+      // console.log(this.state.checkData,JSON.parse(sessionStorage.getItem('checkData')),'.........');
     }
     componentDidMount(){
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
@@ -176,21 +187,30 @@ class HomeContent extends Component {
                                            });
                                          }
                                        });
-                                       if(window.sessionStorage.getItem(
-                                           "checkData")){
-                                          // if (
-                                          //   JSON.parse(
-                                          //     window.sessionStorage.getItem(
-                                          //       "checkData"
-                                          //     )
-                                          //   ).length > initCoinsList.length
-                                          // ) {
+                                       console.log(initCoinsList);
+                                       if (
+                                         JSON.parse(window.sessionStorage.getItem(
+                                           "checkData"
+                                         ))
+                                       ) {
+                                         // if (
+                                         //   JSON.parse(
+                                         //     window.sessionStorage.getItem(
+                                         //       "checkData"
+                                         //     )
+                                         //   ).length > initCoinsList.length
+                                         // ) {
 
-                                          // }
-                                       }else{
-                                           window.sessionStorage.setItem("checkData", JSON.stringify(initCoinsList));
+                                         // }
+                                        //  console.log("cunnnnnnnnnnnn12345678n");
+                                       } else {
+                                        //  console.log("cunnnnnnnnnnnnn");
+                                         window.sessionStorage.setItem(
+                                           "checkData",
+                                           JSON.stringify(initCoinsList)
+                                         );
                                        }
-                                      
+                                      // console.log(sessionStorage.getItem('checkData'))
                                        this.setState(
                                          {
                                            checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
@@ -212,7 +232,6 @@ class HomeContent extends Component {
                                                )
                                              );
                                            }
-                                           console.log(amount,'.........');
                                            this.setState(
                                              {
                                                coinsBalance: amount,
@@ -446,6 +465,7 @@ class HomeContent extends Component {
     };
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
+      // console.log(checkData,'.......');
         return (
           <div className="content">
             <div className="contentWrap">
@@ -594,83 +614,85 @@ class HomeContent extends Component {
                     );
                   })}
 
-                  {JSON.parse(sessionStorage.getItem("checkData")) &&
-                    JSON.parse(sessionStorage.getItem("checkData")).map((v, i) => {
-                      return (
-                        <div
-                          className="assetListsEvery"
-                          style={
-                            v.checked == false
-                              ? { display: "none" }
-                              : { display: "flex" }
-                          }
-                          key={i}
-                          onClick={() => {
-                            this.setState(
-                              {
-                                display1: !this.state.display1,
-                                name: v.show_name,
-                                detailAddr: v.address,
-                                rate:
-                                  v.balance == 0
+                  {JSON.parse(window.sessionStorage.getItem("checkData")) &&
+                    JSON.parse(window.sessionStorage.getItem("checkData")).map(
+                      (v, i) => {
+                        return (
+                          <div
+                            className="assetListsEvery"
+                            style={
+                              v.checked == false
+                                ? { display: "none" }
+                                : { display: "flex" }
+                            }
+                            key={i}
+                            onClick={() => {
+                              this.setState(
+                                {
+                                  display1: !this.state.display1,
+                                  name: v.show_name,
+                                  detailAddr: v.address,
+                                  rate:
+                                    v.balance == 0
+                                      ? "0.00"
+                                      : v.rate == 0
+                                      ? "0.00"
+                                      : this.getFloat(
+                                          v.rate * (v.balance / 1e6),
+                                          6
+                                        ),
+                                  icon: v.show_icon,
+                                  balance:
+                                    v.balance == 0
+                                      ? 0
+                                      : this.getFloat(v.balance / 1e6, 6),
+                                },
+                                () => {
+                                  window.sessionStorage.setItem(
+                                    "detailAddr",
+                                    v.address
+                                  );
+                                }
+                              );
+                            }}
+                          >
+                            <div className="leftAsset">
+                              <i>
+                                <img src={v.show_icon} />
+                              </i>
+                              <label>{v.show_name}</label>
+                            </div>
+                            <div className="rightAsset">
+                              {visible ? (
+                                <span>
+                                  {v.balance == 0
+                                    ? 0
+                                    : this.getFloat(v.balance / 1e6, 6)}
+                                </span>
+                              ) : (
+                                <span>******</span>
+                              )}
+
+                              {visible ? (
+                                <label>
+                                  ≈$
+                                  {v.balance == 0
                                     ? "0.00"
                                     : v.rate == 0
                                     ? "0.00"
                                     : this.getFloat(
                                         v.rate * (v.balance / 1e6),
-                                        6
-                                      ),
-                                icon: v.show_icon,
-                                balance:
-                                  v.balance == 0
-                                    ? 0
-                                    : this.getFloat(v.balance / 1e6, 6),
-                              },
-                              () => {
-                                window.sessionStorage.setItem(
-                                  "detailAddr",
-                                  v.address
-                                );
-                              }
-                            );
-                          }}
-                        >
-                          <div className="leftAsset">
-                            <i>
-                              <img src={v.show_icon} />
-                            </i>
-                            <label>{v.show_name}</label>
+                                        2
+                                      )}
+                                </label>
+                              ) : (
+                                <label>******</label>
+                              )}
+                            </div>
                           </div>
-                          <div className="rightAsset">
-                            {visible ? (
-                              <span>
-                                {v.balance == 0
-                                  ? 0
-                                  : this.getFloat(v.balance / 1e6, 6)}
-                              </span>
-                            ) : (
-                              <span>******</span>
-                            )}
-
-                            {visible ? (
-                              <label>
-                                ≈$
-                                {v.balance == 0
-                                  ? "0.00"
-                                  : v.rate == 0
-                                  ? "0.00"
-                                  : this.getFloat(
-                                      v.rate * (v.balance / 1e6),
-                                      2
-                                    )}
-                              </label>
-                            ) : (
-                              <label>******</label>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      }
+                    )}
                 </div>
               </div>
             </div>
