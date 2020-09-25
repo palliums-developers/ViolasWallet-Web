@@ -349,8 +349,8 @@ class SaveOrder extends Component {
       });
   };
   onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
   };
   //选择获取时间
   onOk = (value) => {
@@ -358,8 +358,6 @@ class SaveOrder extends Component {
       selectTime1: new Date(value[0]).getTime(),
       selectTime2: new Date(value[1]).getTime(),
     });
-    // console.log(new Date(value[0]).getTime(),'........');
-    // console.log("onOk: ", value);
   };
   //选择币种
   getOptionCoins = (value) => {
@@ -481,7 +479,6 @@ class SaveOrder extends Component {
   }
   render() {
     let { types, allCoin, allStatus, withdrawalsList, warning } = this.state;
-    // console.log(getDialog())
     return (
       <div className="saveOrder">
         <Breadcrumb separator=">">
@@ -521,7 +518,6 @@ class SaveOrder extends Component {
               onRow={(record) => {
                 return {
                   onClick: () => {
-                    // console.log(record);
                     sessionStorage.setItem(
                       "withdrawalsList",
                       JSON.stringify(record)

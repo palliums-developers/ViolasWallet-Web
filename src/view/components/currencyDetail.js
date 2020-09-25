@@ -36,7 +36,8 @@ class CurrencyDetail extends Component {
             curIndex:0,
             dis: false,
             detailAddrs:'',
-            name:''
+            name:'',
+            type:''
         };
         
     }
@@ -55,13 +56,19 @@ class CurrencyDetail extends Component {
 
     }
     componentWillReceiveProps(nextProps){
-        
-        this.setState({
+        this.setState(
+          {
             detailAddrs: nextProps.detailAddrs,
-            name: nextProps.name
-        },()=>{
-            this.getNavData()  
-        })
+            name: nextProps.nameType,
+            type:
+              nextProps.icon
+                .split("/")
+                [nextProps.icon.split("/").length - 1].split(".")[0] 
+          },
+          () => {
+            this.getNavData();
+          }
+        );
     }
     getSubStr(str){
         if(str == null){
@@ -74,47 +81,83 @@ class CurrencyDetail extends Component {
     }
 
     getNavData(){
-        let { detailAddrs, name } = this.state;
-        // console.log(detailAddrs, name)
-        if (name == 'BTC'){
-            this.setState({
-                dataList: []
-            })
-        }else{
-            if (this.state.navType == 'all') {
-                if (this.state.total == 0) {
-                    fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&offset=0&&limit=20').then(res => res.json()).then(res => {
-
-                        this.setState({
-                            total: res.data.length
-                        })
-                    })
-                }
-
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&offset=' + this.state.page + '&&limit=' + this.state.pageSize).then(res => res.json()).then(res => {
-                    // console.log(res.data.length)
-                   
-                    this.setState({
-                        dataList: res.data
-                    })
-                })
-            } else if (this.state.navType == 'into') {
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&flows=1').then(res => res.json()).then(res => {
-                    
-                    this.setState({
-                        total: res.data.length,
-                        dataList: res.data
-                    })
-                })
-            } else if (this.state.navType == 'out') {
-                fetch(url + '/1.0/violas/transaction?addr=' + detailAddrs + '&&flows=0').then(res => res.json()).then(res => {
-                    
-                    this.setState({
-                        total: res.data.length,
-                        dataList: res.data
-                    })
-                })
+        let { detailAddrs, type } = this.state;
+        if (type == "btc") {
+          this.setState({
+            dataList: [],
+          });
+        } else {
+          if (this.state.navType == "all") {
+            if (this.state.total == 0) {
+              fetch(url + "/1.0/"+type+"/transaction?addr=" + detailAddrs)
+                .then((res) => res.json())
+                .then((res) => {
+                  this.setState({
+                    total: res.data.length,
+                  });
+                });
             }
+
+            fetch(
+              url +
+                "/1.0/" +
+                type +
+                "/transaction?addr=" +
+                detailAddrs +
+                "&&offset=" +
+                this.state.page +
+                "&&limit=" +
+                this.state.pageSize
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                // console.log(res.data.length)
+
+                this.setState({
+                  dataList: res.data,
+                });
+              });
+          } else if (this.state.navType == "into") {
+            fetch(
+              url +
+                "/1.0/" +
+                type +
+                "transaction?addr=" +
+                detailAddrs +
+                "&&flows=1" +
+                "&&offset=" +
+                this.state.page +
+                "&&limit=" +
+                this.state.pageSize
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                this.setState({
+                  total: res.data.length,
+                  dataList: res.data,
+                });
+              });
+          } else if (this.state.navType == "out") {
+            fetch(
+              url +
+                "/1.0/" +
+                type +
+                "transaction?addr=" +
+                detailAddrs +
+                "&&flows=0" +
+                "&&offset=" +
+                this.state.page +
+                "&&limit=" +
+                this.state.pageSize
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                this.setState({
+                  total: res.data.length,
+                  dataList: res.data,
+                });
+              });
+          }
         }
         
         
@@ -123,7 +166,7 @@ class CurrencyDetail extends Component {
         this.props.showDetails();
     };
     onChange = (page,pageSize) => {
-        console.log(page, pageSize)
+        // console.log(page, pageSize)
         this.setState({
             page: page,
             pageSize:pageSize,
@@ -154,9 +197,8 @@ class CurrencyDetail extends Component {
     };
     
     render() {
-        let { types, navType, dataList, total, curPage,dis} = this.state;
+        let { types, navType, dataList, total,dis} = this.state;
         let { detailAddrs,nameType,icon,rate,balance } = this.props;
-        // console.log(detailAddrs,'/////////')
         
         return (
           <div className="currencyDetail">

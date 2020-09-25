@@ -436,7 +436,6 @@ class CashPooling extends Component {
         showMenuViolas2: false,
       },
       () => {
-        // console.log('111111')
         this.opinionOutputAmount();
       }
     );
@@ -506,17 +505,14 @@ class CashPooling extends Component {
     if (e.target.value) {
       let arr = this.state.selData.filter((v) => {
         if (v.show_name.indexOf(e.target.value.toUpperCase()) >= 0) {
-          console.log(v, ".......");
+          // console.log(v, ".......");
           return v;
         }
       });
-      console.log(arr, "......");
+      // console.log(arr, "......");
       this.setState(
         {
           selData: arr,
-        },
-        () => {
-          console.log(this.state.selData, "......");
         }
       );
     } else {
@@ -778,7 +774,7 @@ class CashPooling extends Component {
     this.state.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
-        console.log("Add Liquidity ", res);
+        // console.log("Add Liquidity ", res);
         this.setState({
           warning: "转入成功",
           showWallet: false,
@@ -792,7 +788,7 @@ class CashPooling extends Component {
         }, 500);
       })
       .catch((err) => {
-        console.log("Add Liquidity ", err);
+        // console.log("Add Liquidity ", err);
         this.setState({
           warning: "转入失败",
           showWallet: false,
@@ -857,7 +853,7 @@ class CashPooling extends Component {
     this.state.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
-        console.log("Remove Liquidity ", res);
+        // console.log("Remove Liquidity ", res);
         if (res == "success") {
           this.setState({
             warning: "转出成功",
@@ -873,7 +869,7 @@ class CashPooling extends Component {
         }
       })
       .catch((err) => {
-        console.log("Remove Liquidity ", err);
+        // console.log("Remove Liquidity ", err);
         this.setState({
           warning: "转出失败",
           showWallet: false,

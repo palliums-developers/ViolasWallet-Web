@@ -374,9 +374,8 @@ class BorrowOrder extends Component {
       .then((res) => {
         if (res.data.length > 0) {
           let newData = [];
-          console.log(res.data);
+          // console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
-            // console.log(res.data)
             newData.push({
               coin: res.data[i].name,
               key: i + 1,
@@ -433,8 +432,6 @@ class BorrowOrder extends Component {
       selectTime1: new Date(value[0]).getTime(),
       selectTime2: new Date(value[1]).getTime(),
     });
-    // console.log(new Date(value[0]).getTime(),'........');
-    // console.log("onOk: ", value);
   };
   //选择币种
   getOptionCoins = (value) => {
@@ -565,7 +562,6 @@ class BorrowOrder extends Component {
   };
   //弹出二级菜单
   expandRowByKey = (key) => {
-    // console.log(this.state.data[key-1].id,key,'.......')
     this.setState(
       {
         borrowId: this.state.data[key - 1].id,
@@ -592,8 +588,8 @@ class BorrowOrder extends Component {
   //     this.expandRowByKey(record.key);
   // };
   onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    // console.log("Selected Time: ", value);
+    // console.log("Formatted Selected Time: ", dateString);
   };
   //二级菜单内容
   expandedRowRender = (record, index, indent, expanded) => {
@@ -668,7 +664,7 @@ class BorrowOrder extends Component {
   //点击搜索
   searchFunction = () => {
     let { selectTime1, selectTime2, selectCoin, selectStatus } = this.state;
-    console.log(selectCoin, selectStatus, ".......");
+    // console.log(selectCoin, selectStatus, ".......");
     this.getBorrowDetail1(selectCoin, selectStatus);
   };
   render() {

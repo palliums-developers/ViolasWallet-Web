@@ -130,7 +130,7 @@ class GetMoney extends Component {
             }, () => {
               let arr = this.state.arr1.concat(this.state.arr2)
               let newArr = arr.concat(this.state.BTCBalances)
-              console.log(newArr, '........')
+              // console.log(newArr, '........')
               newArr.sort((a, b) => {
                 return b.balance - a.balance
               })
@@ -144,7 +144,7 @@ class GetMoney extends Component {
           } else {
             if (this.state.arr2) {
               let newArr = this.state.arr1.concat(this.state.BTCBalances)
-              console.log(newArr, '.....')
+              // console.log(newArr, '.....')
               newArr.sort((a, b) => {
                 return b.balance - a.balance
               })
@@ -211,7 +211,6 @@ class GetMoney extends Component {
     }
     render(){
       let { address, showDealType, type, dis, arr, coinName,ind } = this.state;
-      // console.log(this.state.showDealType,'.........')
         return (
           <div className="getMoney">
             <div className="dialogContent">

@@ -336,7 +336,7 @@ class DigitalBank extends Component {
       this.state.walletConnector
         .sendTransaction("_bitcoin", tx)
         .then((res) => {
-          console.log("Bitcoin mapping ", res);
+          // console.log("Bitcoin mapping ", res);
           this.setState({
             warning: "映射成功",
             showWallet: false,
@@ -350,7 +350,7 @@ class DigitalBank extends Component {
           }, 1000);
         })
         .catch((err) => {
-          console.log("Bitcoin mapping ", err);
+          // console.log("Bitcoin mapping ", err);
           this.setState({
             warning: "映射失败",
             showWallet: false,
@@ -382,7 +382,7 @@ class DigitalBank extends Component {
       this.state.walletConnector
         .sendTransaction("_libra", tx)
         .then((res) => {
-          console.log("Libra mapping ", res);
+          // console.log("Libra mapping ", res);
           this.setState({
             warning: "映射成功",
             showWallet: false,
@@ -396,7 +396,7 @@ class DigitalBank extends Component {
           }, 1000);
         })
         .catch((err) => {
-          console.log("Libra mapping ", err);
+          // console.log("Libra mapping ", err);
           this.setState({
             warning: "映射失败",
             showWallet: false,
@@ -428,7 +428,7 @@ class DigitalBank extends Component {
       this.state.walletConnector
         .sendTransaction("violas", tx)
         .then((res) => {
-          console.log("Violas mapping ", res);
+          // console.log("Violas mapping ", res);
           this.setState({
             warning: "映射成功",
             showWallet: false,
@@ -442,7 +442,7 @@ class DigitalBank extends Component {
           }, 1000);
         })
         .catch((err) => {
-          console.log("Violas mapping ", err);
+          // console.log("Violas mapping ", err);
           this.setState({
             warning: "映射失败",
             showWallet: false,

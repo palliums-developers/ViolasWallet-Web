@@ -254,8 +254,6 @@ class ExChange extends Component {
         for (let l in this.state.crossChainInfo) {
             if (this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type) {
                 if (this.state.crossChainInfo[l].to_coin.assets.name === this.state.swap_out_name) {
-
-                    // console.log(l, this.state.crossChainInfo[l].input_coin_type, this.state.crossChainInfo[l].to_coin.assets.name)
                     await this.setState({ swap_address: this.state.crossChainInfo[l].receiver_address });
                     break;
                 }
@@ -396,7 +394,6 @@ class ExChange extends Component {
                 break;
             }
         }
-        // console.log(_type)
         let to_address = _address;
         let result = {
             flag: flag,
@@ -504,7 +501,7 @@ class ExChange extends Component {
             const tx = await this.getBitcoinSwap();
             console.log('bitcoin swap', tx);
             this.state.walletConnector.sendTransaction('_bitcoin', tx).then(res => {
-                console.log('Bitcoin Swap ', res);
+                // console.log('Bitcoin Swap ', res);
                   this.setState({
                     warning: "兑换成功",
                     showWallet: false,
@@ -517,7 +514,7 @@ class ExChange extends Component {
                       });
                     }, 500);
             }).catch(err => {
-                console.log('Bitcoin Swap ', err);
+                // console.log('Bitcoin Swap ', err);
                   this.setState({
                     warning: "兑换失败",
                     showWallet: false,
@@ -534,7 +531,7 @@ class ExChange extends Component {
             const tx = await this.getLibraSwap(this.state.swap_out_type, sessionStorage.getItem("libra_chainId"));
             console.log('libra swap ', tx);
             this.state.walletConnector.sendTransaction('_libra', tx).then(res => {
-                console.log('Libra Swap ', res);
+                // console.log('Libra Swap ', res);
                      this.setState({
                        warning: "兑换成功",
                        showWallet: false,
@@ -547,7 +544,7 @@ class ExChange extends Component {
                        });
                      }, 500);
             }).catch(err => {
-                console.log('Libra Swap ', err);
+                // console.log('Libra Swap ', err);
                    this.setState({
                      warning: "兑换失败",
                      showWallet: false,
@@ -565,7 +562,7 @@ class ExChange extends Component {
             const tx = await this.getViolasSwap(this.state.swap_out_type, sessionStorage.getItem("violas_chainId"));
             console.log('violas swap ', tx);
             this.state.walletConnector.sendTransaction('violas', tx).then(res => {
-                console.log('Violas Swap ', res);
+                // console.log('Violas Swap ', res);
                     this.setState({
                       warning: "兑换成功",
                       showWallet: false,
@@ -578,7 +575,7 @@ class ExChange extends Component {
                       });
                     }, 500);
             }).catch(err => {
-                console.log('Violas Swap ', err);
+                // console.log('Violas Swap ', err);
                     this.setState({
                       warning: "兑换失败",
                       showWallet: false,
@@ -844,7 +841,6 @@ class ExChange extends Component {
             //判断 
             let arr = this.state.selData.filter(v => {
                 if (this.state.type1 != v.show_name) {
-                    // console.log('arr: ',v.name)
                     return v;
                 }
             })

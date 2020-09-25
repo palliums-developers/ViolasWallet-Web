@@ -8,6 +8,7 @@ import AddCurrency from "./components/addCurrency";
 import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io"
+
 // let url1 = "https://tbtc1.trezor.io"
 
 //钱包首页
@@ -71,6 +72,9 @@ class HomeContent extends Component {
       }
       number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
       number = parseFloat(Number(number).toFixed(n)); //补足位数
+      if (typeof(number) != parseFloat) {
+         return number.toFixed(2);
+      }
       return number;
     }
     getBalances(){
@@ -168,7 +172,6 @@ class HomeContent extends Component {
                                            initCoinsList.push(v);
                                          }
                                        });
-                                      //  console.log(initCoinsList);
                                        initCoinsList.map((v, i) => {
                                          if (v.checked) {
                                           //  return v;
@@ -178,7 +181,6 @@ class HomeContent extends Component {
                                            });
                                          }
                                        });
-                                      //  console.log(initCoinsList);
                                        if (
                                          JSON.parse(window.sessionStorage.getItem(
                                            "checkData"
@@ -193,15 +195,12 @@ class HomeContent extends Component {
                                          // ) {
 
                                          // }
-                                        //  console.log("cunnnnnnnnnnnn12345678n");
                                        } else {
-                                        //  console.log("cunnnnnnnnnnnnn");
                                          window.sessionStorage.setItem(
                                            "checkData",
                                            JSON.stringify(initCoinsList)
                                          );
                                        }
-                                      console.log(sessionStorage.getItem('checkData'))
                                        this.setState(
                                          {
                                            checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
@@ -233,7 +232,6 @@ class HomeContent extends Component {
                                                  this.state.coinsBalance +
                                                    this.state.BTCBalance
                                                );
-                                               //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
                                                this.setState(
                                                  {
                                                    totalAmount: this.getFloat(
@@ -426,14 +424,12 @@ class HomeContent extends Component {
     }
     //显示详情页面
     showDetails1 = (type) =>{
-      console.log(type)
       this.setState({
         display2: type
       })
     }
     
     curDataFun = (val) => {
-      console.log(val)
       this.setState({
         detailData:val
       })
@@ -550,7 +546,7 @@ class HomeContent extends Component {
                             {
                               display1: !this.state.display1,
                               name: v.name,
-                              detailAddr: BTCAddress,
+                              detailAddr: sessionStorage.getItem('btc_address'),
                               rate:
                                 v.BTC == 0
                                   ? "0.00"
@@ -568,8 +564,6 @@ class HomeContent extends Component {
                               );
                             }
                           );
-                          // window.sessionStorage.setItem('detailAddr', BTCAddress)
-                          // window.sessionStorage.setItem('name', v.name)
                         }}
                       >
                         <div className="leftAsset">
@@ -688,7 +682,6 @@ class HomeContent extends Component {
             </div>
             {/* 添加币种 */}
             <Drawer
-              // title="Basic Drawer"
               placement="right"
               closable={false}
               // onClose={this.onClose}
@@ -703,7 +696,6 @@ class HomeContent extends Component {
             </Drawer>
             {/* 币种详情 */}
             <Drawer
-              // title="Basic Drawer"
               placement="right"
               closable={false}
               onClose={this.onClose}
@@ -724,7 +716,6 @@ class HomeContent extends Component {
             </Drawer>
             {/* 详情 */}
             <Drawer
-              // title="Basic Drawer"
               placement="right"
               closable={false}
               onClose={this.onClose1}

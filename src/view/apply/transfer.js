@@ -93,7 +93,6 @@ class Transfer extends Component {
       });
   }
   getVLBalance() {
-    // console.log(this.state.BTCArr);
     fetch(
       url +
         "/1.0/violas/balance?addr=" +
@@ -106,7 +105,6 @@ class Transfer extends Component {
             arr1: res.data.balances,
           },()=>{
             let arrs = this.state.arr1.concat(this.state.BTCArr);
-            // console.log(arrs,'.....')
             this.setState(
               {
                 selData: arrs,
@@ -306,7 +304,6 @@ class Transfer extends Component {
 
   //获取violas的tyArgs,并转账
   async getTyArgs(_name) {
-    // console.log(_name)
     let address = "00000000000000000000000000000001";
     let prefix = "07";
     let suffix = "00";
@@ -323,8 +320,6 @@ class Transfer extends Component {
       name_length +
       _name_hex +
       suffix;
-    // console.log(_name_hex);
-    // console.log(result);
     this.setState({ tyArgs: result, showWallet: true }, () => {
       this.getViolasNext();
     });
@@ -378,7 +373,7 @@ class Transfer extends Component {
           showWallet: false,
         });
 
-        console.log("send transaction ", res);
+        // console.log("send transaction ", res);
       })
       .catch((err) => {
         this.setState({
@@ -386,7 +381,7 @@ class Transfer extends Component {
           showWallet: false,
         });
 
-        console.log("send transaction ", err);
+        // console.log("send transaction ", err);
       });
   }
   //libra转账
@@ -421,7 +416,7 @@ class Transfer extends Component {
     this.state.walletConnector
       .sendTransaction("_libra", tx)
       .then((res) => {
-        console.log("Libra transaction", res);
+        // console.log("Libra transaction", res);
         this.setState({
           warning: intl.get("Transfer success"),
           showWallet: false,
@@ -433,7 +428,7 @@ class Transfer extends Component {
           showWallet: false,
         });
 
-        console.log("Libra transaction ", err);
+        // console.log("Libra transaction ", err);
       });
   }
   //btc转账
@@ -449,14 +444,14 @@ class Transfer extends Component {
     this.state.walletConnector
       .sendTransaction("_bitcoin", tx)
       .then((res) => {
-        console.log("Bitcoin transaction ", res);
+        // console.log("Bitcoin transaction ", res);
         this.setState({
           warning: intl.get("Transfer success"),
           showWallet: false,
         });
       })
       .catch((err) => {
-        console.log("Bitcoin transaction ", err);
+        // console.log("Bitcoin transaction ", err);
         this.setState({
           warning: intl.get("Transfer failed"),
           showWallet: false,
@@ -468,12 +463,10 @@ class Transfer extends Component {
       this.setState({
         warning: "Please input address",
       });
-      // alert('Please input address')
     } else if (this.state.amount == "") {
       this.setState({
         warning: "Please input amount",
       });
-      // alert('Please input amount')
     } else {
       if (
         Number(this.state.amount) >
@@ -495,12 +488,10 @@ class Transfer extends Component {
       this.setState({
         warning: "Please input address",
       });
-      // alert('Please input address')
     } else if (this.state.amount == "") {
       this.setState({
         warning: "Please input amount",
       });
-      // alert('Please input amount')
     } else {
       if (
         Number(this.state.amount) >
@@ -522,12 +513,10 @@ class Transfer extends Component {
       this.setState({
         warning: "Please input address",
       });
-      // alert('Please input address')
     } else if (this.state.amount == "") {
       this.setState({
         warning: "Please input amount",
       });
-      // alert('Please input amount')
     } else {
       if (
         Number(this.state.amount) >
@@ -551,7 +540,6 @@ class Transfer extends Component {
   };
   //转账时判断是哪个币种然后在发起转账
   opinionCurNextContent = () => {
-    // console.log(this.state.opinionType,'/.........')
     if (this.state.opinionType == "violas") {
       this.getTyArgs(this.state.coinName);
     } else if (this.state.opinionType == "libra") {

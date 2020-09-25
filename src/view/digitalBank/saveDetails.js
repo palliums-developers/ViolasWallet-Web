@@ -39,7 +39,6 @@ class SaveDetails extends Component {
     this.getCurrenciesList()
   }
   getCurrenciesList(){
-    //   console.log(sessionStorage.getItem("token_module"),'.....');
         fetch(
         "https://api4.violas.io/1.0/violas/balance?addr=" +
             sessionStorage.getItem("violas_address")
@@ -118,7 +117,6 @@ class SaveDetails extends Component {
   }
   //获取输入框value
   getInputValue = (e) => {
-    // console.log(e.target.value,'.......')
     if (e.target.value) {
       this.setState({
         amount: e.target.value,
@@ -163,7 +161,6 @@ class SaveDetails extends Component {
     this.state.walletConnector
       .signTransaction(tx)
       .then(async (res) => {
-        // console.log('Digital Bank ', this.state.digitalBankOperation, res);
         await this.getBankBroadcast(
           sessionStorage.getItem("violas_address"),
           productId,
@@ -187,7 +184,6 @@ class SaveDetails extends Component {
     axios
       .post(`https://api4.violas.io${api}`, parm)
       .then((res) => {
-        // console.log(res.data)
         if (res.data.code == 2000) {
           this.setState({
             warning: "存款成功",

@@ -26,11 +26,9 @@ class Details extends Component {
         oInput.className = 'oInput';
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
-        console.log([v])
+        // console.log([v])
         this.setState({
             [v]: true
-        },()=>{
-                console.log(this.state.reve, this.state.tran, this.state.deal)
         })
         let Timer = setInterval(() => {
             this.setState({

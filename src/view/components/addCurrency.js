@@ -9,7 +9,6 @@ import '../app.scss'
 let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
 let names = []
-
 //添加币种
 class AddCurrency extends Component {
   constructor(props) {
@@ -45,28 +44,19 @@ class AddCurrency extends Component {
     });
   }
   async componentWillReceiveProps(nextProps) {
-    if (sessionStorage.getItem("checkData")==null) {
-      await this.setState(
-        {
-          checkData: nextProps.checkData,
-        },() => {
-          // console.log(this.state.checkData, "......this.state.checkData");
-        }
-      );
+    if (this.state.checkData.length == 0) {
+      await this.setState({
+        checkData: nextProps.checkData,
+      });
+      await this.getBalance(this.state.checkData);
     }
-  }
-  componentDidUpdate(props){
-    //  console.log(props, "......this.state.checkData");
   }
   async componentDidMount() {
    
     if (JSON.parse(sessionStorage.getItem("checkData"))) {
-      // console.log("111", JSON.parse(sessionStorage.getItem("checkData")));
       await this.getBalance(JSON.parse(sessionStorage.getItem("checkData")));
     } else {
-      // console.log("222", JSON.parse(sessionStorage.getItem("checkData")));
       if (this.state.checkData) {
-        // console.log("333", this.state.checkData);
         await this.getBalance(this.state.checkData);
       }
     }
@@ -78,8 +68,6 @@ class AddCurrency extends Component {
     }
   }
   getBalance = (checkData) => {
-    // console.log(checkData);
-    // window.sessionStorage.setItem("init", true);
     fetch(
       url +
         "/1.0/btc/balance?address=" +
@@ -87,7 +75,6 @@ class AddCurrency extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res.data)
         if (res.data) {
           this.setState({
             BTCData: res.data,
@@ -121,7 +108,6 @@ class AddCurrency extends Component {
                   Object.assign(v, { checked: false });
                 }
               });
-              console.log(arr, "......1");
               for(let i=0;i < arr.length;i++){
                 for (let j = 0; j < checkData.length; j++) {
                   if (
@@ -131,15 +117,11 @@ class AddCurrency extends Component {
                     "violas"
                   ) {
                     if (arr[i].show_name == checkData[j].show_name) {
-                      // console.log(1,v.checked , checkData[j].checked);
                       arr[i].checked = checkData[j].checked;
-                      console.log(2, arr[i]);
                     }
                   }
                 }
               }
-             
-              console.log(arr,'......2')
               this.setState({
                 addCurrencyList1: arr,
               });
@@ -218,8 +200,7 @@ class AddCurrency extends Component {
   //点击激活
   async getTyArgs(_name, _addr, ind, icon) {
     let type = icon.split("/")[icon.split("/").length - 1].split(".")[0];
-    // window.sessionStorage.setItem("init", true);
-    // console.log(this.state.addCurrencyList1, _name, icon.split('/')[icon.split('/').length - 1].split('.')[0],'.........')
+    
     fetch(
       url +
         "/1.0/violas/currency/published?addr=" +
@@ -252,9 +233,7 @@ class AddCurrency extends Component {
           if (temp.pd) {
             if (temp.violas_balance.show_name == temp.published) {
               temp.violas_balance.checked = true;
-              // console.log(temp.violas_balance,'......');
               checkData.push(temp.violas_balance);
-              // console.log(checkData, "......1");
               window.sessionStorage.setItem(
                 "checkData",
                 JSON.stringify(checkData)
@@ -268,13 +247,11 @@ class AddCurrency extends Component {
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
-              // this.props.showAddCoins(false);
             } else if (type == "libra") {
               this.setState({
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
-              // this.props.showAddCoins(false);
             }
           }
         }
@@ -320,10 +297,6 @@ class AddCurrency extends Component {
     });
   }
   async libra_sendPublish(_chainId) {
-    console.log(
-      "You send Libra transaction with ",
-      sessionStorage.getItem("libra_address")
-    );
     let tx = {
       from: sessionStorage.getItem("libra_address"),
       payload: {
@@ -395,7 +368,7 @@ class AddCurrency extends Component {
           violas_balance: {},
           published: {},
         };
-        console.log(res.data.published);
+        // console.log(res.data.published);
         for (let i = 0; i < res.data.published.length; i++) {
           for (let j = 0; j < violas_Balances.length; j++) {
             if (res.data.published[i] == _name) {
@@ -419,7 +392,6 @@ class AddCurrency extends Component {
             this.forceUpdate();
           }
         }
-        // window.sessionStorage.setItem('typeName', JSON.stringify(names))
         for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
           for (let j = 0; j < names.length; j++) {
             if (
@@ -429,7 +401,6 @@ class AddCurrency extends Component {
             }
           }
         }
-        // console.log(this.state.addCurrencyList1)
         window.sessionStorage.setItem(
           "addCurrencyList1",
           JSON.stringify(this.state.addCurrencyList1)
@@ -443,7 +414,7 @@ class AddCurrency extends Component {
     });
   };
   render() {
-    let { addCurrencyList1, addCurrencyList2, BTCData } = this.state;
+    let { addCurrencyList1, BTCData } = this.state;
     return (
       <div className="addCurrency">
         <h4 onClick={() => this.props.showAddCoins(false)}>
