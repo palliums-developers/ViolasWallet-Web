@@ -45,26 +45,29 @@ class AddCurrency extends Component {
     });
   }
   async componentWillReceiveProps(nextProps) {
-    if (!sessionStorage.getItem("checkData")) {
+    if (sessionStorage.getItem("checkData")==null) {
       await this.setState(
         {
           checkData: nextProps.checkData,
-        },
-        // async () => {
-        //   await this.getBalance(this.state.checkData);
-        // }
+        },() => {
+          // console.log(this.state.checkData, "......this.state.checkData");
+        }
       );
     }
   }
-  componentDidMount() {
-    // this.forceUpdate()
-    let checkData = JSON.parse(sessionStorage.getItem("checkData"));
-    // this.getBalance();
-    if (checkData) {
-      this.getBalance(checkData);
+  componentDidUpdate(props){
+    //  console.log(props, "......this.state.checkData");
+  }
+  async componentDidMount() {
+   
+    if (JSON.parse(sessionStorage.getItem("checkData"))) {
+      // console.log("111", JSON.parse(sessionStorage.getItem("checkData")));
+      await this.getBalance(JSON.parse(sessionStorage.getItem("checkData")));
     } else {
+      // console.log("222", JSON.parse(sessionStorage.getItem("checkData")));
       if (this.state.checkData) {
-        this.getBalance(this.state.checkData);
+        // console.log("333", this.state.checkData);
+        await this.getBalance(this.state.checkData);
       }
     }
 
@@ -109,29 +112,34 @@ class AddCurrency extends Component {
               arr2: res.data.currencies,
             },
             () => {
-              let arr = this.state.arr1.concat(this.state.arr2);
+              let arr = [];
+              arr = this.state.arr1.concat(this.state.arr2);
               arr.forEach((v, i) => {
                 if (v.checked) {
                   // return v;
                 } else {
                   Object.assign(v, { checked: false });
                 }
+              });
+              console.log(arr, "......1");
+              for(let i=0;i < arr.length;i++){
                 for (let j = 0; j < checkData.length; j++) {
                   if (
-                    v.show_icon
+                    arr[i].show_icon
                       .split("/")
-                      [v.show_icon.split("/").length - 1].split(".")[0] ==
+                      [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
                     "violas"
                   ) {
-                    if (v.show_name == checkData[j].show_name) {
+                    if (arr[i].show_name == checkData[j].show_name) {
                       // console.log(1,v.checked , checkData[j].checked);
-                      v.checked = checkData[j].checked;
-                      // console.log(2, v.checked, checkData[j].checked);
+                      arr[i].checked = checkData[j].checked;
+                      console.log(2, arr[i]);
                     }
                   }
                 }
-              });
-              // console.log(arr,'......')
+              }
+             
+              console.log(arr,'......2')
               this.setState({
                 addCurrencyList1: arr,
               });

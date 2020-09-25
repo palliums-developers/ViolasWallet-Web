@@ -42,21 +42,19 @@ class HomeContent extends Component {
         init:false
       }
     }
-    componentWillMount(){
-     
-      // window.sessionStorage.setItem("init", false);
-      this.getBalances();
-    }
-    componentWillUpdate(){ 
-      // if (
-      //   (this.state.checkData!=JSON.parse(sessionStorage.getItem("checkData")))
-      // ) {
-      //   this.getBalances();
-      //   // this.setState({
-      //   //   checkData: JSON.parse(sessionStorage.getItem("checkData")),
-      //   // });
-      // }
-      // console.log(this.state.checkData,JSON.parse(sessionStorage.getItem('checkData')),'.........');
+    // async componentWillUpdate(nextProps){
+    //   let i=0;
+    //   if(JSON.stringify(this.state.checkData) !== (sessionStorage.getItem('checkData'))){
+    //      await this.getBalances();
+    //      await this.setState({
+    //        checkData:JSON.parse(sessionStorage.getItem("checkData"))
+    //      })
+    //      i+=1
+    //      console.log(i,JSON.stringify(this.state.checkData)==(sessionStorage.getItem('checkData')))
+    //   }
+    // }
+    async componentWillMount(){
+      await this.getBalances();
     }
     componentDidMount(){
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
@@ -128,13 +126,6 @@ class HomeContent extends Component {
                              arr1: res.data.balances,
                            },
                            () => {
-                             // let BTCBalance = 0;
-                             // this.state.BTCBalances.map((v, i) => {
-                             //   BTCBalance += Number(this.getFloat((v.BTC / 1e8) * v.rate, 8))
-                             // })
-                             // this.setState({
-                             //   BTCBalance: BTCBalance
-                             // })
                              fetch(
                                url1 +
                                  "/1.0/violas/value/violas?address=" +
@@ -177,7 +168,7 @@ class HomeContent extends Component {
                                            initCoinsList.push(v);
                                          }
                                        });
-                                       console.log(initCoinsList);
+                                      //  console.log(initCoinsList);
                                        initCoinsList.map((v, i) => {
                                          if (v.checked) {
                                           //  return v;
@@ -187,7 +178,7 @@ class HomeContent extends Component {
                                            });
                                          }
                                        });
-                                       console.log(initCoinsList);
+                                      //  console.log(initCoinsList);
                                        if (
                                          JSON.parse(window.sessionStorage.getItem(
                                            "checkData"
@@ -210,7 +201,7 @@ class HomeContent extends Component {
                                            JSON.stringify(initCoinsList)
                                          );
                                        }
-                                      // console.log(sessionStorage.getItem('checkData'))
+                                      console.log(sessionStorage.getItem('checkData'))
                                        this.setState(
                                          {
                                            checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
@@ -465,7 +456,6 @@ class HomeContent extends Component {
     };
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
-      // console.log(checkData,'.......');
         return (
           <div className="content">
             <div className="contentWrap">
