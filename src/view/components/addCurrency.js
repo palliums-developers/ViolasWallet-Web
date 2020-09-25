@@ -227,18 +227,17 @@ class AddCurrency extends Component {
         this.getFloat((checkData[i].balance / 1e6) * checkData[i].rate, 6)
       );
     }
-    if(amount>0){
-      this.setState(
-      {
-        coinsBalance: amount,
-      },
-      () => {
-        window.sessionStorage.setItem("balances",this.state.coinsBalance + this.state.BTCBalance);
-        this.setState({totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance,2)},()=>{
+    
+    if(amount > 0){
+        window.sessionStorage.setItem("balances",amount + this.state.BTCBalance);
+        this.setState({totalAmount: this.getFloat(amount + this.state.BTCBalance,2)},()=>{
           this.props.getInitTotal(this.state.totalAmount);
         })
-      }
-    );
+    }else{
+      window.sessionStorage.setItem("balances",this.state.BTCBalance);
+      this.setState({totalAmount: this.getFloat(this.state.BTCBalance,2)},()=>{
+          this.props.getInitTotal(this.state.totalAmount);
+        })
     }
   };
   //点击激活

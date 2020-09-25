@@ -31,7 +31,8 @@ class SaveOrder extends Component {
       withdrawalsList: {},
       withdrawalsAmount: "",
       warning: "",
-      total:0,
+      total: 0,
+      curTotal: 0,
       types: [
         {
           id: 0,
@@ -167,8 +168,10 @@ class SaveOrder extends Component {
       selectTime2: 0,
       selectCoin: "",
       selectStatus: "",
-      page:1,
-      pageSize:6
+      page: 1,
+      pageSize: 6,
+      curPage: 1,
+      curPageSize: 6,
     };
   }
   getOptions = () => {
@@ -213,16 +216,35 @@ class SaveOrder extends Component {
     });
   }
   componentDidMount() {
-    this.getPage(this.state.page, this.state.pageSize)
-    //当前存款
+    // this.getPage(this.state.page, this.state.pageSize)
+    this.getCurSaveDetail()
+    this.getSaveDetail();
+    this.getSaveDetail1();
+  }
+  async getDepositProduct() {
+    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
+      async (res) => {
+        await this.setState({ depositProduct: res.data.data });
+      }
+    );
+  }
+  //当前存款
+  getCurSaveDetail = (page, pageSize) => {
     fetch(
       url +
         "/1.0/violas/bank/deposit/orders?address=" +
-        window.sessionStorage.getItem("violas_address")
+        window.sessionStorage.getItem("violas_address") +
+        "&limit=" +
+        pageSize +
+        "&offset=" +
+        (page - 1) * pageSize
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (res.data.length > 0) {
+          this.setState({
+            curTotal: res.data[0].total_count,
+          });
           let newData = [];
           for (let i = 0; i < res.data.length; i++) {
             newData.push({
@@ -245,16 +267,7 @@ class SaveOrder extends Component {
           });
         }
       });
-    this.getSaveDetail();
-    // this.getSaveDetail1();
-  }
-  async getDepositProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
-      async (res) => {
-        await this.setState({ depositProduct: res.data.data });
-      }
-    );
-  }
+  };
   //币种和状态下拉框
   getSaveDetail = () => {
     fetch(
@@ -264,11 +277,7 @@ class SaveOrder extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
-          // console.log(res.data,'.........')
-          this.setState({
-            total:res.data.length
-          })
+        if (res.data.length > 0) {
           let allCoin = ["全部"];
           let allStatus = ["全部"];
           for (let i = 0; i < res.data.length; i++) {
@@ -295,16 +304,12 @@ class SaveOrder extends Component {
               }
             }
           }
-        } else {
-          this.setState({
-            data1: res.data,
-          });
         }
       });
   };
   //存款明细
-  getSaveDetail1 = (start,end,curreny, status) => {
-    let { page,pageSize} = this.state;
+  getSaveDetail1 = (start, end, curreny, status) => {
+    let { page, pageSize } = this.state;
     fetch(
       url +
         "/1.0/violas/bank/deposit/order/list?address=" +
@@ -324,7 +329,10 @@ class SaveOrder extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (res.data.length > 0) {
+          this.setState({
+            total: res.data[0].total_count,
+          });
           // console.log(res.data,'......')
           let newData = [];
           for (let i = 0; i < res.data.length; i++) {
@@ -355,8 +363,8 @@ class SaveOrder extends Component {
   //选择获取时间
   onOk = (value) => {
     this.setState({
-      selectTime1: new Date(value[0]).getTime(),
-      selectTime2: new Date(value[1]).getTime(),
+      selectTime1: Math.ceil(new Date(value[0]).getTime() / 1000),
+      selectTime2: Math.ceil(new Date(value[1]).getTime() / 1000),
     });
   };
   //选择币种
@@ -468,15 +476,27 @@ class SaveOrder extends Component {
 
     // this.getSaveDetail1(selectCoin, selectStatus);
   };
-  //获取每页的页码和条数
-  getPage = (page,pageSize) =>{
+  //获取当前存款每页的页码和条数
+  getCurPage = (page, pageSize) => {
     this.setState({
-      page:page,
-      pageSize:pageSize
+      curPage: page,
+      curPageSize: pageSize,
     },()=>{
-      this.getSaveDetail1(this.state.curreny, this.state.status);
-    })
-  }
+      this.getCurSaveDetail();
+    });
+  };
+  //获取每页的页码和条数
+  getPage = (page, pageSize) => {
+    this.setState(
+      {
+        page: page,
+        pageSize: pageSize,
+      },
+      () => {
+        this.getSaveDetail1();
+      }
+    );
+  };
   render() {
     let { types, allCoin, allStatus, withdrawalsList, warning } = this.state;
     return (
@@ -527,7 +547,12 @@ class SaveOrder extends Component {
               }}
               columns={this.state.columns}
               dataSource={this.state.data}
-              pagination={{ pageSize: 6, position: ["bottomCenter"] }}
+              pagination={{
+                pageSize: 6,
+                position: ["bottomCenter"],
+                total: this.state.curTotal,
+                onChange: (page, pageSize) => this.getCurPage(page, pageSize),
+              }}
             />
           ) : (
             <div className="saveDetail">

@@ -25,6 +25,8 @@ class BorrowOrder extends Component {
       allStatus: [],
       displayMenu: false,
       borrowId: "",
+      total: 0,
+      curTotal: 0,
       borrowDetails: [
         {
           id: 0,
@@ -54,6 +56,10 @@ class BorrowOrder extends Component {
       secondData: [],
       secondData1: [],
       secondData2: [],
+      selectTime1: 0,
+      selectTime2: 0,
+      selectCoin: "",
+      selectStatus: "",
       columns: [
         {
           title: "币种",
@@ -361,10 +367,38 @@ class BorrowOrder extends Component {
         },
       ],
       secondAllData: [],
+      page: 1,
+      pageSize: 6,
+      curPage: 1,
+      curPageSize: 6,
     };
   }
   componentDidMount() {
-    // 当前借款
+    this.getCurBorrowDetail();
+    this.getBorrowDetail();
+    this.getBorrowDetail1();
+  }
+  //选择获取时间
+  onOk = (value) => {
+    this.setState({
+      selectTime1: Math.ceil(new Date(value[0]).getTime() / 1000),
+      selectTime2: Math.ceil(new Date(value[1]).getTime() / 1000),
+    });
+  };
+  //选择币种
+  getOptionCoins = (value) => {
+    this.setState({
+      selectCoin: value,
+    });
+  };
+  //选择状态
+  getOptionStatus = (value) => {
+    this.setState({
+      selectStatus: value,
+    });
+  };
+  // 当前借款
+  getCurBorrowDetail = () => {
     fetch(
       url +
         "/1.0/violas/bank/borrow/orders?address=" +
@@ -373,6 +407,9 @@ class BorrowOrder extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data.length > 0) {
+          this.setState({
+            curTotal: res.data[0].total_count,
+          });
           let newData = [];
           // console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
@@ -423,27 +460,6 @@ class BorrowOrder extends Component {
           });
         }
       });
-    this.getBorrowDetail();
-    this.getBorrowDetail1();
-  }
-  //选择获取时间
-  onOk = (value) => {
-    this.setState({
-      selectTime1: new Date(value[0]).getTime(),
-      selectTime2: new Date(value[1]).getTime(),
-    });
-  };
-  //选择币种
-  getOptionCoins = (value) => {
-    this.setState({
-      selectCoin: value,
-    });
-  };
-  //选择状态
-  getOptionStatus = (value) => {
-    this.setState({
-      selectStatus: value,
-    });
   };
   //币种，状态下拉框
   getBorrowDetail = () => {
@@ -467,23 +483,20 @@ class BorrowOrder extends Component {
             } else {
               allCoin.push(res.data[i].currency);
             }
-            
-              if (allStatus.length > 0) {
-                if (res.data[i].status >= 0) {
-                  
-                  allStatus.push(res.data[i].status);
-                  let newStatus = [...new Set(allStatus)];
-                  this.setState({
-                    allStatus: newStatus,
-                  });
-                }
-                
-                
-              } else {
-                if (res.data[i].status >= 0) {
-                  allStatus.push(res.data[i].status);
-                }
+
+            if (allStatus.length > 0) {
+              if (res.data[i].status >= 0) {
+                allStatus.push(res.data[i].status);
+                let newStatus = [...new Set(allStatus)];
+                this.setState({
+                  allStatus: newStatus,
+                });
               }
+            } else {
+              if (res.data[i].status >= 0) {
+                allStatus.push(res.data[i].status);
+              }
+            }
           }
         } else {
           this.setState({
@@ -493,7 +506,8 @@ class BorrowOrder extends Component {
       });
   };
   //借款明细
-  getBorrowDetail1 = (curreny, status) => {
+  getBorrowDetail1 = (start, end, curreny, status) => {
+    let { page, pageSize } = this.state;
     fetch(
       url +
         "/1.0/violas/bank/borrow/order/list?address=" +
@@ -501,11 +515,22 @@ class BorrowOrder extends Component {
         "&curreny=" +
         curreny +
         "&status=" +
-        status
+        status +
+        "&start=" +
+        start +
+        "&end=" +
+        end +
+        "&limit=" +
+        pageSize +
+        "&offset=" +
+        (page - 1) * pageSize
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (res.data.length > 0) {
+          this.setState({
+            total: res.data[0].total_count,
+          });
           let newData = [];
           for (let i = 0; i < res.data.length; i++) {
             newData.push({
@@ -658,14 +683,36 @@ class BorrowOrder extends Component {
       </div>
     );
   };
-  onOk = (value) => {
-    console.log("onOk: ", value);
+
+  //获取当前借款每页的页码和条数
+  getCurPage = (page, pageSize) => {
+    this.setState(
+      {
+        curPage: page,
+        curPageSize: pageSize,
+      },
+      () => {
+        this.getCurBorrowDetail();
+      }
+    );
+  };
+  //获取每页的页码和条数
+  getPage = (page, pageSize) => {
+    this.setState(
+      {
+        page: page,
+        pageSize: pageSize,
+      },
+      () => {
+        this.getBorrowDetail1();
+      }
+    );
   };
   //点击搜索
   searchFunction = () => {
     let { selectTime1, selectTime2, selectCoin, selectStatus } = this.state;
     // console.log(selectCoin, selectStatus, ".......");
-    this.getBorrowDetail1(selectCoin, selectStatus);
+    this.getBorrowDetail1(selectTime1, selectTime2, selectCoin, selectStatus);
   };
   render() {
     let { types, expandedRowKeys, allStatus, allCoin, secondData } = this.state;
@@ -722,7 +769,12 @@ class BorrowOrder extends Component {
               }}
               columns={this.state.columns}
               dataSource={this.state.data}
-              pagination={{ pageSize: 6, position: ["bottomCenter"] }}
+              pagination={{
+                pageSize: 6,
+                position: ["bottomCenter"],
+                total: this.state.curTotal,
+                onChange: (page, pageSize) => this.getCurPage(page, pageSize),
+              }}
             />
           ) : (
             <div className="saveDetail">
@@ -802,7 +854,12 @@ class BorrowOrder extends Component {
                 locale={locale}
                 columns={this.state.columns1}
                 dataSource={this.state.data1}
-                pagination={{ pageSize: 6, position: ["bottomCenter"] }}
+                pagination={{
+                  pageSize: 6,
+                  position: ["bottomCenter"],
+                  total: this.state.total,
+                  onChange: (page, pageSize) => this.getPage(page, pageSize),
+                }}
               />
             </div>
           )}
