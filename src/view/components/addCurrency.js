@@ -38,6 +38,9 @@ class AddCurrency extends Component {
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
+    if (false) {
+      this.forceUpdate();
+    }
   }
   async getNewWalletConnect() {
     await this.setState({
@@ -45,23 +48,22 @@ class AddCurrency extends Component {
     });
   }
   async componentWillReceiveProps(nextProps) {
-    if (sessionStorage.getItem("checkData")==null) {
+    if (this.state.checkData.length == 0) {
       await this.setState(
         {
           checkData: nextProps.checkData,
-        },() => {
-          // console.log(this.state.checkData, "......this.state.checkData");
         }
       );
+      await this.getBalance(this.state.checkData);
     }
   }
-  componentDidUpdate(props){
-    //  console.log(props, "......this.state.checkData");
+  componentDidUpdate(props) {
+
   }
   async componentDidMount() {
-   
+
     if (JSON.parse(sessionStorage.getItem("checkData"))) {
-      // console.log("111", JSON.parse(sessionStorage.getItem("checkData")));
+      console.log("111", JSON.parse(sessionStorage.getItem("checkData")) == null);
       await this.getBalance(JSON.parse(sessionStorage.getItem("checkData")));
     } else {
       // console.log("222", JSON.parse(sessionStorage.getItem("checkData")));
@@ -70,7 +72,6 @@ class AddCurrency extends Component {
         await this.getBalance(this.state.checkData);
       }
     }
-
     if (JSON.parse(window.localStorage.getItem("wallet_info"))) {
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -82,8 +83,8 @@ class AddCurrency extends Component {
     // window.sessionStorage.setItem("init", true);
     fetch(
       url +
-        "/1.0/btc/balance?address=" +
-        window.sessionStorage.getItem("btc_address")
+      "/1.0/btc/balance?address=" +
+      window.sessionStorage.getItem("btc_address")
     )
       .then((res) => res.json())
       .then((res) => {
@@ -121,25 +122,21 @@ class AddCurrency extends Component {
                   Object.assign(v, { checked: false });
                 }
               });
-              console.log(arr, "......1");
-              for(let i=0;i < arr.length;i++){
+              for (let i = 0; i < arr.length; i++) {
                 for (let j = 0; j < checkData.length; j++) {
                   if (
                     arr[i].show_icon
                       .split("/")
-                      [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
+                    [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
                     "violas"
                   ) {
                     if (arr[i].show_name == checkData[j].show_name) {
                       // console.log(1,v.checked , checkData[j].checked);
                       arr[i].checked = checkData[j].checked;
-                      console.log(2, arr[i]);
                     }
                   }
                 }
               }
-             
-              console.log(arr,'......2')
               this.setState({
                 addCurrencyList1: arr,
               });
@@ -222,8 +219,8 @@ class AddCurrency extends Component {
     // console.log(this.state.addCurrencyList1, _name, icon.split('/')[icon.split('/').length - 1].split('.')[0],'.........')
     fetch(
       url +
-        "/1.0/violas/currency/published?addr=" +
-        window.sessionStorage.getItem("violas_address")
+      "/1.0/violas/currency/published?addr=" +
+      window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
       .then((res) => {
@@ -352,8 +349,8 @@ class AddCurrency extends Component {
   getPublish() {
     fetch(
       url +
-        "/1.0/violas/currency/published?addr=" +
-        window.sessionStorage.getItem("violas_address")
+      "/1.0/violas/currency/published?addr=" +
+      window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
       .then((res) => {
@@ -381,8 +378,8 @@ class AddCurrency extends Component {
   closePub = (_name) => {
     fetch(
       url +
-        "/1.0/violas/currency/published?addr=" +
-        window.sessionStorage.getItem("violas_address")
+      "/1.0/violas/currency/published?addr=" +
+      window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
       .then((res) => {
@@ -484,11 +481,11 @@ class AddCurrency extends Component {
                       }
                     />
                   ) : (
-                    <img
-                      onClick={() => this.closePub(v.show_name)}
-                      src="/img/Rectangle 2@2x.png"
-                    />
-                  )}
+                      <img
+                        onClick={() => this.closePub(v.show_name)}
+                        src="/img/Rectangle 2@2x.png"
+                      />
+                    )}
                 </p>
               </div>
             );
