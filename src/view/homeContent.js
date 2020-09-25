@@ -43,17 +43,7 @@ class HomeContent extends Component {
         init:false
       }
     }
-    // async componentWillUpdate(nextProps){
-    //   let i=0;
-    //   if(JSON.stringify(this.state.checkData) !== (sessionStorage.getItem('checkData'))){
-    //      await this.getBalances();
-    //      await this.setState({
-    //        checkData:JSON.parse(sessionStorage.getItem("checkData"))
-    //      })
-    //      i+=1
-    //      console.log(i,JSON.stringify(this.state.checkData)==(sessionStorage.getItem('checkData')))
-    //   }
-    // }
+
     async componentWillMount(){
       await this.getBalances();
     }
@@ -73,7 +63,7 @@ class HomeContent extends Component {
       number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
       number = parseFloat(Number(number).toFixed(n)); //补足位数
       if (typeof(number) != parseFloat) {
-         return number.toFixed(2);
+         number.toFixed(2);
       }
       return number;
     }
@@ -205,46 +195,47 @@ class HomeContent extends Component {
                                          {
                                            checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
                                          },
-                                         () => {
-                                           let amount = 0;
-                                           for (
-                                             let i = 0;
-                                             i < this.state.checkData.length;
-                                             i++
-                                           ) {
-                                             amount += Number(
-                                               this.getFloat(
-                                                 (this.state.checkData[i]
-                                                   .balance /
-                                                   1e6) *
-                                                   this.state.checkData[i].rate,
-                                                 6
-                                               )
-                                             );
-                                           }
-                                           this.setState(
-                                             {
-                                               coinsBalance: amount,
-                                             },
-                                             () => {
-                                               window.sessionStorage.setItem(
-                                                 "balances",
-                                                 this.state.coinsBalance +
-                                                   this.state.BTCBalance
-                                               );
-                                               this.setState(
-                                                 {
-                                                   totalAmount: this.getFloat(
-                                                     this.state.coinsBalance +
-                                                       this.state.BTCBalance,
-                                                     2
-                                                   ),
-                                                 },
-                                                 () => {}
-                                               );
-                                             }
-                                           );
-                                         }
+                                        //  () => {
+                                        //    let amount = 0;
+                                        //    for (
+                                        //      let i = 0;
+                                        //      i < this.state.checkData.length;
+                                        //      i++
+                                        //    ) {
+                                        //      amount += Number(
+                                        //        this.getFloat(
+                                        //          (this.state.checkData[i]
+                                        //            .balance /
+                                        //            1e6) *
+                                        //            this.state.checkData[i].rate,
+                                        //          6
+                                        //        )
+                                        //      );
+                                        //    }
+                                        //    console.log(amount,'.....')
+                                        //    this.setState(
+                                        //      {
+                                        //        coinsBalance: amount,
+                                        //      },
+                                        //      () => {
+                                        //        window.sessionStorage.setItem(
+                                        //          "balances",
+                                        //          this.state.coinsBalance +
+                                        //            this.state.BTCBalance
+                                        //        );
+                                        //        this.setState(
+                                        //          {
+                                        //            totalAmount: this.getFloat(
+                                        //              this.state.coinsBalance +
+                                        //                this.state.BTCBalance,
+                                        //              2
+                                        //            ),
+                                        //          },
+                                        //          () => {}
+                                        //        );
+                                        //      }
+                                        //    );
+                                        //  }
                                        );
                                      }
                                      // fetch(url1 + "/1.0/libra/balance?addr=" + window.sessionStorage.getItem('libra_address')).then(res => res.json())
@@ -450,6 +441,11 @@ class HomeContent extends Component {
         display2: false
       })
     };
+    getInitTotal = (val) =>{
+      this.setState({
+        totalAmount:val
+      });
+    }
     render(){
       let { BTCAddress, BTCBalances, visible, totalAmount, checkData, balance } = this.state;
         return (
@@ -546,7 +542,7 @@ class HomeContent extends Component {
                             {
                               display1: !this.state.display1,
                               name: v.name,
-                              detailAddr: sessionStorage.getItem('btc_address'),
+                              detailAddr: sessionStorage.getItem("btc_address"),
                               rate:
                                 v.BTC == 0
                                   ? "0.00"
@@ -688,10 +684,13 @@ class HomeContent extends Component {
               visible={this.state.display}
               mask={false}
               getContainer={false}
+              
             >
               <AddCurrency
                 showAddCoins={this.showAddCoins}
                 checkData={this.state.checkData}
+                BTCBalance={this.state.BTCBalance}
+                getInitTotal={this.getInitTotal}
               ></AddCurrency>
             </Drawer>
             {/* 币种详情 */}
