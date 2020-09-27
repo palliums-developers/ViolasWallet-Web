@@ -162,9 +162,9 @@ class CurrencyDetail extends Component {
         
         
     }
-    showDetails = () => {
-        this.props.showDetails();
-    };
+    // showDetails = () => {
+    //     this.props.showDetails();
+    // };
     onChange = (page,pageSize) => {
         // console.log(page, pageSize)
         this.setState({

@@ -21,7 +21,7 @@ export default {
   "Payment success": "收款成功",
   "Add Digital Currency": "添加币种",
   "Currency Detail": "币种详情",
-  Detail: "Detail",
+  Detail: "详情",
   "Stability coin activated successfully": "稳定币激活成功",
   Amount: "金额",
   "Cost of miners": "矿工费用",

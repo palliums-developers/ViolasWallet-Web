@@ -2,8 +2,8 @@ import React, { Component,PureComponent } from "react";
 import "./app.scss";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
-import { Drawer } from "antd";
-
+import { Drawer, Badge } from "antd";
+import { BellOutlined } from "@ant-design/icons";
 import ExchangeDialog from './market/exchangeDialog'
 import MyPoolDialog from './market/myPoolDialog'
 import WalletConnect from "../packages/browser/src/index";
@@ -142,6 +142,8 @@ class Home extends React.PureComponent {
                     ? "active"
                     : active == "getMoney"
                     ? "active"
+                    : active == "pushMessage"
+                    ? "active"
                     : null
                 }
               >
@@ -186,6 +188,16 @@ class Home extends React.PureComponent {
         <div className="box">
           <div className="boxHead">
             <div className="boxHeadList">
+              <div className="badge" onClick={()=>{
+                this.props.history.push(
+                  "/homepage/home/pushMessage"
+                );
+              }}>
+                <Badge count={100}>
+                  <img src="/img/编组 12@2x.png" />
+                  {/* <a href="#" className="head-example" /> */}
+                </Badge>
+              </div>
               <div className="mine">
                 {showMineDialog ? (
                   <img
@@ -257,6 +269,7 @@ class Home extends React.PureComponent {
                 ) : null}
               </div>
               {/* <span>Download</span> */}
+
               <div className="changeLangList">
                 {this.state.changeLang ? (
                   <div
@@ -311,7 +324,6 @@ class Home extends React.PureComponent {
           </div>
           <RouterView routes={routes}></RouterView>
         </div>
-        
 
         {/* 我的资金池 */}
         <Drawer

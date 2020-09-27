@@ -15,115 +15,116 @@ import SaveOrder from "../view/digitalBank/saveOrder";
 import BorrowOrder from "../view/digitalBank/borrowOrder";
 import BorrowDetails from "../view/digitalBank/borrowDetails";
 import Repayment from "../view/digitalBank/repayment";
+import PushMessage from "../view/push/pushMessage";
 
 let routes = [
-    //首页
-    {
-        path: '/app',
-        component: App
-    },
-    {
-        path: '/homepage',
-        component: HomePage,
-        children:[
-            {
-                path: '/homepage/home',
-                component: Home,
-                children: [
-                    {
-                        path: '/homepage/home/homeContent',
-                        component: HomeContent
+  //首页
+  {
+    path: "/app",
+    component: App,
+  },
+  {
+    path: "/homepage",
+    component: HomePage,
+    children: [
+      {
+        path: "/homepage/home",
+        component: Home,
+        children: [
+          {
+            path: "/homepage/home/homeContent",
+            component: HomeContent,
+          },
+          {
+            path: "/homepage/home/pushMessage",
+            component: PushMessage,
+          },
+          {
+            path: "/homepage/home/changeContent",
+            component: ChangeContent,
+            children: [
+              {
+                path: "/homepage/home/changeContent/exchange",
+                component: Exchange,
+              },
+              {
+                path: "/homepage/home/changeContent/cashPooling",
+                component: CashPooling,
+              },
+              {
+                path: "/homepage/home/changeContent",
+                redirect: "/homepage/home/changeContent/exchange",
+              },
+            ],
+          },
+          {
+            path: "/homepage/home/digitalBank",
+            component: DigitalBank,
+            children: [
+              {
+                path: "/homepage/home/digitalBank/digitalBankPage",
+                component: DigitalBankPage,
+              },
+              {
+                path: "/homepage/home/digitalBank/mapping",
+                component: Mapping,
+              },
+              {
+                path: "/homepage/home/digitalBank/saveDetails",
+                component: SaveDetails,
+              },
+              {
+                path: "/homepage/home/digitalBank/borrowDetails",
+                component: BorrowDetails,
+              },
+              {
+                path: "/homepage/home/digitalBank/repayment",
+                component: Repayment,
+              },
+              {
+                path: "/homepage/home/digitalBank/saveOrder",
+                component: SaveOrder,
+              },
+              {
+                path: "/homepage/home/digitalBank/borrowOrder",
+                component: BorrowOrder,
+              },
+              {
+                path: "/homepage/home/digitalBank",
+                redirect: "/homepage/home/digitalBank/digitalBankPage",
+              },
+            ],
+          },
+          {
+            path: "/homepage/home/transfer",
+            component: Transfer,
+          },
+          {
+            path: "/homepage/home/getMoney",
+            component: GetMoney,
+          },
+          {
+            path: "/homepage/home",
+            redirect: "/homepage/home/homeContent",
+          },
+        ],
+      },
 
-                    },
-                    {
-                        path: '/homepage/home/changeContent',
-                        component: ChangeContent,
-                        children: [
-                            {
-                                path: '/homepage/home/changeContent/exchange',
-                                component: Exchange
-                            },
-                            {
-                                path: '/homepage/home/changeContent/cashPooling',
-                                component: CashPooling
-                            },
-                            {
-                                path: '/homepage/home/changeContent',
-                                redirect: '/homepage/home/changeContent/exchange'
-                            },
-                        ]
-                    },
-                    {
-                        path: '/homepage/home/digitalBank',
-                        component: DigitalBank,
-                        children:[
-                            {
-                                path: '/homepage/home/digitalBank/digitalBankPage',
-                                component: DigitalBankPage
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/mapping',
-                                component: Mapping
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/saveDetails',
-                                component: SaveDetails
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/borrowDetails',
-                                component: BorrowDetails
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/repayment',
-                                component: Repayment
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/saveOrder',
-                                component: SaveOrder
-                            },
-                            {
-                                path: '/homepage/home/digitalBank/borrowOrder',
-                                component: BorrowOrder
-                            },
-                            {
-                                path: '/homepage/home/digitalBank',
-                                redirect: '/homepage/home/digitalBank/digitalBankPage'
-                            }
-                        ]
-
-                    },
-                    {
-                        path: '/homepage/home/transfer',
-                        component:Transfer
-                    },
-                    {
-                        path: '/homepage/home/getMoney',
-                        component: GetMoney
-                    },
-                    {
-                        path: '/homepage/home',
-                        redirect: '/homepage/home/homeContent'
-                    }
-                ]
-            },
-            
-            
-            {
-                path: '/homepage',
-                redirect: '/homepage/home'
-            }
-        ]
-       
-    },
-    // //详情
-    // {
-    //     path: '/detail/:address/:type/:nikename',
-    //     component: Detail
-    // },
-    {
-        path: '/',
-        redirect: '/app'
-    }
-]
+      {
+        path: "/homepage",
+        redirect: "/homepage/home",
+      },
+    ],
+  },
+  // //详情
+  // {
+  //     path: '/detail/:address/:type/:nikename',
+  //     component: Detail
+  // },
+  {
+    path: "/",
+    redirect: "/app",
+  },
+];
 
 export default routes
