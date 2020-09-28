@@ -2007,6 +2007,7 @@ dd {
       padding: 0 31px;
       box-sizing: border-box;
       background: #FFF;
+      flex-shrink:0;
       h3{
         display: flex;
         align-items: center;
