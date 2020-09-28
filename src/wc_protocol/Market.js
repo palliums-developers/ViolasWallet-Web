@@ -405,7 +405,7 @@ class Market extends React.Component {
                     },
                     {
                         type: 'U64',
-                        value: '' + this.state.swap_in_amount
+                        value: '' + this.state.swap_trial.data.amount
                     },
                     {
                         type: 'Vector',
