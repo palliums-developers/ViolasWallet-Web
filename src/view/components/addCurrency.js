@@ -291,11 +291,14 @@ class AddCurrency extends Component {
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
+              
+              this.forceUpdate()
             } else if (type == "libra") {
               this.setState({
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
+              this.forceUpdate();
             }
           }
         }
@@ -319,12 +322,15 @@ class AddCurrency extends Component {
         this.setState({
           showWallet: false,
         });
+        window.sessionStorage.setItem("init", true);
+        this.props.showAddCoins(false);
         console.log("send publish ", res);
       })
       .catch((err) => {
         this.setState({
           showWallet: false,
         });
+        this.props.showAddCoins(false);
         console.log("send publish ", err);
       });
   }
@@ -357,12 +363,15 @@ class AddCurrency extends Component {
         this.setState({
           showWallet: false,
         });
+        window.sessionStorage.setItem("init", true);
+        this.props.showAddCoins(false);
         console.log("Libra transaction", res);
       })
       .catch((err) => {
         this.setState({
           showWallet: false,
         });
+        this.props.showAddCoins(false);
         console.log("Libra transaction ", err);
       });
   }

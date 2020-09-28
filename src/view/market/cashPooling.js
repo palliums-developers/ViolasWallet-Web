@@ -600,7 +600,7 @@ class CashPooling extends Component {
       fetch(
         url1 +
           "/1.0/market/pool/deposit/trial?amount=" +
-          this.state.inputAmount +
+          this.state.inputAmount * 1e6 +
           "&&coin_a=" +
           this.state.type1 +
           "&&coin_b=" +
@@ -609,8 +609,9 @@ class CashPooling extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
+            console.log(res.data,'.......')
             this.setState({
-              inputAmount1: res.data,
+              inputAmount1: res.data / 1e6,
             });
           }
         });
@@ -621,7 +622,7 @@ class CashPooling extends Component {
       fetch(
         url1 +
           "/1.0/market/pool/deposit/trial?amount=" +
-          this.state.inputAmount1 +
+          this.state.inputAmount1 * 1e6 +
           "&&coin_a=" +
           this.state.name +
           "&&coin_b=" +
@@ -631,7 +632,7 @@ class CashPooling extends Component {
         .then((res) => {
           if (res.data) {
             this.setState({
-              inputAmount: res.data,
+              inputAmount: res.data / 1e6,
             });
           }
         });
@@ -645,7 +646,7 @@ class CashPooling extends Component {
           "/1.0/market/pool/withdrawal/trial?address=" +
           window.sessionStorage.getItem("violas_address") +
           "&amount=" +
-          this.state.outputAmount +
+          this.state.outputAmount * 1e6 +
           "&&coin_a=" +
           this.state.aName +
           "&&coin_b=" +
@@ -738,6 +739,7 @@ class CashPooling extends Component {
   }
   //点击转入
   async getAddLiquidity(chainId) {
+    console.log(this.state.name, this.state.type1,'............');
     await this.orderCurrencies(this.state.name, this.state.type1);
 
     // console.log(this.state.AddLiquidity.coin_a_amount, '..........')

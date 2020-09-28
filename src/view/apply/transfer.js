@@ -742,7 +742,7 @@ class Transfer extends Component {
         ) : null}
         {/*  */}
         {this.state.showWallet ? (
-          <WalletconnectDialog></WalletconnectDialog>
+          <WalletconnectDialog getCloseWallet={this.closeWallet}></WalletconnectDialog>
         ) : null}
       </div>
     );

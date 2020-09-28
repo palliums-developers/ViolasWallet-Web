@@ -149,10 +149,23 @@ class HomeContent extends Component {
                                    },
                                    () => {
                                      let { arr1 } = this.state;
+                                     
                                      window.sessionStorage.setItem(
                                        "violas_Balances",
                                        JSON.stringify(arr1)
                                      );
+                                    // if (JSON.parse(window.sessionStorage.getItem("violas_Balances")).length<1) {
+                                    //      window.sessionStorage.setItem(
+                                    //        "init",
+                                    //        false
+                                    //      );
+                                    //     }else{ 
+                                    //     if(window.sessionStorage.getItem("init")=='true'){
+                                         
+                                    //       window.sessionStorage.setItem("checkData", JSON.stringify(arr1));
+                                    //     }
+                                    //  }
+                                     
                                      if (arr1) {
                                        arr1.sort((a, b) => {
                                          return b.balance - a.balance;
@@ -171,20 +184,17 @@ class HomeContent extends Component {
                                            });
                                          }
                                        });
-                                       if (
-                                         JSON.parse(window.sessionStorage.getItem(
-                                           "checkData"
-                                         ))
-                                       ) {
-                                         // if (
-                                         //   JSON.parse(
-                                         //     window.sessionStorage.getItem(
-                                         //       "checkData"
-                                         //     )
-                                         //   ).length > initCoinsList.length
-                                         // ) {
-
-                                         // }
+                                       let temp =JSON.parse(window.sessionStorage.getItem( "checkData" ));
+                                       if (temp && this.state.arr1) {
+                                         for(let i =0; i< temp.length;i++){
+                                           for(let j=0;j<this.state.arr1.length;j++){
+                                             if(temp[i].name===this.state.arr1[j].name){
+                                              temp[i].balance=this.state.arr1[j].balance;
+                                              break;
+                                            }
+                                          }
+                                        }
+                                         sessionStorage.setItem('checkData',JSON.stringify(temp))
                                        } else {
                                          window.sessionStorage.setItem(
                                            "checkData",
@@ -194,7 +204,9 @@ class HomeContent extends Component {
                                        this.setState(
                                          {
                                            checkData: JSON.parse(window.sessionStorage.getItem("checkData"))
-                                         },
+                                         },()=>{
+                                          //  console.log(this.state.checkData,'111')
+                                         }
                                         //  () => {
                                         //    let amount = 0;
                                         //    for (
