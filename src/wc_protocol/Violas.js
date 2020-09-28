@@ -198,7 +198,7 @@ class Violas extends React.Component {
                             }
                         </select>
                     </p>
-                    <button onClick={() => this.sendPublish(sessionStorage.getItem('violas_chainId'))}>send publish</button>
+                    <button onClick={() => this.sendPublish(parseInt(sessionStorage.getItem('violas_chainId')))}>send publish</button>
                 </div>
                 <div className='tx'>
                     <h5>Send Transaction</h5>
@@ -211,7 +211,7 @@ class Violas extends React.Component {
                             })
                         }
                     </select>
-                    <button onClick={() => this.violas_sendTransaction(sessionStorage.getItem('violas_chainId'))}>send transaction</button>
+                    <button onClick={() => this.violas_sendTransaction(parseInt(sessionStorage.getItem('violas_chainId')))}>send transaction</button>
                 </div>
                 {/* <div className='tx'>
                     <h5>Send Signed Transaction</h5>

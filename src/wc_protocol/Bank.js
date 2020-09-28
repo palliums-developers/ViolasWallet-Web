@@ -147,7 +147,7 @@ class Bank extends React.Component {
             });
         } else if (this.state.mappingCoinType.from_coin.coin_type === 'libra') {
             let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
-            let tx = getLibraTx(sessionStorage.getItem('libra_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, sessionStorage.getItem('libra_chainId'), script);
+            let tx = getLibraTx(sessionStorage.getItem('libra_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, parseInt(sessionStorage.getItem('libra_chainId')), script);
             console.log('libra: ', tx);
             this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra mapping ', res);
@@ -156,7 +156,7 @@ class Bank extends React.Component {
             });
         } else if (this.state.mappingCoinType.from_coin.coin_type === 'violas') {
             let script = getMapScript(this.state.mappingCoinType.from_coin.coin_type, this.state.mappingCoinType.lable, to_address);
-            let tx = getViolasTx(sessionStorage.getItem('violas_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, sessionStorage.getItem('violas_chainId'), script);
+            let tx = getViolasTx(sessionStorage.getItem('violas_address'), this.state.mappingCoinType.receiver_address, this.state.mappingCoinAmount, this.state.mappingCoinType.from_coin.assert.module, this.state.mappingCoinType.from_coin.assert.name, parseInt(sessionStorage.getItem('violas_chainId')), script);
             console.log('violas: ', tx);
             this.props.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas mapping ', res);
@@ -197,27 +197,28 @@ class Bank extends React.Component {
         })
     }
     async getDigitalBank() {
+        let { digitalBankOperation, depositProduct, digitalBankCurrency,digitalBankAmount } = this.state;
         let productId = 0;
-        let tx='';
-        if (this.state.digitalBankOperation === 'lock' || this.state.digitalBankOperation === 'redeem') {
-            productId = getProductId(this.state.digitalBankCurrency, this.state.depositProduct);
+        let tx = '';
+        if (digitalBankOperation === 'lock' || digitalBankOperation === 'redeem') {
+            productId = getProductId(digitalBankCurrency, depositProduct);
             this.getDigitalBankDepositDetail(productId);
-            tx = digitalBank(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.digitalBankAmount, sessionStorage.getItem('violas_address'), this.state.digitalBankDepositDetail.token_address, sessionStorage.getItem('violas_chainId'))
-        } else if (this.state.digitalBankOperation === 'borrow' || this.state.digitalBankOperation === 'repay') {
-            productId = getProductId(this.state.digitalBankCurrency, this.state.borrowProduct);
+            tx = digitalBank(digitalBankOperation, digitalBankCurrency, digitalBankAmount, sessionStorage.getItem('violas_address'), this.state.digitalBankDepositDetail.token_address, parseInt(sessionStorage.getItem('violas_chainId')))
+        } else if (digitalBankOperation === 'borrow' || digitalBankOperation === 'repay') {
+            productId = getProductId(digitalBankCurrency, this.state.borrowProduct);
             this.getDigitalBankBorrowDetail(productId);
-            tx = digitalBank(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.digitalBankAmount, sessionStorage.getItem('violas_address'), this.state.digitalBankBorrowDetail.token_address, sessionStorage.getItem('violas_chainId'))
+            tx = digitalBank(digitalBankOperation, digitalBankCurrency, digitalBankAmount, parseInt(sessionStorage.getItem('violas_address')), this.state.digitalBankBorrowDetail.token_address, parseInt(sessionStorage.getItem('violas_chainId')))
         }
         if (productId === 0) {
             console.log('Cannot find match product, please select other coin.');
             return;
         }
-        console.log('Digital Bank ', this.state.digitalBankOperation, tx);
+        console.log('Digital Bank ', digitalBankOperation, tx);
         this.props.walletConnector.signTransaction(tx).then(async res => {
-            // console.log('Digital Bank ', this.state.digitalBankOperation, res);
-            await this.getBankBroadcast(sessionStorage.getItem('violas_address'), this.state.digitalBankOperation, productId, this.state.digitalBankAmount, res);
+            // console.log('Digital Bank ', digitalBankOperation, res);
+            await this.getBankBroadcast(sessionStorage.getItem('violas_address'), digitalBankOperation, productId, digitalBankAmount, res);
         }).catch(err => {
-            console.log('Digital Bank ', this.state.digitalBankOperation, err);
+            console.log('Digital Bank ', digitalBankOperation, err);
         });
     }
     async getAvailableQuantity(operation, currency, depositProductList, borrowProductList) {
@@ -258,14 +259,14 @@ class Bank extends React.Component {
                 break;
             case 'digitalBankOperation':
                 await this.setState({ digitalBankOperation: e.target.value, available: '' });
-                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct,this.state.borrowProduct)
+                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct, this.state.borrowProduct)
                 break;
             case 'digitalBankAmount':
                 await this.setState({ digitalBankAmount: e.target.value });
                 break;
             case 'digitalBankCurrency':
                 await this.setState({ digitalBankCurrency: e.target.value, available: '' });
-                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct,this.state.borrowProduct)
+                await this.getAvailableQuantity(this.state.digitalBankOperation, this.state.digitalBankCurrency, this.state.depositProduct, this.state.borrowProduct)
             default:
                 break;
         }

@@ -440,7 +440,7 @@ class Market extends React.Component {
                 console.log('Bitcoin Swap ', err);
             });
         } else if (this.state.swap_in_type === 'libra') {
-            const tx = await this.getLibraSwap(this.state.swap_out_type, sessionStorage.getItem('libra_chainId'));
+            const tx = await this.getLibraSwap(this.state.swap_out_type, parseInt(sessionStorage.getItem('libra_chainId')));
             console.log('libra Swap ', tx);
             this.props.walletConnector.sendTransaction('_libra', tx).then(res => {
                 console.log('Libra Swap ', res);
@@ -448,7 +448,7 @@ class Market extends React.Component {
                 console.log('Libra Swap ', err);
             })
         } else if (this.state.swap_in_type === 'violas') {
-            const tx = await this.getViolasSwap(this.state.swap_out_type, sessionStorage.getItem('violas_chainId'));
+            const tx = await this.getViolasSwap(this.state.swap_out_type, parseInt(sessionStorage.getItem('violas_chainId')));
             console.log('violas Swap ', tx);
             this.props.walletConnector.sendTransaction('violas', tx).then(res => {
                 console.log('Violas Swap ', res);
@@ -616,7 +616,7 @@ class Market extends React.Component {
                     <button onClick={() => this.getAddLiquidityTrial(this.state.input_a_amount, this.state.input_a, this.state.input_b)}>Add Trial</button>
                     <br />
                     {
-                        this.state.addLiquidityTrial !== 0 && <button onClick={() => this.getAddLiquidity(sessionStorage.getItem('violas_chainId'))}>add Liquidity</button>
+                        this.state.addLiquidityTrial !== 0 && <button onClick={() => this.getAddLiquidity(parseInt(sessionStorage.getItem('violas_chainId')))}>add Liquidity</button>
                     }
                 </div>
                 <div className='tx'>
@@ -641,7 +641,7 @@ class Market extends React.Component {
                             value:{this.state.removeLiquidityTrial.coin_a_value}</h5>
                             <h5>coin b: {this.state.removeLiquidityTrial.coin_b_name}&nbsp;
                             value:{this.state.removeLiquidityTrial.coin_b_value}</h5>
-                            <button onClick={() => this.getRemoveLiquidity(sessionStorage.getItem('violas_chainId'))}>remove Liquidity</button>
+                            <button onClick={() => this.getRemoveLiquidity(parseInt(sessionStorage.getItem('violas_chainId')))}>remove Liquidity</button>
                         </div>
                     }
                 </div>

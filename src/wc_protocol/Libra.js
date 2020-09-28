@@ -130,7 +130,7 @@ class Libra extends React.Component {
                             }
                         </select>
                     </p>
-                    <button onClick={() => this.libra_sendPublish(sessionStorage.getItem('libra_chainId'))}>send publish</button>
+                    <button onClick={() => this.libra_sendPublish(parseInt(sessionStorage.getItem('libra_chainId')))}>send publish</button>
                 </div>
                 <div className='tx'>
                     <h5>Test Net Transaction:</h5>
@@ -143,7 +143,7 @@ class Libra extends React.Component {
                             })
                         }
                     </select>
-                    <button onClick={() => this.libra_sendTransaction(sessionStorage.getItem('libra_chainId'))}>Send Transaction</button>
+                    <button onClick={() => this.libra_sendTransaction(parseInt(sessionStorage.getItem('libra_chainId')))}>Send Transaction</button>
                 </div>
             </div>
         )
