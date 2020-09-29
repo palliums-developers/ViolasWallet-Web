@@ -831,11 +831,12 @@ class ExChange extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
+            // console.log(res.data,'.............')
             this.setState({
               swap_trial: res.data,
               outputAmount: res.data.amount / 1e6,
               exchangeRate: this.getFloat(res.data.rate, 6),
-              gasFee: res.data.fee,
+              gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
             });
           }
         });
@@ -847,7 +848,7 @@ class ExChange extends Component {
       this.before_getSwap(this.state.type, this.state.type1);
       fetch(
         url1 +
-          "/1.0/market/exchange/trial?amount=" +
+          "/1.0/market/exchange/trial/reverse?amount=" +
           this.state.outputAmount * 1e6 +
           "&&currencyIn=" +
           this.state.type +
@@ -857,12 +858,12 @@ class ExChange extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            console.log(res.data, ".res.data....");
+            // console.log(res.data, ".res.data....");
             this.setState({
               swap_trial: res.data,
               inputAmount: res.data.amount / 1e6,
               exchangeRate: this.getFloat(res.data.rate, 6),
-              gasFee: res.data.fee,
+              gasFee: this.getFloat(res.data.fee/1e6, 6)+'%',
             });
           }
         });
@@ -1058,6 +1059,22 @@ class ExChange extends Component {
       showWallet: val,
     });
   };
+  //兑换记录兑换币种及金额
+  getExchangeRecodeReturn = (from_chain,shown_name,amount) =>{
+    if (from_chain == 'btc') {
+      if (shown_name == null) {
+        return null
+      }else{
+        return amount/1e8
+      }
+    }else{
+      if (shown_name == null) {
+        return null;
+      } else {
+        return amount / 1e6;
+      }
+    }
+  }
   render() {
     let {
       arr,
@@ -1083,7 +1100,7 @@ class ExChange extends Component {
         <div className="exchangeContent">
           <div className="exchangeContents">
             <div className="form">
-              {gasFee == "--" || "0" ? <p>费率：--</p> : <p>费率：{gasFee}%</p>}
+              {gasFee == "0" ? <p>费率：--</p> : <p>费率：{gasFee}</p>}
 
               <div className={getFocus ? "iptForm getFormBorder" : "iptForm"}>
                 <div className="showAsset">
@@ -1355,9 +1372,11 @@ class ExChange extends Component {
                             : null}
                         </span>
                         <p>
-                          {v.input_shown_name == null
-                            ? null
-                            : v.input_amount / 1e6}
+                          {this.getExchangeRecodeReturn(
+                            v.from_chain,
+                            v.input_shown_name,
+                            v.input_amount
+                          )}
                           &nbsp;
                           {v.input_shown_name == null
                             ? "--"
@@ -1369,9 +1388,11 @@ class ExChange extends Component {
                       </div>
                       <div className="list2">
                         <span>
-                          {v.output_shown_name == null
-                            ? null
-                            : v.output_amount / 1e6}
+                          {this.getExchangeRecodeReturn(
+                            v.to_chain,
+                            v.output_shown_name,
+                            v.output_amount
+                          )}
                           &nbsp;
                           {v.output_shown_name == null
                             ? "--"

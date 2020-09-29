@@ -41,6 +41,7 @@ class CashPooling extends Component {
       arr1: [],
       arr2: [],
       arr: [],
+      arrTwo: [],
       ind: -1,
       ind1: -1,
       type1: "选择通证",
@@ -65,6 +66,7 @@ class CashPooling extends Component {
       coin_b_value: "",
       focusActive: false,
       showWallet: false,
+      rate:0
       // visible:false
     };
   }
@@ -117,11 +119,21 @@ class CashPooling extends Component {
       url1 +
         "/1.0/market/pool/transaction?address=" +
         window.sessionStorage.getItem("violas_address") +
-        "&offset=0&limit=5"
+        "&offset=0&limit=10"
     )
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res,'.....')
+        // let arr =[]
+        // for(let i =0;i<res.data.length;i++){
+        //   if (res.data[i].transaction_type == 'ADD_LIQUIDITY') {
+        //    if (res.data.length <= 5) {
+        //      arr.push(res.data[i]);
+             
+        //    }
+        //   }
+           
+        // }
+        // console.log(arr, ".....");
         if (res.data) {
           this.setState(
             {
@@ -187,6 +199,15 @@ class CashPooling extends Component {
       () => {
         this.opinionInputAmount();
         this.opinionInputAmount1();
+        let arrTwo = this.state.selData.filter((v) => {
+          if (this.state.name != v.show_name) {
+            // console.log('arr: ',v.name)
+            return v;
+          }
+        });
+         this.setState({
+           arrTwo: arrTwo,
+         });
         if (this.state.name == "BTC") {
           if (bal == "0") {
             this.setState({
@@ -395,7 +416,15 @@ class CashPooling extends Component {
       () => {
         this.opinionInputAmount();
         this.opinionInputAmount1();
-        // console.log(this.state.type1,'.........')
+        let arr = this.state.selData.filter((v) => {
+          if (this.state.type1 != v.show_name) {
+            // console.log('arr: ',v.name)
+            return v;
+          }
+        });
+        this.setState({
+          arr: arr,
+        });
         if (this.state.type1 == "BTC") {
           if (bal == "0") {
             this.setState({
@@ -477,6 +506,7 @@ class CashPooling extends Component {
                 this.setState(
                   {
                     arr: newArr,
+                    arrTwo: newArr,
                     selData: newArr,
                   },
                   () => {
@@ -554,11 +584,9 @@ class CashPooling extends Component {
       url1 +
         "/1.0/market/pool/info?address=" +
         window.sessionStorage.getItem("violas_address")
-    )
-      .then((res) => res.json())
+    ).then((res) => res.json())
       .then((res) => {
-        // console.log(res,'.......')
-        if (res.data) {
+        if (res.data != {}) {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
@@ -570,13 +598,13 @@ class CashPooling extends Component {
   //判断转入/转出成功或失败
   optionTypes(transaction_type, status) {
     if (transaction_type == "ADD_LIQUIDITY") {
-      if (status == 4001) {
+      if (status == "Executed") {
         return "转入成功";
       } else {
         return "转入失败";
       }
     } else {
-      if (status == 4001) {
+      if (status == "Executed") {
         return "转出成功";
       } else {
         return "转出失败";
@@ -654,17 +682,18 @@ class CashPooling extends Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          // console.log(res, '.........')
+         
           if (res.data) {
             this.setState({
               outputAmount1:
-                res.data.coin_a_value +
+                res.data.coin_a_value / 1e6 +
                 res.data.coin_a_name +
                 "/" +
-                res.data.coin_b_value +
+                res.data.coin_b_value / 1e6 +
                 res.data.coin_b_name,
               coin_a_value: res.data.coin_a_value,
               coin_b_value: res.data.coin_b_value,
+              rate: this.getFloat(res.data.coin_b_value / res.data.coin_a_value,6)
             });
           }
         });
@@ -697,6 +726,7 @@ class CashPooling extends Component {
   }
   //点击转入前的判断
   async orderCurrencies(input_a, input_b) {
+    console.log(input_a, input_b);
     let index_a,
       index_b,
       amount_a,
@@ -716,8 +746,8 @@ class CashPooling extends Component {
       amount_a = this.state.inputAmount1;
       amount_b = this.state.inputAmount;
     } else {
-      amount_a = this.state.inputAmount1;
-      amount_b = this.state.inputAmount;
+      amount_a = this.state.inputAmount;
+      amount_b = this.state.inputAmount1;
     }
     this.setState({
       AddLiquidity: {
@@ -754,11 +784,11 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + parseInt(this.state.AddLiquidity.coin_a_amount) * 1e6,
+            value: "" + Number(this.state.AddLiquidity.coin_a_amount) * 1e6,
           },
           {
             type: "U64",
-            value: "" + parseInt(this.state.AddLiquidity.coin_b_amount) * 1e6,
+            value: "" + Number(this.state.AddLiquidity.coin_b_amount) * 1e6,
           },
           {
             type: "U64",
@@ -837,15 +867,15 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + parseInt(this.state.outputAmount) * 1e6,
+            value: "" + Number(this.state.outputAmount) * 1e6,
           },
           {
             type: "U64",
-            value: "" + this.state.coin_a_value * 1e6,
+            value: "" + this.state.coin_a_value,
           },
           {
             type: "U64",
-            value: "" + this.state.coin_b_value * 1e6,
+            value: "" + this.state.coin_b_value,
           },
         ],
       },
@@ -926,6 +956,7 @@ class CashPooling extends Component {
       selData,
       type1,
       arr,
+      arrTwo,
       ind,
       index,
       type2,
@@ -1057,7 +1088,7 @@ class CashPooling extends Component {
                               onChange={(e) => this.getSearchList(e)}
                             />
                           </div>
-                          {selData.map((v, i) => {
+                          {arr.map((v, i) => {
                             return (
                               <div
                                 className="searchList"
@@ -1100,23 +1131,6 @@ class CashPooling extends Component {
                               </div>
                             );
                           })}
-                          {/* {selData.map((v, i) => {
-                                                            return (
-                                                                <span
-                                                                    key={i}
-                                                                    className={i == index ? "active" : null}
-                                                                    onClick={() => {
-                                                                        if (v.show_name == 'BTC') {
-                                                                            this.showMenu(v.show_name, v.BTC, i)
-                                                                        } else {
-                                                                            this.showMenu(v.show_name, v.balance, i)
-                                                                        }
-                                                                    }}
-                                                                >
-                                                                    {v.show_name}
-                                                                </span>
-                                                            );
-                                                        })} */}
                         </div>
                       ) : null}
                     </div>
@@ -1282,7 +1296,7 @@ class CashPooling extends Component {
                               onChange={(e) => this.getSearchList1(e)}
                             />
                           </div>
-                          {arr.map((v, i) => {
+                          {arrTwo.map((v, i) => {
                             return (
                               <div
                                 className="searchList"
@@ -1359,7 +1373,9 @@ class CashPooling extends Component {
                   </div>
                 </div>
               )}
-              <div className="changeRate">兑换率：--</div>
+              <div className="changeRate">
+                兑换率：{this.state.rate == 0 ? "--" : '1:'+this.state.rate}
+              </div>
               {/* <div className="changeRate">当前资金池大小：— —</div> */}
               {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}
             </div>
@@ -1455,9 +1471,7 @@ class CashPooling extends Component {
                             }
                           </div>
                           <div>
-                            {
-                              <p>通证：+{v.token / 1e6}</p>
-                            }
+                            {<p>通证：+{v.token / 1e6}</p>}
 
                             <p>{timeStamp2String(v.date + "000")}</p>
                           </div>

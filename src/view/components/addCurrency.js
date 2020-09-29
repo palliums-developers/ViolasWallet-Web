@@ -204,7 +204,7 @@ class AddCurrency extends Component {
       _name_hex +
       suffix;
     this.setState({ tyArgs: result }, async () => {
-      await this.sendPublish(sessionStorage.getItem("violas_chainId"));
+      await this.sendPublish(_name, sessionStorage.getItem("violas_chainId"));
     });
   }
   getFloat(number, n) {
@@ -227,17 +227,23 @@ class AddCurrency extends Component {
         this.getFloat((checkData[i].balance / 1e6) * checkData[i].rate, 6)
       );
     }
-    
-    if(amount > 0){
-        window.sessionStorage.setItem("balances",amount + this.state.BTCBalance);
-        this.setState({totalAmount: this.getFloat(amount + this.state.BTCBalance,2)},()=>{
+
+    if (amount > 0) {
+      window.sessionStorage.setItem("balances", amount + this.state.BTCBalance);
+      this.setState(
+        { totalAmount: this.getFloat(amount + this.state.BTCBalance, 2) },
+        () => {
           this.props.getInitTotal(this.state.totalAmount);
-        })
-    }else{
-      window.sessionStorage.setItem("balances",this.state.BTCBalance);
-      this.setState({totalAmount: this.getFloat(this.state.BTCBalance,2)},()=>{
+        }
+      );
+    } else {
+      window.sessionStorage.setItem("balances", this.state.BTCBalance);
+      this.setState(
+        { totalAmount: this.getFloat(this.state.BTCBalance, 2) },
+        () => {
           this.props.getInitTotal(this.state.totalAmount);
-        })
+        }
+      );
     }
   };
   //点击激活
@@ -291,13 +297,14 @@ class AddCurrency extends Component {
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
-              
-              this.forceUpdate()
+              this.props.getBalances();
+              this.forceUpdate();
             } else if (type == "libra") {
               this.setState({
                 showWallet: true,
               });
               this.violas_getTyArgs(_name);
+              this.props.getBalances();
               this.forceUpdate();
             }
           }
@@ -305,7 +312,7 @@ class AddCurrency extends Component {
       });
   }
   //violas币激活
-  async sendPublish(chainId) {
+  async sendPublish(_name, chainId) {
     const tx = {
       from: window.sessionStorage.getItem("violas_address"),
       payload: {
@@ -322,11 +329,18 @@ class AddCurrency extends Component {
         this.setState({
           showWallet: false,
         });
-        window.sessionStorage.setItem("init", true);
+        this.after_publish(
+          res,
+          _name,
+          this.state.addCurrencyList1,
+          "checkData",
+          "violas"
+        );
         this.props.showAddCoins(false);
         console.log("send publish ", res);
       })
       .catch((err) => {
+        
         this.setState({
           showWallet: false,
         });
@@ -343,10 +357,13 @@ class AddCurrency extends Component {
       name: _name,
     };
     await this.setState({ tyArgs1: result }, async () => {
-      await this.libra_sendPublish(sessionStorage.getItem("libra_chainId"));
+      await this.libra_sendPublish(
+        _name,
+        sessionStorage.getItem("libra_chainId")
+      );
     });
   }
-  async libra_sendPublish(_chainId) {
+  async libra_sendPublish(_name, _chainId) {
     let tx = {
       from: sessionStorage.getItem("libra_address"),
       payload: {
@@ -363,7 +380,13 @@ class AddCurrency extends Component {
         this.setState({
           showWallet: false,
         });
-        window.sessionStorage.setItem("init", true);
+        this.after_publish(
+          res,
+          _name,
+          this.state.addCurrencyList1,
+          "checkData",
+          "libra"
+        );
         this.props.showAddCoins(false);
         console.log("Libra transaction", res);
       })
@@ -375,7 +398,24 @@ class AddCurrency extends Component {
         console.log("Libra transaction ", err);
       });
   }
-
+  async after_publish(res,name,list,sessionName,chain='violas'){
+    let temp=JSON.parse(sessionStorage.getItem(sessionName));
+    // console.log(temp,'.......')
+    if(res==='success'){
+      for(let i=0;i<list.length;i++){
+        if(name===list[i].name){
+          temp.push(list[i])
+          temp[temp.length-1].checked=true;
+          temp[temp.length - 1].balance = 0;
+          temp[temp.length - 1].rate = 0;
+          break;
+        }
+      }
+      this.getBalance(temp);
+      sessionStorage.setItem(sessionName,JSON.stringify(temp))
+    }
+  }
+  //关闭选中
   closePub = (_name) => {
     fetch(
       url +
