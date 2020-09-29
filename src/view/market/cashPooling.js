@@ -586,11 +586,11 @@ class CashPooling extends Component {
         window.sessionStorage.getItem("violas_address")
     ).then((res) => res.json())
       .then((res) => {
-        if (res.data != {}) {
+        if (res.data) {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
-            total_token: res.data.balance[0].token,
+            total_token: res.data.balance && res.data.balance[0].token,
           });
         }
       });
