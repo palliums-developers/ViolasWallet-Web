@@ -590,7 +590,7 @@ class CashPooling extends Component {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
-            total_token: res.data.balance && res.data.balance[0].token,
+            total_token: res.data.balance.length>0 && res.data.balance[0].token,
           });
         }
       });
