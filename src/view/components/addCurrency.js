@@ -124,7 +124,9 @@ class AddCurrency extends Component {
                     arr[i].show_icon
                       .split("/")
                       [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
-                    "violas"
+                    checkData[j].show_icon
+                      .split("/")
+                      [checkData[j].show_icon.split("/").length - 1].split(".")[0]
                   ) {
                     if (arr[i].show_name == checkData[j].show_name) {
                       arr[i].checked = checkData[j].checked;
@@ -247,7 +249,7 @@ class AddCurrency extends Component {
     }
   };
   //点击激活
-  async getTyArgs(_name, _addr, ind, icon) {
+  async getTyArgs(_name, _addr, ind, icon,_module) {
     let type = icon.split("/")[icon.split("/").length - 1].split(".")[0];
 
     fetch(
@@ -270,12 +272,16 @@ class AddCurrency extends Component {
           };
           for (let i = 0; i < res.data.published.length; i++) {
             for (let j = 0; j < violas_Balances.length; j++) {
+              if(violas_Balances[j].show_icon.split("/")[violas_Balances[j].show_icon.split("/").length - 1].split(".")[0]== type){
               if (res.data.published[i] == _name) {
-                temp.pd = true;
-                temp.violas_balance = violas_Balances[i];
-                temp.published = res.data.published[i];
+                if(violas_Balances[j].show_name == res.data.published[i]){
+                  temp.pd = true;
+                  temp.violas_balance = violas_Balances[j];
+                  temp.published = res.data.published[i];
 
-                break;
+                  break;
+                }
+              }
               }
             }
           }
@@ -303,7 +309,7 @@ class AddCurrency extends Component {
               this.setState({
                 showWallet: true,
               });
-              this.violas_getTyArgs(_name);
+              this.libra_getTyArgs(_module,_name);
               this.props.getBalances();
               this.forceUpdate();
             }
@@ -374,7 +380,7 @@ class AddCurrency extends Component {
       chainId: _chainId,
     };
     console.log("libra ", tx);
-    this.props.walletConnector
+    this.state.walletConnector
       .sendTransaction("_libra", tx)
       .then((res) => {
         this.setState({
@@ -398,9 +404,8 @@ class AddCurrency extends Component {
         console.log("Libra transaction ", err);
       });
   }
-  async after_publish(res,name,list,sessionName,chain='violas'){
+  async after_publish(res,name,list,sessionName,chain){
     let temp=JSON.parse(sessionStorage.getItem(sessionName));
-    // console.log(temp,'.......')
     if(res==='success'){
       for(let i=0;i<list.length;i++){
         if(name===list[i].name){
@@ -416,7 +421,7 @@ class AddCurrency extends Component {
     }
   }
   //关闭选中
-  closePub = (_name) => {
+  closePub = (_name,_iconName) => {
     fetch(
       url +
         "/1.0/violas/currency/published?addr=" +
@@ -436,12 +441,15 @@ class AddCurrency extends Component {
         // console.log(res.data.published);
         for (let i = 0; i < res.data.published.length; i++) {
           for (let j = 0; j < violas_Balances.length; j++) {
-            if (res.data.published[i] == _name) {
-              temp.pd = true;
-              temp.violas_balance = violas_Balances[i];
-              temp.published = res.data.published[i];
-
-              break;
+            if(violas_Balances[j].show_icon.split("/")[violas_Balances[j].show_icon.split("/").length - 1].split(".")[0]== _iconName){
+              if (res.data.published[i] == _name) {
+                if(violas_Balances[j].show_name == res.data.published[i]){
+                temp.pd = true;
+                temp.violas_balance = violas_Balances[j];
+                temp.published = res.data.published[i];
+                // break;
+                }
+            }
             }
           }
         }
@@ -481,6 +489,7 @@ class AddCurrency extends Component {
   };
   render() {
     let { addCurrencyList1, BTCData } = this.state;
+    // console.log(addCurrencyList1,'...')
     return (
       <div className="addCurrency">
         <h4 onClick={() => this.props.showAddCoins(false)}>
@@ -517,12 +526,12 @@ class AddCurrency extends Component {
                     <img
                       src="/img/编组 4复制 2@2x.png"
                       onClick={() =>
-                        this.getTyArgs(v.name, v.address, i, v.show_icon)
+                        this.getTyArgs(v.name, v.address, i, v.show_icon,v.module)
                       }
                     />
                   ) : (
                     <img
-                      onClick={() => this.closePub(v.show_name)}
+                      onClick={() => this.closePub(v.show_name, v.show_icon.split("/")[v.show_icon.split("/").length - 1].split(".")[0])}
                       src="/img/Rectangle 2@2x.png"
                     />
                   )}

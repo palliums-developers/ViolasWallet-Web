@@ -104,13 +104,74 @@ class Transfer extends Component {
           this.setState({
             arr1: res.data.balances,
           },()=>{
+            // let arrs = this.state.arr1.concat(this.state.BTCArr);
+            // this.setState(
+            //   {
+            //     selData: arrs,
+            //   },
+            //   () => {
+            //     if (this.state.type == "") {
+            //       this.setState({
+            //         type: this.state.selData[0].show_name,
+            //         coinName: this.state.selData[0].name,
+            //         balance: this.state.selData[0].balance,
+            //         opinionType: this.state.selData[0].show_icon
+            //           .split("/")
+            //           [
+            //             this.state.selData[0].show_icon.split("/").length - 1
+            //           ].split(".")[0],
+            //       });
+            //     }
+            //   }
+            // );
+          });
+        }
+      });
+    fetch(
+      url +
+        "/1.0/libra/balance?addr=" +
+        window.sessionStorage.getItem("libra_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          this.setState(
+            {
+              arr2: res.data.balances,
+            },
+            () => {
+              let arr = this.state.arr1.concat(this.state.arr2);
+              let arrs = arr.concat(this.state.BTCArr);
+              this.setState(
+                {
+                  selData: arrs,
+                },
+                () => {
+                  if (this.state.type == "") {
+                  this.setState({
+                    type: this.state.selData[0].show_name,
+                    coinName: this.state.selData[0].name,
+                    balance: this.state.selData[0].balance,
+                    opinionType: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0],
+                  });
+                }
+                }
+              );
+            }
+          );
+        } else {
+          if (this.state.arr1) {
             let arrs = this.state.arr1.concat(this.state.BTCArr);
             this.setState(
               {
                 selData: arrs,
               },
               () => {
-                if (this.state.type == "") {
+               if (this.state.type == "") {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
@@ -124,70 +185,9 @@ class Transfer extends Component {
                 }
               }
             );
-          });
+          }
         }
       });
-    // fetch(
-    //   url +
-    //     "/1.0/libra/balance?addr=" +
-    //     window.sessionStorage.getItem("libra_address")
-    // )
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     if (res.data) {
-    //       this.setState(
-    //         {
-    //           arr2: res.data.balances,
-    //         },
-    //         () => {
-    //           let arr = this.state.arr1.concat(this.state.arr2);
-    //           let arrs = arr.concat(this.state.BTCArr);
-    //           this.setState(
-    //             {
-    //               selData: arrs,
-    //             },
-    //             () => {
-    //               if (this.state.type == "") {
-    //                 this.setState({
-    //                   type: this.state.selData[0].show_name,
-    //                   coinName: this.state.selData[0].name,
-    //                   balance: this.state.selData[0].balance,
-    //                   opinionType: this.state.selData[0].show_icon
-    //                     .split("/")
-    //                     [
-    //                       this.state.selData[0].show_icon.split("/").length - 1
-    //                     ].split(".")[0],
-    //                 });
-    //               }
-    //             }
-    //           );
-    //         }
-    //       );
-    //     } else {
-    //       if (this.state.arr1) {
-    //         let arrs = this.state.arr1.concat(this.state.BTCArr);
-    //         this.setState(
-    //           {
-    //             selData: arrs,
-    //           },
-    //           () => {
-    //             if (this.state.type == "") {
-    //               this.setState({
-    //                 type: this.state.selData[0].show_name,
-    //                 coinName: this.state.selData[0].name,
-    //                 balance: this.state.selData[0].balance,
-    //                 opinionType: this.state.selData[0].show_icon
-    //                   .split("/")
-    //                   [
-    //                     this.state.selData[0].show_icon.split("/").length - 1
-    //                   ].split(".")[0],
-    //               });
-    //             }
-    //           }
-    //         );
-    //       }
-    //     }
-    //   });
   }
   getTypeShow = (event) => {
     // this.stopPropagation(event);

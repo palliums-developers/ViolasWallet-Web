@@ -580,7 +580,7 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + parseInt(this.state.inputAmount) * 1e6,
+            value: "" + Number(this.state.inputAmount) * 1e6,
           },
           {
             type: "Vector",
