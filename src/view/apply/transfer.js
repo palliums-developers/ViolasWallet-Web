@@ -151,7 +151,11 @@ class Transfer extends Component {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].balance,
+                    balance: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -175,7 +179,11 @@ class Transfer extends Component {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].balance,
+                    balance: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -200,7 +208,7 @@ class Transfer extends Component {
     this.setState(
       {
         type: v,
-        balance: bal,
+        balance: opinionType == 'btc' ? this.getFloat(bal / 1e8, 6) : this.getFloat(bal / 1e6, 6),
         showDealType: false,
         coinName: name,
         ind: ind,
@@ -276,21 +284,15 @@ class Transfer extends Component {
         });
       }
     } else {
-      if (this.state.address.length != 32) {
-        this.setState({
-          warning: "address error",
-        });
-      } else {
-        this.setState({
+      this.setState({
           warning: "",
         });
-      }
     }
   }
   amountWarn() {
     if (
       Number(this.state.amount) >
-      Number(this.getFloat(this.state.balance / 1e6, 6))
+      Number(this.state.balance)
     ) {
       this.setState({
         warning: "Insufficient available balance",
@@ -320,7 +322,7 @@ class Transfer extends Component {
       name_length +
       _name_hex +
       suffix;
-    this.setState({ tyArgs: result, showWallet: true }, () => {
+    this.setState({ tyArgs: result }, () => {
       this.getViolasNext();
     });
   }
@@ -435,28 +437,28 @@ class Transfer extends Component {
   async bitcoin_sendTransaction() {
     const tx = {
       from: this.state.BTCAddress,
-      amount: this.state.amount,
+      amount: this.state.amount * 1e8,
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.address,
       // script: this.state.script
     };
     console.log("bitcoin ", tx);
     this.state.walletConnector
-      .sendTransaction("_bitcoin", tx)
-      .then((res) => {
-        // console.log("Bitcoin transaction ", res);
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        });
-      })
-      .catch((err) => {
-        // console.log("Bitcoin transaction ", err);
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+    .sendTransaction("_bitcoin", tx)
+    .then((res) => {
+      // console.log("Bitcoin transaction ", res);
+      this.setState({
+        warning: intl.get("Transfer success"),
+        showWallet: false,
       });
+    })
+    .catch((err) => {
+      // console.log("Bitcoin transaction ", err);
+      this.setState({
+        warning: intl.get("Transfer failed"),
+        showWallet: false,
+      });
+    });
   }
   getViolasNext = () => {
     if (this.state.address == "") {
@@ -470,15 +472,17 @@ class Transfer extends Component {
     } else {
       if (
         Number(this.state.amount) >
-        Number(this.getFloat(this.state.balance / 1e6, 6))
+        Number(this.state.balance)
       ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"));
         this.setState({
           warning: "",
+          showWallet: true
+        },()=>{
+          this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"));
         });
       }
     }
@@ -495,20 +499,24 @@ class Transfer extends Component {
     } else {
       if (
         Number(this.state.amount) >
-        Number(this.getFloat(this.state.balance / 1e6, 6))
+        Number(this.state.balance)
       ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"));
+       
         this.setState({
           warning: "",
+          showWallet: true
+        },()=>{
+           this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"));
         });
       }
     }
   };
   getBTCNext = () => {
+    console.log(this.state.amount,this.state.balance)
     if (this.state.address == "") {
       this.setState({
         warning: "Please input address",
@@ -520,15 +528,18 @@ class Transfer extends Component {
     } else {
       if (
         Number(this.state.amount) >
-        Number(this.getFloat(this.state.balance / 1e6, 6))
+        Number(this.state.balance)
       ) {
         this.setState({
           warning: "Insufficient available balance",
         });
       } else {
-        this.bitcoin_sendTransaction();
+        
         this.setState({
           warning: "",
+          showWallet: true
+        },()=>{
+          this.bitcoin_sendTransaction();
         });
       }
     }
@@ -545,7 +556,7 @@ class Transfer extends Component {
     } else if (this.state.opinionType == "libra") {
       this.getTyArgs1(this.state.coinName);
     } else {
-      this.bitcoin_sendTransaction();
+      this.getBTCNext();
     }
   };
   getSearchList = (e) => {
@@ -703,7 +714,7 @@ class Transfer extends Component {
               <p>
                 {intl.get("Balance")}{" "}
                 <span>
-                  {balance == 0 ? 0 : this.getFloat(balance / 1e6, 6)}
+                  {balance == 0 ? 0 : balance}
                 </span>
               </p>
             </div>
