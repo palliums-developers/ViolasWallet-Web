@@ -89,20 +89,30 @@ class GetMoney extends Component {
         this.setState({
           BTCAddress: window.sessionStorage.getItem("btc_address")
         }, () => {
-          this.getBalances()
+          this.getTypesBalance()
         })
       }
     }
-    getBalances(){
-      fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress).then(res => res.json())
-        .then(res => {
-          if(res.data){
-            this.setState({
-              BTCBalances: res.data
-            })
+    //获取到每个币种及余额
+    getTypesBalance() {
+      fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.data) {
+            this.setState(
+              {
+                BTCBalances: res.data
+              },
+              () => {
+                this.getBalances();
+              }
+            );
+          } else {
+            this.getBalances();
           }
-         
-        })
+        });
+    }
+    getBalances(){
       fetch(url1 + "/1.0/violas/balance?addr=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
         .then(res => {
           if (res.data) {
@@ -211,6 +221,7 @@ class GetMoney extends Component {
     }
     render(){
       let { address, showDealType, type, dis, arr, coinName,ind } = this.state;
+      // console.log(arr,'.....arr')
         return (
           <div className="getMoney">
             <div className="dialogContent">
@@ -267,10 +278,14 @@ class GetMoney extends Component {
                                 <h4>{v.show_name}</h4>
                                 <p>
                                   {intl.get("Balance")}：
-                                  {v.show_name == "BTC"
+                                  {v.show_icon
+                                    .split("/")
+                                    [v.show_icon.split("/").length - 1].split(
+                                      "."
+                                    )[0] == "btc"
                                     ? v.BTC == 0
                                       ? 0
-                                      : this.getFloat(v.BTC / 1e8, 6)
+                                      : this.getFloat(v.BTC / 1e8, 8)
                                     : v.balance == 0
                                     ? 0
                                     : this.getFloat(v.balance / 1e6, 6)}{" "}
@@ -289,7 +304,7 @@ class GetMoney extends Component {
                 ) : null}
               </div>
               <div className="qrCode">
-                <QRCode value={coinName + ":" + address + "?amount=1"}></QRCode>
+                <QRCode value={coinName + ":" + address + "?amount=0"}></QRCode>
               </div>
               <div className="addressCode">
                 <span id="add">{address}</span>

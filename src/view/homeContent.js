@@ -472,10 +472,10 @@ class HomeContent extends Component {
                                   ? "0.00"
                                   : v.rate == 0
                                   ? "0.00"
-                                  : this.getFloat(v.rate * (v.BTC / 1e8), 6),
+                                  : this.getFloat(v.rate * (v.BTC / 1e8), 2),
                               icon: v.show_icon,
                               balance:
-                                v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6),
+                                v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 8),
                             },
                             () => {
                               window.sessionStorage.setItem(
@@ -495,7 +495,7 @@ class HomeContent extends Component {
                         <div className="rightAsset">
                           {visible ? (
                             <span>
-                              {v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 6)}
+                              {v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 8)}
                             </span>
                           ) : (
                             <span>******</span>

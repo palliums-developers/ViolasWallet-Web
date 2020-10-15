@@ -155,7 +155,7 @@ class Transfer extends Component {
                       .split("/")
                       [
                         this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -183,7 +183,7 @@ class Transfer extends Component {
                       .split("/")
                       [
                         this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 6) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -208,7 +208,7 @@ class Transfer extends Component {
     this.setState(
       {
         type: v,
-        balance: opinionType == 'btc' ? this.getFloat(bal / 1e8, 6) : this.getFloat(bal / 1e6, 6),
+        balance: opinionType == 'btc' ? this.getFloat(bal / 1e8, 8) : this.getFloat(bal / 1e6, 6),
         showDealType: false,
         coinName: name,
         ind: ind,
@@ -691,7 +691,7 @@ class Transfer extends Component {
                                     )[0] == "btc"
                                     ? v.BTC == 0
                                       ? 0
-                                      : this.getFloat(v.BTC / 1e8, 6)
+                                      : this.getFloat(v.BTC / 1e8, 8)
                                     : v.balance == 0
                                     ? 0
                                     : this.getFloat(v.balance / 1e6, 6)}{" "}

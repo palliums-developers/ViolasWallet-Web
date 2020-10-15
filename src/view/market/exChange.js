@@ -770,7 +770,7 @@ class ExChange extends Component {
     });
   };
   //输入选中的币种
-  showMenu = (v, bal, i) => {
+  showMenu = (v, bal, i,type) => {
     this.setState(
       {
         swap_in_name: v,
@@ -790,14 +790,14 @@ class ExChange extends Component {
         await this.setState({
           arr1: arr1,
         });
-        if (this.state.type == "BTC") {
+        if (type == "btc") {
           if (bal == "0") {
             this.setState({
               asset: "0.00",
             });
           } else {
             this.setState({
-              asset: this.getFloat(bal / 1e8, 6),
+              asset: this.getFloat(bal / 1e8, 8),
             });
           }
         } else {
@@ -990,7 +990,7 @@ class ExChange extends Component {
     });
   };
   //输出框选中的币种
-  showTypes = (v, address, ind, bal) => {
+  showTypes = (v, address, ind, bal,type) => {
     this.setState(
       {
         type1: v,
@@ -1013,14 +1013,14 @@ class ExChange extends Component {
         await this.setState({
           arr: arr,
         });
-        if (this.state.type1 == "BTC") {
+        if (type == "btc") {
           if (bal == "0") {
             this.setState({
               asset1: "0.00",
             });
           } else {
             this.setState({
-              asset1: this.getFloat(bal / 1e8, 6),
+              asset1: this.getFloat(bal / 1e8, 8),
             });
           }
         } else {
@@ -1155,7 +1155,10 @@ class ExChange extends Component {
                               key={i}
                               className={i == index ? "active" : null}
                               onClick={() =>
-                                this.showMenu(v.show_name, v.balance, i)
+                                this.showMenu(v.show_name, v.balance, i,v.icon.split("/")
+                                    [v.icon.split("/").length - 1].split(
+                                      "."
+                                    )[0])
                               }
                             >
                               {v.show_name}
@@ -1246,7 +1249,11 @@ class ExChange extends Component {
                                   v.show_name,
                                   v.address,
                                   i,
-                                  v.balance
+                                  v.balance,
+                                  v.icon.split("/")
+                                    [v.icon.split("/").length - 1].split(
+                                      "."
+                                    )[0]
                                 )
                               }
                             >
@@ -1257,16 +1264,17 @@ class ExChange extends Component {
                                     <h4>{v.show_name}</h4>
                                     <p>
                                       余额：
-                                      {v.show_name == "BTC"
-                                        ? v.balance == 0
-                                          ? 0
-                                          : this.getFloat(v.balance / 1e8, 6)
-                                        : v.balance == 0
-                                        ? 0
-                                        : this.getFloat(
-                                            v.balance / 1e6,
-                                            6
-                                          )}{" "}
+                                      {v.icon
+                                    .split("/")
+                                    [v.icon.split("/").length - 1].split(
+                                      "."
+                                    )[0] == "btc"
+                                    ? v.balance == 0
+                                      ? 0
+                                      : this.getFloat(v.balance / 1e8, 8)
+                                    : v.balance == 0
+                                    ? 0
+                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
                                       {v.show_name}
                                     </p>
                                   </div>
