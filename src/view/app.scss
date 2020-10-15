@@ -147,13 +147,13 @@ dd {
       padding-top: 30px;
       box-sizing: border-box;
       img {
-        width: 147px;
-        height: 23px;
+        width: 163px;
+        height: 27px;
       }
     }
     .app_link {
-      width: 675px;
-      height: 480px;
+      width: 50%;
+      // height:49%;
       background: url("/img/编组 3@2x.png") no-repeat;
       background-size: cover;
       background-position: 50%;
@@ -162,24 +162,26 @@ dd {
       display: flex;
       flex-direction: column;
       align-items: center;
+      border-radius: 10px;
       .link_logo {
         img {
-          width: 176px;
+          width: 200px;
           // height: 30px;
           margin-top: 77px;
           margin-bottom: 60px;
         }
       }
       .qrCode {
+        
         position: relative;
         cursor: pointer;
         canvas {
-          width: 153px !important;
-          height: 153px !important;
+          width:200px !important;
+          height:200px !important;
         }
         .dialog {
-          width: 153px;
-          height: 153px;
+          width: 200px;
+          height: 200px;
           background: rgba(255, 255, 255, 0.9);
           position: absolute;
           top: 0;
@@ -223,12 +225,14 @@ dd {
         margin-top: 15px;
       }
       > p {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 400;
         color: rgba(97, 91, 107, 1);
         // line-height:20px;
         // margin-bottom: 100px !important;
-        margin-top: 26px;
+        margin-top: 30px;
+        margin-bottom: 15%!important;
+
       }
     }
   }
@@ -2695,7 +2699,23 @@ dd {
   }
   
 }
-
+@media screen and (max-width:1440px){
+  .app .appContent .app_link{
+     width:670px;
+     .qrCode {
+        position: relative;
+        cursor: pointer;
+        canvas {
+          width: 153px !important;
+          height: 153px !important;
+        }
+        .dialog {
+          width:153px;
+          height: 153px;
+        }
+      }
+  }
+}
 @media screen and (max-height:1024px){
   .homePage{
     height: 100%!important;

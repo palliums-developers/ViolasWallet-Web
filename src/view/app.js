@@ -25,6 +25,7 @@ class App extends Component {
   }
   componentDidMount() {
     this.QRCode();
+    console.log('版本号:0.1.0！！！！！')
   }
   async componentWillMount() {
     let lang = intl.options.currentLocale;
