@@ -188,16 +188,15 @@ class Home extends React.PureComponent {
         <div className="box">
           <div className="boxHead">
             <div className="boxHeadList">
-              <div className="badge" onClick={()=>{
+              {/* <div className="badge" onClick={()=>{
                 this.props.history.push(
                   "/homepage/home/pushMessage"
                 );
               }}>
                 <Badge count={100}>
                   <img src="/img/编组 12@2x.png" />
-                  {/* <a href="#" className="head-example" /> */}
                 </Badge>
-              </div>
+              </div> */}
               <div className="mine">
                 {showMineDialog ? (
                   <img
