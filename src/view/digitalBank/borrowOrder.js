@@ -94,6 +94,7 @@ class BorrowOrder extends Component {
                         marginRight: "50px",
                         color: "rgba(112, 56, 253, 1)",
                         cursor: "pointer",
+                        whiteSpace:"nowrap"
                       }}
                     >
                       {val.name}
@@ -131,6 +132,7 @@ class BorrowOrder extends Component {
                         marginRight: "50px",
                         color: "rgba(112, 56, 253, 1)",
                         cursor: "pointer",
+                        whiteSpace:"nowrap"
                       }}
                     >
                       {val.name}
@@ -149,6 +151,7 @@ class BorrowOrder extends Component {
                       marginRight: "50px",
                       color: "rgba(112, 56, 253, 1)",
                       cursor: "pointer",
+                      whiteSpace:"nowrap"
                     }}
                   >
                     {val.name}

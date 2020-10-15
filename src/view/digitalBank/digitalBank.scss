@@ -976,7 +976,7 @@
       }
   .curSaveLists{
     width: 1071px;
-    min-height: 700px;
+    // min-height: 700px;
     background: #FFF;
     margin: 0 auto;
     margin-top: 17px;
@@ -1426,4 +1426,12 @@
        }
     }
   }
+}
+  @media screen and (max-width:1600px){
+  .borrowOrder,.saveOrder{
+    .curSaveLists{
+      width: 80%;
+    }
+  }
+  
 }
