@@ -12,8 +12,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      bridge: 'https://bridge.walletconnect.org',
-      // bridge: "https://walletconnect.violas.io",
+      // bridge: 'https://bridge.walletconnect.org',
+      bridge: "https://walletconnect.violas.io",
       walletConnector: {},
       session_id: "",
       status: 0,
