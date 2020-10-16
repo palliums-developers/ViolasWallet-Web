@@ -296,7 +296,7 @@ dd {
 
 //首页
 .home {
-  min-width: 1440px;
+  min-width: 1024px;
   height: 100%;
   display: flex;
   // flex-direction: column;
@@ -2716,10 +2716,23 @@ dd {
       }
   }
 }
+
+@media screen and (max-width:1050px){
+.home{
+    .content{
+      .contentWrap {
+          width: 700px;
+    }
+  }
+  }
+}
 @media screen and (max-height:1024px){
   .homePage{
     height: 100%!important;
   }
+  
+  
+  
   // .ant-drawer-content-wrapper {
   //   height: 100%!important;
   // }
