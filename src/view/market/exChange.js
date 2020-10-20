@@ -1094,7 +1094,7 @@ class ExChange extends Component {
       exchangeRate,
       focusActive,
     } = this.state;
-    // console.log(selData,'....')
+    // console.log(arr1,'....')
     return (
       <div className="exchange">
         <div className="exchangeContent">

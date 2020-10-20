@@ -104,26 +104,32 @@ class Transfer extends Component {
           this.setState({
             arr1: res.data.balances,
           },()=>{
-            // let arrs = this.state.arr1.concat(this.state.BTCArr);
-            // this.setState(
-            //   {
-            //     selData: arrs,
-            //   },
-            //   () => {
-            //     if (this.state.type == "") {
-            //       this.setState({
-            //         type: this.state.selData[0].show_name,
-            //         coinName: this.state.selData[0].name,
-            //         balance: this.state.selData[0].balance,
-            //         opinionType: this.state.selData[0].show_icon
-            //           .split("/")
-            //           [
-            //             this.state.selData[0].show_icon.split("/").length - 1
-            //           ].split(".")[0],
-            //       });
-            //     }
-            //   }
-            // );
+            if (this.state.arr2.length == 0) {
+            let arrs = this.state.arr1.concat(this.state.BTCArr);
+            this.setState(
+              {
+                selData: arrs,
+              },
+              () => {
+               if (this.state.type == "") {
+                  this.setState({
+                    type: this.state.selData[0].show_name,
+                    coinName: this.state.selData[0].name,
+                    balance: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                    opinionType: this.state.selData[0].show_icon
+                      .split("/")
+                      [
+                        this.state.selData[0].show_icon.split("/").length - 1
+                      ].split(".")[0],
+                  });
+                }
+              }
+            );
+          }
           });
         }
       });

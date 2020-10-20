@@ -119,16 +119,19 @@ class GetMoney extends Component {
             this.setState({
               arr1: res.data.balances
             }, () => {
-              // this.state.arr1.map((v, i) => {
-              //   if (v.show_name == 'LBR') {
-              //     v.show_name = 'VLS'
-              //   }
-              // })
-              if (this.state.type == "") {
-                this.setState({
-                  coinName: 'violas-' + res.data.balances[0].name.toLowerCase(),
-                })
-              }
+             if (this.state.arr2.length == 0) {
+              let newArr = this.state.arr1.concat(this.state.BTCBalances)
+              // console.log(newArr, '.....')
+              newArr.sort((a, b) => {
+                return b.balance - a.balance
+              })
+              this.setState({
+                arr: newArr,
+                type: newArr[0].show_name,
+                address: newArr[0].show_name == 'BTC' ? this.state.BTCAddress : newArr[0].address,
+                ind: Object.keys(newArr)[0]
+              })
+            }
             })
           }
         })
@@ -152,7 +155,7 @@ class GetMoney extends Component {
               })
             })
           } else {
-            if (this.state.arr2) {
+            if (this.state.arr1) {
               let newArr = this.state.arr1.concat(this.state.BTCBalances)
               // console.log(newArr, '.....')
               newArr.sort((a, b) => {

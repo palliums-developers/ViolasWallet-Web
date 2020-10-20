@@ -149,22 +149,66 @@ class HomeContent extends Component {
                                      arr1: this.state.arr1,
                                    },
                                    () => {
-                                     
-                                     // if (JSON.parse(window.sessionStorage.getItem("violas_Balances")).length<1) {
-                                     //      window.sessionStorage.setItem(
-                                     //        "init",
-                                     //        false
-                                     //      );
-                                     //     }else{
-                                     //     if(window.sessionStorage.getItem("init")=='true'){
-
-                                     //       window.sessionStorage.setItem("checkData", JSON.stringify(arr1));
-                                     //     }
-                                     //  }
-
-                                     
-                                   }
-                                 );
+                                     if (this.state.arr2.length == 0) {
+                                        let { arr1 } = this.state;
+                                        let arrs = arr1;
+                                        window.sessionStorage.setItem(
+                                          "violas_Balances",
+                                          JSON.stringify(arrs)
+                                        );
+                                        if (arr1) {
+                                          arrs.sort((a, b) => {
+                                            return b.balance - a.balance;
+                                          });
+                                          arrs.map((v, i) => {
+                                            if (v.name == "LBR") {
+                                              initCoinsList.push(v);
+                                            }
+                                          });
+                                          initCoinsList.map((v, i) => {
+                                            if (v.checked) {
+                                              //  return v;
+                                            } else {
+                                              Object.assign(v, {
+                                                checked: true,
+                                              });
+                                            }
+                                          });
+                                          let temp = JSON.parse(
+                                            window.sessionStorage.getItem("checkData")
+                                          );
+                                          //  console.log(arrs,'.......');
+                                          if (temp && arrs) {
+                                            for (let i = 0; i < temp.length; i++) {
+                                              for (let j = 0; j < arrs.length; j++) {
+                                                if (temp[i].show_icon.split("/")[temp[i].show_icon.split("/").length - 1].split(".")[0] == arrs[j].show_icon.split("/")[arrs[j].show_icon.split("/").length - 1].split(".")[0]) {
+                                                if (temp[i].name == arrs[j].name) {
+                                                  temp[i].balance = arrs[j].balance;
+                                                  break;
+                                                }
+                                                }
+                                              }
+                                            }
+                                            sessionStorage.setItem(
+                                              "checkData",
+                                              JSON.stringify(temp)
+                                            );
+                                          } else {
+                                            window.sessionStorage.setItem(
+                                              "checkData",
+                                              JSON.stringify(initCoinsList)
+                                            );
+                                          }
+                                          this.setState({
+                                            checkData: JSON.parse(
+                                              window.sessionStorage.getItem(
+                                                "checkData"
+                                              )
+                                            ),
+                                          });
+                                        }
+                                         }
+                                      });
                                });
                            }
                          );
