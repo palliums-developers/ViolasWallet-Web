@@ -103,10 +103,10 @@ class Home extends React.PureComponent {
     });
   }
   async logout() {
-    await this.state.walletConnector.killSession();
-    await this.getNewWalletConnect();
     window.localStorage.clear();
     window.sessionStorage.clear();
+    await this.state.walletConnector.killSession();
+    await this.getNewWalletConnect();
     this.props.history.push("/app");
   }
   changeLanguage(lang) {

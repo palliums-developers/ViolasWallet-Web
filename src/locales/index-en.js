@@ -162,7 +162,7 @@ export default {
   "For successful": "For successful",
   "For failure": "For failure",
   Address: "Address",
-
+ 'address error':'address error',
   "Input your wallet type": "Input your wallet type",
   "Access Code does not match,please Re_input":
     "Access Code does not match,please Re_input",
@@ -172,6 +172,8 @@ export default {
   "Please input nickname": "Please input nickname",
   "Please input Note": "Please input Note",
   "Please input address": "Please input address",
+  "Please input amount": "Please input amount",
+  "Insufficient available balance":'Insufficient available balance',
   Add: "Add",
 
   "Simplified Chinese": "Simplified Chinese",

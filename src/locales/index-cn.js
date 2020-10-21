@@ -173,6 +173,9 @@ export default {
   "Please input nickname": "请输入昵称",
   "Please input Note": "请填写备注",
   "Please input address": "请输入地址",
+  "Please input amount": "请输入数量",
+  "Insufficient available balance":'余额不足',
+  'address error':'地址错误',
   Add: "添加",
 
   "Simplified Chinese": "简体中文",

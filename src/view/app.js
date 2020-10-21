@@ -23,9 +23,21 @@ class App extends Component {
       uri: "",
     };
   }
-  componentDidMount() {
-    this.QRCode();
-    console.log('版本号:0.1.0！！！！！')
+  async componentDidMount() {
+    await this.logout();
+    await this.QRCode();
+    console.log('版本号:0.1.1！！！！！')
+  }
+  async logout() {
+    // await this.state.walletConnector.connected && this.state.walletConnector.killSession();
+    await this.state.walletConnector.killSession();
+    await this.setState({ walletConnector: {} });
+    await this.getNewWalletConnect();
+    // await sessionStorage.setItem("violas_address", "");
+    // await sessionStorage.setItem("bitcoin_address", "");
+    // await sessionStorage.setItem("libra_address", "");
+    await localStorage.clear();
+    await sessionStorage.clear();
   }
   async componentWillMount() {
     let lang = intl.options.currentLocale;

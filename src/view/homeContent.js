@@ -45,7 +45,9 @@ class HomeContent extends Component {
     }
 
     async componentWillMount(){
-      await this.getBalances();
+      if(window.sessionStorage.getItem("btc_address")){
+        this.getBalances();
+      }
     }
     componentDidMount(){
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){

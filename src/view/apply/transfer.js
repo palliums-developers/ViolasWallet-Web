@@ -274,7 +274,8 @@ class Transfer extends Component {
   };
   //输入警告
   addressWarn() {
-    if (this.state.type == "BTC") {
+    // console.log(this.state.opinionType)
+    if (this.state.opinionType == "btc") {
       let valid = WAValidator.validate(
         this.state.address,
         "bitcoin",
@@ -286,7 +287,7 @@ class Transfer extends Component {
         });
       } else {
         this.setState({
-          warning: "address error",
+          warning: intl.get("address error"),
         });
       }
     } else {
@@ -301,7 +302,7 @@ class Transfer extends Component {
       Number(this.state.balance)
     ) {
       this.setState({
-        warning: "Insufficient available balance",
+        warning: intl.get("Insufficient available balance"),
       });
     } else {
       this.setState({
@@ -469,11 +470,15 @@ class Transfer extends Component {
   getViolasNext = () => {
     if (this.state.address == "") {
       this.setState({
-        warning: "Please input address",
+        warning: intl.get("Please input address"),
       });
     } else if (this.state.amount == "") {
       this.setState({
-        warning: "Please input amount",
+        warning: intl.get("Please input amount"),
+      });
+    } else if (this.state.amount == "0") {
+      this.setState({
+        warning: intl.get("Please input amount"),
       });
     } else {
       if (
@@ -481,7 +486,7 @@ class Transfer extends Component {
         Number(this.state.balance)
       ) {
         this.setState({
-          warning: "Insufficient available balance",
+          warning: intl.get("Insufficient available balance"),
         });
       } else {
         this.setState({
@@ -496,11 +501,11 @@ class Transfer extends Component {
   getLibraNext = () => {
     if (this.state.address == "") {
       this.setState({
-        warning: "Please input address",
+        warning:  intl.get("Please input address"),
       });
     } else if (this.state.amount == "") {
       this.setState({
-        warning: "Please input amount",
+        warning: intl.get("Please input amount"),
       });
     } else {
       if (
@@ -508,7 +513,7 @@ class Transfer extends Component {
         Number(this.state.balance)
       ) {
         this.setState({
-          warning: "Insufficient available balance",
+          warning: intl.get("Insufficient available balance"),
         });
       } else {
        
@@ -525,11 +530,11 @@ class Transfer extends Component {
     console.log(this.state.amount,this.state.balance)
     if (this.state.address == "") {
       this.setState({
-        warning: "Please input address",
+        warning: intl.get("Please input address"),
       });
     } else if (this.state.amount == "") {
       this.setState({
-        warning: "Please input amount",
+        warning:  intl.get("Please input amount"),
       });
     } else {
       if (
@@ -537,7 +542,7 @@ class Transfer extends Component {
         Number(this.state.balance)
       ) {
         this.setState({
-          warning: "Insufficient available balance",
+          warning: intl.get("Insufficient available balance"),
         });
       } else {
         

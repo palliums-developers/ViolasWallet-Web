@@ -624,6 +624,7 @@ class CashPooling extends Component {
   };
   //获取输入换算数量
   opinionInputAmount = () => {
+    
     if (this.state.inputAmount) {
       fetch(
         url1 +
@@ -637,9 +638,10 @@ class CashPooling extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            console.log(res.data,'.......')
+            // console.log(res.data,'.......')
             this.setState({
               inputAmount1: res.data / 1e6,
+              rate:this.getFloat((res.data / 1e6) / this.state.inputAmount,6)
             });
           }
         });
@@ -661,6 +663,7 @@ class CashPooling extends Component {
           if (res.data) {
             this.setState({
               inputAmount: res.data / 1e6,
+              rate:this.getFloat(this.state.inputAmount1 / (res.data / 1e6),6)
             });
           }
         });
@@ -668,6 +671,12 @@ class CashPooling extends Component {
   };
   //获取输出换算数量
   opinionOutputAmount = () => {
+    // if(this.state.outputAmount == '0'){
+    //   this.setState({
+    //     outputAmount1:'',
+    //     rate:0
+    //   })
+    // }
     if (this.state.outputAmount) {
       fetch(
         url1 +
@@ -835,24 +844,43 @@ class CashPooling extends Component {
       });
   }
   showExchangeCode = () => {
-    if (this.state.inputAmount) {
-      if (this.state.inputAmount1) {
-        this.getAddLiquidity(sessionStorage.getItem("violas_chainId"));
-        this.setState({
-          warning: "",
-          focusActive: true,
-          showWallet: true,
-        });
-      } else {
-        this.setState({
-          warning: "请输入兑换数量",
-        });
-      }
-    } else {
+    if(this.state.name == '选择通证'){
       this.setState({
-        warning: "请输入兑换数量",
-      });
+          warning: "请选择通证",
+        });
+    }else if(this.state.type1 == '选择通证'){
+      this.setState({
+          warning: "请选择通证",
+        });
+    }else{
+      if(this.state.inputAmount == ''){
+        this.setState({
+          warning: "请输入输入数量",
+        });
+      }else if(this.state.inputAmount ==  '0'){
+        this.setState({
+          warning: "请输入输入数量",
+        });
+      }else if (this.state.inputAmount) {
+        if (this.state.inputAmount1) {
+          this.getAddLiquidity(sessionStorage.getItem("violas_chainId"));
+          this.setState({
+            warning: "",
+            focusActive: true,
+            showWallet: true,
+          });
+        } else if(this.state.inputAmount1 == ''){
+          this.setState({
+            warning: "请输入输入数量",
+          });
+        }else if(this.state.inputAmount1 == '0'){
+          this.setState({
+            warning: "请输入输入数量",
+          });
+        }
+      } 
     }
+    
   };
   //点击转出
   async getRemoveLiquidity(chainId) {
@@ -916,24 +944,39 @@ class CashPooling extends Component {
       });
   }
   showExchangeCode1 = () => {
-    if (this.state.outputAmount) {
-      if (this.state.outputAmount1) {
-        this.getRemoveLiquidity(sessionStorage.getItem("violas_chainId"));
-        this.setState({
-          warning: "",
-          focusActive: true,
-          showWallet: true,
+    if(this.state.type2 == '选择通证'){
+      this.setState({
+          warning: "请选择通证",
         });
+    }else{
+      if(this.state.outputAmount == ''){
+        this.setState({
+          warning: "请输入输出数量",
+        });
+      }else if(this.state.outputAmount ==  '0'){
+        this.setState({
+          warning: "请输入输出数量",
+        });
+      }else if (this.state.outputAmount) {
+        if (this.state.outputAmount1) {
+          this.getRemoveLiquidity(sessionStorage.getItem("violas_chainId"));
+          this.setState({
+            warning: "",
+            focusActive: true,
+            showWallet: true,
+          });
+        } else {
+          this.setState({
+            warning: "请输入兑换数量",
+          });
+        }
       } else {
         this.setState({
           warning: "请输入兑换数量",
         });
       }
-    } else {
-      this.setState({
-        warning: "请输入兑换数量",
-      });
     }
+    
   };
   closeWallet = (val) => {
     this.setState({
@@ -965,6 +1008,7 @@ class CashPooling extends Component {
       poolArr,
       focusActive,
     } = this.state;
+    // console.log(this.state.rate,'.......')
     return (
       <div className="exchange cashPooling">
         <div className="exchangeContent">
@@ -1374,7 +1418,7 @@ class CashPooling extends Component {
                 </div>
               )}
               <div className="changeRate">
-                兑换率：{this.state.rate == 0 ? "--" : '1:'+this.state.rate}
+                兑换率：{this.state.rate > 0 ? '1:'+this.state.rate : "--"}
               </div>
               {/* <div className="changeRate">当前资金池大小：— —</div> */}
               {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}

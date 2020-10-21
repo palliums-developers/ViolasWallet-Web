@@ -960,24 +960,32 @@ class ExChange extends Component {
   };
   //点击兑换
   showExchangeCode = () => {
-    if (this.state.inputAmount) {
-      if (this.state.outputAmount) {
-        this.getSwap();
-        this.setState({
-          warning: "",
-          focusActive: true,
-          showWallet: true,
+    // console.log(this.state.inputAmount,this.state.outputAmount)
+    if(this.state.type1 == '选择通证'){
+      this.setState({
+          warning: "请选择通证",
         });
-      } else {
+    }else{
+      if (this.state.inputAmount) {
+        if (this.state.outputAmount) {
+          this.getSwap();
+          this.setState({
+            warning: "",
+            focusActive: true,
+            showWallet: true,
+          });
+        } else if(this.state.outputAmount == '' || '0'){
+          this.setState({
+            warning: "请输入兑换数量",
+          });
+        }
+      } else  if(this.state.inputAmount == '' || '0'){
         this.setState({
           warning: "请输入兑换数量",
         });
       }
-    } else {
-      this.setState({
-        warning: "请输入兑换数量",
-      });
     }
+    
   };
   onClose = () => {
     this.setState({
@@ -1321,7 +1329,7 @@ class ExChange extends Component {
                   </div>
                 </div>
               </div>
-              {exchangeRate == "--" ? (
+              {exchangeRate == "--" || '0' ? (
                 <div className="changeRate">兑换率：--</div>
               ) : (
                 <div className="changeRate">兑换率：1:{exchangeRate}</div>
