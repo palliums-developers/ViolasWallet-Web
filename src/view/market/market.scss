@@ -60,7 +60,7 @@
                 line-height: 14px;
                 text-align: center;
                 border-radius:8px;
-                border:1px solid rgba(112,56,253,1);
+                border:0.5px solid rgba(112,56,253,1);
                 font-size:12px;
                 font-weight:400;
                 color:rgba(112,56,253,1);
@@ -223,7 +223,7 @@
             line-height:60px;
             font-weight:400;
             color:rgba(61,57,73,1);
-            border-bottom: 1px solid rgba(60, 56, 72, .2);
+            border-bottom:0.5px solid rgba(60, 56, 72, .2);
         }
         .listContent{
             display: flex;
@@ -272,7 +272,7 @@
                 justify-content: space-between;
                 align-items: center;
                 margin-left: 10px;
-                border-bottom:1px solid  rgba(224, 224, 224, 1);
+                border-bottom:0.5px solid  rgba(224, 224, 224, 1);
                 >label{
                     width:13px;
                     height:13px;

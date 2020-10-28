@@ -29,7 +29,7 @@ class GetMoney extends Component {
       }
     }
     getTypeShow = (event) => {
-      // this.stopPropagation(event)
+      this.stopPropagation(event)
       this.setState({
         showDealType: !this.state.showDealType
       })
@@ -83,8 +83,11 @@ class GetMoney extends Component {
       // }
       
     }
+    stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
     componentDidMount(){
-      // document.addEventListener('click', this.closeDialog);
+      document.addEventListener('click', this.closeDialog);
       if (window.sessionStorage.getItem("btc_address")){
         this.setState({
           BTCAddress: window.sessionStorage.getItem("btc_address")
@@ -190,9 +193,6 @@ class GetMoney extends Component {
         })
       }, 1000);
     };
-    // stopPropagation(e) {
-    //   e.nativeEvent.stopImmediatePropagation();
-    // }
     closeDialog = () => {
       this.setState({
         showDealType: false

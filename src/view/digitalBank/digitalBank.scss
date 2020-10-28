@@ -275,7 +275,7 @@
           width: 100% !important;
           height:48px;
           border-radius: 8px;
-          border: 1px solid rgba(194,194,194,1);
+          border: 0.5px solid rgba(194,194,194,1);
           padding-right: 10px;
           box-sizing: border-box;
           >input {
@@ -305,7 +305,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border:1px solid #7038FD;
+            border:0.5px solid #7038FD;
             font-size: 16px;
             font-weight: 400;
             color: #7038FD;
@@ -347,8 +347,8 @@
                         align-items: center;
                         border-radius: 4px;
                         img{
-                          width: 25px;
-                          height: 25px;
+                          width: 20px;
+                          height: 20px;
                           margin: 0 10px;
                         }
                         input{
@@ -387,7 +387,7 @@
                             align-items: center;
                             justify-content: space-between;
                             flex: 1;
-                            border-bottom: 1px solid rgba(224, 224, 224, 1);
+                            border-bottom:0.5px solid rgba(224, 224, 224, 1);
                             padding-bottom: 10px;
                             box-sizing: border-box;
                             h4{
@@ -457,7 +457,7 @@
         }
         .line{
             width:598px;
-            border-bottom: 1px dashed rgba(60, 56, 72, .2);
+            border-bottom: 0.5px dashed rgba(60, 56, 72, .2);
             margin: 0 auto;
             margin-top: 30px;
             margin-bottom: 24px;
@@ -546,7 +546,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    border-bottom: 1px solid rgba(224, 224, 224, 1);
+                    border-bottom: 0.5px solid rgba(224, 224, 224, 1);
                     div{
                         display: flex;
                         flex-direction: column;
@@ -708,13 +708,13 @@
           outline: 0;
           border: 0;
           margin-top: 8px;
-          border-bottom: 1px solid rgba(222, 222, 222, 1);
+          border-bottom: 0.5px solid rgba(222, 222, 222, 1);
         }
         ::-webkit-input-placeholder{
           color: rgba(222, 222, 222, 1);
         }
         .activeInput{
-          border-bottom: 1px solid rgba(229, 64, 64, 1);
+          border-bottom: 0.5px solid rgba(229, 64, 64, 1);
 
         }
         .saveDetailsShow{
@@ -762,7 +762,7 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-bottom: 1px solid rgba(222, 222, 222, 1);
+          border-bottom:0.5px solid rgba(222, 222, 222, 1);
           label{
             font-size:14px;
             font-weight:400;
@@ -950,6 +950,7 @@
 //存款订单
 .borrowOrder,.saveOrder{
   width: 100%;
+  
   .ant-breadcrumb {
           display: flex;
           align-items: center;
@@ -1004,7 +1005,15 @@
     .saveDetail{
       .selector{
         margin-top: 40px;
-        
+        .ant-picker:hover, .ant-picker-focused{
+          border-color:#7038fd!important;
+        }
+        .ant-picker-input > input:hover {
+          border-color:#7038fd!important;
+        }
+        .ant-picker-range .ant-picker-active-bar{
+          background:#7038fd;
+        }
         .ant-select{
           margin-left:20px;
         }
@@ -1024,6 +1033,9 @@
           outline: 0;
           margin-left: 20px;
           cursor: pointer;
+        }
+        .btn:hover{
+          background:rgba(112, 56, 253, .85);
         }
       }
     }
@@ -1122,7 +1134,7 @@
             width: 100%;
             height: 49px;
             border-radius:3px;
-            border:1px solid rgba(222,222,222,1);
+            border:0.5px solid rgba(222,222,222,1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1236,6 +1248,26 @@
         }
       }
     }
+}
+//日历列表
+.ant-picker-dropdown{
+  .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before{
+   border:1px solid #7038fd;
+  }
+  
+  .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner, .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner, .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner{
+    background:#7038fd;
+  }
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner{
+    background:rgba(112, 56, 253, .2);
+  }
+  .ant-btn-primary{
+    background: #7038fd;
+    border:0;
+  }
+  .ant-btn-primary:hover{
+    background:rgba(112, 56, 253, .85);
+  }
 }
 //借款
 .borrowDetails{
@@ -1430,23 +1462,65 @@
   @media screen and (max-width:1600px){
   .borrowOrder,.saveOrder{
     .curSaveLists{
-      width: 80%;
+      width: 90%;
     }
   }
   
 }
+@media screen and (max-width:1315px){
+  .ant-space{
+    width: 300px;
+  }
+  .ant-select{
+    width: 160px!important;
+    
+  }
+  .borrowOrder .curSaveLists .saveDetail .selector, .saveOrder .curSaveLists .saveDetail .selector {
+    .ant-select{
+      margin-left: 15px;
+    }
+    .btn{
+      margin-left: 15px;
+    }
+  }
+}
+
 @media screen and (max-width:1200px){
+  .borrowOrder,.saveOrder{
+    .curSaveLists{
+      width: 95%;
+    }
+  }
   .digitalBankPage{
     width: 800px;
   }
 }
 @media screen and (max-width:1100px){
+  .ant-space{
+    width: 280px;
+  }
+  .ant-select{
+    width: 150px!important;
+    
+  }
+  .borrowOrder .curSaveLists .saveDetail .selector, .saveOrder .curSaveLists .saveDetail .selector {
+    .ant-select{
+      margin-left: 12px;
+    }
+    .btn{
+      margin-left: 12px;
+    }
+  }
   .digitalBankPage{
     width: 750px;
   }
 }
 @media screen and (max-width:1030px){
+  
   .digitalBankPage{
     width: 720px;
   }
+}
+@media screen and (max-width:1024px){
+  
 }

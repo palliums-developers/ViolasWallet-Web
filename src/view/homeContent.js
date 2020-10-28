@@ -43,13 +43,16 @@ class HomeContent extends Component {
         init:false
       }
     }
-
+    stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
     async componentWillMount(){
       if(window.sessionStorage.getItem("btc_address")){
         this.getBalances();
       }
     }
     componentDidMount(){
+      document.addEventListener('click', this.onClose);
       if (JSON.parse(window.localStorage.getItem("wallet_info"))){
         this.setState({
           addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
@@ -403,14 +406,16 @@ class HomeContent extends Component {
     }
     onClose = () => {
       this.setState({
-        display1:false
-      })
-    };
-    onClose1 = () => {
-      this.setState({
+        display:false,
+        display1:false,
         display2: false
       })
     };
+    // onClose1 = () => {
+    //   this.setState({
+    //     display2: false
+    //   })
+    // };
     getInitTotal = (val) =>{
       this.setState({
         totalAmount:val
@@ -491,9 +496,10 @@ class HomeContent extends Component {
                 <p>
                   <label>{intl.get("Funds")}</label>
                   <i
-                    onClick={() => {
+                    onClick={(e) => {
+                      this.stopPropagation(e)
                       this.setState({
-                        display: !this.state.display,
+                        display: true
                       });
                       // this.props.showPolling(!this.props.display);
                     }}
@@ -507,7 +513,8 @@ class HomeContent extends Component {
                       <div
                         className="assetListsEvery"
                         key={i}
-                        onClick={() => {
+                        onClick={(e) => {
+                          this.stopPropagation(e)
                           this.setState(
                             {
                               display1: !this.state.display1,
@@ -576,7 +583,8 @@ class HomeContent extends Component {
                                 : { display: "flex" }
                             }
                             key={i}
-                            onClick={() => {
+                            onClick={(e) => {
+                              this.stopPropagation(e)
                               this.setState(
                                 {
                                   display1: !this.state.display1,

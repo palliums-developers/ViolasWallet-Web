@@ -35,19 +35,19 @@ class MyPoolDialog extends Component {
         // console.log(poolList,'.......')
         return (
             <div className="myPoolDialog">
-                <h4 onClick={() => this.showPolling()}><i><img src="/img/编组备份 3@2x.png" /></i>我的资金池</h4>
+                <h4 onClick={() => this.props.showDrawer1(false)}><i><img src="/img/编组备份 3@2x.png" /></i>我的资金池</h4>
                 <div className="amountShow">
                   <p>资金池资产</p>
-                  <p><span>{total_token / 1e6}</span>Violas</p>
+                  <p><span>{total_token / 1e6}</span></p>
                 </div>
                 <div className="btns">
                     <button onClick={()=>{
                         window.sessionStorage.setItem('curDealType', '转入')
-                        this.showPolling()
+                        this.props.showDrawer1(false)
                     }}>转入</button>
                     <button onClick={() => {
                         window.sessionStorage.setItem('curDealType', '转出')
-                        this.showPolling()
+                        this.props.showDrawer1(false)
                     }}>转出</button>
                 </div>
                 <div className="list">

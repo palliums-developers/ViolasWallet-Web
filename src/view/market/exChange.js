@@ -69,8 +69,11 @@ class ExChange extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
   componentDidMount() {
-    // document.addEventListener('click', this.closeMenu);
+    document.addEventListener('click', this.onClose);
     // this.getSelectTypes()
     this.getExchangeRecode();
     if (window.sessionStorage.getItem("btc_address")) {
@@ -1175,16 +1178,6 @@ class ExChange extends Component {
                         })}
                       </div>
                     ) : null}
-                    {/* {
-                                        showMenuViolas ? <div className='dropdown-content1'>
-                                                {
-                                                    names.map((v, i) => {
-                                                        return <span key={i} className={name == v ? 'active' : null} onClick={() => this.showMenu(v)}>{v}</span>
-                                                    })
-                                                }
-                                            </div> : null
-                                    }
-                                     */}
                   </div>
                 </div>
               </div>
@@ -1360,7 +1353,8 @@ class ExChange extends Component {
                     <div
                       className="changeList"
                       key={i}
-                      onClick={() => {
+                      onClick={(e) => {
+                        this.stopPropagation(e)
                         this.setState({
                           visible: true,
                           changeList: v,
@@ -1459,33 +1453,6 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        // showDialog: () => {
-        //     dispatch({
-        //         type: 'EXCHANGE',
-        //         params: {
-        //             type: true,
-        //             vis: true
-        //         }
-        //     })
-        // },
-        //     showDrawer:(type) => {
-        //         dispatch({
-        //             type: 'VISIBLE',
-        //             payload: !type
-        //         })
-        //    },
-        // showDrawer1: () => {
-        //     dispatch({
-        //         type: 'VISIBLE1',
-        //         payload: false
-        //     })
-        // },
-        // showPolling: () => {
-        //     dispatch({
-        //         type: 'SHOWPOOL',
-        //         payload: false
-        //     })
-        // }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ExChange);

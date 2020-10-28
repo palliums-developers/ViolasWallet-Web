@@ -32,7 +32,11 @@ class DigitalBankPage extends Component {
             yesterday: 0.00
         }
     }
+    stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
     componentDidMount() {
+        document.addEventListener('click', this.closeDialog);
         //账户信息
         fetch(url + "/1.0/violas/bank/account/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
             if (res.data){
@@ -65,6 +69,11 @@ class DigitalBankPage extends Component {
             }
         })
     }
+    closeDialog = () => {
+      this.setState({
+        visible1: false
+      })
+    }
     getMarketType = (i) =>{
       this.setState({
           ind:i
@@ -93,7 +102,8 @@ class DigitalBankPage extends Component {
                         </i>
                         </p> 
                         <div className="dropdown">
-                            <span onClick={()=>{
+                            <span onClick={(e)=>{
+                                this.stopPropagation(e)
                                 this.setState({
                                     visible1:!this.state.visible1
                                 })

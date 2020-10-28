@@ -60,6 +60,9 @@ class Transfer extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
     if (window.sessionStorage.getItem("btc_address")) {
@@ -204,7 +207,7 @@ class Transfer extends Component {
       });
   }
   getTypeShow = (event) => {
-    // this.stopPropagation(event);
+    this.stopPropagation(event);
     this.setState({
       showDealType: !this.state.showDealType,
     });
@@ -226,11 +229,11 @@ class Transfer extends Component {
       }
     );
   };
-  // closeDialog = () => {
-  //   this.setState({
-  //     showDealType: false,
-  //   });
-  // };
+  closeDialog = () => {
+    this.setState({
+      showDealType: false,
+    });
+  };
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
   }

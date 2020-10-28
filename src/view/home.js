@@ -2,10 +2,7 @@ import React, { Component,PureComponent } from "react";
 import "./app.scss";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
-import { Drawer, Badge } from "antd";
-import { BellOutlined } from "@ant-design/icons";
-import ExchangeDialog from './market/exchangeDialog'
-import MyPoolDialog from './market/myPoolDialog'
+
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 let url = "https://api.violas.io";
@@ -38,9 +35,15 @@ class Home extends React.PureComponent {
   getMineDialog = (event) => {
     // event.stopPropagation();
     this.setState({
-      showMineDialog: !this.state.showMineDialog,
+      showMineDialog: !this.state.showMineDialog
     });
   };
+  // getMineDialog1 = (event) => {
+  //   // event.stopPropagation();
+  //   this.setState({
+  //     showMineDialog: false
+  //   });
+  // };
   // shouldComponentUpdate(nextProps,nextState) {
   //   return nextProps.location !== this.props.location;
   // }
@@ -324,18 +327,7 @@ class Home extends React.PureComponent {
           <RouterView routes={routes}></RouterView>
         </div>
 
-        {/* 我的资金池 */}
-        <Drawer
-          // title="Basic Drawer"
-          placement="right"
-          closable={false}
-          // onClose={this.onClose}
-          mask={false}
-          visible={this.props.showpooling}
-          getContainer={false}
-        >
-          <MyPoolDialog></MyPoolDialog>
-        </Drawer>
+        
       </div>
     );
   }

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavLink } from 'react-router-dom'
 import "../app.scss";
 import { connect } from 'react-redux';
 import { timeStamp2String } from '../../utils/timer';
@@ -9,6 +8,7 @@ import { bytes2StrHex, string2Byte } from '../../utils/trans'
 import code_data from '../../utils/code.json';
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
+import MyPoolDialog from '../market/myPoolDialog'
 import intl from "react-intl-universal";
 // import RouterView from '../router/routerView'
 // let url = "http://52.27.228.84:4000"
@@ -24,6 +24,7 @@ class CashPooling extends Component {
       showMenuViolas: false,
       showMenuViolas1: false,
       showMenuViolas2: false,
+      showpooling:false,
       names: ["Violas", "Libra", "Bitcoin"],
       types: ["转入", "转出"],
       type: "转入",
@@ -66,10 +67,14 @@ class CashPooling extends Component {
       coin_b_value: "",
       focusActive: false,
       showWallet: false,
-      rate:0
+      rate:0,
+      showMineDialog:false
       // visible:false
     };
   }
+  stopPropagation(e) {
+        e.nativeEvent.stopImmediatePropagation();
+    }
   async componentWillMount() {
     if (this.props.visible) {
       this.props.showDrawer();
@@ -82,7 +87,7 @@ class CashPooling extends Component {
     });
   }
   componentDidMount() {
-    // document.addEventListener('click', this.closeMenu);
+    document.addEventListener('click', this.onClose);
     // this.getSelectTypes()
     if (!window.sessionStorage.getItem("curDealType")) {
       window.sessionStorage.setItem("curDealType", this.state.type);
@@ -236,9 +241,6 @@ class CashPooling extends Component {
   //     this.setState({
   //         showMenuViolas: false
   //     })
-  // }
-  // stopPropagation(e) {
-  //     e.nativeEvent.stopImmediatePropagation();
   // }
 
   showType = (v) => {
@@ -615,11 +617,24 @@ class CashPooling extends Component {
   onClose = () => {
     this.setState({
       visible1: false,
+      showpooling: false,
     });
   };
+  // onClose1 = () => {
+  //   // e.stopPropagation()
+  //   this.setState({
+  //     showpooling: false,
+  //   });
+  // };
   showDrawer = (type) => {
     this.setState({
       visible1: type,
+    });
+  };
+  showDrawer1 = (type) => {
+    // console.log(type)
+    this.setState({
+      showpooling: type,
     });
   };
   //获取输入换算数量
@@ -983,6 +998,18 @@ class CashPooling extends Component {
       showWallet: val,
     });
   };
+  getMineDialog = (event) => {
+    // event.stopPropagation();
+    this.setState({
+      showMineDialog: true
+    });
+  };
+  getMineDialog1 = (event) => {
+    // event.stopPropagation();
+    this.setState({
+      showMineDialog: false
+    });
+  };
   render() {
     let {
       names,
@@ -1012,11 +1039,16 @@ class CashPooling extends Component {
     return (
       <div className="exchange cashPooling">
         <div className="exchangeContent">
-          {this.props.showpooling ? (
+          {this.state.showMineDialog ? (
             <div
               className="minePool poolClick"
-              onClick={() => {
-                this.props.showPolling(!this.props.showpooling);
+              onMouseOver={(e) => this.getMineDialog(e)}
+              onMouseOut={(e) => this.getMineDialog1(e)}
+              onClick={(e) => {
+                this.stopPropagation(e)
+                this.setState({
+                  showpooling:true
+                })
               }}
             >
               <img src="/img/形状备份 2@2x.png" />
@@ -1025,8 +1057,13 @@ class CashPooling extends Component {
           ) : (
             <div
               className="minePool"
-              onClick={() => {
-                this.props.showPolling(!this.props.showpooling);
+              onMouseOver={(e) => this.getMineDialog(e)}
+              onMouseOut={(e) => this.getMineDialog1(e)}
+              onClick={(e) => {
+                this.stopPropagation(e)
+                this.setState({
+                  showpooling:false
+                })
               }}
             >
               <img src="/img/形状 2@2x.png" />
@@ -1578,6 +1615,18 @@ class CashPooling extends Component {
             changeList={this.state.changeList}
           ></PoolingDetail>
         </Drawer>
+        {/* 我的资金池 */}
+        <Drawer
+          // title="Basic Drawer"
+          placement="right"
+          closable={false}
+          onClose={this.onClose1}
+          mask={false}
+          visible={this.state.showpooling}
+          getContainer={false}
+        >
+          <MyPoolDialog showDrawer1={this.showDrawer1}></MyPoolDialog>
+        </Drawer>
         {this.state.showWallet ? (
           <WalletconnectDialog
             getCloseWallet={this.closeWallet}
@@ -1602,24 +1651,24 @@ let mapDispatchToProps = (dispatch) => {
                 }
             })
         },
-        showPolling: (payload) => {
-            dispatch({
-                type: 'SHOWPOOL',
-                payload: payload
-            })
-        },
-        showDrawer: () => {
-            dispatch({
-                type: 'VISIBLE',
-                payload: false
-            })
-        },
-        showDrawer1: (type) => {
-            dispatch({
-                type: 'VISIBLE1',
-                payload: !type
-            })
-        }
+        // showPolling: (payload) => {
+        //     dispatch({
+        //         type: 'SHOWPOOL',
+        //         payload: payload
+        //     })
+        // },
+        // showDrawer: () => {
+        //     dispatch({
+        //         type: 'VISIBLE',
+        //         payload: false
+        //     })
+        // },
+        // showDrawer1: (type) => {
+        //     dispatch({
+        //         type: 'VISIBLE1',
+        //         payload: !type
+        //     })
+        // }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CashPooling);

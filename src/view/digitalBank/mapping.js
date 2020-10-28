@@ -52,6 +52,9 @@ class DigitalBank extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+  }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
     this.getMappingRecord();
@@ -87,9 +90,11 @@ class DigitalBank extends Component {
         });
       });
   };
-  stopPropagation(e) {
-    e.nativeEvent.stopImmediatePropagation();
-  }
+  closeDialog = () => {
+      this.setState({
+        showDealType: false
+      })
+    }
   //获取币种信息 切换币种
   getMappingInfo() {
     fetch(url + "/1.0/mapping/address/info")
