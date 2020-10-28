@@ -1275,6 +1275,9 @@ dd {
             cursor: pointer;
             text-align: center;
           }
+          span:hover{
+            background: #FFF;
+          }
           .active{
              background: #FFF;
           }

@@ -1,13 +1,14 @@
-import React, { Component,PureComponent } from "react";
+import React from "react";
 import "./app.scss";
 import { connect } from 'react-redux'
 import RouterView from '../router/routerView'
-
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
+import Head from './components/head'
+import LangPage from './components/langPage'
 let url = "https://api.violas.io";
 
-//首页 包括左侧栏，头部我的
+//首页
 class Home extends React.PureComponent {
   constructor(props) {
     super();
@@ -17,18 +18,6 @@ class Home extends React.PureComponent {
       walletConnector: {},
       active: "",
       showMineDialog: false,
-      changeLang: false,
-      changeLangLists: [
-        {
-          local: "简体中文",
-          lang: "CN",
-        },
-        {
-          local: "English",
-          lang: "EN",
-        },
-      ],
-      local: "",
       ind: 0,
     };
   }
@@ -48,19 +37,6 @@ class Home extends React.PureComponent {
   //   return nextProps.location !== this.props.location;
   // }
   async componentWillMount() {
-    intl.options.currentLocale = localStorage.getItem("local");
-    let lang = intl.options.currentLocale;
-    switch (lang) {
-      case "zh":
-        this.setState({ local: "简体中文", ind: 0 });
-        break;
-      case "CN":
-        this.setState({ local: "简体中文", ind: 0 });
-        break;
-      default:
-        this.setState({ local: "English", ind: 1 });
-        break;
-    }
     await this.getNewWalletConnect();
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
@@ -112,14 +88,10 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     this.props.history.push("/app");
   }
-  changeLanguage(lang) {
-    intl.options.currentLocale = lang;
-    this.forceUpdate();
-  }
+
   render() {
     let { routes } = this.props;
-    let { active, showMineDialog, local, changeLangLists } = this.state;
-    // console.log(showMineDialog, "..........");
+    let { active } = this.state;
     return (
       <div className="home">
         {/* <div style={{position:'absolute'}}>log out</div> */}
@@ -200,128 +172,10 @@ class Home extends React.PureComponent {
                   <img src="/img/编组 12@2x.png" />
                 </Badge>
               </div> */}
-              <div className="mine">
-                {showMineDialog ? (
-                  <img
-                    onClick={(e) => this.getMineDialog(e)}
-                    src="/img/wode备份 3@2x.png"
-                  />
-                ) : (
-                  <img
-                    onClick={(e) => this.getMineDialog(e)}
-                    src="/img/wode备份 2@2x.png"
-                  />
-                )}
-                {showMineDialog ? (
-                  <div className="mineList">
-                    <div className="balanceList">
-                      <div
-                        className="balance"
-                        onClick={() => {
-                          this.props.history.push("/homepage/home");
-                        }}
-                      >
-                        <label>{intl.get("Total assets")}($)</label>
-                        <span>
-                          {window.sessionStorage.getItem("balances")
-                            ? this.getFloat(
-                                window.sessionStorage.getItem("balances"),
-                                2
-                              )
-                            : "0"}
-                        </span>
-                      </div>
-                      <div className="icon">
-                        <img src="/img/Combined Shape 2@2x.png" />
-                      </div>
-                    </div>
-                    <div className="btns">
-                      <dl
-                        onClick={() => {
-                          this.props.history.push({
-                            pathname: "/homepage/home/transfer",
-                          });
-                        }}
-                        className={active == "transfer" ? "act" : null}
-                      >
-                        <dt>
-                          <img src="/img/编组 13备份 4@2x.png" />
-                        </dt>
-                        <dd>{intl.get("Transfer")}</dd>
-                      </dl>
-                      <dl
-                        onClick={() => {
-                          this.props.history.push({
-                            pathname: "/homepage/home/getMoney",
-                          });
-                        }}
-                        className={active == "getMoney" ? "act" : null}
-                      >
-                        <dt>
-                          <img src="/img/编组 13备份 5@2x.png" />
-                        </dt>
-                        <dd>{intl.get("Receive")}</dd>
-                      </dl>
-                    </div>
-                    <p onClick={() => this.logout()}>
-                      <img src="/img/tuichu 2@2x.png" />
-                      {intl.get("Logout")}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
+             <Head></Head>
               {/* <span>Download</span> */}
-
-              <div className="changeLangList">
-                {this.state.changeLang ? (
-                  <div
-                    className="changeLang changeLangAct"
-                    onClick={() => {
-                      this.setState({
-                        changeLang: !this.state.changeLang,
-                      });
-                    }}
-                  >
-                    <label>{local}</label>
-                    <img src="/img/qiehuan-2 2@2x (1).png" />
-                  </div>
-                ) : (
-                  <div
-                    className="changeLang"
-                    onClick={() => {
-                      this.setState({
-                        changeLang: !this.state.changeLang,
-                      });
-                    }}
-                  >
-                    <label>{local}</label>
-                    <img src="/img/qiehuan-2 2@2x.png" />
-                  </div>
-                )}
-                {this.state.changeLang ? (
-                  <div className="changeLangLists">
-                    {changeLangLists.map((v, i) => {
-                      return (
-                        <span
-                          key={i}
-                          className={i == this.state.ind ? "active" : ""}
-                          onClick={() => {
-                            this.changeLanguage(v.lang);
-                            localStorage.setItem("local", v.lang);
-                            this.setState({
-                              local: v.local,
-                              ind: i,
-                              changeLang: false,
-                            });
-                          }}
-                        >
-                          {v.local}
-                        </span>
-                      );
-                    })}
-                  </div>
-                ) : null}
-              </div>
+             <LangPage></LangPage>
+              
             </div>
           </div>
           <RouterView routes={routes}></RouterView>
