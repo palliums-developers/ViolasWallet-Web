@@ -91,11 +91,10 @@ class App extends React.Component {
     
   }
   componentWillMount(){
-    
     this.setState({
-      id:rndNum(100),
-      address:this.props.location.state.address
-    })
+      id: rndNum(100),
+      address: this.props.location.search.split("=")[1],
+    });
     registerHandler("calljs", (data, responseCallback) => {
       console.log("from native to js " + data);
       this.setState({

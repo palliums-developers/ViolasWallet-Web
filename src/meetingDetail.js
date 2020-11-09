@@ -51,7 +51,7 @@ class MeetingDetail extends Component {
     this.setState(
       {
         id: rndNum(100),
-        ip_id: this.props.location.state.ipid,
+        ip_id: this.props.location.search.split("=")[1],
       },
       () => {
         this.getDetails();
