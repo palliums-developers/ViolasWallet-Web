@@ -127,9 +127,9 @@ class App extends React.Component {
   };
   //向移动端发起请求 验证密码
   onDone = (msg) => {
-    alert(msg,'msg.......')
+    alert(JSON.stringify(msg), "msg.......");
     callHandler("testCall", JSON.stringify(msg),(resp)=> {
-      // alert(resp)
+    alert(resp)
         if(resp === 'success'){
           this.getSubmit()
         }
