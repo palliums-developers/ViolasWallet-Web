@@ -111,7 +111,7 @@ class MeetingDetail extends Component {
     if (e == "yes") {
 
       callHandler(
-        "testCall",
+        "callNative",
         JSON.stringify({
           id: this.state.id,
           method: "checkAuthorize",
@@ -215,7 +215,7 @@ class MeetingDetail extends Component {
   };
   //向移动端发起请求 验证密码
   onDone = (msg) => {
-    callHandler("testCall", JSON.stringify(msg), (resp) => {
+    callHandler("callNative", JSON.stringify(msg), (resp) => {
       // alert(resp)
       if (resp === "success") {
         this.ipverifyFun({

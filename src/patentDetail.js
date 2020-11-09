@@ -77,7 +77,7 @@ class PatentDetail extends Component {
   };
   //向移动端发起支付请求
   onDone = (msg) => {
-    callHandler("testCall", JSON.stringify(msg), (resp) => {
+    callHandler("callNative", JSON.stringify(msg), (resp) => {
       if (resp === "success") {
         this.payTokenFun({
           id: this.state.id,
@@ -99,7 +99,7 @@ class PatentDetail extends Component {
   };
   //支付代币:
   payTokenFun = (msg) => {
-    callHandler("testCall", JSON.stringify(msg), (resp) => {
+    callHandler("callNative", JSON.stringify(msg), (resp) => {
       if (resp === "success") {
         message.success("支付成功");
       } else {
@@ -109,7 +109,7 @@ class PatentDetail extends Component {
   };
   //Publish 代币
   publishTokenFun = (msg) => {
-    callHandler("testCall", JSON.stringify(msg), (resp) => {
+    callHandler("callNative", JSON.stringify(msg), (resp) => {
       if (resp === "success") {
         message.success("Publish 成功");
       } else {
@@ -120,7 +120,7 @@ class PatentDetail extends Component {
   //转让IP
   tranferIPFun = () =>{
     callHandler(
-      "testCall",
+      "callNative",
       JSON.stringify({
         id: this.state.id,
         method: "assignmentIP",
