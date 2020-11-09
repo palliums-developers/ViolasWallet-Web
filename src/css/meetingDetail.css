@@ -1,0 +1,184 @@
+.meetingDetail{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #F7F7F7;
+    overflow: auto;
+}
+.meetingDetail .head{
+    width: 100%;
+    padding: 20px 24px;
+    box-sizing: border-box;
+}
+.meetingDetail .head p{
+    display: flex;
+    justify-content: space-between;
+}
+.meetingDetail .head p label{
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+}
+.meetingDetail .head p span{
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+.meetingDetail .head p span.orgColor{
+    color: rgba(251, 143, 11, 1);
+}
+.meetingDetail .head p span.redColor{
+    color: rgba(229, 64, 64, 1);
+}
+.meetingDetail .patentList{
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 32px 32px 8px 8px;
+    padding: 0 24px;
+    padding-top: 12px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+.meetingDetail .patentList p{
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid rgba(222, 222, 222, 1);
+    margin-bottom: 0!important;
+}
+.meetingDetail .patentList p:nth-child(3){
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 0;
+}
+.meetingDetail .patentList p:nth-child(3) .am-textarea-item{
+    width: 100%;
+}
+.meetingDetail .patentList p:nth-child(3) .am-textarea-item textarea{
+    height: auto;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+    padding-right: 12px;
+    box-sizing: border-box;
+}
+.am-textarea-control textarea{
+    line-height: 23px;
+}
+.meetingDetail .patentList p:nth-child(3) label{
+    height: 50px;
+    line-height: 50px;
+}
+.meetingDetail .patentList p label{
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
+}
+.meetingDetail .patentList p span{
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+}
+.meetingDetail .btnList{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.meetingDetail .btnList .noBtn .btns{
+    width: 167px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid #999999;
+    font-size: 14px;
+    font-weight: 500;
+    color: #272728;
+    background: #FFF;
+    margin-left: -10px;
+    margin-bottom: 0;
+}
+.meetingDetail .btnList .yesBtn .btns{
+    width: 167px;
+    height: 40px;
+    background: #272727;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+    margin-left: 10px;
+    margin-bottom: 0;
+}
+.am-list-item.descr textarea{
+    width: 100%;
+    height: auto;
+    background: #FFF!important;
+    font-size: 14px;
+    padding-top: 10px;
+}
+.am-modal-body .ant-form-item{
+   display: flex;
+   align-items: center;
+}
+.am-modal-body .ant-form-item-label > label{
+
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+}
+.am-modal-body .ant-form-item .ant-select{
+   width: 171px;
+   height: 40px;
+   /* display: flex;
+   align-items: center; */
+}
+.ant-select-selection-item{
+    display: flex;
+    align-items: flex-start;
+}
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+    height: 40px;
+    border-radius: 8px;
+    background-color: transparent;
+}
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input{
+    height: 40px;
+    line-height: 40px;
+}
+.ant-select-single .ant-select-selector .ant-select-selection-item, .ant-select-single .ant-select-selector .ant-select-selection-placeholder{
+    line-height: 40px;
+}
+.am-modal-body .ant-form-item.pass{
+    /* display: flex; */
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.am-modal-body .ant-form-item.pass .ant-input{
+    width: 240px;
+    height: 48px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 0;
+}
+
+@media (max-width: 575px){
+.ant-form .ant-form-item .ant-form-item-label, .ant-form .ant-form-item .ant-form-item-control{
+    flex:1;
+}
+.ant-form-item .ant-form-item-label {
+    
+    padding: 0;
+}
+}
+@media (max-width:321px){
+.meetingDetail .btnList .noBtn .btns{
+    width: 140px;
+}
+.meetingDetail .btnList .yesBtn .btns{
+    width: 140px;
+}
+}
