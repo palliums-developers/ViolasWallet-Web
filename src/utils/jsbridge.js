@@ -37,7 +37,7 @@ function setupWebViewJavascriptBridge(callback) {
       return window.WKWVJBCallbacks.push(callback);
     }
     window.WKWVJBCallbacks = [callback];
-    // window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
+    window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
   }
 }
 setupWebViewJavascriptBridge(function (bridge) {
@@ -68,7 +68,6 @@ function registerHandler(funName, callback) {
 
 // 调用手机的方法
 function callHandler(funName, dataJson, callback) {
-  alert('111')
   setupWebViewJavascriptBridge(function (bridge) {
     alert(JSON.stringify(bridge),"222");
     bridge.callHandler(funName, dataJson, function (response) {
