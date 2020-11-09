@@ -44,7 +44,7 @@
 .am-list-item .am-input-control input{
     font-size: 14px;
     font-weight: 400;
-    color: #BABABA;
+    /* color: #BABABA; */
     text-align: right;
 }
 .am-list-item .am-input-control input::-webkit-input-placeholder{

@@ -55,6 +55,7 @@ class InputEdit extends React.Component {
         type={type}
         placeholder={placeholder}
         clear={false}
+        maxLength="20"
         onChange={(v) => {
           this.onChange(v);
         }}
@@ -126,6 +127,7 @@ class App extends React.Component {
   };
   //向移动端发起请求 验证密码
   onDone = (msg) => {
+    alert(msg,'msg.......')
     callHandler("testCall", JSON.stringify(msg),(resp)=> {
       // alert(resp)
         if(resp === 'success'){
@@ -193,94 +195,106 @@ class App extends React.Component {
   render(){
     
     return (
-        <div className="app">
-          <div className="list">
-              <h4>* 提交申请需要支付100 token</h4>
-              <InputEdit
-                placeholder="请输入 IP 号"
-                content="IP 号"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'ip_id')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 名称"
-                content="IP 名称"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'ip_name')}
-              />
-              <TextareaItem
-                className="ant-right-input"
-                title="IP 介绍"
-                placeholder="请输入 IP 介绍"
-                data-seed="logId"
-                rows="3"
-                ref={(el) => (this.autoFocusInst = el)}
-                autoHeight
-                onChange={(e)=>this.onChange1(e,'ip_intro')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 通证名称"
-                content="IP 通证名称"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'token_name')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 通证数量"
-                content="IP 通证数量"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'token_amount')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 使用通证名称"
-                content="IP 使用通证名称"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'token_name_for_user')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 使用通证数量"
-                content="IP 使用通证数量"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'token_amount_for_user')}
-              />
-              <InputEdit
-                placeholder="请输入 IP 使用通证单次下载数量"
-                content="IP 单次下载数量"
-                type="text"
-                className="ant-right-input"
-                onValueChange={(e)=>this.onChange1(e,'download_fee')}
-              />
-              <div className="upload">
-                <Upload {...props} onRemove={this.onRemove} beforeUpload={this.beforeUpload} fileList={this.state.fileList}>
-                  <Button icon={<PlusCircleOutlined />}>IP上传</Button>
-                </Upload>
-              </div>
-              
-            </div>
-            <div className="btn">
-              <WhiteSpace size="lg" />
-              <Button className="btns" onClick={() => prompt(
-                '输入密码',
-                '',
-                password => {
-                  this.onDone({
-                  "id":this.state.id,
-                  "method": "checkAuthorize",
-                  "params": [password+'']
-                 })
-                },
-                'secure-text',
-              )}
-              >提交</Button>
-            </div>
-              {/* <Button className="btns" onClick={this.onDone}>支付并提交</Button> */}
+      <div className="app">
+        <div className="list">
+          <h4>* 提交申请需要支付100 token</h4>
+          <InputEdit
+            placeholder="请输入 IP 号"
+            content="IP 号"
+            type="text"
+            
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "ip_id")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 名称"
+            content="IP 名称"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "ip_name")}
+          />
+          <TextareaItem
+            className="ant-right-input"
+            title="IP 介绍"
+            placeholder="请输入 IP 介绍"
+            data-seed="logId"
+            rows="3"
+            maxLength="200"
+            ref={(el) => (this.autoFocusInst = el)}
+            autoHeight
+            onChange={(e) => this.onChange1(e, "ip_intro")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 通证名称"
+            content="IP 通证名称"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "token_name")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 通证数量"
+            content="IP 通证数量"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "token_amount")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 使用通证名称"
+            content="IP 使用通证名称"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "token_name_for_user")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 使用通证数量"
+            content="IP 使用通证数量"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "token_amount_for_user")}
+          />
+          <InputEdit
+            placeholder="请输入 IP 使用通证单次下载数量"
+            content="IP 单次下载数量"
+            type="text"
+            className="ant-right-input"
+            onValueChange={(e) => this.onChange1(e, "download_fee")}
+          />
+          <div className="upload">
+            <Upload
+              {...props}
+              onRemove={this.onRemove}
+              beforeUpload={this.beforeUpload}
+              fileList={this.state.fileList}
+            >
+              <Button icon={<PlusCircleOutlined />}>IP上传</Button>
+            </Upload>
+          </div>
         </div>
-      );
+        <div className="btn">
+          <WhiteSpace size="lg" />
+          <Button
+            className="btns"
+            onClick={() =>
+              prompt(
+                "输入密码",
+                "",
+                (password) => {
+                  this.onDone({
+                    id: this.state.id,
+                    method: "checkAuthorize",
+                    params: [password + ""],
+                  });
+                },
+                "secure-text"
+              )
+            }
+          >
+            提交
+          </Button>
+        </div>
+        {/* <Button className="btns" onClick={this.onDone}>支付并提交</Button> */}
+      </div>
+    );
   }
   
 }
