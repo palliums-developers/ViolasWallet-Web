@@ -70,7 +70,7 @@ function registerHandler(funName, callback) {
 function callHandler(funName, dataJson, callback) {
   alert('111')
   setupWebViewJavascriptBridge(function (bridge) {
-    alert(JSON.parse(bridge),"222");
+    alert(JSON.stringify(bridge),"222");
     bridge.callHandler(funName, dataJson, function (response) {
       alert(response, "response");
       callback && callback(response);

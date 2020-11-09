@@ -96,7 +96,7 @@ class App extends React.Component {
       id: rndNum(100),
       address: this.props.location.search.split("=")[1],
     });
-    registerHandler("calljs", (data, responseCallback) => {
+    registerHandler("callJavaScript", (data, responseCallback) => {
       console.log("from native to js " + data);
       this.setState({
         ipvalue: data,
