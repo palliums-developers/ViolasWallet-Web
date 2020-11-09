@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+新互联钱包:持有者申请，申请详情，理事会审批详情页面
 
 ## Available Scripts
 
