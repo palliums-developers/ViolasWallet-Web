@@ -140,17 +140,17 @@ class App extends React.Component {
   getSubmit = () =>{
     let {address,ip_id,ip_name,ip_intro,ip_file_name,token_name,token_amount,token_name_for_user,token_amount_for_user,download_fee} = this.state;
     let ipList = {
-      address:address,
-      ip_id:ip_id,
-      ip_name:ip_name,
-      ip_intro:ip_intro,
-      token_name:token_name,
-      token_amount:token_amount,
-      token_name_for_user:token_name_for_user,
-      token_amount_for_user:token_amount_for_user,
-      download_fee:download_fee,
-      ip_file_name:ip_file_name
-    }
+      address: address,
+      ip_id: ip_id,
+      ip_name: ip_name,
+      ip_intro: ip_intro,
+      token_name: token_name,
+      token_amount: token_amount * 1e6,
+      token_name_for_user: token_name_for_user,
+      token_amount_for_user: token_amount_for_user * 1e6,
+      download_fee: download_fee * 1e6,
+      ip_file_name: ip_file_name,
+    };
     axios.post(url+'/1.0/newnet/ip',ipList).then((res) => {
       console.log(res);
       if(res.data.code == 2000){
