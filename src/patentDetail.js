@@ -76,25 +76,16 @@ class PatentDetail extends Component {
       });
   };
   //向移动端发起支付请求
-  onDone = (msg) => {
-    callHandler("callNative", JSON.stringify(msg), (resp) => {
-      if (resp.result === "success") {
-        this.payTokenFun({
-          id: this.state.id,
-          method: "payToken",
-          params: [
-            JSON.stringify(msg),
-            this.state.address,
-            'LBR',
-            100,
-          ],
-        });
-        this.publishTokenFun({
-          id: this.state.id,
-          method: "publishToken",
-          params: [JSON.stringify(msg), this.state.moduleName],
-        });
-      }
+  onDone = (pwd) => {
+    this.payTokenFun({
+      id: this.state.id,
+      method: "payToken",
+      params: [pwd, this.state.address, "LBR", "100"],
+    });
+    this.publishTokenFun({
+      id: this.state.id,
+      method: "publishToken",
+      params: [pwd, this.state.moduleName],
     });
   };
   //支付代币:
