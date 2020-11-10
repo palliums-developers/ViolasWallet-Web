@@ -129,8 +129,8 @@ class App extends React.Component {
   onDone = (msg) => {
     callHandler("callNative", JSON.stringify(msg),(resp)=> {
     // alert(resp)
-    alert(JSON.parse(resp).result)
-        if (resp.result === "success") {
+    // alert(JSON.parse(resp).result)
+        if (JSON.parse(resp).result === "success") {
           this.getSubmit();
         }
       
@@ -197,7 +197,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="list">
-          <h4>* 提交申请需要支付100 token version4</h4>
+          <h4>* 提交申请需要支付100 token version5</h4>
           <InputEdit
             placeholder="请输入 IP 号"
             content="IP 号"

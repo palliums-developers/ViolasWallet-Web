@@ -118,7 +118,7 @@ class MeetingDetail extends Component {
           params: [this.state.iptValue],
         }),
         (resp) => {
-          if (resp.result === "success") {
+          if (JSON.parse(resp).result === "success") {
             if (this.state.code == 1) {
               this.ipverifyFun({
                 ip_id: this.state.ip_id,
@@ -217,7 +217,7 @@ class MeetingDetail extends Component {
   onDone = (msg) => {
     callHandler("callNative", JSON.stringify(msg), (resp) => {
       // alert(resp)
-      if (resp.result === "success") {
+      if (JSON.parse(resp).result === "success") {
         this.ipverifyFun({
           ip_id: this.state.ip_id,
           status: 1,
