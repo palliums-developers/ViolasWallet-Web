@@ -224,11 +224,7 @@ class PatentDetail extends Component {
                   "输入密码",
                   "",
                   (password) => {
-                    this.onDone({
-                      id: this.state.id,
-                      method: "checkAuthorize",
-                      params: [password + ""],
-                    });
+                    this.onDone(password);
                   },
                   "secure-text"
                 )
