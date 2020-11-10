@@ -69,9 +69,7 @@ function registerHandler(funName, callback) {
 // 调用手机的方法
 function callHandler(funName, dataJson, callback) {
   setupWebViewJavascriptBridge(function (bridge) {
-    alert(JSON.stringify(bridge),"222");
     bridge.callHandler(funName, dataJson, function (response) {
-      alert(response, "response");
       callback && callback(response);
     });
   });

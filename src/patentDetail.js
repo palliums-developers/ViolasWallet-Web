@@ -78,7 +78,7 @@ class PatentDetail extends Component {
   //向移动端发起支付请求
   onDone = (msg) => {
     callHandler("callNative", JSON.stringify(msg), (resp) => {
-      if (resp === "success") {
+      if (resp.result === "success") {
         this.payTokenFun({
           id: this.state.id,
           method: "payToken",
@@ -100,7 +100,7 @@ class PatentDetail extends Component {
   //支付代币:
   payTokenFun = (msg) => {
     callHandler("callNative", JSON.stringify(msg), (resp) => {
-      if (resp === "success") {
+      if (resp.result === "success") {
         message.success("支付成功");
       } else {
         message.error("支付失败");
@@ -110,7 +110,7 @@ class PatentDetail extends Component {
   //Publish 代币
   publishTokenFun = (msg) => {
     callHandler("callNative", JSON.stringify(msg), (resp) => {
-      if (resp === "success") {
+      if (resp.result === "success") {
         message.success("Publish 成功");
       } else {
         message.error("Publish 失败");
@@ -127,7 +127,7 @@ class PatentDetail extends Component {
         params: [this.props.location.state.ipid, this.state.moduleName],
       }),
       (resp) => {
-        if (resp === "success") {
+        if (resp.result === "success") {
           message.success("成功");
         } else {
           message.error("失败");
