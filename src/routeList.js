@@ -17,7 +17,7 @@ class RouteList extends Component {
             ---
             <Link to="/applyforinfo?ipid=BL20201105">applyforinfo</Link>
             ---
-            <Link to="/applyforinfo?ipid=BL20201105">approval</Link>
+            <Link to="/approval?ipid=BL20201105">approval</Link>
           </div>
         );
     }

@@ -28,6 +28,9 @@
 .meetingDetail .head p span.orgColor{
     color: rgba(251, 143, 11, 1);
 }
+.meetingDetail .head p span.greColor{
+    color: rgba(19, 183, 136, 1);
+}
 .meetingDetail .head p span.redColor{
     color: rgba(229, 64, 64, 1);
 }

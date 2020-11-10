@@ -251,16 +251,12 @@ class MeetingDetail extends Component {
               <span>{timeStamp2String(ipList.date + "000")}</span>
             </p>
           )}
-          {ipList.status == 1 ? null : (
+          {ipList.status == 0 ? null : (
             <p>
               <label>审核结果:</label>
-              {ipList.status == 0 ? (
-                <span className="orgColor">待审核</span>
-              ) : ipList.status == -1 ? (
+              {ipList.status == -1 ? (
                 <span className="redColor">审核驳回</span>
-              ) : ipList.status == 2 ? (
-                <span className="orgColor">发币中</span>
-              ) : ipList.status == 3 ? (
+              ) : ipList.status == 1 ? (
                 <span className="greColor">IP已通过</span>
               ) : null}
             </p>
@@ -315,7 +311,7 @@ class MeetingDetail extends Component {
               <span style={{ color: "rgba(0, 179, 191, 1)" }}>IP详细文档</span>
             </CopyToClipboard>
           </p>
-          {ipList.status == 1 ? (
+          {ipList.status == 0 ? (
             <div className="btnList">
               <div className="noBtn">
                 <WhiteSpace size="lg" />
