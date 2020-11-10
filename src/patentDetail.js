@@ -27,6 +27,7 @@ class PatentDetail extends Component {
       ipList: {},
       address: "",
       moduleName: "",
+      moduleName1: "",
     };
   }
   componentDidMount() {
@@ -46,11 +47,10 @@ class PatentDetail extends Component {
     axios
       .get(url + "/1.0/newnet/council/payment/info")
       .then((res) => {
-        // console.log(res)
+        alert(JSON.stringify(res))
         if (res.data.code == 2000) {
           this.setState({
-            address: res.data.data.address,
-            moduleName: res.data.data.token_module,
+            address: res.data.data.address
           });
         }
       })
@@ -68,6 +68,8 @@ class PatentDetail extends Component {
         if (res.data.code == 2000) {
           this.setState({
             ipList: res.data.data,
+            moduleName: res.data.data.token_name,
+            moduleName1: res.data.data.token_name,
           });
         }
       })
@@ -85,7 +87,7 @@ class PatentDetail extends Component {
     this.publishTokenFun({
       id: this.state.id,
       method: "publishToken",
-      params: [pwd, this.state.moduleName],
+      params: [pwd, this.state.moduleName, this.state.moduleName1],
     });
   };
   //支付代币:
