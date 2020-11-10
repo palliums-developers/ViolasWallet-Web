@@ -128,7 +128,7 @@ class App extends React.Component {
   //向移动端发起请求 验证密码
   onDone = (msg) => {
     callHandler("callNative", JSON.stringify(msg),(resp)=> {
-    alert(resp.result)
+    alert(JSON.parse(resp),JSON.parse(resp).result)
         if (resp.result === "success") {
           this.getSubmit();
         }
