@@ -196,7 +196,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="list">
-          <h4>* 提交申请需要支付100 token</h4>
+          <h4>* 提交申请需要支付100 token version1</h4>
           <InputEdit
             placeholder="请输入 IP 号"
             content="IP 号"
