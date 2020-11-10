@@ -85,7 +85,7 @@ class PatentDetail extends Component {
           params: [
             JSON.stringify(msg),
             this.state.address,
-            this.state.moduleName,
+            'LBR',
             100,
           ],
         });
