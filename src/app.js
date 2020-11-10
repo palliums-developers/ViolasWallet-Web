@@ -128,7 +128,8 @@ class App extends React.Component {
   //向移动端发起请求 验证密码
   onDone = (msg) => {
     callHandler("callNative", JSON.stringify(msg),(resp)=> {
-    alert(resp)
+    // alert(resp)
+    alert(JSON.parse(resp).result)
         if (resp.result === "success") {
           this.getSubmit();
         }
@@ -196,7 +197,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="list">
-          <h4>* 提交申请需要支付100 token version3</h4>
+          <h4>* 提交申请需要支付100 token version4</h4>
           <InputEdit
             placeholder="请输入 IP 号"
             content="IP 号"
