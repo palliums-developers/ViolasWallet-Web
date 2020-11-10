@@ -90,7 +90,9 @@ class PatentDetail extends Component {
   };
   //支付代币:
   payTokenFun = (msg) => {
+    alert(msg);
     callHandler("callNative", JSON.stringify(msg), (resp) => {
+      alert(JSON.parse(resp).result);
       if (JSON.parse(resp).result === "success") {
         message.success("支付成功");
       } else {
@@ -100,6 +102,7 @@ class PatentDetail extends Component {
   };
   //Publish 代币
   publishTokenFun = (msg) => {
+    alert(msg)
     callHandler("callNative", JSON.stringify(msg), (resp) => {
       if (JSON.parse(resp).result === "success") {
         message.success("Publish 成功");
