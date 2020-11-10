@@ -69,7 +69,7 @@ class PatentDetail extends Component {
           this.setState({
             ipList: res.data.data,
             moduleName: res.data.data.token_name,
-            moduleName1: res.data.data.token_name,
+            moduleName1: res.data.data.token_name_for_user,
           });
         }
       })
@@ -121,7 +121,7 @@ class PatentDetail extends Component {
       JSON.stringify({
         id: this.state.id,
         method: "assignmentIP",
-        params: [this.state.ip_id, this.state.moduleName],
+        params: [this.state.ip_id, this.state.moduleName1],
       }),
       (resp) => {
         if (JSON.parse(resp).result === "success") {
