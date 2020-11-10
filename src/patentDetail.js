@@ -47,7 +47,6 @@ class PatentDetail extends Component {
     axios
       .get(url + "/1.0/newnet/council/payment/info")
       .then((res) => {
-        alert(JSON.stringify(res))
         if (res.data.code == 2000) {
           this.setState({
             address: res.data.data.address
