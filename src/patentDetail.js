@@ -119,7 +119,7 @@ class PatentDetail extends Component {
       JSON.stringify({
         id: this.state.id,
         method: "assignmentIP",
-        params: [this.props.location.state.ipid, this.state.moduleName],
+        params: [this.state.ip_id, this.state.moduleName],
       }),
       (resp) => {
         if (JSON.parse(resp).result === "success") {
