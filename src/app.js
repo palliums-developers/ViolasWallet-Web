@@ -127,8 +127,9 @@ class App extends React.Component {
   };
   //向移动端发起请求 验证密码
   onDone = (msg) => {
+    alert(JSON.stringify(msg));
     callHandler("callNative", JSON.stringify(msg),(resp)=> {
-    // alert(resp)
+    alert(JSON.stringify(resp));
     // alert(JSON.parse(resp).result)
         if (JSON.parse(resp).result === "success") {
           this.getSubmit();
@@ -155,9 +156,9 @@ class App extends React.Component {
       console.log(res);
       if(res.data.code == 2000){
         message.success('submit successfully');
-        setTimeout(()=>{
-          this.closePage()
-        },500)
+        // setTimeout(()=>{
+        //   this.closePage()
+        // },500)
       }else if(res.data.code == 2003){
         message.success(res.data.message);
       }else{

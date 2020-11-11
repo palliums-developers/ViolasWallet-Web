@@ -8,10 +8,16 @@
 }
 .meetingDetail .head{
     width: 100%;
-    padding: 20px 24px;
+    padding: 15px 24px;
     box-sizing: border-box;
 }
-.meetingDetail .head p{
+.meetingDetail .head p.fail_content{
+   justify-content: flex-end;
+   font-size: 13px;
+   font-weight: 400;
+   color: #5A5A5A;
+}
+.meetingDetail .head p {
     display: flex;
     justify-content: space-between;
 }

@@ -28,7 +28,8 @@ class PatentDetail extends Component {
       address: "",
       moduleName: "",
       moduleName1: "",
-      password:''
+      password: "",
+      failReason:[]
     };
   }
   componentDidMount() {
@@ -40,6 +41,7 @@ class PatentDetail extends Component {
       () => {
         this.getDetails();
         this.getAccountFun();
+        this.getFailReason()
       }
     );
   }
@@ -50,7 +52,7 @@ class PatentDetail extends Component {
       .then((res) => {
         if (res.data.code == 2000) {
           this.setState({
-            address: res.data.data.address
+            address: res.data.data.address,
           });
         }
       })
@@ -80,7 +82,7 @@ class PatentDetail extends Component {
   //向移动端发起支付请求
   onDone = (pwd) => {
     this.setState({
-      password:pwd
+      password: pwd,
     });
     this.publishTokenFun({
       id: this.state.id,
@@ -89,27 +91,27 @@ class PatentDetail extends Component {
     });
   };
   //设置ip币种publish状态
-  updatePublistStatus = () =>{
-     let { ip_id } = this.state;
+  updatePublistStatus = () => {
+    let { ip_id } = this.state;
 
-     axios
-       .get(url + "/1.0/newnet/ip/publish/token?ip_id=" + ip_id)
-       .then((res) => {
+    axios
+      .get(url + "/1.0/newnet/ip/publish/token?ip_id=" + ip_id)
+      .then((res) => {
         //  alert(JSON.parse(res));
         //  if (res.data.code == 2000) {
         //    alert()
         //  }
-       })
-       .catch(function (error) {
-         console.log(error);
-       });
-  }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   //支付代币:
   payTokenFun = (msg) => {
     callHandler("callNative", JSON.stringify(msg), (resp) => {
       if (JSON.parse(resp).result === "success") {
         message.success("支付成功");
-        this.updatePublistStatus()
+        this.updatePublistStatus();
       } else {
         message.error("支付失败");
       }
@@ -132,7 +134,7 @@ class PatentDetail extends Component {
     });
   };
   //转让IP
-  tranferIPFun = () =>{
+  tranferIPFun = () => {
     callHandler(
       "callNative",
       JSON.stringify({
@@ -148,6 +150,29 @@ class PatentDetail extends Component {
         }
       }
     );
+  };
+  //获取驳回原因
+  getFailReason = () => {
+    axios
+      .get(url + "/1.0/newnet/ip/verify/fail/reason")
+      .then((res) => {
+        if (res.data.code == 2000) {
+          this.setState({
+            failReason: res.data.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  curReason(fail_reason){
+    for(let i=0;i<this.state.failReason.length;i++){
+       if (fail_reason == this.state.failReason[i].id) {
+         return this.state.failReason[i].reason;
+       }
+    }
   }
   render() {
     let { ipList } = this.state;
@@ -186,8 +211,11 @@ class PatentDetail extends Component {
           {ipList.status == -1 ? (
             <p>
               <label>驳回原因:</label>
-              <span>{ipList.fail_reason}</span>
+              <span>{this.curReason(ipList.fail_reason)}</span>
             </p>
+          ) : null}
+          {ipList.fail_reason == 2 ? (
+            <p className="fail_content">fail_content</p>
           ) : null}
         </div>
         <div className="patentList">
@@ -209,7 +237,7 @@ class PatentDetail extends Component {
           </p>
           <p>
             <label>IP通证数量</label>
-            <span>{ipList.token_amount}</span>
+            <span>{ipList.token_amount / 1e6}</span>
           </p>
           <p>
             <label>IP使用通证名称</label>
@@ -217,11 +245,11 @@ class PatentDetail extends Component {
           </p>
           <p>
             <label>IP使用通证数量</label>
-            <span>{ipList.token_amount_for_user}</span>
+            <span>{ipList.token_amount_for_user / 1e6}</span>
           </p>
           <p>
             <label>单次下载数量</label>
-            <span>{ipList.download_fee}</span>
+            <span>{ipList.download_fee / 1e6}</span>
           </p>
           <p>
             <label>IP文件</label>

@@ -109,7 +109,6 @@ class MeetingDetail extends Component {
       [key]: false,
     });
     if (e == "yes") {
-
       callHandler(
         "callNative",
         JSON.stringify({
@@ -151,10 +150,10 @@ class MeetingDetail extends Component {
           params.fail_code
       )
       .then((res) => {
-        if(res.data.code == 2000){
-          message.success('审批驳回成功')
-        }else{
-           message.error("审批驳回失败");
+        if (res.data.code == 2000) {
+          message.success("审批驳回成功");
+        } else {
+          message.error("审批驳回失败");
         }
       })
       .catch((error) => {
@@ -226,9 +225,7 @@ class MeetingDetail extends Component {
     });
   };
   //点击审批通过
-  getSubmit = () =>{
-
-  }
+  getSubmit = () => {};
   //输入驳回信息
   getTextValue = (value) => {
     console.log(value);
@@ -236,6 +233,13 @@ class MeetingDetail extends Component {
       textValue: value,
     });
   };
+  curReason = (fail_reason)=>{
+    for (let i = 0; i < this.state.failReason.length; i++) {
+      if (fail_reason == this.state.failReason[i].id) {
+        return this.state.failReason[i].reason;
+      }
+    }
+  }
   render() {
     let { ipList, failReason, defaultValue } = this.state;
     return (
@@ -265,8 +269,11 @@ class MeetingDetail extends Component {
           {ipList.status == -1 ? (
             <p>
               <label>驳回原因:</label>
-              <span>{ipList.fail_reason}</span>
+              <span>{this.curReason(ipList.fail_reason)}</span>
             </p>
+          ) : null}
+          {ipList.fail_reason == 2 ? (
+            <p className="fail_content">fail_content</p>
           ) : null}
         </div>
         <div className="patentList">
@@ -288,7 +295,7 @@ class MeetingDetail extends Component {
           </p>
           <p>
             <label>IP通证数量</label>
-            <span>{ipList.token_amount}</span>
+            <span>{ipList.token_amount / 1e6}</span>
           </p>
           <p>
             <label>IP使用通证名称</label>
@@ -296,11 +303,11 @@ class MeetingDetail extends Component {
           </p>
           <p>
             <label>IP使用通证数量</label>
-            <span>{ipList.token_amount_for_user}</span>
+            <span>{ipList.token_amount_for_user / 1e6}</span>
           </p>
           <p>
             <label>单次下载数量</label>
-            <span>{ipList.download_fee}</span>
+            <span>{ipList.download_fee / 1e6}</span>
           </p>
           <p>
             <label>IP文件</label>
@@ -402,7 +409,6 @@ class MeetingDetail extends Component {
             </div>
           ) : null}
         </div>
-
       </div>
     );
   }
