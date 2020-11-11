@@ -29,7 +29,7 @@ class PatentDetail extends Component {
       moduleName: "",
       moduleName1: "",
       password: "",
-      failReason:[]
+      failReason: [],
     };
   }
   componentDidMount() {
@@ -41,7 +41,7 @@ class PatentDetail extends Component {
       () => {
         this.getDetails();
         this.getAccountFun();
-        this.getFailReason()
+        this.getFailReason();
       }
     );
   }
@@ -112,6 +112,9 @@ class PatentDetail extends Component {
       if (JSON.parse(resp).result === "success") {
         message.success("支付成功");
         this.updatePublistStatus();
+        setTimeout(() => {
+          this.closePage();
+        }, 500);
       } else {
         message.error("支付失败");
       }
@@ -167,13 +170,29 @@ class PatentDetail extends Component {
       });
   };
 
-  curReason(fail_reason){
-    for(let i=0;i<this.state.failReason.length;i++){
-       if (fail_reason == this.state.failReason[i].id) {
-         return this.state.failReason[i].reason;
-       }
+  curReason(fail_reason) {
+    for (let i = 0; i < this.state.failReason.length; i++) {
+      if (fail_reason == this.state.failReason[i].id) {
+        return this.state.failReason[i].reason;
+      }
     }
   }
+  //关闭页面
+  closePage = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "closePage",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.stringify(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
   render() {
     let { ipList } = this.state;
     // ipList.status = 3;

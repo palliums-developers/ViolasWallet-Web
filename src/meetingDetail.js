@@ -153,7 +153,6 @@ class MeetingDetail extends Component {
         if (res.data.code == 2000) {
           message.success("审批驳回成功");
           setTimeout(() => {
-            alert("close");
             this.closePage();
           }, 500);
         } else {
@@ -182,7 +181,6 @@ class MeetingDetail extends Component {
         if (res.data.code == 2000) {
           message.success("成功");
            setTimeout(() => {
-             alert("close");
              this.closePage();
            }, 500);
         } else {
@@ -250,7 +248,6 @@ class MeetingDetail extends Component {
   };
   //关闭页面
   closePage = () => {
-    alert("close111111");
     callHandler(
       "callNative",
       JSON.stringify({
