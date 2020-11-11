@@ -28,6 +28,7 @@ class PatentDetail extends Component {
       address: "",
       moduleName: "",
       moduleName1: "",
+      password:''
     };
   }
   componentDidMount() {
@@ -78,10 +79,8 @@ class PatentDetail extends Component {
   };
   //向移动端发起支付请求
   onDone = (pwd) => {
-    this.payTokenFun({
-      id: this.state.id,
-      method: "payToken",
-      params: [pwd, this.state.address, "LBR", "100"],
+    this.setState({
+      password:pwd
     });
     this.publishTokenFun({
       id: this.state.id,
@@ -89,6 +88,22 @@ class PatentDetail extends Component {
       params: [pwd, this.state.moduleName, this.state.moduleName1],
     });
   };
+  //设置ip币种publish状态
+  updatePublistStatus = () =>{
+     let { ip_id } = this.state;
+
+     axios
+       .get(url + "/1.0/newnet/ip/publish/token?ip_id=" + ip_id)
+       .then((res) => {
+         alert(JSON.parse(res));
+        //  if (res.data.code == 2000) {
+        //    alert()
+        //  }
+       })
+       .catch(function (error) {
+         console.log(error);
+       });
+  }
   //支付代币:
   payTokenFun = (msg) => {
     alert(JSON.stringify(msg));
@@ -96,6 +111,7 @@ class PatentDetail extends Component {
       alert(resp);
       if (JSON.parse(resp).result === "success") {
         message.success("支付成功");
+        this.updatePublistStatus()
       } else {
         message.error("支付失败");
       }
@@ -108,6 +124,11 @@ class PatentDetail extends Component {
       alert(resp);
       if (JSON.parse(resp).result === "success") {
         message.success("Publish 成功");
+        this.payTokenFun({
+          id: this.state.id,
+          method: "payToken",
+          params: [this.state.password, this.state.address, "LBR", "100"],
+        });
       } else {
         message.error("Publish 失败");
       }
