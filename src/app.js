@@ -158,7 +158,7 @@ class App extends React.Component {
           this.closePage()
         },500)
       }else if(res.data.code == 2003){
-        message.success(res.data.message);
+        message.error(res.data.message);
       }else{
         message.error('submit failure');
       }
@@ -174,15 +174,38 @@ class App extends React.Component {
       this.setState(state => ({
         ip_file_name:file.name,
         fileList: [...state.fileList, file],
-      }));
+      }),()=>{
+        this.uploadFile()
+        console.log(this.state.fileList);
+      });
     }else{
       message.error('只能上传一个文件');
-      this.setState(state => ({
-        fileList: [...state.fileList],
-      }));
+      this.setState(
+        (state) => ({
+          fileList: [...state.fileList],
+        }),
+        () => {
+          this.uploadFile();
+          console.log(this.state.fileList);
+        }
+      );
     }
     return false;
   };
+  uploadFile = () =>{
+    axios
+      .post(url + "/1.0/newnet/ip")
+      .then((res) => {
+        alert(JSON.stringify(res));
+        if (res.data.code == 2000) {
+        } else {
+          message.error("submit failure");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   //删除文件
   onRemove=(file)=>{
     this.setState(state => {
@@ -220,7 +243,6 @@ class App extends React.Component {
             placeholder="请输入 IP 号"
             content="IP 号"
             type="text"
-            
             className="ant-right-input"
             onValueChange={(e) => this.onChange1(e, "ip_id")}
           />
@@ -283,6 +305,7 @@ class App extends React.Component {
               onRemove={this.onRemove}
               beforeUpload={this.beforeUpload}
               fileList={this.state.fileList}
+              headers={{"Content-type":"multipart/form-data"}}
             >
               <Button icon={<PlusCircleOutlined />}>IP上传</Button>
             </Upload>
