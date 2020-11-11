@@ -95,7 +95,7 @@ class PatentDetail extends Component {
      axios
        .get(url + "/1.0/newnet/ip/publish/token?ip_id=" + ip_id)
        .then((res) => {
-         alert(JSON.parse(res));
+        //  alert(JSON.parse(res));
         //  if (res.data.code == 2000) {
         //    alert()
         //  }
@@ -106,9 +106,7 @@ class PatentDetail extends Component {
   }
   //支付代币:
   payTokenFun = (msg) => {
-    alert(JSON.stringify(msg));
     callHandler("callNative", JSON.stringify(msg), (resp) => {
-      alert(resp);
       if (JSON.parse(resp).result === "success") {
         message.success("支付成功");
         this.updatePublistStatus()
@@ -119,9 +117,8 @@ class PatentDetail extends Component {
   };
   //Publish 代币
   publishTokenFun = (msg) => {
-    alert(JSON.stringify(msg));
+    // alert(JSON.stringify(msg));
     callHandler("callNative", JSON.stringify(msg), (resp) => {
-      alert(resp);
       if (JSON.parse(resp).result === "success") {
         message.success("Publish 成功");
         this.payTokenFun({
