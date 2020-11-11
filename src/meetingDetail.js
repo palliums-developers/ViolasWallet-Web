@@ -249,7 +249,7 @@ class MeetingDetail extends Component {
             <label>提交时间:</label>
             <span>{timeStamp2String(ipList.date + "000")}</span>
           </p>
-          {ipList.status == 0 ? null : ipList.status == 1 ? null : (
+          {ipList.status == 0 ? null : (
             <p>
               <label>审核时间:</label>
               <span>{timeStamp2String(ipList.date + "000")}</span>
