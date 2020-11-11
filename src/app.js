@@ -193,8 +193,15 @@ class App extends React.Component {
     return false;
   };
   uploadFile = () =>{
+    alert('uploadFile')
     axios
-      .post(url + "/1.0/newnet/ip/file")
+      .post(
+        url + "/1.0/newnet/ip/file",
+        {},
+        {
+          headers:{"Content-type": "multipart/form-data"},
+        }
+      )
       .then((res) => {
         alert(JSON.stringify(res));
         if (res.data.code == 2000) {
@@ -305,7 +312,6 @@ class App extends React.Component {
               onRemove={this.onRemove}
               beforeUpload={this.beforeUpload}
               fileList={this.state.fileList}
-              headers={{"Content-type":"multipart/form-data"}}
             >
               <Button icon={<PlusCircleOutlined />}>IP上传</Button>
             </Upload>
