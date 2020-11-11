@@ -152,6 +152,10 @@ class MeetingDetail extends Component {
       .then((res) => {
         if (res.data.code == 2000) {
           message.success("审批驳回成功");
+          setTimeout(() => {
+            alert("close");
+            this.closePage();
+          }, 500);
         } else {
           message.error("审批驳回失败");
         }
@@ -177,6 +181,10 @@ class MeetingDetail extends Component {
       .then((res) => {
         if (res.data.code == 2000) {
           message.success("成功");
+           setTimeout(() => {
+             alert("close");
+             this.closePage();
+           }, 500);
         } else {
           message.error("失败");
         }
@@ -233,13 +241,30 @@ class MeetingDetail extends Component {
       textValue: value,
     });
   };
-  curReason = (fail_reason)=>{
+  curReason = (fail_reason) => {
     for (let i = 0; i < this.state.failReason.length; i++) {
       if (fail_reason == this.state.failReason[i].id) {
         return this.state.failReason[i].reason;
       }
     }
-  }
+  };
+  //关闭页面
+  closePage = () => {
+    alert("close111111");
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "closePage",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.stringify(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
   render() {
     let { ipList, failReason, defaultValue } = this.state;
     return (
@@ -379,7 +404,7 @@ class MeetingDetail extends Component {
                       label="支付密码"
                       rules={[{ required: false }]}
                     >
-                      <Input onChange={this.getValue} />
+                      <Input type="password" onChange={this.getValue} />
                     </Form.Item>
                   </Form>
                 </Modal>
