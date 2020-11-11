@@ -194,7 +194,7 @@ class App extends React.Component {
   };
   uploadFile = () =>{
     axios
-      .post(url + "/1.0/newnet/ip")
+      .post(url + "/1.0/newnet/ip/file")
       .then((res) => {
         alert(JSON.stringify(res));
         if (res.data.code == 2000) {
