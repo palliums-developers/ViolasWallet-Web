@@ -215,7 +215,7 @@ class PatentDetail extends Component {
             </p>
           ) : null}
           {ipList.fail_reason == 2 ? (
-            <p className="fail_content">fail_content</p>
+            <p className="fail_content">{ipList.fail_content}</p>
           ) : null}
         </div>
         <div className="patentList">
