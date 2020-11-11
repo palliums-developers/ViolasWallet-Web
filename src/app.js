@@ -155,6 +155,7 @@ class App extends React.Component {
       if(res.data.code == 2000){
         message.success('submit successfully');
         setTimeout(()=>{
+          alert('close')
           this.closePage()
         },500)
       }else if(res.data.code == 2003){
@@ -196,6 +197,7 @@ class App extends React.Component {
   }
   //关闭页面
   closePage = () =>{
+    alert('close111111')
     callHandler(
       "callNative",
       JSON.stringify({
@@ -204,6 +206,7 @@ class App extends React.Component {
         params: [],
       }),
       (resp) => {
+         alert(JSON.stringify(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
