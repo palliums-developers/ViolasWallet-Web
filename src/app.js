@@ -197,7 +197,7 @@ class App extends React.Component {
     axios
       .post(
         url + "/1.0/newnet/ip/file",
-        {},
+        {file:this.state.fileList},
         {
           headers:{"Content-type": "multipart/form-data"},
         }
