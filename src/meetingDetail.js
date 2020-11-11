@@ -284,6 +284,10 @@ class MeetingDetail extends Component {
                 <span className="redColor">审核驳回</span>
               ) : ipList.status == 1 ? (
                 <span className="greColor">IP已通过</span>
+              ) : ipList.status == 2 ? (
+                <span className="greColor">IP已通过</span>
+              ) : ipList.status == 3 ? (
+                <span className="greColor">IP已通过</span>
               ) : null}
             </p>
           )}
