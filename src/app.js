@@ -155,6 +155,9 @@ class App extends React.Component {
       console.log(res);
       if(res.data.code == 2000){
         message.success('submit successfully');
+        setTimeout(()=>{
+          this.closePage()
+        },500)
       }else if(res.data.code == 2003){
         message.success(res.data.message);
       }else{
@@ -192,12 +195,27 @@ class App extends React.Component {
       };
     });
   }
+  //关闭页面
+  closePage = () =>{
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "closePage",
+        params: [],
+      }),
+      (resp) => {
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  }
   render(){
     
     return (
       <div className="app">
         <div className="list">
-          <h4>* 提交申请需要支付100 token version1.3</h4>
+          <h4>* 提交申请需要支付100 token</h4>
           <InputEdit
             placeholder="请输入 IP 号"
             content="IP 号"
