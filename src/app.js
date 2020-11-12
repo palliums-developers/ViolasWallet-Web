@@ -7,7 +7,8 @@ import {
   InputItem,
   TextareaItem,
   WhiteSpace,
-  Modal, 
+  Modal,
+  Toast,
 } from "antd-mobile";
 import { Upload, message } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
@@ -36,39 +37,39 @@ const props = {
   }
 };
 
-class InputEdit extends React.Component {
-  onChange = (value) => {
-    if (this.props.onValueChange !== undefined) {
-      this.props.onValueChange(value);
-    }
-  };
-  onBlur = (value) => {
-    if (this.props.onBlur !== undefined) {
-      this.props.onBlur(value);
-    }
-  };
-  render() {
-    const { className, type, placeholder, content } = this.props;
-    return (
-      <InputItem
-        className={className}
-        type={type}
-        placeholder={placeholder}
-        clear={false}
-        maxLength="20"
-        onChange={(v) => {
-          this.onChange(v);
-        }}
-        onBlur={(v) => {
-          this.onBlur(v);
-        }}
-        moneyKeyboardWrapProps={moneyKeyboardWrapProps}
-      >
-        {content}
-      </InputItem>
-    );
-  }
-}
+// class InputEdit extends React.Component {
+//   onChange = (value) => {
+//     if (this.props.onValueChange !== undefined) {
+//       this.props.onValueChange(value);
+//     }
+//   };
+//   onBlur = (value) => {
+//     if (this.props.onBlur !== undefined) {
+//       this.props.onBlur(value);
+//     }
+//   };
+//   render() {
+//     const { className, type, placeholder, content } = this.props;
+//     return (
+//       <InputItem
+//         className={className}
+//         type={type}
+//         placeholder={placeholder}
+//         clear={false}
+//         maxLength="20"
+//         onChange={(v) => {
+//           this.onChange(v);
+//         }}
+//         onBlur={(v) => {
+//           this.onBlur(v);
+//         }}
+//         moneyKeyboardWrapProps={moneyKeyboardWrapProps}
+//       >
+//         {content}
+//       </InputItem>
+//     );
+//   }
+// }
 
 class App extends React.Component {
   constructor(props) {
@@ -106,14 +107,14 @@ class App extends React.Component {
     
   }
   onChange1 = (v,type) => {
-    // console.log(v,type)
+    console.log(v,type)
     switch(type){
-      case 'ip_id' : this.setState({ip_id:v});break;
+      case 'ip_id' : this.setState({ ip_id: v.replace(/[^\w_]/g, "") });break;
       case 'ip_name' : this.setState({ip_name:v});break;
       case 'ip_intro' : this.setState({ip_intro:v});break;
-      case 'token_name' : this.setState({token_name:v});break;
+      case 'token_name' :this.setState({ token_name: v.replace(/[\W]/g, "") });break;
       case 'token_amount' : this.setState({token_amount:v});break;
-      case 'token_name_for_user' : this.setState({token_name_for_user:v});break;
+      case 'token_name_for_user' : this.setState({ token_name_for_user: v.replace(/[\W]/g, "") });break;
       case 'token_amount_for_user' : this.setState({token_amount_for_user:v});break;
       case 'download_fee' : this.setState({download_fee:v});break;
       default: return;
@@ -244,26 +245,76 @@ class App extends React.Component {
       }
     );
   }
+  getVerify = () =>{
+    let {
+      ip_id,
+      ip_name,
+      ip_intro,
+      ip_file_name,
+      token_name,
+      token_amount,
+      token_name_for_user,
+      token_amount_for_user,
+      download_fee,
+    } = this.state;
+    if (ip_id == "") {
+      message.error('请输入 IP 号')
+    } else if (ip_name == "") {
+      message.error("请输入 IP 名称");
+    } else if (ip_intro == "") {
+      message.error("请输入 IP 介绍");
+    }  else if (token_name == "") {
+      message.error("请输入 IP 通证名称");
+    } else if (token_amount == "") {
+      message.error("请输入 IP 通证数量");
+    } else if (token_name_for_user == "") {
+      message.error("请输入 IP 使用通证名称");
+    } else if (token_amount_for_user == "") {
+      message.error("请输入 IP 使用通证数量");
+    } else if (download_fee == "") {
+      message.error("请输入 IP 使用通证单次下载数量");
+    }else{
+      prompt(
+        "输入密码",
+        "",
+        (password) => {
+          this.onDone({
+            id: this.state.id,
+            method: "checkAuthorize",
+            params: [password + ""],
+          });
+        },
+        "secure-text"
+      );
+    }
+    
+  }
   render(){
     
     return (
       <div className="app">
         <div className="list">
           <h4>* 提交申请需要支付100 token</h4>
-          <InputEdit
+          <InputItem
+            maxLength="20"
             placeholder="请输入 IP 号"
-            content="IP 号"
             type="text"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "ip_id")}
-          />
-          <InputEdit
+            clear={false}
+            onChange={(e) => this.onChange1(e, "ip_id")}
+          >
+            IP 号
+          </InputItem>
+          <InputItem
+            maxLength="20"
             placeholder="请输入 IP 名称"
-            content="IP 名称"
             type="text"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "ip_name")}
-          />
+            clear={false}
+            onChange={(e) => this.onChange1(e, "ip_name")}
+          >
+            IP 名称
+          </InputItem>
           <TextareaItem
             className="ant-right-input"
             title="IP 介绍"
@@ -275,41 +326,57 @@ class App extends React.Component {
             autoHeight
             onChange={(e) => this.onChange1(e, "ip_intro")}
           />
-          <InputEdit
+          <InputItem
+            maxLength="6"
             placeholder="请输入 IP 通证名称"
-            content="IP 通证名称"
             type="text"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "token_name")}
-          />
-          <InputEdit
+            clear={false}
+            onChange={(e) => this.onChange1(e, "token_name")}
+            value={this.state.token_name}
+          >
+            IP 通证名称
+          </InputItem>
+          <InputItem
+            maxLength="20"
             placeholder="请输入 IP 通证数量"
-            content="IP 通证数量"
-            type="text"
+            type="number"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "token_amount")}
-          />
-          <InputEdit
+            clear={false}
+            onChange={(e) => this.onChange1(e, "token_amount")}
+          >
+            IP 通证数量
+          </InputItem>
+          <InputItem
+            maxLength="6"
             placeholder="请输入 IP 使用通证名称"
-            content="IP 使用通证名称"
             type="text"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "token_name_for_user")}
-          />
-          <InputEdit
+            clear={false}
+            onChange={(e) => this.onChange1(e, "token_name_for_user")}
+          >
+            IP 使用通证名称
+          </InputItem>
+          <InputItem
+            maxLength="20"
             placeholder="请输入 IP 使用通证数量"
-            content="IP 使用通证数量"
-            type="text"
+            type="number"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "token_amount_for_user")}
-          />
-          <InputEdit
+            clear={false}
+            onChange={(e) => this.onChange1(e, "token_amount_for_user")}
+          >
+            IP 使用通证数量
+          </InputItem>
+          <InputItem
+            maxLength="20"
             placeholder="请输入 IP 使用通证单次下载数量"
-            content="IP 单次下载数量"
-            type="text"
+            type="number"
             className="ant-right-input"
-            onValueChange={(e) => this.onChange1(e, "download_fee")}
-          />
+            clear={false}
+            onChange={(e) => this.onChange1(e, "download_fee")}
+          >
+            IP 单次下载数量
+          </InputItem>
           <div className="upload">
             <Upload
               {...props}
@@ -323,23 +390,7 @@ class App extends React.Component {
         </div>
         <div className="btn">
           <WhiteSpace size="lg" />
-          <Button
-            className="btns"
-            onClick={() =>
-              prompt(
-                "输入密码",
-                "",
-                (password) => {
-                  this.onDone({
-                    id: this.state.id,
-                    method: "checkAuthorize",
-                    params: [password + ""],
-                  });
-                },
-                "secure-text"
-              )
-            }
-          >
+          <Button className="btns" onClick={() => this.getVerify()}>
             提交
           </Button>
         </div>
