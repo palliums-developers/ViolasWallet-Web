@@ -224,7 +224,7 @@ class App extends React.Component {
         params: [],
       }),
       (resp) => {
-         alert(JSON.stringify(resp));
+        //  alert(JSON.stringify(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -288,7 +288,6 @@ class App extends React.Component {
       }
       if (info.file.status === "done") {
         
-        alert(info.file.response)
         if (info.file.response.code == 2000) {
           this.setState({
             ip_file_name: info.file.response.data.file_name,

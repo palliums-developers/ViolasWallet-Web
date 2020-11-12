@@ -187,7 +187,7 @@ class PatentDetail extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.stringify(resp));
+        // alert(JSON.stringify(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
