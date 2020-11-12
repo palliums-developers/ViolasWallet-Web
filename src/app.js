@@ -28,14 +28,7 @@ if (isIPhone) {
     onTouchStart: (e) => e.preventDefault(),
   };
 }
-const props = {
-  name: 'file',
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  listType: 'picture',
-  headers: {
-    authorization: 'authorization-text',
-  }
-};
+
 
 // class InputEdit extends React.Component {
 //   onChange = (value) => {
@@ -175,49 +168,41 @@ class App extends React.Component {
       this.setState(state => ({
         ip_file_name:file.name,
         fileList: [...state.fileList, file],
-      }),()=>{
-        this.uploadFile()
-        console.log(this.state.fileList);
-      });
+      }));
     }else{
       message.error('只能上传一个文件');
       this.setState(
         (state) => ({
           fileList: [...state.fileList],
-        }),
-        () => {
-          this.uploadFile();
-          console.log(this.state.fileList);
-        }
-      );
+        }));
     }
     return false;
   };
-  uploadFile = () => {
-    alert("uploadFile");
-    let { fileList } = this.state;
-    console.log(fileList, fileList[0].name);
-    let param = new FormData(); //创建form对象
-    console.log(param)
-    param.append("file", fileList[0], fileList[0].name); //通过append向form对象添加数据
-    console.log(param);
-    param.append("chunk", "0"); //添加form表单中其他数据
-    console.log(param.get("file")); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-    axios
-      .post(url + "/1.0/newnet/ip/file", param, {
-        headers: { "Content-type": "multipart/form-data" },
-      })
-      .then((res) => {
-        alert(JSON.stringify(res));
-        if (res.data.code == 2000) {
-        } else {
-          message.error("submit failure");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // uploadFile = () => {
+  //   alert("uploadFile");
+  //   let { fileList } = this.state;
+  //   console.log(fileList, fileList[0].name);
+  //   let param = new FormData(); //创建form对象
+  //   console.log(param)
+  //   param.append("file", fileList[0], fileList[0].name); //通过append向form对象添加数据
+  //   console.log(param);
+  //   param.append("chunk", "0"); //添加form表单中其他数据
+  //   console.log(param.get("file")); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+  //   axios
+  //     .post(url + "/1.0/newnet/ip/file", param, {
+  //       headers: { "Content-type": "multipart/form-data" },
+  //     })
+  //     .then((res) => {
+  //       alert(JSON.stringify(res));
+  //       if (res.data.code == 2000) {
+  //       } else {
+  //         message.error("submit failure");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
   //删除文件
   onRemove=(file)=>{
     this.setState(state => {
@@ -273,7 +258,9 @@ class App extends React.Component {
       message.error("请输入 IP 使用通证数量");
     } else if (download_fee == "") {
       message.error("请输入 IP 使用通证单次下载数量");
-    }else{
+    } else if (ip_file_name == "") {
+      message.error("请输入上传 IP ");
+    } else {
       prompt(
         "输入密码",
         "",
@@ -290,7 +277,31 @@ class App extends React.Component {
     
   }
   render(){
-    
+    let arr = {
+      name: "ip_file",
+      action: "http://94.191.95.240:4000/1.0/newnet/ip/file",
+      // beforeUpload: this.beforeUpload,
+      onRemove:this.onRemove,
+      onChange: (info) => {
+      if (info.file.status !== "uploading") {
+        // console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        
+        alert(info.file.response)
+        if (info.file.response.code == 2000) {
+          this.setState({
+            ip_file_name: info.file.response.data.file_name,
+          },()=>{
+            message.success(`${info.file.name} file uploaded successfully`);
+          });
+        }
+        
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    }
+    };
     return (
       <div className="app">
         <div className="list">
@@ -379,10 +390,10 @@ class App extends React.Component {
           </InputItem>
           <div className="upload">
             <Upload
-              {...props}
-              onRemove={this.onRemove}
-              beforeUpload={this.beforeUpload}
-              fileList={this.state.fileList}
+              {...arr}
+              // onRemove={this.onRemove}
+              // beforeUpload={this.beforeUpload}
+              // fileList={this.state.fileList}
             >
               <Button icon={<PlusCircleOutlined />}>IP上传</Button>
             </Upload>
