@@ -192,16 +192,20 @@ class App extends React.Component {
     }
     return false;
   };
-  uploadFile = () =>{
-    alert('uploadFile')
+  uploadFile = () => {
+    alert("uploadFile");
+    let { fileList } = this.state;
+    console.log(fileList, fileList[0].name);
+    let param = new FormData(); //创建form对象
+    console.log(param)
+    param.append("file", fileList[0], fileList[0].name); //通过append向form对象添加数据
+    console.log(param);
+    param.append("chunk", "0"); //添加form表单中其他数据
+    console.log(param.get("file")); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
     axios
-      .post(
-        url + "/1.0/newnet/ip/file",
-        {file:this.state.fileList},
-        {
-          headers:{"Content-type": "multipart/form-data"},
-        }
-      )
+      .post(url + "/1.0/newnet/ip/file", param, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
       .then((res) => {
         alert(JSON.stringify(res));
         if (res.data.code == 2000) {
@@ -212,7 +216,7 @@ class App extends React.Component {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
   //删除文件
   onRemove=(file)=>{
     this.setState(state => {
