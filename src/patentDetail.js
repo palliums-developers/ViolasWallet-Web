@@ -172,7 +172,7 @@ class PatentDetail extends Component {
 
   curReason(fail_reason) {
     for (let i = 0; i < this.state.failReason.length; i++) {
-      if (fail_reason == this.state.failReason[i].id) {
+      if (fail_reason == this.state.failReason[i].reason) {
         return this.state.failReason[i].reason;
       }
     }
@@ -233,7 +233,7 @@ class PatentDetail extends Component {
               <span>{this.curReason(ipList.fail_reason)}</span>
             </p>
           ) : null}
-          {ipList.fail_reason == 2 ? (
+          {ipList.fail_reason == '其他' ? (
             <p className="fail_content">{ipList.fail_content}</p>
           ) : null}
         </div>
