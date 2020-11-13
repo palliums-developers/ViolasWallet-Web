@@ -348,7 +348,7 @@ class App extends React.Component {
             IP 通证名称
           </InputItem>
           <InputItem
-            maxLength="20"
+            maxLength="8"
             placeholder="请输入 IP 通证数量"
             type="number"
             className="ant-right-input"
@@ -368,7 +368,7 @@ class App extends React.Component {
             IP 使用通证名称
           </InputItem>
           <InputItem
-            maxLength="20"
+            maxLength="8"
             placeholder="请输入 IP 使用通证数量"
             type="number"
             className="ant-right-input"
@@ -378,7 +378,7 @@ class App extends React.Component {
             IP 使用通证数量
           </InputItem>
           <InputItem
-            maxLength="20"
+            maxLength="8"
             placeholder="请输入 IP 使用通证单次下载数量"
             type="number"
             className="ant-right-input"
