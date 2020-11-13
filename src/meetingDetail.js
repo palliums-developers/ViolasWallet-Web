@@ -137,7 +137,7 @@ class MeetingDetail extends Component {
       );
     }
   };
-  //审批通过驳回
+  //审批通过 驳回
   ipverifyFun = (params) => {
     axios
       .get(
@@ -150,13 +150,23 @@ class MeetingDetail extends Component {
           params.fail_code
       )
       .then((res) => {
+        console.log(res);
         if (res.data.code == 2000) {
-          message.success("审批驳回成功");
+          if (params.status == 1) {
+            message.success("审批已通过");
+          }else if (params.status == 2) {
+            message.success("审批驳回成功");
+          }
+          
           setTimeout(() => {
             this.closePage();
           }, 500);
         } else {
-          message.error("审批驳回失败");
+          if (params.status == 1) {
+            message.success("审批未通过");
+          } else if (params.status == 2) {
+            message.success("审批驳回失败");
+          }
         }
       })
       .catch((error) => {
@@ -178,13 +188,14 @@ class MeetingDetail extends Component {
           params.fail_reason
       )
       .then((res) => {
+        console.log(res);
         if (res.data.code == 2000) {
-          message.success("成功");
+          message.success("审批驳回成功");
            setTimeout(() => {
              this.closePage();
            }, 500);
         } else {
-          message.error("失败");
+          message.error("审批驳回失败");
         }
       })
       .catch((error) => {
