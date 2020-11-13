@@ -163,9 +163,9 @@ class MeetingDetail extends Component {
           }, 500);
         } else {
           if (params.status == 1) {
-            message.success("审批未通过");
+            message.error("审批未通过");
           } else if (params.status == 2) {
-            message.success("审批驳回失败");
+            message.error("审批驳回失败");
           }
         }
       })
