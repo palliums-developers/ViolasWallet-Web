@@ -286,8 +286,9 @@ class App extends React.Component {
       if (info.file.status !== "uploading") {
         // console.log(info.file, info.fileList);
       }
+      alert(JSON.stringify(info.file),'.........');
       if (info.file.status === "done") {
-        console.log(info.file.response,'.........');
+        
         if (info.file.response.code == 2000) {
           this.setState({
             ip_file_name: info.file.response.data.file_name,
