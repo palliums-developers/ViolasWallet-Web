@@ -283,10 +283,12 @@ class App extends React.Component {
       // beforeUpload: this.beforeUpload,
       onRemove:this.onRemove,
       onChange: (info) => {
-        alert(JSON.stringify(info.file), ".........");
+      alert(JSON.stringify(info.file), ".........");
       if (info.file.status !== "uploading") {
-         message.error(`${info.file.name} file upload failed.`);
-      }else if (info.file.status === "uploading") {
+        // console.log(info.file, info.fileList);
+      }
+      alert(JSON.stringify(info.file),'.........');
+      if (info.file.status === "done") {
         
         if (info.file.response.code == 2000) {
           this.setState({
@@ -296,7 +298,9 @@ class App extends React.Component {
           });
         }
         
-      } 
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
     }
     };
     let {
