@@ -287,7 +287,7 @@ class App extends React.Component {
         // console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
-        
+        console.log(info.file.response,'.........');
         if (info.file.response.code == 2000) {
           this.setState({
             ip_file_name: info.file.response.data.file_name,
@@ -301,6 +301,16 @@ class App extends React.Component {
       }
     }
     };
+    let {
+      ip_id,
+      ip_name,
+      ip_intro,
+      token_name,
+      token_amount,
+      token_name_for_user,
+      token_amount_for_user,
+      download_fee,
+    } = this.state;
     return (
       <div className="app">
         <div className="list">
@@ -312,6 +322,7 @@ class App extends React.Component {
             className="ant-right-input"
             clear={false}
             onChange={(e) => this.onChange1(e, "ip_id")}
+            value={ip_id}
           >
             IP 号
           </InputItem>
@@ -321,6 +332,7 @@ class App extends React.Component {
             type="text"
             className="ant-right-input"
             clear={false}
+            value={ip_name}
             onChange={(e) => this.onChange1(e, "ip_name")}
           >
             IP 名称
@@ -334,6 +346,7 @@ class App extends React.Component {
             maxLength="200"
             ref={(el) => (this.autoFocusInst = el)}
             autoHeight
+            value={ip_intro}
             onChange={(e) => this.onChange1(e, "ip_intro")}
           />
           <InputItem
@@ -343,7 +356,7 @@ class App extends React.Component {
             className="ant-right-input"
             clear={false}
             onChange={(e) => this.onChange1(e, "token_name")}
-            value={this.state.token_name}
+            value={token_name}
           >
             IP 通证名称
           </InputItem>
@@ -353,6 +366,7 @@ class App extends React.Component {
             type="number"
             className="ant-right-input"
             clear={false}
+            value={token_amount}
             onChange={(e) => this.onChange1(e, "token_amount")}
           >
             IP 通证数量
@@ -363,6 +377,7 @@ class App extends React.Component {
             type="text"
             className="ant-right-input"
             clear={false}
+            value={token_name_for_user}
             onChange={(e) => this.onChange1(e, "token_name_for_user")}
           >
             IP 使用通证名称
@@ -373,6 +388,7 @@ class App extends React.Component {
             type="number"
             className="ant-right-input"
             clear={false}
+            value={token_amount_for_user}
             onChange={(e) => this.onChange1(e, "token_amount_for_user")}
           >
             IP 使用通证数量
@@ -383,6 +399,7 @@ class App extends React.Component {
             type="number"
             className="ant-right-input"
             clear={false}
+            value={download_fee}
             onChange={(e) => this.onChange1(e, "download_fee")}
           >
             IP 单次下载数量
