@@ -284,10 +284,9 @@ class App extends React.Component {
       onRemove:this.onRemove,
       onChange: (info) => {
       alert(JSON.stringify(info.file), ".........");
-      if (info.file.status !== "uploading") {
-        // console.log(info.file, info.fileList);
-      }
-      alert(JSON.stringify(info.file),'.........');
+      // if (info.file.status !== "uploading") {
+      //   // console.log(info.file, info.fileList);
+      // }
       if (info.file.status === "done") {
         
         if (info.file.response.code == 2000) {
