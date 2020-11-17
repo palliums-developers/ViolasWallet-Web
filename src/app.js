@@ -279,12 +279,12 @@ class App extends React.Component {
   render(){
     let arr = {
       name: "ip_file",
-      // action: "http://94.191.95.240:4000/1.0/newnet/ip/file",
-      action: "http://47.52.66.26:10090/file",
+      action: "http://94.191.95.240:4000/1.0/newnet/ip/file",
+      // action: "http://47.52.66.26:10090/file",
       // beforeUpload: this.beforeUpload,
       onRemove: this.onRemove,
       onChange: (info) => {
-        alert(JSON.stringify(info.file), ".........");
+        // alert(JSON.stringify(info.file), ".........");
         // if (info.file.status !== "uploading") {
         //   // console.log(info.file, info.fileList);
         // }
