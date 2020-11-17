@@ -283,7 +283,7 @@ class App extends React.Component {
       // beforeUpload: this.beforeUpload,
       onRemove:this.onRemove,
       onChange: (info) => {
-      // alert(JSON.stringify(info.file), ".........");
+      alert(JSON.stringify(info.file), ".........");
       // if (info.file.status !== "uploading") {
       //   // console.log(info.file, info.fileList);
       // }
