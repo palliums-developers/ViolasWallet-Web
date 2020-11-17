@@ -279,28 +279,30 @@ class App extends React.Component {
   render(){
     let arr = {
       name: "ip_file",
-      action: "http://94.191.95.240:4000/1.0/newnet/ip/file",
+      // action: "http://94.191.95.240:4000/1.0/newnet/ip/file",
+      action: "http://47.52.66.26:10090/file",
       // beforeUpload: this.beforeUpload,
-      onRemove:this.onRemove,
+      onRemove: this.onRemove,
       onChange: (info) => {
-      alert(JSON.stringify(info.file), ".........");
-      // if (info.file.status !== "uploading") {
-      //   // console.log(info.file, info.fileList);
-      // }
-      if (info.file.status === "done") {
-        
-        if (info.file.response.code == 2000) {
-          this.setState({
-            ip_file_name: info.file.response.data.file_name,
-          },()=>{
-            message.success(`${info.file.name} file uploaded successfully`);
-          });
+        alert(JSON.stringify(info.file), ".........");
+        // if (info.file.status !== "uploading") {
+        //   // console.log(info.file, info.fileList);
+        // }
+        if (info.file.status === "done") {
+          if (info.file.response.code == 2000) {
+            this.setState(
+              {
+                ip_file_name: info.file.response.data.file_name,
+              },
+              () => {
+                message.success(`${info.file.name} file uploaded successfully`);
+              }
+            );
+          }
+        } else if (info.file.status === "error") {
+          message.error(`${info.file.name} file upload failed.`);
         }
-        
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    }
+      },
     };
     let {
       ip_id,
