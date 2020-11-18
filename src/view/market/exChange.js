@@ -751,7 +751,8 @@ class ExChange extends Component {
       .then((res) => res.json())
       .then((res) => {
         // console.log(res.data);
-        if (res.data.length > 0) {
+      
+        if (res.data) {
           this.setState({
             changeRecord: res.data,
           });
