@@ -38,6 +38,7 @@
     "antd": "^4.6.4",
     "axios": "^0.19.2",
     "better-scroll": "^1.15.2",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-immutable-render-mixin": "^0.9.7",
     "react-intl-universal": "^2.4.1",
     "react-redux": "^7.2.0",

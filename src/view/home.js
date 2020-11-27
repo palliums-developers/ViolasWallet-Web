@@ -95,7 +95,7 @@ class Home extends React.PureComponent {
     return (
       <div className="home">
         {/* <div style={{position:'absolute'}}>log out</div> */}
-        <div className="header">
+        <div className="header header1">
           <div
             className="logo"
             onClick={() => {

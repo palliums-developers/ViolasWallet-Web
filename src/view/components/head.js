@@ -102,85 +102,97 @@ class Head extends React.PureComponent {
   render() {
     let { active, showMineDialog} = this.state;
     return (
-           <div className="mine">
-                
-                {showMineDialog ? (
-                  <img
-                    // onMouseEnter={(e) => this.getMineDialog(e)}
-                    // onMouseLeave={(e) => this.getMineDialog1(e)}
-                    onClick={(e) => this.getMineDialog(e)}
-                    src="/img/wode备份 3@2x.png"
-                  />
-                ) : (
-                  <img
-                    onMouseEnter={(e) => this.getMineDialog(e)}
-                    // onMouseMove={(e) => this.getMineDialog(e)}
-                    // onMouseLeave={(e) => this.getMineDialog1(e)}
-                    onClick={(e) => this.getMineDialog(e)}
-                    src="/img/wode备份 2@2x.png"
-                  />
-                )}
-                {showMineDialog ? (
-                  <div className="mineList" 
-                    onMouseEnter={() => this.menuMouseEnterEvent()}
-                    onMouseLeave={() => this.menuMouseLeaveEvent()}
-                    >
-                    <div className="balanceList">
-                      <div
-                        className="balance"
-                        onClick={() => {
-                          this.props.history.push("/homepage/home");
-                        }}
-                      >
-                        <label>{intl.get("Total assets")}($)</label>
-                        <span>
-                          {window.sessionStorage.getItem("balances")
-                            ? this.getFloat(
-                                window.sessionStorage.getItem("balances"),
-                                2
-                              )
-                            : "0"}
-                        </span>
-                      </div>
-                      <div className="icon">
-                        <img src="/img/Combined Shape 2@2x.png" />
-                      </div>
-                    </div>
-                    <div className="btns">
-                      <dl
-                        onClick={() => {
-                          this.props.history.push({
-                            pathname: "/homepage/home/transfer",
-                          });
-                        }}
-                        className={active == "transfer" ? "act" : null}
-                      >
-                        <dt>
-                          <img src="/img/编组 13备份 4@2x.png" />
-                        </dt>
-                        <dd>{intl.get("Transfer")}</dd>
-                      </dl>
-                      <dl
-                        onClick={() => {
-                          this.props.history.push({
-                            pathname: "/homepage/home/getMoney",
-                          });
-                        }}
-                        className={active == "getMoney" ? "act" : null}
-                      >
-                        <dt>
-                          <img src="/img/编组 13备份 5@2x.png" />
-                        </dt>
-                        <dd>{intl.get("Receive")}</dd>
-                      </dl>
-                    </div>
-                    <p onClick={() => this.logout()}>
-                      <img src="/img/tuichu 2@2x.png" />
-                      {intl.get("Logout")}
-                    </p>
-                  </div>
-                ) : null}
+      <div className="mine">
+        {showMineDialog ? (
+          <img
+            // onMouseEnter={(e) => this.getMineDialog(e)}
+            // onMouseLeave={(e) => this.getMineDialog1(e)}
+            onClick={(e) => this.getMineDialog(e)}
+            src="/img/wode备份 3@2x.png"
+          />
+        ) : (
+          <img
+            onMouseEnter={(e) => this.getMineDialog(e)}
+            // onMouseMove={(e) => this.getMineDialog(e)}
+            // onMouseLeave={(e) => this.getMineDialog1(e)}
+            onClick={(e) => this.getMineDialog(e)}
+            src="/img/wode备份 2@2x.png"
+          />
+        )}
+        {showMineDialog ? (
+          <div
+            className="mineList"
+            onMouseEnter={() => this.menuMouseEnterEvent()}
+            onMouseLeave={() => this.menuMouseLeaveEvent()}
+          >
+            <div className="balanceList">
+              <div
+                className="balance"
+                onClick={() => {
+                  this.props.history.push("/homepage/home");
+                }}
+              >
+                <label>{intl.get("Total assets")}($)</label>
+                <span>
+                  {window.sessionStorage.getItem("balances")
+                    ? this.getFloat(
+                        window.sessionStorage.getItem("balances"),
+                        2
+                      )
+                    : "0"}
+                </span>
               </div>
+              <div className="icon">
+                <img src="/img/Combined Shape 2@2x.png" />
+              </div>
+            </div>
+            <div className="btns">
+              <dl
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: "/homepage/home/transfer",
+                  });
+                }}
+                className={active == "transfer" ? "act" : null}
+              >
+                <dt>
+                  <img src="/img/编组 13备份 4@2x.png" />
+                </dt>
+                <dd>{intl.get("Transfer")}</dd>
+              </dl>
+              <dl
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: "/homepage/home/getMoney",
+                  });
+                }}
+                className={active == "getMoney" ? "act" : null}
+              >
+                <dt>
+                  <img src="/img/编组 13备份 5@2x.png" />
+                </dt>
+                <dd>{intl.get("Receive")}</dd>
+              </dl>
+            </div>
+            <div
+              className="rules"
+              onClick={() => {
+                this.props.history.push("/homepage/home/miningAwards");
+              }}
+            >
+              <p>挖矿奖励</p>
+            </div>
+            <p onClick={() => {}}>
+              <img src="/img/yaoqingjiangli 2@2x.png" />
+              邀请好友
+            </p>
+            <p onClick={() => this.logout()}>
+              <img src="/img/tuichu 2@2x.png" />
+              {intl.get("Logout")}
+            </p>
+          </div>
+        ) : null}
+      </div>
     );
   }
 }

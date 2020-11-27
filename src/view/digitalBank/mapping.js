@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './digitalBank.scss';
-import { Breadcrumb } from "antd";
+import { Breadcrumb,message } from "antd";
 import { NavLink } from "react-router-dom";
 import { timeStamp2String } from '../../utils/timer';
 import { getBitcoinScript, getLibraScript, getMapScript } from '../../utils/trans'
@@ -9,6 +9,7 @@ import getLibraTx from '../../utils/libra_trans';
 import getViolasTx from '../../utils/violas_trans';
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import code_data from '../../utils/code.json';
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -582,7 +583,10 @@ class DigitalBank extends Component {
                               <div>
                                 <h4>{v.from_coin.assert.show_name}</h4>
                                 <p>
-                                  余额：{v.from_coin.coin_type == 'btc' ? v.balance / 1e8 : v.balance / 1e6}{" "}
+                                  余额：
+                                  {v.from_coin.coin_type == "btc"
+                                    ? v.balance / 1e8
+                                    : v.balance / 1e6}{" "}
                                   {v.from_coin.assert.show_name}
                                 </p>
                               </div>
@@ -638,6 +642,43 @@ class DigitalBank extends Component {
               >
                 {warning}
               </p>
+            </div>
+          </div>
+          <div className="ETHTokenWrap">
+            <h4>如何映射 ETH 代币？</h4>
+            <div className="ETHTokenWrapList">
+              <div className="tokenList1">
+                <p>将链接复制到以下钱包，即可将ETH代币映射至violas钱包</p>
+                <CopyToClipboard
+                  text="localhost:12222/violasMapping"
+                  onCopy={() => message.success("复制成功")}
+                >
+                  <a>
+                    localhost:12222/violasMapping
+                    <img src="/img/fuzhi 3@2x.png" />
+                  </a>
+                </CopyToClipboard>
+              </div>
+              <div className="tokenList2">
+                <span>
+                  <img src="/img/eth1.png" />
+                </span>
+                <span>
+                  <img src="/img/eth2.png" />
+                </span>
+                <span>
+                  <img src="/img/eth3.png" />
+                </span>
+                <span>
+                  <img src="/img/eth4.png" />
+                </span>
+                <span>
+                  <img src="/img/eth5.png" />
+                </span>
+                <span>
+                  <img src="/img/eth6.png" />
+                </span>
+              </div>
             </div>
           </div>
           <div className="mappingRecord">

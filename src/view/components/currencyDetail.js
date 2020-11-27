@@ -92,9 +92,12 @@ class CurrencyDetail extends Component {
               fetch(url + "/1.0/"+type+"/transaction?addr=" + detailAddrs)
                 .then((res) => res.json())
                 .then((res) => {
-                  this.setState({
-                    total: res.data.length,
-                  });
+                  if (res.data) {
+                    this.setState({
+                      total: res.data.length,
+                    });
+                  }
+                  
                 });
             }
 

@@ -16,12 +16,24 @@ import BorrowOrder from "../view/digitalBank/borrowOrder";
 import BorrowDetails from "../view/digitalBank/borrowDetails";
 import Repayment from "../view/digitalBank/repayment";
 import PushMessage from "../view/push/pushMessage";
+import ViolasMapping from "../view/mapping/violasMapping";
+import ViolasExchange from "../view/mapping/violasExchange";
+import MiningAwards from "../view/mining/miningAwards";
+import RuleDescription from "../view/mining/ruleDescription";
 
 let routes = [
   //首页
   {
     path: "/app",
     component: App,
+  },
+  {
+    path: "/violasMapping",
+    component: ViolasMapping,
+  },
+  {
+    path: "/violasExchange",
+    component: ViolasExchange,
   },
   {
     path: "/homepage",
@@ -38,6 +50,14 @@ let routes = [
           {
             path: "/homepage/home/pushMessage",
             component: PushMessage,
+          },
+          {
+            path: "/homepage/home/miningAwards",
+            component: MiningAwards,
+          },
+          {
+            path: "/homepage/home/ruleDescription",
+            component: RuleDescription,
           },
           {
             path: "/homepage/home/changeContent",
@@ -69,6 +89,7 @@ let routes = [
                 path: "/homepage/home/digitalBank/mapping",
                 component: Mapping,
               },
+
               {
                 path: "/homepage/home/digitalBank/saveDetails",
                 component: SaveDetails,

@@ -1,0 +1,392 @@
+.violasMapping{
+    width: 100%;
+    background: #FFF;
+    .violasMappingContent{
+        width: 636px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        h3{
+            font-size: 20px;
+            font-weight: 600;
+            color: #3C3848;
+            margin-top: 123px;
+        }
+        .formWrap{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 56px;
+            p{
+                margin-bottom: 8px!important;
+                margin-left: 12px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+            }
+            input{
+                width: 100%;
+                height: 50px;
+                font-size: 16px;
+                background: #FFFFFF;
+                border-radius: 8px;
+                border: 0.5px solid #979797;
+                outline: 0;
+                padding-left: 12px;
+                box-sizing: border-box;
+                ::-webkit-input-placeholder{
+                    
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #BABABA;
+                }
+            }
+            span{
+                margin-left: 12px;
+                margin-top: 8px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #E54040;
+                line-height: 14px;
+            }
+            
+        }
+        .confirmBtn{
+            width: 280px;
+            height: 46px;
+            background: #6131AB;
+            border-radius: 23px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 46px;
+            margin-top: 91px;
+            margin-bottom: 71px;
+            cursor: pointer;
+        }
+        .descrList{
+            width: 100%;
+            height: 103px;
+            background: #F7F7F9;
+            border-radius: 8px;
+            padding-top: 27px;
+            padding-left: 32px;
+            box-sizing: border-box;
+            h4{
+                
+                font-size: 16px;
+                font-weight: 500;
+                color: #999999;
+            }
+            p{
+                
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+            }
+        }
+    }
+}
+.violasExchange{
+    width: 100%;
+    background: #FFF;
+    .violasExchangeContent{
+        width: 636px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+         h3{
+            font-size: 20px;
+            font-weight: 600;
+            color: #3C3848;
+            margin-top: 68px;
+            margin-bottom: 56px;
+        }
+        .formWrap{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            .form{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                >div{
+                    p{
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #5C5C5C;
+                        margin-bottom: 8px!important;
+                        padding: 0 12px;
+                        box-sizing: border-box;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .ant-input-affix-wrapper{
+                        height: 50px;
+                        border-radius: 8px;
+                         .ant-input{
+                             font-size: 16px;
+                             color: #333333;
+                             ::-webkit-input-placeholder{
+                                font-size: 16px;
+                                font-weight: 400;
+                                color: #BABABA;
+                                }
+                            }
+                    }
+                    .ant-input-affix-wrapper:hover{
+                        border-color:rgba(97, 49, 171, 1);
+                    }
+                    .ant-input-affix-wrapper:focus,.ant-input-affix-wrapper-focused{
+                        border-color:rgba(97, 49, 171, 1);
+                        box-shadow: 0 0 0 2px rgba(97, 49, 171, .2);
+                    }
+                    .scale{
+                        display: flex;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #333333;
+                        margin-left: 12px;
+                        margin-top: 8px!important;
+                    }
+                }
+                .ant-row{
+                    width: 100%;
+                    height: 50px!important;
+                    .ant-form-item-control-input{
+                         width: 100%;
+                        .ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-custmize-input) .ant-select-selector{
+                                border-color:rgba(97, 49, 171, 1)!important;
+                                box-shadow: 0 0 0 2px rgba(97, 49, 171, .2)!important;
+                        }
+                        .ant-select:not(.ant-select-disabled):hover .ant-select-selector{
+                                border-color:rgba(97, 49, 171, 1)!important;
+                        }
+                        .ant-select{
+                            width: 100%;
+                            font-size: 16px;
+                            font-weight: 400;
+                            color: #333333;
+                        }
+                        
+                        .ant-select-selector{
+                            height: 50px;
+                            align-items: center;
+                            border-radius: 8px;
+                            // border: 1px solid #979797;
+                           
+                            
+                        }
+                        .ant-select-arrow{
+                            width: 16px;
+                            height: 16px;
+                            background: url('/img/矩形 2@2x.png') no-repeat;
+                            background-size: 100% 100%;
+                            top:45%;
+                            span{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+                
+            }
+            .confirmBtn{
+                width: 280px;
+                height: 46px;
+                background: #6131AB;
+                border-radius: 23px;
+                font-size: 18px;
+                font-weight: 500;
+                color: #FFFFFF;
+                line-height: 46px;
+                text-align: center;
+                margin:91px auto;
+                margin-bottom: 68px;
+
+            }
+        }
+        .descrList{
+            width: 100%;
+            height: 369px;
+            background: #F7F7F9;
+            border-radius: 8px;
+            padding-left: 32px;
+            padding-top: 26px;
+            padding-right: 32px;
+            box-sizing: border-box;
+            margin-bottom: 53px;
+            >div{
+                margin-bottom: 32px;
+                display: flex;
+                flex-direction: column;
+                h4{
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #999999;
+                    margin-bottom: 8px!important;
+                }
+                span{
+                    
+                    font-size: 14px;
+                    font-weight: 550;
+                    color: #333333;
+                    margin: 7px 0!important;
+                }
+                p{
+                    
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #333333;
+                }
+            }
+        }
+    }
+}
+@media (max-width:750px){
+  .violasMapping{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background:rgba(247, 247, 249, 1);
+    .violasMappingContent{
+        width: 100%;
+        padding: 0 15px;
+        box-sizing: border-box;
+        h3{  
+        font-size: 16px;
+        font-weight: 500;
+        color: #333333;
+        margin-top: 20px;
+        margin-bottom: 35px;
+        }
+        .formWrap{
+           width: 100%;
+           background: #FFF;
+           padding: 0 15px;
+           box-sizing: border-box;
+           
+        }
+        .form{
+               p{
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: #5C5C5C;
+               }
+               input{
+                font-size: 14px;
+                height: 48px;
+                ::-webkit-input-placeholder{
+                    
+                    font-size: 14px;
+                }
+            }
+           }
+         .confirmBtn{
+                width: 238px;
+                height: 40px;
+                line-height:40px;
+                background: linear-gradient(152deg, #9339F3 0%, #7038FD 100%);
+                border-radius: 3px;
+                font-size: 16px;
+                margin-top: 181px;
+                margin-bottom: 54px;
+        }
+        .descrList{
+            padding-left: 15px;
+            margin-top: 32px;
+            h4{
+                font-size: 14px;
+            }
+            
+            p{
+                font-size: 12px;
+            }
+        }
+    }
+  }
+  .violasExchange{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background:rgba(247, 247, 249, 1);
+    .violasExchangeContent{
+        width: 100%;
+        padding: 0 15px;
+        box-sizing: border-box;
+        h3{  
+        font-size: 16px;
+        font-weight: 500;
+        color: #333333;
+        margin-top: 20px;
+        margin-bottom: 35px;
+        }
+        .formWrap{
+           width: 100%;
+           background: #FFF;
+           padding: 0 15px;
+           box-sizing: border-box;
+           padding-top: 37px;
+           box-sizing: border-box;
+           .form{
+              > div{
+                  p{
+                     font-size: 12px;
+                  }
+              }
+           } 
+           .confirmBtn{
+                width: 238px;
+                height: 40px;
+                line-height:40px;
+                background: linear-gradient(152deg, #9339F3 0%, #7038FD 100%);
+                border-radius: 3px;
+                font-size: 16px;
+                margin-top: 56px;
+                margin-bottom: 54px;
+        }
+        }
+        .descrList{
+            padding-left: 15px;
+            padding-right: 10px;
+            padding-top: 0;
+            margin-top: 32px;
+            >div{
+                margin-bottom: 24px;
+                h4{
+                    font-size: 14px;
+                }
+                span{
+                    font-size: 12px;
+                    margin-top: 25px!important;
+                    margin-bottom: 5px!important;
+                }
+                p{
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
+}
+
+@media screen and (max-width: 1100px){
+.ant-select {
+    width: 100%!important;
+}
+}
+@media screen and (max-width: 1315px){
+.ant-select {
+    width: 100%!important;
+}
+}
