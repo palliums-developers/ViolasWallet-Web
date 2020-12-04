@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Drawer } from "antd";
+import { Drawer, Affix } from "antd";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
 import intl, { init } from "react-intl-universal";
@@ -497,9 +497,9 @@ class HomeContent extends Component {
                   <label>{intl.get("Funds")}</label>
                   <i
                     onClick={(e) => {
-                      this.stopPropagation(e)
+                      this.stopPropagation(e);
                       this.setState({
-                        display: true
+                        display: true,
                       });
                       // this.props.showPolling(!this.props.display);
                     }}
@@ -507,6 +507,14 @@ class HomeContent extends Component {
                     <img src="/img/编组 18@2x.png" />
                   </i>
                 </p>
+                <div
+                  className="goMining"
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/miningAwards");
+                  }}
+                >
+                  <span>挖矿领福利</span>
+                </div>
                 <div className="assetLists">
                   {BTCBalances.map((v, i) => {
                     return (
@@ -514,7 +522,7 @@ class HomeContent extends Component {
                         className="assetListsEvery"
                         key={i}
                         onClick={(e) => {
-                          this.stopPropagation(e)
+                          this.stopPropagation(e);
                           this.setState(
                             {
                               display1: !this.state.display1,
@@ -584,7 +592,7 @@ class HomeContent extends Component {
                             }
                             key={i}
                             onClick={(e) => {
-                              this.stopPropagation(e)
+                              this.stopPropagation(e);
                               this.setState(
                                 {
                                   display1: !this.state.display1,
@@ -653,6 +661,14 @@ class HomeContent extends Component {
                     )}
                 </div>
               </div>
+                <div
+                  className="free"
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/userRewards");
+                  }}
+                >
+                  <span>免费领取</span>
+                </div>
             </div>
             {/* 添加币种 */}
             <Drawer

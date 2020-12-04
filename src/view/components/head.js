@@ -182,9 +182,13 @@ class Head extends React.PureComponent {
             >
               <p>挖矿奖励</p>
             </div>
-            <p onClick={() => {}}>
+            <p
+              onClick={() => {
+                this.props.history.push("/homepage/home/inviteRewards");
+              }}
+            >
               <img src="/img/yaoqingjiangli 2@2x.png" />
-              邀请好友
+              邀请奖励
             </p>
             <p onClick={() => this.logout()}>
               <img src="/img/tuichu 2@2x.png" />

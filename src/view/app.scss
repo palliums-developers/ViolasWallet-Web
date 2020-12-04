@@ -372,6 +372,24 @@ dd {
           background-size: 100% 100%;
         }
       }
+      span:nth-child(1){
+        i{
+          width: 25px;
+          height: 25px;
+          margin-top: 13px;
+        }
+      }
+      span:nth-child(2){
+        i{
+          margin-top: 12px;
+        }
+      }
+      span:nth-child(3){
+        i{
+          width: 26px;
+          height: 26px;
+        }
+      }
       span:hover{
         color:#FFF;
         background: rgba(247, 247, 249, .15);
@@ -1334,7 +1352,7 @@ dd {
   .content {
     flex: 1;
     display: flex;
-    overflow-y: auto;
+    
     overflow-x: hidden;
     background: #FFF;
     margin-top: 8px;
@@ -1342,8 +1360,31 @@ dd {
     // position: relative;
     .contentWrap {
       width: 755px;
-      margin: 69px auto;
-
+      margin: 0 auto;
+      margin-top: 69px;
+      position: relative;
+      // overflow-y: auto;
+      .free{
+        width: 80px;
+        height: 88px;
+        position: absolute;
+        bottom: 5%;
+        right:5%;
+        // background-attachment:fixed;
+        background: url('/img/m_编组 63@2x.png')no-repeat;
+        background-size: 100%;
+        background-position: center center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        span{
+          margin-top:64px;
+          font-size: 15px;
+          font-family: PingFangSC-Semibold, PingFang SC;
+          font-weight: 600;
+          color: #7035BF;
+        }
+      }
       .apply {
         width: 100%;
         height: 196px;
@@ -1439,6 +1480,7 @@ dd {
       }
       .assetList {
         width: 100%;
+        height: 100%;
         padding: 20px 17px;
         box-sizing: border-box;
         background: rgba(255, 255, 255, 1);
@@ -1459,6 +1501,28 @@ dd {
               width: 100%;
               height: 100%;
             }
+          }
+        }
+        .goMining{
+          width: 100%;
+          height: 60px;
+          background: url('/img/m_编组 177@2x.png')no-repeat;
+          background-size: 100%;
+          background-position: center center;
+          margin-bottom: 22px;
+          display: flex;
+          align-items:center;
+          cursor: pointer;
+          span{
+            font-size: 21px;
+            // font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #FFFFFF;
+            line-height: 29px;
+            letter-spacing: 1px;
+            // -webkit-text-stroke: 1px #FFFFFF;
+            // text-stroke: 1px #FFFFFF;
+            margin-left:120px;
           }
         }
         .assetLists {
@@ -2708,7 +2772,10 @@ dd {
 @media screen and (min-width:1440px){
   .home .content .contentWrap {
     width: 898px;
-    margin: 69px auto;
+    // margin: 69px auto;
+    .free{
+
+    }
   }
 }
 @media screen and (max-width:1440px){
@@ -2728,7 +2795,13 @@ dd {
       }
   }
 }
-
+// @media screen and (min-width:1300px){
+//   .home .content .contentWrap {
+//     .free{
+//       right: 10%;
+//     }
+//   }
+// }
 @media screen and (max-width:1050px){
 .home{
     .content{
