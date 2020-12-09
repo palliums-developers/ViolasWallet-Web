@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 const { TabPane } = Tabs;
+
 //挖矿明细
 class MiningDetails extends Component {
     constructor(props) {
@@ -17,10 +18,14 @@ class MiningDetails extends Component {
             <div>
               <Breadcrumb separator="">
                 <Breadcrumb.Item>
-                  <NavLink to="/homepage/home/miningAwards">
+                  <a
+                    onClick={() => {
+                      this.props.history.go(-1);
+                    }}
+                  >
                     {" "}
                     <img src="/img/fanhui 2@2x.png" />
-                  </NavLink>
+                  </a>
                 </Breadcrumb.Item>
                 <span>收益明细</span>
                 <span></span>

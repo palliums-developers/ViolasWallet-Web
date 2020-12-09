@@ -510,217 +510,220 @@ class DigitalBank extends Component {
     } = this.state;
     return (
       <div className="mapping">
-        <Breadcrumb separator=">">
-          <Breadcrumb.Item>
-            <NavLink to="/homepage">
-              {" "}
-              <img src="/img/fanhui 2@2x.png" />
-              钱包
-            </NavLink>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <NavLink to="/homepage/home/digitalBank/mapping">映射</NavLink>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        <div className="mappingContent">
-          <div className="mappingList">
-            <h3>
-              <img src="/img/kyye.png" />
-              可用余额：
-              <label>
-                {balance} {type}
-              </label>
-            </h3>
-            <div className="iptAmount">
-              <input
-                value={this.state.amount}
-                placeholder="转出数量"
-                onChange={(e) => this.getTransAmount(e)}
-              />
-              <div className="dropdown1">
-                {showDealType ? (
-                  <span onClick={(e) => this.getTypeShow(e)}>
-                    {type}
-                    <i>
-                      <img src="/img/路径备份 3@2x.png" />
-                    </i>
-                  </span>
-                ) : (
-                  <span onClick={(e) => this.getTypeShow(e)}>
-                    {type}
-                    <i>
-                      <img src="/img/路径 7@2x.png" />
-                    </i>
-                  </span>
-                )}
-                {showDealType ? (
-                  <div className="dropdown-content1">
-                    <div className="formSearch">
-                      <img src="/img/sousuo 2@2x.png" />
-                      <input
-                        placeholder="Search"
-                        onChange={(e) => this.getSearchList(e)}
-                      />
-                    </div>
-                    {selData.map((v, i) => {
-                      return (
-                        <div
-                          className="searchList"
-                          key={i}
-                          onClick={() =>
-                            this.showTypes(
-                              v.from_coin.assert.show_name,
-                              v.balance,
-                              v.from_coin.assert.name,
-                              i,
-                              v
-                            )
-                          }
-                        >
-                          <div className="searchEvery">
-                            <img src={v.from_coin.assert.icon} />
-                            <div className="searchEvery1">
-                              <div>
-                                <h4>{v.from_coin.assert.show_name}</h4>
-                                <p>
-                                  余额：
-                                  {v.from_coin.coin_type == "btc"
-                                    ? v.balance / 1e8
-                                    : v.balance / 1e6}{" "}
-                                  {v.from_coin.assert.show_name}
-                                </p>
+        <div>
+          <Breadcrumb separator=">">
+            <Breadcrumb.Item>
+              <NavLink to="/homepage">
+                {" "}
+                <img src="/img/fanhui 2@2x.png" />
+                钱包
+              </NavLink>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <NavLink to="/homepage/home/digitalBank/mapping">映射</NavLink>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <div className="mappingContent">
+            <div className="mappingList">
+              <h3>
+                <img src="/img/kyye.png" />
+                可用余额：
+                <label>
+                  {balance} {type}
+                </label>
+              </h3>
+              <div className="iptAmount">
+                <input
+                  value={this.state.amount}
+                  placeholder="转出数量"
+                  onChange={(e) => this.getTransAmount(e)}
+                />
+                <div className="dropdown1">
+                  {showDealType ? (
+                    <span onClick={(e) => this.getTypeShow(e)}>
+                      {type}
+                      <i>
+                        <img src="/img/路径备份 3@2x.png" />
+                      </i>
+                    </span>
+                  ) : (
+                    <span onClick={(e) => this.getTypeShow(e)}>
+                      {type}
+                      <i>
+                        <img src="/img/路径 7@2x.png" />
+                      </i>
+                    </span>
+                  )}
+                  {showDealType ? (
+                    <div className="dropdown-content1">
+                      <div className="formSearch">
+                        <img src="/img/sousuo 2@2x.png" />
+                        <input
+                          placeholder="Search"
+                          onChange={(e) => this.getSearchList(e)}
+                        />
+                      </div>
+                      {selData.map((v, i) => {
+                        return (
+                          <div
+                            className="searchList"
+                            key={i}
+                            onClick={() =>
+                              this.showTypes(
+                                v.from_coin.assert.show_name,
+                                v.balance,
+                                v.from_coin.assert.name,
+                                i,
+                                v
+                              )
+                            }
+                          >
+                            <div className="searchEvery">
+                              <img src={v.from_coin.assert.icon} />
+                              <div className="searchEvery1">
+                                <div>
+                                  <h4>{v.from_coin.assert.show_name}</h4>
+                                  <p>
+                                    余额：
+                                    {v.from_coin.coin_type == "btc"
+                                      ? v.balance / 1e8
+                                      : v.balance / 1e6}{" "}
+                                    {v.from_coin.assert.show_name}
+                                  </p>
+                                </div>
+                                <span
+                                  className={
+                                    ind == i ? "check active" : "check"
+                                  }
+                                ></span>
                               </div>
-                              <span
-                                className={ind == i ? "check active" : "check"}
-                              ></span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : null}
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            </div>
-            <div className="arrow">
-              <img src="/img/ai28 4@2x.png" />
-            </div>
-            <div className="showAmount">
-              <label>{this.state.amount1}</label>
-              <span>{type}</span>
-            </div>
-            <div className="line"></div>
-            <p>
-              <label>汇率：</label>
-              <span>
-                {this.state.amount == ""
-                  ? "-- "
-                  : this.state.amount == "0"
-                  ? "--"
-                  : this.state.amount / this.state.amount +
-                    type +
-                    "=" +
-                    this.state.amount / this.state.amount +
-                    type}
-              </span>
-            </p>
-            <p>
-              <label>矿工费用：</label>
-              <span>--</span>
-            </p>
-            <div className="foot">
-              <p
-                className={focusActive == false ? "btn" : "btn focusActive"}
-                onClick={() => this.confirmMapping()}
-              >
-                确定映射
+              <div className="arrow">
+                <img src="/img/ai28 4@2x.png" />
+              </div>
+              <div className="showAmount">
+                <label>{this.state.amount1}</label>
+                <span>{type}</span>
+              </div>
+              <div className="line"></div>
+              <p>
+                <label>汇率：</label>
+                <span>
+                  {this.state.amount == ""
+                    ? "-- "
+                    : this.state.amount == "0"
+                    ? "--"
+                    : this.state.amount / this.state.amount +
+                      type +
+                      "=" +
+                      this.state.amount / this.state.amount +
+                      type}
+                </span>
               </p>
-              <p
-                className={
-                  warning == "映射成功" ? "descr descrWarn" : "descr descrRed"
-                }
-              >
-                {warning}
+              <p>
+                <label>矿工费用：</label>
+                <span>--</span>
               </p>
-            </div>
-          </div>
-          <div className="ETHTokenWrap">
-            <h4>如何映射 ETH 代币？</h4>
-            <div className="ETHTokenWrapList">
-              <div className="tokenList1">
-                <p>将链接复制到以下钱包，即可将ETH代币映射至violas钱包</p>
-                <CopyToClipboard
-                  text="localhost:12222/violasMapping"
-                  onCopy={() => message.success("复制成功")}
+              <div className="foot">
+                <p
+                  className={focusActive == false ? "btn" : "btn focusActive"}
+                  onClick={() => this.confirmMapping()}
                 >
-                  <a>
-                    localhost:12222/violasMapping
-                    <img src="/img/fuzhi 3@2x.png" />
-                  </a>
-                </CopyToClipboard>
-              </div>
-              <div className="tokenList2">
-                <span>
-                  <img src="/img/eth1.png" />
-                </span>
-                <span>
-                  <img src="/img/eth2.png" />
-                </span>
-                <span>
-                  <img src="/img/eth3.png" />
-                </span>
-                <span>
-                  <img src="/img/eth4.png" />
-                </span>
-                <span>
-                  <img src="/img/eth5.png" />
-                </span>
-                <span>
-                  <img src="/img/eth6.png" />
-                </span>
+                  确定映射
+                </p>
+                <p
+                  className={
+                    warning == "映射成功" ? "descr descrWarn" : "descr descrRed"
+                  }
+                >
+                  {warning}
+                </p>
               </div>
             </div>
-          </div>
-          <div className="mappingRecord">
-            <h4>映射记录</h4>
-            <div className="recordLists">
-              {mappingRecord.map((item, index) => {
-                return (
-                  <div className="recordList" key={index}>
-                    <div>
-                      <span
-                        className={
-                          item.state == "start"
-                            ? "spanYel"
+            <div className="ETHTokenWrap">
+              <h4>如何映射 ETH 代币？</h4>
+              <div className="ETHTokenWrapList">
+                <div className="tokenList1">
+                  <p>将链接复制到以下钱包，即可将ETH代币映射至violas钱包</p>
+                  <CopyToClipboard
+                    text="localhost:12222/violasMapping"
+                    onCopy={() => message.success("复制成功")}
+                  >
+                    <a>
+                      localhost:12222/violasMapping
+                      <img src="/img/fuzhi 3@2x.png" />
+                    </a>
+                  </CopyToClipboard>
+                </div>
+                <div className="tokenList2">
+                  <span>
+                    <img src="/img/eth1.png" />
+                  </span>
+                  <span>
+                    <img src="/img/eth2.png" />
+                  </span>
+                  <span>
+                    <img src="/img/eth3.png" />
+                  </span>
+                  <span>
+                    <img src="/img/eth4.png" />
+                  </span>
+                  <span>
+                    <img src="/img/eth5.png" />
+                  </span>
+                  <span>
+                    <img src="/img/eth6.png" />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mappingRecord">
+              <h4>映射记录</h4>
+              <div className="recordLists">
+                {mappingRecord.map((item, index) => {
+                  return (
+                    <div className="recordList" key={index}>
+                      <div>
+                        <span
+                          className={
+                            item.state == "start"
+                              ? "spanYel"
+                              : item.state == "end"
+                              ? "spanGre"
+                              : "spanRed"
+                          }
+                        >
+                          {item.state == "start"
+                            ? "映射中"
                             : item.state == "end"
-                            ? "spanGre"
-                            : "spanRed"
-                        }
-                      >
-                        {item.state == "start"
-                          ? "映射中"
-                          : item.state == "end"
-                          ? "映射成功"
-                          : "映射失败"}
-                      </span>
-                      <label>
-                        {timeStamp2String(item.expiration_time + "000")}
-                      </label>
+                            ? "映射成功"
+                            : "映射失败"}
+                        </span>
+                        <label>
+                          {timeStamp2String(item.expiration_time + "000")}
+                        </label>
+                      </div>
+                      <div>
+                        <p>
+                          {item.in_amount / 1e6}
+                          {item.in_show_name}
+                          <img src="/img/路径 2@2x.png" />
+                          {item.out_amount / 1e6}
+                          {item.out_show_name}
+                        </p>
+                        <label>旷工费：--</label>
+                      </div>
                     </div>
-                    <div>
-                      <p>
-                        {item.in_amount / 1e6}
-                        {item.in_show_name}
-                        <img src="/img/路径 2@2x.png" />
-                        {item.out_amount / 1e6}
-                        {item.out_show_name}
-                      </p>
-                      <label>旷工费：--</label>
-                    </div>
-                  </div>
-                );
-              })}
-              {/* 
+                  );
+                })}
+                {/* 
               <div className="recordList">
                 <div>
                   <span className="spanRed">映射失败</span>
@@ -735,14 +738,15 @@ class DigitalBank extends Component {
                   <label>旷工费：0.01 BTC</label>
                 </div>
               </div> */}
+              </div>
             </div>
           </div>
+          {this.state.showWallet ? (
+            <WalletconnectDialog
+              getCloseWallet={this.closeWallet}
+            ></WalletconnectDialog>
+          ) : null}
         </div>
-        {this.state.showWallet ? (
-          <WalletconnectDialog
-            getCloseWallet={this.closeWallet}
-          ></WalletconnectDialog>
-        ) : null}
       </div>
     );
   }

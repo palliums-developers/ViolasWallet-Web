@@ -661,6 +661,7 @@ class HomeContent extends Component {
                     )}
                 </div>
               </div>
+              <div className="freeWrap">
                 <div
                   className="free"
                   onClick={() => {
@@ -669,6 +670,7 @@ class HomeContent extends Component {
                 >
                   <span>免费领取</span>
                 </div>
+              </div>
             </div>
             {/* 添加币种 */}
             <Drawer

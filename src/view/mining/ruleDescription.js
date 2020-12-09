@@ -14,10 +14,12 @@ class RuleDescription extends Component {
         <div>
           <Breadcrumb separator="">
             <Breadcrumb.Item>
-              <NavLink to="/homepage/home/miningAwards">
+              <a onClick={()=>{
+                this.props.history.go(-1);
+              }}>
                 {" "}
                 <img src="/img/fanhui 2@2x.png" />
-              </NavLink>
+              </a>
             </Breadcrumb.Item>
             <span>规则说明</span>
             <span></span>

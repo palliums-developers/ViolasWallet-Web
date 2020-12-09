@@ -1045,10 +1045,10 @@ class CashPooling extends Component {
               onMouseOver={(e) => this.getMineDialog(e)}
               onMouseOut={(e) => this.getMineDialog1(e)}
               onClick={(e) => {
-                this.stopPropagation(e)
+                this.stopPropagation(e);
                 this.setState({
-                  showpooling:true
-                })
+                  showpooling: true,
+                });
               }}
             >
               <img src="/img/形状备份 2@2x.png" />
@@ -1060,10 +1060,10 @@ class CashPooling extends Component {
               onMouseOver={(e) => this.getMineDialog(e)}
               onMouseOut={(e) => this.getMineDialog1(e)}
               onClick={(e) => {
-                this.stopPropagation(e)
+                this.stopPropagation(e);
                 this.setState({
-                  showpooling:false
-                })
+                  showpooling: false,
+                });
               }}
             >
               <img src="/img/形状 2@2x.png" />
@@ -1072,6 +1072,17 @@ class CashPooling extends Component {
           )}
 
           <div className="exchangeContents">
+            <div className="goRules">
+              <div>
+                <h4>挖矿福利</h4>
+                <p>现在加入资金池可获得同手续费奖励等价的VLS挖矿福利</p>
+              </div>
+              <div onClick={()=>{
+                this.props.history.push("/homepage/home/ruleDescription");
+              }}>
+                <img src="/img/m_jiantou-5 2@2x.png" />
+              </div>
+            </div>
             <div className="form">
               <div className="dropdown">
                 <div className="dropdown2">
@@ -1455,7 +1466,7 @@ class CashPooling extends Component {
                 </div>
               )}
               <div className="changeRate">
-                兑换率：{this.state.rate > 0 ? '1:'+this.state.rate : "--"}
+                兑换率：{this.state.rate > 0 ? "1:" + this.state.rate : "--"}
               </div>
               {/* <div className="changeRate">当前资金池大小：— —</div> */}
               {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}

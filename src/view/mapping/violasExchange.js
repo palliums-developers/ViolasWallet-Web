@@ -18,11 +18,12 @@ class ViolasExchange extends Component {
       token: [
         {
           name: "VLSTUSDT",
-          address: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+          address: "0xFFf6458a07bCb69df2EaEbbf9Cf463aB08F3f39B",
         },
       ],
       // swapContractAddress: "0xE6C7f2DAB2E9B16ab124E45dE3516196457A1120",
-      tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      tokenContractAddress: "0xFFf6458a07bCb69df2EaEbbf9Cf463aB08F3f39B",
       swapContractAddress: "0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8",
       swapAmount: "",
     };

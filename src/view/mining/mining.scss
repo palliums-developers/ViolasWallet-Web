@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
+    overflow-x: hidden;
     .goRule{
         width: 135px;
         height: 34px;
@@ -100,10 +100,9 @@
       }
       .poolingFund{
           width: 100%;
-          height: 156px;
+          // height: 156px;
           display: flex;
           padding-top: 19px;
-          padding-bottom: 23px;
           box-sizing: border-box;
           margin-top: 35px;
           .poolingFundContent{
@@ -158,6 +157,7 @@
             padding: 6px 12px;
             box-sizing: border-box;
             margin-top: 25px;
+            
             img{
                 width: 10px;
                 height: 10px;
@@ -168,12 +168,13 @@
           .poolingFundContent:nth-child(3){
               padding-left: 45px;
               box-sizing: border-box;
+              border-left: 0.5px solid  rgba(255, 255, 255, 1);
           }
-          .line{
-            width: 0.5px;
-            height: 100%;
-            background: rgba(255, 255, 255, 1);
-          }
+          // .line{
+          //   width: 0.5px;
+          //   height: 100%;
+          //   background: rgba(255, 255, 255, 1);
+          // }
       }
     }
     .getMoreVLS{
@@ -310,20 +311,21 @@
     overflow-y: auto;
     >div{
       width: 1070px;
-      margin:0 auto;
-      margin-top: 70px;
+      margin:70px auto;
+      margin-bottom: 40px;
     }
     .ant-breadcrumb {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-top: 23px;
-        margin-left: 22px;
+        margin-left: 32px;
          span{
           font-size: 20px;
           font-family: PingFangSC-Semibold, PingFang SC;
           font-weight: 600;
           color: #3C3848;
+          margin-right: 40px;
         }
         a{
             font-size: 14px;
@@ -444,7 +446,7 @@
 
 //收益明细
 .miningDetails{
-  width: 100%;
+    width: 100%;
     flex: 1;
     overflow-y: auto;
     >div{
@@ -624,7 +626,7 @@
 
 //排行榜,邀请榜单
 .rankingLists,.invitationList{
-  width: 100%;
+    width: 100%;
     flex: 1;
     overflow-y: auto;
     >div{
@@ -811,4 +813,115 @@
         }
       }
     }
+}
+
+@media (max-width:1440px){
+    .miningAwards{
+       .miningFundList {
+           width: 724px;
+           padding-bottom: 39px;
+           background: url('/img/m_蒙版 22@2x.png') no-repeat;
+           background-size: 100% 100%;
+           .poolingFund{
+               flex-direction: column;
+               padding-right: 40px;
+               padding-top: 0;
+               .line{
+                   width: 100%;
+                   height: 0.5px;
+                   background: rgba(186, 186, 186, 1);
+               }
+               .poolingFundContent{
+                   width: 100%;
+                   padding: 0;
+                   justify-content: space-between;
+                   padding-top: 31px;
+                   p:nth-child(2){
+                     align-items: flex-end;
+                   }
+               }
+               .poolingFundContent:nth-child(1){
+                   padding-bottom:35px;
+               }
+               .poolingFundContent:nth-child(3){
+                   padding-left: 0;
+                   border-left: 0;
+               }
+           }
+       }
+       .getMoreVLS{
+         width: 724px;
+         h3{
+           border-bottom: 0;
+         }
+         .getMoreContent{
+           flex-direction: column;
+           >div{
+             width: 100%;
+             
+           }
+            > div:nth-child(1){
+              border-right:0;
+              padding-right: 16px;
+            }
+            > div:nth-child(2){
+              padding-left: 14px;
+              padding-right: 16px;
+            }
+         }
+       }
+       .rankingList{
+          width: 724px;
+       }
+    } 
+    .ruleDescription > div {
+        width:724px;
+    }
+    .rankingLists,.invitationList{
+      .ant-breadcrumb span:nth-child(2){
+        margin-left: -54%;
+      }
+      >div{
+        width: 724px;
+        .rankingWrap{
+          .topThreeList{
+            .topOne{
+              width: 267px;
+            }
+            .topTwo{
+              width: 259px;
+            }
+            .topThree{
+              width: 259px;
+            }
+          }
+          .residualRanking{
+            .head{
+              span:nth-child(1){
+                width: 26%;
+              }
+              span:nth-child(2){
+                width: 48%;
+              }
+            } 
+            .list {
+              flex-direction: column;
+              >div{
+                width: 100%;
+              }
+              >div:nth-child(2){
+                padding-left:0;
+              }
+            }
+          } 
+        } 
+      }
+    }
+    //收益明细
+  .miningDetails{
+    >div{
+      width: 724px;
+    }
+      
+  }
 }
