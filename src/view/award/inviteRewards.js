@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PhotoSynthesis from "./saveImage.js";
 import "./award.scss";
+let url1 = "https://api4.violas.io";
 
 //邀请奖励
 class InviteRewards extends Component {
@@ -8,19 +9,60 @@ class InviteRewards extends Component {
     super(props);
     this.state = {
       sharePosters: false,
+      incentive: 0,
+      invite_count: 0,
     };
-    
   }
-  componentDidMount(){
-
+  componentDidMount() {
+    this.getInviterInfo();
+    this.getInviterTop()
   }
-
+  //显示VLS地址（前6...后6）
+  showVLSAddress(str) {
+    // 中间显示省略号，截取显示括号内容
+    // var str = "53e59e4b4fa3c35770846f6c87ca2d35";
+    var last = 0;
+    var all = str.length;
+    var first = str.substr(0, 6);
+    str = first + " ... " + str.substr(all - 6, 6);
+    return str;
+  }
+  
+  //获取邀请奖励Top20
+  getInviterTop(){
+    fetch(url1 +"/violas/1.0/incentive/inviter/top20")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res, "...............");
+        if (res.data) {
+         console.log(res.data,'...............')
+        }
+      });
+  }
+  //获取邀请奖励信息
+  getInviterInfo() {
+    fetch(
+      url1 +
+        "/violas/1.0/incentive/inviter/info?address=" +
+        window.sessionStorage.getItem("violas_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          this.setState({
+            incentive: res.data.incentive,
+            invite_count: res.data.invite_count,
+          });
+        }
+      });
+  }
   closeDialog = (val) => {
     this.setState({
       sharePosters: val,
     });
   };
   render() {
+    let { incentive, invite_count } = this.state;
     return (
       <div className="inviteRewards">
         <div className="inviteContent">
@@ -72,12 +114,12 @@ class InviteRewards extends Component {
             </div>
             <div className="invitationDetails">
               <div>
-                <span>100</span>
+                <span>{incentive}</span>
                 <label>邀请人数</label>
               </div>
               <div className="line"></div>
               <div>
-                <span>100,000VLS</span>
+                <span>{invite_count} VLS</span>
                 <label>邀请奖励</label>
               </div>
             </div>

@@ -2,12 +2,26 @@ import React, { Component } from "react";
 import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 import "../mining/mining.scss";
+let url1 = "https://api4.violas.io";
 
 //邀请榜单
 class InvitationList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+  componentDidMount(){
+    this.getInviterTop();
+  }
+  //获取邀请奖励Top20
+  getInviterTop() {
+    fetch(url1 + "/violas/1.0/incentive/inviter/top20")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+        }
+      });
   }
   render() {
     return (
