@@ -71,12 +71,18 @@ class HomePage extends Component {
   }
   async ifNotLogin() {
     if(!this.state.walletConnector.connected){
-      if (this.props.location.pathname === "/homepage/home/miningAwards"){
+      if (
+        this.props.location.pathname === "/homepage/home/miningAwards" ||
+        this.props.location.pathname === "/homepage/home/ruleDescription" ||
+        this.props.location.pathname === "/homepage/home/rankingList" ||
+        this.props.location.pathname === "/homepage/home/inviteRewards" ||
+        this.props.location.pathname === "/homepage/home/invitationList"
+      ) {
         if (this.props.location.search == "") {
           this.props.history.push("/app");
         } else {
         }
-      }else{
+      } else {
         this.props.history.push("/app");
       }
       

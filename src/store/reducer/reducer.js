@@ -5,7 +5,7 @@ let initState = {
 };
 
 let ListReducer = (state = initState, action) => {
-    console.log(action.payload)
+    // console.log(action.payload)
     switch (action.type) {
         case 'GETETH':
             return { eth: action.payload };
