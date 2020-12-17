@@ -53,8 +53,8 @@ class App extends Component {
         lang = "EN";
         break;
     }
-    localStorage.setItem("local", lang);
-    intl.options.currentLocale = localStorage.getItem("local");
+    window.localStorage.setItem("local", lang);
+    intl.options.currentLocale = window.localStorage.getItem("local");
     await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {

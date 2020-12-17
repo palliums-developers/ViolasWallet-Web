@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Drawer, Affix } from "antd";
 import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
-import intl, { init } from "react-intl-universal";
+import intl from "react-intl-universal";
 import AddCurrency from "./components/addCurrency";
 import "./app.scss";
 let url1 = "https://api4.violas.io";

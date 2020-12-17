@@ -8,9 +8,20 @@ let url1 = "https://api4.violas.io";
 class InvitationList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      ifMobile: false,
+    };
   }
-  componentDidMount(){
+  componentWillMount() {
+    if (this.props.location) {
+      if (this.props.location.search) {
+        this.setState({
+          ifMobile: true,
+        });
+      }
+    }
+  }
+  componentDidMount() {
     this.getInviterTop();
   }
   //获取邀请奖励Top20
@@ -24,8 +35,9 @@ class InvitationList extends Component {
       });
   }
   render() {
+    let { ifMobile } = this.state;
     return (
-      <div className="invitationList">
+      <div className={ifMobile == false ? "invitationList" : "invitationList1"}>
         <div>
           <Breadcrumb separator="">
             <Breadcrumb.Item>

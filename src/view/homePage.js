@@ -29,16 +29,38 @@ class HomePage extends Component {
         lang = "EN";
         break;
     }
-    localStorage.setItem("local", lang);
-    intl.options.currentLocale = localStorage.getItem("local");
+    // alert(window.localStorage==null)
+    if(window.localStorage!==null&&window.localStorage.setItem!==undefined){
+      localStorage.setItem("local", lang);
+      intl.options.currentLocale = localStorage.getItem("local");
+    }
+    // if (
+    //   typeof window=='object' &&
+    //   typeof window.localStorage == "object" &&
+    //   typeof window.localStorage.setItem == "function"
+    // ) {
+    //   localStorage.setItem("local", lang);
+    //   intl.options.currentLocale =localStorage.getItem("local");
+    // }
+
+    // if(localStorage.setItem !== null ){
+    //  localStorage.setItem("local", lang);
+    //  if (localStorage.getItem !== null) {
+    //    intl.options.currentLocale =
+    //    localStorage.getItem && localStorage.getItem("local");
+    //  }
+     
+    // }
+    
     await this.getNewWalletConnect();
+    // await this.ifNotLogin();
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
       window.localStorage.clear();
       window.sessionStorage.clear();
-      this.props.history.push('/app')
+      this.props.history.push("/app");
       // console.log("wallet disconnected", "////////////");
     });
   }
@@ -47,7 +69,20 @@ class HomePage extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
-  
+  async ifNotLogin() {
+    if(!this.state.walletConnector.connected){
+      if (this.props.location.pathname === "/homepage/home/miningAwards"){
+        if (this.props.location.search == "") {
+          this.props.history.push("/app");
+        } else {
+        }
+      }else{
+        this.props.history.push("/app");
+      }
+      
+    }
+
+  }
   componentDidMount() {
     window.addEventListener("onbeforeunload", () => {
       this.state.walletConnector.killSession();
@@ -69,7 +104,7 @@ class HomePage extends Component {
   onClose = () => {};
   render() {
     let { routes } = this.props;
-
+    this.ifNotLogin();
     return (
       <div className="homePage">
         <RouterView routes={routes}></RouterView>

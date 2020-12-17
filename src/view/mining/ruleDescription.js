@@ -6,17 +6,33 @@ import { NavLink } from "react-router-dom";
 class RuleDescription extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      ifMobile: false,
+    };
+  }
+  componentWillMount() {
+    if (this.props.location) {
+      if (this.props.location.search) {
+        this.setState({
+          ifMobile: true,
+        });
+      }
+    }
   }
   render() {
+    let { ifMobile } = this.state;
     return (
-      <div className="ruleDescription">
+      <div
+        className={ifMobile == false ? "ruleDescription" : "ruleDescription1"}
+      >
         <div>
           <Breadcrumb separator="">
             <Breadcrumb.Item>
-              <a onClick={()=>{
-                this.props.history.go(-1);
-              }}>
+              <a
+                onClick={() => {
+                  this.props.history.go(-1);
+                }}
+              >
                 {" "}
                 <img src="/img/fanhui 2@2x.png" />
               </a>
@@ -63,7 +79,7 @@ class RuleDescription extends Component {
               </h4>
               <p>a.用户在数字银行进行存款，将获得存款利息；</p>
               <p>
-                b.在提取到钱包账户的同时，用户将获得同提取利息，同等价值的VLS挖矿奖励。文字看原型看原型看原型看原型
+                b.在提取到钱包账户的同时，用户将获得同提取利息，同等价值的VLS挖矿奖励。
               </p>
             </div>
             <div>
@@ -72,12 +88,15 @@ class RuleDescription extends Component {
                 借款挖矿
               </h4>
               <p>a.用户在数字银行进行借款，将产生借款利息；</p>
-              <p>b.在还款的同时，用户将获得同还款利息，同等价值的</p>
+              <p>
+                b.在还款的同时，用户将获得同还款利息，同等价值的VLS挖矿奖励。
+              </p>
             </div>
           </div>
           <div className="ruleDescriptionTwo">
             <h4>
-              <img src="/img/m_编组 26@2x.png" />
+              <i></i>
+              {/* <img src="/img/m_编组 26@2x.png" /> */}
               说明
             </h4>
             <div>

@@ -19,12 +19,13 @@ class Home extends React.PureComponent {
       active: "",
       showMineDialog: false,
       ind: 0,
+      ifMobile: false,
     };
   }
   getMineDialog = (event) => {
     // event.stopPropagation();
     this.setState({
-      showMineDialog: !this.state.showMineDialog
+      showMineDialog: !this.state.showMineDialog,
     });
   };
   // getMineDialog1 = (event) => {
@@ -88,82 +89,95 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     this.props.history.push("/app");
   }
-
+  getLanguage=(val)=>{
+   intl.options.currentLocale = val;
+   this.forceUpdate();
+  }
   render() {
     let { routes } = this.props;
     let { active } = this.state;
+    if (this.props.location) {
+      if (this.props.location.search) {
+        this.setState({
+          ifMobile: true,
+        });
+      }
+    }
     return (
-      <div className="home">
+      <div className={this.state.ifMobile == false ? "home" : "home home1"}>
         {/* <div style={{position:'absolute'}}>log out</div> */}
-        <div className="header header1">
-          <div
-            className="logo"
-            onClick={() => {
-              this.props.history.push("/homepage/home");
-            }}
-          >
-            <img src="/img/logo1.png" />
-          </div>
-          {
-            <div className="route">
-              <span
-                onClick={() => {
-                  this.props.history.push("/homepage/home/homeContent");
-                }}
-                className={
-                  active == "homeContent"
-                    ? "active"
-                    : active == "transfer"
-                    ? "active"
-                    : active == "getMoney"
-                    ? "active"
-                    : active == "pushMessage"
-                    ? "active"
-                    : null
-                }
-              >
-                <i
-                  className="noWal"
-                  // {
-                  //   active == "homeContent"
-                  //     ? "wal"
-                  //     : active == "transfer"
-                  //       ? "wal"
-                  //       : active == "getMoney"
-                  //         ? "wal"
-                  //         : "l"
-                  // }
-                ></i>
-                <label>{intl.get("Wallet")}</label>
-              </span>
-              <span
-                onClick={() => {
-                  this.props.history.push("/homepage/home/changeContent");
-                  // this.props.showDetails()
-                  // this.props.showPolling()
-                }}
-                className={active == "changeContent" ? "active" : null}
-              >
-                <i className="noMar"></i>
-                <label>{intl.get("Market")}</label>
-              </span>
-              <span
-                onClick={() => {
-                  this.props.history.push("/homepage/home/digitalBank");
-                }}
-                className={active == "digitalBank" ? "active" : null}
-              >
-                <i className="noBank"></i>
-                <label>{intl.get("Bank")}</label>
-              </span>
+        {this.state.ifMobile == false ? (
+          <div className="header header1">
+            <div
+              className="logo"
+              onClick={() => {
+                this.props.history.push("/homepage/home");
+              }}
+            >
+              <img src="/img/logo1.png" />
             </div>
-          }
-        </div>
+            {
+              <div className="route">
+                <span
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/homeContent");
+                  }}
+                  className={
+                    active == "homeContent"
+                      ? "active"
+                      : active == "transfer"
+                      ? "active"
+                      : active == "getMoney"
+                      ? "active"
+                      : active == "pushMessage"
+                      ? "active"
+                      : null
+                  }
+                >
+                  <i
+                    className="noWal"
+                    // {
+                    //   active == "homeContent"
+                    //     ? "wal"
+                    //     : active == "transfer"
+                    //       ? "wal"
+                    //       : active == "getMoney"
+                    //         ? "wal"
+                    //         : "l"
+                    // }
+                  ></i>
+                  <label>{intl.get("Wallet")}</label>
+                </span>
+                <span
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/changeContent");
+                    // this.props.showDetails()
+                    // this.props.showPolling()
+                  }}
+                  className={active == "changeContent" ? "active" : null}
+                >
+                  <i className="noMar"></i>
+                  <label>{intl.get("Market")}</label>
+                </span>
+                <span
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/digitalBank");
+                  }}
+                  className={active == "digitalBank" ? "active" : null}
+                >
+                  <i className="noBank"></i>
+                  <label>{intl.get("Bank")}</label>
+                </span>
+              </div>
+            }
+          </div>
+        ) : null}
 
         <div className="box">
-          <div className="boxHead">
-            <div className="boxHeadList">
-              {/* <div className="badge" onClick={()=>{
+          {this.state.ifMobile == false ? (
+            <div className="boxHead">
+              <div className="boxHeadList">
+                {/* <div className="badge" onClick={()=>{
                 this.props.history.push(
                   "/homepage/home/pushMessage"
                 );
@@ -172,16 +186,15 @@ class Home extends React.PureComponent {
                   <img src="/img/编组 12@2x.png" />
                 </Badge>
               </div> */}
-             <Head></Head>
-              {/* <span>Download</span> */}
-             <LangPage></LangPage>
-              
+                <Head></Head>
+                {/* <span>Download</span> */}
+                <LangPage getLanguage={this.getLanguage}></LangPage>
+              </div>
             </div>
-          </div>
+          ) : null}
+
           <RouterView routes={routes}></RouterView>
         </div>
-
-        
       </div>
     );
   }

@@ -26,7 +26,7 @@ class LangPage extends React.PureComponent {
         e.nativeEvent.stopImmediatePropagation();
     }
   async componentWillMount() {
-    intl.options.currentLocale = localStorage.getItem("local");
+    // intl.options.currentLocale = localStorage.getItem("local");
     let lang = intl.options.currentLocale;
     switch (lang) {
       case "zh":
@@ -39,6 +39,7 @@ class LangPage extends React.PureComponent {
         this.setState({ local: "English", ind: 1 });
         break;
     }
+    
   }
   componentDidMount() {
     document.addEventListener('mouseenter', this.getMineDialog1);
@@ -47,6 +48,7 @@ class LangPage extends React.PureComponent {
   
   changeLanguage(lang) {
     intl.options.currentLocale = lang;
+    this.props.getLanguage(lang);
     this.forceUpdate();
   }
   getMineDialog = (event) => {

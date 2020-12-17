@@ -11,11 +11,22 @@ class InviteRewards extends Component {
       sharePosters: false,
       incentive: 0,
       invite_count: 0,
+      ifMobile: false,
     };
+  }
+  componentWillMount() {
+    if (this.props.location) {
+      if (this.props.location.search) {
+        this.setState({
+          ifMobile: true,
+        });
+      }
+    }
   }
   componentDidMount() {
     this.getInviterInfo();
-    this.getInviterTop()
+    this.getInviterTop();
+    console.log(window);
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
@@ -27,15 +38,14 @@ class InviteRewards extends Component {
     str = first + " ... " + str.substr(all - 6, 6);
     return str;
   }
-  
+
   //获取邀请奖励Top20
-  getInviterTop(){
-    fetch(url1 +"/violas/1.0/incentive/inviter/top20")
+  getInviterTop() {
+    fetch(url1 + "/violas/1.0/incentive/inviter/top20")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res, "...............");
         if (res.data) {
-         console.log(res.data,'...............')
+          // console.log(res.data, "...............");
         }
       });
   }
@@ -61,57 +71,86 @@ class InviteRewards extends Component {
       sharePosters: val,
     });
   };
+ handleScroll(e){
+      let clientHeight = document.getElementById("inviteRewards").clientHeight; //可视区域高度
+      let scrollTop = document.getElementById("inviteRewards").scrollTop; //滚动条滚动高度
+      let scrollHeight = document.getElementById("inviteRewards").scrollHeight; //滚动内容高度
+      if (clientHeight + scrollTop == scrollHeight) {
+        //如果滚动到底部
+        document.getElementById("btns").style.background =
+          "RGBA(64, 25, 135, 1)";
+      }else{
+        document.getElementById("btns").style.background =
+          "url('/img/mobile_m_矩形 2@2x.png') no-repeat";
+        document.getElementById("btns").style.backgroundSize='100%';
+        document.getElementById("btns").style.backgroundPosition='center center';
+      }
+      
+}
   render() {
-    let { incentive, invite_count } = this.state;
+    let { incentive, invite_count, ifMobile } = this.state;
+    // console.log(ifMobile);
     return (
-      <div className="inviteRewards">
+      <div
+        id="inviteRewards"
+        className={ifMobile == false ? "inviteRewards" : "inviteRewards1"}
+        onScroll={this.state.ifMobile == false ? null :this.handleScroll}
+      >
         <div className="inviteContent">
           <div className="head">
             <div className="logo">
               <img src="/img/m_编组 24@2x.png" />
             </div>
             <div className="descr">
-              <img src="/img/m_编组 566@2x.png" />
+              {ifMobile == false ? (
+                <img src="/img/m_编组 566@2x.png" />
+              ) : (
+                <img src="/img/mobile_m_编组 33@2x.png" />
+              )}
             </div>
             <div className="stepWrap">
-              <dl>
-                <dt>
-                  <img src="/img/m_编组 38@2x.png" />
-                </dt>
-                <dd>发送邀请链接给好友</dd>
-              </dl>
-              <div className="jiantou">
-                <img src="/img/m_jiantou-4 2@2x.png" />
+              <div>
+                <dl>
+                  <dt>
+                    <img src="/img/m_编组 38@2x.png" />
+                  </dt>
+                  <dd>发送邀请链接给好友</dd>
+                </dl>
+                <div className="jiantou">
+                  <img src="/img/m_jiantou-4 2@2x.png" />
+                </div>
+                <dl>
+                  <dt>
+                    <img src="/img/m_编组 40@2x.png" />
+                  </dt>
+                  <dd>好友通过手机号验证</dd>
+                </dl>
+                <div className="jiantou">
+                  <img src="/img/m_jiantou-4 2@2x.png" />
+                </div>
+                <dl>
+                  <dt>
+                    <img src="/img/m_编组 266@2x.png" />
+                  </dt>
+                  <dd>双方获得相应奖励</dd>
+                </dl>
               </div>
-              <dl>
-                <dt>
-                  <img src="/img/m_编组 40@2x.png" />
-                </dt>
-                <dd>好友通过手机号验证</dd>
-              </dl>
-              <div className="jiantou">
-                <img src="/img/m_jiantou-4 2@2x.png" />
-              </div>
-              <dl>
-                <dt>
-                  <img src="/img/m_编组 266@2x.png" />
-                </dt>
-                <dd>双方获得相应奖励</dd>
-              </dl>
             </div>
           </div>
           <div className="myInvitation">
             <div className="head">
               <h3>我的邀请</h3>
+
               <p
                 onClick={() => {
                   this.props.history.push("/homepage/home/miningDetails");
                 }}
               >
-                查看更多
+                <label>查看更多</label>
                 <img src="/img/m_编组 17@2x.png" />
               </p>
             </div>
+            <div className="line"></div>
             <div className="invitationDetails">
               <div>
                 <span>{incentive}</span>
@@ -132,10 +171,11 @@ class InviteRewards extends Component {
                   this.props.history.push("/homepage/home/invitationList");
                 }}
               >
-                查看更多
+                <label>查看更多</label>
                 <img src="/img/m_编组 17@2x.png" />
               </p>
             </div>
+            <div className="line"></div>
             <div className="list">
               <p>
                 <span>
@@ -181,8 +221,9 @@ class InviteRewards extends Component {
           </div>
           <div className="activityRules">
             <h4>
-              <img src="/img/m_编组 26@2x.png" />
-              说明
+              <i></i>
+              {/* <img src="/img/m_编组 26@2x.png" /> */}
+              活动规则
             </h4>
             <div>
               <p>一. 凡是平台的用户都可参与，暂不设定奖励上限；</p>
@@ -201,7 +242,7 @@ class InviteRewards extends Component {
               </p>
             </div>
           </div>
-          <div className="btns">
+          <div id={ifMobile == false ? "" : "btns"} className="btns">
             <button>分享链接</button>
             <button
               onClick={() => {
@@ -215,7 +256,10 @@ class InviteRewards extends Component {
           </div>
         </div>
         {this.state.sharePosters ? (
-          <PhotoSynthesis closeDialog={this.closeDialog}></PhotoSynthesis>
+          <PhotoSynthesis
+            closeDialog={this.closeDialog}
+            ifMobile={ifMobile}
+          ></PhotoSynthesis>
         ) : null}
       </div>
     );

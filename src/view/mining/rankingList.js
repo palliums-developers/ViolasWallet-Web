@@ -8,7 +8,18 @@ let url1 = "https://api4.violas.io";
 class RankingList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      ifMobile: false,
+    };
+  }
+  componentWillMount() {
+    if (this.props.location) {
+      if (this.props.location.search) {
+        this.setState({
+          ifMobile: true,
+        });
+      }
+    }
   }
   //获取激励排名top20
   getInviterTop() {
@@ -21,8 +32,9 @@ class RankingList extends Component {
       });
   }
   render() {
+    let { ifMobile } = this.state;
     return (
-      <div className="rankingLists">
+      <div className={ifMobile == false ? "rankingLists" : "rankingLists1"}>
         <div>
           <Breadcrumb separator="">
             <Breadcrumb.Item>

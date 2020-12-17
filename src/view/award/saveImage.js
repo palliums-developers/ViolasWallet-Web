@@ -4,8 +4,10 @@ import QRCode from "qrcode.react";
 class PhotoSynthesis extends Component {
   constructor(props) {
     super(props);
-    this.initCanvas = this.initCanvas.bind(this);
+    this.state = {
+    };
   }
+
   initCanvas() {
     let canvas1 = document.getElementById("customCanvas");
     let width = (canvas1.width = 305);
@@ -49,10 +51,10 @@ class PhotoSynthesis extends Component {
       };
     };
   }
-  getPhoto = () =>{
+  getPhoto = () => {
     var type = "png";
     this.download(type);
-  }
+  };
   //图片下载操作,指定图片类型
   download(type) {
     var bigcan = document.querySelectorAll("canvas")[1];
@@ -60,23 +62,39 @@ class PhotoSynthesis extends Component {
     var imgdata = bigcan.toDataURL(type);
     //将mime-type改为image/octet-stream,强制让浏览器下载
     var fixtype = function (type) {
-        type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
-        var r = type.match(/png|jpeg|bmp|gif/)[0];
-        return 'image/' + r;
-    }
-    imgdata = imgdata.replace(fixtype(type), 'image/octet-stream')
+      type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
+      var r = type.match(/png|jpeg|bmp|gif/)[0];
+      return "image/" + r;
+    };
+    imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
     //将图片保存到本地
     var saveFile = function (data, filename) {
-        var link = document.createElement('a');
-        link.href = data;
-        link.download = filename;
-        var event = document.createEvent('MouseEvents');
-        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        link.dispatchEvent(event);
-    }
-    var filename = new Date().toLocaleDateString() + '.' + type;
+      var link = document.createElement("a");
+      link.href = data;
+      link.download = filename;
+      var event = document.createEvent("MouseEvents");
+      event.initMouseEvent(
+        "click",
+        true,
+        false,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
+      );
+      link.dispatchEvent(event);
+    };
+    var filename = new Date().toLocaleDateString() + "." + type;
     saveFile(imgdata, filename);
-}
+  }
   componentDidMount() {
     this.initCanvas();
   }
@@ -85,9 +103,13 @@ class PhotoSynthesis extends Component {
   // }
 
   render() {
-    const { width, height, canvaswidth, canvasheight } = this.props;
+  
+    let { width, height, canvaswidth, canvasheight, ifMobile } = this.props;
+    console.log(ifMobile);
     return (
-      <div className="canvasWrap">
+      <div
+        className={ifMobile == false ? "canvasWrap" : "canvasWrap canvasWrap1"}
+      >
         <div className="canvas">
           <QRCode style={{ display: "none" }} value={666}></QRCode>
           <canvas
@@ -98,12 +120,33 @@ class PhotoSynthesis extends Component {
           ></canvas>
           <img className="canimg" src="" />
           {/* <img id="avatar" ></img> */}
-          <a className="btns" onClick={() => this.getPhoto()}>
-            保存图片
-          </a>
-          <p onClick={() => this.props.closeDialog(false)}>
-            <img src="/img/m_guanbi 2@2x.png" />
-          </p>
+          {ifMobile == false ? (
+            <a className="btns" onClick={() => this.getPhoto()}>
+              保存图片
+            </a>
+          ) : (
+            <div className="btns1List">
+              <a className="btns1" onClick={() => this.getPhoto()}>
+                <img src="/img/mobile_m_xiazai 2@2x.png" />
+                保存到相册
+              </a>
+            </div>
+          )}
+          {ifMobile == false ? (
+            <p
+              className="closeDilog"
+              onClick={() => this.props.closeDialog(false)}
+            >
+              <img src="/img/m_guanbi 2@2x.png" />
+            </p>
+          ) : (
+            <p
+              className="closeDilog1"
+              onClick={() => this.props.closeDialog(false)}
+            >
+              取 消
+            </p>
+          )}
         </div>
       </div>
     );

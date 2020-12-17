@@ -282,7 +282,7 @@ dd {
 
 //首页
 .home {
-  min-width: 1024px;
+  width:100%;
   height: 100%;
   display: flex;
   // flex-direction: column;
@@ -2812,7 +2812,16 @@ dd {
   }
   }
 }
+@media screen and (max-width:1024px){
+  .home{
+    width: 1024px;
+  }
+  .home1{
+    width:100%;
+  }
+}
 @media screen and (max-height:1024px){
+  
   .homePage{
     height: 100%!important;
   }
