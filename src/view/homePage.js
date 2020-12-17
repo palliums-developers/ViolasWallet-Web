@@ -78,6 +78,7 @@ class HomePage extends Component {
         this.props.location.pathname === "/homepage/home/inviteRewards" ||
         this.props.location.pathname === "/homepage/home/invitationList"
       ) {
+        // this.props.history.push("/app");
         if (this.props.location.search == "") {
           this.props.history.push("/app");
         } else {
@@ -85,7 +86,6 @@ class HomePage extends Component {
       } else {
         this.props.history.push("/app");
       }
-      
     }
 
   }

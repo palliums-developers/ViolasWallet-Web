@@ -26,7 +26,6 @@ class InviteRewards extends Component {
   componentDidMount() {
     this.getInviterInfo();
     this.getInviterTop();
-    console.log(window);
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
