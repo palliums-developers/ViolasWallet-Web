@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import PhotoSynthesis from "./saveImage.js";
+import { rndNum } from "../../utils/redomNum";
+import { verifyMobile } from "../../utils/verifyMobile";
+import intl from "react-intl-universal";
 import "./award.scss";
 let url1 = "https://api4.violas.io";
 
@@ -12,16 +15,16 @@ class InviteRewards extends Component {
       incentive: 0,
       invite_count: 0,
       ifMobile: false,
+      lang:'EN'
     };
   }
   componentWillMount() {
-    if (this.props.location) {
-      if (this.props.location.search) {
-        this.setState({
-          ifMobile: true,
-        });
-      }
-    }
+    intl.options.currentLocale = verifyMobile(this.props.location).lang;
+    this.setState({
+      id: rndNum(100),
+      ifMobile: verifyMobile(this.props.location).ifMobile,
+      lang: verifyMobile(this.props.location).lang,
+    });
   }
   componentDidMount() {
     this.getInviterInfo();
@@ -87,13 +90,13 @@ class InviteRewards extends Component {
       
 }
   render() {
-    let { incentive, invite_count, ifMobile } = this.state;
+    let { incentive, invite_count, ifMobile,lang } = this.state;
     // console.log(ifMobile);
     return (
       <div
         id="inviteRewards"
         className={ifMobile == false ? "inviteRewards" : "inviteRewards1"}
-        onScroll={this.state.ifMobile == false ? null :this.handleScroll}
+        onScroll={this.state.ifMobile == false ? null : this.handleScroll}
       >
         <div className="inviteContent">
           <div className="head">
@@ -166,9 +169,21 @@ class InviteRewards extends Component {
             <div className="head">
               <h3>排行榜</h3>
               <p
-                onClick={() => {
-                  this.props.history.push("/homepage/home/invitationList");
-                }}
+                onClick={
+                  ifMobile == false
+                    ? () => {
+                        this.props.history.push(
+                          "/homepage/home/invitationList"
+                        );
+                      }
+                    : () => {
+                        this.props.history.push(
+                          "/homepage/home/invitationList?address=" +
+                            "&language=" +
+                            lang
+                        );
+                      }
+                }
               >
                 <label>查看更多</label>
                 <img src="/img/m_编组 17@2x.png" />

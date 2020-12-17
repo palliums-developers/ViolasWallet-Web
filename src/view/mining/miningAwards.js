@@ -3,6 +3,7 @@ import './mining.scss'
 import { rndNum } from "../../utils/redomNum";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
+import { verifyMobile } from "../../utils/verifyMobile";
 let url1 = "https://api4.violas.io";
 
 //挖矿奖励
@@ -22,20 +23,13 @@ class MiningAwards extends Component {
     };
   }
   componentWillMount() {
-    this.setState(
-      {
-        id: rndNum(100)
-      });
-    if (this.props.location) {
-      if (this.props.location.search) {
-        this.setState({
-          ifMobile: true,
-          lang:this.props.location.search.split("&")[1].split("=")[1].toUpperCase()
-        },()=>{
-          intl.options.currentLocale = this.state.lang
-        });
-      }
-    }
+    intl.options.currentLocale = verifyMobile(this.props.location).lang;
+    this.setState({
+      id: rndNum(100),
+      ifMobile: verifyMobile(this.props.location).ifMobile,
+      lang:verifyMobile(this.props.location).lang
+    });
+
   }
   componentDidMount() {
     this.getMiningInfo();
@@ -115,6 +109,7 @@ class MiningAwards extends Component {
       ranking,
       is_new,
       ifMobile,
+      lang
     } = this.state;
     return (
       <div className={ifMobile == false ? "miningAwards" : "miningAwards1"}>
@@ -122,9 +117,19 @@ class MiningAwards extends Component {
           <div className="goRule">
             <img src="/img/m_矩形 4@2x.png" />
             <p
-              onClick={() => {
-                this.props.history.push("/homepage/home/ruleDescription");
-              }}
+              onClick={
+                ifMobile == false
+                  ? () => {
+                      this.props.history.push("/homepage/home/ruleDescription");
+                    }
+                  : () => {
+                      this.props.history.push(
+                        "/homepage/home/ruleDescription?address=" +
+                          "&language=" +
+                          lang
+                      );
+                    }
+              }
             >
               规则说明
               <img src="/img/m_编组 41@2x.png" />
@@ -258,9 +263,19 @@ class MiningAwards extends Component {
               <h3>排行榜</h3>
 
               <p
-                onClick={() => {
-                  this.props.history.push("/homepage/home/rankingList");
-                }}
+                onClick={
+                  ifMobile == false
+                    ? () => {
+                        this.props.history.push("/homepage/home/rankingList");
+                      }
+                    : () => {
+                        this.props.history.push(
+                          "/homepage/home/rankingList?address=" +
+                            "&language=" +
+                            lang
+                        );
+                      }
+                }
               >
                 <label>查看更多</label>
                 <img src="/img/m_编组 17@2x.png" />
