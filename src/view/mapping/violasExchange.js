@@ -3,7 +3,7 @@ import "./mapping.scss";
 import WalletConnect from "../../packages/browser/src/index";
 import { connect } from "react-redux";
 import WalletconnectDialog from "../components/walletconnectDialog";
-import { BigNumber } from "bignumber.js";
+//import { BigNumber } from "bignumber.js";
 import { Form, Select, Input } from "antd";
 //violas兑换
 class ViolasExchange extends Component {
