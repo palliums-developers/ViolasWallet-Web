@@ -24,14 +24,14 @@ class MiningAwards extends Component {
   }
   componentWillMount() {
     alert(JSON.stringify(this.props.location))
-    intl.options.currentLocale = verifyMobile(this.props.location).lang;
+    // intl.options.currentLocale = verifyMobile(this.props.location).lang;
 
     this.setState({
       id: rndNum(100),
-      ifMobile: verifyMobile(this.props.location).ifMobile,
-      lang: verifyMobile(this.props.location).lang,
+      ifMobile: true,
+      lang: "EN",
     });
-  }
+  }p
   componentDidMount() {
     this.getMiningInfo();
     this.getVerifiedWallet();
