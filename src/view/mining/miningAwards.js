@@ -20,13 +20,13 @@ class MiningAwards extends Component {
       is_new: 0,
       ifMobile: false,
       lang: "EN",
-      id: '',
+      id: "",
     };
   }
   componentWillMount() {
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
-
+    let i = 1;
     this.setState(
       {
         id: rndNum(100),
@@ -34,7 +34,8 @@ class MiningAwards extends Component {
         lang: "EN",
       },
       () => {
-        alert(this.state.ifMobile);
+        alert(this.state.ifMobile, i);
+        i++;
       }
     );
   }
