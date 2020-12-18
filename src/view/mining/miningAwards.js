@@ -223,7 +223,7 @@ class MiningAwards extends Component {
           </div>
 
           <div className="fundList">
-            <p>{this.window.location}11</p>
+            <p>{window.location}11</p>
             <h4>总收益 ( VLS )</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
