@@ -1,5 +1,4 @@
 export function verifyMobile(location) {
-  
   if (location) {
     if (location.search) {
         let address = location.search.split("&")[0].split("=")[1].toUpperCase();
@@ -12,7 +11,6 @@ export function verifyMobile(location) {
         }else{
             return;
         }
-        
     }
   }
 }

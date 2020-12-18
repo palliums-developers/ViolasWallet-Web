@@ -1,5 +1,5 @@
-import React,{Component} from "react";
-import './mining.scss'
+import React, { Component } from "react";
+import "./mining.scss";
 import { rndNum } from "../../utils/redomNum";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
@@ -23,23 +23,28 @@ class MiningAwards extends Component {
     };
   }
   componentWillMount() {
-    alert('111')
-    alert(window)
-    alert(window.location)
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
 
-    this.setState({
-      id: rndNum(100),
-      ifMobile: true,
-      lang: 'EN',
-    },()=>{
-      alert(this.state.ifMobile)
-    });
+    this.setState(
+      {
+        id: rndNum(100),
+        ifMobile: true,
+        lang: "EN",
+      },
+      () => {
+        alert(this.state.ifMobile);
+      }
+    );
+  }
+  checkMobile() {
+    alert("111");
+    alert(window);
+    alert(window.location);
   }
   componentDidMount() {
-    this.getMiningInfo();
-    this.getVerifiedWallet();
+    // this.getMiningInfo();
+    // this.getVerifiedWallet();
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
@@ -308,11 +313,13 @@ class MiningAwards extends Component {
                     className="btn"
                     onClick={
                       ifMobile == false
-                          ? () => {
-                      this.props.history.push(
-                        "/homepage/home/digitalBank/saveDetails"
-                      );
-                    }:()=>this.depositInfo()}
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/digitalBank/saveDetails"
+                            );
+                          }
+                        : () => this.depositInfo()
+                    }
                   >
                     去存款
                   </button>
@@ -327,10 +334,15 @@ class MiningAwards extends Component {
                   <label>邀请好友</label>
                   <button
                     className="btn"
-                    onClick={ifMobile == false
-                          ? () => {
-                      this.props.history.push("/homepage/home/inviteRewards");
-                    }:()=>this.inviteInfo()}
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/inviteRewards"
+                            );
+                          }
+                        : () => this.inviteInfo()
+                    }
                   >
                     去邀请
                   </button>
@@ -339,12 +351,15 @@ class MiningAwards extends Component {
                   <label>借款挖矿</label>
                   <button
                     className="btn"
-                    onClick={ifMobile == false
-                          ? () => {
-                      this.props.history.push(
-                        "/homepage/home/digitalBank/borrowDetails"
-                      );
-                    }:()=>this.borrowInfo()}
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/digitalBank/borrowDetails"
+                            );
+                          }
+                        : () => this.borrowInfo()
+                    }
                   >
                     去借款
                   </button>
@@ -404,5 +419,5 @@ class MiningAwards extends Component {
     );
   }
 }
- 
+
 export default MiningAwards;
