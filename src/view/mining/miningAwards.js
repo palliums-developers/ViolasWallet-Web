@@ -35,7 +35,7 @@ class MiningAwards extends Component {
     },()=>{
       alert('222')
     });
-  }p
+  }
   componentDidMount() {
     this.getMiningInfo();
     this.getVerifiedWallet();
