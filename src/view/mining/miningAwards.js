@@ -19,7 +19,7 @@ class MiningAwards extends Component {
       ranking: [],
       is_new: 0,
       ifMobile: false,
-      lang:'EN'
+      lang: "EN",
     };
   }
   componentWillMount() {
@@ -28,9 +28,8 @@ class MiningAwards extends Component {
     this.setState({
       id: rndNum(100),
       ifMobile: verifyMobile(this.props.location).ifMobile,
-      lang:verifyMobile(this.props.location).lang
+      lang: verifyMobile(this.props.location).lang,
     });
-
   }
   componentDidMount() {
     this.getMiningInfo();
@@ -84,6 +83,86 @@ class MiningAwards extends Component {
         }
       });
   }
+  //H5新用户验证
+  userInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "new_user_check",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.parse(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
+  //H5去存款/存款挖矿
+  depositInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "bank_deposit_farming",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.parse(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
+  //H5去借款/借款挖矿
+  borrowInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "bank_loan_farming",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.parse(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
+  //H5去转入/资金池挖矿
+  poolingInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "pool_farming",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.parse(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
+  //H5去邀请/邀请好友
+  inviteInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "mine_invite",
+        params: [],
+      }),
+      (resp) => {
+        alert(JSON.parse(resp));
+        if (JSON.parse(resp).result === "success") {
+        }
+      }
+    );
+  };
   //H5挖矿明细
   miningdetail = () => {
     callHandler(
@@ -94,7 +173,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(resp);
+        alert(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -110,7 +189,7 @@ class MiningAwards extends Component {
       ranking,
       is_new,
       ifMobile,
-      lang
+      lang,
     } = this.state;
     return (
       <div className={ifMobile == false ? "miningAwards" : "miningAwards1"}>
@@ -153,7 +232,7 @@ class MiningAwards extends Component {
                   ? () => {
                       this.props.history.push("/homepage/home/miningDetails");
                     }
-                  : this.miningdetail()
+                  : () => this.miningdetail()
               }
             >
               挖矿明细
@@ -201,9 +280,15 @@ class MiningAwards extends Component {
                   {is_new == 0 ? (
                     <button
                       className="btn"
-                      onClick={() => {
-                        this.props.history.push("/homepage/home/userRewards");
-                      }}
+                      onClick={
+                        ifMobile == false
+                          ? () => {
+                              this.props.history.push(
+                                "/homepage/home/userRewards"
+                              );
+                            }
+                          : () => this.userInfo()
+                      }
                     >
                       去验证
                     </button>
@@ -215,11 +300,13 @@ class MiningAwards extends Component {
                   <label>存款挖矿</label>
                   <button
                     className="btn"
-                    onClick={() => {
+                    onClick={
+                      ifMobile == false
+                          ? () => {
                       this.props.history.push(
                         "/homepage/home/digitalBank/saveDetails"
                       );
-                    }}
+                    }:()=>this.depositInfo()}
                   >
                     去存款
                   </button>
@@ -234,9 +321,10 @@ class MiningAwards extends Component {
                   <label>邀请好友</label>
                   <button
                     className="btn"
-                    onClick={() => {
+                    onClick={ifMobile == false
+                          ? () => {
                       this.props.history.push("/homepage/home/inviteRewards");
-                    }}
+                    }:()=>this.inviteInfo()}
                   >
                     去邀请
                   </button>
@@ -245,11 +333,12 @@ class MiningAwards extends Component {
                   <label>借款挖矿</label>
                   <button
                     className="btn"
-                    onClick={() => {
+                    onClick={ifMobile == false
+                          ? () => {
                       this.props.history.push(
                         "/homepage/home/digitalBank/borrowDetails"
                       );
-                    }}
+                    }:()=>this.borrowInfo()}
                   >
                     去借款
                   </button>
