@@ -87,7 +87,7 @@ class MiningAwards extends Component {
   //H5挖矿明细
   miningdetail = () => {
     callHandler(
-      "callJavaScript",
+      "callNative",
       JSON.stringify({
         id: this.state.id,
         method: "yield_farming_detail",
