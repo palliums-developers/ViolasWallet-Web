@@ -20,11 +20,14 @@ class InviteRewards extends Component {
   }
   componentWillMount() {
     // intl.options.currentLocale = verifyMobile(this.props.location).lang;
+    let temp = verifyMobile(window.location);
+    intl.options.currentLocale = temp.lang;
     this.setState({
       id: rndNum(100),
-      ifMobile: true,
-      lang:'EN',
+      ifMobile: temp.ifMobile,
+      lang: temp.lang,
     });
+
   }
   componentDidMount() {
     this.getInviterInfo();
