@@ -226,7 +226,7 @@ class MiningAwards extends Component {
 
           <div className="fundList">
             <p>{JSON.stringify(window.location)}</p>
-            {/* <p>{this.checkMobile(window.location)}11</p> */}
+            <p>{this.checkMobile(window.location)}</p>
             <h4>总收益 ( VLS )</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
