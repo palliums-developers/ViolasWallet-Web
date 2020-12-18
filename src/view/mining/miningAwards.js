@@ -3,6 +3,7 @@ import "./mining.scss";
 import { rndNum } from "../../utils/redomNum";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
+import { message } from "antd";
 import { verifyMobile } from "../../utils/verifyMobile";
 let url1 = "https://api4.violas.io";
 
@@ -94,7 +95,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -110,7 +111,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -126,7 +127,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -142,7 +143,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -158,7 +159,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -174,7 +175,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        alert(JSON.parse(resp));
+        message.success(JSON.parse(resp));
         if (JSON.parse(resp).result === "success") {
         }
       }
@@ -229,6 +230,7 @@ class MiningAwards extends Component {
             </div>
             <p
               onClick={
+                
                 ifMobile == false
                   ? () => {
                       this.props.history.push("/homepage/home/miningDetails");
