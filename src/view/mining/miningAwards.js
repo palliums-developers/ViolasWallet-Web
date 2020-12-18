@@ -24,7 +24,7 @@ class MiningAwards extends Component {
   }
   componentWillMount() {
     alert('111')
-    alert(JSON.stringify(window))
+    alert(window)
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
 
