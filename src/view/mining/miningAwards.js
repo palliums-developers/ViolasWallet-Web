@@ -32,10 +32,12 @@ class MiningAwards extends Component {
       lang: "EN",
     });
   }
-  checkMobile() {
-    alert("111");
-    alert(window);
-    alert(window.location);
+  checkMobile(temp) {
+    let result = "";
+    for (let i in temp) {
+      result += i;
+    }
+    return result;
   }
   componentDidMount() {
     // this.getMiningInfo();
@@ -223,7 +225,8 @@ class MiningAwards extends Component {
           </div>
 
           <div className="fundList">
-            <p>{JSON.stringify(window.location)}11</p>
+            <p>{JSON.stringify(window.location)}</p>
+            {/* <p>{this.checkMobile(window.location)}11</p> */}
             <h4>总收益 ( VLS )</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
