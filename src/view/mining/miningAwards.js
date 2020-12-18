@@ -25,6 +25,7 @@ class MiningAwards extends Component {
   componentWillMount() {
     alert('111')
     alert(window)
+    alert(window.location)
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
 
@@ -33,9 +34,9 @@ class MiningAwards extends Component {
       ifMobile: true,
       lang: 'EN',
     },()=>{
-      alert('222')
+      alert(this.state.ifMobile)
     });
-  }p
+  }
   componentDidMount() {
     this.getMiningInfo();
     this.getVerifiedWallet();
@@ -222,7 +223,7 @@ class MiningAwards extends Component {
           </div>
 
           <div className="fundList">
-            <h4>总收益 ( VLS )1</h4>
+            <h4>总收益 ( VLS )</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
               {ifMobile == false ? (
