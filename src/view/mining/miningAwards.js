@@ -222,7 +222,7 @@ class MiningAwards extends Component {
           </div>
 
           <div className="fundList">
-            <h4>总收益 ( VLS )</h4>
+            <h4>总收益 ( VLS )1</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
               {ifMobile == false ? (
