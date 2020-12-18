@@ -35,7 +35,7 @@ class MiningAwards extends Component {
   checkMobile(temp) {
     let result = "";
     for (let i in temp) {
-      result += i;
+      result = result + i + " ";
     }
     return result;
   }
