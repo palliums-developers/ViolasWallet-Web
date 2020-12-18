@@ -24,13 +24,13 @@ class MiningAwards extends Component {
   }
   componentWillMount() {
     alert(JSON.stringify(this.props))
-    let VerifyMobile = verifyMobile(this.props.location);
-    intl.options.currentLocale = VerifyMobile.lang;
+    // let VerifyMobile = verifyMobile(this.props.location);
+    // intl.options.currentLocale = VerifyMobile.lang;
 
     this.setState({
       id: rndNum(100),
-      ifMobile: VerifyMobile.ifMobile,
-      lang: VerifyMobile.lang,
+      ifMobile: true,
+      lang: 'EN',
     });
   }p
   componentDidMount() {
