@@ -20,6 +20,7 @@ class MiningAwards extends Component {
       is_new: 0,
       ifMobile: false,
       lang: "EN",
+      id: '',
     };
   }
   componentWillMount() {
