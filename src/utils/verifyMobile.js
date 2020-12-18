@@ -1,5 +1,5 @@
 export function verifyMobile(location) {
-  alert(JSON.stringify(location))
+  
   if (location) {
     if (location.search) {
         let address = location.search.split("&")[0].split("=")[1].toUpperCase();

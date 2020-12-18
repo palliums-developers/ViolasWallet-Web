@@ -23,6 +23,7 @@ class MiningAwards extends Component {
     };
   }
   componentWillMount() {
+    alert(JSON.stringify(this.props.location))
     intl.options.currentLocale = verifyMobile(this.props.location).lang;
 
     this.setState({
