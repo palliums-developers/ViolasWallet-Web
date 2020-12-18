@@ -23,6 +23,7 @@ class MiningAwards extends Component {
     };
   }
   componentWillMount() {
+    alert('111')
     alert(window.location)
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
@@ -31,6 +32,8 @@ class MiningAwards extends Component {
       id: rndNum(100),
       ifMobile: true,
       lang: 'EN',
+    },()=>{
+      alert('222')
     });
   }p
   componentDidMount() {
