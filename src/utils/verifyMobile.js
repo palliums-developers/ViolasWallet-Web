@@ -1,15 +1,17 @@
 export function verifyMobile(location) {
   if (location) {
     if (location.search) {
-
-        return {
-          ifMobile: true,
-          address: location.search.split("&")[0].split("=")[1].toUpperCase(),
-          lang:location.search
-        .split("&")[1]
-        .split("=")[1]
-        .toUpperCase()
-        };
+        let address = location.search.split("&")[0].split("=")[1].toUpperCase();
+        if(address == "" || address.length == 32){
+            return {
+            ifMobile: true,
+            address: address,
+            lang: location.search.split("&")[1].split("=")[1].toUpperCase(),
+            };
+        }else{
+            return;
+        }
+        
     }
   }
 }

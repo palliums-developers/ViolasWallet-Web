@@ -24,6 +24,7 @@ class MiningAwards extends Component {
   }
   componentWillMount() {
     intl.options.currentLocale = verifyMobile(this.props.location).lang;
+
     this.setState({
       id: rndNum(100),
       ifMobile: verifyMobile(this.props.location).ifMobile,
@@ -93,7 +94,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        console.log(resp);
+        alert(resp);
         if (JSON.parse(resp).result === "success") {
         }
       }
