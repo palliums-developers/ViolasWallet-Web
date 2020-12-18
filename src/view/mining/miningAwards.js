@@ -26,18 +26,11 @@ class MiningAwards extends Component {
   componentWillMount() {
     // let VerifyMobile = verifyMobile(this.props.location);
     // intl.options.currentLocale = VerifyMobile.lang;
-    let i = 1;
-    this.setState(
-      {
-        id: rndNum(100),
-        ifMobile: true,
-        lang: "EN",
-      },
-      () => {
-        alert(this.state.ifMobile, i);
-        i++;
-      }
-    );
+    this.setState({
+      id: rndNum(100),
+      ifMobile: true,
+      lang: "EN",
+    });
   }
   checkMobile() {
     alert("111");
@@ -230,6 +223,7 @@ class MiningAwards extends Component {
           </div>
 
           <div className="fundList">
+            <p>{this.window.location}11</p>
             <h4>总收益 ( VLS )</h4>
             <span>{total_incentive}</span>
             <div className="rightImg">
