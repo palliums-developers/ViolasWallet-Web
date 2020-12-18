@@ -23,13 +23,14 @@ class MiningAwards extends Component {
     };
   }
   componentWillMount() {
-    alert(JSON.stringify(this.props.location))
-    // intl.options.currentLocale = verifyMobile(this.props.location).lang;
+    alert(JSON.stringify(this.props))
+    let VerifyMobile = verifyMobile(this.props.location);
+    intl.options.currentLocale = VerifyMobile.lang;
 
     this.setState({
       id: rndNum(100),
-      ifMobile: true,
-      lang: "EN",
+      ifMobile: VerifyMobile.ifMobile,
+      lang: VerifyMobile.lang,
     });
   }p
   componentDidMount() {
