@@ -6,7 +6,7 @@ import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 import 'antd/dist/antd.css'
 import VConsole from "vconsole";
-const isDebug = true;
+const isDebug = false;
 // 本地开发调试注入vConsole
 if (isDebug) {
   new VConsole();
