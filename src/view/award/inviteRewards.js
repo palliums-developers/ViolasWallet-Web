@@ -93,6 +93,18 @@ class InviteRewards extends Component {
       }
       
 }
+//H5去邀请/邀请好友
+  inviteInfo = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "mine_invite",
+        params: [],
+      }),
+      (resp) => {}
+    );
+  };
   render() {
     let { incentive, invite_count, ifMobile,lang } = this.state;
     // console.log(ifMobile);
@@ -148,9 +160,13 @@ class InviteRewards extends Component {
               <h3>我的邀请</h3>
 
               <p
-                onClick={() => {
-                  this.props.history.push("/homepage/home/miningDetails");
-                }}
+                onClick={
+                  ifMobile == false
+                    ? () => {
+                        this.props.history.push("/homepage/home/miningDetails");
+                      }
+                    : this.inviteInfo()
+                }
               >
                 <label>查看更多</label>
                 <img src="/img/m_编组 17@2x.png" />

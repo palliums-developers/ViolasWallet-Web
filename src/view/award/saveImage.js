@@ -72,7 +72,6 @@ class PhotoSynthesis extends Component {
     this.saveToAlbum(imgdata.split(",")[1]);
   };
   saveToAlbum = (imgBase64) => {
-    message.success('111');
     callHandler(
       "callNative",
       JSON.stringify({
@@ -81,20 +80,11 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
-        message.success(JSON.stringify(resp));
+          message.success(JSON.stringify(resp));
+        
       }
     );
   };
-  // saveToAlbum = (imgBase64) => {
-  //   // 图片预览, 可选参数 saveable：是否显示保存图片按钮， index: 多图情况下指定当前浏览的序号
-  //   if (window.mbBridge) {
-  //     window.mbBridge.mb.image({
-  //       index: 1,
-  //       saveable: true,
-  //       urls: [imgBase64],
-  //     });
-  //   }
-  // };
 
   getPhoto = () => {
     var type = "png";
@@ -148,8 +138,8 @@ class PhotoSynthesis extends Component {
   // }
 
   render() {
-    let { width, height, canvaswidth, canvasheight, ifMobile } = this.props;
-    console.log(ifMobile);
+    let { canvaswidth, canvasheight, ifMobile } = this.props;
+    // console.log(ifMobile);
     return (
       <div
         className={ifMobile == false ? "canvasWrap" : "canvasWrap canvasWrap1"}
