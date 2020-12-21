@@ -95,9 +95,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
       }
     );
   };
@@ -111,9 +108,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
       }
     );
   };
@@ -127,9 +121,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
       }
     );
   };
@@ -143,9 +134,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
+        
       }
     );
   };
@@ -159,9 +148,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
       }
     );
   };
@@ -230,7 +216,6 @@ class MiningAwards extends Component {
             </div>
             <p
               onClick={
-                
                 ifMobile == false
                   ? () => {
                       this.props.history.push("/homepage/home/miningDetails");
@@ -318,7 +303,20 @@ class MiningAwards extends Component {
                 </p>
                 <p>
                   <label>资金池挖矿</label>
-                  <button className="btn">去转入</button>
+                  <button
+                    className="btn"
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/inviteRewards"
+                            );
+                          }
+                        : () => this.poolingInfo()
+                    }
+                  >
+                    去转入
+                  </button>
                 </p>
               </div>
               <div>
