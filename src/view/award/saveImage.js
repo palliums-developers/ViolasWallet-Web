@@ -6,7 +6,7 @@ class PhotoSynthesis extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgData: "",
+      imgData: "1",
     };
   }
 
