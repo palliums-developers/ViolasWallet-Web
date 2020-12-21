@@ -7,10 +7,15 @@ class PhotoSynthesis extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgData: "1",
+      imgData: "",
+      id:""
     };
   }
-
+  componentWillMount() {
+    this.setState({
+      id: rndNum(100)
+    });
+  }
   initCanvas() {
     let canvas1 = document.getElementById("customCanvas");
     let width = (canvas1.width = 305);
@@ -80,8 +85,7 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
-          message.success(JSON.stringify(resp));
-        
+        message.success(JSON.stringify(resp));
       }
     );
   };
