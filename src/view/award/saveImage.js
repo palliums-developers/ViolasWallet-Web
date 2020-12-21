@@ -59,12 +59,12 @@ class PhotoSynthesis extends Component {
     //设置保存图片的类型
     var imgdata = bigcan.toDataURL(type);
     //将mime-type改为image/octet-stream,强制让浏览器下载
-    var fixtype = function (type) {
-      type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
-      var r = type.match(/png|jpeg|bmp|gif/)[0];
-      return "image/" + r;
-    };
-    imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
+    // var fixtype = function (type) {
+    //   type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
+    //   var r = type.match(/png|jpeg|bmp|gif/)[0];
+    //   return "image/" + r;
+    // };
+    // imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
     this.setState({
       imgData:imgdata,
     });
