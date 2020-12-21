@@ -133,18 +133,7 @@ class MiningAwards extends Component {
       (resp) => {}
     );
   };
-  //H5去邀请/邀请好友
-  inviteInfo = () => {
-    callHandler(
-      "callNative",
-      JSON.stringify({
-        id: this.state.id,
-        method: "mine_invite",
-        params: [],
-      }),
-      (resp) => {}
-    );
-  };
+
   //H5挖矿明细
   miningdetail = () => {
     callHandler(

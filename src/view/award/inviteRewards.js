@@ -17,7 +17,8 @@ class InviteRewards extends Component {
       incentive: 0,
       invite_count: 0,
       ifMobile: false,
-      lang:'EN'
+      lang:'EN',
+      id:""
     };
   }
   componentWillMount() {
@@ -94,7 +95,7 @@ class InviteRewards extends Component {
       }
       
 }
-//H5去邀请/邀请好友
+  //我的邀请
   inviteInfo = () => {
     callHandler(
       "callNative",
@@ -166,7 +167,7 @@ class InviteRewards extends Component {
                     ? () => {
                         this.props.history.push("/homepage/home/miningDetails");
                       }
-                    : this.inviteInfo()
+                    : ()=>this.inviteInfo()
                 }
               >
                 <label>查看更多</label>
