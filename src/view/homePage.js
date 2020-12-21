@@ -5,6 +5,13 @@ import RouterView from '../router/routerView';
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 import 'antd/dist/antd.css'
+import VConsole from "vconsole";
+const isDebug = true;
+// 本地开发调试注入vConsole
+if (isDebug) {
+  new VConsole();
+}
+
 //首页 首个路由
 class HomePage extends Component {
   constructor(props) {
