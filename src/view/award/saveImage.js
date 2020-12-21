@@ -151,12 +151,12 @@ class PhotoSynthesis extends Component {
           <img className="canimg" src="" />
           {/* <img id="avatar" ></img> */}
           {ifMobile == false ? (
-            <a className="btns" onClick={() => this.getPhoto1()}>
+            <a className="btns" onClick={() => this.getPhoto()}>
               保存图片
             </a>
           ) : (
             <div className="btns1List">
-              <a className="btns1" onClick={() => this.getPhoto()}>
+              <a className="btns1" onClick={() => this.getPhoto1()}>
                 <img src="/img/mobile_m_xiazai 2@2x.png" />
                 保存到相册
               </a>
