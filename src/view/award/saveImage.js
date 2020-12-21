@@ -54,22 +54,22 @@ class PhotoSynthesis extends Component {
     };
   }
   getPhoto1 = () => {
-    // var type = "png";
-    // var bigcan = document.querySelectorAll("canvas")[1];
-    // //设置保存图片的类型
-    // var imgdata = bigcan.toDataURL(type);
-    // //将mime-type改为image/octet-stream,强制让浏览器下载
-    // var fixtype = function (type) {
-    //   type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
-    //   var r = type.match(/png|jpeg|bmp|gif/)[0];
-    //   return "image/" + r;
-    // };
-    // imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
+    var type = "png";
+    var bigcan = document.querySelectorAll("canvas")[1];
+    //设置保存图片的类型
+    var imgdata = bigcan.toDataURL(type);
+    //将mime-type改为image/octet-stream,强制让浏览器下载
+    var fixtype = function (type) {
+      type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
+      var r = type.match(/png|jpeg|bmp|gif/)[0];
+      return "image/" + r;
+    };
+    imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
     this.setState({
-      imgData: '2',
+      imgData:imgdata,
     });
-    // message.success(imgdata);
-    // this.saveToAlbum(imgdata);
+    message.success(imgdata);
+    this.saveToAlbum(imgdata);
   };
   saveToAlbum = (imgBase64) => {
     // 图片预览, 可选参数 saveable：是否显示保存图片按钮， index: 多图情况下指定当前浏览的序号
