@@ -5,6 +5,7 @@ class PhotoSynthesis extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      imgData:""
     };
   }
 
@@ -50,6 +51,23 @@ class PhotoSynthesis extends Component {
         };
       };
     };
+  }
+  getPhoto1 = ()=>{
+    var type = "png";
+    var bigcan = document.querySelectorAll("canvas")[1];
+    //设置保存图片的类型
+    var imgdata = bigcan.toDataURL(type);
+    //将mime-type改为image/octet-stream,强制让浏览器下载
+    var fixtype = function (type) {
+      type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
+      var r = type.match(/png|jpeg|bmp|gif/)[0];
+      return "image/" + r;
+    };
+    imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
+    this.setState({
+      imgData: imgdata,
+    });
+    alert(imgdata)
   }
   getPhoto = () => {
     var type = "png";
@@ -103,7 +121,6 @@ class PhotoSynthesis extends Component {
   // }
 
   render() {
-  
     let { width, height, canvaswidth, canvasheight, ifMobile } = this.props;
     console.log(ifMobile);
     return (
@@ -121,7 +138,7 @@ class PhotoSynthesis extends Component {
           <img className="canimg" src="" />
           {/* <img id="avatar" ></img> */}
           {ifMobile == false ? (
-            <a className="btns" onClick={() => this.getPhoto()}>
+            <a className="btns" onClick={() => this.getPhoto1()}>
               保存图片
             </a>
           ) : (
@@ -144,7 +161,7 @@ class PhotoSynthesis extends Component {
               className="closeDilog1"
               onClick={() => this.props.closeDialog(false)}
             >
-              取 消
+              取 消{this.state.imgData}
             </p>
           )}
         </div>

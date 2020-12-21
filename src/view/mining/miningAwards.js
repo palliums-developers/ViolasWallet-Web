@@ -162,7 +162,7 @@ class MiningAwards extends Component {
     );
   };
   //数字银行挖矿
-  bankProfit = ()=>{
+  bankProfit = () => {
     callHandler(
       "callNative",
       JSON.stringify({
@@ -174,7 +174,21 @@ class MiningAwards extends Component {
         message.success(JSON.parse(resp));
       }
     );
-  }
+  };
+  //资金池挖矿
+  poolProfit = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "withdraw_pool_profit",
+        params: [],
+      }),
+      (resp) => {
+        message.success(JSON.parse(resp));
+      }
+    );
+  };
   render() {
     let {
       total_incentive,
@@ -244,7 +258,19 @@ class MiningAwards extends Component {
                     <label>待提取(VLS)</label>
                     {pool_incentive}
                   </span>
-                  <button>一键提取</button>
+                  <button
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/userRewards"
+                            );
+                          }
+                        : () => this.poolProfit()
+                    }
+                  >
+                    一键提取
+                  </button>
                 </p>
               </div>
               <div className="line"></div>

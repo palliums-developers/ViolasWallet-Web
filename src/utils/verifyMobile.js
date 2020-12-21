@@ -10,7 +10,7 @@ export function verifyMobile(location) {
       return result;
     }
   }else{
-    return { ifMobile: false};
+    return { ifMobile: false,lang:localStorage.getItem('local')};
   }
 }
 
