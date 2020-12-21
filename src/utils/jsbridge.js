@@ -1,5 +1,7 @@
 function setupWebViewJavascriptBridge(callback) {
+  console.log(window);
   if (/android/.test(navigator.userAgent.toLowerCase())) {
+    console.log(window);
     // https://github.com/lzyzsd/JsBridge
     if (window.WebViewJavascriptBridge) {
       console.log(window);
