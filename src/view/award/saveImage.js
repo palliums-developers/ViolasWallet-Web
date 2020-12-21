@@ -70,8 +70,6 @@ class PhotoSynthesis extends Component {
       imgData: imgdata,
     });
     this.saveToAlbum(imgdata.split(",")[1]);
-    
-    this.saveToAlbum(imgdata);
   };
   saveToAlbum = (imgBase64) => {
     message.success('111');
