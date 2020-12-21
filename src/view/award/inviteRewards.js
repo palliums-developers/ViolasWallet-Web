@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PhotoSynthesis from "./saveImage.js";
 import { rndNum } from "../../utils/redomNum";
 import { verifyMobile } from "../../utils/verifyMobile";
+import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
 import { message } from "antd";
 import "./award.scss";
