@@ -94,8 +94,7 @@ class MiningAwards extends Component {
         method: "new_user_check",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   //H5去存款/存款挖矿
@@ -107,8 +106,7 @@ class MiningAwards extends Component {
         method: "bank_deposit_farming",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   //H5去借款/借款挖矿
@@ -120,8 +118,7 @@ class MiningAwards extends Component {
         method: "bank_loan_farming",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   //H5去转入/资金池挖矿
@@ -133,9 +130,7 @@ class MiningAwards extends Component {
         method: "pool_farming",
         params: [],
       }),
-      (resp) => {
-        
-      }
+      (resp) => {}
     );
   };
   //H5去邀请/邀请好友
@@ -147,8 +142,7 @@ class MiningAwards extends Component {
         method: "mine_invite",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   //H5挖矿明细
@@ -167,6 +161,20 @@ class MiningAwards extends Component {
       }
     );
   };
+  //数字银行挖矿
+  bankProfit = ()=>{
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "withdraw_bank_profit",
+        params: [],
+      }),
+      (resp) => {
+        message.success(JSON.parse(resp));
+      }
+    );
+  }
   render() {
     let {
       total_incentive,
@@ -247,7 +255,19 @@ class MiningAwards extends Component {
                     <label>待提取(VLS)</label>
                     {bank_incentive}
                   </span>
-                  <button>一键提取</button>
+                  <button
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/userRewards"
+                            );
+                          }
+                        : () => this.bankProfit()
+                    }
+                  >
+                    一键提取
+                  </button>
                 </p>
                 <p>
                   <img src="/img/m_wenhao 3@2x.png" />
@@ -309,7 +329,7 @@ class MiningAwards extends Component {
                       ifMobile == false
                         ? () => {
                             this.props.history.push(
-                              "/homepage/home/inviteRewards"
+                              "/homepage/home/changeContent/cashPooling"
                             );
                           }
                         : () => this.poolingInfo()
