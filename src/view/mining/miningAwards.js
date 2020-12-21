@@ -144,9 +144,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
-        if (JSON.parse(resp).result === "success") {
-        }
       }
     );
   };
@@ -160,7 +157,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
       }
     );
   };
@@ -174,7 +170,6 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
-        message.success(JSON.parse(resp));
       }
     );
   };

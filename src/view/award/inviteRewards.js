@@ -17,11 +17,12 @@ class InviteRewards extends Component {
       incentive: 0,
       invite_count: 0,
       ifMobile: false,
-      lang:'EN',
-      id:""
+      lang: "EN",
+      id: "",
     };
   }
   componentWillMount() {
+    console.log(window.location.href);
     // intl.options.currentLocale = verifyMobile(this.props.location).lang;
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
@@ -30,7 +31,6 @@ class InviteRewards extends Component {
       ifMobile: temp.ifMobile,
       lang: temp.lang,
     });
-
   }
   componentDidMount() {
     this.getInviterInfo();
@@ -79,22 +79,21 @@ class InviteRewards extends Component {
       sharePosters: val,
     });
   };
- handleScroll(e){
-      let clientHeight = document.getElementById("inviteRewards").clientHeight; //可视区域高度
-      let scrollTop = document.getElementById("inviteRewards").scrollTop; //滚动条滚动高度
-      let scrollHeight = document.getElementById("inviteRewards").scrollHeight; //滚动内容高度
-      if (clientHeight + scrollTop == scrollHeight) {
-        //如果滚动到底部
-        document.getElementById("btns").style.background =
-          "RGBA(64, 25, 135, 1)";
-      }else{
-        document.getElementById("btns").style.background =
-          "url('/img/mobile_m_矩形 2@2x.png') no-repeat";
-        document.getElementById("btns").style.backgroundSize='100%';
-        document.getElementById("btns").style.backgroundPosition='center center';
-      }
-      
-}
+  handleScroll(e) {
+    let clientHeight = document.getElementById("inviteRewards").clientHeight; //可视区域高度
+    let scrollTop = document.getElementById("inviteRewards").scrollTop; //滚动条滚动高度
+    let scrollHeight = document.getElementById("inviteRewards").scrollHeight; //滚动内容高度
+    if (clientHeight + scrollTop == scrollHeight) {
+      //如果滚动到底部
+      document.getElementById("btns").style.background = "RGBA(64, 25, 135, 1)";
+    } else {
+      document.getElementById("btns").style.background =
+        "url('/img/mobile_m_矩形 2@2x.png') no-repeat";
+      document.getElementById("btns").style.backgroundSize = "100%";
+      document.getElementById("btns").style.backgroundPosition =
+        "center center";
+    }
+  }
   //我的邀请
   inviteInfo = () => {
     callHandler(
@@ -107,8 +106,22 @@ class InviteRewards extends Component {
       (resp) => {}
     );
   };
+  //分享链接
+  shareLink = () => {
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "share_link",
+        params: [window.location.href],
+      }),
+      (resp) => {
+        message.success(JSON.stringify(resp));
+      }
+    );
+  };
   render() {
-    let { incentive, invite_count, ifMobile,lang } = this.state;
+    let { incentive, invite_count, ifMobile, lang } = this.state;
     // console.log(ifMobile);
     return (
       <div
@@ -167,7 +180,7 @@ class InviteRewards extends Component {
                     ? () => {
                         this.props.history.push("/homepage/home/miningDetails");
                       }
-                    : ()=>this.inviteInfo()
+                    : () => this.inviteInfo()
                 }
               >
                 <label>查看更多</label>
@@ -279,7 +292,9 @@ class InviteRewards extends Component {
             </div>
           </div>
           <div id={ifMobile == false ? "" : "btns"} className="btns">
-            <button>分享链接</button>
+            <button onClick={ifMobile == false ? ()=>{
+              console.log('分享链接')
+            } : ()=>this.shareLink()}>分享链接</button>
             <button
               onClick={() => {
                 this.setState({
