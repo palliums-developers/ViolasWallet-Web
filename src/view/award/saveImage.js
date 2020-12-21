@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import QRCode from "qrcode.react";
+import { message } from "antd";
 //保存图片
 class PhotoSynthesis extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgData:""
+      imgData: "",
     };
   }
 
@@ -52,7 +53,7 @@ class PhotoSynthesis extends Component {
       };
     };
   }
-  getPhoto1 = ()=>{
+  getPhoto1 = () => {
     var type = "png";
     var bigcan = document.querySelectorAll("canvas")[1];
     //设置保存图片的类型
@@ -67,8 +68,20 @@ class PhotoSynthesis extends Component {
     this.setState({
       imgData: imgdata,
     });
-    alert(imgdata)
-  }
+    message.success(imgdata);
+    this.saveToAlbum(imgdata);
+  };
+  saveToAlbum = (imgBase64) => {
+    // 图片预览, 可选参数 saveable：是否显示保存图片按钮， index: 多图情况下指定当前浏览的序号
+    if (window.mbBridge) {
+      window.mbBridge.mb.image({
+        index: 1,
+        saveable: true,
+        urls: [imgBase64],
+      });
+    }
+  };
+
   getPhoto = () => {
     var type = "png";
     this.download(type);
