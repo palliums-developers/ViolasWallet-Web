@@ -324,15 +324,13 @@ class MiningAwards extends Component {
                   <label>邀请好友</label>
                   <button
                     className="btn"
-                    onClick={
-                      ifMobile == false
-                        ? () => {
-                            this.props.history.push(
-                              "/homepage/home/inviteRewards"
-                            );
-                          }
-                        : () => this.inviteInfo()
-                    }
+                    onClick={() => {
+                      this.props.history.push(
+                        "/homepage/home/inviteRewards?language=" +
+                          lang +
+                          "&address="
+                      );
+                    }}
                   >
                     去邀请
                   </button>
