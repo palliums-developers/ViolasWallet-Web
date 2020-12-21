@@ -190,7 +190,7 @@ class PhotoSynthesis extends Component {
               className="closeDilog1"
               onClick={() => this.props.closeDialog(false)}
             >
-              取 消{this.state.imgData}
+              取 消
             </p>
           )}
         </div>
