@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import QRCode from "qrcode.react";
 import { message } from "antd";
+import { callHandler, registerHandler } from "../../utils/jsbridge";
 //保存图片
 class PhotoSynthesis extends Component {
   constructor(props) {
@@ -66,21 +67,36 @@ class PhotoSynthesis extends Component {
     // };
     // imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
     this.setState({
-      imgData:imgdata,
+      imgData: imgdata,
     });
+    this.saveToAlbum(imgdata.split(",")[1]);
+    console.log(imgdata.split(",")[1]);
     message.success(imgdata);
     this.saveToAlbum(imgdata);
   };
   saveToAlbum = (imgBase64) => {
-    // 图片预览, 可选参数 saveable：是否显示保存图片按钮， index: 多图情况下指定当前浏览的序号
-    if (window.mbBridge) {
-      window.mbBridge.mb.image({
-        index: 1,
-        saveable: true,
-        urls: [imgBase64],
-      });
-    }
+    callHandler(
+      "callNative",
+      JSON.stringify({
+        id: this.state.id,
+        method: "save_picture",
+        params: [imgBase64],
+      }),
+      (resp) => {
+        message.success(JSON.stringify(resp));
+      }
+    );
   };
+  // saveToAlbum = (imgBase64) => {
+  //   // 图片预览, 可选参数 saveable：是否显示保存图片按钮， index: 多图情况下指定当前浏览的序号
+  //   if (window.mbBridge) {
+  //     window.mbBridge.mb.image({
+  //       index: 1,
+  //       saveable: true,
+  //       urls: [imgBase64],
+  //     });
+  //   }
+  // };
 
   getPhoto = () => {
     var type = "png";

@@ -3,6 +3,7 @@ import PhotoSynthesis from "./saveImage.js";
 import { rndNum } from "../../utils/redomNum";
 import { verifyMobile } from "../../utils/verifyMobile";
 import intl from "react-intl-universal";
+import { message } from "antd";
 import "./award.scss";
 let url1 = "https://api4.violas.io";
 
