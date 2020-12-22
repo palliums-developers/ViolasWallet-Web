@@ -82,7 +82,7 @@ class InviteRewards extends Component {
       sharePosters: val,
     });
   };
-  handleScroll(e) {
+  handleScroll() {
     let clientHeight = document.getElementById("inviteRewards").clientHeight; //可视区域高度
     let scrollTop = document.getElementById("inviteRewards").scrollTop; //滚动条滚动高度
     let scrollHeight = document.getElementById("inviteRewards").scrollHeight; //滚动内容高度
