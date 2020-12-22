@@ -22,6 +22,9 @@ class InvitationList extends Component {
     }
   }
   componentDidMount() {
+    if (this.state.ifMobile) {
+      document.title = "邀请榜单";
+    }
     this.getInviterTop();
   }
   //获取邀请奖励Top20

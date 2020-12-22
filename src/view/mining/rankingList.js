@@ -21,6 +21,11 @@ class RankingList extends Component {
       }
     }
   }
+  componentDidMount(){
+    if (this.state.ifMobile) {
+      document.title = "收益榜单";
+    }
+  }
   //获取激励排名top20
   getInviterTop() {
     fetch(url1 + "/violas/1.0/incentive/top20")

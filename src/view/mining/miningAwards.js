@@ -34,6 +34,10 @@ class MiningAwards extends Component {
     });
   }
   componentDidMount() {
+    if (this.state.ifMobile) {
+      document.title = "挖矿激励";
+    }
+    
     // this.getMiningInfo();
     // this.getVerifiedWallet();
   }

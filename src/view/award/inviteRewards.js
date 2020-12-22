@@ -33,6 +33,9 @@ class InviteRewards extends Component {
     });
   }
   componentDidMount() {
+    if (this.state.ifMobile) {
+      document.title = "邀请奖励";
+    }
     this.getInviterInfo();
     this.getInviterTop();
   }

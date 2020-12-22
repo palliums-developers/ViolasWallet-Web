@@ -19,6 +19,11 @@ class RuleDescription extends Component {
       }
     }
   }
+  componentDidMount() {
+    if (this.state.ifMobile) {
+      document.title = "规则说明";
+    }
+  }
   render() {
     let { ifMobile } = this.state;
     return (
