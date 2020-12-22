@@ -68,7 +68,7 @@ class Head extends React.PureComponent {
       if (error) {
         throw error;
       }
-      console.log("wallet disconnected");
+      // console.log("wallet disconnected");
     });
   }
 

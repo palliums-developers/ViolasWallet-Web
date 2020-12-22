@@ -174,6 +174,7 @@ class MiningAwards extends Component {
         params: [],
       }),
       (resp) => {
+        // this.getMiningInfo()
       }
     );
   };
@@ -358,13 +359,21 @@ class MiningAwards extends Component {
                   <label>邀请好友</label>
                   <button
                     className="btn"
-                    onClick={() => {
-                      this.props.history.push(
-                        "/homepage/home/inviteRewards?language=" +
-                          lang +
-                          "&address="
-                      );
-                    }}
+                    onClick={
+                      ifMobile == false
+                        ? () => {
+                            this.props.history.push(
+                              "/homepage/home/inviteRewards"
+                            );
+                          }
+                        : () => {
+                            this.props.history.push(
+                              "/homepage/home/inviteRewards?language=" +
+                                lang +
+                                "&address="
+                            );
+                          }
+                    }
                   >
                     去邀请
                   </button>

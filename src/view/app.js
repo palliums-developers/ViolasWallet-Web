@@ -25,23 +25,19 @@ class App extends Component {
   }
   async componentDidMount() {
     await this.logout();
+    await this.getNewWalletConnect();
     await this.QRCode();
-    console.log('版本号:0.1.1！！！！！')
+    console.log("版本号:0.1.1！！！！！");
   }
   async logout() {
-    // await this.state.walletConnector.connected && this.state.walletConnector.killSession();
-    await this.state.walletConnector.killSession();
+    await this.state.walletConnector.killSession&&this.state.walletConnector.killSession();
     await this.setState({ walletConnector: {} });
-    await this.getNewWalletConnect();
-    // await sessionStorage.setItem("violas_address", "");
-    // await sessionStorage.setItem("bitcoin_address", "");
-    // await sessionStorage.setItem("libra_address", "");
     await localStorage.clear();
     await sessionStorage.clear();
+    console.log('run log out')
   }
   async componentWillMount() {
     let lang = intl.options.currentLocale;
-    console.log(lang);
     switch (lang) {
       case "zh":
         lang = "CN";
@@ -55,18 +51,19 @@ class App extends Component {
     }
     window.localStorage.setItem("local", lang);
     intl.options.currentLocale = window.localStorage.getItem("local");
-    await this.getNewWalletConnect();
   }
   async getNewWalletConnect() {
     await this.setState({
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
+    console.log('create new walletconnect')
   }
   QRCode() {
     if (!this.state.walletConnector.connected) {
       this.state.walletConnector.createSession().then(async () => {
         const uri = this.state.walletConnector.uri;
         webStorage.setSession(this.state.walletConnector.session);
+        console.log('save in location')
         await this.setState({
           uri: uri,
         });
@@ -79,6 +76,7 @@ class App extends Component {
         });
         throw error;
       }
+      console.log('connect')
       const { accounts, chainId } = payload.params[0];
       this.getAccount();
       this.setState(
@@ -106,10 +104,10 @@ class App extends Component {
       if (error) {
         throw error;
       }
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      this.props.history.push("/app");
-      // console.log("wallet disconnected");
+      console.log("disconnect");
+      // window.localStorage.clear();
+      // window.sessionStorage.clear();
+      // this.props.history.push("/app");
     });
   }
 
