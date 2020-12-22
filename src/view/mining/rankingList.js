@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
+import { verifyMobile } from "../../utils/verifyMobile";
+import intl from "react-intl-universal";
 import './mining.scss'
 let url1 = "https://api4.violas.io";
 
@@ -13,13 +15,12 @@ class RankingList extends Component {
     };
   }
   componentWillMount() {
-    if (this.props.location) {
-      if (this.props.location.search) {
-        this.setState({
-          ifMobile: true,
-        });
-      }
-    }
+    let temp = verifyMobile(window.location);
+    intl.options.currentLocale = temp.lang;
+    this.setState({
+      ifMobile: temp.ifMobile,
+      lang: temp.lang,
+    });
   }
   componentDidMount(){
     if (this.state.ifMobile) {

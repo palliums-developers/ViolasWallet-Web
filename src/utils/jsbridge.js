@@ -2,7 +2,6 @@ function setupWebViewJavascriptBridge(callback) {
   if (/android/.test(navigator.userAgent.toLowerCase())) {
     // https://github.com/lzyzsd/JsBridge
     if (window.WebViewJavascriptBridge) {
-      console.log(window);
       callback(window.WebViewJavascriptBridge);
     } else {
       document.addEventListener(
@@ -23,7 +22,7 @@ function setupWebViewJavascriptBridge(callback) {
       return window.WKWVJBCallbacks.push(callback);
     }
     window.WKWVJBCallbacks = [callback];
-    window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
+    // window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
   }
 }
 setupWebViewJavascriptBridge(function (bridge) {

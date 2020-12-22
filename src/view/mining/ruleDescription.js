@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Breadcrumb } from "antd";
+import { verifyMobile } from "../../utils/verifyMobile";
+import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
 
 //规则说明
@@ -11,13 +13,12 @@ class RuleDescription extends Component {
     };
   }
   componentWillMount() {
-    if (this.props.location) {
-      if (this.props.location.search) {
-        this.setState({
-          ifMobile: true,
-        });
-      }
-    }
+    let temp = verifyMobile(window.location);
+    intl.options.currentLocale = temp.lang;
+    this.setState({
+      ifMobile: temp.ifMobile,
+      lang: temp.lang,
+    });
   }
   componentDidMount() {
     if (this.state.ifMobile) {
