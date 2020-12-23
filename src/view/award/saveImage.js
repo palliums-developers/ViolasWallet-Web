@@ -80,6 +80,7 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
+        message.success(JSON.stringify(JSON.parse(resp)));
          if (JSON.stringify(JSON.parse(resp)).result == "success") {
            setTimeout(() => {
           this.props.closeDialog(false);

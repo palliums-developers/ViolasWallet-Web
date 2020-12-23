@@ -81,7 +81,6 @@ class InviteRewards extends Component {
       });
   }
   closeDialog = (val) => {
-    message.success(val)
     this.setState({
       sharePosters: val,
     });
@@ -123,7 +122,6 @@ class InviteRewards extends Component {
         params: [this.state.address],
       }),
       (resp) => {
-        message.success(JSON.stringify(JSON.parse(resp)));
       }
     );
   };
