@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PhotoSynthesis from "./saveImage.js";
 import { rndNum } from "../../utils/redomNum";
 import { verifyMobile } from "../../utils/verifyMobile";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
 import { message } from "antd";
@@ -296,9 +297,17 @@ class InviteRewards extends Component {
             </div>
           </div>
           <div id={ifMobile == false ? "" : "btns"} className="btns">
-            <button onClick={ifMobile == false ? ()=>{
-              console.log('分享链接')
-            } : ()=>this.shareLink()}>分享链接</button>
+            {ifMobile == false ? (
+              <CopyToClipboard
+                text={window.sessionStorage.getItem("violas_address")}
+                onCopy={() => message.success("复制成功")}
+              >
+                <button> 分享链接 </button>
+              </CopyToClipboard>
+            ) : (
+              <button onClick={() => this.shareLink()}>分享链接</button>
+            )}
+
             <button
               onClick={() => {
                 this.setState({
