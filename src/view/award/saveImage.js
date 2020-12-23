@@ -86,6 +86,7 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
+        message.success(JSON.stringify(resp))
       }
     );
   };
