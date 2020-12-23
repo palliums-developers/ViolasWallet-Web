@@ -18,6 +18,9 @@ class UserRewards extends Component {
       addressIpt: "",
       codeIpt: "",
       descr: "",
+      descr1: "",
+      count: 60,
+      liked: true,
     };
   }
   ///获取验证码;
@@ -30,6 +33,7 @@ class UserRewards extends Component {
       this.setState({
         descr: "",
       });
+      this.handleClick()
       fetch(url1 + "/1.0/violas/verify_code", {
         method: "POST",
         headers: {
@@ -47,6 +51,31 @@ class UserRewards extends Component {
         });
     }
   }
+  //验证码倒计时
+  handleClick = () => {
+    const { sendMsg } = this.props;
+    const { liked } = this.state;
+    if (!liked) {
+      return;
+    }
+    this.countDown();
+  };
+  countDown() {
+    const { count } = this.state;
+    if (count === 1) {
+      this.setState({
+        count: 60,
+        liked: true,
+      });
+    } else {
+      this.setState({
+        count: count - 1,
+        liked: false,
+      });
+      setTimeout(this.countDown.bind(this), 1000);
+    }
+  }
+
   //输入手机号
   getPhoneValue = (e) => {
     // var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
@@ -69,7 +98,7 @@ class UserRewards extends Component {
     });
   };
   //立即领取
-  receiveFun = () =>{
+  receiveFun = () => {
     if (this.state.phoneIpt == "") {
       this.setState({
         descr: "请输入手机号",
@@ -83,26 +112,33 @@ class UserRewards extends Component {
       this.setState({
         descr: "你输入的手机号有误",
       });
-    } else{
-      // fetch(url1 + "/violas/1.0/incentive/mobile/verify", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     address: window.sessionStorage.getItem("violas_address"),
-      //     phone_local_number: "+86",
-      //     receiver: this.state.phoneIpt,
-      //   }),
-      // })
-      //   .then((res) => res.json())
-      //   .then((res) => {
-      //     console.log(res, "...............");
-      //   });
+    } else {
+      fetch(url1 + "/1.0/violas/incentive/mobile/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wallet_address: window.sessionStorage.getItem("violas_address"),
+          local_number: "+86",
+          mobile_number: this.state.phoneIpt,
+          verify_code: this.state.codeIpt,
+          inviter_address: this.state.addressIpt,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if(res.code == 2000){
+            this.setState({
+              descr1:"验证成功"
+            })
+          }
+        });
     }
-  }
+  };
+
   render() {
-    let { phoneIpt, addressIpt, codeIpt, descr } = this.state;
+    let { phoneIpt, addressIpt, codeIpt, descr, descr1 } = this.state;
     return (
       <div className="userRewards">
         <div>
@@ -168,9 +204,13 @@ class UserRewards extends Component {
                       onChange={this.getCodeValue}
                     />
                   </Form.Item>
-                  <Button onClick={() => this.getVerifyCode()}>
-                    获取验证码
-                  </Button>
+                  {this.state.liked ? (
+                    <Button onClick={() => this.getVerifyCode()}>
+                      获取验证码
+                    </Button>
+                  ) : (
+                    <Button disabled>{this.state.count}</Button>
+                  )}
                 </Form.Item>
                 <Form.Item
                   className="addressIpt"
@@ -187,7 +227,8 @@ class UserRewards extends Component {
                 </Form.Item>
               </Form>
               <button onClick={() => this.receiveFun()}>立即领取</button>
-              <p>{descr}</p>
+              <p className="p1">{descr}</p>
+              <p className="p2">{descr1}</p>
             </div>
           </div>
         </div>

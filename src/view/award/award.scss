@@ -87,6 +87,9 @@
                 color: #E54040;
                 margin: 0 auto;
             }
+            >p.p2{
+                color: rgb(5, 199, 5);
+            }
             .ant-form-item{
                 margin-bottom: 0;
             }
@@ -139,6 +142,9 @@
             }
             .phoneIpt:hover,.addressIpt:hover{
                 border-color: rgba(112, 56, 253, 1);
+            }
+            .ant-btn[disabled], .ant-btn[disabled]:hover, .ant-btn[disabled]:focus, .ant-btn[disabled]:active{
+                background: #FFF;
             }
             //输入验证码
             .streetIpt{

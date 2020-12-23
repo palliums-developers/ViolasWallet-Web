@@ -115,7 +115,6 @@ class App extends Component {
     this.state.walletConnector
       .get_accounts()
       .then((res) => {
-        console.log(res);
         window.localStorage.setItem("wallet_info", JSON.stringify(res));
         for (let i of res) {
           if (i.coinType === "violas") {
@@ -137,6 +136,7 @@ class App extends Component {
   //   intl.options.currentLocale = lang;
   //   this.forceUpdate();
   // }
+
   render() {
     let { uri } = this.state;
     return (

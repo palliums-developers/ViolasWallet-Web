@@ -16,13 +16,13 @@ class MiningDetails extends Component {
     this.getBankOrders();
   }
   callback(key) {
-    console.log(key);
+    //console.log(key);
   }
   //获取邀请奖励记录
   getInviterOrders() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/inviter/info?address=" +
+        "/1.0/violas/incentive/orders/invite?address=" +
         window.sessionStorage.getItem("violas_address") +
         "offset="
     )
@@ -37,7 +37,7 @@ class MiningDetails extends Component {
   getPoolOrders() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/orders/pool?address=" +
+        "/1.0/violas/incentive/orders/pool?address=" +
         window.sessionStorage.getItem("violas_address") +
         "offset="
     )
@@ -52,7 +52,7 @@ class MiningDetails extends Component {
   getBankOrders() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/orders/bank?address=" +
+        "/1.0/violas/incentive/orders/bank?address=" +
         window.sessionStorage.getItem("violas_address") +
         "offset="
     )

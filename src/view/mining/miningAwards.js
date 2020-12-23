@@ -2,9 +2,13 @@ import React, { Component } from "react";
 import "./mining.scss";
 import { rndNum } from "../../utils/redomNum";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
+import code_data from "../../utils/code.json";
+import WalletConnect from "../../packages/browser/src/index";
+import { bytes2StrHex, string2Byte } from "../../utils/trans";
 import intl from "react-intl-universal";
 import { message } from "antd";
 import { verifyMobile } from "../../utils/verifyMobile";
+import WalletconnectDialog from "../components/walletconnectDialog";
 let url1 = "https://api4.violas.io";
 
 //挖矿奖励
@@ -12,6 +16,8 @@ class MiningAwards extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bridge: "https://walletconnect.violas.io",
+      walletConnector: {},
       total_incentive: 0,
       bank_incentive: 0,
       pool_incentive: 0,
@@ -22,6 +28,8 @@ class MiningAwards extends Component {
       ifMobile: false,
       lang: "EN",
       id: "",
+      tyArgs: "",
+      showWallet: false,
     };
   }
   componentWillMount() {
@@ -32,14 +40,46 @@ class MiningAwards extends Component {
       ifMobile: temp.ifMobile,
       lang: temp.lang,
     });
+    this.getNewWalletConnect();
+  }
+  getNewWalletConnect() {
+    this.setState({
+      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
+    });
   }
   componentDidMount() {
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
     }
-    
-    // this.getMiningInfo();
-    // this.getVerifiedWallet();
+
+    this.getMiningInfo();
+    this.getVerifiedWallet();
+  }
+  //获取violas的tyArgs
+  async getTyArgs(_name, name) {
+    let address = "00000000000000000000000000000001";
+    let prefix = "07";
+    let suffix = "00";
+    let name_length = _name.length;
+    if (name_length < 10) {
+      name_length = "0" + name_length;
+    }
+    let _name_hex = bytes2StrHex(string2Byte(_name));
+    let result =
+      prefix +
+      address +
+      name_length +
+      _name_hex +
+      name_length +
+      _name_hex +
+      suffix;
+    this.setState({ tyArgs: result, showWallet: true }, () => {
+      if (name == "pool") {
+        this.poolProfit(sessionStorage.getItem("violas_chainId"));
+      } else if (name == "bank") {
+        this.bankProfit(sessionStorage.getItem("violas_chainId"));
+      }
+    });
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
@@ -55,7 +95,7 @@ class MiningAwards extends Component {
   getMiningInfo() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/mint/info?address=" +
+        "/1.0/violas/incentive/mint/info?address=" +
         window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
@@ -76,7 +116,7 @@ class MiningAwards extends Component {
   getVerifiedWallet() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/check/verified?address=" +
+        "/1.0/violas/incentive/check/verified?address=" +
         window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
@@ -85,7 +125,6 @@ class MiningAwards extends Component {
           this.setState({
             is_new: res.data.is_new,
           });
-          console.log(res.data);
         }
       });
   }
@@ -98,7 +137,8 @@ class MiningAwards extends Component {
         method: "new_user_check",
         params: [],
       }),
-      (resp) => {}
+      (resp) => {
+      }
     );
   };
   //H5去存款/存款挖矿
@@ -147,12 +187,38 @@ class MiningAwards extends Component {
         method: "yield_farming_detail",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
-  //数字银行挖矿
-  bankProfit = () => {
+  //一键提取
+  bankProfit = (chainId) => {
+    const tx = {
+      from: window.sessionStorage.getItem("violas_address"),
+      payload: {
+        code: code_data.violas.withdraw_mine_reward,
+        tyArgs: [this.state.tyArgs],
+        args: [],
+      },
+      chainId: chainId,
+    };
+    console.log(tx, "violas");
+    this.state.walletConnector
+      .sendTransaction("violas", tx)
+      .then((res) => {
+        this.setState({
+          showWallet: false,
+        });
+        console.log("send transaction ", res);
+      })
+      .catch((err) => {
+        this.setState({
+          showWallet: false,
+        });
+        console.log("send transaction ", err);
+      });
+  };
+  //一键提取/数字银行挖矿
+  bankProfit1 = () => {
     callHandler(
       "callNative",
       JSON.stringify({
@@ -160,12 +226,38 @@ class MiningAwards extends Component {
         method: "withdraw_bank_profit",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
-  //资金池挖矿
-  poolProfit = () => {
+  //一键提取
+  poolProfit = (chainId) => {
+    const tx = {
+      from: window.sessionStorage.getItem("violas_address"),
+      payload: {
+        code: code_data.violas.claim_incentive,
+        tyArgs: [this.state.tyArgs],
+        args: [],
+      },
+      chainId: chainId,
+    };
+    console.log(tx, "violas");
+    this.state.walletConnector
+      .sendTransaction("violas", tx)
+      .then((res) => {
+        this.setState({
+          showWallet: false,
+        });
+        console.log("send transaction ", res);
+      })
+      .catch((err) => {
+        this.setState({
+          showWallet: false,
+        });
+        console.log("send transaction ", err);
+      });
+  };
+  //一键提取/资金池挖矿
+  poolProfit1 = () => {
     callHandler(
       "callNative",
       JSON.stringify({
@@ -177,6 +269,11 @@ class MiningAwards extends Component {
         // this.getMiningInfo()
       }
     );
+  };
+  closeWallet = (val) => {
+    this.setState({
+      showWallet: val,
+    });
   };
   render() {
     let {
@@ -250,12 +347,8 @@ class MiningAwards extends Component {
                   <button
                     onClick={
                       ifMobile == false
-                        ? () => {
-                            this.props.history.push(
-                              "/homepage/home/userRewards"
-                            );
-                          }
-                        : () => this.poolProfit()
+                        ? () => this.getTyArgs("VLS", "pool")
+                        : () => this.poolProfit1()
                     }
                   >
                     一键提取
@@ -273,12 +366,8 @@ class MiningAwards extends Component {
                   <button
                     onClick={
                       ifMobile == false
-                        ? () => {
-                            this.props.history.push(
-                              "/homepage/home/userRewards"
-                            );
-                          }
-                        : () => this.bankProfit()
+                        ? () => this.getTyArgs("VLS", "bank")
+                        : () => this.bankProfit1()
                     }
                   >
                     一键提取
@@ -446,6 +535,11 @@ class MiningAwards extends Component {
             </div>
           </div>
         </div>
+        {this.state.showWallet ? (
+          <WalletconnectDialog
+            getCloseWallet={this.closeWallet}
+          ></WalletconnectDialog>
+        ) : null}
       </div>
     );
   }
