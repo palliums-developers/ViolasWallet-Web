@@ -46,7 +46,6 @@ class PhotoSynthesis extends Component {
           context1.fillText("扫描二维码", xw - 120, xh + 5);
           context1.fillStyle = "rgba(254, 169, 18, 1)";
           context1.fillText("一起瓜分奖励", xw - 138, xh + 30);
-
           context1.drawImage(image3, xw - 20, xh - 20, 60, 60);
           //绘制完成,转为图片
           setTimeout(function () {
@@ -82,7 +81,7 @@ class PhotoSynthesis extends Component {
       (resp) => {
         message.success(resp);
         message.success(JSON.parse(resp));
-         if (JSON.stringify(JSON.parse(resp)).result == "success") {
+         if (JSON.parse(resp).result == "success") {
            setTimeout(() => {
             this.props.closeDialog(false);
           }, 500);
