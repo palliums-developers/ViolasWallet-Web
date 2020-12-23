@@ -13,6 +13,7 @@ class PhotoSynthesis extends Component {
     };
   }
   componentWillMount() {
+    
     this.setState({
       id: rndNum(100)
     });
@@ -65,13 +66,6 @@ class PhotoSynthesis extends Component {
     var bigcan = document.querySelectorAll("canvas")[1];
     //设置保存图片的类型
     var imgdata = bigcan.toDataURL(type);
-    //将mime-type改为image/octet-stream,强制让浏览器下载
-    // var fixtype = function (type) {
-    //   type = type.toLocaleLowerCase().replace(/jpg/i, "jpeg");
-    //   var r = type.match(/png|jpeg|bmp|gif/)[0];
-    //   return "image/" + r;
-    // };
-    // imgdata = imgdata.replace(fixtype(type), "image/octet-stream");
     this.setState({
       imgData: imgdata,
     });
@@ -86,7 +80,12 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
-        message.success(JSON.stringify(resp))
+         if (JSON.parse(resp).result === "success") {
+           setTimeout(()=>{
+            this.props.closeDialog(false);
+           },500)
+         }
+        //message.success(JSON.stringify(resp))
       }
     );
   };
@@ -138,13 +137,11 @@ class PhotoSynthesis extends Component {
   componentDidMount() {
     this.initCanvas();
   }
-  // componentDidUpdate() {
-  //   this.initCanvas();
-  // }
 
   render() {
     let { canvaswidth, canvasheight, ifMobile } = this.props;
     // console.log(ifMobile);
+    message.success(this.props.address);
     return (
       <div
         className={ifMobile == false ? "canvasWrap" : "canvasWrap canvasWrap1"}

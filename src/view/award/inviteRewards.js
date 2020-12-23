@@ -19,15 +19,17 @@ class InviteRewards extends Component {
       ifMobile: false,
       lang: "EN",
       id: "",
+      address:""
     };
   }
   componentWillMount() {
-    console.log(window.location.href);
+    //console.log(window.location.href);
     // intl.options.currentLocale = verifyMobile(this.props.location).lang;
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
     this.setState({
       id: rndNum(100),
+      address:temp.address,
       ifMobile: temp.ifMobile,
       lang: temp.lang,
     });
@@ -116,7 +118,7 @@ class InviteRewards extends Component {
       JSON.stringify({
         id: this.state.id,
         method: "share_link",
-        params: [window.location.href],
+        params: [this.state.address],
       }),
       (resp) => {
         message.success(JSON.stringify(resp));
@@ -124,7 +126,7 @@ class InviteRewards extends Component {
     );
   };
   render() {
-    let { incentive, invite_count, ifMobile, lang } = this.state;
+    let { incentive, invite_count, ifMobile, lang,address } = this.state;
     // console.log(ifMobile);
     return (
       <div
@@ -313,6 +315,7 @@ class InviteRewards extends Component {
           <PhotoSynthesis
             closeDialog={this.closeDialog}
             ifMobile={ifMobile}
+            address={this.state.address}
           ></PhotoSynthesis>
         ) : null}
       </div>
