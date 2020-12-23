@@ -81,6 +81,7 @@ class InviteRewards extends Component {
       });
   }
   closeDialog = (val) => {
+    message.success(val)
     this.setState({
       sharePosters: val,
     });
