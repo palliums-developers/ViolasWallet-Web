@@ -80,11 +80,12 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
-         if (JSON.stringify(resp).result === "success") {
-           setTimeout(() => {
-             this.props.closeDialog(false);
-           }, 500);
-         }
+        message.success(JSON.stringify(resp));
+        //  if (JSON.stringify(resp).results === "success") {
+        //    setTimeout(() => {
+        //      this.props.closeDialog(false);
+        //    }, 500);
+        //  }
       }
     );
   };
@@ -140,7 +141,6 @@ class PhotoSynthesis extends Component {
   render() {
     let { canvaswidth, canvasheight, ifMobile } = this.props;
     // console.log(ifMobile);
-    message.success(this.props.address);
     return (
       <div
         className={ifMobile == false ? "canvasWrap" : "canvasWrap canvasWrap1"}
