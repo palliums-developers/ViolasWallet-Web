@@ -81,10 +81,11 @@ class PhotoSynthesis extends Component {
       }),
       (resp) => {
         message.success(JSON.stringify(JSON.parse(resp)));
+        setTimeout(() => {
+          this.props.closeDialog(false);
+        }, 500);
          if (JSON.stringify(JSON.parse(resp)).result == "success") {
-           setTimeout(() => {
-             this.props.closeDialog(false);
-           }, 500);
+           
          }
       }
     );
