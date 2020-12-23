@@ -100,6 +100,7 @@ class MiningAwards extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res,'.......')
         if (res.data) {
           this.setState({
             total_incentive: res.data.total_incentive,

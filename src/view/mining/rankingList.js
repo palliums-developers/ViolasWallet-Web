@@ -26,10 +26,11 @@ class RankingList extends Component {
     if (this.state.ifMobile) {
       document.title = "收益榜单";
     }
+    this.getInviterTop()
   }
   //获取激励排名top20
   getInviterTop() {
-    fetch(url1 + "/violas/1.0/incentive/top20")
+    fetch(url1 + "/1.0/violas/incentive/inviter/top20")
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {

@@ -1122,9 +1122,7 @@
       width: 100%;
       .topThreeList{
         display: flex;
-        
         margin-top: 55px;
-        // position: relative;
         >div{
           display: flex;
           flex-direction: column;
@@ -1297,14 +1295,16 @@
     .rankingWrap{
       width: 100%;
       .topThreeList{
+        width: 100%;
         display: flex;
-        
+        justify-content: space-between;
         margin-top: 55px;
-        // position: relative;
         >div{
+          width: 34%;
           display: flex;
           flex-direction: column;
           align-items: center;
+          
           position: relative;
           flex-shrink: 0;
           p:nth-child(2){
@@ -1322,14 +1322,11 @@
           }
         }
         .topOne{
-          width: 120px;
           height: 200px;
           background: url('/img/m_编组 9@2x.png') no-repeat;
           background-size: 100% 100%;
-          // left: 50%;
           margin-left: -8px;
           margin-right: -7px;
-          // top: 0;
           z-index: 3;
           p:nth-child(2){
             margin-top: 30px;
@@ -1344,7 +1341,6 @@
           }
         }
         .topTwo{
-          width:120px;
           height: 180px;
           background: url('/img/m_编组 155@2x.png') no-repeat;
           background-size: 100% 100%;
@@ -1360,7 +1356,6 @@
           }
         }
         .topThree{
-          width:120px;
           height: 180px;
           background: url('/img/m_编组 14@2x.png') no-repeat;
           background-size: 100% 100%;
@@ -1406,7 +1401,6 @@
           display: flex;
           flex-direction: column;
           div{
-            // width: 50%;
             p{
               margin-top: 30px;
               display: flex;
@@ -1424,7 +1418,6 @@
                 color: #333333;
               }
               span:nth-child(3){
-                
                 font-size: 16px;
                 // font-family: Roboto-Medium, Roboto;
                 font-weight: 500;
@@ -1550,9 +1543,14 @@
       
   }
 }
-
-// @media (max-width:1024px){
-// .miningAwards1{
-//   margin: 0;
-// }
-// }
+@media (min-width:1020px){
+.rankingLists1,.invitationList1{
+  .rankingWrap{
+    .topThreeList{
+      >div{
+        width:33.8%;
+      }
+    }
+  }
+} 
+}
