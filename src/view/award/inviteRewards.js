@@ -122,7 +122,6 @@ class InviteRewards extends Component {
         params: [this.state.address],
       }),
       (resp) => {
-        message.success(JSON.stringify(JSON.parse(resp)));
       }
     );
   };
