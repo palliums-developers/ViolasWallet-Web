@@ -30,6 +30,7 @@ class MiningAwards extends Component {
       id: "",
       tyArgs: "",
       showWallet: false,
+      address:""
     };
   }
   componentWillMount() {
@@ -39,6 +40,7 @@ class MiningAwards extends Component {
       id: rndNum(100),
       ifMobile: temp.ifMobile,
       lang: temp.lang,
+      address: temp.address,
     });
     this.getNewWalletConnect();
   }
@@ -51,9 +53,14 @@ class MiningAwards extends Component {
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
     }
-
-    this.getMiningInfo();
-    this.getVerifiedWallet();
+    if (this.state.ifMobile) {
+      this.getMiningInfo(window.sessionStorage.getItem("violas_address"));
+      this.getVerifiedWallet(window.sessionStorage.getItem("violas_address"));
+    }else{
+      this.getMiningInfo(this.state.address);
+      this.getVerifiedWallet(this.state.address);
+    }
+    
   }
   //获取violas的tyArgs
   async getTyArgs(_name, name) {
@@ -92,15 +99,12 @@ class MiningAwards extends Component {
     return str;
   }
   //获取挖矿奖励信息
-  getMiningInfo() {
-    fetch(
-      url1 +
-        "/1.0/violas/incentive/mint/info?address=" +
-        window.sessionStorage.getItem("violas_address")
-    )
+  getMiningInfo(address) {
+    if(address){
+      fetch(url1 + "/1.0/violas/incentive/mint/info?address=" + address)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res,'.......')
+        console.log(res, ".......");
         if (res.data) {
           this.setState({
             total_incentive: res.data.total_incentive,
@@ -112,22 +116,23 @@ class MiningAwards extends Component {
           });
         }
       });
+    }
   }
   //钱包是否已验证
-  getVerifiedWallet() {
-    fetch(
-      url1 +
-        "/1.0/violas/incentive/check/verified?address=" +
-        window.sessionStorage.getItem("violas_address")
-    )
+  getVerifiedWallet(address) {
+    if(address){
+    fetch(url1 + "/1.0/violas/incentive/check/verified?address=" + address)
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          message.success(res.data);
+          console.log(res.data);
           this.setState({
             is_new: res.data.is_new,
           });
         }
       });
+    }
   }
   //H5新用户验证
   userInfo = () => {

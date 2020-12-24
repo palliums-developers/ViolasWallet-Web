@@ -25,6 +25,7 @@ class App extends Component {
   }
   async componentDidMount() {
     await this.logout();
+    this.setLang();
     await this.getNewWalletConnect();
     await this.QRCode();
     console.log("版本号:0.1.1！！！！！");
@@ -37,6 +38,22 @@ class App extends Component {
     console.log('run log out')
   }
   async componentWillMount() {
+    // let lang = intl.options.currentLocale;
+    // switch (lang) {
+    //   case "zh":
+    //     lang = "CN";
+    //     break;
+    //   case "CN":
+    //     lang = "CN";
+    //     break;
+    //   default:
+    //     lang = "EN";
+    //     break;
+    // }
+    // window.localStorage.setItem("local", lang);
+    // intl.options.currentLocale = window.localStorage.getItem("local");
+  }
+  setLang(){
     let lang = intl.options.currentLocale;
     switch (lang) {
       case "zh":
@@ -63,7 +80,7 @@ class App extends Component {
       this.state.walletConnector.createSession().then(async () => {
         const uri = this.state.walletConnector.uri;
         webStorage.setSession(this.state.walletConnector.session);
-        console.log('save in location')
+        console.log('save walletconnect',this.state.walletConnector.clientId)
         await this.setState({
           uri: uri,
         });
@@ -74,11 +91,12 @@ class App extends Component {
         this.setState({
           status: 2,
         });
+        console.log('connect error ' + error)
         throw error;
       }
-      console.log('connect')
+      console.log("connect success " + JSON.stringify(payload));
       const { accounts, chainId } = payload.params[0];
-      this.getAccount();
+      // this.getAccount();
       this.setState(
         {
           status: 1,
@@ -102,9 +120,10 @@ class App extends Component {
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
+      console.log("error disconnect",error);
         throw error;
       }
-      console.log("disconnect");
+      console.log("disconnect " + JSON.stringify(payload));
       // window.localStorage.clear();
       // window.sessionStorage.clear();
       // this.props.history.push("/app");

@@ -55,11 +55,11 @@ class InviteRewards extends Component {
 
   //获取邀请奖励Top20
   getInviterTop() {
-    fetch(url1 + "/violas/1.0/incentive/inviter/top20")
+    fetch(url1 + "/1.0/violas/incentive/inviter/top20")
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          // console.log(res.data, "...............");
+          console.log(res.data, "...............");
         }
       });
   }
@@ -67,7 +67,7 @@ class InviteRewards extends Component {
   getInviterInfo() {
     fetch(
       url1 +
-        "/violas/1.0/incentive/inviter/info?address=" +
+        "/1.0/violas/incentive/inviter/info?address=" +
         window.sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())

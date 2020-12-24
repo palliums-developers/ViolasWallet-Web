@@ -12,6 +12,7 @@ class RankingList extends Component {
     super(props);
     this.state = {
       ifMobile: false,
+      rankList:[]
     };
   }
   componentWillMount() {
@@ -34,12 +35,14 @@ class RankingList extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
+          this.setState({
+            rankList: res.data,
+          });
         }
       });
   }
   render() {
-    let { ifMobile } = this.state;
+    let { ifMobile, rankList } = this.state;
     return (
       <div className={ifMobile == false ? "rankingLists" : "rankingLists1"}>
         <div>
