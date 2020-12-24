@@ -96,7 +96,7 @@ class App extends Component {
       }
       console.log("connect success " + JSON.stringify(payload));
       const { accounts, chainId } = payload.params[0];
-      // this.getAccount();
+      this.getAccount();
       this.setState(
         {
           status: 1,
