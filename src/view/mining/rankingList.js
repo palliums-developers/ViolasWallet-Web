@@ -12,7 +12,10 @@ class RankingList extends Component {
     super(props);
     this.state = {
       ifMobile: false,
-      rankList:[]
+      firstList: [],
+      secondList: [],
+      thirdList: [],
+      rankList2: [],
     };
   }
   componentWillMount() {
@@ -23,26 +26,55 @@ class RankingList extends Component {
       lang: temp.lang,
     });
   }
-  componentDidMount(){
+  componentDidMount() {
     if (this.state.ifMobile) {
       document.title = "收益榜单";
     }
-    this.getInviterTop()
+    this.getInviterTop();
+  }
+  //显示VLS地址（前6...后6）
+  showVLSAddress(str) {
+    // 中间显示省略号，截取显示括号内容
+    // var str = "53e59e4b4fa3c35770846f6c87ca2d35";
+    var last = 0;
+    var all = str.length;
+    var first = str.substr(0, 6);
+    str = first + " ... " + str.substr(all - 6, 6);
+    return str;
   }
   //获取激励排名top20
   getInviterTop() {
-    fetch(url1 + "/1.0/violas/incentive/inviter/top20")
+    fetch(url1 + "/1.0/violas/incentive/top20")
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          let firstData = [],
+            secondData = [],
+            thirdData = [];
+          let endData = [];
+          res.data.map((v) => {
+            if (v.rank == 1) {
+              firstData.push(v);
+            } else if (v.rank == 2) {
+              secondData.push(v);
+            } else if (v.rank == 3) {
+              thirdData.push(v);
+            } else {
+              endData.push(v);
+            }
+          });
           this.setState({
-            rankList: res.data,
+            firstList: firstData,
+            secondList: secondData,
+            thirdList: thirdData,
+            rankList: endData,
           });
         }
       });
   }
   render() {
-    let { ifMobile, rankList } = this.state;
+    let { ifMobile, firstList, secondList, thirdList, rankList } = this.state;
+    console.log(rankList);
     return (
       <div className={ifMobile == false ? "rankingLists" : "rankingLists1"}>
         <div>
@@ -61,27 +93,39 @@ class RankingList extends Component {
           </Breadcrumb>
           <div className="rankingWrap">
             <div className="topThreeList">
-              <div className="topTwo">
-                <p className="topLogo">
-                  <img src="/img/m_编组 12@2x.png" />
-                </p>
-                <p>2eiw8s…20wis9</p>
-                <p>10VLS</p>
-              </div>
-              <div className="topOne">
-                <p className="topLogo">
-                  <img src="/img/m_编组 58@2x.png" />
-                </p>
-                <p>2eiw8s…20wis9</p>
-                <p>1000VLS</p>
-              </div>
-              <div className="topThree">
-                <p className="topLogo">
-                  <img src="/img/m_编组 10@2x.png" />
-                </p>
-                <p>2eiw8s…20wis9</p>
-                <p>10VLS</p>
-              </div>
+              {secondList.map((v, i) => {
+                return (
+                  <div key={i} className="topTwo">
+                    <p className="topLogo">
+                      <img src="/img/m_编组 12@2x.png" />
+                    </p>
+                    <p>{this.showVLSAddress(v.address)}</p>
+                    <p>{v.incentive}VLS</p>
+                  </div>
+                );
+              })}
+              {firstList.map((v, i) => {
+                return (
+                  <div key={i} className="topOne">
+                    <p className="topLogo">
+                      <img src="/img/m_编组 58@2x.png" />
+                    </p>
+                    <p>{this.showVLSAddress(v.address)}</p>
+                    <p>{v.incentive}VLS</p>
+                  </div>
+                );
+              })}
+              {thirdList.map((v, i) => {
+                return (
+                  <div key={i} className="topThree">
+                    <p className="topLogo">
+                      <img src="/img/m_编组 10@2x.png" />
+                    </p>
+                    <p>{this.showVLSAddress(v.address)}</p>
+                    <p>{v.incentive}VLS</p>
+                  </div>
+                );
+              })}
             </div>
             <div className="residualRanking">
               <div className="head">
@@ -91,93 +135,16 @@ class RankingList extends Component {
               </div>
               <div className="list">
                 <div>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
-                  <p>
-                    <span>NO.4</span>
-                    <span>2eiw8…20wis9</span>
-                    <span>10VLS</span>
-                  </p>
+                  {rankList&&rankList.map((v, i) => {
+                    return (
+                      <p key={i}>
+                        <span>NO.{v.rank}</span>
+                        <span>{this.showVLSAddress(v.address)}</span>
+                        <span>{v.incentive}VLS</span>
+                      </p>
+                    );
+                  })}
+
                 </div>
               </div>
             </div>

@@ -126,7 +126,6 @@ class MiningAwards extends Component {
   }
   //钱包是否已验证
   getVerifiedWallet(addr) {
-    message.success(addr)
     if (addr) {
       fetch(url1 + "/1.0/violas/incentive/check/verified?address=" + addr)
         .then((res) => res.json())
@@ -298,6 +297,7 @@ class MiningAwards extends Component {
       ifMobile,
       lang,
     } = this.state;
+    console.log(ranking);
     return (
       <div className={ifMobile == false ? "miningAwards" : "miningAwards1"}>
         <div className="miningFundList">
@@ -535,7 +535,9 @@ class MiningAwards extends Component {
                         <img src="/img/m_编组 5备份 2@2x.png" />
                       ) : v.rank == 3 ? (
                         <img src="/img/m_编组 4备份 2@2x.png" />
-                      ) : null}
+                      ) : (
+                        <span>{v.rank}</span>
+                      )}
 
                       {this.showVLSAddress(v.address)}
                     </span>

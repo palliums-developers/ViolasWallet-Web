@@ -20,7 +20,8 @@ class InviteRewards extends Component {
       ifMobile: false,
       lang: "EN",
       id: "",
-      address:""
+      address:"",
+      ranking:[]
     };
   }
   componentWillMount() {
@@ -69,22 +70,27 @@ class InviteRewards extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          this.setState({
+            ranking: res.data,
+          });
           console.log(res.data, "...............");
         }
       });
   }
   //获取邀请奖励信息
   getInviterInfo(addr) {
-    fetch(url1 + "/1.0/violas/incentive/inviter/info?address=" + addr)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          this.setState({
-            incentive: res.data.incentive,
-            invite_count: res.data.invite_count,
-          });
-        }
-      });
+    if (addr) {
+      fetch(url1 + "/1.0/violas/incentive/inviter/info?address=" + addr)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.data) {
+            this.setState({
+              incentive: res.data.incentive,
+              invite_count: res.data.invite_count,
+            });
+          }
+        });
+    }
   }
   closeDialog = (val) => {
     this.setState({
@@ -132,7 +138,7 @@ class InviteRewards extends Component {
     );
   };
   render() {
-    let { incentive, invite_count, ifMobile, lang,address } = this.state;
+    let { incentive, invite_count, ifMobile, lang,address,ranking } = this.state;
     // console.log(ifMobile);
     return (
       <div
@@ -237,46 +243,26 @@ class InviteRewards extends Component {
             </div>
             <div className="line"></div>
             <div className="list">
-              <p>
-                <span>
-                  <img src="/img/m_编组 56备份 3@2x.png" />
-                  12uww3…9312jw
-                </span>
-                <span>89人</span>
-                <span>1.283 VLS</span>
-              </p>
-              <p>
-                <span>
-                  <img src="/img/m_编组 56备份 3@2x.png" />
-                  12uww3…9312jw
-                </span>
-                <span>89人</span>
-                <span>1.283 VLS</span>
-              </p>
-              <p>
-                <span>
-                  <img src="/img/m_编组 56备份 3@2x.png" />
-                  12uww3…9312jw
-                </span>
-                <span>89人</span>
-                <span>1.283 VLS</span>
-              </p>
-              <p>
-                <span>
-                  <strong>4</strong>
-                  12uww3…9312jw
-                </span>
-                <span>89人</span>
-                <span>1.283 VLS</span>
-              </p>
-              <p>
-                <span>
-                  <strong>5</strong>
-                  12uww3…9312jw
-                </span>
-                <span>89人</span>
-                <span>1.283 VLS</span>
-              </p>
+              {ranking&&ranking.map((v, i) => {
+                return (
+                  <p key={i}>
+                    <span>
+                      {v.rank == 1 ? (
+                        <img src="/img/m_编组 56备份 3@2x.png" />
+                      ) : v.rank == 2 ? (
+                        <img src="/img/m_编组 5备份 2@2x.png" />
+                      ) : v.rank == 3 ? (
+                        <img src="/img/m_编组 4备份 2@2x.png" />
+                      ) : (
+                        <strong>{v.rank}</strong>
+                      )}
+
+                      {this.showVLSAddress(v.address)}
+                    </span>
+                    <span>{v.incentive} VLS</span>
+                  </p>
+                );
+              })}
             </div>
           </div>
           <div className="activityRules">
