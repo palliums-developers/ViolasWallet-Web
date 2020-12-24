@@ -36,7 +36,7 @@ class MiningAwards extends Component {
   componentWillMount() {
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
-    console.log(temp.address);
+    // console.log(temp.address);
     this.setState(
       {
         id: rndNum(100),
@@ -131,7 +131,7 @@ class MiningAwards extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            console.log(res.data);
+            // console.log(res.data);
             this.setState({
               is_new: res.data.is_new,
             });
@@ -297,7 +297,6 @@ class MiningAwards extends Component {
       ifMobile,
       lang,
     } = this.state;
-    console.log(ranking);
     return (
       <div className={ifMobile == false ? "miningAwards" : "miningAwards1"}>
         <div className="miningFundList">
@@ -353,7 +352,7 @@ class MiningAwards extends Component {
                 <p>
                   <span>
                     <label>待提取(VLS)</label>
-                    {pool_incentive}
+                    {pool_incentive == null ? 0 : pool_incentive}
                   </span>
                   <button
                     onClick={
@@ -372,7 +371,7 @@ class MiningAwards extends Component {
                 <p>
                   <span>
                     <label>待提取(VLS)</label>
-                    {bank_incentive}
+                    {bank_incentive == null ? 0 : bank_incentive}
                   </span>
                   <button
                     onClick={
