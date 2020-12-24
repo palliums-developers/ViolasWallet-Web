@@ -30,18 +30,20 @@ class MiningAwards extends Component {
       id: "",
       tyArgs: "",
       showWallet: false,
-      address:""
+      address: "",
     };
   }
   componentWillMount() {
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
-    this.setState({
-      id: rndNum(100),
-      ifMobile: temp.ifMobile,
-      lang: temp.lang,
-      address: temp.address,
-    });
+    console.log(temp.address);
+    this.setState(
+      {
+        id: rndNum(100),
+        ifMobile: temp.ifMobile,
+        lang: temp.lang,
+        address: temp.address,
+      });
     this.getNewWalletConnect();
   }
   getNewWalletConnect() {
@@ -52,15 +54,19 @@ class MiningAwards extends Component {
   componentDidMount() {
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
-    }
-    if (this.state.ifMobile) {
-      this.getMiningInfo(window.sessionStorage.getItem("violas_address"));
-      this.getVerifiedWallet(window.sessionStorage.getItem("violas_address"));
-    }else{
       this.getMiningInfo(this.state.address);
       this.getVerifiedWallet(this.state.address);
+    }else{
+      this.getMiningInfo(
+        window.sessionStorage.getItem("violas_address") &&
+          window.sessionStorage.getItem("violas_address")
+      );
+      this.getVerifiedWallet(
+        window.sessionStorage.getItem("violas_address") &&
+          window.sessionStorage.getItem("violas_address")
+      );
     }
-    
+
   }
   //获取violas的tyArgs
   async getTyArgs(_name, name) {
@@ -99,41 +105,39 @@ class MiningAwards extends Component {
     return str;
   }
   //获取挖矿奖励信息
-  getMiningInfo(address) {
-    if(address){
-      fetch(url1 + "/1.0/violas/incentive/mint/info?address=" + address)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res, ".......");
-        if (res.data) {
-          this.setState({
-            total_incentive: res.data.total_incentive,
-            bank_incentive: res.data.bank_incentive,
-            pool_incentive: res.data.pool_incentive,
-            bank_total_incentive: res.data.bank_total_incentive,
-            pool_total_incentive: res.data.pool_total_incentive,
-            ranking: res.data.ranking,
-          });
-        }
-      });
+  getMiningInfo(addr) {
+    if (addr) {
+      fetch(url1 + "/1.0/violas/incentive/mint/info?address=" + addr)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res, ".......");
+          if (res.data) {
+            this.setState({
+              total_incentive: res.data.total_incentive,
+              bank_incentive: res.data.bank_incentive,
+              pool_incentive: res.data.pool_incentive,
+              bank_total_incentive: res.data.bank_total_incentive,
+              pool_total_incentive: res.data.pool_total_incentive,
+              ranking: res.data.ranking,
+            });
+          }
+        });
     }
   }
   //钱包是否已验证
-  getVerifiedWallet(address) {
-    message.success(address);
-    if(address){
-    fetch(url1 + "/1.0/violas/incentive/check/verified?address=" + address)
-      .then((res) => res.json())
-      .then((res) => {
-        message.success(res);
-        if (res.data) {
-          //message.success(res.data);
-          console.log(res.data);
-          this.setState({
-            is_new: res.data.is_new,
-          });
-        }
-      });
+  getVerifiedWallet(addr) {
+    message.success(addr);
+    if (addr) {
+      fetch(url1 + "/1.0/violas/incentive/check/verified?address=" + addr)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.data) {
+            console.log(res.data);
+            this.setState({
+              is_new: res.data.is_new,
+            });
+          }
+        });
     }
   }
   //H5新用户验证
@@ -145,8 +149,7 @@ class MiningAwards extends Component {
         method: "new_user_check",
         params: [],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   //H5去存款/存款挖矿
