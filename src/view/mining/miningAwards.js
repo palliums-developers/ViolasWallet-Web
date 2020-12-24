@@ -126,12 +126,13 @@ class MiningAwards extends Component {
   }
   //钱包是否已验证
   getVerifiedWallet(addr) {
+    message.success(addr)
     if (addr) {
       fetch(url1 + "/1.0/violas/incentive/check/verified?address=" + addr)
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            // console.log(res.data);
+            console.log(res.data);
             this.setState({
               is_new: res.data.is_new,
             });
