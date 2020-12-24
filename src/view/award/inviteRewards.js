@@ -36,11 +36,21 @@ class InviteRewards extends Component {
     });
   }
   componentDidMount() {
+    this.getInviterTop();
+    if (this.state.ifMobile) {
+      document.title = "挖矿激励";
+      this.getInviterInfo(this.state.address);
+      
+    } else {
+      this.getInviterInfo(
+        window.sessionStorage.getItem("violas_address") &&
+          window.sessionStorage.getItem("violas_address")
+      );
+    }
     if (this.state.ifMobile) {
       document.title = "邀请奖励";
     }
-    this.getInviterInfo();
-    this.getInviterTop();
+    
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
@@ -64,12 +74,8 @@ class InviteRewards extends Component {
       });
   }
   //获取邀请奖励信息
-  getInviterInfo() {
-    fetch(
-      url1 +
-        "/1.0/violas/incentive/inviter/info?address=" +
-        window.sessionStorage.getItem("violas_address")
-    )
+  getInviterInfo(addr) {
+    fetch(url1 + "/1.0/violas/incentive/inviter/info?address=" + addr)
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
