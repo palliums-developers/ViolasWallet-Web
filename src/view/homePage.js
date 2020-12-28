@@ -30,7 +30,6 @@ class HomePage extends Component {
         lang = "EN";
         break;
     }
-    // alert(window.localStorage==null)
     if(window.localStorage!==null&&window.localStorage.setItem!==undefined){
       localStorage.setItem("local", lang);
       intl.options.currentLocale = localStorage.getItem("local");
@@ -62,7 +61,6 @@ class HomePage extends Component {
       window.localStorage.clear();
       window.sessionStorage.clear();
       this.props.history.push("/app");
-      // console.log("wallet disconnected", "////////////");
     });
   }
   async getNewWalletConnect() {
@@ -79,7 +77,6 @@ class HomePage extends Component {
         this.props.location.pathname === "/homepage/home/inviteRewards" ||
         this.props.location.pathname === "/homepage/home/invitationList"
       ) {
-        // this.props.history.push("/app");
         if (this.props.location.search == "") {
           this.props.history.push("/app");
         } else {

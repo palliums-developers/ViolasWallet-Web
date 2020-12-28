@@ -78,9 +78,6 @@ class UserRewards extends Component {
 
   //输入手机号
   getPhoneValue = (e) => {
-    // var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
-    // var flag = reg.test(e.targer.value); //true
-    // console.log(flag)
     this.setState({
       phoneIpt: e.target.value,
     });

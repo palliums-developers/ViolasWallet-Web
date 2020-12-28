@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Breadcrumb, Tabs, Pagination } from "antd";
+import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
 import { verifyMobile } from "../../utils/verifyMobile";
 import intl from "react-intl-universal";

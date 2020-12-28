@@ -13,7 +13,6 @@ class PoolingDetail extends Component {
         }
     }
     componentDidMount() {
-        // this.optionTypes()
     }
     componentWillReceiveProps(nextProps){
         this.setState({

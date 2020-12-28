@@ -37,21 +37,7 @@ class App extends Component {
     await sessionStorage.clear();
     console.log('run log out')
   }
-  async componentWillMount() {
-    // let lang = intl.options.currentLocale;
-    // switch (lang) {
-    //   case "zh":
-    //     lang = "CN";
-    //     break;
-    //   case "CN":
-    //     lang = "CN";
-    //     break;
-    //   default:
-    //     lang = "EN";
-    //     break;
-    // }
-    // window.localStorage.setItem("local", lang);
-    // intl.options.currentLocale = window.localStorage.getItem("local");
+  componentWillMount() {
   }
   setLang(){
     let lang = intl.options.currentLocale;

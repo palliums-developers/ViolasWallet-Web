@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import QRCode from "qrcode.react";
 import { rndNum } from "../../utils/redomNum";
-import { message } from "antd";
+// import { message } from "antd";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 //保存图片
 class PhotoSynthesis extends Component {

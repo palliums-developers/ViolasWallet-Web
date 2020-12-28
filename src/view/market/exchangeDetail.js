@@ -65,12 +65,7 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        // showDrawer: () => {
-        //     dispatch({
-        //         type: 'VISIBLE',
-        //         payload: false
-        //     })
-        // }
+
     }
 }
 

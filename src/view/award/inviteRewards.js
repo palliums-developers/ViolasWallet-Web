@@ -25,8 +25,6 @@ class InviteRewards extends Component {
     };
   }
   componentWillMount() {
-    //console.log(window.location.href);
-    // intl.options.currentLocale = verifyMobile(this.props.location).lang;
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
     this.setState({
@@ -73,7 +71,7 @@ class InviteRewards extends Component {
           this.setState({
             ranking: res.data,
           });
-          console.log(res.data, "...............");
+          // console.log(res.data, "...............");
         }
       });
   }

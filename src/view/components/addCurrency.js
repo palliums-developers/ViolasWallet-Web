@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { withRouter } from "react-router-dom";
 import WalletConnect from '../../packages/browser/src/index';
 import code_data from '../../utils/code.json';
 import intl from "react-intl-universal";
