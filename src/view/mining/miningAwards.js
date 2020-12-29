@@ -37,13 +37,12 @@ class MiningAwards extends Component {
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
     // console.log(temp.address);
-    this.setState(
-      {
-        id: rndNum(100),
-        ifMobile: temp.ifMobile,
-        lang: temp.lang,
-        address: temp.address,
-      });
+    this.setState({
+      id: rndNum(100),
+      ifMobile: temp.ifMobile,
+      lang: temp.lang,
+      address: temp.address,
+    });
     this.getNewWalletConnect();
   }
   getNewWalletConnect() {
@@ -51,12 +50,22 @@ class MiningAwards extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  //小数点后的位数
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = parseFloat(Number(number).toFixed(n)); //补足位数
+    return number;
+  }
   componentDidMount() {
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
       this.getMiningInfo(this.state.address);
       this.getVerifiedWallet(this.state.address);
-    }else{
+    } else {
       this.getMiningInfo(
         window.sessionStorage.getItem("violas_address") &&
           window.sessionStorage.getItem("violas_address")
@@ -66,7 +75,6 @@ class MiningAwards extends Component {
           window.sessionStorage.getItem("violas_address")
       );
     }
-
   }
   //获取violas的tyArgs
   async getTyArgs(_name, name) {
@@ -113,11 +121,17 @@ class MiningAwards extends Component {
           // console.log(res, ".......");
           if (res.data) {
             this.setState({
-              total_incentive: res.data.total_incentive,
-              bank_incentive: res.data.bank_incentive,
-              pool_incentive: res.data.pool_incentive,
-              bank_total_incentive: res.data.bank_total_incentive,
-              pool_total_incentive: res.data.pool_total_incentive,
+              total_incentive: this.getFloat(res.data.total_incentive / 1e6, 3),
+              bank_incentive: this.getFloat(res.data.bank_incentive / 1e6, 3),
+              pool_incentive: this.getFloat(res.data.pool_incentive / 1e6, 3),
+              bank_total_incentive: this.getFloat(
+                res.data.bank_total_incentive / 1e6,
+                3
+              ),
+              pool_total_incentive: this.getFloat(
+                res.data.pool_total_incentive / 1e6,
+                3
+              ),
               ranking: res.data.ranking,
             });
           }
