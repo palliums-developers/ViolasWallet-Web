@@ -346,6 +346,8 @@
            font-weight: 600;
            color: #FFFFFF;
            cursor: pointer;
+           display: flex;
+           align-items: center;
            img{
                width: 15px;
                height: 12px;
@@ -362,7 +364,7 @@
       box-sizing: border-box;
       .fundList{
           width: 100%;
-          height: 331px;
+          height: 450px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -374,6 +376,7 @@
             display: flex;
             position: absolute;
             z-index: 1;
+            margin-top: -60px;
             img{
               width: 100%;
               height: 100%;
@@ -415,7 +418,7 @@
           width: 100%;
           padding: 0 15px 0;
           box-sizing: border-box;
-          margin-top: -25px;
+          margin-top: -95px;
           position: relative;
           z-index: 99;
           >div{
@@ -428,9 +431,11 @@
             box-sizing: border-box;
           }
           .line{
-                   width: 100%;
-                   height: 0.5px;
-                   background: rgba(186, 186, 186, 1);
+                   width: 200%;
+                   height: 0.25px;
+                   background: rgba(255, 255, 255, 1);
+                   transform-origin:0 0;
+                   transform:scale(0.5);
                }
           .poolingFundContent{
             width: 100%;
@@ -454,6 +459,10 @@
                 font-size: 24px;
                 font-weight: bold;
                 color: #FFFFFF;
+                display: flex;
+                align-items: center;
+                position: relative;
+                top: 5px;
                 label{
                 font-size: 12px;
                 font-weight: 400;
