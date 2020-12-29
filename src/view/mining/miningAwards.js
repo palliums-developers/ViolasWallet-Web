@@ -554,7 +554,7 @@ class MiningAwards extends Component {
 
                       {this.showVLSAddress(v.address)}
                     </span>
-                    <span>{v.incentive} VLS</span>
+                    <span>{this.getFloat(v.incentive/1e6,6)} VLS</span>
                   </p>
                 );
               })}
