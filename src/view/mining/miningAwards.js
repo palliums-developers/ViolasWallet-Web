@@ -121,16 +121,16 @@ class MiningAwards extends Component {
           // console.log(res, ".......");
           if (res.data) {
             this.setState({
-              total_incentive: this.getFloat(res.data.total_incentive / 1e6, 3),
-              bank_incentive: this.getFloat(res.data.bank_incentive / 1e6, 3),
-              pool_incentive: this.getFloat(res.data.pool_incentive / 1e6, 3),
+              total_incentive: this.getFloat(res.data.total_incentive / 1e6, 6),
+              bank_incentive: this.getFloat(res.data.bank_incentive / 1e6, 6),
+              pool_incentive: this.getFloat(res.data.pool_incentive / 1e6, 6),
               bank_total_incentive: this.getFloat(
                 res.data.bank_total_incentive / 1e6,
-                3
+                6
               ),
               pool_total_incentive: this.getFloat(
                 res.data.pool_total_incentive / 1e6,
-                3
+                6
               ),
               ranking: res.data.ranking,
             });

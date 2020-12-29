@@ -20,16 +20,26 @@ class InviteRewards extends Component {
       ifMobile: false,
       lang: "EN",
       id: "",
-      address:"",
-      ranking:[]
+      address: "",
+      ranking: [],
     };
+  }
+  //小数点后的位数
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = parseFloat(Number(number).toFixed(n)); //补足位数
+    return number;
   }
   componentWillMount() {
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
     this.setState({
       id: rndNum(100),
-      address:temp.address,
+      address: temp.address,
       ifMobile: temp.ifMobile,
       lang: temp.lang,
     });
@@ -39,7 +49,6 @@ class InviteRewards extends Component {
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
       this.getInviterInfo(this.state.address);
-      
     } else {
       this.getInviterInfo(
         window.sessionStorage.getItem("violas_address") &&
@@ -49,7 +58,6 @@ class InviteRewards extends Component {
     if (this.state.ifMobile) {
       document.title = "邀请奖励";
     }
-    
   }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
@@ -84,7 +92,7 @@ class InviteRewards extends Component {
           if (res.data) {
             this.setState({
               incentive: res.data.incentive,
-              invite_count: res.data.invite_count,
+              invite_count: this.getFloat(res.data.invite_count / 1e6,2),
             });
           }
         });
@@ -131,12 +139,18 @@ class InviteRewards extends Component {
         method: "share_link",
         params: [this.state.address],
       }),
-      (resp) => {
-      }
+      (resp) => {}
     );
   };
   render() {
-    let { incentive, invite_count, ifMobile, lang,address,ranking } = this.state;
+    let {
+      incentive,
+      invite_count,
+      ifMobile,
+      lang,
+      address,
+      ranking,
+    } = this.state;
     // console.log(ifMobile);
     return (
       <div
@@ -241,26 +255,27 @@ class InviteRewards extends Component {
             </div>
             <div className="line"></div>
             <div className="list">
-              {ranking&&ranking.map((v, i) => {
-                return (
-                  <p key={i}>
-                    <span>
-                      {v.rank == 1 ? (
-                        <img src="/img/m_编组 56备份 3@2x.png" />
-                      ) : v.rank == 2 ? (
-                        <img src="/img/m_编组 5备份 2@2x.png" />
-                      ) : v.rank == 3 ? (
-                        <img src="/img/m_编组 4备份 2@2x.png" />
-                      ) : (
-                        <strong>{v.rank}</strong>
-                      )}
+              {ranking &&
+                ranking.map((v, i) => {
+                  return (
+                    <p key={i}>
+                      <span>
+                        {v.rank == 1 ? (
+                          <img src="/img/m_编组 56备份 3@2x.png" />
+                        ) : v.rank == 2 ? (
+                          <img src="/img/m_编组 5备份 2@2x.png" />
+                        ) : v.rank == 3 ? (
+                          <img src="/img/m_编组 4备份 2@2x.png" />
+                        ) : (
+                          <strong>{v.rank}</strong>
+                        )}
 
-                      {this.showVLSAddress(v.address)}
-                    </span>
-                    <span>{v.incentive} VLS</span>
-                  </p>
-                );
-              })}
+                        {this.showVLSAddress(v.address)}
+                      </span>
+                      <span>{v.incentive} VLS</span>
+                    </p>
+                  );
+                })}
             </div>
           </div>
           <div className="activityRules">
