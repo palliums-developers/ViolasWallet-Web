@@ -16,13 +16,12 @@ class MyPoolDialog extends Component {
     componentDidMount() {
         fetch(url1 + "/1.0/market/pool/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json())
             .then(res => {
-                // console.log(res,'.......')
-                if(res.data){
-                    this.setState({
-                        // res.data.balance  res.data.total_token
-                        poolList: res.data.balance,
-                        total_token: res.data.total_token
-                    })
+                if (JSON.stringify(res.data) !="{}") {
+                  this.setState({
+                    // res.data.balance  res.data.total_token
+                    poolList: res.data.balance,
+                    total_token: res.data.total_token,
+                  });
                 }
                 
             })

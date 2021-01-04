@@ -156,12 +156,7 @@ class DigitalBankPage extends Component {
               </div>
             </div>
             <div className="tabList">
-              <div
-                className="tabs"
-                onClick={() => {
-                  this.props.history.push("/homepage/home/ruleDescription");
-                }}
-              >
+              <div className="tabs">
                 <div className="tab">
                   {types.map((v, i) => {
                     return (
@@ -175,7 +170,12 @@ class DigitalBankPage extends Component {
                     );
                   })}
                 </div>
-                <div className="goRules">
+                <div
+                  className="goRules"
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/ruleDescription");
+                  }}
+                >
                   <p>
                     存!借挖矿规则<span>＞＞</span>
                   </p>

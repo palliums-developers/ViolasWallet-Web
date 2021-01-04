@@ -588,11 +588,11 @@ class CashPooling extends Component {
         window.sessionStorage.getItem("violas_address")
     ).then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (JSON.stringify(res.data) != "{}") {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
-            total_token: res.data.balance.length>0 && res.data.balance[0].token,
+            total_token: res.data.balance && res.data.balance[0].token,
           });
         }
       });
@@ -1072,14 +1072,14 @@ class CashPooling extends Component {
           )}
 
           <div className="exchangeContents">
-            <div className="goRules">
+            <div className="goRules" onClick={()=>{
+                this.props.history.push("/homepage/home/ruleDescription");
+              }}>
               <div>
                 <h4>挖矿福利</h4>
                 <p>现在加入资金池可获得同手续费奖励等价的VLS挖矿福利</p>
               </div>
-              <div onClick={()=>{
-                this.props.history.push("/homepage/home/ruleDescription");
-              }}>
+              <div>
                 <img src="/img/m_jiantou-5 2@2x.png" />
               </div>
             </div>

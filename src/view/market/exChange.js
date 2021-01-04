@@ -89,6 +89,7 @@ class ExChange extends Component {
       let temp = [];
       temp = res.data.data.btc.concat(res.data.data.libra);
       temp = temp.concat(res.data.data.violas);
+      
       this.setState(
         {
           currencies: temp,
@@ -122,11 +123,13 @@ class ExChange extends Component {
                 arr[i].balance = 0;
                 break;
               } else if (arr[i].name == res.data.balances[j].name) {
+                console.log()
                 arr[i].balance = res.data.balances[j].balance;
                 break;
               }
             }
           }
+          
           await this.setState(
             {
               violas_currencies: arr,
@@ -245,7 +248,7 @@ class ExChange extends Component {
   }
   async getCrossChainInfo() {
     axios(
-      "https://api4.violas.io/1.0/market/exchange/crosschain/address/info"
+      url1+"/1.0/market/exchange/crosschain/address/info"
     ).then(async (res) => {
       await this.setState({ crossChainInfo: res.data.data });
     });

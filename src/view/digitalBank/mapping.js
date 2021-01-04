@@ -86,6 +86,7 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res,'/////')
         this.setState({
           mappingRecord: res.data,
         });
