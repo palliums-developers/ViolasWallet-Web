@@ -114,7 +114,6 @@ class Transfer extends Component {
                 selData: arrs,
               },
               () => {
-               if (this.state.type == "") {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
@@ -129,7 +128,6 @@ class Transfer extends Component {
                         this.state.selData[0].show_icon.split("/").length - 1
                       ].split(".")[0],
                   });
-                }
               }
             );
           }
@@ -149,14 +147,21 @@ class Transfer extends Component {
               arr2: res.data.balances,
             },
             () => {
-              let arr = this.state.arr1.concat(this.state.arr2);
-              let arrs = arr.concat(this.state.BTCArr);
+              
+              let arr = [],arrs = [];
+              if (JSON.stringify(this.state.arr1)!="[]") {
+                arr = this.state.arr1.concat(this.state.arr2);
+                arrs = arr.concat(this.state.BTCArr);
+              }else{
+                arrs = this.state.arr2.concat(this.state.BTCArr);
+              }
+              
               this.setState(
                 {
                   selData: arrs,
                 },
                 () => {
-                  if (this.state.type == "") {
+                 
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
@@ -171,7 +176,6 @@ class Transfer extends Component {
                         this.state.selData[0].show_icon.split("/").length - 1
                       ].split(".")[0],
                   });
-                }
                 }
               );
             }

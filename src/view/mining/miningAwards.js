@@ -118,7 +118,7 @@ class MiningAwards extends Component {
       fetch(url1 + "/1.0/violas/incentive/mint/info?address=" + addr)
         .then((res) => res.json())
         .then((res) => {
-          // console.log(res, ".......");
+          console.log(res, ".......");
           if (res.data) {
             this.setState({
               total_incentive: this.getFloat(res.data.total_incentive / 1e6, 6),

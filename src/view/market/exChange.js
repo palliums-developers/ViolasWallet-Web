@@ -147,7 +147,7 @@ class ExChange extends Component {
                   selData: newArr,
                 },
                 () => {
-                  if (this.state.selData) {
+                  if (JSON.stringify(this.state.selData)!="[]") {
                     if (this.state.type == "") {
                       this.setState(
                         {

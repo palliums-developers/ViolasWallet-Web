@@ -159,7 +159,7 @@ class HomeContent extends Component {
                                         return b.balance - a.balance;
                                       });
                                       arrs.map((v, i) => {
-                                        if (v.name == "XUS") {
+                                        if (v.name == "VLS") {
                                           initCoinsList.push(v);
                                         }
                                       });
@@ -271,12 +271,17 @@ class HomeContent extends Component {
                                 },
                                 () => {
                                   let { arr2, arr1 } = this.state;
-                                  let arrs = arr2.concat(arr1);
+                                  let arrs = [];
+                                  if (arr1) {
+                                    arrs = arr2.concat(arr1);
+                                  }
+                                  arrs = arr2;
                                   window.sessionStorage.setItem(
                                     "violas_Balances",
                                     JSON.stringify(arrs)
                                     );
-                                    if (arr1) {
+                                    
+                                    // if (arr1) {
                                       arrs.sort((a, b) => {
                                         return b.balance - a.balance;
                                       });
@@ -285,6 +290,7 @@ class HomeContent extends Component {
                                           initCoinsList.push(v);
                                         }
                                       });
+                                      
                                       initCoinsList.map((v, i) => {
                                         if (v.checked) {
                                           //  return v;
@@ -294,10 +300,12 @@ class HomeContent extends Component {
                                         });
                                       }
                                     });
+                                    
                                     let temp = JSON.parse(
                                       window.sessionStorage.getItem("checkData")
                                     );
-                                    if (temp && arrs) {
+                                    // console.log(temp, "......");
+                                    if (JSON.stringify(temp)!="[]" && arrs) {
                                       for (let i = 0; i < temp.length; i++) {
                                         for (let j = 0; j < arrs.length; j++) {
                                           if (
@@ -338,7 +346,7 @@ class HomeContent extends Component {
                                         )
                                       ),
                                     });
-                                  }
+                                  // }
                                 }
                               );
                             });

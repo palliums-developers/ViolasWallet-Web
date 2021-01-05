@@ -32,6 +32,16 @@ class RankingList extends Component {
     }
     this.getInviterTop();
   }
+  //小数点后的位数
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = parseFloat(Number(number).toFixed(n)); //补足位数
+    return number;
+  }
   //显示VLS地址（前6...后6）
   showVLSAddress(str) {
     // 中间显示省略号，截取显示括号内容
@@ -100,7 +110,7 @@ class RankingList extends Component {
                       <img src="/img/m_编组 12@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
-                    <p>{v.incentive}VLS</p>
+                    <p>{parseInt(v.incentive / 1e6, 4)}VLS</p>
                   </div>
                 );
               })}
@@ -111,21 +121,28 @@ class RankingList extends Component {
                       <img src="/img/m_编组 58@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
-                    <p>{v.incentive}VLS</p>
+                    <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );
               })}
-              {thirdList.map((v, i) => {
+              {/* {thirdList.map((v, i) => {
                 return (
                   <div key={i} className="topThree">
                     <p className="topLogo">
                       <img src="/img/m_编组 10@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
-                    <p>{v.incentive}VLS</p>
+                    <p>{parseInt(v.incentive / 1e6, 6)}VLS</p>
                   </div>
                 );
-              })}
+              })} */}
+              <div className="topThree">
+                <p className="topLogo">
+                  <img src="/img/m_编组 10@2x.png" />
+                </p>
+                <p>{this.showVLSAddress("ad045cf65d5ea5996089e142e20b8770")}</p>
+                <p>{parseInt(1000000000 / 1e6)}VLS</p>
+              </div>
             </div>
             <div className="residualRanking">
               <div className="head">
@@ -135,16 +152,16 @@ class RankingList extends Component {
               </div>
               <div className="list">
                 <div>
-                  {rankList&&rankList.map((v, i) => {
-                    return (
-                      <p key={i}>
-                        <span>NO.{v.rank}</span>
-                        <span>{this.showVLSAddress(v.address)}</span>
-                        <span>{v.incentive}VLS</span>
-                      </p>
-                    );
-                  })}
-
+                  {rankList &&
+                    rankList.map((v, i) => {
+                      return (
+                        <p key={i}>
+                          <span>NO.{v.rank}</span>
+                          <span>{this.showVLSAddress(v.address)}</span>
+                          <span>{this.getFloat(v.incentive / 1e6, 6)}VLS</span>
+                        </p>
+                      );
+                    })}
                 </div>
               </div>
             </div>
