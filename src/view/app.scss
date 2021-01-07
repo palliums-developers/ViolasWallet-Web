@@ -1164,10 +1164,22 @@ dd {
             margin-left: 70px;
           }
         }
-        >p:nth-last-child(2){
+        >p:nth-last-child(1){
+          img{
+            width: 17px;
+            height: 19px;
+          }
+        }
+        >p:nth-child(4){
           img{
             width: 16px;
             height: 16px;
+          }
+        }
+        >p:nth-child(5){
+          img{
+            width: 18px;
+            height: 18px;
           }
         }
         >p{

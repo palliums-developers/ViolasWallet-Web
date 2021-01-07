@@ -25,6 +25,12 @@ import RankingList from "../view/mining/rankingList";
 import UserRewards from "../view/award/userRewards";
 import InviteRewards from "../view/award/inviteRewards";
 import InvitationList from "../view/award/invitationList";
+import HelpCenter from "../view/helpCenter/helpCenterPage";
+import HelpCenterIndex from "../view/helpCenter/index";
+import SearchResult from "../view/helpCenter/searchResult";
+import NewsCenter from "../view/helpCenter/newsCenter";
+import FAQuestion from "../view/helpCenter/FAQuestion";
+import PlatformAgreement from "../view/helpCenter/platformAgreement";
 
 let routes = [
   //首页
@@ -40,7 +46,37 @@ let routes = [
     path: "/violasExchange",
     component: ViolasExchange,
   },
-
+  //帮助中心
+  {
+    path: "/helpCenter",
+    component: HelpCenter,
+    children: [
+      {
+        path: "/helpCenter/helpCenterIndex",
+        component: HelpCenterIndex,
+      },
+      {
+        path: "/helpCenter/searchResult",
+        component: SearchResult,
+      },
+      {
+        path: "/helpCenter/newsCenter",
+        component: NewsCenter,
+      },
+      {
+        path: "/helpCenter/FAQuestion",
+        component: FAQuestion,
+      },
+      {
+        path: "/helpCenter/platformAgreement",
+        component: PlatformAgreement,
+      },
+      {
+        path: "/helpCenter",
+        redirect: "/helpCenter/helpCenterIndex",
+      },
+    ],
+  },
   {
     path: "/homepage",
     component: HomePage,
