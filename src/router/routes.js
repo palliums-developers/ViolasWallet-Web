@@ -31,6 +31,8 @@ import SearchResult from "../view/helpCenter/searchResult";
 import NewsCenter from "../view/helpCenter/newsCenter";
 import FAQuestion from "../view/helpCenter/FAQuestion";
 import PlatformAgreement from "../view/helpCenter/platformAgreement";
+import DigitalCashPage from "../view/helpCenter/digitalCashPage";
+import AllDetails from "../view/helpCenter/allDetails";
 
 let routes = [
   //首页
@@ -70,6 +72,14 @@ let routes = [
       {
         path: "/helpCenter/platformAgreement",
         component: PlatformAgreement,
+      },
+      {
+        path: "/helpCenter/digitalCashPage",
+        component: DigitalCashPage,
+      },
+      {
+        path: "/helpCenter/allDetails",
+        component: AllDetails,
       },
       {
         path: "/helpCenter",

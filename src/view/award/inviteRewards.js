@@ -90,9 +90,10 @@ class InviteRewards extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
+            
             this.setState({
-              incentive: res.data.incentive,
-              invite_count: this.getFloat(res.data.invite_count / 1e6,2),
+              incentive: this.getFloat( res.data.incentive / 1e6,2),
+              invite_count: res.data.invite_count,
             });
           }
         });
@@ -219,12 +220,12 @@ class InviteRewards extends Component {
             <div className="line"></div>
             <div className="invitationDetails">
               <div>
-                <span>{incentive}</span>
+                <span>{invite_count}</span>
                 <label>邀请人数</label>
               </div>
               <div className="line"></div>
               <div>
-                <span>{invite_count} VLS</span>
+                <span>{incentive} VLS</span>
                 <label>邀请奖励</label>
               </div>
             </div>

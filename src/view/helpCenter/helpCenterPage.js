@@ -37,7 +37,9 @@ class HelpCenterPage extends Component {
       <div className="HelpCenterWrap">
         <div className="head">
           <div>
-            <img className="logo" src="/img/编组 8@2x.png" />
+            <img className="logo" src="/img/编组 8@2x.png" onClick={()=>{
+              this.props.history.push("/helpCenter/helpCenterIndex");
+            }}/>
             <div className="applys">
               <p>提交请求</p>
               <LangPage getLanguage={this.getLanguage}></LangPage>

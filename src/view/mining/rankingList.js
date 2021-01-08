@@ -125,7 +125,7 @@ class RankingList extends Component {
                   </div>
                 );
               })}
-              {/* {thirdList.map((v, i) => {
+              {thirdList.map((v, i) => {
                 return (
                   <div key={i} className="topThree">
                     <p className="topLogo">
@@ -135,14 +135,14 @@ class RankingList extends Component {
                     <p>{parseInt(v.incentive / 1e6, 6)}VLS</p>
                   </div>
                 );
-              })} */}
-              <div className="topThree">
+              })}
+              {/* <div className="topThree">
                 <p className="topLogo">
                   <img src="/img/m_编组 10@2x.png" />
                 </p>
                 <p>{this.showVLSAddress("ad045cf65d5ea5996089e142e20b8770")}</p>
                 <p>{parseInt(1000000000 / 1e6)}VLS</p>
-              </div>
+              </div> */}
             </div>
             <div className="residualRanking">
               <div className="head">
