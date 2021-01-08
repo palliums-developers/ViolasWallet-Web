@@ -10,10 +10,34 @@ let helpCenterUrl = "http://192.168.1.119:5000";
 class FAQuestion extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      title: "",
+      groups: [],
+    };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.newsFunction()
+  }
+  newsFunction = () => {
+    let id = this.props.location.search.split("=")[1];
+    fetch(
+      helpCenterUrl +
+        "/api/help_center?type=category&key="+id+"&language=" +
+        localStorage.getItem("local").toLowerCase()
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          this.setState({
+            title: res.category.name,
+            groups: res.group,
+          });
+        }
+        console.log(res, "........");
+      });
+  };
   render() {
+    let { title, groups } = this.state;
     return (
       <div className="FAQuestion">
         <div>
@@ -24,12 +48,13 @@ class FAQuestion extends Component {
                   onClick={() => {
                     this.props.history.go(-1);
                   }}
+                  id="active"
                 >
                   帮助中心 <strong>></strong>
                 </a>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <NavLink to="/helpCenter/newsCenter">常见问题</NavLink>
+                <NavLink to="/helpCenter/newsCenter">{title}</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
             <div className="form">
@@ -38,24 +63,72 @@ class FAQuestion extends Component {
             </div>
           </div>
           <div className="newCenterContent">
-            <h3>常见问题</h3>
+            <h3>{title}</h3>
             <div className="contentList">
-              <div>
-                <h4>账号安全</h4>
-                <div className="list">
-                  <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
-                  <div className="line"></div>
-                  <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
-                  <div className="line"></div>
-                  <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
-                  <div className="line"></div>
-                  <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
-                  <div className="line"></div>
-                  <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
-                  <div className="line"></div>
-                </div>
-                <p>查看所有23篇文章</p>
-              </div>
+              {groups.map((v, i) => {
+                return (
+                  <div key={i}>
+                    <h4>{v.name}</h4>
+                    <div className="list">
+                      {v.article.length > 5
+                        ? v.article.slice(0, 5).map((v1, i1) => {
+                            return (
+                              <>
+                                <div
+                                  key={i1}
+                                  dangerouslySetInnerHTML={{
+                                    __html: v1.content,
+                                  }}
+                                  onClick={() =>
+                                    this.props.history.push(
+                                      "/helpCenter/allDetails?id=" + v1.id
+                                    )
+                                  }
+                                ></div>
+                                <div className="line"></div>
+                              </>
+                            );
+                          })
+                        : v.article.map((v1, i1) => {
+                            return (
+                              <>
+                                <div
+                                  key={i1}
+                                  dangerouslySetInnerHTML={{
+                                    __html: v1.content,
+                                  }}
+                                  onClick={() =>
+                                    this.props.history.push(
+                                      "/helpCenter/allDetails?id=" + v1.id
+                                    )
+                                  }
+                                ></div>
+                                <div className="line"></div>
+                              </>
+                            );
+                          })}
+                      {/*                         
+                        <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
+                        <div className="line"></div>
+                        <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
+                        <div className="line"></div>
+                        <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
+                        <div className="line"></div>
+                        <p>交易ONE，享受25,000,000ONE和3000BNB空投交易投交…</p>
+                        <div className="line"></div> */}
+                    </div>
+                    <p
+                      onClick={() => {
+                        this.props.history.push(
+                          "/helpCenter/newsGroup?id=" + v.id
+                        );
+                      }}
+                    >
+                      查看所有{v.article.length}篇文章
+                    </p>
+                  </div>
+                );
+              })}
               <div>
                 <h4>闪兑交易</h4>
                 <div className="list">
@@ -86,7 +159,6 @@ class FAQuestion extends Component {
                 </div>
                 <p>查看所有23篇文章</p>
               </div>
-
             </div>
           </div>
         </div>

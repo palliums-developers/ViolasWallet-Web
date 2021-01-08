@@ -33,6 +33,8 @@ import FAQuestion from "../view/helpCenter/FAQuestion";
 import PlatformAgreement from "../view/helpCenter/platformAgreement";
 import DigitalCashPage from "../view/helpCenter/digitalCashPage";
 import AllDetails from "../view/helpCenter/allDetails";
+import AboutViolasPage from "../view/helpCenter/aboutViolasPage";
+import NewsGroup from "../view/helpCenter/newsGroup";
 
 let routes = [
   //首页
@@ -66,6 +68,10 @@ let routes = [
         component: NewsCenter,
       },
       {
+        path: "/helpCenter/newsGroup",
+        component: NewsGroup,
+      },
+      {
         path: "/helpCenter/FAQuestion",
         component: FAQuestion,
       },
@@ -80,6 +86,10 @@ let routes = [
       {
         path: "/helpCenter/allDetails",
         component: AllDetails,
+      },
+      {
+        path: "/helpCenter/aboutViolasPage",
+        component: AboutViolasPage,
       },
       {
         path: "/helpCenter",

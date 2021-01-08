@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Pagination } from "antd";
 import "./index.scss";
 let url1 = "https://api4.violas.io";
 let helpCenterUrl = "http://192.168.1.119:5000";
 
-//数字货币
-class DigitalCashPage extends Component {
+//用户协议
+class AboutViolasPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: "",
-      groups: [],
+      groups: []
     };
   }
   componentDidMount() {
@@ -41,7 +41,7 @@ class DigitalCashPage extends Component {
   render() {
     let { title, groups } = this.state;
     return (
-      <div className="digitalCashPage">
+      <div className="aboutViolas">
         <div>
           <div className="searchHead">
             <Breadcrumb separator="">
@@ -50,7 +50,6 @@ class DigitalCashPage extends Component {
                   onClick={() => {
                     this.props.history.go(-1);
                   }}
-                  id="active"
                 >
                   帮助中心 <strong>></strong>
                 </a>
@@ -67,13 +66,9 @@ class DigitalCashPage extends Component {
           <div className="platformAgreementContent">
             <h3>{title}</h3>
             <div className="contentList">
-              <p>VLAS</p>
+              <p>隐私协议</p>
               <div className="line"></div>
-              <p>BTC</p>
-              <div className="line"></div>
-              <p>LIBRA</p>
-              <div className="line"></div>
-              <p>AAA</p>
+              <p>借贷协议</p>
               <div className="line"></div>
             </div>
           </div>
@@ -83,4 +78,4 @@ class DigitalCashPage extends Component {
   }
 }
 
-export default DigitalCashPage;
+export default AboutViolasPage;

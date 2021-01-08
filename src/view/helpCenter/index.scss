@@ -356,8 +356,8 @@
       }
   }
 }
-//公告中心
-.newsCenter,.FAQuestion{
+//公告中心/常见问题
+.newsCenter,.FAQuestion,.newsGroup{
     width: 100%;
     flex: 1;
     overflow-y: auto;
@@ -401,14 +401,15 @@
                         margin-bottom: 32px;
                     }
                     .list{
-                        p{
+                        p,a{
+                            display: flex;
                             margin: 20px 0!important;
                             font-size: 18px;
                             font-weight: 400;
                             color: #333333;
                             cursor: pointer;
                         }
-                        p:hover{
+                        p:hover,a:hover{
                             color: #6131AB;
                             text-decoration: underline;
                         }
@@ -428,8 +429,19 @@
         }
     }
 }
-//用户协议
-.platformAgreement,.digitalCashPage{
+.newsGroup{
+    > div {
+        .newCenterContent{
+             .contentList{
+                 > div{
+                     width: 100%;
+                 }
+             } 
+        }
+    }
+} 
+//用户协议/关于violas
+.platformAgreement,.digitalCashPage,.aboutViolas{
     width: 100%;
     flex: 1;
     overflow-y: auto;
@@ -482,6 +494,172 @@
         width: 1440px;
         margin: 0 auto;
         @include searchHead;
+        .allDetailsContent{
+            display: flex;
+            margin-top: 16px;
+            .allDetailsContentLeft{
+                h4{
+                font-size: 14px;
+                font-weight: 500;
+                color: #333333;
+                margin-bottom: 13px!important;
+                }
+                >p{
+                    
+                font-size: 16px;
+                font-weight: 400;
+                color: #501BA2;
+                margin-top: 16px;
+                }
+                .otherList{
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: -22px;
+                    p{
+                    width: 240px;
+                    height: 88px;
+                    background: #FFFFFF;
+                    border-radius: 16px;
+                    margin-bottom: 16px!important;
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #333333;
+                    display: flex;
+                    align-items: center;
+                    padding:0 22px;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                    }
+                    p:hover{
+                        background: #501BA2;
+                        color: #FFFFFF;
+                    }
+                }
+            }
+            .allDetailsContentRight{
+                margin-left: 95px;
+                margin-top: -10px;
+                h3{
+                    font-size: 24px;
+                    font-weight: 500;
+                    color: #333333;
+                    margin-bottom: 30px!important;
+                }
+                .relativeDescr{
+                    .user{
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 49px;
+                        p:nth-child(1){
+                            width: 48px;
+                            height:48px;
+                            border: 0.5px solid rgba(151, 151, 151, 1);
+                            border-radius: 50%;
+                            margin-right: 16px;
+                            display: flex;
+                        }
+                        p:nth-child(2){
+                            display: flex;
+                            flex-direction: column;
+                            span{
+                                font-size: 16px;
+                                font-weight: 500;
+                                color: #333333;
+                            }
+                            label{
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: #999999;
+                            }
+                        }
+                    }
+                    .userContent{
+                        >p{
+                            margin-bottom: 49px!important;
+                        }
+                        >div{
+                            p:nth-child(1){
+                                margin-bottom:20px!important;
+                            }
+                            .thank{
+                                margin: 49px 0!important;
+                            }
+                            .lasttime{
+                                text-align: right;
+                            }
+                        }
+                        >div:nth-child(3){
+                            h4{
+                                font-size: 16px;
+                                font-weight: 500;
+                                color: #333333;
+                                margin-bottom: 25px!important;
+                                margin-top: 30px;
+                            }
+                            >div{
+                                p{
+                                    margin-bottom: 8px!important;
+                                    label{
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        color: #333333;
+                                        cursor: pointer;
+                                    }
+                                    label:hover{
+                                        text-decoration: underline;
+                                    }
+                                }
+                            }
+                        }
+                        p{
+                            
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: #333333;
+                        }
+                    }
+                }
+                >.line{
+                    width: 100%;
+                    height: 0.5px;
+                    background:rgba(153, 153, 153, 1);
+                    margin: 48px 0;
+                }
+                .lastList{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 130px;
+                    .listContent{
+                        h4{
+                            
+                            font-size: 16px;
+                            font-weight: 500;
+                            color: #333333;
+                            margin-bottom: 32px!important;
+                        }
+                        >div{
+                            p{
+                                margin: 20px 0!important;
+                                font-size: 16px;
+                                font-weight: 400;
+                                color: #6131AB;
+                                cursor: pointer;
+                            }
+                            p:hover{
+                                text-decoration: underline;
+                            }
+                            .line{
+                                width: 200%;
+                                height: 0.25px;
+                                background: rgba(222, 222, 222, 1);
+                                transform-origin:0 0;
+                                transform:scale(0.5);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 @media (max-width:1500px){
@@ -494,6 +672,11 @@
             }
         }
     }
+    .allDetails{
+    >div{
+        width: 1024px;
+    }
+}
     .newsCenter,.FAQuestion{
         width: 100%;
         >div{

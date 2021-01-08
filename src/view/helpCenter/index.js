@@ -24,6 +24,7 @@ class HelpCenterIndex extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res,'........')
         if (res) {
           this.setState({
             category: res.category,
@@ -36,16 +37,22 @@ class HelpCenterIndex extends Component {
     intl.options.currentLocale = val;
     this.forceUpdate();
   };
-  goToEveryPage = (v) =>{
+  goToEveryPage = (v,id) =>{
     if (v == "Notification Center") {
-      this.props.history.push("/helpCenter/newsCenter");
-    }else if (v == "FAQ") {
-      this.props.history.push("/helpCenter/FAQuestion");
+      this.props.history.push("/helpCenter/newsCenter?id="+id);
+    }else if (v == "Q&A") {
+      this.props.history.push("/helpCenter/FAQuestion?id=" + id);
+    }else if (v == "About Violas") {
+      this.props.history.push("/helpCenter/aboutViolasPage?id=" + id);
+    } else if (v == "Digital Currency") {
+      this.props.history.push("/helpCenter/digitalCashPage?id=" + id);
+    } else if (v == "Platform Agreement") {
+      this.props.history.push("/helpCenter/platformAgreement?id=" + id);
     }
   }
   render() {
     let { category, recommend } = this.state;
-    console.log(recommend);
+    // console.log(category);
     return (
       <div className="HelpCenterContent">
         <div className="formBox">
@@ -64,8 +71,8 @@ class HelpCenterIndex extends Component {
           <div className="titleList">
             {category.map((v, i) => {
               return (
-                <p key={i} onClick={() => this.goToEveryPage(v.name_cn)}>
-                  {v.name_cn}
+                <p key={i} onClick={() => this.goToEveryPage(v.name,v.id)}>
+                  {v.name}
                 </p>
               );
             })}
@@ -78,21 +85,25 @@ class HelpCenterIndex extends Component {
               {recommend.map((v, i) => {
                 return (
                   <div key={i}>
-                    <p>{v.title_cn}</p>
+                    <p onClick={() => {
+                          this.props.history.push(
+                            "/helpCenter/allDetails?id=" + v.id
+                          );
+                        }}>{v.title}</p>
                     <div className="line"></div>
                   </div>
 
                   // <div className="line"></div>
-                  //     <>
-                  //     <div
-                  //       key={i}
-                  //       dangerouslySetInnerHTML={{
-                  //         __html: v.content_cn,
-                  //       }}
-                  //     >
-                  //     </div>
-                  //       <div className="line"></div>
-                  //       </>
+                      // <>
+                      // <div
+                      //   key={i}
+                      //   dangerouslySetInnerHTML={{
+                      //     __html: v.content_cn,
+                      //   }}
+                      // >
+                      // </div>
+                      //   <div className="line"></div>
+                      //   </>
                 );
               })}
             </div>

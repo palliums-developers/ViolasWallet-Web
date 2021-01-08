@@ -10,10 +10,36 @@ let helpCenterUrl = "http://192.168.1.119:5000";
 class PlatformAgreement extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      title: "",
+      groups: [],
+    };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.newsFunction();
+  }
+  newsFunction = () => {
+    let id = this.props.location.search.split("=")[1];
+    fetch(
+      helpCenterUrl +
+        "/api/help_center?type=category&key=" +
+        id +
+        "&language=" +
+        localStorage.getItem("local").toLowerCase()
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          this.setState({
+            title: res.category.name,
+            groups: res.group,
+          });
+        }
+        console.log(res, "........");
+      });
+  };
   render() {
+    let { title, groups } = this.state;
     return (
       <div className="platformAgreement">
         <div>
@@ -29,7 +55,7 @@ class PlatformAgreement extends Component {
                 </a>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <NavLink to="/helpCenter/newsCenter">平台协议</NavLink>
+                <NavLink to="/helpCenter/newsCenter">{title}</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
             <div className="form">
@@ -38,7 +64,7 @@ class PlatformAgreement extends Component {
             </div>
           </div>
           <div className="platformAgreementContent">
-            <h3>平台协议</h3>
+            <h3>{title}</h3>
             <div className="contentList">
               <p>隐私协议</p>
               <div className="line"></div>
