@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
 import { Breadcrumb, Pagination } from "antd";
+import SearchList from "../components/searchList";
+import Foot from "../components/foot";
 import "./index.scss";
 let url1 = "https://api4.violas.io";
 let helpCenterUrl = "http://192.168.1.119:5000";
@@ -38,8 +40,9 @@ class PlatformAgreement extends Component {
         console.log(res, "........");
       });
   };
+
   render() {
-    let { title, groups } = this.state;
+    let { title } = this.state;
     return (
       <div className="platformAgreement">
         <div>
@@ -50,6 +53,7 @@ class PlatformAgreement extends Component {
                   onClick={() => {
                     this.props.history.go(-1);
                   }}
+                  id="active"
                 >
                   帮助中心 <strong>></strong>
                 </a>
@@ -58,10 +62,7 @@ class PlatformAgreement extends Component {
                 <NavLink to="/helpCenter/newsCenter">{title}</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
-            <div className="form">
-              <img src="/img/sousuo 2@2x.png" />
-              <input maxLength="50" placeholder="搜索" />
-            </div>
+            <SearchList></SearchList>
           </div>
           <div className="platformAgreementContent">
             <h3>{title}</h3>
@@ -72,6 +73,7 @@ class PlatformAgreement extends Component {
               <div className="line"></div>
             </div>
           </div>
+          <Foot></Foot>
         </div>
       </div>
     );

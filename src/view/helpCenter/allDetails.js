@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
 import { Breadcrumb } from "antd";
+import SearchList from "../components/searchList";
+import Foot from "../components/foot";
 import "./index.scss";
 let url1 = "https://api4.violas.io";
 let helpCenterUrl = "http://192.168.1.119:5000";
@@ -11,8 +13,9 @@ class AllDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles:{},
-      others:[]
+      articles: {},
+      others: [],
+      showList: false
     };
   }
   componentDidMount() {
@@ -39,7 +42,7 @@ class AllDetails extends Component {
       });
   };
   render() {
-    let { others, articles } = this.state;
+    let { others, articles, showList } = this.state;
     return (
       <div className="allDetails">
         <div>
@@ -85,10 +88,7 @@ class AllDetails extends Component {
                 <NavLink to="/helpCenter/newsCenter">详情</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
-            <div className="form">
-              <img src="/img/sousuo 2@2x.png" />
-              <input maxLength="50" placeholder="搜索" />
-            </div>
+            <SearchList></SearchList>
           </div>
           <div className="allDetailsContent">
             <div className="allDetailsContentLeft">
@@ -132,6 +132,52 @@ class AllDetails extends Component {
                     <label>13分钟前 · 更新于</label>
                   </p>
                 </div>
+                <div className="allDetailsContentLeft1">
+                  <h4
+                    onClick={() => {
+                      this.setState({
+                        showList: !showList,
+                      });
+                    }}
+                  >
+                    此组内其他文章
+                    {showList ? (
+                      <img id="img1" src="/img/bzzx矩形 1@2x.png" />
+                    ) : (
+                      <img src="/img/bzzx矩形 2@2x.png" />
+                    )}
+                  </h4>
+                  {showList ? (
+                    <div>
+                      <div className="otherList">
+                        {others.length > 10
+                          ? others.slice(0, 10).map((v, i) => {
+                              return <p key={i}>{v.title}</p>;
+                            })
+                          : others.map((v, i) => {
+                              return <p key={i}>{v.title}</p>;
+                            })}
+
+                        {/* <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p>
+                    <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p>
+                    <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p>
+                    <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p>
+                    <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p>
+                    <p>jiaoyisuo将于2019年06月01日中午12:0001日中</p> */}
+                      </div>
+                      <p
+                        onClick={() => {
+                          this.props.history.push(
+                            "/helpCenter/newsGroup?id=" +
+                              this.props.location.search.split("=")[1]
+                          );
+                        }}
+                      >
+                        {others.length < 10 ? "查看更多" : null}
+                      </p>
+                    </div>
+                  ) : null}
+                </div>
                 <div className="userContent">
                   <p>
                     jiaoyisuo将于2019年06月01日中午12:00（香港时间）上线Harmony(ONE)，并开通ONE/BNB、
@@ -174,7 +220,7 @@ class AllDetails extends Component {
               </div>
               <div className="line"></div>
               <div className="lastList">
-                <div className="listContent">
+                <div className="listContent listContent1">
                   <h4>最近查看的文章</h4>
                   <div>
                     <p>交易ONE，享受25,000,000O交易投交交投…</p>
@@ -187,7 +233,7 @@ class AllDetails extends Component {
                     <div className="line"></div>
                   </div>
                 </div>
-                <div className="listContent">
+                <div className="listContent listContent2">
                   <h4>相关文章</h4>
                   <div>
                     <p>交易ONE，享受25,000,000O交易投交交投…</p>
@@ -203,6 +249,7 @@ class AllDetails extends Component {
               </div>
             </div>
           </div>
+          <Foot></Foot>
         </div>
       </div>
     );

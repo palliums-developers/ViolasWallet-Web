@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
 import { Breadcrumb } from "antd";
+import SearchList from "../components/searchList";
+import Foot from "../components/foot";
 import "./index.scss";
 let url1 = "https://api4.violas.io";
 let helpCenterUrl = "http://192.168.1.119:5000";
@@ -59,10 +61,7 @@ class DigitalCashPage extends Component {
                 <NavLink to="/helpCenter/newsCenter">{title}</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
-            <div className="form">
-              <img src="/img/sousuo 2@2x.png" />
-              <input maxLength="50" placeholder="搜索" />
-            </div>
+            <SearchList></SearchList>
           </div>
           <div className="platformAgreementContent">
             <h3>{title}</h3>
@@ -77,6 +76,7 @@ class DigitalCashPage extends Component {
               <div className="line"></div>
             </div>
           </div>
+          <Foot></Foot>
         </div>
       </div>
     );

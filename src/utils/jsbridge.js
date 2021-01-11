@@ -22,7 +22,7 @@ function setupWebViewJavascriptBridge(callback) {
       return window.WKWVJBCallbacks.push(callback);
     }
     window.WKWVJBCallbacks = [callback];
-    window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
+    // window.webkit.messageHandlers.iOS_Native_InjectJavascript.postMessage(null);
   }
 }
 setupWebViewJavascriptBridge(function (bridge) {

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { NavLink } from "react-router-dom";
 import { Breadcrumb, Pagination } from "antd";
+import SearchList from "../components/searchList";
+import Foot from "../components/foot";
 import "./index.scss";
 let url1 = "https://api4.violas.io";
 let helpCenterUrl = "http://192.168.1.119:5000";
@@ -14,11 +16,11 @@ class NewsGroup extends Component {
       title: "",
       title1: "",
       articles: [],
+      iptVal1: "",
     };
   }
   componentDidMount() {
-      
-      this.newsFunction();
+    this.newsFunction();
   }
   newsFunction = () => {
     let id = this.props.location.search.split("=")[1];
@@ -41,8 +43,9 @@ class NewsGroup extends Component {
         console.log(res, "........");
       });
   };
+
   render() {
-      let { title,title1, articles } = this.state;
+    let { title, title1, articles } = this.state;
     return (
       <div className="newsGroup">
         <div>
@@ -72,10 +75,7 @@ class NewsGroup extends Component {
                 <NavLink to="/helpCenter/newsCenter">{title}</NavLink>
               </Breadcrumb.Item>
             </Breadcrumb>
-            <div className="form">
-              <img src="/img/sousuo 2@2x.png" />
-              <input maxLength="50" placeholder="搜索" />
-            </div>
+            <SearchList></SearchList>
           </div>
           <div className="newCenterContent">
             <h3>{title1}</h3>
@@ -112,6 +112,7 @@ class NewsGroup extends Component {
               </div>
             </div>
           </div>
+          <Foot></Foot>
         </div>
       </div>
     );
