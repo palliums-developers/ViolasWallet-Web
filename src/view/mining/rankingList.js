@@ -110,7 +110,7 @@ class RankingList extends Component {
                       <img src="/img/m_编组 12@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
-                    <p>{parseInt(v.incentive / 1e6, 4)}VLS</p>
+                    <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );
               })}
@@ -132,7 +132,7 @@ class RankingList extends Component {
                       <img src="/img/m_编组 10@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
-                    <p>{parseInt(v.incentive / 1e6, 6)}VLS</p>
+                    <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );
               })}
@@ -158,7 +158,7 @@ class RankingList extends Component {
                         <p key={i}>
                           <span>NO.{v.rank}</span>
                           <span>{this.showVLSAddress(v.address)}</span>
-                          <span>{this.getFloat(v.incentive / 1e6, 6)}VLS</span>
+                          <span>{parseInt(v.incentive / 1e6)}VLS</span>
                         </p>
                       );
                     })}

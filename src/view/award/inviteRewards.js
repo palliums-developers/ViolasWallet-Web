@@ -225,7 +225,7 @@ class InviteRewards extends Component {
               </div>
               <div className="line"></div>
               <div>
-                <span>{incentive} VLS</span>
+                <span>{parseInt(incentive)} VLS</span>
                 <label>邀请奖励</label>
               </div>
             </div>
@@ -274,7 +274,7 @@ class InviteRewards extends Component {
                         {this.showVLSAddress(v.address)}
                       </span>
                       <span>
-                        {this.getFloat(v.incentive / 1e6, 6)} VLS
+                        {parseInt(v.incentive / 1e6)} VLS
                       </span>
                     </p>
                   );

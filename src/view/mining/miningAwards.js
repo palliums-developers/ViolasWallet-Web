@@ -338,7 +338,7 @@ class MiningAwards extends Component {
 
           <div className="fundList">
             <h4>总收益 ( VLS )</h4>
-            <span>{total_incentive}</span>
+            <span>{parseInt(total_incentive)}</span>
             <div className="rightImg">
               {ifMobile == false ? (
                 <img src="/img/m_编组 15@2x.png" />
@@ -362,11 +362,11 @@ class MiningAwards extends Component {
           <div className="poolingFund">
             <div>
               <div className="poolingFundContent">
-                <p>资金池挖矿已提取：{pool_total_incentive} VLS</p>
+                <p>资金池挖矿已提取：{parseInt(pool_total_incentive)} VLS</p>
                 <p>
                   <span>
                     <label>待提取(VLS)</label>
-                    {pool_incentive == null ? 0 : pool_incentive}
+                    {pool_incentive == null ? 0 : parseInt(pool_incentive)}
                   </span>
                   <button
                     onClick={
@@ -381,11 +381,11 @@ class MiningAwards extends Component {
               </div>
               <div className="line"></div>
               <div className="poolingFundContent">
-                <p>数字银行挖矿已提取：{bank_total_incentive} VLS</p>
+                <p>数字银行挖矿已提取：{parseInt(bank_total_incentive)} VLS</p>
                 <p>
                   <span>
                     <label>待提取(VLS)</label>
-                    {bank_incentive == null ? 0 : bank_incentive}
+                    {bank_incentive == null ? 0 : parseInt(bank_incentive)}
                   </span>
                   <button
                     onClick={
@@ -554,7 +554,7 @@ class MiningAwards extends Component {
 
                       {this.showVLSAddress(v.address)}
                     </span>
-                    <span>{this.getFloat(v.incentive/1e6,6)} VLS</span>
+                    <span>{parseInt(v.incentive/1e6)} VLS</span>
                   </p>
                 );
               })}
