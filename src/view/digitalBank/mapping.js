@@ -508,6 +508,7 @@ class DigitalBank extends Component {
       mappingRecord,
       focusActive,
     } = this.state;
+    // console.log(selData);
     return (
       <div className="mapping">
         <div>
