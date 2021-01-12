@@ -440,7 +440,7 @@ class MiningAwards extends Component {
                       ifMobile == false
                         ? () => {
                             this.props.history.push(
-                              "/homepage/home/digitalBank/saveDetails"
+                              "/homepage/home/digitalBank/digitalBankPage"
                             );
                           }
                         : () => this.depositInfo()
@@ -499,7 +499,7 @@ class MiningAwards extends Component {
                       ifMobile == false
                         ? () => {
                             this.props.history.push(
-                              "/homepage/home/digitalBank/borrowDetails"
+                              "/homepage/home/digitalBank/digitalBankPage"
                             );
                           }
                         : () => this.borrowInfo()

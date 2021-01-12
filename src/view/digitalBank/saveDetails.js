@@ -98,6 +98,7 @@ class SaveDetails extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          console.log(res)
           this.setState({
             saveList: {
               limit:
