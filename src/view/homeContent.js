@@ -5,6 +5,7 @@ import CurrencyDetail from "./components/currencyDetail";
 import Details from "./components/details";
 import intl from "react-intl-universal";
 import AddCurrency from "./components/addCurrency";
+import WalletconnectDialog from "./components/walletconnectDialog";
 import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
@@ -40,6 +41,7 @@ class HomeContent extends Component {
       name: "",
       detailData: {},
       init: false,
+      showWallet: false,
     };
   }
   stopPropagation(e) {
@@ -271,81 +273,83 @@ class HomeContent extends Component {
                                 },
                                 () => {
                                   let { arr2, arr1 } = this.state;
+
                                   let arrs = [];
+
                                   if (arr1) {
                                     arrs = arr2.concat(arr1);
+                                  } else {
+                                    arrs = arr2;
                                   }
-                                  arrs = arr2;
                                   window.sessionStorage.setItem(
                                     "violas_Balances",
                                     JSON.stringify(arrs)
-                                    );
-                                    
-                                    // if (arr1) {
-                                      arrs.sort((a, b) => {
-                                        return b.balance - a.balance;
+                                  );
+
+                                  // if (arr1) {
+                                  arrs.sort((a, b) => {
+                                    return b.balance - a.balance;
+                                  });
+                                  arrs.map((v, i) => {
+                                    if (v.name == "XUS") {
+                                      initCoinsList.push(v);
+                                    }
+                                  });
+                                  initCoinsList.map((v, i) => {
+                                    if (v.checked) {
+                                      //  return v;
+                                    } else {
+                                      Object.assign(v, {
+                                        checked: true,
                                       });
-                                      arrs.map((v, i) => {
-                                        if (v.name == "XUS") {
-                                          initCoinsList.push(v);
-                                        }
-                                      });
-                                      
-                                      initCoinsList.map((v, i) => {
-                                        if (v.checked) {
-                                          //  return v;
-                                        } else {
-                                          Object.assign(v, {
-                                            checked: true,
-                                        });
-                                      }
-                                    });
-                                    
-                                    let temp = JSON.parse(
-                                      window.sessionStorage.getItem("checkData")
-                                    );
-                                    // console.log(temp, "......");
-                                    if (JSON.stringify(temp)!="[]" && arrs) {
-                                      for (let i = 0; i < temp.length; i++) {
-                                        for (let j = 0; j < arrs.length; j++) {
-                                          if (
-                                            temp[i].show_icon
-                                              .split("/")
-                                              [
-                                                temp[i].show_icon.split("/")
-                                                  .length - 1
-                                              ].split(".")[0] ==
-                                            arrs[j].show_icon
-                                              .split("/")
-                                              [
-                                                arrs[j].show_icon.split("/")
-                                                  .length - 1
-                                              ].split(".")[0]
-                                          ) {
-                                            if (temp[i].name == arrs[j].name) {
-                                              temp[i].balance = arrs[j].balance;
-                                              break;
-                                            }
+                                    }
+                                  });
+
+                                  let temp = JSON.parse(
+                                    window.sessionStorage.getItem("checkData")
+                                  );
+
+                                  // console.log(temp, "......");
+                                  if (JSON.stringify(temp) != "[]" && arrs) {
+                                    for (let i = 0; i < temp.length; i++) {
+                                      for (let j = 0; j < arrs.length; j++) {
+                                        if (
+                                          temp[i].show_icon
+                                            .split("/")
+                                            [
+                                              temp[i].show_icon.split("/")
+                                                .length - 1
+                                            ].split(".")[0] ==
+                                          arrs[j].show_icon
+                                            .split("/")
+                                            [
+                                              arrs[j].show_icon.split("/")
+                                                .length - 1
+                                            ].split(".")[0]
+                                        ) {
+                                          if (temp[i].name == arrs[j].name) {
+                                            temp[i].balance = arrs[j].balance;
+                                            break;
                                           }
                                         }
                                       }
-                                      sessionStorage.setItem(
-                                        "checkData",
-                                        JSON.stringify(temp)
-                                      );
-                                    } else {
-                                      window.sessionStorage.setItem(
-                                        "checkData",
-                                        JSON.stringify(initCoinsList)
-                                      );
                                     }
-                                    this.setState({
-                                      checkData: JSON.parse(
-                                        window.sessionStorage.getItem(
-                                          "checkData"
-                                        )
-                                      ),
-                                    });
+
+                                    sessionStorage.setItem(
+                                      "checkData",
+                                      JSON.stringify(temp)
+                                    );
+                                  } else {
+                                    window.sessionStorage.setItem(
+                                      "checkData",
+                                      JSON.stringify(initCoinsList)
+                                    );
+                                  }
+                                  this.setState({
+                                    checkData: JSON.parse(
+                                      window.sessionStorage.getItem("checkData")
+                                    ),
+                                  });
                                   // }
                                 }
                               );
@@ -466,6 +470,16 @@ class HomeContent extends Component {
       totalAmount: val,
     });
   };
+  closeWallet = (val) => {
+    this.setState({
+      showWallet: val,
+    });
+  };
+  showWalletFun=(val) =>{
+    this.setState({
+      showWallet: val,
+    });
+  }
   render() {
     let {
       BTCAddress,
@@ -736,6 +750,7 @@ class HomeContent extends Component {
             BTCBalance={this.state.BTCBalance}
             getInitTotal={this.getInitTotal}
             getBalances={this.getBalances}
+            showWalletFun={this.showWalletFun}
           ></AddCurrency>
         </Drawer>
         {/* 币种详情 */}
@@ -772,6 +787,11 @@ class HomeContent extends Component {
             detailDatas={this.state.detailData}
           ></Details>
         </Drawer>
+        {this.state.showWallet ? (
+          <WalletconnectDialog
+            getCloseWallet={this.closeWallet}
+          ></WalletconnectDialog>
+        ) : null}
       </div>
     );
   }

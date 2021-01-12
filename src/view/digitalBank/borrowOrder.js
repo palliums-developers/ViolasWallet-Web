@@ -371,7 +371,7 @@ class BorrowOrder extends Component {
       ],
       secondAllData: [],
       page: 1,
-      pageSize: 6,
+      pageSize:6,
       curPage: 1,
       curPageSize: 6,
     };
@@ -402,10 +402,14 @@ class BorrowOrder extends Component {
   };
   // 当前借款
   getCurBorrowDetail = () => {
+    let { curPage, curPageSize } = this.state;
     fetch(
       url +
         "/1.0/violas/bank/borrow/orders?address=" +
-        window.sessionStorage.getItem("violas_address")
+        window.sessionStorage.getItem("violas_address")+"&limit=" +
+        curPageSize +
+        "&offset=" +
+        (curPage - 1) * curPageSize
     )
       .then((res) => res.json())
       .then((res) => {
@@ -773,7 +777,7 @@ class BorrowOrder extends Component {
               columns={this.state.columns}
               dataSource={this.state.data}
               pagination={{
-                pageSize: 6,
+                pageSize: this.state.curPageSize,
                 position: ["bottomCenter"],
                 total: this.state.curTotal,
                 onChange: (page, pageSize) => this.getCurPage(page, pageSize),
@@ -858,7 +862,7 @@ class BorrowOrder extends Component {
                 columns={this.state.columns1}
                 dataSource={this.state.data1}
                 pagination={{
-                  pageSize: 6,
+                  pageSize: this.state.pageSize,
                   position: ["bottomCenter"],
                   total: this.state.total,
                   onChange: (page, pageSize) => this.getPage(page, pageSize),

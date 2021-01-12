@@ -229,19 +229,21 @@ class SaveOrder extends Component {
     );
   }
   //当前存款
-  getCurSaveDetail = (page, pageSize) => {
+  getCurSaveDetail = () => {
+    let { curPage, curPageSize } = this.state;
     fetch(
       url +
         "/1.0/violas/bank/deposit/orders?address=" +
         window.sessionStorage.getItem("violas_address") +
         "&limit=" +
-        pageSize +
+        curPageSize +
         "&offset=" +
-        (page - 1) * pageSize
+        (curPage - 1) * curPageSize
     )
       .then((res) => res.json())
       .then((res) => {
         if (res.data.length > 0) {
+          // console.log(res.data)
           this.setState({
             curTotal: res.data[0].total_count,
           });

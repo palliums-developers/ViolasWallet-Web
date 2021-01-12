@@ -477,13 +477,15 @@ class CashPooling extends Component {
     fetch(url1 + "/1.0/market/exchange/currency")
       .then((res) => res.json())
       .then(async (res) => {
+        // console.log(res)
         let temp = [];
-        temp = res.data.btc.concat(res.data.libra);
-        temp = temp.concat(res.data.violas);
+        temp = res.data
+        // btc.concat(res.data.libra);
+        // temp = temp.concat(res.data.violas);
 
         await this.setState(
           {
-            violasArr: res.data.violas,
+            violasArr: res.data,
             currencies: temp,
           },
           () => {

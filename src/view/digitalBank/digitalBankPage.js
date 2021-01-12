@@ -40,14 +40,18 @@ class DigitalBankPage extends Component {
         //账户信息
         fetch(url + "/1.0/violas/bank/account/info?address=" + window.sessionStorage.getItem('violas_address')).then(res => res.json()).then(res => {
             if (res.data){
+              // console.log(res.data)
              this.setState({
-                 amount: res.data.amount,
-                 borrow: res.data.borrow,
-                //  borrows: res.data.borrows,
-                //  deposits: res.data.deposits,
-                 total: res.data.total,
-                 yesterday: res.data.yesterday
-             })
+               amount: res.data.amount,
+               borrow:
+                 res.data.borrow == 0
+                   ? "0.00" + "/" + res.data.borrow_limit
+                   : res.data.borrow + "/" + res.data.borrow_limit,
+               //  borrows: res.data.borrows,
+               //  deposits: res.data.deposits,
+               total: res.data.total == 0 ? "0.00" : res.data.total,
+               yesterday: res.data.yesterday == 0 ? "0.00" : res.data.yesterday,
+             });
          }
         })
         //存款产品列表

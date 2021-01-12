@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import WalletConnect from '../../packages/browser/src/index';
 import code_data from '../../utils/code.json';
 import intl from "react-intl-universal";
-import WalletconnectDialog from "./walletconnectDialog";
+
 import '../app.scss'
 let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
@@ -22,7 +22,7 @@ class AddCurrency extends Component {
       arr2: [],
       foc: false,
       checkData: [],
-      showWallet: false,
+      // showWallet: false,
       code:
         "a11ceb0b01000701000202020403061004160205181d07356f08a4011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479167061795f66726f6d5f776974685f6d657461646174611b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202",
       publish_code:
@@ -258,6 +258,7 @@ class AddCurrency extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res.data);
         let checkData = JSON.parse(sessionStorage.getItem("checkData"));
         let violas_Balances = JSON.parse(
           sessionStorage.getItem("violas_Balances")
@@ -298,16 +299,12 @@ class AddCurrency extends Component {
             }
           } else {
             if (type == "violas") {
-              this.setState({
-                showWallet: true,
-              });
+              this.props.showWalletFun(true)
               this.violas_getTyArgs(_name);
               this.props.getBalances();
               this.forceUpdate();
             } else if (type == "libra") {
-              this.setState({
-                showWallet: true,
-              });
+              this.props.showWalletFun(true);
               this.libra_getTyArgs(_module,_name);
               this.props.getBalances();
               this.forceUpdate();
@@ -331,9 +328,7 @@ class AddCurrency extends Component {
     this.state.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
-        this.setState({
-          showWallet: false,
-        });
+        this.props.showWalletFun(false);
         this.after_publish(
           res,
           _name,
@@ -346,9 +341,7 @@ class AddCurrency extends Component {
       })
       .catch((err) => {
         
-        this.setState({
-          showWallet: false,
-        });
+        this.props.showWalletFun(false);
         this.props.showAddCoins(false);
         console.log("send publish ", err);
       });
@@ -382,9 +375,7 @@ class AddCurrency extends Component {
     this.state.walletConnector
       .sendTransaction("_libra", tx)
       .then((res) => {
-        this.setState({
-          showWallet: false,
-        });
+        this.props.showWalletFun(false);
         this.after_publish(
           res,
           _name,
@@ -396,9 +387,7 @@ class AddCurrency extends Component {
         console.log("Libra transaction", res);
       })
       .catch((err) => {
-        this.setState({
-          showWallet: false,
-        });
+        this.props.showWalletFun(false);
         this.props.showAddCoins(false);
         console.log("Libra transaction ", err);
       });
@@ -481,11 +470,7 @@ class AddCurrency extends Component {
         this.props.showAddCoins(false);
       });
   };
-  closeWallet = (val) => {
-    this.setState({
-      showWallet: val,
-    });
-  };
+  
   render() {
     let { addCurrencyList1, BTCData } = this.state;
     // console.log(addCurrencyList1,'...')
@@ -545,11 +530,7 @@ class AddCurrency extends Component {
             <p><img src="/img/编组 4复制 2@2x.png"/></p>
           </div> */}
         </div>
-        {this.state.showWallet ? (
-          <WalletconnectDialog
-            getCloseWallet={this.closeWallet}
-          ></WalletconnectDialog>
-        ) : null}
+        
       </div>
     );
   }

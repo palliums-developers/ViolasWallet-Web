@@ -85,17 +85,19 @@ class ExChange extends Component {
   //按链获取币种信息
   async getMarketCurrencies() {
     axios("https://api4.violas.io/1.0/market/exchange/currency").then((res) => {
+      console.log(res)
       this.setState({ currenciesWithType: res.data.data });
       let temp = [];
-      temp = res.data.data.btc.concat(res.data.data.libra);
-      temp = temp.concat(res.data.data.violas);
+      temp = res.data.data
+      // .btc.concat(res.data.data.libra);
+      // temp = temp.concat(res.data.data.violas);
       
       this.setState(
         {
           currencies: temp,
-          violas_currencies: res.data.data.violas,
-          libra_currencies: res.data.data.libra,
-          btc_currencies: res.data.data.btc,
+          violas_currencies: res.data.data,
+          // libra_currencies: res.data.data.libra,
+          // btc_currencies: res.data.data.btc,
           // swap_in: temp[0].show_name,
           // swap_out: temp[0].show_name
         },
@@ -196,6 +198,7 @@ class ExChange extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         if (res.data) {
           let arr1 = this.state.libra_currencies;
           for (let i = 0; i < arr1.length; i++) {
@@ -215,8 +218,11 @@ class ExChange extends Component {
     fetch(url1 + "/1.0/btc/balance?address=" + this.state.BTCAddress)
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res)
         if (res.data) {
-          this.state.btc_currencies[0].balance = res.data[0].BTC;
+          this.setState({
+            btc_currencies: res.data,
+          });
         } else {
           return;
         }
@@ -250,6 +256,7 @@ class ExChange extends Component {
     axios(
       url1+"/1.0/market/exchange/crosschain/address/info"
     ).then(async (res) => {
+      // console.log(res,'.......')
       await this.setState({ crossChainInfo: res.data.data });
     });
   }
