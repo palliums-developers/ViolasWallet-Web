@@ -274,9 +274,7 @@ class InviteRewards extends Component {
 
                         {this.showVLSAddress(v.address)}
                       </span>
-                      <span>
-                        {parseInt(v.incentive / 1e6)} VLS
-                      </span>
+                      <span>{parseInt(v.incentive / 1e6)} VLS</span>
                     </p>
                   );
                 })}
@@ -298,10 +296,11 @@ class InviteRewards extends Component {
                 三.
                 邀请人每成功邀请一位，可获得2VLS奖励；被邀请人可获得1VLS奖励；
               </p>
-              <p>四. 邀请奖励将在三个工作日内尽快发放</p>
+              <p>四. 邀请奖励将在三个工作日内尽快发放；</p>
               <p>五. 如用户违反平台的相应风控规则，则无权参与此活动；</p>
               <p>
-                六. 活动如有调整，以Violas平台公告为准，最终解释权归Violas 所有
+                六. 活动如有调整，以Violas平台公告为准，最终解释权归Violas
+                所有；
               </p>
             </div>
           </div>
