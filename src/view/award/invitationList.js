@@ -110,6 +110,9 @@ class InvitationList extends Component {
                       <img src="/img/m_编组 12@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
+                    <p className="inv">
+                      共邀请 <span>{v.invite_count}</span> 人
+                    </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );
@@ -121,6 +124,9 @@ class InvitationList extends Component {
                       <img src="/img/m_编组 58@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
+                    <p className="inv">
+                      共邀请 <span>{v.invite_count}</span> 人
+                    </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );
@@ -132,6 +138,9 @@ class InvitationList extends Component {
                       <img src="/img/m_编组 10@2x.png" />
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
+                    <p className="inv">
+                      共邀请 <span>{v.invite_count}</span> 人
+                    </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
                 );

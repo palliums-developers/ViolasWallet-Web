@@ -61,9 +61,11 @@ class MiningAwards extends Component {
     return number;
   }
   componentDidMount() {
+    this.getInviterTop();
     if (this.state.ifMobile) {
       document.title = "挖矿激励";
       this.getMiningInfo(this.state.address);
+      
       this.getVerifiedWallet(this.state.address);
     } else {
       this.getMiningInfo(
@@ -112,6 +114,19 @@ class MiningAwards extends Component {
     str = first + " ... " + str.substr(all - 6, 6);
     return str;
   }
+  //获取邀请奖励Top20
+  getInviterTop() {
+    fetch(url1 + "/1.0/violas/incentive/top20")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          this.setState({
+            ranking: res.data.length > 5 ? res.data.splice(0, 5) : res.data,
+          });
+          // console.log(res.data, "...............");
+        }
+      });
+  }
   //获取挖矿奖励信息
   getMiningInfo(addr) {
     if (addr) {
@@ -131,10 +146,6 @@ class MiningAwards extends Component {
                 res.data.pool_total_incentive / 1e6,
                 6
               ),
-              ranking:
-                res.data.ranking.length > 5
-                  ? res.data.ranking.splice(0, 5)
-                  : res.data.ranking,
             });
           }
         });
@@ -529,7 +540,8 @@ class MiningAwards extends Component {
                       }
                     : () => {
                         this.props.history.push(
-                          "/homepage/home/rankingList?address="+address +
+                          "/homepage/home/rankingList?address=" +
+                            address +
                             "&language=" +
                             lang
                         );
