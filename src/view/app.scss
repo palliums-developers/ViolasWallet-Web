@@ -318,13 +318,12 @@ dd {
         display: flex;
         align-items: center;
         // justify-content: center;
-        padding: 0 40px;
+        // padding: 0 40px;
         padding-left: 85px;
         box-sizing: border-box;
         cursor: pointer;
         margin-bottom: 10px;
         label{
-          margin-top: 13px;
           cursor: pointer;
           font-size: 16px;
           font-weight: 400;
@@ -334,7 +333,6 @@ dd {
           width: 24px;
           height: 24px;
           margin-right:5px;
-          margin-top: 10px;
         }
         .noWal {
           background: url("/img/编组 17复制 522@2x.png") no-repeat;
@@ -361,12 +359,6 @@ dd {
         i{
           width: 25px;
           height: 25px;
-          margin-top: 13px;
-        }
-      }
-      span:nth-child(2){
-        i{
-          margin-top: 12px;
         }
       }
       span:nth-child(3){
@@ -2271,7 +2263,7 @@ dd {
     padding-top: 100px;
     box-sizing: border-box;
     .walDialog {
-    margin-left: -1310px;
+    // margin-left: -1310px;
     }
     >h4{
         display: flex;

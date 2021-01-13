@@ -62,7 +62,7 @@ class ExChange extends Component {
   async componentWillMount() {
     await this.getMarketCurrencies();
     await this.getNewWalletConnect();
-    this.getCrossChainInfo();
+    // this.getCrossChainInfo();
   }
   async getNewWalletConnect() {
     await this.setState({
@@ -198,7 +198,7 @@ class ExChange extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data) {
           let arr1 = this.state.libra_currencies;
           for (let i = 0; i < arr1.length; i++) {
@@ -256,7 +256,7 @@ class ExChange extends Component {
     axios(
       url1+"/1.0/market/exchange/crosschain/address/info"
     ).then(async (res) => {
-      // console.log(res,'.......')
+      console.log(res,'.......')
       await this.setState({ crossChainInfo: res.data.data });
     });
   }
@@ -304,21 +304,21 @@ class ExChange extends Component {
       swap_out_type: await this.getSwapType(this.state.swap_out_name),
     });
     //get receiver address
-    for (let l in this.state.crossChainInfo) {
-      if (
-        this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type
-      ) {
-        if (
-          this.state.crossChainInfo[l].to_coin.assets.name ===
-          this.state.swap_out_name
-        ) {
-          await this.setState({
-            swap_address: this.state.crossChainInfo[l].receiver_address,
-          });
-          break;
-        }
-      }
-    }
+    // for (let l in this.state.crossChainInfo) {
+    //   if (
+    //     this.state.crossChainInfo[l].input_coin_type === this.state.swap_in_type
+    //   ) {
+    //     if (
+    //       this.state.crossChainInfo[l].to_coin.assets.name ===
+    //       this.state.swap_out_name
+    //     ) {
+    //       await this.setState({
+    //         swap_address: this.state.crossChainInfo[l].receiver_address,
+    //       });
+    //       break;
+    //     }
+    //   }
+    // }
   }
   getPayeeAddress() {
     let payee_address = "";
@@ -619,6 +619,7 @@ class ExChange extends Component {
     };
   }
   async getViolasSwap(_out_type, chainId) {
+    console.log(_out_type, chainId);
     let tx;
     if (_out_type === "violas") {
       tx = await this.getUniswap(chainId);
