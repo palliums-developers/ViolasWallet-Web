@@ -90,9 +90,9 @@ class InviteRewards extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            
+            // console.log(res.data);
             this.setState({
-              incentive: this.getFloat( res.data.incentive / 1e6,2),
+              incentive: res.data.incentive,
               invite_count: res.data.invite_count,
             });
           }
