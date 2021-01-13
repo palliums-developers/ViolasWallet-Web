@@ -84,6 +84,7 @@ class InvitationList extends Component {
   }
   render() {
     let { ifMobile, firstList, secondList, thirdList, rankList } = this.state;
+    console.log(firstList);
     return (
       <div className={ifMobile == false ? "invitationList" : "invitationList1"}>
         <div>
@@ -139,7 +140,8 @@ class InvitationList extends Component {
             <div className="residualRanking">
               <div className="head">
                 <span>排名</span>
-                <span>地址</span>
+                <span>邀请地址</span>
+                <span>邀请人数</span>
                 <span>总收益</span>
               </div>
               <div className="list">
@@ -150,6 +152,7 @@ class InvitationList extends Component {
                         <p key={i}>
                           <span>NO.{v.rank}</span>
                           <span>{this.showVLSAddress(v.address)}</span>
+                          <span>{v.invite_count}</span>
                           <span>{parseInt(v.incentive / 1e6)}VLS</span>
                         </p>
                       );

@@ -6,6 +6,7 @@ import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 import Head from './components/head'
 import LangPage from './components/langPage'
+import {Badge} from "antd"
 let url = "https://api.violas.io";
 
 //首页
@@ -177,7 +178,7 @@ class Home extends React.PureComponent {
           {this.state.ifMobile == false ? (
             <div className="boxHead">
               <div className="boxHeadList">
-                {/* <div className="badge" onClick={()=>{
+                <div className="badge" onClick={()=>{
                 this.props.history.push(
                   "/homepage/home/pushMessage"
                 );
@@ -185,7 +186,7 @@ class Home extends React.PureComponent {
                 <Badge count={100}>
                   <img src="/img/编组 12@2x.png" />
                 </Badge>
-              </div> */}
+              </div>
                 <Head></Head>
                 {/* <span>Download</span> */}
                 <LangPage getLanguage={this.getLanguage}></LangPage>
