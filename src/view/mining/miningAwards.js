@@ -312,6 +312,7 @@ class MiningAwards extends Component {
       is_new,
       ifMobile,
       lang,
+      address,
     } = this.state;
     return (
       <div className={ifMobile == false ? "miningAwards" : "miningAwards1"}>
@@ -327,6 +328,7 @@ class MiningAwards extends Component {
                   : () => {
                       this.props.history.push(
                         "/homepage/home/ruleDescription?address=" +
+                          address +
                           "&language=" +
                           lang
                       );
@@ -485,7 +487,8 @@ class MiningAwards extends Component {
                             this.props.history.push(
                               "/homepage/home/inviteRewards?language=" +
                                 lang +
-                                "&address="
+                                "&address=" +
+                                address
                             );
                           }
                     }
@@ -526,7 +529,7 @@ class MiningAwards extends Component {
                       }
                     : () => {
                         this.props.history.push(
-                          "/homepage/home/rankingList?address=" +
+                          "/homepage/home/rankingList?address="+address +
                             "&language=" +
                             lang
                         );

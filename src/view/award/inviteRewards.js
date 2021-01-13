@@ -244,6 +244,7 @@ class InviteRewards extends Component {
                     : () => {
                         this.props.history.push(
                           "/homepage/home/invitationList?address=" +
+                            address +
                             "&language=" +
                             lang
                         );
