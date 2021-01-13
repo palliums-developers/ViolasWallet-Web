@@ -118,7 +118,6 @@ class MiningAwards extends Component {
       fetch(url1 + "/1.0/violas/incentive/mint/info?address=" + addr)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res, ".......");
           if (res.data) {
             this.setState({
               total_incentive: this.getFloat(res.data.total_incentive / 1e6, 6),
@@ -132,7 +131,10 @@ class MiningAwards extends Component {
                 res.data.pool_total_incentive / 1e6,
                 6
               ),
-              ranking: res.data.ranking,
+              ranking:
+                res.data.ranking.length > 5
+                  ? res.data.ranking.splice(0, 5)
+                  : res.data.ranking,
             });
           }
         });
@@ -516,7 +518,6 @@ class MiningAwards extends Component {
           <div>
             <div className="head">
               <h3>排行榜</h3>
-
               <p
                 onClick={
                   ifMobile == false
@@ -554,7 +555,7 @@ class MiningAwards extends Component {
 
                       {this.showVLSAddress(v.address)}
                     </span>
-                    <span>{parseInt(v.incentive/1e6)} VLS</span>
+                    <span>{parseInt(v.incentive / 1e6)} VLS</span>
                   </p>
                 );
               })}

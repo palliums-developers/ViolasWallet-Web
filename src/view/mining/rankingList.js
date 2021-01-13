@@ -84,7 +84,7 @@ class RankingList extends Component {
   }
   render() {
     let { ifMobile, firstList, secondList, thirdList, rankList } = this.state;
-    console.log(rankList);
+    // console.log(rankList);
     return (
       <div className={ifMobile == false ? "rankingLists" : "rankingLists1"}>
         <div>

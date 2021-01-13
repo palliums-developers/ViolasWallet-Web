@@ -77,7 +77,7 @@ class InviteRewards extends Component {
       .then((res) => {
         if (res.data) {
           this.setState({
-            ranking: res.data,
+            ranking: res.data.length > 5 ? res.data.splice(0,5):res.data,
           });
           // console.log(res.data, "...............");
         }
