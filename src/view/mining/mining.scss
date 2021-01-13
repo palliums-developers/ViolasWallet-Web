@@ -1449,45 +1449,103 @@
           color: #999999;
           font-family: PingFangSC-Regular, PingFang SC;
           }
-       
-          span:nth-child(2){
-            margin-left: -70px;
-          }
+          
+          
         }
-        .list{
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          div{
-            p{
-              margin-top: 30px;
-              display: flex;
-              justify-content: space-between;
-              span:nth-child(1){
-                font-size: 16px;
-                // font-family: Roboto-Bold, Roboto;
-                font-weight: bold;
-                color: #333333;
-              }
-              span:nth-child(2){
-                flex: 1;
-                font-size: 16px;
-                // font-family: Roboto-Regular, Roboto;
-                font-weight: 400;
-                color: #333333;
-                margin-left: 20px;
-              }
-              span:nth-child(3){
-                font-size: 16px;
-                // font-family: Roboto-Medium, Roboto;
-                font-weight: 500;
-                color: #13B788;
-              }
-            }
-          }
-        }
+        
       }
     }
+}
+.rankingLists1{
+  .rankingWrap{
+    .residualRanking{
+     .head{
+        span:nth-child(2){
+          margin-left: -35%;
+        }
+        
+      }
+      .list{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                div{
+                  p{
+                    margin-top: 30px;
+                    display: flex;
+                    justify-content: space-between;
+                    span:nth-child(1){
+                      font-size: 16px;
+                      // font-family: Roboto-Bold, Roboto;
+                      font-weight: bold;
+                      color: #333333;
+                    }
+                    span:nth-child(2){
+                      flex: 1;
+                      font-size: 16px;
+                      // font-family: Roboto-Regular, Roboto;
+                      font-weight: 400;
+                      color: #333333;
+                      margin-left: 20px;
+                    }
+                    span:nth-child(3){
+                      font-size: 16px;
+                      // font-family: Roboto-Medium, Roboto;
+                      font-weight: 500;
+                      color: #13B788;
+                    }
+                  }
+                }
+              }
+  }
+}
+}
+.invitationList1{
+  .rankingWrap{
+    .residualRanking{
+      .head{
+        span:nth-child(2){
+          margin-left: 0;
+        }
+        span:nth-child(3){
+          margin-left: 14%;
+        }
+      }
+      .list{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                >div{
+                  p{
+                    margin-top: 30px;
+                    display: flex;
+                    justify-content: space-between;
+                    span:nth-child(1){
+                      font-size: 16px;
+                      // font-family: Roboto-Bold, Roboto;
+                      font-weight: bold;
+                      color: #333333;
+                    }
+                    span:nth-child(2){
+                      flex: 1;
+                      font-size: 16px;
+                      // font-family: Roboto-Regular, Roboto;
+                      font-weight: 400;
+                      color: #333333;
+                      margin-left: 10px;
+                    }
+                    span:nth-child(3){
+                      font-size: 16px;
+                      // font-family: Roboto-Medium, Roboto;
+                      font-weight: 500;
+                      color: #13B788;
+                      width: 30%;
+                    }
+                  }
+                }
+              }
+    }
+  }
 }
 @media (max-width:1440px){
     .miningAwards{
