@@ -1502,6 +1502,7 @@
                     display: flex;
                     justify-content: space-between;
                     span:nth-child(1){
+                      width: 15%;
                       font-size: 16px;
                       // font-family: Roboto-Bold, Roboto;
                       font-weight: bold;
@@ -1513,7 +1514,7 @@
                       // font-family: Roboto-Regular, Roboto;
                       font-weight: 400;
                       color: #333333;
-                      margin-left: 20px;
+                      margin-left: 25px;
                     }
                     span:nth-child(3){
                       font-size: 16px;
