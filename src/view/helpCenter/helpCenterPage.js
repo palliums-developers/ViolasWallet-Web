@@ -41,7 +41,7 @@ class HelpCenterPage extends Component {
               className="logo"
               src="/img/编组 8@2x.png"
               onClick={() => {
-                this.props.history.push("/helpCenter/helpCenterIndex");
+                this.props.history.push("/homepage/home");
               }}
             />
             <div className="applys">
@@ -51,7 +51,6 @@ class HelpCenterPage extends Component {
           </div>
         </div>
         <RouterView routes={routes}></RouterView>
-        
       </div>
     );
   }
