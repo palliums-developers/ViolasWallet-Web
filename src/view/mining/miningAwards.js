@@ -168,15 +168,20 @@ class MiningAwards extends Component {
   }
   //H5新用户验证
   userInfo = () => {
-    callHandler(
-      "callNative",
-      JSON.stringify({
-        id: this.state.id,
-        method: "new_user_check",
-        params: [],
-      }),
-      (resp) => {}
-    );
+    if(this.state.address){
+      callHandler(
+        "callNative",
+        JSON.stringify({
+          id: this.state.id,
+          method: "new_user_check",
+          params: [],
+        }),
+        (resp) => {}
+      );
+    }else{
+      message.warning("请先创建/导入钱包");
+    }
+    
   };
   //H5去存款/存款挖矿
   depositInfo = () => {
@@ -267,7 +272,7 @@ class MiningAwards extends Component {
         (resp) => {}
       );
     }else{
-      alert("请先创建/导入钱包");
+      message.warning("请先创建/导入钱包");
     }
     
   };
@@ -313,7 +318,7 @@ class MiningAwards extends Component {
         }
       );
     } else {
-      alert("请先创建/导入钱包");
+      message.warning("请先创建/导入钱包");
     }
   };
   closeWallet = (val) => {
