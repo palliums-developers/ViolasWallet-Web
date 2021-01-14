@@ -85,7 +85,7 @@ class ExChange extends Component {
   //按链获取币种信息
   async getMarketCurrencies() {
     axios("https://api4.violas.io/1.0/market/exchange/currency").then((res) => {
-      console.log(res)
+      // console.log(res)
       this.setState({ currenciesWithType: res.data.data });
       let temp = [];
       temp = res.data.data
@@ -268,23 +268,25 @@ class ExChange extends Component {
     return result;
   }
   async getSwapType(_temp) {
-    if (_temp === "BTC") {
-      return "btc";
-    } else {
-      for (let j in this.state.currenciesWithType.libra) {
-        if (this.state.currenciesWithType.libra[j].name === _temp) {
-          return "libra";
-        }
-      }
-      for (let k in this.state.currenciesWithType.violas) {
-        if (this.state.currenciesWithType.violas[k].name === _temp) {
-          return "violas";
-        }
-      }
-    }
+    return "violas";
+    // if (_temp === "BTC") {
+    //   return "btc";
+    // } else {
+    //   for (let j in this.state.currenciesWithType.libra) {
+    //     if (this.state.currenciesWithType.libra[j].name === _temp) {
+    //       return "libra";
+    //     }
+    //   }
+    //   for (let k in this.state.currenciesWithType.violas) {
+    //     if (this.state.currenciesWithType.violas[k].name === _temp) {
+    //       return "violas";
+    //     }
+    //   }
+    // }
   }
   //兑换前
   async before_getSwap(input_type, output_type) {
+    console.log(this.state.currencies,'currencies');
     //change show name to name
     for (let i in this.state.currencies) {
       if (this.state.currencies[i].show_name === input_type) {
@@ -630,6 +632,7 @@ class ExChange extends Component {
   }
   //兑换
   async getSwap() {
+    console.log(this.state.swap_in_type);
     if (this.state.swap_in_type === "btc") {
       const tx = await this.getBitcoinSwap();
       console.log("bitcoin swap", tx);
@@ -700,6 +703,7 @@ class ExChange extends Component {
           }, 500);
         });
     } else if (this.state.swap_in_type === "violas") {
+      
       const tx = await this.getViolasSwap(
         this.state.swap_out_type,
         sessionStorage.getItem("violas_chainId")
@@ -750,13 +754,8 @@ class ExChange extends Component {
   getExchangeRecode = () => {
     fetch(
       url1 +
-        "/1.0/market/crosschain/transaction?addresses=" +
-        sessionStorage.getItem("violas_address") +
-        "_violas," +
-        sessionStorage.getItem("libra_address") +
-        "_libra," +
-        sessionStorage.getItem("btc_address") +
-        "_btc" +
+        "/1.0/market/exchange/transaction?address=" +
+        sessionStorage.getItem("violas_address")+
         "&offset=0&limit=5"
     )
       .then((res) => res.json())
@@ -1365,7 +1364,7 @@ class ExChange extends Component {
                       className="changeList"
                       key={i}
                       onClick={(e) => {
-                        this.stopPropagation(e)
+                        this.stopPropagation(e);
                         this.setState({
                           visible: true,
                           changeList: v,
@@ -1374,34 +1373,18 @@ class ExChange extends Component {
                     >
                       <div className="list1">
                         <span
-                          className={
-                            v.status == 4001
-                              ? "green"
-                              : v.status == 4003
-                              ? "red"
-                              : v.status == 4002
-                              ? "yel"
-                              : null
-                          }
+                          className={v.status == "Executed" ? "green" : "red"}
                         >
-                          {v.status == 4001
-                            ? "兑换成功"
-                            : v.status == 4003
-                            ? "兑换失败"
-                            : v.status == 4002
-                            ? "兑换中"
-                            : null}
+                          {v.status == "Executed" ? "兑换成功" : "兑换失败"}
                         </span>
                         <p>
                           {this.getExchangeRecodeReturn(
-                            v.from_chain,
-                            v.input_shown_name,
+                            "violas",
+                            v.input_show_name,
                             v.input_amount
                           )}
                           &nbsp;
-                          {v.input_shown_name == null
-                            ? "--"
-                            : v.input_shown_name}
+                          {v.input_show_name == null ? "--" : v.input_show_name}
                         </p>
                       </div>
                       <div className="changeImg">
@@ -1410,18 +1393,18 @@ class ExChange extends Component {
                       <div className="list2">
                         <span>
                           {this.getExchangeRecodeReturn(
-                            v.to_chain,
-                            v.output_shown_name,
+                            "violas",
+                            v.output_show_name,
                             v.output_amount
                           )}
                           &nbsp;
-                          {v.output_shown_name == null
+                          {v.output_show_name == null
                             ? "--"
-                            : v.output_shown_name}
+                            : v.output_show_name}
                         </span>
 
                         <p>
-                          {timeStamp2String(v.data + "000")}
+                          {timeStamp2String(v.date + "000")}
                           <i>
                             <img src="/img/rightArrow.png" />
                           </i>

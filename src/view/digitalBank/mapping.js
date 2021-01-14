@@ -98,9 +98,10 @@ class DigitalBank extends Component {
     }
   //获取币种信息 切换币种
   getMappingInfo() {
-    fetch(url + "/1.0/mapping/address/info")
+    fetch(url + "/1.0/market/exchange/crosschain/address/info")
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         if (res.data) {
           let violasArr = [],
             libraArr = [],
@@ -120,10 +121,8 @@ class DigitalBank extends Component {
               libra_mappingInfo: libraArr,
               btc_mappingInfo: btcArr,
               mappingInfo: res.data,
-              
             },
             () => {
-              
               this.getBalances();
             }
           );

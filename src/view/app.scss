@@ -308,21 +308,19 @@ dd {
     .route {
       width: 100%;
       display: flex;
-      // align-items: center;
       flex-direction: column;
       margin-top:62px;
+      padding:0 32px;
+      box-sizing: border-box;
       span {
-        height:80px;
-        
+        height:61px;
         color: #FFF;
         display: flex;
         align-items: center;
-        // justify-content: center;
-        // padding: 0 40px;
-        padding-left: 85px;
-        box-sizing: border-box;
+        padding-left: 56px;
         cursor: pointer;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
+        border-radius: 31px;
         label{
           cursor: pointer;
           font-size: 16px;
@@ -369,11 +367,11 @@ dd {
       }
       span:hover{
         color:#FFF;
-        background: rgba(247, 247, 249, .15);
+        background: rgba(247, 247, 249, .06);
       }
       .active{
         color:#FFF;
-        background: rgba(247, 247, 249, .15);
+        background: rgba(247, 247, 249, .06);
       }
     }
   }
@@ -1136,7 +1134,7 @@ dd {
         right: 0;
         background:rgba(80,27,162,1);
         border-radius:8px;
-        padding: 10px;
+        padding: 12px 9px 27px 9px;
         box-sizing: border-box;
         .rules{
           width: 100%;
@@ -1148,6 +1146,7 @@ dd {
           margin-top: 18px;
           display: flex;
           align-items: center;
+          margin-bottom: 3px;
           p{
             font-size: 16px;
             font-weight: 600;
@@ -1165,20 +1164,20 @@ dd {
         >p:nth-child(4){
           img{
             width: 16px;
-            height: 16px;
+            height: 15px;
           }
         }
         >p:nth-child(5){
           img{
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
           }
         }
         >p{
           font-size:14px;
           font-weight:400;
           color:rgba(255,255,255,1);
-          height: 30px;
+          height: 26px;
           display: flex;
           align-items: center;
           margin-top: 15px;
@@ -1188,12 +1187,12 @@ dd {
             width: 17px;
             height: 19px;
             
-            margin-left: 12px;
+            margin-left: 14px;
             margin-right:10px;
           }
         }
         >p:hover{
-          background:rgba(255,255,255,.2);
+          background:rgba(255,255,255,.15);
         }
         .balanceList{
            width: 100%;
@@ -1235,21 +1234,22 @@ dd {
           // flex-direction: column;
           dl{
             flex: 1;
-            height: 35px;
+            height: 26px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius:17px;
             margin-bottom: 0!important;
-            margin-top: 10px;
+            margin-top: 16px;
             cursor: pointer;
-            background:rgba(255,255,255,.2);
+            background:rgba(255,255,255,.1);
             dt{
               img{
-                width: 15px;
+                width: 13px;
                 height:15px;
                 // margin-left: 5px;
                 margin-right:5px;
+                 margin-top: -1px;
               }
             }
             dd{
@@ -1259,14 +1259,19 @@ dd {
               
             }
           }
-          dl:nth-child(2){
-            margin-left: 5px;
+          dl:nth-child(1){
+            margin-right: 14px;
+            dt{
+              img{
+                margin-top: -3px;
+              }
+            }
           }
           dl:hover{
-            background:rgba(255,255,255,.5);
+            background:rgba(255,255,255,.15);
           }
           .act{
-            background:rgba(255,255,255,.2);
+            background:rgba(255,255,255,.1);
           }
         }
       }
@@ -1455,15 +1460,15 @@ dd {
               border-radius: 3px;
               cursor: pointer;
               dt {
-                width: 22px;
-                height: 22px;
+                width: 20px;
+                height: 20px;
                 display: flex;
-                margin-right: 8px;
+                margin-right: 6px;
               }
               dd {
                 font-size: 16px;
                 font-weight: 500;
-                color: rgba(75, 30, 144, 1);
+                color: rgba(80, 27, 162, 1);
               }
             }
             dl:hover {
@@ -1471,10 +1476,14 @@ dd {
 
             }
             dl:nth-child(1) dt {
+              width: 24px;
+              height: 22px;
               background: url("/img/transfer.png") no-repeat;
               background-size: 100% 100%;
             }
             dl:nth-child(2) dt {
+              width: 21px;
+              height: 22px;
               background: url("/img/getMoney.png") no-repeat;
               background-size: 100% 100%;
             }
