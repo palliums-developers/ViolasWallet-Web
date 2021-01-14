@@ -256,15 +256,20 @@ class MiningAwards extends Component {
   };
   //一键提取/数字银行挖矿
   bankProfit1 = () => {
-    callHandler(
-      "callNative",
-      JSON.stringify({
-        id: this.state.id,
-        method: "withdraw_bank_profit",
-        params: [],
-      }),
-      (resp) => {}
-    );
+    if (this.state.address) {
+      callHandler(
+        "callNative",
+        JSON.stringify({
+          id: this.state.id,
+          method: "withdraw_bank_profit",
+          params: [],
+        }),
+        (resp) => {}
+      );
+    }else{
+      alert("请先创建/导入钱包");
+    }
+    
   };
   //一键提取
   poolProfit = (chainId) => {
@@ -295,17 +300,21 @@ class MiningAwards extends Component {
   };
   //一键提取/资金池挖矿
   poolProfit1 = () => {
-    callHandler(
-      "callNative",
-      JSON.stringify({
-        id: this.state.id,
-        method: "withdraw_pool_profit",
-        params: [],
-      }),
-      (resp) => {
-        // this.getMiningInfo()
-      }
-    );
+    if (this.state.address) {
+      callHandler(
+        "callNative",
+        JSON.stringify({
+          id: this.state.id,
+          method: "withdraw_pool_profit",
+          params: [],
+        }),
+        (resp) => {
+          // this.getMiningInfo()
+        }
+      );
+    } else {
+      alert("请先创建/导入钱包");
+    }
   };
   closeWallet = (val) => {
     this.setState({
