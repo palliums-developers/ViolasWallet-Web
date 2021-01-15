@@ -155,9 +155,9 @@ class App extends Component {
           >
             英
           </span> */}
-          <div className="logo">
+          {/* <div className="logo">
             <img src="/img/编组 10复制 4@2x.png" />
-          </div>
+          </div> */}
           <div className="app_link">
             <div className="link_logo">
               <img src="/img/编组复制 11@2x.png" />
