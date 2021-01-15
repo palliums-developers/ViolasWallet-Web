@@ -53,6 +53,7 @@ class AddCurrency extends Component {
       BTCBalance: nextProps.BTCBalance,
     });
     if (this.state.checkData.length == 0) {
+      console.log("000");
       await this.setState({
         checkData: nextProps.checkData,
       });
@@ -125,7 +126,9 @@ class AddCurrency extends Component {
                       [arr[i].show_icon.split("/").length - 1].split(".")[0] ==
                     checkData[j].show_icon
                       .split("/")
-                      [checkData[j].show_icon.split("/").length - 1].split(".")[0]
+                      [checkData[j].show_icon.split("/").length - 1].split(
+                        "."
+                      )[0]
                   ) {
                     if (arr[i].show_name == checkData[j].show_name) {
                       arr[i].checked = checkData[j].checked;
@@ -222,6 +225,7 @@ class AddCurrency extends Component {
   }
   //获取总额
   getTotal = (checkData) => {
+    // console.log(checkData);
     let amount = 0;
     for (let i = 0; i < checkData.length; i++) {
       amount += Number(
@@ -248,7 +252,7 @@ class AddCurrency extends Component {
     }
   };
   //点击激活
-  async getTyArgs(_name, _addr, ind, icon,_module) {
+  async getTyArgs(_name, _addr, ind, icon, _module) {
     let type = icon.split("/")[icon.split("/").length - 1].split(".")[0];
 
     fetch(
@@ -272,16 +276,22 @@ class AddCurrency extends Component {
           };
           for (let i = 0; i < res.data.published.length; i++) {
             for (let j = 0; j < violas_Balances.length; j++) {
-              if(violas_Balances[j].show_icon.split("/")[violas_Balances[j].show_icon.split("/").length - 1].split(".")[0]== type){
-              if (res.data.published[i] == _name) {
-                if(violas_Balances[j].show_name == res.data.published[i]){
-                  temp.pd = true;
-                  temp.violas_balance = violas_Balances[j];
-                  temp.published = res.data.published[i];
+              if (
+                violas_Balances[j].show_icon
+                  .split("/")
+                  [violas_Balances[j].show_icon.split("/").length - 1].split(
+                    "."
+                  )[0] == type
+              ) {
+                if (res.data.published[i] == _name) {
+                  if (violas_Balances[j].show_name == res.data.published[i]) {
+                    temp.pd = true;
+                    temp.violas_balance = violas_Balances[j];
+                    temp.published = res.data.published[i];
 
-                  break;
+                    break;
+                  }
                 }
-              }
               }
             }
           }
@@ -299,13 +309,13 @@ class AddCurrency extends Component {
             }
           } else {
             if (type == "violas") {
-              this.props.showWalletFun(true)
+              this.props.showWalletFun(true);
               this.violas_getTyArgs(_name);
               this.props.getBalances();
               this.forceUpdate();
             } else if (type == "libra") {
               this.props.showWalletFun(true);
-              this.libra_getTyArgs(_module,_name);
+              this.libra_getTyArgs(_module, _name);
               this.props.getBalances();
               this.forceUpdate();
             }
@@ -340,7 +350,6 @@ class AddCurrency extends Component {
         console.log("send publish ", res);
       })
       .catch((err) => {
-        
         this.props.showWalletFun(false);
         this.props.showAddCoins(false);
         console.log("send publish ", err);
@@ -392,24 +401,24 @@ class AddCurrency extends Component {
         console.log("Libra transaction ", err);
       });
   }
-  async after_publish(res,name,list,sessionName,chain){
-    let temp=JSON.parse(sessionStorage.getItem(sessionName));
-    if(res==='success'){
-      for(let i=0;i<list.length;i++){
-        if(name===list[i].name){
-          temp.push(list[i])
-          temp[temp.length-1].checked=true;
+  async after_publish(res, name, list, sessionName, chain) {
+    let temp = JSON.parse(sessionStorage.getItem(sessionName));
+    if (res === "success") {
+      for (let i = 0; i < list.length; i++) {
+        if (name === list[i].name) {
+          temp.push(list[i]);
+          temp[temp.length - 1].checked = true;
           temp[temp.length - 1].balance = 0;
           temp[temp.length - 1].rate = 0;
           break;
         }
       }
       this.getBalance(temp);
-      sessionStorage.setItem(sessionName,JSON.stringify(temp))
+      sessionStorage.setItem(sessionName, JSON.stringify(temp));
     }
   }
   //关闭选中
-  closePub = (_name,_iconName) => {
+  closePub = (_name, _iconName) => {
     fetch(
       url +
         "/1.0/violas/currency/published?addr=" +
@@ -429,15 +438,21 @@ class AddCurrency extends Component {
         // console.log(res.data.published);
         for (let i = 0; i < res.data.published.length; i++) {
           for (let j = 0; j < violas_Balances.length; j++) {
-            if(violas_Balances[j].show_icon.split("/")[violas_Balances[j].show_icon.split("/").length - 1].split(".")[0]== _iconName){
+            if (
+              violas_Balances[j].show_icon
+                .split("/")
+                [violas_Balances[j].show_icon.split("/").length - 1].split(
+                  "."
+                )[0] == _iconName
+            ) {
               if (res.data.published[i] == _name) {
-                if(violas_Balances[j].show_name == res.data.published[i]){
-                temp.pd = true;
-                temp.violas_balance = violas_Balances[j];
-                temp.published = res.data.published[i];
-                // break;
+                if (violas_Balances[j].show_name == res.data.published[i]) {
+                  temp.pd = true;
+                  temp.violas_balance = violas_Balances[j];
+                  temp.published = res.data.published[i];
+                  // break;
                 }
-            }
+              }
             }
           }
         }
@@ -470,7 +485,7 @@ class AddCurrency extends Component {
         this.props.showAddCoins(false);
       });
   };
-  
+
   render() {
     let { addCurrencyList1, BTCData } = this.state;
     // console.log(addCurrencyList1,'...')
@@ -510,12 +525,25 @@ class AddCurrency extends Component {
                     <img
                       src="/img/编组 4复制 2@2x.png"
                       onClick={() =>
-                        this.getTyArgs(v.name, v.address, i, v.show_icon,v.module)
+                        this.getTyArgs(
+                          v.name,
+                          v.address,
+                          i,
+                          v.show_icon,
+                          v.module
+                        )
                       }
                     />
                   ) : (
                     <img
-                      onClick={() => this.closePub(v.show_name, v.show_icon.split("/")[v.show_icon.split("/").length - 1].split(".")[0])}
+                      onClick={() =>
+                        this.closePub(
+                          v.show_name,
+                          v.show_icon
+                            .split("/")
+                            [v.show_icon.split("/").length - 1].split(".")[0]
+                        )
+                      }
                       src="/img/Rectangle 2@2x.png"
                     />
                   )}
@@ -530,7 +558,6 @@ class AddCurrency extends Component {
             <p><img src="/img/编组 4复制 2@2x.png"/></p>
           </div> */}
         </div>
-        
       </div>
     );
   }
