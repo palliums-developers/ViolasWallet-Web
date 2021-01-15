@@ -265,44 +265,48 @@ class GetMoney extends Component {
                         onChange={(e) => this.getSearchList(e)}
                       />
                     </div>
-                    {arr.map((v, i) => {
-                      return (
-                        <div
-                          className="searchList"
-                          key={i}
-                          onClick={() =>
-                            this.showTypes(v.show_name, v.address, v.name, i)
-                          }
-                        >
-                          <div className="searchEvery">
-                            <img src={v.show_icon} />
-                            <div className="searchEvery1">
-                              <div>
-                                <h4>{v.show_name}</h4>
-                                <p>
-                                  {intl.get("Balance")}：
-                                  {v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0] == "btc"
-                                    ? v.BTC == 0
+                    <div className="searchWrap">
+                      {arr.map((v, i) => {
+                        return (
+                          <div
+                            className="searchList"
+                            key={i}
+                            onClick={() =>
+                              this.showTypes(v.show_name, v.address, v.name, i)
+                            }
+                          >
+                            <div className="searchEvery">
+                              <img src={v.show_icon} />
+                              <div className="searchEvery1">
+                                <div>
+                                  <h4>{v.show_name}</h4>
+                                  <p>
+                                    {intl.get("Balance")}：
+                                    {v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0] == "btc"
+                                      ? v.BTC == 0
+                                        ? 0
+                                        : this.getFloat(v.BTC / 1e8, 8)
+                                      : v.balance == 0
                                       ? 0
-                                      : this.getFloat(v.BTC / 1e8, 8)
-                                    : v.balance == 0
-                                    ? 0
-                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
-                                  {v.show_name}
-                                </p>
+                                      : this.getFloat(v.balance / 1e6, 6)}{" "}
+                                    {v.show_name}
+                                  </p>
+                                </div>
+                                <span
+                                  className={
+                                    ind == i ? "check active" : "check"
+                                  }
+                                ></span>
                               </div>
-                              <span
-                                className={ind == i ? "check active" : "check"}
-                              ></span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 ) : null}
               </div>

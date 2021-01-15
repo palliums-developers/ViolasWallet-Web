@@ -32,6 +32,9 @@ class Repayment extends Component {
       available: 0,
     };
   }
+  stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+  }
   async componentWillMount() {
     this.setState({
       repayCurList: JSON.parse(sessionStorage.getItem("repayCurList")),
@@ -96,24 +99,7 @@ class Repayment extends Component {
     });
   }
   componentDidMount() {
-    // let { repayCurList } = this.state;
-    // //获取借款产品信息
-    // fetch(
-    //   url +
-    //     "/1.0/violas/bank/borrow/repayment?address=" +
-    //     sessionStorage.getItem("violas_address") +
-    //     "&&id=" +
-    //     repayCurList.id
-    // )
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     if (res.data) {
-    //       console.log(res.data, ".....");
-    //       this.setState({
-    //         borrowList: res.data,
-    //       });
-    //     }
-    //   });
+    document.addEventListener("click", this.onClose);
   }
   //获取还款产品信息
   async getAvailableQuantity(currency, borrowProductList) {
@@ -213,7 +199,6 @@ class Repayment extends Component {
     };
     console.log(parm);
     axios.post(`https://api4.violas.io${api}`, parm).then((res) => {
-        
       if (res.data.code == 2000) {
         this.setState({
           warning: "还款成功",
@@ -239,6 +224,12 @@ class Repayment extends Component {
       }
     });
   }
+  //显示关闭侧边栏
+  onClose = () => {
+    this.setState({
+      showList: false
+    });
+  };
   closeWallet = (val) => {
     this.setState({
       showWallet: val,
@@ -272,7 +263,8 @@ class Repayment extends Component {
               <label>我要还</label>
               <div className="dropdown1">
                 <span
-                  onClick={() => {
+                  onClick={(e) => {
+                    this.stopPropagation(e);
                     this.setState({
                       showList: !this.state.showList,
                     });

@@ -33,51 +33,56 @@ class SaveDetails extends Component {
       depositProduct: [],
     };
   }
+  stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+  }
   async componentWillMount() {
     await this.getNewWalletConnect();
     await this.getDepositProduct();
-    this.getCurrenciesList()
+    this.getCurrenciesList();
   }
-  getCurrenciesList(){
-        fetch(
-        "https://api4.violas.io/1.0/violas/balance?addr=" +
-            sessionStorage.getItem("violas_address")
-        )
-        .then((res) => res.json())
-        .then((res) => {
-            if (res.data.balances.length > 0) {
-            let temp = [];
-            for (let i = 0; i < this.state.depositProduct.length; i++) {
-                for (let j = 0; j < res.data.balances.length; j++) {
+  getCurrenciesList() {
+    fetch(
+      "https://api4.violas.io/1.0/violas/balance?addr=" +
+        sessionStorage.getItem("violas_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data.balances.length > 0) {
+          let temp = [];
+          for (let i = 0; i < this.state.depositProduct.length; i++) {
+            for (let j = 0; j < res.data.balances.length; j++) {
+              if (
+                this.state.depositProduct[i].token_module ===
+                res.data.balances[j].show_name
+              ) {
+                temp.push({
+                  type: this.state.depositProduct[i].token_module,
+                  balance: res.data.balances[j].balance / 1e6,
+                });
+              }
+            }
+          }
+          this.setState(
+            {
+              showLists: temp,
+            },
+            () => {
+              for (let i = 0; i < this.state.showLists.length; i++) {
                 if (
-                    this.state.depositProduct[i].token_module ===
-                    res.data.balances[j].show_name
+                  this.state.showLists[i].type ==
+                  sessionStorage.getItem("token_module")
                 ) {
-                    temp.push({
-                    type: this.state.depositProduct[i].token_module,
-                    balance: res.data.balances[j].balance / 1e6,
-                    });
+                  this.setState({
+                    showType: this.state.showLists[i].type,
+                    extra: this.state.showLists[i].balance,
+                  });
                 }
-                }
+              }
             }
-            this.setState(
-                {
-                showLists: temp,
-                },
-                () => {
-                 for (let i = 0; i < this.state.showLists.length; i++) {
-                     if (this.state.showLists[i].type == sessionStorage.getItem("token_module")) {
-                        this.setState({
-                        showType: this.state.showLists[i].type,
-                        extra: this.state.showLists[i].balance,
-                        });
-                     }
-                 }
-                    
-                }
-            );
-            }
-        });
+          );
+        }
+      });
   }
   async getNewWalletConnect() {
     await this.setState({
@@ -85,6 +90,7 @@ class SaveDetails extends Component {
     });
   }
   componentDidMount() {
+    document.addEventListener("click", this.onClose);
     //获取币种列表
 
     //获取存款产品信息
@@ -98,7 +104,7 @@ class SaveDetails extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          console.log(res)
+          console.log(res);
           this.setState({
             saveList: {
               limit:
@@ -209,7 +215,7 @@ class SaveDetails extends Component {
           }, 500);
         }
       })
-      .catch((error)=>{
+      .catch((error) => {
         this.setState({
           warning: "存款失败",
           showWallet: false,
@@ -222,13 +228,18 @@ class SaveDetails extends Component {
         }, 500);
       });
   }
+  //显示关闭侧边栏
+  onClose = () => {
+    this.setState({
+      showList: false,
+    });
+  };
   closeWallet = (val) => {
     this.setState({
       showWallet: val,
     });
   };
   render() {
-    let { routes } = this.props;
     let {
       showList,
       saveList,
@@ -258,9 +269,10 @@ class SaveDetails extends Component {
               <label>我要存</label>
               <div className="dropdown1">
                 <span
-                  onClick={() => {
+                  onClick={(e) => {
+                    this.stopPropagation(e);
                     this.setState({
-                      showList: !this.state.showList,
+                      showList:!this.state.showList,
                     });
                   }}
                 >
@@ -279,7 +291,7 @@ class SaveDetails extends Component {
                           onClick={() => {
                             this.setState({
                               showType: v.type,
-                              extra:v.balance,
+                              extra: v.balance,
                               showList: false,
                             });
                           }}

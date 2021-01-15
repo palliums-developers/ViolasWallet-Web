@@ -440,7 +440,7 @@ class HomeContent extends Component {
   onClose = () => {
     this.setState({
       display: false,
-      display1: false,
+      // display1: false,
       display2: false,
     });
   };

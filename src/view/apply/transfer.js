@@ -238,9 +238,6 @@ class Transfer extends Component {
       showDealType: false,
     });
   };
-  stopPropagation(e) {
-    e.nativeEvent.stopImmediatePropagation();
-  }
 
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
@@ -607,7 +604,6 @@ class Transfer extends Component {
       tranferDig,
       ind,
     } = this.state;
-    // console.log(selData, tranferDig,this.state.coinName , this.state.address )
     // console.log(selData,'.....')
     return (
       <div className="transfer">
@@ -664,6 +660,7 @@ class Transfer extends Component {
                         onChange={(e) => this.getSearchList(e)}
                       />
                     </div>
+                    <div className="searchWrap">
                     {selData.map((v, i) => {
                       return (
                         <div
@@ -724,6 +721,7 @@ class Transfer extends Component {
                         </div>
                       );
                     })}
+                    </div>
                   </div>
                 ) : null}
               </div>

@@ -743,17 +743,20 @@ class BorrowOrder extends Component {
           <div className="tab">
             {types.map((v, i) => {
               return (
-                <span
-                  key={i}
-                  className={this.state.saveId == v.id ? "active" : null}
-                  onClick={() => {
-                    this.setState({
-                      saveId: v.id,
-                    });
-                  }}
-                >
-                  {v.type}
-                </span>
+                <div>
+                  <span
+                    key={i}
+                    className={this.state.saveId == v.id ? "active" : null}
+                    onClick={() => {
+                      this.setState({
+                        saveId: v.id,
+                      });
+                    }}
+                  >
+                    {v.type}
+                  </span>
+                  {this.state.saveId == v.id ? <i></i> : null}
+                </div>
               );
             })}
           </div>

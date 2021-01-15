@@ -455,6 +455,14 @@
                           color:rgba(153,153,153,1);
                         }
                       }  
+                      .searchWrap{
+                        flex: 1;
+                        overflow: auto;
+                        overflow: -moz-scrollbars-none;
+                      }
+                      .searchWrap::-webkit-scrollbar{
+                          display: none;
+                      }
                       .searchList{
                         display: flex;
                         flex-direction: column;
@@ -468,7 +476,10 @@
                             width: 44px;
                             height: 44px;
                             margin-right: 10px;
-                            border-radius: 10px;
+                            border-radius: 50%;
+                            border:0.5px solid rgba(224, 224, 224, 1);
+                            padding: 5px;
+                            box-sizing: border-box;
                           }
                           .searchEvery1{
                             margin-top: 10px;
@@ -1075,6 +1086,10 @@
     .tab{
       margin-left: 19px;
       display: flex;
+      >div{
+        display: flex;
+        flex-direction: column;
+      }
       span{
         width: 22px;
         margin-right: 87px;
@@ -1084,11 +1099,17 @@
         white-space: nowrap;
         cursor: pointer;
       }
+      
+      i{
+        width: 20px;
+        height: 6px;
+        background:rgba(112, 56, 253, 1);
+        border-radius: 5px;
+      }
       .active{
         font-size:16px;
         font-weight:500;
         color:rgba(51,51,51,1);
-        border-bottom: 2px solid rgba(112, 56, 253, 1);
       }
     }
     .saveDetail{
@@ -1156,6 +1177,23 @@
       }
       .ant-pagination{
         margin-top: 30px;
+        .ant-pagination-next,.ant-pagination-prev{
+        .ant-pagination-item-link:hover{
+          border-color: rgba(112, 56, 253, 1);
+        }
+        .ant-pagination-item-link:hover .anticon{
+          color: rgba(112, 56, 253, 1);
+        }
+        }
+        .ant-pagination-disabled{
+          .ant-pagination-item-link:hover{
+            border-color: #d9d9d9;
+          }
+          .ant-pagination-item-link:hover .anticon{
+            color: #d9d9d9;
+          }
+        }
+        
         li:hover{
          border-color: rgba(112, 56, 253, 1);
          
@@ -1357,6 +1395,12 @@
   .ant-btn-primary:hover{
     background:rgba(112, 56, 253, .85);
   }
+}
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector:hover{
+  border-color: #7038fd;
+}
+.ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+  border-color: #7038fd;
 }
 //借款
 .borrowDetails{

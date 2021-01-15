@@ -70,10 +70,12 @@ class ExChange extends Component {
     });
   }
   stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    e.nativeEvent.stopImmediatePropagation();
+  }
   componentDidMount() {
-    document.addEventListener('click', this.onClose);
+    document.addEventListener("click", this.onClose);
+    document.addEventListener("click", this.onClose1);
+    document.addEventListener("click", this.onClose2);
     // this.getSelectTypes()
     this.getExchangeRecode();
     if (window.sessionStorage.getItem("btc_address")) {
@@ -88,10 +90,10 @@ class ExChange extends Component {
       // console.log(res)
       this.setState({ currenciesWithType: res.data.data });
       let temp = [];
-      temp = res.data.data
+      temp = res.data.data;
       // .btc.concat(res.data.data.libra);
       // temp = temp.concat(res.data.data.violas);
-      
+
       this.setState(
         {
           currencies: temp,
@@ -125,13 +127,13 @@ class ExChange extends Component {
                 arr[i].balance = 0;
                 break;
               } else if (arr[i].name == res.data.balances[j].name) {
-                console.log()
+                console.log();
                 arr[i].balance = res.data.balances[j].balance;
                 break;
               }
             }
           }
-          
+
           await this.setState(
             {
               violas_currencies: arr,
@@ -149,7 +151,7 @@ class ExChange extends Component {
                   selData: newArr,
                 },
                 () => {
-                  if (JSON.stringify(this.state.selData)!="[]") {
+                  if (JSON.stringify(this.state.selData) != "[]") {
                     if (this.state.type == "") {
                       this.setState(
                         {
@@ -253,12 +255,12 @@ class ExChange extends Component {
     return result;
   }
   async getCrossChainInfo() {
-    axios(
-      url1+"/1.0/market/exchange/crosschain/address/info"
-    ).then(async (res) => {
-      console.log(res,'.......')
-      await this.setState({ crossChainInfo: res.data.data });
-    });
+    axios(url1 + "/1.0/market/exchange/crosschain/address/info").then(
+      async (res) => {
+        console.log(res, ".......");
+        await this.setState({ crossChainInfo: res.data.data });
+      }
+    );
   }
   async getBytePath(arr) {
     let result = [];
@@ -286,7 +288,7 @@ class ExChange extends Component {
   }
   //兑换前
   async before_getSwap(input_type, output_type) {
-    console.log(this.state.currencies,'currencies');
+    console.log(this.state.currencies, "currencies");
     //change show name to name
     for (let i in this.state.currencies) {
       if (this.state.currencies[i].show_name === input_type) {
@@ -461,7 +463,7 @@ class ExChange extends Component {
     }
     let payee_address = _payee_address;
     let sequence = await this.fullWith16(getTimestamp);
-    console.log('sequence ', sequence)
+    console.log("sequence ", sequence);
     let module_address = code_data.btc.violas_module_address;
     let amount = await this.fullWith16(_amount);
     let time = "0000";
@@ -703,7 +705,6 @@ class ExChange extends Component {
           }, 500);
         });
     } else if (this.state.swap_in_type === "violas") {
-      
       const tx = await this.getViolasSwap(
         this.state.swap_out_type,
         sessionStorage.getItem("violas_chainId")
@@ -755,7 +756,7 @@ class ExChange extends Component {
     fetch(
       url1 +
         "/1.0/market/exchange/transaction?address=" +
-        sessionStorage.getItem("violas_address")+
+        sessionStorage.getItem("violas_address") +
         "&offset=0&limit=5"
     )
       .then((res) => res.json())
@@ -769,21 +770,21 @@ class ExChange extends Component {
       });
   };
   getShow = (event) => {
-    // this.stopPropagation(event)
+    this.stopPropagation(event)
     this.setState({
       showMenuViolas: !this.state.showMenuViolas,
       showMenuViolas1: false,
     });
   };
   getShow1 = (event) => {
-    // this.stopPropagation(event)
+    this.stopPropagation(event)
     this.setState({
       showMenuViolas1: !this.state.showMenuViolas1,
       showMenuViolas: false,
     });
   };
   //输入选中的币种
-  showMenu = (v, bal, i,type) => {
+  showMenu = (v, bal, i, type) => {
     this.setState(
       {
         swap_in_name: v,
@@ -876,7 +877,7 @@ class ExChange extends Component {
               swap_trial: res.data,
               inputAmount: res.data.amount / 1e6,
               exchangeRate: this.getFloat(res.data.rate, 6),
-              gasFee: this.getFloat(res.data.fee/1e6, 6)+'%',
+              gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
             });
           }
         });
@@ -974,11 +975,11 @@ class ExChange extends Component {
   //点击兑换
   showExchangeCode = () => {
     // console.log(this.state.inputAmount,this.state.outputAmount)
-    if(this.state.type1 == '选择通证'){
+    if (this.state.type1 == "选择通证") {
       this.setState({
-          warning: "请选择通证",
-        });
-    }else{
+        warning: "请选择通证",
+      });
+    } else {
       if (this.state.inputAmount) {
         if (this.state.outputAmount) {
           this.getSwap();
@@ -987,22 +988,31 @@ class ExChange extends Component {
             focusActive: true,
             showWallet: true,
           });
-        } else if(this.state.outputAmount == '' || '0'){
+        } else if (this.state.outputAmount == "" || "0") {
           this.setState({
             warning: "请输入兑换数量",
           });
         }
-      } else  if(this.state.inputAmount == '' || '0'){
+      } else if (this.state.inputAmount == "" || "0") {
         this.setState({
           warning: "请输入兑换数量",
         });
       }
     }
-    
   };
   onClose = () => {
     this.setState({
       visible: false,
+    });
+  };
+  onClose1 = () => {
+    this.setState({
+      showMenuViolas: false,
+    });
+  };
+  onClose2 = () => {
+    this.setState({
+      showMenuViolas1: false,
     });
   };
   showDrawer = (type) => {
@@ -1011,7 +1021,7 @@ class ExChange extends Component {
     });
   };
   //输出框选中的币种
-  showTypes = (v, address, ind, bal,type) => {
+  showTypes = (v, address, ind, bal, type) => {
     this.setState(
       {
         type1: v,
@@ -1081,21 +1091,21 @@ class ExChange extends Component {
     });
   };
   //兑换记录兑换币种及金额
-  getExchangeRecodeReturn = (from_chain,shown_name,amount) =>{
-    if (from_chain == 'btc') {
+  getExchangeRecodeReturn = (from_chain, shown_name, amount) => {
+    if (from_chain == "btc") {
       if (shown_name == null) {
-        return null
-      }else{
-        return amount/1e8
+        return null;
+      } else {
+        return amount / 1e8;
       }
-    }else{
+    } else {
       if (shown_name == null) {
         return null;
       } else {
         return amount / 1e6;
       }
     }
-  }
+  };
   render() {
     let {
       arr,
@@ -1176,10 +1186,14 @@ class ExChange extends Component {
                               key={i}
                               className={i == index ? "active" : null}
                               onClick={() =>
-                                this.showMenu(v.show_name, v.balance, i,v.icon.split("/")
-                                    [v.icon.split("/").length - 1].split(
-                                      "."
-                                    )[0])
+                                this.showMenu(
+                                  v.show_name,
+                                  v.balance,
+                                  i,
+                                  v.icon
+                                    .split("/")
+                                    [v.icon.split("/").length - 1].split(".")[0]
+                                )
                               }
                             >
                               {v.show_name}
@@ -1250,55 +1264,61 @@ class ExChange extends Component {
                             onChange={(e) => this.getSearchList(e)}
                           />
                         </div>
-                        {arr1.map((v, i) => {
-                          return (
-                            <div
-                              className="searchList"
-                              key={i}
-                              onClick={() =>
-                                this.showTypes(
-                                  v.show_name,
-                                  v.address,
-                                  i,
-                                  v.balance,
-                                  v.icon.split("/")
-                                    [v.icon.split("/").length - 1].split(
-                                      "."
-                                    )[0]
-                                )
-                              }
-                            >
-                              <div className="searchEvery">
-                                <img src={v.icon} />
-                                <div className="searchEvery1">
-                                  <div>
-                                    <h4>{v.show_name}</h4>
-                                    <p>
-                                      余额：
-                                      {v.icon
-                                    .split("/")
-                                    [v.icon.split("/").length - 1].split(
-                                      "."
-                                    )[0] == "btc"
-                                    ? v.balance == 0
-                                      ? 0
-                                      : this.getFloat(v.balance / 1e8, 8)
-                                    : v.balance == 0
-                                    ? 0
-                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
-                                      {v.show_name}
-                                    </p>
+                        <div className="searchWrap">
+                          {arr1.map((v, i) => {
+                            return (
+                              <div
+                                className="searchList"
+                                key={i}
+                                onClick={() =>
+                                  this.showTypes(
+                                    v.show_name,
+                                    v.address,
+                                    i,
+                                    v.balance,
+                                    v.icon
+                                      .split("/")
+                                      [v.icon.split("/").length - 1].split(
+                                        "."
+                                      )[0]
+                                  )
+                                }
+                              >
+                                <div className="searchEvery">
+                                  <img src={v.icon} />
+                                  <div className="searchEvery1">
+                                    <div>
+                                      <h4>{v.show_name}</h4>
+                                      <p>
+                                        余额：
+                                        {v.icon
+                                          .split("/")
+                                          [v.icon.split("/").length - 1].split(
+                                            "."
+                                          )[0] == "btc"
+                                          ? v.balance == 0
+                                            ? 0
+                                            : this.getFloat(v.balance / 1e8, 8)
+                                          : v.balance == 0
+                                          ? 0
+                                          : this.getFloat(
+                                              v.balance / 1e6,
+                                              6
+                                            )}{" "}
+                                        {v.show_name}
+                                      </p>
+                                    </div>
+                                    <span
+                                      className={
+                                        ind == i ? "check active" : "check"
+                                      }
+                                    ></span>
                                   </div>
-                                  <span
-                                    className={
-                                      ind == i ? "check active" : "check"
-                                    }
-                                  ></span>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     ) : null}
                     <div className="dropdown-content2">
@@ -1332,7 +1352,7 @@ class ExChange extends Component {
                   </div>
                 </div>
               </div>
-              {exchangeRate == "--" || '0' ? (
+              {exchangeRate == "--" || "0" ? (
                 <div className="changeRate">兑换率：--</div>
               ) : (
                 <div className="changeRate">兑换率：1:{exchangeRate}</div>

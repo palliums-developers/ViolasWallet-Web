@@ -35,6 +35,9 @@ class BorrowDetails extends Component {
       depositProduct: [],
     };
   }
+  stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+  }
   async componentWillMount() {
     await this.getNewWalletConnect();
     await this.getBorrowProduct();
@@ -90,6 +93,7 @@ class BorrowDetails extends Component {
       });
   }
   componentDidMount() {
+    document.addEventListener("click", this.onClose);
     //获取借款产品信息
     fetch(
       url +
@@ -185,7 +189,7 @@ class BorrowDetails extends Component {
     let parm = {
       address: address,
       product_id: product_id,
-      value: parseInt(value) *1e6,
+      value: parseInt(value) * 1e6,
       sigtxn: sigtxn,
     };
     // console.log(parm)
@@ -217,7 +221,7 @@ class BorrowDetails extends Component {
           }, 500);
         }
       })
-      .catch((error)=>{
+      .catch((error) => {
         this.setState({
           warning: "借款失败",
           showWallet: false,
@@ -230,6 +234,12 @@ class BorrowDetails extends Component {
         }, 500);
       });
   }
+  //显示关闭侧边栏
+  onClose = () => {
+    this.setState({
+      showList: false,
+    });
+  };
   closeWallet = (val) => {
     this.setState({
       showWallet: val,
@@ -265,7 +275,8 @@ class BorrowDetails extends Component {
               <label>我要借</label>
               <div className="dropdown1">
                 <span
-                  onClick={() => {
+                  onClick={(e) => {
+                    this.stopPropagation(e);
                     this.setState({
                       showList: !this.state.showList,
                     });
@@ -371,11 +382,15 @@ class BorrowDetails extends Component {
             <p className="btn" onClick={() => this.borrowingImmediately()}>
               立即借款
             </p>
-            <p className={
+            <p
+              className={
                 this.state.warning == "借款成功"
                   ? "descr descrWarn"
                   : "descr descrRed"
-              }>{this.state.warning}</p>
+              }
+            >
+              {this.state.warning}
+            </p>
           </div>
           <div className="productDescr">
             <div className="h3">

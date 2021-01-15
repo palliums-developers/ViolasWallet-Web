@@ -554,6 +554,7 @@ class DigitalBank extends Component {
                       </i>
                     </span>
                   )}
+                  <div className="searchWrap">
                   {showDealType ? (
                     <div className="dropdown-content1">
                       <div className="formSearch">
@@ -603,6 +604,7 @@ class DigitalBank extends Component {
                       })}
                     </div>
                   ) : null}
+                  </div>
                 </div>
               </div>
               <div className="arrow">

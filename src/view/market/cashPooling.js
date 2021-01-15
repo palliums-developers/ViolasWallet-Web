@@ -169,19 +169,19 @@ class CashPooling extends Component {
     }
   }
   getShow = (event) => {
-    // this.stopPropagation(event)
+    this.stopPropagation(event)
     this.setState({
       showMenuViolas: !this.state.showMenuViolas,
     });
   };
   getShow1 = (event) => {
-    // this.stopPropagation(event)
+    this.stopPropagation(event)
     this.setState({
       showMenuViolas1: !this.state.showMenuViolas1,
     });
   };
   getShow2 = (event) => {
-    // this.stopPropagation(event)
+    this.stopPropagation(event)
     this.setState({
       showMenuViolas2: !this.state.showMenuViolas2,
     });
@@ -620,14 +620,16 @@ class CashPooling extends Component {
     this.setState({
       visible1: false,
       showpooling: false,
+      showMenuViolas: false,
+      showMenuViolas1: false,
+      showMenuViolas2: false,
     });
   };
-  // onClose1 = () => {
-  //   // e.stopPropagation()
-  //   this.setState({
-  //     showpooling: false,
-  //   });
-  // };
+  onClose2 = () => {
+    this.setState({
+      visible1: false,
+    });
+  };
   showDrawer = (type) => {
     this.setState({
       visible1: type,
@@ -1001,13 +1003,13 @@ class CashPooling extends Component {
     });
   };
   getMineDialog = (event) => {
-    // event.stopPropagation();
+    this.stopPropagation(event);
     this.setState({
       showMineDialog: true
     });
   };
   getMineDialog1 = (event) => {
-    // event.stopPropagation();
+    this.stopPropagation(event);
     this.setState({
       showMineDialog: false
     });
@@ -1074,9 +1076,12 @@ class CashPooling extends Component {
           )}
 
           <div className="exchangeContents">
-            <div className="goRules" onClick={()=>{
+            <div
+              className="goRules"
+              onClick={() => {
                 this.props.history.push("/homepage/home/ruleDescription");
-              }}>
+              }}
+            >
               <div>
                 <h4>挖矿福利</h4>
                 <p>现在加入资金池可获得同手续费奖励等价的VLS挖矿福利</p>
@@ -1182,49 +1187,51 @@ class CashPooling extends Component {
                               onChange={(e) => this.getSearchList(e)}
                             />
                           </div>
-                          {arr.map((v, i) => {
-                            return (
-                              <div
-                                className="searchList"
-                                key={i}
-                                onClick={() => {
-                                  if (v.show_name == "BTC") {
-                                    this.showMenu(v.show_name, v.BTC, i);
-                                  } else {
-                                    this.showMenu(v.show_name, v.balance, i);
-                                  }
-                                }}
-                              >
-                                <div className="searchEvery">
-                                  <img src={v.show_icon} />
-                                  <div className="searchEvery1">
-                                    <div>
-                                      <h4>{v.show_name}</h4>
-                                      <p>
-                                        余额：
-                                        {v.show_name == "BTC"
-                                          ? v.BTC == 0
+                          <div className="searchWrap">
+                            {arr.map((v, i) => {
+                              return (
+                                <div
+                                  className="searchList"
+                                  key={i}
+                                  onClick={() => {
+                                    if (v.show_name == "BTC") {
+                                      this.showMenu(v.show_name, v.BTC, i);
+                                    } else {
+                                      this.showMenu(v.show_name, v.balance, i);
+                                    }
+                                  }}
+                                >
+                                  <div className="searchEvery">
+                                    <img src={v.show_icon} />
+                                    <div className="searchEvery1">
+                                      <div>
+                                        <h4>{v.show_name}</h4>
+                                        <p>
+                                          余额：
+                                          {v.show_name == "BTC"
+                                            ? v.BTC == 0
+                                              ? 0
+                                              : this.getFloat(v.BTC / 1e8, 6)
+                                            : v.balance == 0
                                             ? 0
-                                            : this.getFloat(v.BTC / 1e8, 6)
-                                          : v.balance == 0
-                                          ? 0
-                                          : this.getFloat(
-                                              v.balance / 1e6,
-                                              6
-                                            )}{" "}
-                                        {v.show_name}
-                                      </p>
+                                            : this.getFloat(
+                                                v.balance / 1e6,
+                                                6
+                                              )}{" "}
+                                          {v.show_name}
+                                        </p>
+                                      </div>
+                                      <span
+                                        className={
+                                          index == i ? "check active" : "check"
+                                        }
+                                      ></span>
                                     </div>
-                                    <span
-                                      className={
-                                        index == i ? "check active" : "check"
-                                      }
-                                    ></span>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
+                          </div>
                         </div>
                       ) : null}
                     </div>
@@ -1515,7 +1522,8 @@ class CashPooling extends Component {
                     <div
                       key={i}
                       className="poolRecordList"
-                      onClick={() => {
+                      onClick={(e) => {
+                        this.stopPropagation(e)
                         this.setState({
                           visible1: true,
                           changeList: v,
@@ -1619,6 +1627,7 @@ class CashPooling extends Component {
           // title="Basic Drawer"
           placement="right"
           closable={false}
+          onClose={this.onClose2}
           visible={this.state.visible1}
           mask={false}
           getContainer={false}
