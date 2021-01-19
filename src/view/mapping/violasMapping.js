@@ -66,9 +66,9 @@ class ViolasMapping extends Component {
             let result = 0;
             if (res.data.published.length > 0) {
               for (let i = 0; i <= res.data.published.length; i++) {
-                if (res.data.published[i] == "LBR") {
+                if (res.data.published[i] == "VLS") {
                   result += 1;
-                } else if (res.data.published[i] == "VLSUSD") {
+                } else if (res.data.published[i] == "vUSDT") {
                   result += 1;
                 }
               }
