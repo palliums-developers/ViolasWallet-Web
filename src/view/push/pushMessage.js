@@ -299,3 +299,9 @@ let mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PushMessage);
+{/* <div className="blankWrap">
+  <div className="blank">
+    <img src="/img/blankPage.png" />
+    <p>暂无消息</p>
+  </div>
+</div>; */}
