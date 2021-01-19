@@ -101,7 +101,7 @@ class DigitalBank extends Component {
     fetch(url + "/1.0/market/exchange/crosschain/address/info")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        console.log(res,'......')
         if (res.data) {
           let violasArr = [],
             libraArr = [],
@@ -140,7 +140,10 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then(async (res) => {
+        console.log(res)
         if (res.data) {
+          if (JSON.stringify(this.state.violas_mappingInfo.length)!="[]") {
+          
           let arr = this.state.violas_mappingInfo;
           for (let i = 0; i < arr.length; i++) {
             for (let j = 0; j <= res.data.balances.length; j++) {
@@ -165,12 +168,13 @@ class DigitalBank extends Component {
               );
               let newArr = arr.concat(this.state.btc_mappingInfo);
               // console.log(newArr[0] && newArr[0].balance)
+              console.log(newArr, "newArr......");
               this.setState(
                 {
                   selData: newArr,
                 },
                 () => {
-                  if (this.state.selData) {
+                  if (JSON.stringify(this.state.selData)!="[]") {
                     if (this.state.type == "") {
                       this.setState(
                         {
@@ -189,6 +193,7 @@ class DigitalBank extends Component {
             }
           );
         }
+        }
       });
     //获取libra币种的余额
     fetch(
@@ -198,6 +203,7 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         if (res.data) {
           let arr1 = this.state.libra_mappingInfo;
           for (let i = 0; i < arr1.length; i++) {
@@ -219,8 +225,12 @@ class DigitalBank extends Component {
     fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress)
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         if (res.data) {
-          this.state.btc_mappingInfo[0].balance = res.data[0].BTC;
+          if (JSON.stringify(this.state.btc_mappingInfo)!="[]") {
+            this.state.btc_mappingInfo[0].balance = res.data[0].BTC;
+          }
+          
         } else {
           return;
         }
@@ -555,55 +565,55 @@ class DigitalBank extends Component {
                     </span>
                   )}
                   <div className="searchWrap">
-                  {showDealType ? (
-                    <div className="dropdown-content1">
-                      <div className="formSearch">
-                        <img src="/img/sousuo 2@2x.png" />
-                        <input
-                          placeholder="Search"
-                          onChange={(e) => this.getSearchList(e)}
-                        />
-                      </div>
-                      {selData.map((v, i) => {
-                        return (
-                          <div
-                            className="searchList"
-                            key={i}
-                            onClick={() =>
-                              this.showTypes(
-                                v.from_coin.assert.show_name,
-                                v.balance,
-                                v.from_coin.assert.name,
-                                i,
-                                v
-                              )
-                            }
-                          >
-                            <div className="searchEvery">
-                              <img src={v.from_coin.assert.icon} />
-                              <div className="searchEvery1">
-                                <div>
-                                  <h4>{v.from_coin.assert.show_name}</h4>
-                                  <p>
-                                    余额：
-                                    {v.from_coin.coin_type == "btc"
-                                      ? v.balance / 1e8
-                                      : v.balance / 1e6}{" "}
-                                    {v.from_coin.assert.show_name}
-                                  </p>
+                    {showDealType ? (
+                      <div className="dropdown-content1">
+                        <div className="formSearch">
+                          <img src="/img/sousuo 2@2x.png" />
+                          <input
+                            placeholder="Search"
+                            onChange={(e) => this.getSearchList(e)}
+                          />
+                        </div>
+                        {selData.map((v, i) => {
+                          return (
+                            <div
+                              className="searchList"
+                              key={i}
+                              onClick={() =>
+                                this.showTypes(
+                                  v.from_coin.assert.show_name,
+                                  v.balance,
+                                  v.from_coin.assert.name,
+                                  i,
+                                  v
+                                )
+                              }
+                            >
+                              <div className="searchEvery">
+                                <img src={v.from_coin.assert.icon} />
+                                <div className="searchEvery1">
+                                  <div>
+                                    <h4>{v.from_coin.assert.show_name}</h4>
+                                    <p>
+                                      余额：
+                                      {v.from_coin.coin_type == "btc"
+                                        ? v.balance / 1e8
+                                        : v.balance / 1e6}{" "}
+                                      {v.from_coin.assert.show_name}
+                                    </p>
+                                  </div>
+                                  <span
+                                    className={
+                                      ind == i ? "check active" : "check"
+                                    }
+                                  ></span>
                                 </div>
-                                <span
-                                  className={
-                                    ind == i ? "check active" : "check"
-                                  }
-                                ></span>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : null}
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -655,11 +665,11 @@ class DigitalBank extends Component {
                 <div className="tokenList1">
                   <p>将链接复制到以下钱包，即可将ETH代币映射至violas钱包</p>
                   <CopyToClipboard
-                    text="localhost:12222/violasMapping"
+                    text="https://wallet.violas.io/violasMapping"
                     onCopy={() => message.success("复制成功")}
                   >
                     <a>
-                      localhost:12222/violasMapping
+                      https://wallet.violas.io/violasMapping
                       <img src="/img/fuzhi 3@2x.png" />
                     </a>
                   </CopyToClipboard>
