@@ -75,7 +75,7 @@ class HomeContent extends Component {
   }
   getBalances = async () => {
     let initCoinsList = [];
-    await this.getBTCBalances();
+    this.getBTCBalances();
     //violas余额列表
     fetch(
       url1 +
@@ -175,6 +175,8 @@ class HomeContent extends Component {
                             checkData: JSON.parse(
                               window.sessionStorage.getItem("checkData")
                             ),
+                          },()=>{
+                                 this.getTotalAmount();
                           });
                         }
                       }
@@ -294,6 +296,8 @@ class HomeContent extends Component {
                         checkData: JSON.parse(
                           window.sessionStorage.getItem("checkData")
                         ),
+                      },()=>{
+                           this.getTotalAmount()
                       });
                       // }
                     }
@@ -364,6 +368,40 @@ class HomeContent extends Component {
         //  }
       });
   };
+  getTotalAmount(){
+    let amount = 0;
+    console.log(this.state.checkData);
+    for (let i = 0; i < this.state.checkData.length; i++) {
+      amount += Number(
+        this.getFloat(
+          (this.state.checkData[i].balance / 1e6) *
+            this.state.checkData[i].rate,
+          6
+        )
+      );
+    }
+    this.setState(
+      {
+        coinsBalance: amount,
+      },
+      () => {
+        window.sessionStorage.setItem(
+          "balances",
+          this.state.coinsBalance + this.state.BTCBalance
+        );
+        //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
+        this.setState(
+          {
+            totalAmount: this.getFloat(
+              this.state.coinsBalance + this.state.BTCBalance,
+              2
+            ),
+          },
+          () => {}
+        );
+      }
+    );
+  }
   getBTCBalances() {
     fetch(
       url1 +
@@ -401,6 +439,8 @@ class HomeContent extends Component {
                 }
                 this.setState({
                   BTCBalance: BTCBalance,
+                },()=>{
+                  this.getTotalAmount();
                 });
               });
           }

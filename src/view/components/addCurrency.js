@@ -53,7 +53,7 @@ class AddCurrency extends Component {
       BTCBalance: nextProps.BTCBalance,
     });
     if (this.state.checkData.length == 0) {
-      console.log("000");
+      // console.log("000");
       await this.setState({
         checkData: nextProps.checkData,
       });
