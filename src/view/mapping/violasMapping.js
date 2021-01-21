@@ -12,9 +12,9 @@ class ViolasMapping extends Component {
     this.state = {
       bridge: "https://walletconnect.violas.io",
       walletConnector: {},
-      address:"",
-      result:-1,
-      connected:false
+      address: "",
+      result: -1,
+      connected: false,
     };
     this.eth = null;
   }
@@ -38,7 +38,7 @@ class ViolasMapping extends Component {
       this.eth = window.web3.eth;
       this.props.getEth(this.eth);
       this.setState({
-        connected: true
+        connected: true,
       });
       this.setState({
         connected: true,
@@ -50,15 +50,16 @@ class ViolasMapping extends Component {
     });
     console.log("The link was clicked.");
   };
-  getValue = (e) =>{
+  //设置目标地址
+  getValue = (e) => {
     // console.log(e)
-     this.setState({
-       address:e.target.value
-     })
-  }
+    this.setState({
+      address: e.target.value,
+    });
+  };
   //点击确认
   confirmfun = () => {
-    if(this.state.connected){
+    if (this.state.connected) {
       if (this.state.address) {
         fetch(url + "/1.0/violas/currency/published?addr=" + this.state.address)
           .then((res) => res.json())
@@ -73,21 +74,22 @@ class ViolasMapping extends Component {
                 }
               }
             }
-            this.setState({
-              result: result,
-            },()=>{
-                if (this.state.result==2) {
+            this.setState(
+              {
+                result: result,
+              },
+              () => {
+                if (this.state.result == 2) {
                   this.props.history.push("/violasExchange");
                 }
-            });
+              }
+            );
             // console.log(result, ".........");
           });
       }
-    }else{
+    } else {
       this.connectWallet();
     }
-    
-    
   };
   render() {
     let { result } = this.state;
@@ -103,10 +105,11 @@ class ViolasMapping extends Component {
                 placeholder="请输入钱包地址"
                 onChange={(e) => this.getValue(e)}
               />
-              {
-              result == 0 ? <span>钱包尚未激活，请先到Violas钱包激活</span> : result == 1 ? <span>钱包尚未publish，请先到violas钱包publis</span>  : null
-              }
-              
+              {result == 0 ? (
+                <span>钱包尚未激活，请先到Violas钱包激活</span>
+              ) : result == 1 ? (
+                <span>钱包尚未publish，请先到violas钱包publis</span>
+              ) : null}
             </div>
             <div className="confirmBtn" onClick={() => this.confirmfun()}>
               确 认

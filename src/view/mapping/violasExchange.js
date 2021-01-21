@@ -11,6 +11,7 @@ class ViolasExchange extends Component {
   constructor() {
     super();
     this.state = {
+      account: "",
       bridge: "https://walletconnect.violas.io",
       walletConnector: {},
       connected: false,
@@ -18,7 +19,7 @@ class ViolasExchange extends Component {
       coinName: "",
       token: [
         {
-          name: "VLSTUSDT",
+          name: "vUSDT",
           address: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
         },
       ],
@@ -49,27 +50,52 @@ class ViolasExchange extends Component {
     if (this.props.eth == null) {
       this.connectWallet();
     } else {
-      this.eth = this.props.eth;
-      this.setState({
+      this.setAccount();
+    }
+    this.listen_eth_account();
+  }
+  setAccount = async () => {
+    this.eth = this.props.eth;
+    await this.setState(
+      {
         connected: true,
         account: this.eth.defaultAccount,
-      },()=>{
+      },
+      () => {
         this.queryTokenBalance();
-      });
-    }
-  }
+      }
+    );
+  };
+  listen_eth_account = () => {
+    this.timer = setInterval(async () => {
+      if (this.state.connected) {
+        if (
+          (await window.web3.eth.getAccounts().then((res) => {
+            return res[0];
+          })) != this.state.account
+        ) {
+          console.log("change account");
+          this.connectWallet();
+        }
+      }
+    }, 1000);
+  };
   // 连接 ETH 钱包
   connectWallet = () => {
-    
-    window.ethereum.enable().then(() => {
+    window.ethereum.enable().then(async () => {
       this.eth = window.web3.eth;
-      
-      this.setState({
-        connected: true,
-        account: this.eth.defaultAccount,
-      },()=>{
-        this.queryTokenBalance();
-      });
+      await this.setState(
+        {
+          connected: true,
+          // account: this.eth.defaultAccount,
+          account: await window.web3.eth.getAccounts().then((res) => {
+            return res[0];
+          }),
+        },
+        () => {
+          this.queryTokenBalance();
+        }
+      );
       console.log("connect success.");
     });
     this.setState({
@@ -187,7 +213,6 @@ class ViolasExchange extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
-      console.log()
       let tokenContractAddress = this.state.tokenContractAddress;
       let account = this.state.account;
 
@@ -209,7 +234,6 @@ class ViolasExchange extends Component {
         },
         [account]
       );
-
       // 调用兑换合约，发起兑换
       // ETH 合于调用
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#call
@@ -218,13 +242,14 @@ class ViolasExchange extends Component {
           to: tokenContractAddress,
           data: functionCallAbi,
         })
-        .then((resultAbi) => {
+        .then(async (resultAbi) => {
           let result = this.eth.abi.decodeParameters(["uint256"], resultAbi);
           // console.log(result[0]);
-          this.setState({
+          await this.setState({
             tokenBalance: result[0] / 1e6,
           });
         });
+      console.log(account, tokenContractAddress, this.state.tokenBalance);
     }
   };
   //输入数量
@@ -264,7 +289,6 @@ class ViolasExchange extends Component {
   };
   render() {
     let { tokenBalance, token, coinName, swapAmount } = this.state;
-    // console.log(balance,'...........');
     return (
       <div className="violasExchange">
         <div className="violasExchangeContent">
@@ -273,7 +297,7 @@ class ViolasExchange extends Component {
             <div className="form">
               <div>
                 <p>选择地址</p>
-                <Form.Item label="">
+                {/* <Form.Item label="">
                   <Select
                     value="0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8"
                     // value={this.state.swapContractAddress}
@@ -283,7 +307,8 @@ class ViolasExchange extends Component {
                       0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8
                     </Select.Option>
                   </Select>
-                </Form.Item>
+                </Form.Item> */}
+                <Input value={this.state.account}></Input>
               </div>
               <div>
                 <p>
@@ -347,6 +372,7 @@ class ViolasExchange extends Component {
     );
   }
 }
+
 let mapStateToProps = (state) => {
   return state.ListReducer;
 };
