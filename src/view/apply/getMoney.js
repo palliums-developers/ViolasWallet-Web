@@ -12,7 +12,8 @@ class GetMoney extends Component {
       super()
       this.state = {
         types: ['Violas', 'Libra','Bitcoin'],
-        type: 'Violas',
+        type: '',
+        type1:"",
         title: '',
         showDealType: false,
         address:'',
@@ -22,7 +23,6 @@ class GetMoney extends Component {
         arr:[],
         BTCBalances:[],
         BTCAddress:'',
-        type:'',
         coinName:'',
         coinNameType:'',
         ind:0
@@ -35,42 +35,35 @@ class GetMoney extends Component {
       })
     }
     showTypes = (v,address,name,ind) => {
-      
-      if(v == 'VLS'){
+      // console.log(name);
+      if (v == "violas") {
         this.setState({
-          type: v,
-          coinName: 'violas-'+name.toLowerCase(),
+          type: name,
+          type1:v,
+          coinName: "violas://",
           address: address,
           showDealType: false,
-          ind:ind
-        })
-      }else{
-        if (name.indexOf('VLS') == 0){
-          this.setState({
-            type: v,
-            coinName: 'violas-' + name.toLowerCase(),
-            address: address,
-            showDealType: false,
-            ind: ind
-          })
-        } else if (name == 'BTC'){
-          this.setState({
-            type: v,
-            coinName: 'bitcoin',
-            address: this.state.BTCAddress,
-            showDealType: false,
-            ind: ind
-          })
-         }else{
-          this.setState({
-            type: v,
-            coinName: 'libra-' + name.toLowerCase(),
-            address: address,
-            showDealType: false,
-            ind: ind
-          })
-         }
-      }
+          ind: ind,
+        });
+      } else if (v == "libra") {
+        this.setState({
+          type: name,
+          type1: v,
+          coinName: "libra://",
+          address: address,
+          showDealType: false,
+          ind: ind,
+        });
+      } else {
+        this.setState({
+          type: name,
+          type1: v,
+          coinName: "bitcoin:",
+          address: this.state.BTCAddress,
+          showDealType: false,
+          ind: ind,
+        });
+      } 
       
     }
   
@@ -108,10 +101,12 @@ class GetMoney extends Component {
               },
               () => {
                 this.getBalances();
+                
               }
             );
           } else {
             this.getBalances();
+            
           }
         });
     }
@@ -131,9 +126,28 @@ class GetMoney extends Component {
               this.setState({
                 arr: newArr,
                 type: newArr[0].show_name,
-                address: newArr[0].show_name == 'BTC' ? this.state.BTCAddress : newArr[0].address,
-                ind: Object.keys(newArr)[0]
-              })
+                type1:newArr[0].show_icon
+                    .split("/")
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0],
+                coinName:
+                  newArr[0].show_icon
+                    .split("/")
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
+                  "violas"
+                    ? "violas://"
+                    : newArr[0].show_icon
+                        .split("/")
+                        [newArr[0].show_icon.split("/").length - 1].split(
+                          "."
+                        )[0] == "libra"
+                    ? "libra://"
+                    : "bitcoin",
+                address:
+                  newArr[0].show_name == "BTC"
+                    ? this.state.BTCAddress
+                    : newArr[0].address,
+                ind: Object.keys(newArr)[0],
+              });
             }
             })
           }
@@ -153,9 +167,25 @@ class GetMoney extends Component {
               this.setState({
                 arr: newArr,
                 type: newArr[0].show_name,
+                type1: newArr[0].show_icon
+                  .split("/")
+                  [newArr[0].show_icon.split("/").length - 1].split(".")[0],
+                coinName:
+                  newArr[0].show_icon
+                    .split("/")
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
+                  "violas"
+                    ? "violas://"
+                    : newArr[0].show_icon
+                        .split("/")
+                        [newArr[0].show_icon.split("/").length - 1].split(
+                          "."
+                        )[0] == "libra"
+                    ? "libra://"
+                    : "bitcoin",
                 address: newArr[0].address,
-                ind: Object.keys(newArr)[0]
-              })
+                ind: Object.keys(newArr)[0],
+              });
             })
           } else {
             if (this.state.arr1) {
@@ -167,9 +197,28 @@ class GetMoney extends Component {
               this.setState({
                 arr: newArr,
                 type: newArr[0].show_name,
-                address: newArr[0].show_name == 'BTC' ? this.state.BTCAddress : newArr[0].address,
-                ind: Object.keys(newArr)[0]
-              })
+                type1: newArr[0].show_icon
+                  .split("/")
+                  [newArr[0].show_icon.split("/").length - 1].split(".")[0],
+                coinName:
+                  newArr[0].show_icon
+                    .split("/")
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
+                  "violas"
+                    ? "violas://"
+                    : newArr[0].show_icon
+                        .split("/")
+                        [newArr[0].show_icon.split("/").length - 1].split(
+                          "."
+                        )[0] == "libra"
+                    ? "libra://"
+                    : "bitcoin",
+                address:
+                  newArr[0].show_name == "BTC"
+                    ? this.state.BTCAddress
+                    : newArr[0].address,
+                ind: Object.keys(newArr)[0],
+              });
             }
           }
         })
@@ -224,7 +273,7 @@ class GetMoney extends Component {
     }
     render(){
       let { address, showDealType, type, dis, arr, coinName,ind } = this.state;
-      // console.log(arr,'.....arr')
+      // console.log(arr, ".....arr");
         return (
           <div className="getMoney">
             <div className="dialogContent">
@@ -272,7 +321,16 @@ class GetMoney extends Component {
                             className="searchList"
                             key={i}
                             onClick={() =>
-                              this.showTypes(v.show_name, v.address, v.name, i)
+                              this.showTypes(
+                                v.show_icon
+                                  .split("/")
+                                  [v.show_icon.split("/").length - 1].split(
+                                    "."
+                                  )[0],
+                                v.address,
+                                v.name,
+                                i
+                              )
                             }
                           >
                             <div className="searchEvery">
@@ -311,7 +369,13 @@ class GetMoney extends Component {
                 ) : null}
               </div>
               <div className="qrCode">
-                <QRCode value={coinName + ":" + address + "?amount=0"}></QRCode>
+                {this.state.type1 == "violas" ? (
+                  <QRCode value={coinName + address +"?c=" + this.state.type}></QRCode>
+                ) : this.state.type1 == "libra" ? (
+                  <QRCode value={coinName  + address+"?c=" + this.state.type}></QRCode>
+                ) : (
+                  <QRCode value={coinName + this.state.BTCAddress}></QRCode>
+                )}
               </div>
               <div className="addressCode">
                 <span id="add">{address}</span>

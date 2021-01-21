@@ -267,6 +267,7 @@ class Transfer extends Component {
   };
   //获取到输入数量
   getTransAmount = (e) => {
+    console.log(e.target.value);
     this.setState(
       {
         amount: e.target.value,
@@ -351,6 +352,7 @@ class Transfer extends Component {
   }
   //violas转账
   async violas_sendTransaction(chainId) {
+    // console.log(this.state.amount)
     const tx = {
       from: window.sessionStorage.getItem("violas_address"),
       payload: {
