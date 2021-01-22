@@ -108,7 +108,7 @@ class ViolasMapping extends Component {
               {result == 0 ? (
                 <span>钱包尚未激活，请先到Violas钱包激活</span>
               ) : result == 1 ? (
-                <span>钱包尚未publish，请先到violas钱包publis</span>
+                <span>钱包尚未publish，请先到violas钱包publish</span>
               ) : null}
             </div>
             <div className="confirmBtn" onClick={() => this.confirmfun()}>

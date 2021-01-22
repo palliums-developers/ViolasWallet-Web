@@ -370,7 +370,7 @@ class HomeContent extends Component {
   };
   getTotalAmount(){
     let amount = 0;
-    console.log(this.state.checkData);
+    // console.log(this.state.checkData);
     for (let i = 0; i < this.state.checkData.length; i++) {
       amount += Number(
         this.getFloat(

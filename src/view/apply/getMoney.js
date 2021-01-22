@@ -4,8 +4,10 @@ import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import intl from "react-intl-universal";
+const { encode, decode } = require("../../utils/bech32");
 let url = "https://api.violas.io";
 let url1 = "https://api4.violas.io";
+
 //收款
 class GetMoney extends Component {
     constructor(props){
@@ -25,7 +27,8 @@ class GetMoney extends Component {
         BTCAddress:'',
         coinName:'',
         coinNameType:'',
-        ind:0
+        ind:0,
+        bech32:''
       }
     }
     getTypeShow = (event) => {
@@ -34,26 +37,55 @@ class GetMoney extends Component {
         showDealType: !this.state.showDealType
       })
     }
+    getBech32(addr){
+      let example = {
+        prefix: 'lbr',
+        type: 1,
+        address: addr,
+        sub_address1: "0x0000000000000000",
+      };
+      let encode1 = encode(
+        example.prefix,
+        example.type,
+        example.address,
+        example.sub_address1
+      );
+      return encode1;
+    }
     showTypes = (v,address,name,ind) => {
       // console.log(name);
       if (v == "violas") {
-        this.setState({
-          type: name,
-          type1:v,
-          coinName: "violas://",
-          address: address,
-          showDealType: false,
-          ind: ind,
-        });
+        this.setState(
+          {
+            type: name,
+            type1: v,
+            coinName: "violas://",
+            address: address,
+            showDealType: false,
+            ind: ind,
+          },
+          () => {
+            this.setState({
+              bech32: this.getBech32(this.state.address),
+            });
+          }
+        );
       } else if (v == "libra") {
-        this.setState({
-          type: name,
-          type1: v,
-          coinName: "libra://",
-          address: address,
-          showDealType: false,
-          ind: ind,
-        });
+        this.setState(
+          {
+            type: name,
+            type1: v,
+            coinName: "diem://",
+            address: address,
+            showDealType: false,
+            ind: ind,
+          },
+          () => {
+            this.setState({
+              bech32: this.getBech32(this.state.address),
+            });
+          }
+        );
       } else {
         this.setState({
           type: name,
@@ -123,31 +155,39 @@ class GetMoney extends Component {
               newArr.sort((a, b) => {
                 return b.balance - a.balance
               })
-              this.setState({
-                arr: newArr,
-                type: newArr[0].show_name,
-                type1:newArr[0].show_icon
+              this.setState(
+                {
+                  arr: newArr,
+                  type: newArr[0].show_name,
+                  type1: newArr[0].show_icon
                     .split("/")
                     [newArr[0].show_icon.split("/").length - 1].split(".")[0],
-                coinName:
-                  newArr[0].show_icon
-                    .split("/")
-                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
-                  "violas"
-                    ? "violas://"
-                    : newArr[0].show_icon
-                        .split("/")
-                        [newArr[0].show_icon.split("/").length - 1].split(
-                          "."
-                        )[0] == "libra"
-                    ? "libra://"
-                    : "bitcoin",
-                address:
-                  newArr[0].show_name == "BTC"
-                    ? this.state.BTCAddress
-                    : newArr[0].address,
-                ind: Object.keys(newArr)[0],
-              });
+                  coinName:
+                    newArr[0].show_icon
+                      .split("/")
+                      [newArr[0].show_icon.split("/").length - 1].split(
+                        "."
+                      )[0] == "violas"
+                      ? "violas://"
+                      : newArr[0].show_icon
+                          .split("/")
+                          [newArr[0].show_icon.split("/").length - 1].split(
+                            "."
+                          )[0] == "libra"
+                      ? "diem://"
+                      : "bitcoin",
+                  address:
+                    newArr[0].show_name == "BTC"
+                      ? this.state.BTCAddress
+                      : newArr[0].address,
+                  ind: Object.keys(newArr)[0],
+                },
+                () => {
+                  this.setState({
+                    bech32: this.getBech32(this.state.address),
+                  });
+                }
+              );
             }
             })
           }
@@ -164,28 +204,36 @@ class GetMoney extends Component {
               newArr.sort((a, b) => {
                 return b.balance - a.balance
               })
-              this.setState({
-                arr: newArr,
-                type: newArr[0].show_name,
-                type1: newArr[0].show_icon
-                  .split("/")
-                  [newArr[0].show_icon.split("/").length - 1].split(".")[0],
-                coinName:
-                  newArr[0].show_icon
+              this.setState(
+                {
+                  arr: newArr,
+                  type: newArr[0].show_name,
+                  type1: newArr[0].show_icon
                     .split("/")
-                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
-                  "violas"
-                    ? "violas://"
-                    : newArr[0].show_icon
-                        .split("/")
-                        [newArr[0].show_icon.split("/").length - 1].split(
-                          "."
-                        )[0] == "libra"
-                    ? "libra://"
-                    : "bitcoin",
-                address: newArr[0].address,
-                ind: Object.keys(newArr)[0],
-              });
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0],
+                  coinName:
+                    newArr[0].show_icon
+                      .split("/")
+                      [newArr[0].show_icon.split("/").length - 1].split(
+                        "."
+                      )[0] == "violas"
+                      ? "violas://"
+                      : newArr[0].show_icon
+                          .split("/")
+                          [newArr[0].show_icon.split("/").length - 1].split(
+                            "."
+                          )[0] == "libra"
+                      ? "diem://"
+                      : "bitcoin",
+                  address: newArr[0].address,
+                  ind: Object.keys(newArr)[0],
+                },
+                () => {
+                  this.setState({
+                    bech32: this.getBech32(this.state.address),
+                  });
+                }
+              );
             })
           } else {
             if (this.state.arr1) {
@@ -194,31 +242,39 @@ class GetMoney extends Component {
               newArr.sort((a, b) => {
                 return b.balance - a.balance
               })
-              this.setState({
-                arr: newArr,
-                type: newArr[0].show_name,
-                type1: newArr[0].show_icon
-                  .split("/")
-                  [newArr[0].show_icon.split("/").length - 1].split(".")[0],
-                coinName:
-                  newArr[0].show_icon
+              this.setState(
+                {
+                  arr: newArr,
+                  type: newArr[0].show_name,
+                  type1: newArr[0].show_icon
                     .split("/")
-                    [newArr[0].show_icon.split("/").length - 1].split(".")[0] ==
-                  "violas"
-                    ? "violas://"
-                    : newArr[0].show_icon
-                        .split("/")
-                        [newArr[0].show_icon.split("/").length - 1].split(
-                          "."
-                        )[0] == "libra"
-                    ? "libra://"
-                    : "bitcoin",
-                address:
-                  newArr[0].show_name == "BTC"
-                    ? this.state.BTCAddress
-                    : newArr[0].address,
-                ind: Object.keys(newArr)[0],
-              });
+                    [newArr[0].show_icon.split("/").length - 1].split(".")[0],
+                  coinName:
+                    newArr[0].show_icon
+                      .split("/")
+                      [newArr[0].show_icon.split("/").length - 1].split(
+                        "."
+                      )[0] == "violas"
+                      ? "violas://"
+                      : newArr[0].show_icon
+                          .split("/")
+                          [newArr[0].show_icon.split("/").length - 1].split(
+                            "."
+                          )[0] == "libra"
+                      ? "diem://"
+                      : "bitcoin",
+                  address:
+                    newArr[0].show_name == "BTC"
+                      ? this.state.BTCAddress
+                      : newArr[0].address,
+                  ind: Object.keys(newArr)[0],
+                },
+                () => {
+                  this.setState({
+                    bech32: this.getBech32(this.state.address),
+                  });
+                }
+              );
             }
           }
         })
@@ -370,9 +426,17 @@ class GetMoney extends Component {
               </div>
               <div className="qrCode">
                 {this.state.type1 == "violas" ? (
-                  <QRCode value={coinName + address +"?c=" + this.state.type}></QRCode>
+                  <QRCode
+                    value={
+                      coinName + this.state.bech32 + "?c=" + this.state.type
+                    }
+                  ></QRCode>
                 ) : this.state.type1 == "libra" ? (
-                  <QRCode value={coinName  + address+"?c=" + this.state.type}></QRCode>
+                  <QRCode
+                    value={
+                      coinName + this.state.bech32 + "?c=" + this.state.type
+                    }
+                  ></QRCode>
                 ) : (
                   <QRCode value={coinName + this.state.BTCAddress}></QRCode>
                 )}
