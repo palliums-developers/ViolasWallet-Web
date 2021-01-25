@@ -218,7 +218,7 @@ class App extends React.Component {
       // maxGasAmount: 400000,
       // gasUnitPrice: 0,
       // sequenceNumber: seq,
-      gasCurrencyCode: this.state.currencyCode,
+      gasCurrencyCode: this.state.gasCurrencyCode,
     }
     console.log(JSON.stringify(tx));
     this.state.walletConnector.sendTransaction(tx).then(res => {
