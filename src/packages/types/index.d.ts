@@ -1,4 +1,4 @@
-declare module '@walletconnect/types' {
+declare module 'types' {
   export interface IConnector {
     bridge: string
     key: string
@@ -20,7 +20,7 @@ declare module '@walletconnect/types' {
     rejectSession: (sessionError?: ISessionError) => void
     updateSession: (sessionStatus: ISessionStatus) => void
     killSession: (sessionError?: ISessionError) => Promise<void>
-    sendTransaction: (tx: ITxData) => Promise<any>
+    sendTransaction: (chain: string, tx: ITxData) => Promise<any>
     signTransaction: (tx: ITxData) => Promise<any>
     signMessage: (params: any[]) => Promise<any>
     signPersonalMessage: (params: any[]) => Promise<any>

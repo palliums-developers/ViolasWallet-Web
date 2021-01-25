@@ -47,6 +47,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// import {
+//   IConnector,
+//   ICryptoLib,
+//   ITransportLib,
+//   ISessionStorage,
+//   IEncryptionPayload,
+//   ISocketMessage,
+//   ISessionStatus,
+//   ISessionError,
+//   IJsonRpcResponseSuccess,
+//   IJsonRpcResponseError,
+//   IJsonRpcRequest,
+//   ITxData,
+//   IClientMeta,
+//   IParseURIResult,
+//   ISessionParams,
+//   IWalletConnectOptions,
+//   IUpdateChainParams,
+//   IRequestOptions,
+//   IInternalRequestOptions
+// } from '../../types/index/types'
 var utils_1 = require("@walletconnect/utils");
 var errors_1 = require("./errors");
 var socket_1 = require("./socket");
@@ -529,7 +550,7 @@ var Connector = /** @class */ (function () {
     //     throw error
     //   }
     // }
-    Connector.prototype.sendTransaction = function (tx) {
+    Connector.prototype.sendTransaction = function (chain, tx) {
         return __awaiter(this, void 0, void 0, function () {
             var request, result, error_1;
             return __generator(this, function (_a) {
@@ -539,7 +560,7 @@ var Connector = /** @class */ (function () {
                             throw new Error(errors_1.ERROR_SESSION_DISCONNECTED);
                         }
                         request = this._formatRequest({
-                            method: 'violas_sendTransaction',
+                            method: chain + '_sendTransaction',
                             params: [tx]
                         });
                         _a.label = 1;
