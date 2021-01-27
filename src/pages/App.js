@@ -96,7 +96,7 @@ class App extends Component {
           // to: tokenContractAddress,
           to: token_USDT,
           value: "0",
-          gas: 50000,
+          gas: 500000,
           data: functionCallAbi,
         })
         .on("transactionHash", (hash) => {
@@ -150,16 +150,17 @@ class App extends Component {
 
       // Gas 费预估例子
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#estimategas
-      // this.eth
-      //   .estimateGas({
-      //     from: account,
-      //     to: swapContractAddress,
-      //     value: "0",
-      //     data: functionCallAbi,
-      //   })
-      //   .then((gasLimit) => {
-      //     console.log("Transaction GasLimit: " + gasLimit);
-      //   });
+      this.eth
+        .estimateGas({
+          from: account,
+          // to: swapContractAddress,
+          to: contractAddress,
+          value: "0",
+          data: functionCallAbi,
+        })
+        .then((gasLimit) => {
+          console.log("Transaction GasLimit: " + gasLimit);
+        });
 
       // 调用兑换合约，发起兑换
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#sendtransaction
@@ -169,7 +170,7 @@ class App extends Component {
           // to: token_USDT,
           to: contractAddress,
           value: "0",
-          gas: 300000,
+          gas: 3000000,
           data: functionCallAbi,
         })
         .on("transactionHash", function (hash) {
