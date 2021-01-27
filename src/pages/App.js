@@ -86,9 +86,9 @@ class App extends Component {
           ],
         },
         // [swapContractAddress, amount]
-        [contractAddress, amount * 1e5]
+        [contractAddress, amount * 1e6]
       );
-      console.log(amount * 1e5);
+      console.log(amount * 1e6);
       // 调用代币合约，授权兑换合约可以花费 amount 数量的资产。
       this.eth
         .sendTransaction({
@@ -234,15 +234,19 @@ class App extends Component {
   };
   onChangeSwapContractAddress = (event) => {
     this.setState({
-      swapContractAddress: event.target.value,
+      contractAddress: event.target.value,
     });
   };
   onChangeTokenContractAddress = (event) => {
     this.setState({
-      tokenContractAddress: event.target.value,
+      token_USDT: event.target.value,
     });
   };
-
+  onChangeViolasAddress = (event) => {
+    this.setState({
+      violasAddress: event.target.value,
+    });
+  };
   render() {
     return (
       <div className="App">
@@ -257,9 +261,16 @@ class App extends Component {
           <br />
           <p>-----------mapping dapp-----------</p>
           <div>
+            <span>violas地址：</span>
+            <input
+              value={this.state.violasAddress}
+              onChange={this.onChangeViolasAddress}
+            />
+          </div>
+          <div>
             <span>兑换合约地址：</span>
             <input
-              value={this.state.swapContractAddress}
+              value={this.state.contractAddress}
               onChange={this.onChangeSwapContractAddress}
             />
           </div>
@@ -267,7 +278,7 @@ class App extends Component {
             {/* <span>(VLSUSDT)代币合约地址：</span> */}
             <span>(vUSDT)代币合约地址：</span>
             <input
-              value={this.state.tokenContractAddress}
+              value={this.state.token_USDT}
               onChange={this.onChangeTokenContractAddress}
             />
           </div>
