@@ -125,7 +125,7 @@ class CurrencyDetail extends Component {
               url +
                 "/1.0/" +
                 type +
-                "transaction?addr=" +
+                "/transaction?addr=" +
                 detailAddrs +
                 "&&flows=1" +
                 "&&offset=" +
@@ -145,7 +145,7 @@ class CurrencyDetail extends Component {
               url +
                 "/1.0/" +
                 type +
-                "transaction?addr=" +
+                "/transaction?addr=" +
                 detailAddrs +
                 "&&flows=0" +
                 "&&offset=" +
@@ -168,6 +168,7 @@ class CurrencyDetail extends Component {
     // showDetails = () => {
     //     this.props.showDetails();
     // };
+    
     onChange = (page,pageSize) => {
         // console.log(page, pageSize)
         this.setState({
@@ -270,43 +271,32 @@ class CurrencyDetail extends Component {
                       }}
                     >
                       <i>
-                        {v.type == 0 ? (
-                          <img src="/img/编组 82@2x.png" />
-                        ) : v.sender == detailAddrs ? (
+                        {v.sender == detailAddrs ? (
                           <img src="/img/编组 13备份 3@2x.png" />
                         ) : v.receiver == detailAddrs ? (
                           <img src="/img/编组 13备份 2@2x.png" />
-                        ) : null}
+                        ) : <img src="/img/编组 82@2x.png" />
+                        }
                       </i>
                       <div className="listCenter">
                         <p>
-                          {v.type == 0
-                            ? this.getSubStr(v.sender)
-                            : v.sender == detailAddrs
+                          {v.sender == detailAddrs
                             ? this.getSubStr(v.receiver)
                             : v.receiver == detailAddrs
                             ? this.getSubStr(v.sender)
-                            : null}
+                            : this.getSubStr(v.sender)}
                         </p>
                         <p>{timeStamp2String(v.expiration_time + "000")}</p>
                       </div>
                       <div className="listResult">
                         <p
                           className={
-                            v.type == 0
-                              ? "org"
-                              : v.receiver == detailAddrs
-                              ? "org"
-                              : "green"
+                            v.type == "Executed"
+                              ? "green"
+                              : "red"
                           }
                         >
-                          {v.type == 0
-                            ? ""
-                            : v.sender == detailAddrs
-                            ? "-"
-                            : v.receiver == detailAddrs
-                            ? "+"
-                            : null}
+                          {v.type == "Executed" ? "+" : "-"}
                           {v.amount / 1e6}
                         </p>
                         {/* <p className="org">交易中</p> */}

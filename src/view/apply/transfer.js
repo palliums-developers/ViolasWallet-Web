@@ -103,6 +103,7 @@ class Transfer extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.data);
         if (res.data) {
           this.setState({
             arr1: res.data.balances,
@@ -229,7 +230,7 @@ class Transfer extends Component {
       },
       () => {
         // this.getTypeBalance()
-        this.getTypesBalance();
+        // this.getTypesBalance();
       }
     );
   };

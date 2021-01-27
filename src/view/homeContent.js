@@ -111,9 +111,14 @@ class HomeContent extends Component {
                       arr1: this.state.arr1,
                     },
                     () => {
-                      if (this.state.arr2.length >= 0) {
-                        let { arr1 } = this.state;
-                        let arrs = arr1;
+                        let { arr1,arr2 } = this.state;
+                        let arrs=[];
+                        if (arr2) {
+                          arrs = arr1.concat(arr2);
+                        } else {
+                          arrs = arr1;
+                        }
+                        
                         window.sessionStorage.setItem(
                           "violas_Balances",
                           JSON.stringify(arrs)
@@ -179,7 +184,6 @@ class HomeContent extends Component {
                                  this.getTotalAmount();
                           });
                         }
-                      }
                     }
                   );
                 });
@@ -234,11 +238,11 @@ class HomeContent extends Component {
                         "violas_Balances",
                         JSON.stringify(arrs)
                       );
-
                       // if (arr1) {
                       arrs.sort((a, b) => {
                         return b.balance - a.balance;
                       });
+                      
                       arrs.map((v, i) => {
                         if (v.name == "XUS") {
                           initCoinsList.push(v);
@@ -259,7 +263,8 @@ class HomeContent extends Component {
                       );
 
                       // console.log(temp, "......");
-                      if (JSON.stringify(temp) != "[]" && arrs) {
+                      if (temp && arrs) {
+                        
                         for (let i = 0; i < temp && temp.length; i++) {
                           for (let j = 0; j < arrs.length; j++) {
                             if (
@@ -281,7 +286,6 @@ class HomeContent extends Component {
                             }
                           }
                         }
-
                         sessionStorage.setItem(
                           "checkData",
                           JSON.stringify(temp)

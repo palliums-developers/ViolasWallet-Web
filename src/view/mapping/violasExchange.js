@@ -27,6 +27,8 @@ class ViolasExchange extends Component {
       // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
       tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
       swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
+      contractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
+      token_USDT: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
       swapAmount: "",
     };
     this.eth = null;
@@ -109,8 +111,13 @@ class ViolasExchange extends Component {
       alert("请先连接 ETH 钱包");
       this.connectWallet();
     } else {
-      let swapContractAddress = this.state.swapContractAddress;
-      let tokenContractAddress = this.state.tokenContractAddress;
+      let {
+        swapContractAddress,
+        tokenContractAddress,
+        token_USDT,
+        contractAddress,
+        account
+      } = this.state;
 
       let amount = Number(this.state.swapAmount) * 1e6;
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
@@ -132,13 +139,13 @@ class ViolasExchange extends Component {
       );
       // console.log(functionCallAbi, "..functionCallAbi1");
       // 调用代币合约，授权兑换合约可以花费 amount 数量的资产。
-      let account = this.state.account;
       this.eth
         .sendTransaction({
           from: account,
-          to: tokenContractAddress,
+          // to: tokenContractAddress,
+          to:token_USDT,
           value: "0",
-          gas: 50000,
+          gas: 500000,
           data: functionCallAbi,
         })
         .on("transactionHash", (hash) => {
@@ -156,15 +163,13 @@ class ViolasExchange extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
-      
-      let swapContractAddress = this.state.swapContractAddress;
-      let tokenContractAddress = this.state.tokenContractAddress;
-      // console.log(
-      //   swapContractAddress,
-      //   tokenContractAddress,
-      //   window.sessionStorage.getItem("mapAddress"),
-      //   ".............."
-      // );
+      let {
+        swapContractAddress,
+        tokenContractAddress,
+        account,
+        token_USDT,
+        contractAddress,
+      } = this.state;
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
         {
           name: "transferProof",
@@ -180,10 +185,9 @@ class ViolasExchange extends Component {
             },
           ],
         },
-        [tokenContractAddress, window.sessionStorage.getItem('mapAddress')]
+        [token_USDT, window.sessionStorage.getItem("mapAddress")]
       );
 
-      let account = this.state.account;
       // console.log(functionCallAbi, "..functionCallAbi2");
       // Gas 费预估例子
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#estimategas
@@ -204,9 +208,9 @@ class ViolasExchange extends Component {
       this.eth
         .sendTransaction({
           from: account,
-          to: swapContractAddress,
+          to: contractAddress,
           value: "0",
-          gas: 300000,
+          gas: 3000000,
           data: functionCallAbi,
         })
         .on("transactionHash", function (hash) {
@@ -220,7 +224,7 @@ class ViolasExchange extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
-      let tokenContractAddress = this.state.tokenContractAddress;
+      let token_USDT = this.state.token_USDT;
       let account = this.state.account;
 
       // 查询合约的余额方法，ERC20 方法参照文档 https://eips.ethereum.org/EIPS/eip-20erc20
@@ -246,7 +250,7 @@ class ViolasExchange extends Component {
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#call
       this.eth
         .call({
-          to: tokenContractAddress,
+          to: token_USDT,
           data: functionCallAbi,
         })
         .then(async (resultAbi) => {
@@ -269,7 +273,7 @@ class ViolasExchange extends Component {
   //选择地址
   onChangeSwapContractAddress = (value) => {
     this.setState({
-      swapContractAddress: value,
+      contractAddress: value,
     });
   };
   //兑换
@@ -287,11 +291,12 @@ class ViolasExchange extends Component {
       if (value == this.state.token[i].address) {
         this.setState({
           coinName: this.state.token[i].name,
+
         });
       }
     }
     this.setState({
-      tokenContractAddress: value,
+      token_USDT: value,
     });
   };
   render() {
@@ -319,7 +324,7 @@ class ViolasExchange extends Component {
               <div>
                 <p>
                   <label>币种</label>
-                  <span>余额: {tokenBalance}</span>
+                  {/* <span>余额: {tokenBalance}</span> */}
                 </p>
                 <Form.Item label="">
                   <Select

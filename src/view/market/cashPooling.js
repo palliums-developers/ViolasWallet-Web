@@ -1523,7 +1523,7 @@ class CashPooling extends Component {
                       key={i}
                       className="poolRecordList"
                       onClick={(e) => {
-                        this.stopPropagation(e)
+                        this.stopPropagation(e);
                         this.setState({
                           visible1: true,
                           changeList: v,
@@ -1575,7 +1575,7 @@ class CashPooling extends Component {
                           <div>
                             {<p>通证：+{v.token / 1e6}</p>}
 
-                            <p>{timeStamp2String(v.date + "000")}</p>
+                            <p>{timeStamp2String(v.confirmed_time + "000")}</p>
                           </div>
                         </div>
                         <label>
