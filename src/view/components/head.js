@@ -190,14 +190,14 @@ class Head extends React.PureComponent {
               <img src="/img/yaoqingjiangli 2@2x.png" />
               邀请奖励
             </p>
-            <p
+            {/* <p
               onClick={() => {
                 this.props.history.push("/helpCenter");
               }}
             >
               <img src="/img/bzzxIcon.png" />
               帮助中心
-            </p>
+            </p> */}
             <p onClick={() => this.logout()}>
               <img src="/img/tuichu 2@2x.png" />
               {intl.get("Logout")}

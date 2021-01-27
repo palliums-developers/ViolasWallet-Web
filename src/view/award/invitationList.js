@@ -4,7 +4,8 @@ import { NavLink } from "react-router-dom";
 import { verifyMobile } from "../../utils/verifyMobile";
 import intl from "react-intl-universal";
 import "../mining/mining.scss";
-let url1 = "https://api4.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //邀请榜单
 class InvitationList extends Component {

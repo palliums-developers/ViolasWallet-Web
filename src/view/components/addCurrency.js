@@ -5,8 +5,8 @@ import code_data from '../../utils/code.json';
 import intl from "react-intl-universal";
 
 import '../app.scss'
-let url1 = "https://api.violas.io";
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
 let names = []
 
 //添加币种

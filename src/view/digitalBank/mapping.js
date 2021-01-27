@@ -11,8 +11,8 @@ import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import code_data from '../../utils/code.json';
-let url1 = "https://api.violas.io"
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 
 //映射
 class DigitalBank extends Component {

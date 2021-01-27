@@ -9,7 +9,8 @@ import intl from "react-intl-universal";
 import { message } from "antd";
 import { verifyMobile } from "../../utils/verifyMobile";
 import WalletconnectDialog from "../components/walletconnectDialog";
-let url1 = "https://api4.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //挖矿奖励
 class MiningAwards extends Component {

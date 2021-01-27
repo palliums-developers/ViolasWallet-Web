@@ -3,7 +3,8 @@ import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 import {timeStamp2String} from '../../utils/timer3'
 const { TabPane } = Tabs;
-let url1 = "https://api4.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //挖矿明细
 class MiningDetails extends Component {
@@ -66,7 +67,7 @@ class MiningDetails extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (JSON.stringify(res.data)!="[]") {
           // console.log(res.data);
           this.setState({
             total_count: res.data[0].total_count,
@@ -89,7 +90,7 @@ class MiningDetails extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (JSON.stringify(res.data) != "[]") {
           this.setState({
             total_count2: res.data[0].total_count,
             poolOrders: res.data,
@@ -112,7 +113,7 @@ class MiningDetails extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
+        if (JSON.stringify(res.data) != "[]") {
           this.setState({
             total_count3: res.data[0].total_count,
             bankOrders: res.data,
@@ -205,14 +206,17 @@ class MiningDetails extends Component {
                       );
                     })}
                   </div>
-                  <Pagination
+                  {
+                    total_count > 0 ? <Pagination
                     pageSize={pageSize}
                     defaultCurrent={1}
                     total={total_count}
                     onChange={(page, pageSize) =>
                       this.getCurPage(page, pageSize)
                     }
-                  />
+                  /> : null
+                  }
+                  
                 </div>
               </TabPane>
               <TabPane tab="资金池" key="2">
@@ -238,13 +242,15 @@ class MiningDetails extends Component {
                       );
                     })}
                   </div>
-                  <Pagination
+                  {
+                    total_count2 > 0 ?<Pagination
                     pageSize={pageSize2}
                     total={total_count2}
                     onChange={(page, pageSize) =>
                       this.getCurPage2(page, pageSize)
                     }
-                  />
+                  /> : null
+                  }
                 </div>
               </TabPane>
               <TabPane tab="数字银行" key="3">
@@ -282,13 +288,15 @@ class MiningDetails extends Component {
                     }
                     
                   </div>
-                  <Pagination
+                  {
+                    total_count3 > 0 ? <Pagination
                     pageSize={pageSize3}
                     total={total_count3}
                     onChange={(page, pageSize) =>
                       this.getCurPage3(page, pageSize)
                     }
-                  />
+                  /> : null
+                  }
                 </div>
               </TabPane>
             </Tabs>

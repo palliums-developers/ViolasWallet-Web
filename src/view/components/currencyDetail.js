@@ -5,8 +5,8 @@ import { Pagination } from 'antd';
 import intl from "react-intl-universal";
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
-// let url = 'https://api.violas.io'
-let url = "https://api4.violas.io"
+let url = 'https://api.violas.io'
+// let url = "https://api4.violas.io"
 
 //币种详情
 class CurrencyDetail extends Component {

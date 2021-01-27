@@ -20,13 +20,13 @@ class ViolasExchange extends Component {
       token: [
         {
           name: "vUSDT",
-          address: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
+          address: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
         },
       ],
       // swapContractAddress: "0xE6C7f2DAB2E9B16ab124E45dE3516196457A1120",
       // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      tokenContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      swapContractAddress: "0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8",
+      tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
       swapAmount: "",
     };
     this.eth = null;
@@ -43,7 +43,7 @@ class ViolasExchange extends Component {
   //     e.nativeEvent.stopImmediatePropagation();
   //   }
   componentDidMount() {
-    // console.log(this.props.eth);
+    // console.log(this.state.token[0].name);
     this.setState({
       coinName: this.state.token[0].name,
     });
@@ -156,9 +156,15 @@ class ViolasExchange extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
+      
       let swapContractAddress = this.state.swapContractAddress;
       let tokenContractAddress = this.state.tokenContractAddress;
-
+      // console.log(
+      //   swapContractAddress,
+      //   tokenContractAddress,
+      //   window.sessionStorage.getItem("mapAddress"),
+      //   ".............."
+      // );
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
         {
           name: "transferProof",
@@ -174,7 +180,7 @@ class ViolasExchange extends Component {
             },
           ],
         },
-        [tokenContractAddress, "here is mapping datas"]
+        [tokenContractAddress, window.sessionStorage.getItem('mapAddress')]
       );
 
       let account = this.state.account;
@@ -194,6 +200,7 @@ class ViolasExchange extends Component {
 
       // 调用兑换合约，发起兑换
       // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#sendtransaction
+      console.log(functionCallAbi, "functionCallAbi.......");
       this.eth
         .sendTransaction({
           from: account,
@@ -249,7 +256,7 @@ class ViolasExchange extends Component {
             tokenBalance: result[0] / 1e6,
           });
         });
-      console.log(account, tokenContractAddress, this.state.tokenBalance);
+      // console.log(account, tokenContractAddress, this.state.tokenBalance);
     }
   };
   //输入数量
@@ -275,7 +282,7 @@ class ViolasExchange extends Component {
   };
   //获取兑换地址
   onChangeTokenContractAddress = (value) => {
-    console.log(value);
+    // console.log(value);
     for (let i = 0; i < this.state.token.length; i++) {
       if (value == this.state.token[i].address) {
         this.setState({
@@ -289,6 +296,7 @@ class ViolasExchange extends Component {
   };
   render() {
     let { tokenBalance, token, coinName, swapAmount } = this.state;
+    // console.log(token,coinName)
     return (
       <div className="violasExchange">
         <div className="violasExchangeContent">
@@ -297,18 +305,16 @@ class ViolasExchange extends Component {
             <div className="form">
               <div>
                 <p>选择地址</p>
-                {/* <Form.Item label="">
+                <Form.Item label="">
                   <Select
-                    value="0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8"
-                    // value={this.state.swapContractAddress}
-                    onChange={this.onChangeSwapContractAddress}
+                    // value="0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8"
+                    value={this.state.account}
+                    // onChange={this.onChangeSwapContractAddress}
                   >
-                    <Select.Option>
-                      0xCb9b6D30E26d17Ce94A30Dd225dC336fC4536FE8
-                    </Select.Option>
+                    <Select.Option>{this.state.account}</Select.Option>
                   </Select>
-                </Form.Item> */}
-                <Input value={this.state.account}></Input>
+                </Form.Item>
+                {/* <Input value={this.state.account}></Input> */}
               </div>
               <div>
                 <p>

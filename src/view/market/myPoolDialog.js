@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./market.scss";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-let url1 = "https://api4.violas.io"
-
+let url = "https://api4.violas.io"
+let url1 = "https://api.violas.io";
 class MyPoolDialog extends Component {
     constructor(props) {
         super()

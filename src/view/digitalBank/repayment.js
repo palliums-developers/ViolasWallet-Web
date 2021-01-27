@@ -7,8 +7,8 @@ import WalletconnectDialog from "../components/walletconnectDialog";
 import { digitalBank, getProductId } from "../../utils/bank";
 import axios from "axios";
 import code_data from "../../utils/code.json";
-let url = "https://api4.violas.io";
-
+// let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 //还款
 class Repayment extends Component {
   constructor() {

@@ -7,7 +7,8 @@ import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
 import { message } from "antd";
 import "./award.scss";
-let url1 = "https://api4.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //邀请奖励
 class InviteRewards extends Component {
