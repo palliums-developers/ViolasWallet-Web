@@ -608,7 +608,7 @@ class HomeContent extends Component {
                 this.props.history.push("/homepage/home/miningAwards");
               }}
             >
-              <span>挖矿领福利</span>
+              <span>{intl.get("Mining Bonus")}</span>
             </div>
             <div className="assetLists">
               {BTCBalances.map((v, i) => {

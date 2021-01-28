@@ -10,6 +10,7 @@ import getViolasTx from '../../utils/violas_trans';
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import intl from "react-intl-universal";
 import code_data from '../../utils/code.json';
 let url = "https://api.violas.io"
 let url1 = "https://api4.violas.io"
@@ -526,18 +527,20 @@ class DigitalBank extends Component {
               <NavLink to="/homepage">
                 {" "}
                 <img src="/img/fanhui 2@2x.png" />
-                钱包
+                {intl.get("Wallet")}
               </NavLink>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <NavLink to="/homepage/home/digitalBank/mapping">映射</NavLink>
+              <NavLink to="/homepage/home/digitalBank/mapping">
+                {intl.get("Mapping")}
+              </NavLink>
             </Breadcrumb.Item>
           </Breadcrumb>
           <div className="mappingContent">
             <div className="mappingList">
               <h3>
                 <img src="/img/kyye.png" />
-                可用余额：
+                {intl.get("Balance")}:
                 <label>
                   {balance} {type}
                 </label>
@@ -545,7 +548,7 @@ class DigitalBank extends Component {
               <div className="iptAmount">
                 <input
                   value={this.state.amount}
-                  placeholder="转出数量"
+                  placeholder={intl.get("Amount Transfered")}
                   onChange={(e) => this.getTransAmount(e)}
                 />
                 <div className="dropdown1">
@@ -595,7 +598,7 @@ class DigitalBank extends Component {
                                   <div>
                                     <h4>{v.from_coin.assert.show_name}</h4>
                                     <p>
-                                      余额：
+                                      {intl.get("Balance")}:
                                       {v.from_coin.coin_type == "btc"
                                         ? v.balance / 1e8
                                         : v.balance / 1e6}{" "}
@@ -626,7 +629,7 @@ class DigitalBank extends Component {
               </div>
               <div className="line"></div>
               <p>
-                <label>汇率：</label>
+                <label>{intl.get("Exchange Rate")}：</label>
                 <span>
                   {this.state.amount == ""
                     ? "-- "
@@ -640,7 +643,7 @@ class DigitalBank extends Component {
                 </span>
               </p>
               <p>
-                <label>矿工费用：</label>
+                <label>{intl.get("Gas fee")}：</label>
                 <span>--</span>
               </p>
               <div className="foot">
@@ -648,7 +651,7 @@ class DigitalBank extends Component {
                   className={focusActive == false ? "btn" : "btn focusActive"}
                   onClick={() => this.confirmMapping()}
                 >
-                  确定映射
+                  {intl.get("Confirm")}
                 </p>
                 <p
                   className={
@@ -660,13 +663,19 @@ class DigitalBank extends Component {
               </div>
             </div>
             <div className="ETHTokenWrap">
-              <h4>如何映射 ETH 代币？</h4>
+              <h4>{intl.get("How to map ETH ERC20 token")}</h4>
               <div className="ETHTokenWrapList">
                 <div className="tokenList1">
-                  <p>将链接复制到以下钱包，即可将ETH代币映射至violas钱包</p>
+                  <p>
+                    {intl.get(
+                      "Cope & paste the link to the wallet then map the ETH ERC20 token to Violas wallet"
+                    )}
+                  </p>
                   <CopyToClipboard
                     text="https://wallet.violas.io/violasMapping"
-                    onCopy={() => message.success("复制成功")}
+                    onCopy={() =>
+                      message.success(`${intl.get("Address copy successful")}`)
+                    }
                   >
                     <a>
                       https://wallet.violas.io/violasMapping
@@ -697,7 +706,7 @@ class DigitalBank extends Component {
               </div>
             </div>
             <div className="mappingRecord">
-              <h4>映射记录</h4>
+              <h4>{intl.get("Mapping Records")}</h4>
               <div className="recordLists">
                 {mappingRecord.map((item, index) => {
                   return (
@@ -713,10 +722,10 @@ class DigitalBank extends Component {
                           }
                         >
                           {item.state == "start"
-                            ? "映射中"
+                            ? `${intl.get("Mapping1")}`
                             : item.state == "end"
-                            ? "映射成功"
-                            : "映射失败"}
+                            ? `${intl.get("Mapping success")}`
+                            : `${intl.get("Mapping failed")}`}
                         </span>
                         <label>
                           {timeStamp2String(item.expiration_time + "000")}
@@ -730,7 +739,7 @@ class DigitalBank extends Component {
                           {item.out_amount / 1e6}
                           {item.out_show_name}
                         </p>
-                        <label>旷工费：--</label>
+                        <label>{intl.get("Gas fee")}：--</label>
                       </div>
                     </div>
                   );

@@ -190,7 +190,7 @@ class BorrowDetails extends Component {
     let parm = {
       address: address,
       product_id: product_id,
-      value: parseInt(value) * 1e6,
+      value: parseInt(value),
       sigtxn: sigtxn,
     };
     // console.log(parm)
