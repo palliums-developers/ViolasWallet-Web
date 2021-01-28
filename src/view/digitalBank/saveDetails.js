@@ -43,7 +43,7 @@ class SaveDetails extends Component {
   }
   getCurrenciesList() {
     fetch(
-      "https://api4.violas.io/1.0/violas/balance?addr=" +
+      url+"/1.0/violas/balance?addr=" +
         sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
@@ -145,7 +145,7 @@ class SaveDetails extends Component {
     }
   };
   async getDepositProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
+    axios(url+"/1.0/violas/bank/product/deposit").then(
       async (res) => {
         await this.setState({ depositProduct: res.data.data });
       }
@@ -189,7 +189,7 @@ class SaveDetails extends Component {
     };
     // console.log(parm)
     axios
-      .post(`https://api4.violas.io${api}`, parm)
+      .post(`${url}${api}`, parm)
       .then((res) => {
         if (res.data.code == 2000) {
           this.setState({

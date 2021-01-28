@@ -45,7 +45,7 @@ class Repayment extends Component {
     await this.getCurrenciesList();
   }
   async getDepositProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
+    axios(url+"/1.0/violas/bank/product/deposit").then(
       async (res) => {
         await this.setState({ depositProduct: res.data.data });
       }
@@ -60,7 +60,7 @@ class Repayment extends Component {
     let { repayCurList } = this.state;
     //币种列表
     axios(
-      "https://api4.violas.io/1.0/violas/currency/published?addr=" +
+      url+"/1.0/violas/currency/published?addr=" +
         sessionStorage.getItem("violas_address")
     ).then(async (res) => {
       let temp = [];
@@ -112,7 +112,7 @@ class Repayment extends Component {
     }
     await axios
       .get(
-        `https://api4.violas.io/1.0/violas/bank/borrow/repayment?id=${product_id}&address=${sessionStorage.getItem(
+        `${url}/1.0/violas/bank/borrow/repayment?id=${product_id}&address=${sessionStorage.getItem(
           "violas_address"
         )}`
       )
@@ -151,7 +151,7 @@ class Repayment extends Component {
     }
   };
   async getBorrowProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/borrow").then(
+    axios(url+"/1.0/violas/bank/product/borrow").then(
       async (res) => {
         await this.setState({ borrowProduct: res.data.data });
       }
@@ -198,7 +198,7 @@ class Repayment extends Component {
       sigtxn: sigtxn,
     };
     console.log(parm);
-    axios.post(`https://api4.violas.io${api}`, parm).then((res) => {
+    axios.post(`${url}${api}`, parm).then((res) => {
       if (res.data.code == 2000) {
         this.setState({
           warning: "还款成功",

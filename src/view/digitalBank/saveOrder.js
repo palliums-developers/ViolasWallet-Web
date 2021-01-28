@@ -222,7 +222,7 @@ class SaveOrder extends Component {
     this.getSaveDetail1();
   }
   async getDepositProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/deposit").then(
+    axios(url+"/1.0/violas/bank/product/deposit").then(
       async (res) => {
         await this.setState({ depositProduct: res.data.data });
       }
@@ -441,7 +441,7 @@ class SaveOrder extends Component {
       sigtxn: sigtxn,
     };
     // console.log(parm);
-    axios.post(`https://api4.violas.io${api}`, parm).then((res) => {
+    axios.post(`${url}${api}`, parm).then((res) => {
       console.log(res.data);
       if (res.data.code == 2000) {
         this.setState({

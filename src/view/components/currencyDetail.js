@@ -275,8 +275,9 @@ class CurrencyDetail extends Component {
                           <img src="/img/编组 13备份 3@2x.png" />
                         ) : v.receiver == detailAddrs ? (
                           <img src="/img/编组 13备份 2@2x.png" />
-                        ) : <img src="/img/编组 82@2x.png" />
-                        }
+                        ) : (
+                          <img src="/img/编组 82@2x.png" />
+                        )}
                       </i>
                       <div className="listCenter">
                         <p>
@@ -286,17 +287,11 @@ class CurrencyDetail extends Component {
                             ? this.getSubStr(v.sender)
                             : this.getSubStr(v.sender)}
                         </p>
-                        <p>{timeStamp2String(v.expiration_time + "000")}</p>
+                        <p>{timeStamp2String(v.confirmed_time + "000")}</p>
                       </div>
                       <div className="listResult">
-                        <p
-                          className={
-                            v.type == "Executed"
-                              ? "green"
-                              : "red"
-                          }
-                        >
-                          {v.type == "Executed" ? "+" : "-"}
+                        <p className={v.status == "Executed" ? "gre" : "red"}>
+                          {v.status == "Executed" ? "+" : "-"}
                           {v.amount / 1e6}
                         </p>
                         {/* <p className="org">交易中</p> */}

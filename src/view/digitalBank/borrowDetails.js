@@ -52,7 +52,7 @@ class BorrowDetails extends Component {
   //获取币种列表
   getCurrenciesList() {
     fetch(
-      "https://api4.violas.io/1.0/violas/balance?addr=" +
+      url+"/1.0/violas/balance?addr=" +
         sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
@@ -147,7 +147,7 @@ class BorrowDetails extends Component {
     }
   };
   async getBorrowProduct() {
-    axios("https://api4.violas.io/1.0/violas/bank/product/borrow").then(
+    axios(url+"/1.0/violas/bank/product/borrow").then(
       async (res) => {
         await this.setState({ borrowProduct: res.data.data });
       }
@@ -195,7 +195,7 @@ class BorrowDetails extends Component {
     };
     // console.log(parm)
     axios
-      .post(`https://api4.violas.io${api}`, parm)
+      .post(`${url}${api}`, parm)
       .then((res) => {
         // console.log(res.data)
         if (res.data.code == 2000) {
