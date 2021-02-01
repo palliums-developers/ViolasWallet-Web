@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import intl from "react-intl-universal";
 // let url = "https://api4.violas.io";
 let url = "https://api.violas.io";
 //映射
@@ -91,7 +92,7 @@ class DigitalBankPage extends Component {
             <div className="apply">
               <div className="total">
                 <p>
-                  存款总额 ($)
+                  {intl.get("Total Deposit")}($)
                   <i>
                     {visible ? (
                       <img
@@ -144,18 +145,18 @@ class DigitalBankPage extends Component {
                 <div>
                   <p>
                     <img src="/img/meiyuan8 2@2x.png" />
-                    <label>可借总额（$）</label>
+                    <label>{intl.get("Total Borrowable")}（$）</label>
                     {visible ? <span>≈ {borrow}</span> : <span>******</span>}
                   </p>
                   <p>
                     <img src="/img/形状结合备份 2@2x.png" />
-                    <label>累计收益（$）</label>
+                    <label>{intl.get("Total Earnings")}（$）</label>
                     {visible ? <span>≈ {total}</span> : <span>******</span>}
                   </p>
                 </div>
                 <div className="earnings">
                   <img src="/img/形状结合 2@2x.png" />
-                  昨日收益 {yesterday} $
+                  {intl.get("Yesterday's Earnings")} {yesterday} $
                 </div>
               </div>
             </div>

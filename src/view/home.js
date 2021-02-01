@@ -7,6 +7,9 @@ import intl from "react-intl-universal";
 import Head from './components/head'
 import LangPage from './components/langPage'
 import {Badge} from "antd"
+import firebase from "firebase/app";
+import "firebase/firebase-messaging";
+import axios from 'axios'
 let url = "https://api.violas.io";
 
 //首页
@@ -21,6 +24,23 @@ class Home extends React.PureComponent {
       showMineDialog: false,
       ind: 0,
       ifMobile: false,
+      firebaseConfig: {
+        apiKey: "AIzaSyBG0qOh-LEIWpZk6CpArRxz0HuGUd2HzlE",
+        authDomain: "violas-push-server.firebaseapp.com",
+        projectId: "violas-push-server",
+        storageBucket: "violas-push-server.appspot.com",
+        messagingSenderId: "675290848213",
+        appId: "1:675290848213:web:d7d30fb87f4e39e38fbb5c",
+        measurementId: "G-15RHVC9K78",
+      },
+      message: "",
+      private_key:
+        "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
+      token: "",
+      violas_server: "https://api4.violas.io",
+      violas_register: "/1.0/violas/device/info",
+      address: "e8da60ef0f4cf18c324527f48b06c7e9",
+      language: "en", // en cn
     };
   }
   getMineDialog = (event) => {
@@ -29,17 +49,15 @@ class Home extends React.PureComponent {
       showMineDialog: !this.state.showMineDialog,
     });
   };
-  // getMineDialog1 = (event) => {
-  //   // event.stopPropagation();
-  //   this.setState({
-  //     showMineDialog: false
-  //   });
-  // };
-  // shouldComponentUpdate(nextProps,nextState) {
-  //   return nextProps.location !== this.props.location;
-  // }
+
   async componentWillMount() {
     await this.getNewWalletConnect();
+    await this.initialPage();
+    await this.getNotificationPermission();
+    await this.setState({ token: await this.getToken() });
+    console.log(this.state.token);
+    await this.sendToken();
+    await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
@@ -49,6 +67,92 @@ class Home extends React.PureComponent {
       // this.props.history.push('/app')
     });
   }
+  componentWillUnmount = () => {
+    this.setTokenSentToServer(false);
+  };
+  initialPage = async () => {
+    firebase.initializeApp(this.state.firebaseConfig);
+  };
+  getNotificationPermission = () => {
+    let temp_messaging = firebase.messaging();
+    temp_messaging
+      .requestPermission()
+      .then(() => {
+        console.log("have permission");
+      })
+      .catch((err) => {
+        console.log("Error Occurred " + err);
+      });
+  };
+  getToken = () => {
+    let temp_messaging = firebase.messaging();
+    return temp_messaging
+    .getToken()
+    .then((res) => {
+        
+        return res;
+      })
+      .catch((err) => {
+        console.log("Error Occurred " + err);
+      });
+  };
+  sendToken = () => {
+    if (this.state.token) {
+      this.sendTokenToServer(this.state.token);
+      // updateUIForPushEnabled(this.state.token);
+    } else {
+      // Show permission request.
+      console.log(
+        "No registration token available. Request permission to generate one."
+      );
+      // Show permission UI.
+      // updateUIForPushPermissionRequired();
+      this.setTokenSentToServer(false);
+    }
+  };
+  register = () => {
+    let post_data = {
+      address: window.sessionStorage.getItem("violas_address"),
+      token: this.state.token,
+      device_type: "web",
+      language: this.state.language,
+    };
+    axios
+      .post(this.state.violas_server + this.state.violas_register, post_data)
+      .then((res) => {
+        if (res.data.code === 2000) {
+          console.log("send token successed");
+        }
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+  };
+  getMessage = () => {
+    let temp_messaging = firebase.messaging();
+    temp_messaging.onMessage(async (payload) => {
+      console.log("on message: " + JSON.stringify(payload.data));
+      await this.setState({ message: payload });
+    });
+  };
+  setTokenSentToServer = (sent) => {
+    window.localStorage.setItem("sentToServer", sent ? "1" : "0");
+  };
+  sendTokenToServer = (currentToken) => {
+    if (!this.isTokenSentToServer()) {
+      console.log("Sending token to server...");
+      this.register();
+      this.setTokenSentToServer(true);
+    } else {
+      console.log(
+        "Token already sent to server so won't send it again " +
+          "unless it changes"
+      );
+    }
+  };
+  isTokenSentToServer = () => {
+    return window.localStorage.getItem("sentToServer") === "1";
+  };
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
     // console.log(window.localStorage.getItem('walletconnector'),'..............')
@@ -90,13 +194,14 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     this.props.history.push("/app");
   }
-  getLanguage=(val)=>{
-   intl.options.currentLocale = val;
-   this.forceUpdate();
-  }
+  getLanguage = (val) => {
+    intl.options.currentLocale = val;
+    this.forceUpdate();
+  };
   render() {
     let { routes } = this.props;
-    let { active } = this.state;
+    let { active, message } = this.state;
+    console.log(message,'.......')
     if (this.props.location) {
       if (this.props.location.search) {
         this.setState({
@@ -178,15 +283,16 @@ class Home extends React.PureComponent {
           {this.state.ifMobile == false ? (
             <div className="boxHead">
               <div className="boxHeadList">
-                {/* <div className="badge" onClick={()=>{
-                this.props.history.push(
-                  "/homepage/home/pushMessage"
-                );
-              }}>
-                <Badge count={100}>
-                  <img src="/img/编组 12@2x.png" />
-                </Badge>
-              </div> */}
+                <div
+                  className="badge"
+                  onClick={() => {
+                    this.props.history.push("/homepage/home/pushMessage");
+                  }}
+                >
+                  <Badge count={100}>
+                    <img src="/img/编组 12@2x.png" />
+                  </Badge>
+                </div>
                 <Head></Head>
                 {/* <span>Download</span> */}
                 <LangPage getLanguage={this.getLanguage}></LangPage>

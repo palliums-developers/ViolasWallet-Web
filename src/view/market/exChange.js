@@ -10,6 +10,8 @@ import axios from 'axios'
 import WalletConnect from "../../packages/browser/src/index";
 import code_data from '../../utils/code.json';
 import WalletconnectDialog from "../components/walletconnectDialog";
+import intl from "react-intl-universal";
+
 // import RouterView from '../router/routerView'
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -23,7 +25,7 @@ class ExChange extends Component {
       showMenuViolas: false,
       showMenuViolas1: false,
       type: "",
-      type1: "选择通证",
+      type1: intl.get("Select Token"),
       getFocus: false,
       getFocus1: false,
       inputAmount: "",
@@ -257,7 +259,7 @@ class ExChange extends Component {
   async getCrossChainInfo() {
     axios(url1 + "/1.0/market/exchange/crosschain/address/info").then(
       async (res) => {
-        console.log(res, ".......");
+        // console.log(res, ".......");
         await this.setState({ crossChainInfo: res.data.data });
       }
     );
@@ -643,7 +645,7 @@ class ExChange extends Component {
         .then((res) => {
           // console.log('Bitcoin Swap ', res);
           this.setState({
-            warning: "兑换成功",
+            warning: intl.get("Swap Successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -657,7 +659,7 @@ class ExChange extends Component {
         .catch((err) => {
           // console.log('Bitcoin Swap ', err);
           this.setState({
-            warning: "兑换失败",
+            warning: intl.get("Swap Failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -679,7 +681,7 @@ class ExChange extends Component {
         .then((res) => {
           // console.log('Libra Swap ', res);
           this.setState({
-            warning: "兑换成功",
+            warning: intl.get("Swap Successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -693,7 +695,7 @@ class ExChange extends Component {
         .catch((err) => {
           // console.log('Libra Swap ', err);
           this.setState({
-            warning: "兑换失败",
+            warning: intl.get("Swap Failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -715,7 +717,7 @@ class ExChange extends Component {
         .then((res) => {
           // console.log('Violas Swap ', res);
           this.setState({
-            warning: "兑换成功",
+            warning: intl.get("Swap Successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -729,7 +731,7 @@ class ExChange extends Component {
         .catch((err) => {
           // console.log('Violas Swap ', err);
           this.setState({
-            warning: "兑换失败",
+            warning: intl.get("Swap Failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -902,7 +904,7 @@ class ExChange extends Component {
       }
       if (e.target.value > this.state.asset) {
         this.setState({
-          warning: "资金不足",
+          warning: intl.get("Insuffcient balance"),
         });
       } else {
         this.setState({
@@ -946,7 +948,7 @@ class ExChange extends Component {
       if (this.state.asset1 != "--") {
         if (e.target.value > this.state.asset1) {
           this.setState({
-            warning: "资金不足",
+            warning: intl.get("Insuffcient balance")
           });
         } else {
           this.setState({
@@ -975,9 +977,9 @@ class ExChange extends Component {
   //点击兑换
   showExchangeCode = () => {
     // console.log(this.state.inputAmount,this.state.outputAmount)
-    if (this.state.type1 == "选择通证") {
+    if (this.state.type1 == intl.get("Select Token")) {
       this.setState({
-        warning: "请选择通证",
+        warning: intl.get("Please Select Token"),
       });
     } else {
       if (this.state.inputAmount) {
@@ -990,12 +992,12 @@ class ExChange extends Component {
           });
         } else if (this.state.outputAmount == "" || "0") {
           this.setState({
-            warning: "请输入兑换数量",
+            warning: intl.get("Please enter an amount"),
           });
         }
       } else if (this.state.inputAmount == "" || "0") {
         this.setState({
-          warning: "请输入兑换数量",
+          warning: intl.get("Please enter an amount"),
         });
       }
     }
@@ -1125,20 +1127,27 @@ class ExChange extends Component {
       exchangeRate,
       focusActive,
     } = this.state;
+    
     // console.log(arr1,'....')
     return (
       <div className="exchange">
         <div className="exchangeContent">
           <div className="exchangeContents">
             <div className="form">
-              {gasFee == "0" ? <p>费率：--</p> : <p>费率：{gasFee}</p>}
+              {gasFee == "0" ? (
+                <p>{intl.get("Fees rate")}：--</p>
+              ) : (
+                <p>
+                  {intl.get("Fees rate")}：{gasFee}
+                </p>
+              )}
 
               <div className={getFocus ? "iptForm getFormBorder" : "iptForm"}>
                 <div className="showAsset">
-                  <label>输入</label>
+                  <label>{intl.get("From")}</label>
                   <p>
                     <img src="/img/asset-management.png" />
-                    当前资产：{this.state.asset}
+                    {intl.get("Current Balances")}：{this.state.asset}
                     {type}
                   </p>
                 </div>
@@ -1212,11 +1221,11 @@ class ExChange extends Component {
                 className={getFocus1 ? "iptForm1 getFormBorder" : "iptForm1"}
               >
                 <div className="showAsset">
-                  <label>输出</label>
+                  <label>{intl.get("To")}</label>
                   <p>
                     <img src="/img/asset-management.png" />
-                    当前资产：{this.state.asset1}
-                    {type1 == "选择通证" ? "" : type1}
+                    {intl.get("Current Balances")}：{this.state.asset1}
+                    {type1 == intl.get("Select Token") ? "" : type1}
                   </p>
                 </div>
                 <div className="iptContent">
@@ -1290,7 +1299,7 @@ class ExChange extends Component {
                                     <div>
                                       <h4>{v.show_name}</h4>
                                       <p>
-                                        余额：
+                                        {intl.get("Balance")}：
                                         {v.icon
                                           .split("/")
                                           [v.icon.split("/").length - 1].split(
@@ -1326,7 +1335,7 @@ class ExChange extends Component {
                         <i>
                           <img src="/img/sousuo 2@2x.png" />
                         </i>
-                        <input placeholder="搜索token" />
+                        <input placeholder={intl.get("Search Token")} />
                       </div>
                       <div className="searchLists">
                         <div className="searchList">
@@ -1335,7 +1344,7 @@ class ExChange extends Component {
                           </div>
                           <div className="listContent">
                             <label>ETH</label>
-                            <p>余额：0 ETH</p>
+                            <p>{intl.get("Balance")}：0 ETH</p>
                           </div>
                         </div>
                         <div className="searchList">
@@ -1344,7 +1353,7 @@ class ExChange extends Component {
                           </div>
                           <div className="listContent">
                             <label>ETH</label>
-                            <p>余额：0 ETH</p>
+                            <p>{intl.get("Balance")}：0 ETH</p>
                           </div>
                         </div>
                       </div>
@@ -1353,30 +1362,34 @@ class ExChange extends Component {
                 </div>
               </div>
               {exchangeRate == "--" || "0" ? (
-                <div className="changeRate">兑换率：--</div>
+                <div className="changeRate">{intl.get("Swap rate")}：--</div>
               ) : (
-                <div className="changeRate">兑换率：1:{exchangeRate}</div>
+                <div className="changeRate">
+                  {intl.get("Swap rate")}：1:{exchangeRate}
+                </div>
               )}
-              <div className="changeRate">矿工费用：--</div>
+              <div className="changeRate">{intl.get("Gas fee")}：--</div>
             </div>
             <div className="foot">
               <p
                 className={focusActive == false ? "btn" : "btn focusActive"}
                 onClick={() => this.showExchangeCode()}
               >
-                兑换
+                {intl.get("SWAP1")}
               </p>
               {/* <p className="descr">{warning}</p> */}
               <p
                 className={
-                  warning == "兑换成功" ? "descr descrWarn" : "descr descrRed"
+                  warning == intl.get("Swap Successful")
+                    ? "descr descrWarn"
+                    : "descr descrRed"
                 }
               >
                 {warning}
               </p>
             </div>
             <div className="changeRecord">
-              <h4>兑换记录</h4>
+              <h4>{intl.get("Swap Records")}</h4>
               <div className="changeLists">
                 {changeRecord.map((v, i) => {
                   return (
@@ -1395,7 +1408,9 @@ class ExChange extends Component {
                         <span
                           className={v.status == "Executed" ? "green" : "red"}
                         >
-                          {v.status == "Executed" ? "兑换成功" : "兑换失败"}
+                          {v.status == "Executed"
+                            ? intl.get("Swap Successful")
+                            : intl.get("Swap Failed")}
                         </span>
                         <p>
                           {this.getExchangeRecodeReturn(

@@ -24,11 +24,11 @@ class CashPooling extends Component {
       showMenuViolas: false,
       showMenuViolas1: false,
       showMenuViolas2: false,
-      showpooling:false,
+      showpooling: false,
       names: ["Violas", "Libra", "Bitcoin"],
-      types: ["转入", "转出"],
-      type: "转入",
-      name: "选择通证",
+      types: [intl.get("Add Liquidity"), intl.get("Remove Liquidity")],
+      type: intl.get("Add Liquidity"),
+      name: intl.get("Select Token"),
       showDealType: false,
       getFocus: false,
       getFocus1: false,
@@ -45,8 +45,8 @@ class CashPooling extends Component {
       arrTwo: [],
       ind: -1,
       ind1: -1,
-      type1: "选择通证",
-      type2: "选择通证",
+      type1: intl.get("Select Token"),
+      type2: intl.get("Select Token"),
       visible1: false,
       changeList: {},
       asset: "--",
@@ -67,14 +67,14 @@ class CashPooling extends Component {
       coin_b_value: "",
       focusActive: false,
       showWallet: false,
-      rate:0,
-      showMineDialog:false
+      rate: 0,
+      showMineDialog: false,
       // visible:false
     };
   }
   stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    e.nativeEvent.stopImmediatePropagation();
+  }
   async componentWillMount() {
     if (this.props.visible) {
       this.props.showDrawer();
@@ -87,8 +87,9 @@ class CashPooling extends Component {
     });
   }
   componentDidMount() {
-    document.addEventListener('click', this.onClose);
+    document.addEventListener("click", this.onClose);
     // this.getSelectTypes()
+    console.log(window.sessionStorage.getItem("curDealType"), "........");
     if (!window.sessionStorage.getItem("curDealType")) {
       window.sessionStorage.setItem("curDealType", this.state.type);
     } else {
@@ -133,10 +134,10 @@ class CashPooling extends Component {
         //   if (res.data[i].transaction_type == 'ADD_LIQUIDITY') {
         //    if (res.data.length <= 5) {
         //      arr.push(res.data[i]);
-             
+
         //    }
         //   }
-           
+
         // }
         // console.log(arr, ".....");
         if (res.data) {
@@ -152,7 +153,7 @@ class CashPooling extends Component {
       });
   };
   optionType() {
-    if (this.state.type == "转入") {
+    if (this.state.type == intl.get("Add Liquidity")) {
       let newArr = this.state.changeRecord.filter(
         (v) => v.transaction_type == "ADD_LIQUIDITY"
       );
@@ -169,19 +170,19 @@ class CashPooling extends Component {
     }
   }
   getShow = (event) => {
-    this.stopPropagation(event)
+    this.stopPropagation(event);
     this.setState({
       showMenuViolas: !this.state.showMenuViolas,
     });
   };
   getShow1 = (event) => {
-    this.stopPropagation(event)
+    this.stopPropagation(event);
     this.setState({
       showMenuViolas1: !this.state.showMenuViolas1,
     });
   };
   getShow2 = (event) => {
-    this.stopPropagation(event)
+    this.stopPropagation(event);
     this.setState({
       showMenuViolas2: !this.state.showMenuViolas2,
     });
@@ -210,9 +211,9 @@ class CashPooling extends Component {
             return v;
           }
         });
-         this.setState({
-           arrTwo: arrTwo,
-         });
+        this.setState({
+          arrTwo: arrTwo,
+        });
         if (this.state.name == "BTC") {
           if (bal == "0") {
             this.setState({
@@ -244,7 +245,15 @@ class CashPooling extends Component {
   // }
 
   showType = (v) => {
-    window.sessionStorage.setItem("curDealType", v);
+    console.log(v, "........");
+    if (v == intl.get("Add Liquidity")) {
+      window.sessionStorage.setItem("curDealType", intl.get("Add Liquidity"));
+    } else {
+      window.sessionStorage.setItem(
+        "curDealType",
+        intl.get("Remove Liquidity")
+      );
+    }
     this.setState(
       {
         type: window.sessionStorage.getItem("curDealType"),
@@ -276,7 +285,7 @@ class CashPooling extends Component {
       if (this.state.asset != "--") {
         if (e.target.value > this.state.asset) {
           this.setState({
-            warning: "资金不足",
+            warning: intl.get("Insuffcient balance"),
           });
         } else {
           this.setState({
@@ -321,7 +330,7 @@ class CashPooling extends Component {
       if (this.state.asset2 != "--") {
         if (e.target.value > this.state.asset2) {
           this.setState({
-            warning: "资金不足",
+            warning: intl.get("Insuffcient balance"),
           });
         } else {
           this.setState({
@@ -367,7 +376,7 @@ class CashPooling extends Component {
       if (this.state.asset1 != "--") {
         if (e.target.value > this.state.asset1) {
           this.setState({
-            warning: "资金不足",
+            warning: intl.get("Insuffcient balance"),
           });
         } else {
           this.setState({
@@ -479,7 +488,7 @@ class CashPooling extends Component {
       .then(async (res) => {
         // console.log(res)
         let temp = [];
-        temp = res.data
+        temp = res.data;
         // btc.concat(res.data.libra);
         // temp = temp.concat(res.data.violas);
 
@@ -544,11 +553,9 @@ class CashPooling extends Component {
         }
       });
       // console.log(arr, "......");
-      this.setState(
-        {
-          selData: arr,
-        }
-      );
+      this.setState({
+        selData: arr,
+      });
     } else {
       this.getBalances();
     }
@@ -588,7 +595,8 @@ class CashPooling extends Component {
       url1 +
         "/1.0/market/pool/info?address=" +
         window.sessionStorage.getItem("violas_address")
-    ).then((res) => res.json())
+    )
+      .then((res) => res.json())
       .then((res) => {
         if (JSON.stringify(res.data) != "{}") {
           this.setState({
@@ -603,6 +611,21 @@ class CashPooling extends Component {
   optionTypes(transaction_type, status) {
     if (transaction_type == "ADD_LIQUIDITY") {
       if (status == "Executed") {
+        return intl.get("Deposit Successful");
+      } else {
+        return intl.get("Deposit Failed");
+      }
+    } else {
+      if (status == "Executed") {
+        return intl.get("Withdraw Successful");
+      } else {
+        return intl.get("Withdraw Failed");
+      }
+    }
+  }
+  optionTypes1(transaction_type, status) {
+    if (transaction_type == "ADD_LIQUIDITY") {
+      if (status == "Executed") {
         return "转入成功";
       } else {
         return "转入失败";
@@ -611,7 +634,7 @@ class CashPooling extends Component {
       if (status == "Executed") {
         return "转出成功";
       } else {
-        return "转出失败";
+        return "转出成功";
       }
     }
   }
@@ -643,7 +666,6 @@ class CashPooling extends Component {
   };
   //获取输入换算数量
   opinionInputAmount = () => {
-    
     if (this.state.inputAmount) {
       fetch(
         url1 +
@@ -660,7 +682,7 @@ class CashPooling extends Component {
             // console.log(res.data,'.......')
             this.setState({
               inputAmount1: res.data / 1e6,
-              rate:this.getFloat((res.data / 1e6) / this.state.inputAmount,6)
+              rate: this.getFloat(res.data / 1e6 / this.state.inputAmount, 6),
             });
           }
         });
@@ -682,7 +704,10 @@ class CashPooling extends Component {
           if (res.data) {
             this.setState({
               inputAmount: res.data / 1e6,
-              rate:this.getFloat(this.state.inputAmount1 / (res.data / 1e6),6)
+              rate: this.getFloat(
+                this.state.inputAmount1 / (res.data / 1e6),
+                6
+              ),
             });
           }
         });
@@ -710,7 +735,6 @@ class CashPooling extends Component {
       )
         .then((res) => res.json())
         .then((res) => {
-         
           if (res.data) {
             this.setState({
               outputAmount1:
@@ -721,7 +745,10 @@ class CashPooling extends Component {
                 res.data.coin_b_name,
               coin_a_value: res.data.coin_a_value,
               coin_b_value: res.data.coin_b_value,
-              rate: this.getFloat(res.data.coin_b_value / res.data.coin_a_value,6)
+              rate: this.getFloat(
+                res.data.coin_b_value / res.data.coin_a_value,
+                6
+              ),
             });
           }
         });
@@ -797,7 +824,7 @@ class CashPooling extends Component {
   }
   //点击转入
   async getAddLiquidity(chainId) {
-    console.log(this.state.name, this.state.type1,'............');
+    console.log(this.state.name, this.state.type1, "............");
     await this.orderCurrencies(this.state.name, this.state.type1);
 
     // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
@@ -836,7 +863,7 @@ class CashPooling extends Component {
       .then((res) => {
         // console.log("Add Liquidity ", res);
         this.setState({
-          warning: "转入成功",
+          warning: intl.get("Deposit Successful"),
           showWallet: false,
         });
         setTimeout(() => {
@@ -850,7 +877,7 @@ class CashPooling extends Component {
       .catch((err) => {
         // console.log("Add Liquidity ", err);
         this.setState({
-          warning: "转入失败",
+          warning: intl.get("Deposit Failed"),
           showWallet: false,
         });
         setTimeout(() => {
@@ -863,24 +890,24 @@ class CashPooling extends Component {
       });
   }
   showExchangeCode = () => {
-    if(this.state.name == '选择通证'){
+    if (this.state.name == intl.get("Select Token")) {
       this.setState({
-          warning: "请选择通证",
-        });
-    }else if(this.state.type1 == '选择通证'){
+        warning: intl.get("Please Select Token"),
+      });
+    } else if (this.state.type1 == intl.get("Select Token")) {
       this.setState({
-          warning: "请选择通证",
-        });
-    }else{
-      if(this.state.inputAmount == ''){
+        warning: intl.get("Please Select Token"),
+      });
+    } else {
+      if (this.state.inputAmount == "") {
         this.setState({
-          warning: "请输入输入数量",
+          warning: intl.get("Please enter an amount1"),
         });
-      }else if(this.state.inputAmount ==  '0'){
+      } else if (this.state.inputAmount == "0") {
         this.setState({
-          warning: "请输入输入数量",
+          warning: intl.get("Please enter an amount1"),
         });
-      }else if (this.state.inputAmount) {
+      } else if (this.state.inputAmount) {
         if (this.state.inputAmount1) {
           this.getAddLiquidity(sessionStorage.getItem("violas_chainId"));
           this.setState({
@@ -888,18 +915,17 @@ class CashPooling extends Component {
             focusActive: true,
             showWallet: true,
           });
-        } else if(this.state.inputAmount1 == ''){
+        } else if (this.state.inputAmount1 == "") {
           this.setState({
-            warning: "请输入输入数量",
+            warning: intl.get("Please enter an amount1"),
           });
-        }else if(this.state.inputAmount1 == '0'){
+        } else if (this.state.inputAmount1 == "0") {
           this.setState({
-            warning: "请输入输入数量",
+            warning: intl.get("Please enter an amount1"),
           });
         }
-      } 
+      }
     }
-    
   };
   //点击转出
   async getRemoveLiquidity(chainId) {
@@ -935,7 +961,7 @@ class CashPooling extends Component {
         // console.log("Remove Liquidity ", res);
         if (res == "success") {
           this.setState({
-            warning: "转出成功",
+            warning: intl.get("Withdraw Successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -950,7 +976,7 @@ class CashPooling extends Component {
       .catch((err) => {
         // console.log("Remove Liquidity ", err);
         this.setState({
-          warning: "转出失败",
+          warning: intl.get("Withdraw Failed"),
           showWallet: false,
         });
         setTimeout(() => {
@@ -963,20 +989,20 @@ class CashPooling extends Component {
       });
   }
   showExchangeCode1 = () => {
-    if(this.state.type2 == '选择通证'){
+    if (this.state.type2 == intl.get("Select Token")) {
       this.setState({
-          warning: "请选择通证",
-        });
-    }else{
-      if(this.state.outputAmount == ''){
+        warning: intl.get("Please Select Token"),
+      });
+    } else {
+      if (this.state.outputAmount == "") {
         this.setState({
-          warning: "请输入输出数量",
+          warning: intl.get("Please enter an amount2"),
         });
-      }else if(this.state.outputAmount ==  '0'){
+      } else if (this.state.outputAmount == "0") {
         this.setState({
-          warning: "请输入输出数量",
+          warning: intl.get("Please enter an amount2"),
         });
-      }else if (this.state.outputAmount) {
+      } else if (this.state.outputAmount) {
         if (this.state.outputAmount1) {
           this.getRemoveLiquidity(sessionStorage.getItem("violas_chainId"));
           this.setState({
@@ -986,16 +1012,15 @@ class CashPooling extends Component {
           });
         } else {
           this.setState({
-            warning: "请输入兑换数量",
+            warning: intl.get("Please enter an amount2"),
           });
         }
       } else {
         this.setState({
-          warning: "请输入兑换数量",
+          warning: intl.get("Please enter an amount2"),
         });
       }
     }
-    
   };
   closeWallet = (val) => {
     this.setState({
@@ -1005,13 +1030,13 @@ class CashPooling extends Component {
   getMineDialog = (event) => {
     this.stopPropagation(event);
     this.setState({
-      showMineDialog: true
+      showMineDialog: true,
     });
   };
   getMineDialog1 = (event) => {
     this.stopPropagation(event);
     this.setState({
-      showMineDialog: false
+      showMineDialog: false,
     });
   };
   render() {
@@ -1039,6 +1064,16 @@ class CashPooling extends Component {
       poolArr,
       focusActive,
     } = this.state;
+    if (
+      window.sessionStorage.getItem("curDealType") == intl.get("Add Liquidity")
+    ) {
+      window.sessionStorage.setItem("curDealType", intl.get("Add Liquidity"));
+    } else {
+      window.sessionStorage.setItem(
+        "curDealType",
+        intl.get("Remove Liquidity")
+      );
+    }
     // console.log(this.state.rate,'.......')
     return (
       <div className="exchange cashPooling">
@@ -1056,7 +1091,7 @@ class CashPooling extends Component {
               }}
             >
               <img src="/img/形状备份 2@2x.png" />
-              我的资金池
+              {intl.get("My Pool")}
             </div>
           ) : (
             <div
@@ -1071,7 +1106,7 @@ class CashPooling extends Component {
               }}
             >
               <img src="/img/形状 2@2x.png" />
-              我的资金池
+              {intl.get("My Pool")}
             </div>
           )}
 
@@ -1083,8 +1118,8 @@ class CashPooling extends Component {
               }}
             >
               <div>
-                <h4>挖矿福利</h4>
-                <p>现在加入资金池可获得同手续费奖励等价的VLS挖矿福利</p>
+                <h4>{intl.get("Mining Incentives")}</h4>
+                <p>{intl.get("Liquidity mining with VLS token incentives")}</p>
               </div>
               <div>
                 <img src="/img/m_jiantou-5 2@2x.png" />
@@ -1127,18 +1162,18 @@ class CashPooling extends Component {
                     </div>
                   ) : null}
                 </div>
-                <p>费率：--</p>
+                <p>{intl.get("Fees rate")}：--</p>
               </div>
-              {type == "转入" ? (
+              {type == intl.get("Add Liquidity") ? (
                 <div
                   className={getFocus ? "iptForm1 getFormBorder" : "iptForm1"}
                 >
                   <div className="showAsset">
-                    <label>转入</label>
+                    <label>{intl.get("Input")}</label>
                     <p>
                       <img src="/img/asset-management.png" />
-                      当前资产：{this.state.asset}
-                      {name == "选择通证" ? "" : name}
+                      {intl.get("Current Balances")}：{this.state.asset}
+                      {name == intl.get("Select Token") ? "" : name}
                     </p>
                   </div>
                   <div className="iptContent">
@@ -1207,7 +1242,7 @@ class CashPooling extends Component {
                                       <div>
                                         <h4>{v.show_name}</h4>
                                         <p>
-                                          余额：
+                                          {intl.get("Balance")}：
                                           {v.show_name == "BTC"
                                             ? v.BTC == 0
                                               ? 0
@@ -1244,10 +1279,10 @@ class CashPooling extends Component {
                   }
                 >
                   <div className="showAsset">
-                    <label>资金池通证</label>
+                    <label>{intl.get("Pool tokens")}</label>
                     <p>
                       <img src="/img/asset-management.png" />
-                      当前资产：{this.state.asset1}
+                      {intl.get("Current Balances")}：{this.state.asset1}
                     </p>
                   </div>
                   <div className="iptContent">
@@ -1320,7 +1355,9 @@ class CashPooling extends Component {
                                           "/" +
                                           v.coin_b.show_name}
                                       </h4>
-                                      <p>通证：{v.token / 1e6}</p>
+                                      <p>
+                                        {intl.get("Token")}：{v.token / 1e6}
+                                      </p>
                                     </div>
                                     <span
                                       className={
@@ -1340,16 +1377,16 @@ class CashPooling extends Component {
               )}
 
               <div className="changeImg">&</div>
-              {type == "转入" ? (
+              {type == intl.get("Add Liquidity") ? (
                 <div
                   className={getFocus1 ? "iptForm1 getFormBorder" : "iptForm1"}
                 >
                   <div className="showAsset">
-                    <label>转入</label>
+                    <label>{intl.get("Input")}</label>
                     <p>
                       <img src="/img/asset-management.png" />
-                      当前资产：{this.state.asset2}
-                      {type1 == "选择通证" ? "" : type1}
+                      {intl.get("Current Balances")}：{this.state.asset2}
+                      {type1 == intl.get("Select Token") ? "" : type1}
                     </p>
                   </div>
                   <div className="iptContent">
@@ -1428,7 +1465,7 @@ class CashPooling extends Component {
                                     <div>
                                       <h4>{v.show_name}</h4>
                                       <p>
-                                        余额：
+                                        {intl.get("Balance")}：
                                         {v.show_name == "BTC"
                                           ? v.BTC == 0
                                             ? 0
@@ -1462,7 +1499,7 @@ class CashPooling extends Component {
                   className={getFocus1 ? "iptForm1 getFormBorder" : "iptForm1"}
                 >
                   <div className="showAsset">
-                    <label>转出</label>
+                    <label>{intl.get("Output")}</label>
                     {/* <p><img src="/img/asset-management.png" />当前资产：--</p> */}
                   </div>
                   <div className="iptContent">
@@ -1475,31 +1512,34 @@ class CashPooling extends Component {
                 </div>
               )}
               <div className="changeRate">
-                兑换率：{this.state.rate > 0 ? "1:" + this.state.rate : "--"}
+                {intl.get("Swap rate")}：
+                {this.state.rate > 0 ? "1:" + this.state.rate : "--"}
               </div>
               {/* <div className="changeRate">当前资金池大小：— —</div> */}
               {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}
             </div>
             <div className="foot">
-              {type == "转入" ? (
+              {type == intl.get("Add Liquidity") ? (
                 <p
                   className={focusActive == false ? "btn" : "btn focusActive"}
                   onClick={() => this.showExchangeCode()}
                 >
-                  转入
+                  {intl.get("Liquidity")}
                 </p>
               ) : (
                 <p
                   className={focusActive == false ? "btn" : "btn focusActive"}
                   onClick={() => this.showExchangeCode1()}
                 >
-                  转出
+                  {intl.get("Withdraw")}
                 </p>
               )}
-              {type == "转入" ? (
+              {type == intl.get("Add Liquidity") ? (
                 <p
                   className={
-                    warning == "转入成功" ? "descr descrWarn" : "descr descrRed"
+                    warning == intl.get("Deposit Successful")
+                      ? "descr descrWarn"
+                      : "descr descrRed"
                   }
                 >
                   {warning}
@@ -1507,7 +1547,9 @@ class CashPooling extends Component {
               ) : (
                 <p
                   className={
-                    warning == "转出成功" ? "descr descrWarn" : "descr descrRed"
+                    warning == intl.get("Deposit Successful")
+                      ? "descr descrWarn"
+                      : "descr descrRed"
                   }
                 >
                   {warning}
@@ -1515,7 +1557,7 @@ class CashPooling extends Component {
               )}
             </div>
             <div className="changeRecord poolRecord">
-              <h4>资金池记录</h4>
+              <h4>{intl.get("Pool Records")}</h4>
               <div className="poolRecordLists">
                 {changeRecord.map((v, i) => {
                   return (
@@ -1533,7 +1575,7 @@ class CashPooling extends Component {
                       <div className="logo">
                         <img
                           src={
-                            this.optionTypes(
+                            this.optionTypes1(
                               v.transaction_type,
                               v.status
                             ).slice(0, 2) == "转入"
@@ -1548,7 +1590,7 @@ class CashPooling extends Component {
                           <div>
                             <p
                               className={
-                                this.optionTypes(
+                                this.optionTypes1(
                                   v.transaction_type,
                                   v.status
                                 ).slice(2, 4) == "成功"
@@ -1573,7 +1615,11 @@ class CashPooling extends Component {
                             }
                           </div>
                           <div>
-                            {<p>通证：+{v.token / 1e6}</p>}
+                            {
+                              <p>
+                                {intl.get("Token")}：+{v.token / 1e6}
+                              </p>
+                            }
 
                             <p>{timeStamp2String(v.confirmed_time + "000")}</p>
                           </div>

@@ -180,7 +180,7 @@ class Head extends React.PureComponent {
                 this.props.history.push("/homepage/home/miningAwards");
               }}
             >
-              <p>挖矿奖励</p>
+              <p>{intl.get("Mining Bonus1")}</p>
             </div>
             <p
               onClick={() => {

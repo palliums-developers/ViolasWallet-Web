@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./market.scss";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
+import intl from "react-intl-universal";
 let url = "https://api4.violas.io"
 let url1 = "https://api.violas.io";
 class MyPoolDialog extends Component {
@@ -33,35 +34,59 @@ class MyPoolDialog extends Component {
         let { total_token, poolList } = this.state;
         // console.log(poolList,'.......')
         return (
-            <div className="myPoolDialog">
-                <h4 onClick={() => this.props.showDrawer1(false)}><i><img src="/img/编组备份 3@2x.png" /></i>我的资金池</h4>
-                <div className="amountShow">
-                  <p>资金池资产</p>
-                  <p><span>{total_token / 1e6}</span></p>
-                </div>
-                <div className="btns">
-                    <button onClick={()=>{
-                        window.sessionStorage.setItem('curDealType', '转入')
-                        this.props.showDrawer1(false)
-                    }}>转入</button>
-                    <button onClick={() => {
-                        window.sessionStorage.setItem('curDealType', '转出')
-                        this.props.showDrawer1(false)
-                    }}>转出</button>
-                </div>
-                <div className="list">
-                    <h4>资产</h4>
-                    <div className="listContent">
-                        {
-                            poolList.map((v,i)=>{
-                                return <p key={i}><label>{v.coin_a.index < v.coin_b.index ? v.coin_a.show_name + '/' + v.coin_b.show_name : v.coin_b.show_name + '/' + v.coin_a.show_name}</label><span>{v.token / 1e6}</span></p>
-                            })
-                        }
-                        
-                    </div>
-                </div>
+          <div className="myPoolDialog">
+            <h4 onClick={() => this.props.showDrawer1(false)}>
+              <i>
+                <img src="/img/编组备份 3@2x.png" />
+              </i>
+              {intl.get("My Pool")}
+            </h4>
+            <div className="amountShow">
+              <p>{intl.get("Pool token")}</p>
+              <p>
+                <span>{total_token / 1e6}</span>
+              </p>
             </div>
-        )
+            <div className="btns">
+              <button
+                onClick={() => {
+                  window.sessionStorage.setItem(
+                    "curDealType",
+                    intl.get("Add Liquidity")
+                  );
+                  this.props.showDrawer1(false);
+                }}
+              >
+                {intl.get("Add Liquidity")}
+              </button>
+              <button
+                onClick={() => {
+                  window.sessionStorage.setItem("curDealType", intl.get("Remove Liquidity"));
+                  this.props.showDrawer1(false);
+                }}
+              >
+                {intl.get("Remove Liquidity")}
+              </button>
+            </div>
+            <div className="list">
+              <h4>{intl.get("Fund")}</h4>
+              <div className="listContent">
+                {poolList.map((v, i) => {
+                  return (
+                    <p key={i}>
+                      <label>
+                        {v.coin_a.index < v.coin_b.index
+                          ? v.coin_a.show_name + "/" + v.coin_b.show_name
+                          : v.coin_b.show_name + "/" + v.coin_a.show_name}
+                      </label>
+                      <span>{v.token / 1e6}</span>
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
     }
 }
 let mapStateToProps = (state) => {

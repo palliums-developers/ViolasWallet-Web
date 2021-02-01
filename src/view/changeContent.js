@@ -41,7 +41,7 @@ class ChangeContent extends Component {
                   }}
                   to="/homepage/home/changeContent/exchange"
                 >
-                  {intl.get("ECHANGE")}
+                  {intl.get("SWAP")}
                 </NavLink>
                 <NavLink
                   activeStyle={{
