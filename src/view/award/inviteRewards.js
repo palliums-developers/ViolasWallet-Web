@@ -134,15 +134,7 @@ class InviteRewards extends Component {
   };
   //分享链接
   shareLink = () => {
-    callHandler(
-      "callNative",
-      JSON.stringify({
-        id: this.state.id,
-        method: "share_link",
-        params: [this.state.address],
-      }),
-      (resp) => {}
-    );
+   this.props.history.push('/shareLink')
   };
   render() {
     let {
@@ -306,17 +298,7 @@ class InviteRewards extends Component {
             </div>
           </div>
           <div id={ifMobile == false ? "" : "btns"} className="btns">
-            {ifMobile == false ? (
-              <CopyToClipboard
-                text={window.sessionStorage.getItem("violas_address")}
-                onCopy={() => message.success("复制成功")}
-              >
-                <button> 分享链接 </button>
-              </CopyToClipboard>
-            ) : (
-              <button onClick={() => this.shareLink()}>分享链接</button>
-            )}
-
+            <button onClick={() => this.shareLink()}>分享链接</button>
             <button
               onClick={() => {
                 this.setState({

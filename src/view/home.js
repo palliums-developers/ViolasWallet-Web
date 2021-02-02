@@ -87,9 +87,8 @@ class Home extends React.PureComponent {
   getToken = () => {
     let temp_messaging = firebase.messaging();
     return temp_messaging
-    .getToken()
-    .then((res) => {
-        
+      .getToken()
+      .then((res) => {
         return res;
       })
       .catch((err) => {
@@ -153,6 +152,42 @@ class Home extends React.PureComponent {
   isTokenSentToServer = () => {
     return window.localStorage.getItem("sentToServer") === "1";
   };
+  checkNotificationPermission() {
+    if ("Notification" in window) {
+      if (Notification.permission === "granted") {
+        console.log("we are granted");
+      } else {
+        Notification.requestPermission()
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }
+  showNotification() {
+    this.checkNotificationPermission();
+    let title = "This is title";
+    let delayTime = Date.now() + 120000;
+    let options = {
+      body: "This is body",
+      data: { prop1: 123, prop2: "wryyyyyyyyy" },
+      lang: "en-US",
+      icon: "/images/hexiangu.jpg",
+      timestamp: delayTime,
+      vibrate: [100, 200, 100],
+    };
+    let myNotification = new Notification(title, options);
+    myNotification.addEventListener("show", function (ev) {
+      console.log("show", ev.currentTarget.data);
+    });
+    myNotification.addEventListener("close", function (ev) {
+      console.log("close", ev.currentTarget.body);
+    });
+    setTimeout(myNotification.close.bind(myNotification), 3000);
+  }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
     // console.log(window.localStorage.getItem('walletconnector'),'..............')
@@ -201,7 +236,7 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message } = this.state;
-    console.log(message,'.......')
+    console.log(message, ".......");
     if (this.props.location) {
       if (this.props.location.search) {
         this.setState({

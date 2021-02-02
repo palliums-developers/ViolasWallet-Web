@@ -35,6 +35,9 @@ import DigitalCashPage from "../view/helpCenter/digitalCashPage";
 import AllDetails from "../view/helpCenter/allDetails";
 import AboutViolasPage from "../view/helpCenter/aboutViolasPage";
 import NewsGroup from "../view/helpCenter/newsGroup";
+import ShareLink from "../view/award/shareLink";
+import AndroidDownload from "../view/award/androidDownload";
+import IosDownload from "../view/award/iosDownload";
 
 let routes = [
   //首页
@@ -49,6 +52,18 @@ let routes = [
   {
     path: "/violasExchange",
     component: ViolasExchange,
+  },
+  {
+    path: "/shareLink",
+    component: ShareLink,
+  },
+  {
+    path: "/iosDownload",
+    component: IosDownload,
+  },
+  {
+    path: "/androidDownload",
+    component: AndroidDownload,
   },
   //帮助中心
   {
