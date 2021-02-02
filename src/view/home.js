@@ -1,15 +1,15 @@
 import React from "react";
 import "./app.scss";
-import { connect } from 'react-redux'
-import RouterView from '../router/routerView'
+import { connect } from "react-redux";
+import RouterView from "../router/routerView";
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
-import Head from './components/head'
-import LangPage from './components/langPage'
-import {Badge} from "antd"
+import Head from "./components/head";
+import LangPage from "./components/langPage";
+import { Badge } from "antd";
 import firebase from "firebase/app";
 import "firebase/firebase-messaging";
-import axios from 'axios'
+import axios from "axios";
 let url = "https://api.violas.io";
 
 //首页
@@ -71,7 +71,10 @@ class Home extends React.PureComponent {
     this.setTokenSentToServer(false);
   };
   initialPage = async () => {
-    firebase.initializeApp(this.state.firebaseConfig);
+    if (!firebase.apps.length) {
+      // firebase.initializeApp(config);
+      firebase.initializeApp(this.state.firebaseConfig);
+    }
   };
   getNotificationPermission = () => {
     let temp_messaging = firebase.messaging();
@@ -87,9 +90,8 @@ class Home extends React.PureComponent {
   getToken = () => {
     let temp_messaging = firebase.messaging();
     return temp_messaging
-    .getToken()
-    .then((res) => {
-        
+      .getToken()
+      .then((res) => {
         return res;
       })
       .catch((err) => {
@@ -201,7 +203,7 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message } = this.state;
-    console.log(message,'.......')
+    console.log(message, ".......");
     if (this.props.location) {
       if (this.props.location.search) {
         this.setState({
@@ -306,12 +308,11 @@ class Home extends React.PureComponent {
     );
   }
 }
-let mapStateToProps = (state) =>{
+let mapStateToProps = (state) => {
   return state.ListReducer;
-}
-let mapDispatchToProps = (dispatch) =>{
+};
+let mapDispatchToProps = (dispatch) => {
   return {
- 
     getTypes: (type) => {
       dispatch({
         type: "t_type",
@@ -331,6 +332,6 @@ let mapDispatchToProps = (dispatch) =>{
       });
     },
   };
-}
+};
 
-export default connect(mapStateToProps,mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
