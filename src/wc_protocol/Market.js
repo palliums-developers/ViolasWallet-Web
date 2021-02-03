@@ -53,21 +53,21 @@ class Market extends React.Component {
             })
     }
     async getMarketCurrencies() {
-        axios('https://api4.violas.io/1.0/market/exchange/currency')
-            .then(async res => {
-                await this.setState({ currenciesWithType: res.data.data })
-                let temp = [];
-                temp = res.data.data.btc.concat(res.data.data.libra);
-                temp = temp.concat(res.data.data.violas)
-                await this.setState({
-                    currencies: temp,
-                    violas_currencies: res.data.data.violas,
-                    swap_in: temp[0].show_name,
-                    swap_out: temp[0].show_name,
-                    input_a: res.data.data.violas[0].show_name,
-                    input_b: res.data.data.violas[0].show_name,
-                });
-            })
+        // axios('https://api4.violas.io/1.0/market/exchange/currency')
+        //     .then(async res => {
+        //         await this.setState({ currenciesWithType: res.data.data })
+        //         let temp = [];
+        //         temp = res.data.data.btc.concat(res.data.data.libra);
+        //         temp = temp.concat(res.data.data.violas)
+        //         await this.setState({
+        //             currencies: temp,
+        //             violas_currencies: res.data.data.violas,
+        //             swap_in: temp[0].show_name,
+        //             swap_out: temp[0].show_name,
+        //             input_a: res.data.data.violas[0].show_name,
+        //             input_b: res.data.data.violas[0].show_name,
+        //         });
+        //     })
     }
     // https://api4.violas.io/1.0/market/pool/info?address=f4174e9eabcb2e968e22da4c75ac653b
     async getAccountPoolInfo() {
