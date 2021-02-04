@@ -76,6 +76,13 @@ class CashPooling extends Component {
     e.nativeEvent.stopImmediatePropagation();
   }
   async componentWillMount() {
+    if (!window.sessionStorage.getItem("curDealType")) {
+      window.sessionStorage.setItem("curDealType", this.state.type);
+    } else {
+      this.setState({
+        type: window.sessionStorage.getItem("curDealType"),
+      });
+    }
     if (this.props.visible) {
       this.props.showDrawer();
     }
@@ -89,13 +96,7 @@ class CashPooling extends Component {
   componentDidMount() {
     document.addEventListener("click", this.onClose);
     // this.getSelectTypes()
-    if (!window.sessionStorage.getItem("curDealType")) {
-      window.sessionStorage.setItem("curDealType", this.state.type);
-    } else {
-      this.setState({
-        type: window.sessionStorage.getItem("curDealType"),
-      });
-    }
+    
 
     this.getExchangeRecode();
     this.getOutBalances();
@@ -244,7 +245,7 @@ class CashPooling extends Component {
   // }
 
   showType = (v) => {
-    console.log(v, "........");
+    // console.log(v, "........");
     if (v == intl.get("Add Liquidity")) {
       window.sessionStorage.setItem("curDealType", intl.get("Add Liquidity"));
     } else {
@@ -633,7 +634,7 @@ class CashPooling extends Component {
       if (status == "Executed") {
         return "转出成功";
       } else {
-        return "转出成功";
+        return "转出失败";
       }
     }
   }
@@ -1063,8 +1064,9 @@ class CashPooling extends Component {
       poolArr,
       focusActive,
     } = this.state;
+    // console.log(window.sessionStorage.getItem("curDealType"));
     if (
-      window.sessionStorage.getItem("curDealType") == intl.get("Add Liquidity")
+      window.sessionStorage.getItem("curDealType") !== intl.get("Add Liquidity")
     ) {
       window.sessionStorage.setItem("curDealType", intl.get("Add Liquidity"));
     } else {
@@ -1073,7 +1075,7 @@ class CashPooling extends Component {
         intl.get("Remove Liquidity")
       );
     }
-    // console.log(this.state.rate,'.......')
+    // console.log(window.sessionStorage.getItem("curDealType"),'.......')
     return (
       <div className="exchange cashPooling">
         <div className="exchangeContent">
@@ -1597,27 +1599,39 @@ class CashPooling extends Component {
                                   : "red"
                               }
                             >
-                              {this.optionTypes(v.transaction_type, v.status)}
+                              {this.optionTypes(
+                                v.transaction_type,
+                                v.status
+                              )}
                             </p>
                             {
                               <p>
-                                <label>
-                                  {v.amounta / 1e6}
-                                  {v.coina}
-                                </label>
+                                {v.coina ? (
+                                  <label>
+                                    {v.amounta / 1e6}
+                                    {v.coina}
+                                  </label>
+                                ) : (
+                                  <label>--</label>
+                                )}
                                 &nbsp;&nbsp;&&nbsp;&nbsp;
-                                <label>
-                                  {v.amountb / 1e6}
-                                  {v.coinb}
-                                </label>
+                                {v.coinb ? (
+                                  <label>
+                                    {v.amountb / 1e6}
+                                    {v.coinb}
+                                  </label>
+                                ) : (
+                                  <label>--</label>
+                                )}
                               </p>
                             }
                           </div>
                           <div>
                             {
-                              <p>
+                              v.token?<p>
                                 {intl.get("Token")}：+{v.token / 1e6}
-                              </p>
+                              </p> :<p>--</p>
+                              
                             }
 
                             <p>{timeStamp2String(v.confirmed_time + "000")}</p>

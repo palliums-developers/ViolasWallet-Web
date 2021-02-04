@@ -345,7 +345,7 @@ class ViolasExchange extends Component {
                 <p>兑换数量</p>
                 <Input
                   prefix=""
-                  suffix="RMB"
+                  suffix={coinName}
                   placeholder="请输入代币兑换数量"
                   type="number"
                   value={swapAmount}

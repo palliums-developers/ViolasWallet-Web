@@ -11,7 +11,7 @@ import firebase from "firebase/app";
 import "firebase/firebase-messaging";
 import axios from "axios";
 let url = "https://api4.violas.io";
-
+let url1 = "https://api.violas.io";
 //首页
 class Home extends React.PureComponent {
   constructor(props) {
@@ -54,7 +54,9 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     await this.initialPage();
     await this.getNotificationPermission();
+    await this.getUnreadCount();
     await this.setState({ token: await this.getToken() });
+
     await this.sendToken();
     await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
@@ -65,6 +67,14 @@ class Home extends React.PureComponent {
       window.sessionStorage.clear();
       // this.props.history.push('/app')
     });
+  }
+  //获取未读消息数
+  getUnreadCount() {
+    fetch(url + "/1.0/violas/messages/unread/count?token=" + this.state.token)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   }
   componentWillUnmount = () => {
     this.setTokenSentToServer(false);
@@ -135,7 +145,6 @@ class Home extends React.PureComponent {
       console.log("on message: " + JSON.stringify(payload.data));
       await this.setState({ message: payload });
       await this.showNotification();
-
     });
   };
   setTokenSentToServer = (sent) => {
