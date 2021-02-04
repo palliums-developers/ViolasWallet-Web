@@ -10,7 +10,7 @@ import { Badge } from "antd";
 import firebase from "firebase/app";
 import "firebase/firebase-messaging";
 import axios from "axios";
-let url = "https://api.violas.io";
+let url = "https://api4.violas.io";
 
 //首页
 class Home extends React.PureComponent {

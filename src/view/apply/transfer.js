@@ -7,8 +7,8 @@ import { bytes2StrHex, string2Byte } from '../../utils/trans';
 import intl from "react-intl-universal";
 import WalletconnectDialog from '../components/walletconnectDialog'
 // import {withRouter} from 'react-router-dom'
-let url = "https://api.violas.io"
-let url1 = "https://api4.violas.io"
+let url1 = "https://api.violas.io"
+let url = "https://api4.violas.io"
 // let url1 = "https://tbtc1.trezor.io"
 let WAValidator = require('wallet-address-validator');
 

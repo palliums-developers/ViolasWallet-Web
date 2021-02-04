@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import intl from "react-intl-universal";
 const { encode, decode } = require("../../utils/bech32");
-let url1 = "https://api.violas.io";
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
 
 //收款
 class GetMoney extends Component {

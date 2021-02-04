@@ -7,8 +7,8 @@ import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
 import { message } from "antd";
 import "./award.scss";
-let url = "https://api4.violas.io";
-let url1 = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
+let url = "https://api.violas.io";
 
 //分享链接
 class ShareLink extends Component {

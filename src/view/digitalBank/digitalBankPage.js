@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import intl from "react-intl-universal";
-// let url = "https://api4.violas.io";
-let url = "https://api.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 //映射
 class DigitalBankPage extends Component {
     constructor() {

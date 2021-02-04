@@ -12,8 +12,8 @@ import MyPoolDialog from '../market/myPoolDialog'
 import intl from "react-intl-universal";
 // import RouterView from '../router/routerView'
 // let url = "http://52.27.228.84:4000"
-let url1 = "https://api.violas.io"
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 
 //资金池页面
 class CashPooling extends Component {

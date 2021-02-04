@@ -13,8 +13,8 @@ import WalletconnectDialog from "../components/walletconnectDialog";
 import intl from "react-intl-universal";
 
 // import RouterView from '../router/routerView'
-let url1 = "https://api.violas.io"
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 
 //兑换页面
 class ExChange extends Component {
@@ -88,7 +88,7 @@ class ExChange extends Component {
   }
   //按链获取币种信息
   async getMarketCurrencies() {
-    axios("https://api4.violas.io/1.0/market/exchange/currency").then((res) => {
+    axios(url1+"/1.0/market/exchange/currency").then((res) => {
       // console.log(res)
       this.setState({ currenciesWithType: res.data.data });
       let temp = [];
