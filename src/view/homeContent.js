@@ -10,6 +10,7 @@ import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
 // let url1 = "https://tbtc1.trezor.io"
+let initCoinsList = [];
 
 //钱包首页
 class HomeContent extends Component {
@@ -73,9 +74,8 @@ class HomeContent extends Component {
     }
     return number;
   }
-  getBalances = async () => {
-    let initCoinsList = [];
-    this.getBTCBalances();
+  getViolasBalances = ()=>{
+    
     //violas余额列表
     fetch(
       url1 +
@@ -111,79 +111,83 @@ class HomeContent extends Component {
                       arr1: this.state.arr1,
                     },
                     () => {
-                        let { arr1,arr2 } = this.state;
-                        let arrs=[];
-                        if (arr2) {
-                          arrs = arr1.concat(arr2);
-                        } else {
-                          arrs = arr1;
-                        }
-                        
-                        window.sessionStorage.setItem(
-                          "violas_Balances",
-                          JSON.stringify(arrs)
+                      let { arr1, arr2 } = this.state;
+                      let arrs = [];
+                      arrs = arr1;
+                      // if (arr2) {
+                      //   arrs = arr1.concat(arr2);
+                      // } else {
+                      //   arrs = arr1;
+                      // }
+
+                      window.sessionStorage.setItem(
+                        "violas_Balances",
+                        JSON.stringify(arrs)
+                      );
+                      if (arr1) {
+                        arrs.sort((a, b) => {
+                          return b.balance - a.balance;
+                        });
+                        arrs.map((v, i) => {
+                          if (v.name == "VLS") {
+                            initCoinsList.push(v);
+                          }
+                        });
+                        initCoinsList.map((v, i) => {
+                          if (v.checked) {
+                            //  return v;
+                          } else {
+                            Object.assign(v, {
+                              checked: true,
+                            });
+                          }
+                        });
+                        let temp = JSON.parse(
+                          window.sessionStorage.getItem("checkData")
                         );
-                        if (arr1) {
-                          arrs.sort((a, b) => {
-                            return b.balance - a.balance;
-                          });
-                          arrs.map((v, i) => {
-                            if (v.name == "VLS") {
-                              initCoinsList.push(v);
-                            }
-                          });
-                          initCoinsList.map((v, i) => {
-                            if (v.checked) {
-                              //  return v;
-                            } else {
-                              Object.assign(v, {
-                                checked: true,
-                              });
-                            }
-                          });
-                          let temp = JSON.parse(
-                            window.sessionStorage.getItem("checkData")
-                          );
-                          if (temp && arrs) {
-                            for (let i = 0; i < temp.length; i++) {
-                              for (let j = 0; j < arrs.length; j++) {
-                                if (
-                                  temp[i].show_icon
-                                    .split("/")
-                                    [
-                                      temp[i].show_icon.split("/").length - 1
-                                    ].split(".")[0] ==
-                                  arrs[j].show_icon
-                                    .split("/")
-                                    [
-                                      arrs[j].show_icon.split("/").length - 1
-                                    ].split(".")[0]
-                                ) {
-                                  if (temp[i].name == arrs[j].name) {
-                                    temp[i].balance = arrs[j].balance;
-                                    break;
-                                  }
+                        if (temp && arrs) {
+                          for (let i = 0; i < temp.length; i++) {
+                            for (let j = 0; j < arrs.length; j++) {
+                              if (
+                                temp[i].show_icon
+                                  .split("/")
+                                  [
+                                    temp[i].show_icon.split("/").length - 1
+                                  ].split(".")[0] ==
+                                arrs[j].show_icon
+                                  .split("/")
+                                  [
+                                    arrs[j].show_icon.split("/").length - 1
+                                  ].split(".")[0]
+                              ) {
+                                if (temp[i].name == arrs[j].name) {
+                                  temp[i].balance = arrs[j].balance;
+                                  break;
                                 }
                               }
                             }
-                            sessionStorage.setItem(
-                              "checkData",
-                              JSON.stringify(temp)
-                            );
-                          } else {
-                            window.sessionStorage.setItem(
-                              "checkData",
-                              JSON.stringify(initCoinsList)
-                            );
                           }
-                          this.setState({
+                          sessionStorage.setItem(
+                            "checkData",
+                            JSON.stringify(temp)
+                          );
+                        } else {
+                          window.sessionStorage.setItem(
+                            "checkData",
+                            JSON.stringify(initCoinsList)
+                          );
+                        }
+                        this.setState(
+                          {
                             checkData: JSON.parse(
                               window.sessionStorage.getItem("checkData")
                             ),
-                          },()=>{
-                                 this.getTotalAmount();
-                          });
-                        }
+                          },
+                          () => {
+                            this.getTotalAmount();
+                          }
+                        );
+                      }
                     }
                   );
                 });
@@ -191,6 +195,8 @@ class HomeContent extends Component {
           );
         }
       });
+  }
+  getLibraBalances = () =>{
     //libra余额列表
     fetch(
       url1 +
@@ -228,12 +234,12 @@ class HomeContent extends Component {
                       let { arr2, arr1 } = this.state;
 
                       let arrs = [];
-
-                      if (arr1) {
-                        arrs = arr2.concat(arr1);
-                      } else {
-                        arrs = arr2;
-                      }
+                      arrs = arr2;
+                      // if (arr1) {
+                      //   arrs = arr2.concat(arr1);
+                      // } else {
+                        
+                      // }
                       window.sessionStorage.setItem(
                         "violas_Balances",
                         JSON.stringify(arrs)
@@ -242,7 +248,7 @@ class HomeContent extends Component {
                       arrs.sort((a, b) => {
                         return b.balance - a.balance;
                       });
-                      
+
                       arrs.map((v, i) => {
                         if (v.name == "XUS") {
                           initCoinsList.push(v);
@@ -264,7 +270,6 @@ class HomeContent extends Component {
 
                       // console.log(temp, "......");
                       if (temp && arrs) {
-                        
                         for (let i = 0; i < temp && temp.length; i++) {
                           for (let j = 0; j < arrs.length; j++) {
                             if (
@@ -296,13 +301,16 @@ class HomeContent extends Component {
                           JSON.stringify(initCoinsList)
                         );
                       }
-                      this.setState({
-                        checkData: JSON.parse(
-                          window.sessionStorage.getItem("checkData")
-                        ),
-                      },()=>{
-                           this.getTotalAmount()
-                      });
+                      this.setState(
+                        {
+                          checkData: JSON.parse(
+                            window.sessionStorage.getItem("checkData")
+                          ),
+                        },
+                        () => {
+                          this.getTotalAmount();
+                        }
+                      );
                       // }
                     }
                   );
@@ -371,6 +379,12 @@ class HomeContent extends Component {
         }
         //  }
       });
+  }
+  getBalances = async () => {
+    
+    await this.getBTCBalances();
+    await this.getViolasBalances();
+    await this.getLibraBalances();
   };
   getTotalAmount(){
     let amount = 0;
