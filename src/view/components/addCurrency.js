@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import WalletConnect from '../../packages/browser/src/index';
-import code_data from '../../utils/code.json';
+import WalletConnect from "../../packages/browser/src/index";
+import code_data from "../../utils/code.json";
 import intl from "react-intl-universal";
 
-import '../app.scss'
+import "../app.scss";
 let url1 = "https://api.violas.io";
 let url = "https://api4.violas.io";
-let names = []
+let names = [];
 
 //添加币种
 class AddCurrency extends Component {
@@ -35,7 +35,7 @@ class AddCurrency extends Component {
       publishedArr: [],
       BTCBalance: 0,
       coinsBalance: 0,
-      libraData:[]
+      libraData: [],
     };
   }
   async componentWillMount() {
@@ -209,7 +209,10 @@ class AddCurrency extends Component {
       _name_hex +
       suffix;
     this.setState({ tyArgs: result }, async () => {
-      await this.sendPublish(_name, parseInt(sessionStorage.getItem("violas_chainId")));
+      await this.sendPublish(
+        _name,
+        parseInt(sessionStorage.getItem("violas_chainId"))
+      );
     });
   }
   getFloat(number, n) {
@@ -262,79 +265,82 @@ class AddCurrency extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        this.setState({
-          libraData:res.data.published
-        },()=>{
-          fetch(
-            url +
-              "/1.0/violas/currency/published?addr=" +
-              window.sessionStorage.getItem("violas_address")
-          )
-            .then((res) => res.json())
-            .then((res) => {
-              let checkData = JSON.parse(sessionStorage.getItem("checkData"));
-              let violas_Balances = JSON.parse(
-                sessionStorage.getItem("violas_Balances")
-              );
-              let index = ind;
-              let publishData = res.data.published.concat(this.state.libraData);
-              if (publishData.length > 0) {
-                let temp = {
-                  pd: false,
-                  violas_balance: {},
-                  published: {},
-                };
-                for (let i = 0; i < publishData.length; i++) {
-                  for (let j = 0; j < violas_Balances.length; j++) {
-                    if (
-                      violas_Balances[j].show_icon
-                        .split("/")
-                        [
-                          violas_Balances[j].show_icon.split("/").length - 1
-                        ].split(".")[0] == type
-                    ) {
-                      if (publishData[i] == _name) {
-                        if (violas_Balances[j].show_name == publishData[i]) {
-                          temp.pd = true;
-                          temp.violas_balance = violas_Balances[j];
-                          temp.published = publishData[i];
-                          break;
+        this.setState(
+          {
+            libraData: res.data.published,
+          },
+          () => {
+            fetch(
+              url +
+                "/1.0/violas/currency/published?addr=" +
+                window.sessionStorage.getItem("violas_address")
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                let checkData = JSON.parse(sessionStorage.getItem("checkData"));
+                let violas_Balances = JSON.parse(
+                  sessionStorage.getItem("violas_Balances")
+                );
+                let index = ind;
+                let publishData = res.data.published.concat(
+                  this.state.libraData
+                );
+                if (publishData.length > 0) {
+                  let temp = {
+                    pd: false,
+                    violas_balance: {},
+                    published: {},
+                  };
+                  for (let i = 0; i < publishData.length; i++) {
+                    for (let j = 0; j < violas_Balances.length; j++) {
+                      if (
+                        violas_Balances[j].show_icon
+                          .split("/")
+                          [
+                            violas_Balances[j].show_icon.split("/").length - 1
+                          ].split(".")[0] == type
+                      ) {
+                        if (publishData[i] == _name) {
+                          if (violas_Balances[j].show_name == publishData[i]) {
+                            temp.pd = true;
+                            temp.violas_balance = violas_Balances[j];
+                            temp.published = publishData[i];
+                            break;
+                          }
                         }
                       }
                     }
                   }
-                }
-                if (temp.pd) {
-                  if (temp.violas_balance.show_name == temp.published) {
-                    temp.violas_balance.checked = true;
-                    checkData.push(temp.violas_balance);
-                    window.sessionStorage.setItem(
-                      "checkData",
-                      JSON.stringify(checkData)
-                    );
-                    this.getBalance(checkData);
-                    this.getTotal(checkData);
-                    this.props.showAddCoins(false);
+                  if (temp.pd) {
+                    if (temp.violas_balance.show_name == temp.published) {
+                      temp.violas_balance.checked = true;
+                      checkData.push(temp.violas_balance);
+                      window.sessionStorage.setItem(
+                        "checkData",
+                        JSON.stringify(checkData)
+                      );
+                      this.getBalance(checkData);
+                      this.getTotal(checkData);
+                      this.props.showAddCoins(false);
+                    }
+                  } else {
+                    if (type == "violas") {
+                      this.props.showWalletFun(true);
+                      this.violas_getTyArgs(_name);
+                      this.props.getBalances();
+                      this.forceUpdate();
+                    } else if (type == "libra") {
+                      this.props.showWalletFun(true);
+                      this.libra_getTyArgs(_module, _name);
+                      this.props.getBalances();
+                      this.forceUpdate();
+                    }
                   }
-                } else {
-                  if (type == "violas") {
-                    this.props.showWalletFun(true);
-                    this.violas_getTyArgs(_name);
-                    this.props.getBalances();
-                    this.forceUpdate();
-                  } else if (type == "libra") {
-                    this.props.showWalletFun(true);
-                    this.libra_getTyArgs(_module, _name);
-                    this.props.getBalances();
-                    this.forceUpdate();
-                  }
                 }
-              }
-            });
-        })
+              });
+          }
+        );
       });
-      
-    
   }
   //violas币激活
   async sendPublish(_name, chainId) {
@@ -432,7 +438,6 @@ class AddCurrency extends Component {
   }
   //关闭选中
   closePub = (_name, _iconName) => {
-    
     fetch(
       url +
         "/1.0/violas/currency/published?addr=" +
