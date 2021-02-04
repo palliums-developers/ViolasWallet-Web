@@ -74,8 +74,7 @@ class HomeContent extends Component {
     }
     return number;
   }
-  getViolasBalances = ()=>{
-    
+  getViolasBalances = () => {
     //violas余额列表
     fetch(
       url1 +
@@ -119,7 +118,6 @@ class HomeContent extends Component {
                       // } else {
                       //   arrs = arr1;
                       // }
-
                       window.sessionStorage.setItem(
                         "violas_Balances",
                         JSON.stringify(arrs)
@@ -142,6 +140,7 @@ class HomeContent extends Component {
                             });
                           }
                         });
+                        console.log("violas ", initCoinsList);
                         let temp = JSON.parse(
                           window.sessionStorage.getItem("checkData")
                         );
@@ -195,8 +194,8 @@ class HomeContent extends Component {
           );
         }
       });
-  }
-  getLibraBalances = () =>{
+  };
+  getLibraBalances = () => {
     //libra余额列表
     fetch(
       url1 +
@@ -238,7 +237,7 @@ class HomeContent extends Component {
                       // if (arr1) {
                       //   arrs = arr2.concat(arr1);
                       // } else {
-                        
+
                       // }
                       window.sessionStorage.setItem(
                         "violas_Balances",
@@ -263,7 +262,7 @@ class HomeContent extends Component {
                           });
                         }
                       });
-
+                      console.log("libra ", initCoinsList);
                       let temp = JSON.parse(
                         window.sessionStorage.getItem("checkData")
                       );
@@ -296,6 +295,7 @@ class HomeContent extends Component {
                           JSON.stringify(temp)
                         );
                       } else {
+                        console.log("libra2", initCoinsList);
                         window.sessionStorage.setItem(
                           "checkData",
                           JSON.stringify(initCoinsList)
@@ -379,14 +379,13 @@ class HomeContent extends Component {
         }
         //  }
       });
-  }
+  };
   getBalances = async () => {
-    
     await this.getBTCBalances();
     await this.getViolasBalances();
     await this.getLibraBalances();
   };
-  getTotalAmount(){
+  getTotalAmount() {
     let amount = 0;
     // console.log(this.state.checkData);
     for (let i = 0; i < this.state.checkData.length; i++) {
@@ -455,11 +454,14 @@ class HomeContent extends Component {
                     )
                   );
                 }
-                this.setState({
-                  BTCBalance: BTCBalance,
-                },()=>{
-                  this.getTotalAmount();
-                });
+                this.setState(
+                  {
+                    BTCBalance: BTCBalance,
+                  },
+                  () => {
+                    this.getTotalAmount();
+                  }
+                );
               });
           }
         );
@@ -531,7 +533,6 @@ class HomeContent extends Component {
       checkData,
       balance,
     } = this.state;
-    // console.log(checkData);
     return (
       <div className="content">
         <div className="contentWrap">
