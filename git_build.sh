@@ -1,5 +1,5 @@
 #!/bin/bash
-git pull origin web-wallet-connect
+git pull origin inside
 yarn build
-sudo cp -rf ./build/* /var/www/wallet.violas.io/
+sudo cp -rf ./build/* /var/www/devwallet.violas.io/
 date
