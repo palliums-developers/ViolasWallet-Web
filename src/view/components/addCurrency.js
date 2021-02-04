@@ -209,7 +209,7 @@ class AddCurrency extends Component {
       _name_hex +
       suffix;
     this.setState({ tyArgs: result }, async () => {
-      await this.sendPublish(_name, sessionStorage.getItem("violas_chainId"));
+      await this.sendPublish(_name, parseInt(sessionStorage.getItem("violas_chainId")));
     });
   }
   getFloat(number, n) {
@@ -379,7 +379,7 @@ class AddCurrency extends Component {
     await this.setState({ tyArgs1: result }, async () => {
       await this.libra_sendPublish(
         _name,
-        sessionStorage.getItem("libra_chainId")
+        parseInt(sessionStorage.getItem("libra_chainId"))
       );
     });
   }

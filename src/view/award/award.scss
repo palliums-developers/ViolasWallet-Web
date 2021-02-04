@@ -1076,6 +1076,180 @@
         }
     }
 }
+//安卓端下载页
+.AndroidDownloadPage{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: rgba(38, 3, 114, 1);
+    display: flex;
+    flex-direction: column;
+    >div{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        >p:nth-child(1){
+            display: flex;
+            flex-direction: column;
+            margin-top: 59px;
+            img{
+                width: 68px;
+                height: 68px;
+            }
+            label{
+                font-size: 14px;
+                font-weight: 400;
+                color: #FFFFFF;
+                margin-top: 5px;
+            }
+        }
+        .descr1{
+            margin-top: 42px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            h4{
+                font-size: 24px;
+                font-weight: 600;
+                color: #FFFFFF;
+                margin-bottom: 12px!important;
+            }
+            p{
+                font-size: 12px;
+                font-weight: 400;
+                color: #FFFFFF;
+            }
+            >div{
+                display:flex;
+                img{
+                    width: 549px;
+                    height: 366px;
+                }
+            }
+        }
+        .descr2{
+            margin-top: 20px;
+            >div{
+                margin-top: 30px;
+                img{
+                    width: 376px;
+                    height: 324px;
+                }
+            }
+            h4{
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+                img{
+                  width: 20px;
+                  height:16px;
+                  margin-right: 6px;
+                }
+            }
+        }
+        .descr3{
+             margin-top: 120px;
+             >div{
+                img{
+                    width: 376px;
+                    height: 372px;
+                }
+            }
+            h4{
+                img{
+                  width: 21px;
+                  height:20px;
+                  margin-right: 6px;
+                }
+            }
+        }
+        .descr4{
+            margin-top: 120px;
+            margin-bottom: 120px;
+            h4{
+                img{
+                  width: 21px;
+                  height:21px;
+                  margin-right: 6px;
+                }
+            }
+        }
+    }
+    .bottomBtn{
+        width: 100%;
+        height: 64px;
+        background: #FFF;
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        >div{
+          height: 100%;
+          display: flex;
+          align-items: center;
+          p{
+              cursor: pointer;
+              img{
+                  width: 165px;
+                  height: 40px;
+              }
+          }
+          p:nth-child(1){
+              margin-right: 15px;
+          }
+          p:nth-child(2){
+              width: 165px;
+              height: 40px;
+              background: linear-gradient(139deg, #9339F3 0%, #7038FD 100%);
+              border-radius: 20px;
+              line-height: 40px;
+              text-align: center;
+              font-size: 14px;
+              font-weight: 600;
+              color: #FFFFFF;
+          }
+        }
+    }
+     .bottomBtn1{
+        width: 100%;
+        height: 64px;
+        background: #FFF;
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        >div{
+          height: 100%;
+          display: flex;
+          align-items: center;
+          p{
+            width: 345px;
+            height: 48px;
+            background: linear-gradient(139deg, #9339F3 0%, #7038FD 100%);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            span{
+                font-size: 14px;
+                font-weight: 600;
+                color: #FFFFFF;
+            }
+            label{
+                font-size: 10px;
+                font-weight: 400;
+                color: #FFFFFF;
+            }
+          }
+         
+        }
+    }
+}
 //保存图片
 .canvasWrap{
     width: 100%;

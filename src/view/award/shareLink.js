@@ -18,7 +18,7 @@ class ShareLink extends Component {
 
     };
   }
-  download = () =>{
+  download = () => {
       var u = navigator.userAgent;
       var ua = u.toLowerCase();
       if (/iphone|ipad|ipod/.test(ua)) {// iOS 系统 ->  跳AppStore下载地址
@@ -26,9 +26,16 @@ class ShareLink extends Component {
       } else if (/android/.test(ua)) {// 安卓系统 -> 跳安卓端下载地址
         this.props.history.push("/androidDownload");
       } else {
-        // alert("PC端")
+        var plat = navigator.platform;
+        var win = plat.indexOf('Win');
+        var mac = plat.indexOf('Mac');
+        if (win == 0) {
+          this.props.history.push("/androidDownload");
+        }else if (mac == 0) {
+          this.props.history.push("/iosDownload");
+        }
+        }
       }
-  }
   render() {
     let {
     } = this.state;

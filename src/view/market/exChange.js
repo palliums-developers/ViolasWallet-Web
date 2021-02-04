@@ -636,7 +636,7 @@ class ExChange extends Component {
   }
   //兑换
   async getSwap() {
-    console.log(this.state.swap_in_type);
+    // console.log(this.state.swap_in_type);
     if (this.state.swap_in_type === "btc") {
       const tx = await this.getBitcoinSwap();
       console.log("bitcoin swap", tx);
@@ -673,7 +673,7 @@ class ExChange extends Component {
     } else if (this.state.swap_in_type === "libra") {
       const tx = await this.getLibraSwap(
         this.state.swap_out_type,
-        sessionStorage.getItem("libra_chainId")
+        parseInt(sessionStorage.getItem("libra_chainId"))
       );
       console.log("libra swap ", tx);
       this.state.walletConnector
@@ -709,7 +709,7 @@ class ExChange extends Component {
     } else if (this.state.swap_in_type === "violas") {
       const tx = await this.getViolasSwap(
         this.state.swap_out_type,
-        sessionStorage.getItem("violas_chainId")
+        parseInt(sessionStorage.getItem("violas_chainId"))
       );
       console.log("violas swap ", tx);
       this.state.walletConnector

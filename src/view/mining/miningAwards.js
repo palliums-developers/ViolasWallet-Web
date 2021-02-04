@@ -99,9 +99,9 @@ class MiningAwards extends Component {
       suffix;
     this.setState({ tyArgs: result, showWallet: true }, () => {
       if (name == "pool") {
-        this.poolProfit(sessionStorage.getItem("violas_chainId"));
+        this.poolProfit(parseInt(sessionStorage.getItem("violas_chainId")));
       } else if (name == "bank") {
-        this.bankProfit(sessionStorage.getItem("violas_chainId"));
+        this.bankProfit(parseInt(sessionStorage.getItem("violas_chainId")));
       }
     });
   }

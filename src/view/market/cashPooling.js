@@ -89,7 +89,6 @@ class CashPooling extends Component {
   componentDidMount() {
     document.addEventListener("click", this.onClose);
     // this.getSelectTypes()
-    console.log(window.sessionStorage.getItem("curDealType"), "........");
     if (!window.sessionStorage.getItem("curDealType")) {
       window.sessionStorage.setItem("curDealType", this.state.type);
     } else {
@@ -909,7 +908,7 @@ class CashPooling extends Component {
         });
       } else if (this.state.inputAmount) {
         if (this.state.inputAmount1) {
-          this.getAddLiquidity(sessionStorage.getItem("violas_chainId"));
+          this.getAddLiquidity(parseInt(sessionStorage.getItem("violas_chainId")));
           this.setState({
             warning: "",
             focusActive: true,
@@ -1004,7 +1003,7 @@ class CashPooling extends Component {
         });
       } else if (this.state.outputAmount) {
         if (this.state.outputAmount1) {
-          this.getRemoveLiquidity(sessionStorage.getItem("violas_chainId"));
+          this.getRemoveLiquidity(parseInt(sessionStorage.getItem("violas_chainId")));
           this.setState({
             warning: "",
             focusActive: true,

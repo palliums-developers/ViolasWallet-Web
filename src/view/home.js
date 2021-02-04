@@ -55,7 +55,6 @@ class Home extends React.PureComponent {
     await this.initialPage();
     await this.getNotificationPermission();
     await this.setState({ token: await this.getToken() });
-    console.log(this.state.token);
     await this.sendToken();
     await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
@@ -135,6 +134,8 @@ class Home extends React.PureComponent {
     temp_messaging.onMessage(async (payload) => {
       console.log("on message: " + JSON.stringify(payload.data));
       await this.setState({ message: payload });
+      await this.showNotification();
+
     });
   };
   setTokenSentToServer = (sent) => {
@@ -171,11 +172,12 @@ class Home extends React.PureComponent {
     }
   }
   showNotification() {
+    let { message } = this.state;
     this.checkNotificationPermission();
-    let title = "This is title";
+    let title = message.notification.title;
     let delayTime = Date.now() + 120000;
     let options = {
-      body: "This is body",
+      body: message.notification.body,
       data: { prop1: 123, prop2: "wryyyyyyyyy" },
       lang: "en-US",
       icon: "/images/hexiangu.jpg",
@@ -239,7 +241,7 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message } = this.state;
-    console.log(message, ".......");
+    // console.log(message, ".......");
     if (this.props.location) {
       if (this.props.location.search) {
         this.setState({

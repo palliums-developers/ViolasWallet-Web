@@ -268,7 +268,6 @@ class Transfer extends Component {
   };
   //获取到输入数量
   getTransAmount = (e) => {
-    console.log(e.target.value);
     this.setState(
       {
         amount: e.target.value,
@@ -366,7 +365,7 @@ class Transfer extends Component {
           },
           {
             type: "U64",
-            value: this.state.amount * 1e6,
+            value: String(this.state.amount * 1e6),
           },
           {
             type: "Vector",
@@ -414,7 +413,7 @@ class Transfer extends Component {
           },
           {
             type: "U64",
-            value: this.state.amount * 1e6,
+            value: String(this.state.amount * 1e6),
           },
           {
             type: "Vector",
@@ -500,7 +499,7 @@ class Transfer extends Component {
           warning: "",
           showWallet: true
         },()=>{
-          this.violas_sendTransaction(sessionStorage.getItem("violas_chainId"));
+          this.violas_sendTransaction(parseInt(sessionStorage.getItem("violas_chainId")));
         });
       }
     }
@@ -528,13 +527,14 @@ class Transfer extends Component {
           warning: "",
           showWallet: true
         },()=>{
-           this.libra_sendTransaction(sessionStorage.getItem("libra_chainId"));
+           this.libra_sendTransaction(
+             parseInt(sessionStorage.getItem("libra_chainId"))
+           );
         });
       }
     }
   };
   getBTCNext = () => {
-    console.log(this.state.amount,this.state.balance)
     if (this.state.address == "") {
       this.setState({
         warning: intl.get("Please input address"),

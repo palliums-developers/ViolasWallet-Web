@@ -39,7 +39,7 @@ class GetMoney extends Component {
     }
     getBech32(addr){
       let example = {
-        prefix: 'lbr',
+        prefix: "tdm",
         type: 1,
         address: addr,
         sub_address1: "0x0000000000000000",

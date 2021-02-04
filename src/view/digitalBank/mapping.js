@@ -388,10 +388,10 @@ class DigitalBank extends Component {
       let tx = getLibraTx(
         sessionStorage.getItem("libra_address"),
         this.state.mappingCoinType.receiver_address,
-        this.state.amount * 1e6,
+        ""+this.state.amount * 1e6,
         this.state.mappingCoinType.from_coin.assert.module,
         this.state.mappingCoinType.from_coin.assert.name,
-        sessionStorage.getItem("libra_chainId"),
+        parseInt(sessionStorage.getItem("libra_chainId")),
         script
       );
       console.log("libra: ", tx);
@@ -434,10 +434,10 @@ class DigitalBank extends Component {
       let tx = getViolasTx(
         sessionStorage.getItem("violas_address"),
         this.state.mappingCoinType.receiver_address,
-        this.state.amount * 1e6,
+        ""+this.state.amount * 1e6,
         this.state.mappingCoinType.from_coin.assert.module,
         this.state.mappingCoinType.from_coin.assert.name,
-        sessionStorage.getItem("violas_chainId"),
+        parseInt(sessionStorage.getItem("violas_chainId")),
         script
       );
       console.log("violas: ", tx);

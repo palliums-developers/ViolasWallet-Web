@@ -159,10 +159,10 @@ class SaveDetails extends Component {
     tx = digitalBank(
       "lock",
       this.state.showType,
-      this.state.amount * 1e6,
+      ""+this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
       this.state.token_address,
-      sessionStorage.getItem("violas_chainId")
+      parseInt(sessionStorage.getItem("violas_chainId"))
     );
     console.log("Digital Bank ", "lock", tx);
     this.state.walletConnector

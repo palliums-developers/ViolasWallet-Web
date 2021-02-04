@@ -411,10 +411,10 @@ class SaveOrder extends Component {
     tx = digitalBank(
       "redeem",
       withdrawalsList.token_module,
-      withdrawalsAmount * 1e6,
+      ""+withdrawalsAmount * 1e6,
       sessionStorage.getItem("violas_address"),
       withdrawalsList.token_address,
-      sessionStorage.getItem("violas_chainId")
+      parseInt(sessionStorage.getItem("violas_chainId"))
     );
     console.log("Digital Bank ", "redeem", tx);
     this.state.walletConnector

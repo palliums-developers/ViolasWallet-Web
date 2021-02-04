@@ -160,10 +160,10 @@ class BorrowDetails extends Component {
     tx = digitalBank(
       "borrow",
       this.state.showType,
-      this.state.amount * 1e6,
+      ""+this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
       this.state.token_address,
-      sessionStorage.getItem("violas_chainId")
+      parseInt(sessionStorage.getItem("violas_chainId"))
     );
     if (productId === 0) {
       console.log("Cannot find match product, please select other coin.");
