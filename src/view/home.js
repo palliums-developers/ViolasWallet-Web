@@ -70,7 +70,11 @@ class Home extends React.PureComponent {
   }
   //获取未读消息数
   getUnreadCount() {
-    fetch(url + "/1.0/violas/messages/unread/count?token=" + this.state.token)
+    fetch(
+      url +
+        "/1.0/violas/messages/unread/count?token=" +
+        window.sessionStorage.getItem("firebase_token")
+    )
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
