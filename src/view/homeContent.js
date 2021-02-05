@@ -155,11 +155,9 @@ class HomeContent extends Component {
   };
   getBalances = async () => {
     this.getBTCBalances();
-    this.initCheckData();
-
-    // if (!window.sessionStorage.getItem("checkData")) {
-    //   this.initCheckData();
-    // }
+    if (!window.sessionStorage.getItem("checkData")) {
+      this.initCheckData();
+    }
     this.getTotalAmount();
   };
   getTotalAmount() {
