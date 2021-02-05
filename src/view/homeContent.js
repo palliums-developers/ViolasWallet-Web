@@ -10,7 +10,6 @@ import "./app.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
 // let url1 = "https://tbtc1.trezor.io"
-let initCoinsList = [];
 
 //钱包首页
 class HomeContent extends Component {
@@ -74,319 +73,88 @@ class HomeContent extends Component {
     }
     return number;
   }
-  getViolasBalances = () => {
-    //violas余额列表
-    fetch(
+  getBalanceList = async (chain) => {
+    let temp = await fetch(
       url1 +
-        "/1.0/violas/balance?addr=" +
-        window.sessionStorage.getItem("violas_address")
+        "/1.0/" +
+        chain +
+        "/balance?addr=" +
+        window.sessionStorage.getItem(chain + "_address")
     )
-      .then((res) => res.json())
       .then((res) => {
-        // console.log(res.data,'.............')
-        if (res.data) {
-          this.setState(
-            {
-              arr1: res.data.balances,
-            },
-            () => {
-              fetch(
-                url1 +
-                  "/1.0/violas/value/violas?address=" +
-                  window.sessionStorage.getItem("violas_address")
-              )
-                .then((res) => res.json())
-                .then((res) => {
-                  let vioRate = res.data;
-                  for (let i = 0; i < this.state.arr1.length; i++) {
-                    for (let j = 0; j < vioRate.length; j++) {
-                      if (this.state.arr1[i].name == vioRate[i].name) {
-                        this.state.arr1[i].rate = vioRate[i].rate;
-                      }
-                    }
-                  }
-                  this.setState(
-                    {
-                      arr1: this.state.arr1,
-                    },
-                    () => {
-                      let { arr1, arr2 } = this.state;
-                      let arrs = [];
-                      if (arr2) {
-                        arrs = arr1.concat(arr2);
-                      } else {
-                        arrs = arr1;
-                      }
-                      window.sessionStorage.setItem(
-                        "violas_Balances",
-                        JSON.stringify(arrs)
-                      );
-                      if (arr1) {
-                        arrs.sort((a, b) => {
-                          return b.balance - a.balance;
-                        });
-                        arrs.map((v, i) => {
-                          if (v.name == "VLS") {
-                            initCoinsList.push(v);
-                          }
-                        });
-                        initCoinsList.map((v, i) => {
-                          if (v.checked) {
-                            //  return v;
-                          } else {
-                            Object.assign(v, {
-                              checked: true,
-                            });
-                          }
-                        });
-                        console.log("violas ", initCoinsList);
-                        let temp = JSON.parse(
-                          window.sessionStorage.getItem("checkData")
-                        );
-                        if (temp && arrs) {
-                          for (let i = 0; i < temp.length; i++) {
-                            for (let j = 0; j < arrs.length; j++) {
-                              if (
-                                temp[i].show_icon
-                                  .split("/")
-                                  [
-                                    temp[i].show_icon.split("/").length - 1
-                                  ].split(".")[0] ==
-                                arrs[j].show_icon
-                                  .split("/")
-                                  [
-                                    arrs[j].show_icon.split("/").length - 1
-                                  ].split(".")[0]
-                              ) {
-                                if (temp[i].name == arrs[j].name) {
-                                  temp[i].balance = arrs[j].balance;
-                                  break;
-                                }
-                              }
-                            }
-                          }
-                          sessionStorage.setItem(
-                            "checkData",
-                            JSON.stringify(temp)
-                          );
-                        } else {
-                          window.sessionStorage.setItem(
-                            "checkData",
-                            JSON.stringify(initCoinsList)
-                          );
-                        }
-                        this.setState(
-                          {
-                            checkData: JSON.parse(
-                              window.sessionStorage.getItem("checkData")
-                            ),
-                          },
-                          () => {
-                            this.getTotalAmount();
-                          }
-                        );
-                      }
-                    }
-                  );
-                });
-            }
-          );
-        }
+        return res.json();
+      })
+      .catch((err) => {
+        console.log(err);
       });
+    return temp.data.balances;
   };
-  getLibraBalances = () => {
-    //libra余额列表
-    fetch(
+  getRateList = async (chain) => {
+    let temp = await fetch(
       url1 +
-        "/1.0/libra/balance?addr=" +
-        window.sessionStorage.getItem("libra_address")
+        "/1.0/violas/value/" +
+        chain +
+        "?address=" +
+        window.sessionStorage.getItem(chain + "_address")
     )
-      .then((res) => res.json())
       .then((res) => {
-        if (res.data) {
-          this.setState(
-            {
-              arr2: res.data.balances,
-            },
-            () => {
-              fetch(
-                url1 +
-                  "/1.0/violas/value/libra?address=" +
-                  window.sessionStorage.getItem("libra_address")
-              )
-                .then((res) => res.json())
-                .then((res) => {
-                  let libRate = res.data;
-                  for (let i = 0; i < this.state.arr2.length; i++) {
-                    for (let j = 0; j < libRate.length; j++) {
-                      if (this.state.arr2[i].name == libRate[i].name) {
-                        this.state.arr2[i].rate = libRate[i].rate;
-                      }
-                    }
-                  }
-                  this.setState(
-                    {
-                      arr2: this.state.arr2,
-                    },
-                    () => {
-                      let { arr2, arr1 } = this.state;
-
-                      let arrs = [];
-                      
-                      if (arr1) {
-                        arrs = arr2.concat(arr1);
-                      } else {
-                          arrs = arr2;
-                      }
-                      window.sessionStorage.setItem(
-                        "violas_Balances",
-                        JSON.stringify(arrs)
-                      );
-                      if (arr1) {
-                      arrs.sort((a, b) => {
-                        return b.balance - a.balance;
-                      });
-
-                      arrs.map((v, i) => {
-                        if (v.name == "XUS") {
-                          initCoinsList.push(v);
-                        }
-                      });
-                      initCoinsList.map((v, i) => {
-                        if (v.checked) {
-                          //  return v;
-                        } else {
-                          Object.assign(v, {
-                            checked: true,
-                          });
-                        }
-                      });
-                      console.log("libra ", initCoinsList);
-                      let temp = JSON.parse(
-                        window.sessionStorage.getItem("checkData")
-                      );
-
-                      // console.log(temp, "......");
-                      if (temp && arrs) {
-                        for (let i = 0; i < temp && temp.length; i++) {
-                          for (let j = 0; j < arrs.length; j++) {
-                            if (
-                              temp[i].show_icon
-                                .split("/")
-                                [temp[i].show_icon.split("/").length - 1].split(
-                                  "."
-                                )[0] ==
-                              arrs[j].show_icon
-                                .split("/")
-                                [arrs[j].show_icon.split("/").length - 1].split(
-                                  "."
-                                )[0]
-                            ) {
-                              if (temp[i].name == arrs[j].name) {
-                                temp[i].balance = arrs[j].balance;
-                                break;
-                              }
-                            }
-                          }
-                        }
-                        sessionStorage.setItem(
-                          "checkData",
-                          JSON.stringify(temp)
-                        );
-                      } else {
-                        console.log("libra2", initCoinsList);
-                        window.sessionStorage.setItem(
-                          "checkData",
-                          JSON.stringify(initCoinsList)
-                        );
-                      }
-                      this.setState(
-                        {
-                          checkData: JSON.parse(
-                            window.sessionStorage.getItem("checkData")
-                          ),
-                        },
-                        () => {
-                          this.getTotalAmount();
-                        }
-                      );
-                      }
-                    }
-                  );
-                });
-            }
-          );
-        } else {
-          //  let { arr1 } = this.state;
-          //  if (arr1) {
-          //    arr1.sort((a, b) => {
-          //      return b.balance - a.balance
-          //    })
-          //    arr1.map((v, i) => {
-          //      if (v.checked) {
-          //        return v;
-          //      } else {
-          //        return Object.assign(v, { checked: true })
-          //      }
-          //    })
-          //  if (this.state.typeName) {
-          //    // let newArr = [];
-          //    let typeNames = JSON.parse(window.sessionStorage.getItem("typeName"));
-          //    for (let i = 0; i < arr1.length; i++) {
-          //      for (let j = 0; j < typeNames.length; j++) {
-          //        if (arr1[i].show_name.indexOf(typeNames[j]) == 0) {
-          //          arr1[i].checked = false
-          //        }
-          //      }
-          //    }
-          //    this.setState({
-          //      checkData: arr1
-          //    }, () => {
-          //      let amount = 0;
-          //      for (let i = 0; i < this.state.checkData.length; i++) {
-          //        amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-          //      }
-          //      this.setState({
-          //        coinsBalance: amount
-          //      }, () => {
-          //        window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-          //        //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
-          //        this.setState({
-          //          totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-          //        }, () => {
-          //        })
-          //      })
-          //    })
-          //  } else {
-          //    this.setState({
-          //      checkData: arr1
-          //    }, () => {
-          //      let amount = 0;
-          //      for (let i = 0; i < this.state.checkData.length; i++) {
-          //        amount += Number(this.getFloat((this.state.checkData[i].balance / 1e6) * this.state.checkData[i].rate, 6))
-          //      }
-          //      this.setState({
-          //        coinsBalance: amount
-          //      }, () => {
-          //        window.sessionStorage.setItem('balances', this.state.coinsBalance + this.state.BTCBalance)
-          //        this.setState({
-          //          totalAmount: this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 2)
-          //        })
-          //      })
-          //    })
-          //  }
-        }
-        //  }
+        return res.json();
+      })
+      .catch((err) => {
+        console.log(err);
       });
+    return temp.data;
+  };
+  setAllCoinCheck = (balanceList, rateList, chain) => {
+    let temp = balanceList;
+    for (let i in balanceList) {
+      for (let j in rateList) {
+        if((chain==='violas' && balanceList[i].name==='VLS')||(chain==='libra' && balanceList[i].name==='XUS')){
+        if (balanceList[i].name === rateList[j].name) {
+          temp[i].rate = rateList[j].rate;
+          temp[i].checked = true;
+          temp[i].chain = chain;
+          break;
+        }
+      }
+      }
+    }
+    return temp;
+  };
+  initCheckData = async () => {
+    let violas_balance_list = await this.getBalanceList("violas");
+    let libra_balance_list = await this.getBalanceList("libra");
+    let violas_rate_list = await this.getRateList("violas");
+    let libra_rate_list = await this.getRateList("libra");
+    let temp_arr1 = this.setAllCoinCheck(
+      violas_balance_list,
+      violas_rate_list,
+      "violas"
+    );
+    let temp_arr2 = this.setAllCoinCheck(
+      libra_balance_list,
+      libra_rate_list,
+      "libra"
+    );
+    let temp_checkData = temp_arr1.concat(temp_arr2);
+    await this.setState({
+      arr1: temp_arr1,
+      arr2: temp_arr2,
+      checkData: temp_checkData,
+    });
+    window.sessionStorage.setItem("violas_Balances", JSON.stringify(temp_arr1.concat(temp_arr2)));
+    window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
+    window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
   getBalances = async () => {
-    await this.getBTCBalances();
-    await this.getViolasBalances();
-    await this.getLibraBalances();
+    this.getBTCBalances();
+    if (!window.sessionStorage.getItem("checkData")) {
+      this.initCheckData();
+    }
+    this.getTotalAmount();
   };
   getTotalAmount() {
     let amount = 0;
-    // console.log(this.state.checkData);
     for (let i = 0; i < this.state.checkData.length; i++) {
       amount += Number(
         this.getFloat(
@@ -405,7 +173,6 @@ class HomeContent extends Component {
           "balances",
           this.state.coinsBalance + this.state.BTCBalance
         );
-        //  console.log(this.getFloat(this.state.coinsBalance + this.state.BTCBalance, 6))
         this.setState(
           {
             totalAmount: this.getFloat(
@@ -437,7 +204,6 @@ class HomeContent extends Component {
                 let btcRate = res.data;
                 let { BTCBalances } = this.state;
                 let BTCBalance = 0;
-                // console.log(res.data)
                 for (let i = 0; i < BTCBalances.length; i++) {
                   for (let j = 0; j < btcRate.length; j++) {
                     if (BTCBalances[i].name == btcRate[i].name) {
