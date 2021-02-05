@@ -5,6 +5,7 @@ import intl from "react-intl-universal";
 import { Badge, Pagination, Drawer } from "antd";
 import Details from "./pushDetails";
 import SystemDetails from "./systemDetails";
+let url = "https://api4.violas.io";
 
 //推送页面
 class PushMessage extends Component {
@@ -24,17 +25,11 @@ class PushMessage extends Component {
       idx: 0,
       showDetail: false,
       showDetail1: false,
+      tranfarsList:[],
+      noticesList:[]
     };
   }
-  getTranfars = () =>{
-    // fetch(
-    //   url1 +
-    //     "/1.0/ailosv / message / transfer" +
-    //     window.sessionStorage.getItem("libra_address")
-    // )
-    //   .then((res) => res.json())
-    //   .then((res) => {});
-  }
+
   async componentWillMount() {
     let lang = intl.options.currentLocale;
     // console.log(lang);
@@ -52,6 +47,38 @@ class PushMessage extends Component {
     localStorage.setItem("local", lang);
     intl.options.currentLocale = localStorage.getItem("local");
   }
+  componentDidMount() {
+    this.getTranfars();
+    this.getNotices();
+  }
+  getTranfars = () => {
+    fetch(
+      url +
+        "/1.0/violas/message/transfers?address=" +
+        window.sessionStorage.getItem("violas_address")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          noticesList: res.data,
+        });
+        console.log(res);
+      });
+  };
+  getNotices = () => {
+    fetch(
+      url +
+        "/1.0/violas/message/notices?token=" +
+        window.sessionStorage.getItem("firebase_token")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({
+          tranfarsList: res.data,
+        });
+        console.log(res);
+      });
+  };
   showDetailFun = (type) => {
     this.setState({
       showDetail: type,

@@ -41,6 +41,8 @@ class Home extends React.PureComponent {
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
       language: "en", // en cn
+      unreadCount:0
+
     };
   }
   getMineDialog = (event) => {
@@ -54,9 +56,10 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     await this.initialPage();
     await this.getNotificationPermission();
-    await this.getUnreadCount();
     await this.setState({ token: await this.getToken() });
+    console.log(this.state.token)
     await window.sessionStorage.setItem("firebase_token", this.state.token);
+    await this.getUnreadCount();
     await this.sendToken();
     await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
@@ -77,7 +80,12 @@ class Home extends React.PureComponent {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        // console.log(res);
+        if(res.data){
+          this.setState({
+            unreadCount:res.data.notice+res.data.message
+          });
+        }
       });
   }
   componentWillUnmount = () => {
@@ -129,7 +137,7 @@ class Home extends React.PureComponent {
     let post_data = {
       address: window.sessionStorage.getItem("violas_address"),
       token: this.state.token,
-      device_type: "web",
+      platform: "web",
       language: this.state.language,
     };
     axios
@@ -253,7 +261,7 @@ class Home extends React.PureComponent {
   };
   render() {
     let { routes } = this.props;
-    let { active, message } = this.state;
+    let { active, message, unreadCount } = this.state;
     // console.log(message, ".......");
     if (this.props.location) {
       if (this.props.location.search) {
@@ -342,7 +350,7 @@ class Home extends React.PureComponent {
                     this.props.history.push("/homepage/home/pushMessage");
                   }}
                 >
-                  <Badge count={100}>
+                  <Badge count={unreadCount}>
                     <img src="/img/编组 12@2x.png" />
                   </Badge>
                 </div>

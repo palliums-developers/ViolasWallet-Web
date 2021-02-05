@@ -96,8 +96,6 @@ class CashPooling extends Component {
   componentDidMount() {
     document.addEventListener("click", this.onClose);
     // this.getSelectTypes()
-    
-
     this.getExchangeRecode();
     this.getOutBalances();
     if (window.sessionStorage.getItem("btc_address")) {
@@ -781,7 +779,7 @@ class CashPooling extends Component {
   }
   //点击转入前的判断
   async orderCurrencies(input_a, input_b) {
-    console.log(input_a, input_b);
+    // console.log(input_a, input_b);
     let index_a,
       index_b,
       amount_a,
@@ -824,9 +822,7 @@ class CashPooling extends Component {
   }
   //点击转入
   async getAddLiquidity(chainId) {
-    console.log(this.state.name, this.state.type1, "............");
     await this.orderCurrencies(this.state.name, this.state.type1);
-
     // console.log(this.state.AddLiquidity.coin_a_amount, '..........')
     const tx = {
       from: sessionStorage.getItem("violas_address"),

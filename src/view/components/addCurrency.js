@@ -483,7 +483,6 @@ class AddCurrency extends Component {
                     ) {
                       if (publishData[i] == _name) {
                         if (violas_Balances[j].show_name == publishData[i]) {
-                          console.log(violas_Balances[j]);
                           temp.pd = true;
                           temp.violas_balance = violas_Balances[j];
                           temp.published = publishData[i];
@@ -499,12 +498,6 @@ class AddCurrency extends Component {
                   }
                 }
                 if (temp.pd) {
-                  console.log(
-                    temp.violas_balance.show_name,
-                    temp.published,temp.type,
-                    _iconName
-                  );
-                  console.log(temp.violas_balance.show_name,temp.published);
                     if (temp.violas_balance.show_name == temp.published) {
                         temp.violas_balance.checked = false;
                         for(var j=0;j<checkData.length;j++){

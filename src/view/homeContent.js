@@ -47,18 +47,16 @@ class HomeContent extends Component {
   stopPropagation(e) {
     e.nativeEvent.stopImmediatePropagation();
   }
-  async componentWillMount() {
-    if (window.sessionStorage.getItem("btc_address")) {
-      this.getBalances();
-    }
-  }
-  componentDidMount() {
+  async componentDidMount() {
     document.addEventListener("click", this.onClose);
     if (JSON.parse(window.localStorage.getItem("wallet_info"))) {
       this.setState({
         addCurrencyList: JSON.parse(window.localStorage.getItem("wallet_info")),
         // typeName: JSON.parse(window.sessionStorage.getItem("typeName"))
       });
+    }
+    if (window.sessionStorage.getItem("btc_address")) {
+      await this.getBalances();
     }
   }
   getFloat(number, n) {
@@ -114,10 +112,11 @@ class HomeContent extends Component {
           (chain === "libra" && balanceList[i].name === "XUS")
         ) {
           if (balanceList[i].name === rateList[j].name) {
-            temp[i] = balanceList[i];
-            temp[i].rate = rateList[j].rate;
-            temp[i].checked = true;
-            temp[i].chain = chain;
+            let temp_item = balanceList[i];
+            temp_item.rate = rateList[j].rate;
+            temp_item.checked = true;
+            temp_item.chain = chain;
+            temp.push(temp_item);
             break;
           }
         }
@@ -148,16 +147,17 @@ class HomeContent extends Component {
     });
     window.sessionStorage.setItem(
       "violas_Balances",
-      JSON.stringify(temp_arr1.concat(temp_arr2))
+      JSON.stringify(violas_balance_list.concat(libra_balance_list))
     );
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
   getBalances = async () => {
-    this.getBTCBalances();
+    await this.getBTCBalances();
     if (!window.sessionStorage.getItem("checkData")) {
       this.initCheckData();
     }
+    // this.initCheckData();
     this.getTotalAmount();
   };
   getTotalAmount() {
