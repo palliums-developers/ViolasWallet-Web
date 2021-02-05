@@ -112,12 +112,11 @@ class HomeContent extends Component {
                     () => {
                       let { arr1, arr2 } = this.state;
                       let arrs = [];
-                      arrs = arr1;
-                      // if (arr2) {
-                      //   arrs = arr1.concat(arr2);
-                      // } else {
-                      //   arrs = arr1;
-                      // }
+                      if (arr2) {
+                        arrs = arr1.concat(arr2);
+                      } else {
+                        arrs = arr1;
+                      }
                       window.sessionStorage.setItem(
                         "violas_Balances",
                         JSON.stringify(arrs)
@@ -233,17 +232,17 @@ class HomeContent extends Component {
                       let { arr2, arr1 } = this.state;
 
                       let arrs = [];
-                      arrs = arr2;
-                      // if (arr1) {
-                      //   arrs = arr2.concat(arr1);
-                      // } else {
-
-                      // }
+                      
+                      if (arr1) {
+                        arrs = arr2.concat(arr1);
+                      } else {
+                          arrs = arr2;
+                      }
                       window.sessionStorage.setItem(
                         "violas_Balances",
                         JSON.stringify(arrs)
                       );
-                      // if (arr1) {
+                      if (arr1) {
                       arrs.sort((a, b) => {
                         return b.balance - a.balance;
                       });
@@ -311,7 +310,7 @@ class HomeContent extends Component {
                           this.getTotalAmount();
                         }
                       );
-                      // }
+                      }
                     }
                   );
                 });

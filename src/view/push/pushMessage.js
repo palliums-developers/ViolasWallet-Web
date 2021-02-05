@@ -26,6 +26,15 @@ class PushMessage extends Component {
       showDetail1: false,
     };
   }
+  getTranfars = () =>{
+    // fetch(
+    //   url1 +
+    //     "/1.0/ailosv / message / transfer" +
+    //     window.sessionStorage.getItem("libra_address")
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {});
+  }
   async componentWillMount() {
     let lang = intl.options.currentLocale;
     // console.log(lang);

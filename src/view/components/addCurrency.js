@@ -432,71 +432,112 @@ class AddCurrency extends Component {
   }
   //关闭选中
   closePub = (_name, _iconName) => {
-    
+    console.log(_iconName)
     fetch(
       url +
-        "/1.0/violas/currency/published?addr=" +
-        window.sessionStorage.getItem("violas_address")
+        "/1.0/libra/currency/published?addr=" +
+        window.sessionStorage.getItem("libra_address")
     )
       .then((res) => res.json())
       .then((res) => {
-        let checkData = JSON.parse(sessionStorage.getItem("checkData"));
-        let violas_Balances = JSON.parse(
-          sessionStorage.getItem("violas_Balances")
-        );
-        let temp = {
-          pd: false,
-          violas_balance: {},
-          published: {},
-        };
-        // console.log(res.data.published);
-        for (let i = 0; i < res.data.published.length; i++) {
-          for (let j = 0; j < violas_Balances.length; j++) {
-            if (
-              violas_Balances[j].show_icon
-                .split("/")
-                [violas_Balances[j].show_icon.split("/").length - 1].split(
-                  "."
-                )[0] == _iconName
-            ) {
-              if (res.data.published[i] == _name) {
-                if (violas_Balances[j].show_name == res.data.published[i]) {
-                  temp.pd = true;
-                  temp.violas_balance = violas_Balances[j];
-                  temp.published = res.data.published[i];
-                  // break;
+        this.setState(
+          {
+            libraData: res.data.published,
+          },
+          () => {
+            fetch(
+              url +
+                "/1.0/violas/currency/published?addr=" +
+                window.sessionStorage.getItem("violas_address")
+            )
+              .then((res) => res.json())
+              .then((res) => {
+                let checkData = JSON.parse(sessionStorage.getItem("checkData"));
+                let violas_Balances = JSON.parse(
+                  sessionStorage.getItem("violas_Balances")
+                );
+                let publishData = res.data.published.concat(
+                  this.state.libraData
+                );
+                if (publishData.length > 0) {
+                let temp = {
+                  pd: false,
+                  violas_balance: {},
+                  published: {},
+                  type:""
+                };
+                // console.log(res.data.published);
+                for (let i = 0; i < publishData.length; i++) {
+                  for (let j = 0; j < violas_Balances.length; j++) {
+                     if (
+                      violas_Balances[j].show_icon
+                        .split("/")
+                        [
+                          violas_Balances[j].show_icon.split("/").length - 1
+                        ].split(".")[0] == _iconName
+                    ) {
+                      if (publishData[i] == _name) {
+                        if (violas_Balances[j].show_name == publishData[i]) {
+                          console.log(violas_Balances[j]);
+                          temp.pd = true;
+                          temp.violas_balance = violas_Balances[j];
+                          temp.published = publishData[i];
+                          temp.type =  violas_Balances[j].show_icon
+                        .split("/")
+                        [
+                          violas_Balances[j].show_icon.split("/").length - 1
+                        ].split(".")[0]
+                          break;
+                        }
+                      }
+                    }
+                  }
                 }
+                if (temp.pd) {
+                  console.log(
+                    temp.violas_balance.show_name,
+                    temp.published,temp.type,
+                    _iconName
+                  );
+                  console.log(temp.violas_balance.show_name,temp.published);
+                    if (temp.violas_balance.show_name == temp.published) {
+                        temp.violas_balance.checked = false;
+                        for(var j=0;j<checkData.length;j++){
+                            if(checkData[j].name == temp.violas_balance.name){
+                                checkData.splice(j,1);
+                                break;
+                            }
+                        }
+                        window.sessionStorage.setItem(
+                          "checkData",
+                          JSON.stringify(checkData)
+                        );
+                        this.getBalance(checkData);
+                        this.getTotal(checkData);
+                        this.props.showAddCoins(false);
+                        this.forceUpdate();
+                      }
               }
-            }
+                for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+                  for (let j = 0; j < names.length; j++) {
+                    if (
+                      this.state.addCurrencyList1[i].show_name.indexOf(
+                        names[j]
+                      ) == 0
+                    ) {
+                      this.state.addCurrencyList1[i].checked = false;
+                    }
+                  }
+                }
+                window.sessionStorage.setItem(
+                  "addCurrencyList1",
+                  JSON.stringify(this.state.addCurrencyList1)
+                );
+                this.props.showAddCoins(false);
+                }
+              });
           }
-        }
-        if (temp.pd) {
-          if (temp.violas_balance.show_name == temp.published) {
-            temp.violas_balance.checked = false;
-            let arrlist = checkData.filter(
-              (v) => v.name != temp.violas_balance.name
-            );
-            window.sessionStorage.setItem("checkData", JSON.stringify(arrlist));
-            this.getBalance(arrlist);
-            this.getTotal(arrlist);
-            this.props.showAddCoins(false);
-            this.forceUpdate();
-          }
-        }
-        for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
-          for (let j = 0; j < names.length; j++) {
-            if (
-              this.state.addCurrencyList1[i].show_name.indexOf(names[j]) == 0
-            ) {
-              this.state.addCurrencyList1[i].checked = false;
-            }
-          }
-        }
-        window.sessionStorage.setItem(
-          "addCurrencyList1",
-          JSON.stringify(this.state.addCurrencyList1)
         );
-        this.props.showAddCoins(false);
       });
   };
 
