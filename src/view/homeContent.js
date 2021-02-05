@@ -109,14 +109,17 @@ class HomeContent extends Component {
     let temp = balanceList;
     for (let i in balanceList) {
       for (let j in rateList) {
-        if((chain==='violas' && balanceList[i].name==='VLS')||(chain==='libra' && balanceList[i].name==='XUS')){
-        if (balanceList[i].name === rateList[j].name) {
-          temp[i].rate = rateList[j].rate;
-          temp[i].checked = true;
-          temp[i].chain = chain;
-          break;
+        if (
+          (chain === "violas" && balanceList[i].name === "VLS") ||
+          (chain === "libra" && balanceList[i].name === "XUS")
+        ) {
+          if (balanceList[i].name === rateList[j].name) {
+            temp[i].rate = rateList[j].rate;
+            temp[i].checked = true;
+            temp[i].chain = chain;
+            break;
+          }
         }
-      }
       }
     }
     return temp;
@@ -142,7 +145,10 @@ class HomeContent extends Component {
       arr2: temp_arr2,
       checkData: temp_checkData,
     });
-    window.sessionStorage.setItem("violas_Balances", JSON.stringify(temp_arr1.concat(temp_arr2)));
+    window.sessionStorage.setItem(
+      "violas_Balances",
+      JSON.stringify(temp_arr1.concat(temp_arr2))
+    );
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };

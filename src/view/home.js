@@ -56,7 +56,7 @@ class Home extends React.PureComponent {
     await this.getNotificationPermission();
     await this.getUnreadCount();
     await this.setState({ token: await this.getToken() });
-
+    await window.sessionStorage.setItem("firebase_token", this.state.token);
     await this.sendToken();
     await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
