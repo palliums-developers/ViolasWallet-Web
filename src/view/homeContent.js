@@ -106,7 +106,7 @@ class HomeContent extends Component {
     return temp.data;
   };
   setAllCoinCheck = (balanceList, rateList, chain) => {
-    let temp = balanceList;
+    let temp = [];
     for (let i in balanceList) {
       for (let j in rateList) {
         if (
@@ -114,6 +114,7 @@ class HomeContent extends Component {
           (chain === "libra" && balanceList[i].name === "XUS")
         ) {
           if (balanceList[i].name === rateList[j].name) {
+            temp[i] = balanceList[i];
             temp[i].rate = rateList[j].rate;
             temp[i].checked = true;
             temp[i].chain = chain;
@@ -154,9 +155,11 @@ class HomeContent extends Component {
   };
   getBalances = async () => {
     this.getBTCBalances();
-    if (!window.sessionStorage.getItem("checkData")) {
-      this.initCheckData();
-    }
+    this.initCheckData();
+
+    // if (!window.sessionStorage.getItem("checkData")) {
+    //   this.initCheckData();
+    // }
     this.getTotalAmount();
   };
   getTotalAmount() {
