@@ -51,9 +51,6 @@ class CurrencyDetail extends Component {
                 this.getNavData()
             })
         }
-        
-        
-
     }
     componentWillReceiveProps(nextProps){
         this.setState(

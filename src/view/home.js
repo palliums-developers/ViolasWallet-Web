@@ -57,7 +57,7 @@ class Home extends React.PureComponent {
     await this.initialPage();
     await this.getNotificationPermission();
     await this.setState({ token: await this.getToken() });
-    console.log(this.state.token)
+    // console.log(this.state.token)
     await window.sessionStorage.setItem("firebase_token", this.state.token);
     await this.getUnreadCount();
     await this.sendToken();

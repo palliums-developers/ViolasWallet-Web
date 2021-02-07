@@ -153,7 +153,7 @@ class Details extends Component {
                 </div>
               </div>
             </div>
-            <p className="goBrower">
+            <p className="goBrower" onClick={()=>{window.open("https://testnet.violas.io");}}>
               {intl.get("The browser queries for more details")}
               <img src="/img/go.png" />
             </p>

@@ -273,14 +273,14 @@ class HomeContent extends Component {
     this.setState({
       display: false,
       // display1: false,
-      display2: false,
+      // display2: false,
     });
   };
-  // onClose1 = () => {
-  //   this.setState({
-  //     display2: false
-  //   })
-  // };
+  onClose1 = () => {
+    this.setState({
+      display2: false
+    })
+  };
   getInitTotal = (val) => {
     this.setState({
       totalAmount: val,

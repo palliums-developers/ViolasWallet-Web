@@ -835,11 +835,11 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + Number(this.state.AddLiquidity.coin_a_amount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.AddLiquidity.coin_a_amount) * 1e6,6),
           },
           {
             type: "U64",
-            value: "" + Number(this.state.AddLiquidity.coin_b_amount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.AddLiquidity.coin_b_amount) * 1e6,6),
           },
           {
             type: "U64",
@@ -936,7 +936,7 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + Number(this.state.outputAmount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.outputAmount) * 1e6,6),
           },
           {
             type: "U64",

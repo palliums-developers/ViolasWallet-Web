@@ -417,11 +417,11 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + Number(this.state.inputAmount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6, 6),
           },
           {
             type: "U64",
-            value: "" + Number(this.state.outputAmount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.outputAmount) * 1e6, 6),
           },
           {
             type: "Vector",
@@ -485,13 +485,13 @@ class ExChange extends Component {
   async getBitcoinSwap() {
     return {
       from: this.state.BTCAddress,
-      amount: "" + this.state.inputAmount * 1e8,
+      amount: "" + this.getFloat(this.state.inputAmount * 1e8,8),
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.swap_address,
       script: await this.getBitcoinScript(
         this.state.swap_out,
         this.getPayeeAddress(),
-        this.state.outputAmount * 1e6
+        this.getFloat(this.state.outputAmount * 1e8,8)
       ),
     };
   }
@@ -547,7 +547,7 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + Number(this.state.inputAmount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6,6),
           },
           {
             type: "Vector",
@@ -558,7 +558,7 @@ class ExChange extends Component {
                   this.state.type1,
                   code_data.libra.type.start,
                   address_temp,
-                  this.state.outputAmount * 1e6
+                  this.getFloat(this.state.outputAmount * 1e6,6)
                 )
               )
             ),
@@ -599,7 +599,7 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + Number(this.state.inputAmount) * 1e6,
+            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6,6),
           },
           {
             type: "Vector",
@@ -729,7 +729,7 @@ class ExChange extends Component {
           }, 500);
         })
         .catch((err) => {
-          // console.log('Violas Swap ', err);
+          console.log('Violas Swap ', err);
           this.setState({
             warning: intl.get("Swap Failed"),
             showWallet: false,

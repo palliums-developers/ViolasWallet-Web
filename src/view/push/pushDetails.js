@@ -4,6 +4,7 @@ import { timeStamp2String1 } from '../../utils/timer1';
 // import { withRouter } from "react-router-dom";
 import intl from "react-intl-universal";
 import '../app.scss'
+let url = "https://api4.violas.io";
 
 //点击每个币种进入到每个币种的详情
 class PushDetails extends Component {
@@ -13,9 +14,39 @@ class PushDetails extends Component {
       reve: false,
       tran: false,
       deal: false,
+      msg_id: "",
+      tranfarList: {},
     };
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      {
+        msg_id: nextProps.msg_id1,
+      },
+      () => {
+        fetch(url + "/1.0/violas/message/transfer?msg_id=" + this.state.msg_id)
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.data) {
+              // console.log(res, ".....");
+              this.setState({
+                tranfarList: res.data,
+              });
+            }
+          });
+      }
+    );
+  }
   componentDidMount() {}
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = parseFloat(Number(number).toFixed(n)); //补足位数
+    return number;
+  }
   handleCopy = (v) => {
     const spanText = document.getElementById(v).innerText;
     const oInput = document.createElement("input");
@@ -38,7 +69,7 @@ class PushDetails extends Component {
   };
   render() {
     let { detailDatas } = this.props;
-    let { reve, tran, deal } = this.state;
+    let { reve, tran, deal, tranfarList } = this.state;
     // console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
     return (
       <div className="details">
@@ -65,16 +96,21 @@ class PushDetails extends Component {
             <div className="tableList">
               <p>
                 <label>{intl.get("Amount")}：</label>
-                <span>00VETH</span>
+                <span>
+                  {this.getFloat(tranfarList.amount / 1e6, 6)}
+                  {tranfarList.currency}
+                </span>
               </p>
               <p>
                 <label>{intl.get("Cost of miners")}：</label>
-                <span>0.00052036988 ether</span>
+                <span>
+                  {tranfarList.gas} {tranfarList.gas_currency}
+                </span>
               </p>
               <p>
                 <label>{intl.get("Collection address")}：</label>
                 <span>
-                  <i id="reve">sdfghjopwertyuiozxcvbn</i>
+                  <i id="reve">{tranfarList.receiver}</i>
                   <img
                     onClick={() => this.handleCopy("reve")}
                     src="/img/icon- 2@2x.png"
@@ -89,7 +125,7 @@ class PushDetails extends Component {
               <p>
                 <label>{intl.get("Payment address")}：</label>
                 <span>
-                  <i id="tran">sdfghjopwertyuiozxcvbn</i>
+                  <i id="tran">{tranfarList.sender}</i>
                   <img
                     onClick={() => this.handleCopy("tran")}
                     src="/img/icon- 2@2x.png"
@@ -104,7 +140,7 @@ class PushDetails extends Component {
               <p>
                 <label>{intl.get("Transaction no")}：</label>
                 <span>
-                  <i id="deal">122322</i>
+                  <i id="deal">{tranfarList.version}</i>
                   <img
                     onClick={() => this.handleCopy("deal")}
                     src="/img/icon- 2@2x.png"
@@ -119,7 +155,12 @@ class PushDetails extends Component {
             </div>
           </div>
         </div>
-        <p className="goBrower">
+        <p
+          className="goBrower"
+          onClick={() => {
+            window.open("https://testnet.violas.io");
+          }}
+        >
           {intl.get("The browser queries for more details")}
           <img src="/img/go.png" />
         </p>
