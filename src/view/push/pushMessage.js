@@ -104,7 +104,7 @@ class PushMessage extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
+          // console.log(res.data);
           this.setState({
             tranfarsList: res.data,
             total: res.data[0].count,

@@ -290,7 +290,7 @@ class ExChange extends Component {
   }
   //兑换前
   async before_getSwap(input_type, output_type) {
-    console.log(this.state.currencies, "currencies");
+    // console.log(this.state.currencies, "currencies");
     //change show name to name
     for (let i in this.state.currencies) {
       if (this.state.currencies[i].show_name === input_type) {
