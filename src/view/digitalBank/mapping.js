@@ -87,6 +87,7 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res,'....')
         this.setState({
           mappingRecord: res.data,
         });
@@ -99,10 +100,10 @@ class DigitalBank extends Component {
     }
   //获取币种信息 切换币种
   getMappingInfo() {
-    fetch(url + "/1.0/market/exchange/crosschain/address/info")
+    fetch(url + "/1.0/mapping/address/info")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res,'......')
+        // console.log(res, "......");
         if (res.data) {
           let violasArr = [],
             libraArr = [],
@@ -141,7 +142,7 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then(async (res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data) {
           if (JSON.stringify(this.state.violas_mappingInfo.length)!="[]") {
           
@@ -168,8 +169,7 @@ class DigitalBank extends Component {
                 this.state.libra_mappingInfo
               );
               let newArr = arr.concat(this.state.btc_mappingInfo);
-              // console.log(newArr[0] && newArr[0].balance)
-              console.log(newArr, "newArr......");
+              // console.log(newArr, "newArr......");
               this.setState(
                 {
                   selData: newArr,
@@ -177,16 +177,14 @@ class DigitalBank extends Component {
                 () => {
                   if (JSON.stringify(this.state.selData)!="[]") {
                     if (this.state.type == "") {
-                      this.setState(
-                        {
-                          type: this.state.selData[0].from_coin.assert
-                            .show_name,
-                          coinName: this.state.selData[0].from_coin.assert.name,
-                          balance: this.state.selData[0].balance / 1e6,
-                          mappingCoinType: this.state.selData[0],
-                          // opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
-                        },
-                      );
+                      this.setState({
+                        type: this.state.selData[0].from_coin.assert.show_name,
+                        type1: this.state.selData[0].to_coin.assert.show_name,
+                        coinName: this.state.selData[0].from_coin.assert.name,
+                        balance: this.state.selData[0].balance / 1e6,
+                        mappingCoinType: this.state.selData[0],
+                        // opinionType: this.state.selData[0].show_icon.split('/')[this.state.selData[0].show_icon.split('/').length - 1]
+                      });
                     }
                   }
                 }
@@ -204,7 +202,7 @@ class DigitalBank extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data) {
           let arr1 = this.state.libra_mappingInfo;
           for (let i = 0; i < arr1.length; i++) {
@@ -226,7 +224,7 @@ class DigitalBank extends Component {
     fetch(url + "/1.0/btc/balance?address=" + this.state.BTCAddress)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data) {
           if (JSON.stringify(this.state.btc_mappingInfo)!="[]") {
             this.state.btc_mappingInfo[0].balance = res.data[0].BTC;
@@ -285,11 +283,12 @@ class DigitalBank extends Component {
     });
   };
   //转出数量选中
-  showTypes = (v, bal, name, ind, val) => {
+  showTypes = (v,v1, bal, name, ind, val) => {
     // console.log(val.from_coin.coin_type, "........");
     this.setState(
       {
         type: v,
+        type1:v1,
         balance: val.from_coin.coin_type == 'btc' ? bal / 1e8 : bal / 1e6,
         showDealType: false,
         coinName: name,
@@ -434,7 +433,7 @@ class DigitalBank extends Component {
       let tx = getViolasTx(
         sessionStorage.getItem("violas_address"),
         this.state.mappingCoinType.receiver_address,
-        ""+this.state.amount * 1e6,
+        ""+this.getFloat(this.state.amount * 1e6,6),
         this.state.mappingCoinType.from_coin.assert.module,
         this.state.mappingCoinType.from_coin.assert.name,
         parseInt(sessionStorage.getItem("violas_chainId")),
@@ -511,6 +510,7 @@ class DigitalBank extends Component {
     let {
       showDealType,
       type,
+      type1,
       warning,
       selData,
       ind,
@@ -585,6 +585,7 @@ class DigitalBank extends Component {
                               onClick={() =>
                                 this.showTypes(
                                   v.from_coin.assert.show_name,
+                                  v.to_coin.assert.show_name,
                                   v.balance,
                                   v.from_coin.assert.name,
                                   i,
@@ -625,7 +626,7 @@ class DigitalBank extends Component {
               </div>
               <div className="showAmount">
                 <label>{this.state.amount1}</label>
-                <span>{type}</span>
+                <span>{type1}</span>
               </div>
               <div className="line"></div>
               <p>

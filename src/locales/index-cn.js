@@ -29,7 +29,7 @@ export default {
   Confirm: "确定映射",
   Mapping1: "映射中",
   "Mapping success": "映射成功",
-  "Mapping failed": "映射成功",
+  "Mapping failed": "映射失败",
   "How to map ETH ERC20 token": "如何映射 ETH 代币？",
   "Cope & paste the link to the wallet then map the ETH ERC20 token to Violas wallet":
     "将链接复制到以下钱包，即可将ETH代币映射至violas钱包",
