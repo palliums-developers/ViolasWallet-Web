@@ -129,7 +129,7 @@ class PushMessage extends Component {
           // console.log(res);
           this.setState({
             noticesList: res.data,
-            total1: res.data[0].count,
+            total1: res.data.length>0?res.data[0].count:0,
           });
         }
       });
