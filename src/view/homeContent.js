@@ -526,7 +526,7 @@ class HomeContent extends Component {
                               ≈$
                               {v.balance == 0
                                 ? "0.00"
-                                : v.rate == 0
+                                : v.rate == 0 ||"NAN"
                                 ? "0.00"
                                 : this.getFloat(v.rate * (v.balance / 1e6), 2)}
                             </label>
