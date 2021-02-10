@@ -7,234 +7,330 @@ import intl from "react-intl-universal";
 import '../app.scss';
 let url1 = 'https://api.violas.io'
 let url = "https://api4.violas.io"
-
+let btcUrl = "https://tbtc1.trezor.io";
 //币种详情
 class CurrencyDetail extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            types:[
-                {
-                    name:'全部',
-                    type:'all'
-                },
-                {
-                    name: '转入',
-                    type: 'into'
-                },
-                {
-                    name: '转出',
-                    type: 'out'
-                }
-            ],
-            navType:'all',
-            address: '7f4644ae2b51b65bd3c9d414aa853407',
-            dataList:[],
-            total:0,
-            page:0,
-            pageSize:6,
-            curIndex:0,
-            dis: false,
-            detailAddrs:'',
-            name:'',
-            type:''
-        };
-        
-    }
-    async componentWillMount() {
-        // console.log(this.props.detailAddrs)
-        if (this.props.detailAddrs){
-            this.setState({
-                detailAddrs: this.props.detailAddrs,
-                name: this.props.name
-            }, () => {
-                this.getNavData()
-            })
+  constructor(props) {
+    super(props);
+    this.state = {
+      types: [
+        {
+          name: "全部",
+          type: "all",
+        },
+        {
+          name: "转入",
+          type: "into",
+        },
+        {
+          name: "转出",
+          type: "out",
+        },
+      ],
+      types1: [
+        {
+          name: "全部",
+          type: "all",
+        },
+      ],
+      navType: "all",
+      address: "7f4644ae2b51b65bd3c9d414aa853407",
+      dataList: [],
+      dataList1: [],
+      total: 0,
+      page: 0,
+      pageSize: 6,
+      page1: 1,
+      pageSize1: 3,
+      curIndex: 0,
+      dis: false,
+      detailAddrs: "",
+      name: "",
+      type: "",
+    };
+  }
+  async componentWillMount() {
+    // console.log(this.props.detailAddrs)
+    if (this.props.detailAddrs) {
+      this.setState(
+        {
+          detailAddrs: this.props.detailAddrs,
+          name: this.props.name,
+        },
+        () => {
+          this.getNavData();
         }
+      );
     }
-    componentWillReceiveProps(nextProps){
-        this.setState(
-          {
-            detailAddrs: nextProps.detailAddrs,
-            name: nextProps.nameType,
-            type:
-              nextProps.icon
-                .split("/")
-                [nextProps.icon.split("/").length - 1].split(".")[0] 
-          },
-          () => {
-            this.getNavData();
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      {
+        detailAddrs: nextProps.detailAddrs,
+        name: nextProps.nameType,
+        type: nextProps.icon
+          .split("/")
+          [nextProps.icon.split("/").length - 1].split(".")[0],
+      },
+      () => {
+        this.getNavData();
+      }
+    );
+  }
+  getSubStr(str) {
+    if (str == null) {
+      return "null";
+    }
+    var subStr1 = str && str.substr(0, 10);
+    var subStr2 = str && str.substr(str.length - 5, 5);
+    var subStr = subStr1 + "..." + subStr2;
+    return subStr;
+  }
+  // 获取 UTXO
+  getUTXO() {
+    fetch(
+      "https://tbtc1.trezor.io/api/v2/address/" +
+        window.sessionStorage.getItem("btc_address") +
+        "?pageSize=" +
+        this.state.pageSize1 +
+        "&details=txs&page=" +
+        (this.state.page1 - 1) * this.state.pageSize1
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res, ".......");
+        if (res.transactions) {
+          let transactions = res.transactions;
+          for (let i = 0; i < transactions.length; i++) {
+            for (let j = 0; j < transactions[i].vin.length; j++) {
+              transactions[i].vin[j].type = "vin";
+            }
+            for (let x = 0; x < transactions[i].vout.length; x++) {
+              transactions[i].vout[x].type = "vout";
+            }
+            transactions[i].trans = transactions[i].vin.concat(
+              transactions[i].vout
+            );
+            transactions[i].transLength = transactions[i].trans.length;
+            // console.log(transactions[i].vin.concat(transactions[i].vout));
           }
-        );
-    }
-    getSubStr(str){
-        if(str == null){
-         return 'null'
-        }
-        var subStr1 = str && str.substr(0, 10);
-        var subStr2 = str && str.substr(str.length - 5, 5);
-        var subStr = subStr1 + "..." + subStr2;
-        return subStr;
-    }
-
-    getNavData(){
-        let { detailAddrs, type } = this.state;
-        if (type == "btc") {
-          this.setState({
-            dataList: [],
-          });
-        } else {
+          console.log(transactions);
           if (this.state.navType == "all") {
             if (this.state.total == 0) {
-              fetch(url + "/1.0/"+type+"/transaction?addr=" + detailAddrs)
-                .then((res) => res.json())
-                .then((res) => {
-                  if (res.data) {
-                    this.setState({
-                      total: res.data.length,
-                    });
-                  }
-                  
-                });
+              this.setState({
+                total: transactions && transactions[0].transLength,
+                dataList1: transactions,
+              });
             }
-
-            fetch(
-              url +
-                "/1.0/" +
-                type +
-                "/transaction?addr=" +
-                detailAddrs +
-                "&&offset=" +
-                this.state.page +
-                "&&limit=" +
-                this.state.pageSize
-            )
-              .then((res) => res.json())
-              .then((res) => {
-                // console.log(res.data.length)
-
-                this.setState({
-                  dataList: res.data,
-                });
-              });
-          } else if (this.state.navType == "into") {
-            fetch(
-              url +
-                "/1.0/" +
-                type +
-                "/transaction?addr=" +
-                detailAddrs +
-                "&&flows=1" +
-                "&&offset=" +
-                this.state.page +
-                "&&limit=" +
-                this.state.pageSize
-            )
-              .then((res) => res.json())
-              .then((res) => {
-                this.setState({
-                  total: res.data.length,
-                  dataList: res.data,
-                });
-              });
-          } else if (this.state.navType == "out") {
-            fetch(
-              url +
-                "/1.0/" +
-                type +
-                "/transaction?addr=" +
-                detailAddrs +
-                "&&flows=0" +
-                "&&offset=" +
-                this.state.page +
-                "&&limit=" +
-                this.state.pageSize
-            )
-              .then((res) => res.json())
-              .then((res) => {
-                this.setState({
-                  total: res.data.length,
-                  dataList: res.data,
-                });
-              });
           }
         }
-        
-        
-    }
-    // showDetails = () => {
-    //     this.props.showDetails();
-    // };
-    
-    onChange = (page,pageSize) => {
-        // console.log(page, pageSize)
-        this.setState({
-            page: page,
-            pageSize:pageSize,
-            curIndex:9
-        },()=>{
-            this.getNavData()
-        });
-    };
+      });
+  }
+  getNavData() {
+    let { detailAddrs, type } = this.state;
 
-    handleCopy = () => {
-        const spanText = document.getElementById('add').innerText;
-        const oInput = document.createElement('input');
-        oInput.value = spanText;
-        document.body.appendChild(oInput);
-        oInput.select(); // 选择对象
-        document.execCommand('Copy'); // 执行浏览器复制命令
-        oInput.className = 'oInput';
-        oInput.style.display = 'none';
-        document.body.removeChild(oInput);
-        this.setState({
-            dis: true
-        })
-        let Timer = setInterval(() => {
+    if (type == "btc") {
+      this.getUTXO();
+    } else {
+      if (this.state.navType == "all") {
+        if (this.state.total == 0) {
+          fetch(url + "/1.0/" + type + "/transaction?addr=" + detailAddrs)
+            .then((res) => res.json())
+            .then((res) => {
+              if (res.data) {
+                this.setState({
+                  total: res.data.length,
+                });
+              }
+            });
+        }
+
+        fetch(
+          url +
+            "/1.0/" +
+            type +
+            "/transaction?addr=" +
+            detailAddrs +
+            "&&offset=" +
+            this.state.page +
+            "&&limit=" +
+            this.state.pageSize
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            // console.log(res.data.length)
+
             this.setState({
-                dis: false
-            })
-        }, 1000);
-    };
-    
-    render() {
-        let { types, navType, dataList, total,dis} = this.state;
-        let { detailAddrs,nameType,icon,rate,balance } = this.props;
-        
-        return (
-          <div className="currencyDetail">
-            <h4 onClick={() => this.props.showDetails(false)}>
-              <i>
-                <img src="/img/编组备份 3@2x.png" />
-              </i>
-              {intl.get("Currency Detail")}
-            </h4>
+              dataList: res.data,
+            });
+          });
+      } else if (this.state.navType == "into") {
+        fetch(
+          url +
+            "/1.0/" +
+            type +
+            "/transaction?addr=" +
+            detailAddrs +
+            "&&flows=1" +
+            "&&offset=" +
+            this.state.page +
+            "&&limit=" +
+            this.state.pageSize
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            this.setState({
+              total: res.data.length,
+              dataList: res.data,
+            });
+          });
+      } else if (this.state.navType == "out") {
+        fetch(
+          url +
+            "/1.0/" +
+            type +
+            "/transaction?addr=" +
+            detailAddrs +
+            "&&flows=0" +
+            "&&offset=" +
+            this.state.page +
+            "&&limit=" +
+            this.state.pageSize
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            this.setState({
+              total: res.data.length,
+              dataList: res.data,
+            });
+          });
+      }
+    }
+  }
+  // showDetails = () => {
+  //     this.props.showDetails();
+  // };
 
-            <div className="detailsBalance">
-              <p className="title">
-                <img src={icon} />
-                <label>{nameType}</label>
-              </p>
-              <div className="bal">
-                <span>{balance}</span>
-                <span>≈${rate}</span>
-              </div>
-              <div className="addressCode">
-                <span id="add">{detailAddrs}</span>
-                {dis ? (
-                  <i onClick={() => this.handleCopy()}>
-                    <img src="/img/fuzhi 3@2x.png" />
-                  </i>
-                ) : (
-                  <i onClick={() => this.handleCopy()}>
-                    <img src="/img/Fill 3@2x.png" />
-                  </i>
-                )}
-              </div>
-            </div>
-            <div className="detailContent">
-              <div className="detailNav">
-                {types.map((val, ind) => {
+  onChange = (page, pageSize) => {
+    // console.log(page, pageSize)
+    this.setState(
+      {
+        page: page,
+        pageSize: pageSize,
+        // curIndex: 9,
+      },
+      () => {
+        this.getNavData();
+      }
+    );
+  };
+  onChange1 = (page, pageSize) => {
+    // console.log(page, pageSize)
+    this.setState(
+      {
+        page1: page,
+        pageSize1: pageSize,
+      },
+      () => {
+        this.getNavData();
+      }
+    );
+  };
+  handleCopy = () => {
+    const spanText = document.getElementById("add").innerText;
+    const oInput = document.createElement("input");
+    oInput.value = spanText;
+    document.body.appendChild(oInput);
+    oInput.select(); // 选择对象
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    oInput.className = "oInput";
+    oInput.style.display = "none";
+    document.body.removeChild(oInput);
+    this.setState({
+      dis: true,
+    });
+    let Timer = setInterval(() => {
+      this.setState({
+        dis: false,
+      });
+    }, 1000);
+  };
+  getFloat(number, n) {
+    n = n ? parseInt(n) : 0;
+    if (n <= 0) {
+      return Math.round(number);
+    }
+    number = Math.round(number * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+    number = parseFloat(Number(number).toFixed(n)); //补足位数
+    return number;
+  }
+  render() {
+    let {
+      types,
+      types1,
+      navType,
+      dataList,
+      dataList1,
+      total,
+      dis,
+    } = this.state;
+    let { detailAddrs, nameType, icon, rate, balance } = this.props;
+
+    return (
+      <div className="currencyDetail">
+        <h4 onClick={() => this.props.showDetails(false)}>
+          <i>
+            <img src="/img/编组备份 3@2x.png" />
+          </i>
+          {intl.get("Currency Detail")}
+        </h4>
+
+        <div className="detailsBalance">
+          <p className="title">
+            <img src={icon} />
+            <label>{nameType}</label>
+          </p>
+          <div className="bal">
+            <span>{balance}</span>
+            <span>≈${rate}</span>
+          </div>
+          <div className="addressCode">
+            <span id="add">{detailAddrs}</span>
+            {dis ? (
+              <i onClick={() => this.handleCopy()}>
+                <img src="/img/fuzhi 3@2x.png" />
+              </i>
+            ) : (
+              <i onClick={() => this.handleCopy()}>
+                <img src="/img/Fill 3@2x.png" />
+              </i>
+            )}
+          </div>
+        </div>
+        <div className="detailContent">
+          <div className="detailNav">
+            {this.state.type == "btc"
+              ? types1.map((val, ind) => {
+                  return (
+                    <span
+                      key={ind}
+                      onClick={() => {
+                        this.setState(
+                          {
+                            navType: val.type,
+                          },
+                          () => {
+                            this.getNavData();
+                          }
+                        );
+                      }}
+                      className={navType == val.type ? "active" : null}
+                    >
+                      {val.name}
+                    </span>
+                  );
+                })
+              : types.map((val, ind) => {
                   return (
                     <span
                       key={ind}
@@ -254,9 +350,44 @@ class CurrencyDetail extends Component {
                     </span>
                   );
                 })}
-              </div>
-              <div className="detailLists">
-                {dataList.map((v, i) => {
+          </div>
+          <div className="detailLists">
+            {this.state.type == "btc"
+              ? dataList1.map((v, i) => {
+                  return v.trans.map((v1, i1) => {
+                    return (
+                      <div
+                        key={i1}
+                        className="detailList"
+                        onClick={() => {
+                          this.props.showDetails(false);
+                          this.props.curDataFun(v1);
+                          this.props.showDetails1(true);
+                        }}
+                      >
+                        <i>
+                          {v1.type == "vin" ? (
+                            <img src="/img/编组 13备份 2@2x.png" />
+                          ) : (
+                            <img src="/img/编组 13备份 3@2x.png" />
+                          )}
+                        </i>
+                        <div className="listCenter">
+                          <p>{this.getSubStr(v1.addresses[0])}</p>
+                          <p>{timeStamp2String(v.blockTime + "000")}</p>
+                        </div>
+                        <div className="listResult">
+                          <p className="gre">
+                            {v1.type == "vin" ? "+" : "-"}
+                            {this.getFloat(v1.value / 1e8, 8)}
+                          </p>
+                          {/* <p className="org">交易中</p> */}
+                        </div>
+                      </div>
+                    );
+                  });
+                })
+              : dataList.map((v, i) => {
                   return (
                     <div
                       key={i}
@@ -288,7 +419,11 @@ class CurrencyDetail extends Component {
                       </div>
                       <div className="listResult">
                         <p className={v.status == "Executed" ? "gre" : "red"}>
-                          {v.status == "Executed" ? "+" : "-"}
+                          {v.receiver == detailAddrs
+                            ? "+"
+                            : v.sender == detailAddrs
+                            ? "-"
+                            : "+"}
                           {v.amount / 1e6}
                         </p>
                         {/* <p className="org">交易中</p> */}
@@ -296,19 +431,27 @@ class CurrencyDetail extends Component {
                     </div>
                   );
                 })}
-              </div>
-            </div>
-            {dataList.length > 0 ? (
-              <Pagination
-                defaultCurrent={1}
-                defaultPageSize={6}
-                total={Number(total)}
-                onChange={this.onChange}
-              />
-            ) : null}
           </div>
-        );
-    }
+        </div>
+        {dataList1.length > 0 ? (
+          <Pagination
+            defaultCurrent={this.state.page}
+            pageSize={this.state.pageSize1}
+            total={Number(total)}
+            onChange={this.onChange1}
+          />
+        ) : null}
+        {dataList.length > 0 ? (
+          <Pagination
+            defaultCurrent={1}
+            defaultPageSize={6}
+            total={Number(total)}
+            onChange={this.onChange}
+          />
+        ) : null}
+      </div>
+    );
+  }
 }
 let mapStateToProps = (state) => {
     return state.ListReducer;

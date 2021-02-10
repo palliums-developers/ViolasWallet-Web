@@ -6,6 +6,7 @@ import TransfarDialog from './transfarDialog.js';
 import { bytes2StrHex, string2Byte } from '../../utils/trans';
 import intl from "react-intl-universal";
 import WalletconnectDialog from '../components/walletconnectDialog'
+
 // import {withRouter} from 'react-router-dom'
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -448,9 +449,10 @@ class Transfer extends Component {
   }
   //btc转账
   async bitcoin_sendTransaction() {
+    console.log(this.state.amount);
     const tx = {
       from: this.state.BTCAddress,
-      amount: this.state.amount * 1e8,
+      amount: ""+this.getFloat(this.state.amount * 1e8,8),
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.address,
       // script: this.state.script
