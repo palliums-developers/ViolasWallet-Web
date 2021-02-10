@@ -134,7 +134,9 @@ class CurrencyDetail extends Component {
     } else {
       if (this.state.navType == "all") {
         if (this.state.total == 0) {
-          fetch(url + "/1.0/" + type + "/transaction?addr=" + detailAddrs)
+          fetch(
+            ((url + "/1.0/" + type + "/transaction?addr=" + detailAddrs)+"&currency="+this.state.name)
+          )
             .then((res) => res.json())
             .then((res) => {
               if (res.data) {
