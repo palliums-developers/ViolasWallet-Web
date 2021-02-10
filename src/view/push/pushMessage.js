@@ -107,7 +107,7 @@ class PushMessage extends Component {
           // console.log(res.data);
           this.setState({
             tranfarsList: res.data,
-            total: res.data[0].count,
+            total: res.data.length>0 ?res.data[0].count:0,
           });
         }
       });
@@ -194,7 +194,7 @@ class PushMessage extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data.code == 2000) {
-          this.forceUpdate();
+          window.reload();
         }
       });
   };

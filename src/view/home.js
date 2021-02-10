@@ -37,6 +37,7 @@ class Home extends React.PureComponent {
       private_key:
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
+      firebase_token:"",
       violas_server: "https://api4.violas.io",
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
@@ -56,11 +57,10 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     await this.initialPage();
     await this.getNotificationPermission();
-    await this.setState({ token: await this.getToken() });
-    // console.log(this.state.token)
-    await window.sessionStorage.setItem("firebase_token", this.state.token);
-    await this.getUnreadCount();
+    await this.setState({ token: await this.getToken() }); 
+    
     await this.sendToken();
+    await this.getUnreadCount();
     await this.getMessage();
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
@@ -136,7 +136,7 @@ class Home extends React.PureComponent {
   register = () => {
     let post_data = {
       address: window.sessionStorage.getItem("violas_address"),
-      token: this.state.token,
+      fcm_token: this.state.token,
       platform: "web",
       language: this.state.language,
     };
@@ -144,6 +144,14 @@ class Home extends React.PureComponent {
       .post(this.state.violas_server + this.state.violas_register, post_data)
       .then((res) => {
         if (res.data.code === 2000) {
+          console.log(res.data && res.data.data.token);
+          window.sessionStorage.setItem(
+            "firebase_token",
+            res.data && res.data.data.token
+          );
+          this.setState({
+            firebase_token: res.data.data.token,
+          });
           console.log("send token successed");
         }
       })
@@ -194,6 +202,7 @@ class Home extends React.PureComponent {
   }
   showNotification() {
     let { message } = this.state;
+    console.log(message, "message");
     this.checkNotificationPermission();
     let title = message.notification.title;
     let delayTime = Date.now() + 120000;
@@ -263,6 +272,7 @@ class Home extends React.PureComponent {
     let { routes } = this.props;
     let { active, message, unreadCount } = this.state;
     // console.log(message, ".......");
+    this.getUnreadCount();
     if (this.props.location) {
       if (this.props.location.search) {
         this.setState({
