@@ -55,9 +55,7 @@ class HomeContent extends Component {
         // typeName: JSON.parse(window.sessionStorage.getItem("typeName"))
       });
     }
-    if (window.sessionStorage.getItem("btc_address")) {
-      await this.getBalances();
-    }
+    await this.getBalances();
   }
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
@@ -134,6 +132,7 @@ class HomeContent extends Component {
       violas_rate_list,
       "violas"
     );
+    // console.log(temp_arr1,'....');
     let temp_arr2 = this.setAllCoinCheck(
       libra_balance_list,
       libra_rate_list,
@@ -149,6 +148,7 @@ class HomeContent extends Component {
       "violas_Balances",
       JSON.stringify(violas_balance_list.concat(libra_balance_list))
     );
+    // console.log(temp_checkData);
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
@@ -438,7 +438,7 @@ class HomeContent extends Component {
                     <div className="rightAsset">
                       {visible ? (
                         <span>
-                          {v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 8)}
+                          {v.BTC == 0 ? 0 : this.getFloat(v.BTC / 1e8, 8)}{" "}
                         </span>
                       ) : (
                         <span>******</span>
@@ -451,7 +451,7 @@ class HomeContent extends Component {
                             ? "0.00"
                             : v.rate == 0
                             ? "0.00"
-                            : this.getFloat(v.rate * (v.BTC / 1e8), 2)}
+                            : this.getFloat(v.rate * (v.BTC / 1e8), 2)}{" "}
                         </label>
                       ) : (
                         <label>******</label>

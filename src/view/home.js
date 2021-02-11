@@ -144,7 +144,6 @@ class Home extends React.PureComponent {
       .post(this.state.violas_server + this.state.violas_register, post_data)
       .then((res) => {
         if (res.data.code === 2000) {
-          console.log(res.data && res.data.data.token);
           window.sessionStorage.setItem(
             "firebase_token",
             res.data && res.data.data.token
