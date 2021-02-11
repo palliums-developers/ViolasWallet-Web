@@ -152,10 +152,73 @@ class HomeContent extends Component {
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
+  updateDataAmount = (one, list) => {
+    for (let i in list) {
+      if (list[i].name === one.name) {
+        if (list[i].balance !== one.balance) {
+          one.balance = list[i].balance;
+        }
+        break;
+      }
+    }
+    return one;
+  };
+  updateCheckDataAmount = (checkData, balance) => {
+    for (let i in checkData) {
+      for (let j in balance) {
+        if (
+          checkData[i].chain === balance[j].chain &&
+          checkData[i].name === balance[j].name &&
+          checkData[i].balance !== balance[j].balance
+        ) {
+          checkData[i].balance = balance[j].balance;
+          break;
+        }
+      }
+    }
+    return checkData;
+  };
+  updateAmount = async () => {
+    let violas_balance_list = await this.getBalanceList("violas");
+    let libra_balance_list = await this.getBalanceList("libra");
+    let temp_violas_balance = JSON.parse(
+      window.sessionStorage.getItem("violas_Balances")
+    );
+    let temp_checkData = JSON.parse(window.sessionStorage.getItem("checkData"));
+    for (let i in temp_violas_balance) {
+      if (temp_violas_balance[i].chain === "violas") {
+        let temp = this.updateDataAmount(
+          temp_violas_balance[i],
+          violas_balance_list
+        );
+        temp_violas_balance[i] = temp;
+      } else {
+        let temp = this.updateDataAmount(
+          temp_violas_balance[i],
+          libra_balance_list
+        );
+        temp_violas_balance[i] = temp;
+      }
+    }
+    temp_checkData = this.updateCheckDataAmount(
+      temp_checkData,
+      temp_violas_balance
+    );
+    window.sessionStorage.setItem(
+      "checkData",
+      JSON.stringify(temp_checkData)
+    );
+    window.sessionStorage.setItem(
+      "violas_Balances",
+      JSON.stringify(temp_violas_balance)
+    );
+  };
   getBalances = async () => {
     await this.getBTCBalances();
     if (!window.sessionStorage.getItem("checkData")) {
       this.initCheckData();
+    } else {
+      this.updateAmount();
     }
     // this.initCheckData();
     this.getTotalAmount();
@@ -278,8 +341,8 @@ class HomeContent extends Component {
   };
   onClose1 = () => {
     this.setState({
-      display2: false
-    })
+      display2: false,
+    });
   };
   getInitTotal = (val) => {
     this.setState({
@@ -526,7 +589,7 @@ class HomeContent extends Component {
                               ≈$
                               {v.balance == 0
                                 ? "0.00"
-                                : v.rate == 0 ||"NAN"
+                                : v.rate == 0 || "NAN"
                                 ? "0.00"
                                 : this.getFloat(v.rate * (v.balance / 1e6), 2)}
                             </label>
