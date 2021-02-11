@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
 import intl from "react-intl-universal";
+import BigNumber from "bignumber.js";
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
 let url1 = 'https://api.violas.io'
@@ -381,7 +382,9 @@ class CurrencyDetail extends Component {
                         <div className="listResult">
                           <p className="gre">
                             {v1.type == "vin" ? "+" : "-"}
-                            {this.getFloat(v1.value / 1e8, 8)}
+                            {new BigNumber(String(v1.value / 100000000)).toFormat(
+                              8
+                            )}
                           </p>
                           {/* <p className="org">交易中</p> */}
                         </div>

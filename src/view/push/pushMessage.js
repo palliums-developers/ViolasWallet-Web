@@ -193,8 +193,8 @@ class PushMessage extends Component {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.data.code == 2000) {
-          window.reload();
+        if (res.code == 2000) {
+          window.location.reload();
         }
       });
   };
