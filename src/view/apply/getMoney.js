@@ -4,7 +4,9 @@ import QRCode from "qrcode.react";
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import intl from "react-intl-universal";
+import BigNumber from "bignumber.js";
 const { encode, decode } = require("../../utils/bech32");
+
 let url = "https://api.violas.io";
 let url1 = "https://api4.violas.io";
 
@@ -403,7 +405,9 @@ class GetMoney extends Component {
                                       )[0] == "btc"
                                       ? v.BTC == 0
                                         ? 0
-                                        : this.getFloat(v.BTC / 1e8, 8)
+                                        : new BigNumber(
+                                            String(v.BTC / 100000000)
+                                          ).toFormat(8)
                                       : v.balance == 0
                                       ? 0
                                       : this.getFloat(v.balance / 1e6, 6)}{" "}

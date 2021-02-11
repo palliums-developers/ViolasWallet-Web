@@ -154,6 +154,7 @@ class HomeContent extends Component {
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
   updateDataAmount = (one, list) => {
+    console.log(one, list);
     for (let i in list) {
       if (list[i].name === one.name) {
         if (list[i].balance !== one.balance) {
@@ -182,6 +183,12 @@ class HomeContent extends Component {
   updateAmount = async () => {
     let violas_balance_list = await this.getBalanceList("violas");
     let libra_balance_list = await this.getBalanceList("libra");
+    let violas_rate_list = await this.getRateList("violas");
+    let libra_rate_list = await this.getRateList("libra");
+    window.sessionStorage.setItem(
+      "violas_Balances",
+      JSON.stringify(violas_balance_list.concat(libra_balance_list))
+    );
     let temp_violas_balance = JSON.parse(
       window.sessionStorage.getItem("violas_Balances")
     );
@@ -205,6 +212,7 @@ class HomeContent extends Component {
       temp_checkData,
       temp_violas_balance
     );
+    console.log(temp_checkData);
     window.sessionStorage.setItem(
       "checkData",
       JSON.stringify(temp_checkData)
@@ -369,6 +377,7 @@ class HomeContent extends Component {
       checkData,
       balance,
     } = this.state;
+    // this.updateAmount();
     return (
       <div className="content">
         <div className="contentWrap">

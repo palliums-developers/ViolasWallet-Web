@@ -6,7 +6,7 @@ import TransfarDialog from './transfarDialog.js';
 import { bytes2StrHex, string2Byte } from '../../utils/trans';
 import intl from "react-intl-universal";
 import WalletconnectDialog from '../components/walletconnectDialog'
-
+import BigNumber from "bignumber.js";
 // import {withRouter} from 'react-router-dom'
 let url1 = "https://api.violas.io"
 let url = "https://api4.violas.io"
@@ -123,7 +123,9 @@ class Transfer extends Component {
                       .split("/")
                       [
                         this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                      ].split(".")[0] == 'btc' ? new BigNumber(
+                                  String(this.state.selData[0].balance / 100000000)
+                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -171,7 +173,9 @@ class Transfer extends Component {
                       .split("/")
                       [
                         this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                      ].split(".")[0] == 'btc' ? new BigNumber(
+                                  String(this.state.selData[0].balance / 100000000)
+                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
