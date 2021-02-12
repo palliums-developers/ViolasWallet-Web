@@ -106,18 +106,20 @@ class HomeContent extends Component {
     let temp = [];
     for (let i in balanceList) {
       for (let j in rateList) {
-        if (
-          (chain === "violas" && balanceList[i].name === "VLS") ||
-          (chain === "libra" && balanceList[i].name === "XUS")
-        ) {
-          if (balanceList[i].name === rateList[j].name) {
-            let temp_item = balanceList[i];
-            temp_item.rate = rateList[j].rate;
+        if (balanceList[i].name === rateList[j].name) {
+          let temp_item = balanceList[i];
+          temp_item.rate = rateList[j].rate;
+          temp_item.chain = chain;
+          if (
+            (chain === "violas" && balanceList[i].name === "VLS") ||
+            (chain === "libra" && balanceList[i].name === "XUS")
+          ) {
             temp_item.checked = true;
-            temp_item.chain = chain;
-            temp.push(temp_item);
-            break;
+          } else {
+            temp_item.checked = false;
           }
+          temp.push(temp_item);
+          break;
         }
       }
     }
@@ -133,13 +135,18 @@ class HomeContent extends Component {
       violas_rate_list,
       "violas"
     );
-    // console.log(temp_arr1,'....');
     let temp_arr2 = this.setAllCoinCheck(
       libra_balance_list,
       libra_rate_list,
       "libra"
     );
-    let temp_checkData = temp_arr1.concat(temp_arr2);
+    let temp_violas_balance = temp_arr1.concat(temp_arr2);
+    let temp_checkData = [];
+    for (let i in temp_violas_balance) {
+      if (temp_violas_balance[i].checked) {
+        temp_checkData.push(temp_violas_balance[i]);
+      }
+    }
     await this.setState({
       arr1: temp_arr1,
       arr2: temp_arr2,
@@ -147,18 +154,20 @@ class HomeContent extends Component {
     });
     window.sessionStorage.setItem(
       "violas_Balances",
-      JSON.stringify(violas_balance_list.concat(libra_balance_list))
+      JSON.stringify(temp_arr1.concat(temp_arr2))
     );
     // console.log(temp_checkData);
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
   updateDataAmount = (one, list) => {
-    console.log(one, list);
     for (let i in list) {
       if (list[i].name === one.name) {
         if (list[i].balance !== one.balance) {
           one.balance = list[i].balance;
+        }
+        if (list[i].rate !== one.rate) {
+          one.rate = list[i].rate;
         }
         break;
       }
@@ -168,26 +177,57 @@ class HomeContent extends Component {
   updateCheckDataAmount = (checkData, balance) => {
     for (let i in checkData) {
       for (let j in balance) {
+        // console.log(checkData, balance);
+        // console.log(
+        //   checkData[i].name,
+        //   balance[j].name,
+        //   checkData[i].chain === balance[j].chain,
+        //   checkData[i].name === balance[j].name,
+        //   checkData[i].balance !== balance[j].balance
+        // );
         if (
           checkData[i].chain === balance[j].chain &&
-          checkData[i].name === balance[j].name &&
-          checkData[i].balance !== balance[j].balance
+          checkData[i].name === balance[j].name
         ) {
-          checkData[i].balance = balance[j].balance;
+          if (checkData[i].balance !== balance[j].balance) {
+            checkData[i].balance = balance[j].balance;
+            break;
+          }
+          if (checkData[i].rate !== balance[j].rate) {
+            checkData[i].rate = balance[j].rate;
+          }
+        }
+      }
+    }
+    // console.log(1);
+    return checkData;
+  };
+  mergeBalanceRate = (balance, rate, chain) => {
+    for (let i in balance) {
+      for (let j in rate) {
+        if (balance[i].name === rate[j].name) {
+          balance[i].rate = rate[j].rate;
+          balance[i].chain = chain;
           break;
         }
       }
     }
-    return checkData;
+    return balance;
   };
   updateAmount = async () => {
     let violas_balance_list = await this.getBalanceList("violas");
     let libra_balance_list = await this.getBalanceList("libra");
     let violas_rate_list = await this.getRateList("violas");
     let libra_rate_list = await this.getRateList("libra");
-    window.sessionStorage.setItem(
-      "violas_Balances",
-      JSON.stringify(violas_balance_list.concat(libra_balance_list))
+    let violas_balance_rate = this.mergeBalanceRate(
+      violas_balance_list,
+      violas_rate_list,
+      "violas"
+    );
+    let libra_balance_rate = this.mergeBalanceRate(
+      libra_balance_list,
+      libra_rate_list,
+      "libra"
     );
     let temp_violas_balance = JSON.parse(
       window.sessionStorage.getItem("violas_Balances")
@@ -197,26 +237,23 @@ class HomeContent extends Component {
       if (temp_violas_balance[i].chain === "violas") {
         let temp = this.updateDataAmount(
           temp_violas_balance[i],
-          violas_balance_list
+          violas_balance_rate
         );
         temp_violas_balance[i] = temp;
       } else {
         let temp = this.updateDataAmount(
           temp_violas_balance[i],
-          libra_balance_list
+          libra_balance_rate
         );
         temp_violas_balance[i] = temp;
       }
     }
+    // console.log(temp_violas_balance);
     temp_checkData = this.updateCheckDataAmount(
       temp_checkData,
       temp_violas_balance
     );
-    console.log(temp_checkData);
-    window.sessionStorage.setItem(
-      "checkData",
-      JSON.stringify(temp_checkData)
-    );
+    window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
     window.sessionStorage.setItem(
       "violas_Balances",
       JSON.stringify(temp_violas_balance)
@@ -517,7 +554,9 @@ class HomeContent extends Component {
                         <span>
                           {v.BTC == 0
                             ? 0
-                            : new BigNumber(String(v.BTC/100000000)).toFormat(8)}
+                            : new BigNumber(String(v.BTC / 100000000)).toFormat(
+                                8
+                              )}
                         </span>
                       ) : (
                         <span>******</span>
