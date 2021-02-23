@@ -51,7 +51,7 @@ class AddCurrency extends Component {
   }
   async componentWillReceiveProps(nextProps) {
     await this.setState({
-      BTCBalance: nextProps.BTCBalance,
+      BTCBalance: Number(nextProps.BTCBalance),
     });
     if (this.state.checkData.length == 0) {
       // console.log("000");
@@ -65,7 +65,8 @@ class AddCurrency extends Component {
   async componentDidMount() {
     if (JSON.parse(sessionStorage.getItem("checkData"))) {
       await this.getBalance(JSON.parse(sessionStorage.getItem("checkData")));
-      await this.getTotal(JSON.parse(sessionStorage.getItem("checkData")));
+      await this.getTotal(
+        JSON.parse(sessionStorage.getItem("checkData")));
     } else {
       if (this.state.checkData) {
         await this.getBalance(this.state.checkData);
@@ -215,6 +216,7 @@ class AddCurrency extends Component {
       );
     });
   }
+  
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
     if (n <= 0) {
@@ -228,15 +230,15 @@ class AddCurrency extends Component {
     return number;
   }
   //获取总额
-  getTotal = (checkData) => {
-    // console.log(checkData);
+  getTotal = (checkData, num) => {
+    // console.log(checkData, num);
     let amount = 0;
     for (let i = 0; i < checkData.length; i++) {
       amount += Number(
         this.getFloat((checkData[i].balance / 1e6) * checkData[i].rate, 6)
       );
     }
-
+    
     if (amount > 0) {
       window.sessionStorage.setItem("balances", amount + this.state.BTCBalance);
       this.setState(
@@ -465,73 +467,74 @@ class AddCurrency extends Component {
                   this.state.libraData
                 );
                 if (publishData.length > 0) {
-                let temp = {
-                  pd: false,
-                  violas_balance: {},
-                  published: {},
-                  type:""
-                };
-                // console.log(res.data.published);
-                for (let i = 0; i < publishData.length; i++) {
-                  for (let j = 0; j < violas_Balances.length; j++) {
-                     if (
-                      violas_Balances[j].show_icon
-                        .split("/")
-                        [
-                          violas_Balances[j].show_icon.split("/").length - 1
-                        ].split(".")[0] == _iconName
-                    ) {
-                      if (publishData[i] == _name) {
-                        if (violas_Balances[j].show_name == publishData[i]) {
-                          temp.pd = true;
-                          temp.violas_balance = violas_Balances[j];
-                          temp.published = publishData[i];
-                          temp.type =  violas_Balances[j].show_icon
-                        .split("/")
-                        [
-                          violas_Balances[j].show_icon.split("/").length - 1
-                        ].split(".")[0]
+                  let temp = {
+                    pd: false,
+                    violas_balance: {},
+                    published: {},
+                    type: "",
+                  };
+                  // console.log(res.data.published);
+                  for (let i = 0; i < publishData.length; i++) {
+                    for (let j = 0; j < violas_Balances.length; j++) {
+                      if (
+                        violas_Balances[j].show_icon
+                          .split("/")
+                          [
+                            violas_Balances[j].show_icon.split("/").length - 1
+                          ].split(".")[0] == _iconName
+                      ) {
+                        if (publishData[i] == _name) {
+                          if (violas_Balances[j].show_name == publishData[i]) {
+                            temp.pd = true;
+                            temp.violas_balance = violas_Balances[j];
+                            temp.published = publishData[i];
+                            temp.type = violas_Balances[j].show_icon
+                              .split("/")
+                              [
+                                violas_Balances[j].show_icon.split("/").length -
+                                  1
+                              ].split(".")[0];
+                            break;
+                          }
+                        }
+                      }
+                    }
+                  }
+                  if (temp.pd) {
+                    if (temp.violas_balance.show_name == temp.published) {
+                      temp.violas_balance.checked = false;
+                      for (var j = 0; j < checkData.length; j++) {
+                        if (checkData[j].name == temp.violas_balance.name) {
+                          checkData.splice(j, 1);
                           break;
                         }
                       }
+                      window.sessionStorage.setItem(
+                        "checkData",
+                        JSON.stringify(checkData)
+                      );
+                      this.getBalance(checkData);
+                      this.getTotal(checkData);
+                      this.props.showAddCoins(false);
+                      this.forceUpdate();
                     }
                   }
-                }
-                if (temp.pd) {
-                    if (temp.violas_balance.show_name == temp.published) {
-                        temp.violas_balance.checked = false;
-                        for(var j=0;j<checkData.length;j++){
-                            if(checkData[j].name == temp.violas_balance.name){
-                                checkData.splice(j,1);
-                                break;
-                            }
-                        }
-                        window.sessionStorage.setItem(
-                          "checkData",
-                          JSON.stringify(checkData)
-                        );
-                        this.getBalance(checkData);
-                        this.getTotal(checkData);
-                        this.props.showAddCoins(false);
-                        this.forceUpdate();
+                  for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
+                    for (let j = 0; j < names.length; j++) {
+                      if (
+                        this.state.addCurrencyList1[i].show_name.indexOf(
+                          names[j]
+                        ) == 0
+                      ) {
+                        this.state.addCurrencyList1[i].checked = false;
                       }
-              }
-                for (let i = 0; i < this.state.addCurrencyList1.length; i++) {
-                  for (let j = 0; j < names.length; j++) {
-                    if (
-                      this.state.addCurrencyList1[i].show_name.indexOf(
-                        names[j]
-                      ) == 0
-                    ) {
-                      this.state.addCurrencyList1[i].checked = false;
                     }
                   }
-                }
-                window.sessionStorage.setItem(
-                  "addCurrencyList1",
-                  JSON.stringify(this.state.addCurrencyList1)
-                );
-                this.props.showAddCoins(false);
+                  window.sessionStorage.setItem(
+                    "addCurrencyList1",
+                    JSON.stringify(this.state.addCurrencyList1)
+                  );
+                  this.props.showAddCoins(false);
                 }
               });
           }

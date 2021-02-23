@@ -265,9 +265,13 @@ class HomeContent extends Component {
       this.initCheckData();
     } else {
       this.updateAmount();
+      if (JSON.parse(window.sessionStorage.getItem("checkData")).length==2) {
+        
+      }
     }
-    // this.initCheckData();
     this.getTotalAmount();
+    // this.initCheckData();
+    
   };
   getTotalAmount() {
     let amount = 0;
@@ -338,9 +342,8 @@ class HomeContent extends Component {
                 this.setState(
                   {
                     BTCBalance: BTCBalance,
-                  },
-                  () => {
-                    this.getTotalAmount();
+                  },()=>{
+                    window.sessionStorage.setItem("BTCBalance",this.state.BTCBalance);
                   }
                 );
               });
@@ -523,7 +526,7 @@ class HomeContent extends Component {
                           rate:
                             v.BTC == 0
                               ? "0.00"
-                              : v.rate == 0
+                              : v.rate == 0 ||'NAN'
                               ? "0.00"
                               : this.getFloat(v.rate * (v.BTC / 1e8), 2),
                           icon: v.show_icon,
@@ -644,7 +647,7 @@ class HomeContent extends Component {
                               ≈$
                               {v.balance == 0
                                 ? "0.00"
-                                : v.rate == 0 || "NAN"
+                                : v.rate == 0
                                 ? "0.00"
                                 : this.getFloat(v.rate * (v.balance / 1e6), 2)}
                             </label>
@@ -680,8 +683,8 @@ class HomeContent extends Component {
         >
           <AddCurrency
             showAddCoins={this.showAddCoins}
-            checkData={this.state.checkData}
-            BTCBalance={this.state.BTCBalance}
+            checkData={JSON.parse(window.sessionStorage.getItem("checkData"))}
+            BTCBalance={ window.sessionStorage.getItem("BTCBalance")}
             getInitTotal={this.getInitTotal}
             getBalances={this.getBalances}
             showWalletFun={this.showWalletFun}
