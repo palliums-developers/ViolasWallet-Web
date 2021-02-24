@@ -266,10 +266,9 @@ class HomeContent extends Component {
     } else {
       this.updateAmount();
       if (JSON.parse(window.sessionStorage.getItem("checkData")).length==2) {
-        
+        this.getTotalAmount();
       }
     }
-    this.getTotalAmount();
     // this.initCheckData();
     
   };
@@ -293,6 +292,7 @@ class HomeContent extends Component {
           "balances",
           this.state.coinsBalance + this.state.BTCBalance
         );
+        console.log(this.state.coinsBalance,this.state.BTCBalance);
         this.setState(
           {
             totalAmount: this.getFloat(
@@ -344,6 +344,12 @@ class HomeContent extends Component {
                     BTCBalance: BTCBalance,
                   },()=>{
                     window.sessionStorage.setItem("BTCBalance",this.state.BTCBalance);
+                    if (
+                      JSON.parse(window.sessionStorage.getItem("checkData"))
+                        .length == 2
+                    ) {
+                      this.getTotalAmount();
+                    }
                   }
                 );
               });
