@@ -7,8 +7,8 @@ import {
 } from "antd";
 import { NavLink } from "react-router-dom";
 import "./award.scss";
-let url1 = "https://api4.violas.io";
-let url = "https://api.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //用户验证
 class UserRewards extends Component {

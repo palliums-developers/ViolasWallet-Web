@@ -7,8 +7,8 @@ import intl from "react-intl-universal";
 import BigNumber from "bignumber.js";
 const { encode, decode } = require("../../utils/bech32");
 
-let url = "https://api.violas.io";
-let url1 = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
+let url = "https://api4.violas.io";
 
 //收款
 class GetMoney extends Component {

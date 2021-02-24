@@ -4,7 +4,7 @@ import { timeStamp2String1 } from '../../utils/timer1';
 // import { withRouter } from "react-router-dom";
 import intl from "react-intl-universal";
 import '../app.scss'
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 
 //点击每个币种进入到每个币种的详情
 class PushDetails extends Component {

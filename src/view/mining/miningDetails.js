@@ -3,8 +3,8 @@ import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 import {timeStamp2String} from '../../utils/timer3'
 const { TabPane } = Tabs;
-let url1 = "https://api4.violas.io";
-let url = "https://api.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 
 //挖矿明细
 class MiningDetails extends Component {

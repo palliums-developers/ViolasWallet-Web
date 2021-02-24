@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import intl from "react-intl-universal";
 import { timeStamp2String1 } from "../../utils/timer1";
 import "../app.scss";
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 
 //点击每个币种进入到每个币种的详情
 class SystemDetails extends Component {

@@ -10,8 +10,8 @@ import { Badge } from "antd";
 import firebase from "firebase/app";
 import "firebase/firebase-messaging";
 import axios from "axios";
-let url = "https://api4.violas.io";
-let url1 = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
+let url = "https://api.violas.io";
 //首页
 class Home extends React.PureComponent {
   constructor(props) {
@@ -38,7 +38,7 @@ class Home extends React.PureComponent {
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
       firebase_token:"",
-      violas_server: "https://api4.violas.io",
+      violas_server: "https://api.violas.io",
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
       language: "en", // en cn

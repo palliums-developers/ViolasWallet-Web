@@ -8,8 +8,8 @@ import AddCurrency from "./components/addCurrency";
 import WalletconnectDialog from "./components/walletconnectDialog";
 import "./app.scss";
 import BigNumber from "bignumber.js";
-let url1 = "https://api4.violas.io";
-let url = "https://api.violas.io";
+let url = "https://api4.violas.io";
+let url1 = "https://api.violas.io";
 // let url1 = "https://tbtc1.trezor.io"
 
 //钱包首页

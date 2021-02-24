@@ -12,8 +12,8 @@ import WalletconnectDialog from "../components/walletconnectDialog";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import intl from "react-intl-universal";
 import code_data from '../../utils/code.json';
-let url1 = "https://api.violas.io"
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 
 //映射
 class DigitalBank extends Component {
@@ -673,13 +673,13 @@ class DigitalBank extends Component {
                     )}
                   </p>
                   <CopyToClipboard
-                    text="https://devwallet.violas.io/violasMapping"
+                    text="https://wallet.violas.io/violasMapping"
                     onCopy={() =>
                       message.success(`${intl.get("Address copy successful")}`)
                     }
                   >
                     <a>
-                      https://devwallet.violas.io/violasMapping
+                      https://wallet.violas.io/violasMapping
                       <img src="/img/fuzhi 3@2x.png" />
                     </a>
                   </CopyToClipboard>

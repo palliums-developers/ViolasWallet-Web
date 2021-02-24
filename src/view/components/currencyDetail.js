@@ -6,8 +6,8 @@ import intl from "react-intl-universal";
 import BigNumber from "bignumber.js";
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
-let url1 = 'https://api.violas.io'
-let url = "https://api4.violas.io"
+let url = 'https://api.violas.io'
+let url1 = "https://api4.violas.io"
 let btcUrl = "https://tbtc1.trezor.io";
 //币种详情
 class CurrencyDetail extends Component {

@@ -6,7 +6,7 @@ import { Badge, Pagination, Drawer } from "antd";
 import Details from "./pushDetails";
 import SystemDetails from "./systemDetails";
 import { timeStamp2String } from "../../utils/timer4";
-let url = "https://api4.violas.io";
+let url = "https://api.violas.io";
 //推送页面
 class PushMessage extends Component {
   constructor() {

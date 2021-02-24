@@ -8,8 +8,8 @@ import intl from "react-intl-universal";
 import WalletconnectDialog from '../components/walletconnectDialog'
 import BigNumber from "bignumber.js";
 // import {withRouter} from 'react-router-dom'
-let url1 = "https://api.violas.io"
-let url = "https://api4.violas.io"
+let url = "https://api.violas.io"
+let url1 = "https://api4.violas.io"
 // let url1 = "https://tbtc1.trezor.io"
 let WAValidator = require('wallet-address-validator');
 

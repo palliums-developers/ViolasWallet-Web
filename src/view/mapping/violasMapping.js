@@ -3,8 +3,8 @@ import "./mapping.scss";
 import { connect } from "react-redux";
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
-let url = "https://api4.violas.io";
-let url1 = "https://api.violas.io";
+let url1 = "https://api4.violas.io";
+let url = "https://api.violas.io";
 
 //violas映射
 class ViolasMapping extends Component {

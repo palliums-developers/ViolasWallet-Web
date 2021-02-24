@@ -13,8 +13,8 @@ import WalletconnectDialog from "../components/walletconnectDialog";
 import intl from "react-intl-universal";
 
 // import RouterView from '../router/routerView'
-let url = "https://api.violas.io"
-let url1 = "https://api4.violas.io"
+let url1 = "https://api.violas.io"
+let url = "https://api4.violas.io"
 
 //兑换页面
 class ExChange extends Component {
