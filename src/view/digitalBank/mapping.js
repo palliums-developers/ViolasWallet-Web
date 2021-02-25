@@ -640,7 +640,7 @@ class DigitalBank extends Component {
                       type +
                       "=" +
                       this.state.amount / this.state.amount +
-                      type}
+                      type1}
                 </span>
               </p>
               <p>

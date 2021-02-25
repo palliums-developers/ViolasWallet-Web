@@ -292,7 +292,7 @@ class HomeContent extends Component {
           "balances",
           this.state.coinsBalance + this.state.BTCBalance
         );
-        console.log(this.state.coinsBalance,this.state.BTCBalance);
+        // console.log(this.state.coinsBalance,this.state.BTCBalance);
         this.setState(
           {
             totalAmount: this.getFloat(
