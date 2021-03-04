@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './digitalBank.scss';
 import { Breadcrumb,message } from "antd";
 import { NavLink } from "react-router-dom";
-import { timeStamp2String } from '../../utils/timer';
+import { timeStamp2String } from '../../utils/timer3';
 import { getBitcoinScript, getLibraScript, getMapScript } from '../../utils/trans'
 import getBTCTx from '../../utils/btc_trans';
 import getLibraTx from '../../utils/libra_trans';
@@ -628,6 +628,13 @@ class DigitalBank extends Component {
                 <label>{this.state.amount1}</label>
                 <span>{type1}</span>
               </div>
+              <div className="ETHAddress">
+                <input
+                  value=""
+                  placeholder="请输入转出ETH地址"
+                  onChange={(e) => this.getETHAddressAmount(e)}
+                />
+              </div>
               <div className="line"></div>
               <p>
                 <label>{intl.get("Exchange Rate")}：</label>
@@ -728,11 +735,6 @@ class DigitalBank extends Component {
                             ? `${intl.get("Mapping success")}`
                             : `${intl.get("Mapping failed")}`}
                         </span>
-                        <label>
-                          {timeStamp2String(item.expiration_time + "000")}
-                        </label>
-                      </div>
-                      <div>
                         <p>
                           {item.in_amount / 1e6}
                           {item.in_show_name}
@@ -740,7 +742,12 @@ class DigitalBank extends Component {
                           {item.out_amount / 1e6}
                           {item.out_show_name}
                         </p>
-                        <label>{intl.get("Gas fee")}：--</label>
+                      </div>
+                      <div>
+                        <label>
+                          {timeStamp2String(item.expiration_time + "000")}
+                        </label>
+                        <label id="gas">{intl.get("Gas fee")}：--</label>
                       </div>
                     </div>
                   );
