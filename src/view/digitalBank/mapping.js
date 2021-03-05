@@ -628,13 +628,13 @@ class DigitalBank extends Component {
                 <label>{this.state.amount1}</label>
                 <span>{type1}</span>
               </div>
-              <div className="ETHAddress">
+              {/* <div className="ETHAddress">
                 <input
                   value=""
                   placeholder="请输入转出ETH地址"
                   onChange={(e) => this.getETHAddressAmount(e)}
                 />
-              </div>
+              </div> */}
               <div className="line"></div>
               <p>
                 <label>{intl.get("Exchange Rate")}：</label>
@@ -742,6 +742,7 @@ class DigitalBank extends Component {
                           {item.out_amount / 1e6}
                           {item.out_show_name}
                         </p>
+                        {/* <label>ETH地址：dhhoiweidjoiejodjoiejodjo</label> */}
                       </div>
                       <div>
                         <label>
