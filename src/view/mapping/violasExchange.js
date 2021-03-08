@@ -267,7 +267,7 @@ class ViolasExchange extends Component {
   onChangeSwapAmount = (e) => {
     // console.log(e.target.value);
     this.setState({
-      swapAmount: e.target.value.replace(/\-/g, ""),
+      swapAmount: e.target.value.replace(/\D/g,''),
     });
   };
   //选择地址
@@ -347,7 +347,7 @@ class ViolasExchange extends Component {
                   prefix=""
                   suffix={coinName}
                   placeholder="请输入代币兑换数量"
-                  type="number"
+                  type="text"
                   value={swapAmount}
                   length="20"
                   min="0"
