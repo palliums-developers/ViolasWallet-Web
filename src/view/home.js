@@ -171,7 +171,7 @@ class Home extends React.PureComponent {
     axios
       .put(this.state.violas_server + this.state.violas_register, post_data)
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data.code === 2000) {
          
         }
@@ -192,7 +192,7 @@ class Home extends React.PureComponent {
     window.localStorage.setItem("sentToServer", sent ? "1" : "0");
   };
   sendTokenToServer = (currentToken) => {
-    console.log(this.isTokenSentToServer(),'....');
+    // console.log(this.isTokenSentToServer(),'....');
     if (!this.isTokenSentToServer()) {
       console.log("Sending token to server...");
       console.log(window.sessionStorage.getItem("firebase_token"));
