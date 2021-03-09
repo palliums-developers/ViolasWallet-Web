@@ -24,11 +24,17 @@ class PushDetails extends Component {
         msg_id: nextProps.msg_id1,
       },
       () => {
-        fetch(url + "/1.0/violas/message/transfer?msg_id=" + this.state.msg_id)
+        fetch(
+          url +
+            "/1.0/violas/message/transfer?msg_id=" +
+            this.state.msg_id +
+            "&address=" +
+            window.sessionStorage.getItem("violas_address")
+        )
           .then((res) => res.json())
           .then((res) => {
             if (res.data) {
-              // console.log(res, ".....");
+              console.log(res, ".....");
               this.setState({
                 tranfarList: res.data,
               });

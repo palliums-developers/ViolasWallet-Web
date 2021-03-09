@@ -139,9 +139,15 @@ class BorrowDetails extends Component {
       this.setState({
         warning: "请输入借款数量",
       });
+    }
+    else if (this.state.active == false) {
+      this.setState({
+        warning: "请阅读并同意《质押借款服务协议》",
+      });
     } else {
       this.setState({
         showWallet: true,
+        warning:""
       });
       this.getDigitalBank();
     }

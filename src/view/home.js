@@ -37,13 +37,12 @@ class Home extends React.PureComponent {
       private_key:
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
-      firebase_token:"",
+      firebase_token: "",
       violas_server: "https://api4.violas.io",
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
       language: "en", // en cn
-      unreadCount:0
-
+      unreadCount: 0,
     };
   }
   getMineDialog = (event) => {
@@ -57,7 +56,8 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     await this.initialPage();
     await this.getNotificationPermission();
-    await this.setState({ token: await this.getToken() }); 
+    await this.setState({ token: await this.getToken() });
+    // console.log(this.state.token);
     
     await this.sendToken();
     await this.getUnreadCount();
@@ -66,6 +66,7 @@ class Home extends React.PureComponent {
       if (error) {
         throw error;
       }
+
       window.localStorage.clear();
       window.sessionStorage.clear();
       // this.props.history.push('/app')
@@ -81,9 +82,9 @@ class Home extends React.PureComponent {
       .then((res) => res.json())
       .then((res) => {
         // console.log(res);
-        if(res.data){
+        if (res.data) {
           this.setState({
-            unreadCount:res.data.notice+res.data.message
+            unreadCount: res.data.notice + res.data.message,
           });
         }
       });
@@ -148,10 +149,31 @@ class Home extends React.PureComponent {
             "firebase_token",
             res.data && res.data.data.token
           );
-          this.setState({
-            firebase_token: res.data.data.token,
-          });
+          this.setState(
+            {
+              firebase_token: res.data.data.token,
+            });
           console.log("send token successed");
+        }
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+  };
+  updateRegister = () => {
+    let post_data = {
+      address: window.sessionStorage.getItem("violas_address"),
+      token: this.state.firebase_token,
+      fcm_token: this.state.token,
+      platform: "web",
+      language: this.state.language,
+    };
+    axios
+      .put(this.state.violas_server + this.state.violas_register, post_data)
+      .then((res) => {
+        console.log(res)
+        if (res.data.code === 2000) {
+         
         }
       })
       .catch((err) => {
@@ -170,9 +192,17 @@ class Home extends React.PureComponent {
     window.localStorage.setItem("sentToServer", sent ? "1" : "0");
   };
   sendTokenToServer = (currentToken) => {
+    console.log(this.isTokenSentToServer(),'....');
     if (!this.isTokenSentToServer()) {
       console.log("Sending token to server...");
-      this.register();
+      console.log(window.sessionStorage.getItem("firebase_token"));
+      if (window.sessionStorage.getItem(
+            "firebase_token")) {
+        this.updateRegister();
+      }else{
+        this.register();
+      }
+      
       this.setTokenSentToServer(true);
     } else {
       console.log(
