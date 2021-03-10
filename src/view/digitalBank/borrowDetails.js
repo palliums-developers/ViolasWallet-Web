@@ -105,6 +105,7 @@ class BorrowDetails extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         if (res.data) {
           this.setState({
             borrowList: {
@@ -166,9 +167,9 @@ class BorrowDetails extends Component {
     tx = digitalBank(
       "borrow",
       this.state.showType,
-      ""+this.state.amount * 1e6,
+      "" + this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
-      this.state.token_address,
+      this.state.borrowList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
     );
     if (productId === 0) {
