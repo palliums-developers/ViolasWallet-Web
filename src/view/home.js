@@ -33,7 +33,7 @@ class Home extends React.PureComponent {
         appId: "1:675290848213:web:d7d30fb87f4e39e38fbb5c",
         measurementId: "G-15RHVC9K78",
       },
-      message: "",
+      message: {},
       private_key:
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
@@ -58,7 +58,7 @@ class Home extends React.PureComponent {
     await this.getNotificationPermission();
     await this.setState({ token: await this.getToken() });
     // console.log(this.state.token);
-    
+
     await this.sendToken();
     await this.getUnreadCount();
     await this.getMessage();
@@ -149,10 +149,9 @@ class Home extends React.PureComponent {
             "firebase_token",
             res.data && res.data.data.token
           );
-          this.setState(
-            {
-              firebase_token: res.data.data.token,
-            });
+          this.setState({
+            firebase_token: res.data.data.token,
+          });
           console.log("send token successed");
         }
       })
@@ -173,7 +172,6 @@ class Home extends React.PureComponent {
       .then((res) => {
         // console.log(res)
         if (res.data.code === 2000) {
-         
         }
       })
       .catch((err) => {
@@ -183,7 +181,7 @@ class Home extends React.PureComponent {
   getMessage = () => {
     let temp_messaging = firebase.messaging();
     temp_messaging.onMessage(async (payload) => {
-      console.log("on message: " + JSON.stringify(payload.data));
+      // console.log("on message: " + JSON.stringify(payload.data));
       await this.setState({ message: payload });
       await this.showNotification();
     });
@@ -195,14 +193,13 @@ class Home extends React.PureComponent {
     // console.log(this.isTokenSentToServer(),'....');
     if (!this.isTokenSentToServer()) {
       console.log("Sending token to server...");
-      console.log(window.sessionStorage.getItem("firebase_token"));
-      if (window.sessionStorage.getItem(
-            "firebase_token")) {
+      // console.log(window.sessionStorage.getItem("firebase_token"));
+      if (window.sessionStorage.getItem("firebase_token")) {
         this.updateRegister();
-      }else{
+      } else {
         this.register();
       }
-      
+
       this.setTokenSentToServer(true);
     } else {
       console.log(
@@ -231,15 +228,14 @@ class Home extends React.PureComponent {
   }
   showNotification() {
     let { message } = this.state;
-    console.log(message, "message");
+    // console.log(message, "message");
     this.checkNotificationPermission();
     let title = message.notification.title;
-    let delayTime = Date.now() + 120000;
+    let delayTime = Date.now() + 220000;
     let options = {
       body: message.notification.body,
-      data: { prop1: 123, prop2: "wryyyyyyyyy" },
-      lang: "en-US",
-      icon: "/images/hexiangu.jpg",
+      lang: this.state.language,
+      icon: "/image/favicons.png",
       timestamp: delayTime,
       vibrate: [100, 200, 100],
     };
@@ -312,8 +308,10 @@ class Home extends React.PureComponent {
     return (
       <div className={this.state.ifMobile == false ? "home" : "home home1"}>
         {/* <div style={{position:'absolute'}}>log out</div> */}
+
         {this.state.ifMobile == false ? (
           <div className="header header1">
+            <button onClick={() => this.showNotification()}>111</button>
             <div
               className="logo"
               onClick={() => {
@@ -433,3 +431,6 @@ let mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
+// on message: {"status":"Executed","service":"violas_01","type":"PEER_TO_PEER_WITH_METADATA","date":"1615345930","version":"47010033"}
+// home.js:234 {data: {…}, from: "675290848213", priority: "normal", notification: {…}}
+// data: {status: "Executed", service: "violas_01", type: "PEER_TO_PEER_WITH_METADATA", date: "1615345930", version: "47010033",from: "675290848213"},notification: body: "Payment address: c71d7a054c919be00e8e408d552fa0e4"title: "VLS: 1.0 VLS successfully received!"}}
