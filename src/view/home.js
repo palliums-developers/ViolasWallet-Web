@@ -250,7 +250,6 @@ class Home extends React.PureComponent {
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
-    // console.log(window.localStorage.getItem('walletconnector'),'..............')
     this.setState({
       active: this.props.location.pathname.split("/")[3],
     });
@@ -311,7 +310,6 @@ class Home extends React.PureComponent {
 
         {this.state.ifMobile == false ? (
           <div className="header header1">
-            <button onClick={() => this.showNotification()}>111</button>
             <div
               className="logo"
               onClick={() => {
