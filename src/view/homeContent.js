@@ -13,6 +13,7 @@ let url1 = "https://api.violas.io";
 // let url1 = "https://tbtc1.trezor.io"
 
 //钱包首页
+//钱包首页
 class HomeContent extends Component {
   constructor() {
     super();
@@ -292,7 +293,7 @@ class HomeContent extends Component {
           "balances",
           this.state.coinsBalance + this.state.BTCBalance
         );
-        console.log(this.state.coinsBalance,this.state.BTCBalance);
+        // console.log(this.state.coinsBalance,this.state.BTCBalance);
         this.setState(
           {
             totalAmount: this.getFloat(

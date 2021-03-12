@@ -33,17 +33,16 @@ class Home extends React.PureComponent {
         appId: "1:675290848213:web:d7d30fb87f4e39e38fbb5c",
         measurementId: "G-15RHVC9K78",
       },
-      message: "",
+      message: {},
       private_key:
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
-      firebase_token:"",
-      violas_server: "https://api.violas.io",
+      firebase_token: "",
+      violas_server: "https://api4.violas.io",
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
       language: "en", // en cn
-      unreadCount:0
-
+      unreadCount: 0,
     };
   }
   getMineDialog = (event) => {
@@ -57,8 +56,9 @@ class Home extends React.PureComponent {
     await this.getNewWalletConnect();
     await this.initialPage();
     await this.getNotificationPermission();
-    await this.setState({ token: await this.getToken() }); 
-    
+    await this.setState({ token: await this.getToken() });
+    // console.log(this.state.token);
+
     await this.sendToken();
     await this.getUnreadCount();
     await this.getMessage();
@@ -66,6 +66,7 @@ class Home extends React.PureComponent {
       if (error) {
         throw error;
       }
+
       window.localStorage.clear();
       window.sessionStorage.clear();
       // this.props.history.push('/app')
@@ -81,9 +82,9 @@ class Home extends React.PureComponent {
       .then((res) => res.json())
       .then((res) => {
         // console.log(res);
-        if(res.data){
+        if (res.data) {
           this.setState({
-            unreadCount:res.data.notice+res.data.message
+            unreadCount: res.data.notice + res.data.message,
           });
         }
       });
@@ -158,10 +159,30 @@ class Home extends React.PureComponent {
         console.log("error: ", err);
       });
   };
+  updateRegister = () => {
+    let post_data = {
+      address: window.sessionStorage.getItem("violas_address"),
+      token: window.sessionStorage.getItem(
+            "firebase_token"),
+      fcm_token: this.state.token,
+      platform: "web",
+      language: this.state.language,
+    };
+    axios
+      .put(this.state.violas_server + this.state.violas_register, post_data)
+      .then((res) => {
+        // console.log(res)
+        if (res.data.code === 2000) {
+        }
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+  };
   getMessage = () => {
     let temp_messaging = firebase.messaging();
     temp_messaging.onMessage(async (payload) => {
-      console.log("on message: " + JSON.stringify(payload.data));
+      // console.log("on message: " + JSON.stringify(payload.data));
       await this.setState({ message: payload });
       await this.showNotification();
     });
@@ -170,9 +191,16 @@ class Home extends React.PureComponent {
     window.localStorage.setItem("sentToServer", sent ? "1" : "0");
   };
   sendTokenToServer = (currentToken) => {
+    // console.log(this.isTokenSentToServer(),'....');
     if (!this.isTokenSentToServer()) {
       console.log("Sending token to server...");
-      this.register();
+      // console.log(window.sessionStorage.getItem("firebase_token"));
+      if (window.sessionStorage.getItem("firebase_token")) {
+        this.updateRegister();
+      } else {
+        this.register();
+      }
+
       this.setTokenSentToServer(true);
     } else {
       console.log(
@@ -201,15 +229,14 @@ class Home extends React.PureComponent {
   }
   showNotification() {
     let { message } = this.state;
-    console.log(message, "message");
+    // console.log(message, "message");
     this.checkNotificationPermission();
     let title = message.notification.title;
-    let delayTime = Date.now() + 120000;
+    let delayTime = Date.now() + 220000;
     let options = {
       body: message.notification.body,
-      data: { prop1: 123, prop2: "wryyyyyyyyy" },
-      lang: "en-US",
-      icon: "/images/hexiangu.jpg",
+      lang: this.state.language,
+      icon: "/image/favicons.png",
       timestamp: delayTime,
       vibrate: [100, 200, 100],
     };
@@ -224,7 +251,6 @@ class Home extends React.PureComponent {
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
-    // console.log(window.localStorage.getItem('walletconnector'),'..............')
     this.setState({
       active: this.props.location.pathname.split("/")[3],
     });
@@ -282,6 +308,7 @@ class Home extends React.PureComponent {
     return (
       <div className={this.state.ifMobile == false ? "home" : "home home1"}>
         {/* <div style={{position:'absolute'}}>log out</div> */}
+
         {this.state.ifMobile == false ? (
           <div className="header header1">
             <div

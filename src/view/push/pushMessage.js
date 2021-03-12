@@ -378,6 +378,7 @@ let mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PushMessage);
+
 {/* <div className="blankWrap">
   <div className="blank">
     <img src="/img/blankPage.png" />

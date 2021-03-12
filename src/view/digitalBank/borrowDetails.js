@@ -105,6 +105,7 @@ class BorrowDetails extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         if (res.data) {
           this.setState({
             borrowList: {
@@ -139,9 +140,15 @@ class BorrowDetails extends Component {
       this.setState({
         warning: "请输入借款数量",
       });
+    }
+    else if (this.state.active == false) {
+      this.setState({
+        warning: "请阅读并同意《质押借款服务协议》",
+      });
     } else {
       this.setState({
         showWallet: true,
+        warning:""
       });
       this.getDigitalBank();
     }
@@ -160,9 +167,9 @@ class BorrowDetails extends Component {
     tx = digitalBank(
       "borrow",
       this.state.showType,
-      ""+this.state.amount * 1e6,
+      "" + this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
-      this.state.token_address,
+      this.state.borrowList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
     );
     if (productId === 0) {

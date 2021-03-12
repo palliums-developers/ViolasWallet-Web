@@ -168,7 +168,7 @@ class App extends Component {
               onClick={() => {
                 window.localStorage.clear();
                 window.sessionStorage.clear();
-                this.props.history.push("/app");
+                window.location.reload();
               }}
             >
               <QRCode value={uri}></QRCode>

@@ -13,6 +13,7 @@ let url1 = "https://api4.violas.io"
 // let url1 = "https://tbtc1.trezor.io"
 let WAValidator = require('wallet-address-validator');
 
+//转账
 class Transfer extends Component {
   constructor(props) {
     super();
@@ -62,8 +63,8 @@ class Transfer extends Component {
     });
   }
   stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    e.nativeEvent.stopImmediatePropagation();
+  }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
     if (window.sessionStorage.getItem("btc_address")) {
@@ -106,36 +107,46 @@ class Transfer extends Component {
       .then((res) => {
         console.log(res.data);
         if (res.data) {
-          this.setState({
-            arr1: res.data.balances,
-          },()=>{
-            if (this.state.arr2.length == 0) {
-            let arrs = this.state.arr1.concat(this.state.BTCArr);
-            this.setState(
-              {
-                selData: arrs,
-              },
-              () => {
-                  this.setState({
-                    type: this.state.selData[0].show_name,
-                    coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? new BigNumber(
-                                  String(this.state.selData[0].balance / 100000000)
-                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
-                    opinionType: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0],
-                  });
+          this.setState(
+            {
+              arr1: res.data.balances,
+            },
+            () => {
+              if (this.state.arr2.length == 0) {
+                let arrs = this.state.arr1.concat(this.state.BTCArr);
+                this.setState(
+                  {
+                    selData: arrs,
+                  },
+                  () => {
+                    this.setState({
+                      type: this.state.selData[0].show_name,
+                      coinName: this.state.selData[0].name,
+                      balance:
+                        this.state.selData[0].show_icon
+                          .split("/")
+                          [
+                            this.state.selData[0].show_icon.split("/").length -
+                              1
+                          ].split(".")[0] == "btc"
+                          ? new BigNumber(
+                              String(this.state.selData[0].balance / 100000000)
+                            ).toFormat(8)
+                          : this.getFloat(
+                              this.state.selData[0].balance / 1e6,
+                              6
+                            ),
+                      opinionType: this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0],
+                    });
+                  }
+                );
               }
-            );
-          }
-          });
+            }
+          );
         }
       });
     fetch(
@@ -151,31 +162,33 @@ class Transfer extends Component {
               arr2: res.data.balances,
             },
             () => {
-              
-              let arr = [],arrs = [];
-              if (JSON.stringify(this.state.arr1)!="[]") {
+              let arr = [],
+                arrs = [];
+              if (JSON.stringify(this.state.arr1) != "[]") {
                 arr = this.state.arr1.concat(this.state.arr2);
                 arrs = arr.concat(this.state.BTCArr);
-              }else{
+              } else {
                 arrs = this.state.arr2.concat(this.state.BTCArr);
               }
-              
+
               this.setState(
                 {
                   selData: arrs,
                 },
                 () => {
-                 
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? new BigNumber(
-                                  String(this.state.selData[0].balance / 100000000)
-                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                    balance:
+                      this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0] == "btc"
+                        ? new BigNumber(
+                            String(this.state.selData[0].balance / 100000000)
+                          ).toFormat(8)
+                        : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -194,15 +207,18 @@ class Transfer extends Component {
                 selData: arrs,
               },
               () => {
-               if (this.state.type == "") {
+                if (this.state.type == "") {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                    balance:
+                      this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0] == "btc"
+                        ? this.getFloat(this.state.selData[0].balance / 1e8, 8)
+                        : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -227,7 +243,10 @@ class Transfer extends Component {
     this.setState(
       {
         type: v,
-        balance: opinionType == 'btc' ? this.getFloat(bal / 1e8, 8) : this.getFloat(bal / 1e6, 6),
+        balance:
+          opinionType == "btc"
+            ? this.getFloat(bal / 1e8, 8)
+            : this.getFloat(bal / 1e6, 6),
         showDealType: false,
         coinName: name,
         ind: ind,
@@ -302,15 +321,12 @@ class Transfer extends Component {
       }
     } else {
       this.setState({
-          warning: "",
-        });
+        warning: "",
+      });
     }
   }
   amountWarn() {
-    if (
-      Number(this.state.amount) >
-      Number(this.state.balance)
-    ) {
+    if (Number(this.state.amount) > Number(this.state.balance)) {
       this.setState({
         warning: intl.get("Insufficient available balance"),
       });
@@ -391,6 +407,8 @@ class Transfer extends Component {
         this.setState({
           warning: intl.get("Transfer success"),
           showWallet: false,
+        },()=>{
+          window.location.reload();
         });
 
         // console.log("send transaction ", res);
@@ -437,10 +455,15 @@ class Transfer extends Component {
       .sendTransaction("_libra", tx)
       .then((res) => {
         // console.log("Libra transaction", res);
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       })
       .catch((err) => {
         this.setState({
@@ -456,28 +479,33 @@ class Transfer extends Component {
     console.log(this.state.amount);
     const tx = {
       from: this.state.BTCAddress,
-      amount: ""+this.getFloat(this.state.amount * 1e8,8),
+      amount: "" + this.getFloat(this.state.amount * 1e8, 8),
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.address,
       // script: this.state.script
     };
     console.log("bitcoin ", tx);
     this.state.walletConnector
-    .sendTransaction("_bitcoin", tx)
-    .then((res) => {
-      // console.log("Bitcoin transaction ", res);
-      this.setState({
-        warning: intl.get("Transfer success"),
-        showWallet: false,
+      .sendTransaction("_bitcoin", tx)
+      .then((res) => {
+        // console.log("Bitcoin transaction ", res);
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
+      })
+      .catch((err) => {
+        // console.log("Bitcoin transaction ", err);
+        this.setState({
+          warning: intl.get("Transfer failed"),
+          showWallet: false,
+        });
       });
-    })
-    .catch((err) => {
-      // console.log("Bitcoin transaction ", err);
-      this.setState({
-        warning: intl.get("Transfer failed"),
-        showWallet: false,
-      });
-    });
   }
   getViolasNext = () => {
     if (this.state.address == "") {
@@ -493,50 +521,51 @@ class Transfer extends Component {
         warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-          this.violas_sendTransaction(parseInt(sessionStorage.getItem("violas_chainId")));
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.violas_sendTransaction(
+              parseInt(sessionStorage.getItem("violas_chainId"))
+            );
+          }
+        );
       }
     }
   };
   getLibraNext = () => {
     if (this.state.address == "") {
       this.setState({
-        warning:  intl.get("Please input address"),
+        warning: intl.get("Please input address"),
       });
     } else if (this.state.amount == "") {
       this.setState({
         warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-       
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-           this.libra_sendTransaction(
-             parseInt(sessionStorage.getItem("libra_chainId"))
-           );
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.libra_sendTransaction(
+              parseInt(sessionStorage.getItem("libra_chainId"))
+            );
+          }
+        );
       }
     }
   };
@@ -547,24 +576,23 @@ class Transfer extends Component {
       });
     } else if (this.state.amount == "") {
       this.setState({
-        warning:  intl.get("Please input amount"),
+        warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-        
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-          this.bitcoin_sendTransaction();
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.bitcoin_sendTransaction();
+          }
+        );
       }
     }
   };
@@ -670,66 +698,68 @@ class Transfer extends Component {
                       />
                     </div>
                     <div className="searchWrap">
-                    {selData.map((v, i) => {
-                      return (
-                        <div
-                          className="searchList"
-                          key={i}
-                          onClick={() =>
-                            v.show_name == "BTC"
-                              ? this.showTypes(
-                                  v.show_name,
-                                  v.BTC,
-                                  v.name,
-                                  i,
-                                  v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0]
-                                )
-                              : this.showTypes(
-                                  v.show_name,
-                                  v.balance,
-                                  v.name,
-                                  i,
-                                  v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0]
-                                )
-                          }
-                        >
-                          <div className="searchEvery">
-                            <img src={v.show_icon} />
-                            <div className="searchEvery1">
-                              <div>
-                                <h4>{v.show_name}</h4>
-                                <p>
-                                  {intl.get("Balance")}：
-                                  {v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0] == "btc"
-                                    ? v.BTC == 0
+                      {selData.map((v, i) => {
+                        return (
+                          <div
+                            className="searchList"
+                            key={i}
+                            onClick={() =>
+                              v.show_name == "BTC"
+                                ? this.showTypes(
+                                    v.show_name,
+                                    v.BTC,
+                                    v.name,
+                                    i,
+                                    v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0]
+                                  )
+                                : this.showTypes(
+                                    v.show_name,
+                                    v.balance,
+                                    v.name,
+                                    i,
+                                    v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0]
+                                  )
+                            }
+                          >
+                            <div className="searchEvery">
+                              <img src={v.show_icon} />
+                              <div className="searchEvery1">
+                                <div>
+                                  <h4>{v.show_name}</h4>
+                                  <p>
+                                    {intl.get("Balance")}：
+                                    {v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0] == "btc"
+                                      ? v.BTC == 0
+                                        ? 0
+                                        : this.getFloat(v.BTC / 1e8, 8)
+                                      : v.balance == 0
                                       ? 0
-                                      : this.getFloat(v.BTC / 1e8, 8)
-                                    : v.balance == 0
-                                    ? 0
-                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
-                                  {v.show_name}
-                                </p>
+                                      : this.getFloat(v.balance / 1e6, 6)}{" "}
+                                    {v.show_name}
+                                  </p>
+                                </div>
+                                <span
+                                  className={
+                                    ind == i ? "check active" : "check"
+                                  }
+                                ></span>
                               </div>
-                              <span
-                                className={ind == i ? "check active" : "check"}
-                              ></span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                     </div>
                   </div>
                 ) : null}
@@ -737,10 +767,7 @@ class Transfer extends Component {
             </div>
             <div className="amountShow">
               <p>
-                {intl.get("Balance")}{" "}
-                <span>
-                  {balance == 0 ? 0 : balance}
-                </span>
+                {intl.get("Balance")} <span>{balance == 0 ? 0 : balance}</span>
               </p>
             </div>
             <div className="foot">
@@ -778,28 +805,30 @@ class Transfer extends Component {
         ) : null}
         {/*  */}
         {this.state.showWallet ? (
-          <WalletconnectDialog getCloseWallet={this.closeWallet}></WalletconnectDialog>
+          <WalletconnectDialog
+            getCloseWallet={this.closeWallet}
+          ></WalletconnectDialog>
         ) : null}
       </div>
     );
   }
 }
-let mapStateToProps = (state) =>{
+let mapStateToProps = (state) => {
   return state.ListReducer;
-}
-let mapDispatchToProps = (dispatch) =>{
+};
+let mapDispatchToProps = (dispatch) => {
   return {
-     getDisplay1:(params)=>{
-        dispatch({
-            type:'DISPLAY1',
-            params:{
-                type:true,
-                address:params.address,
-                amount:Number(params.amount)
-            }
-        })
-     },
-     showPolling: () => {
+    getDisplay1: (params) => {
+      dispatch({
+        type: "DISPLAY1",
+        params: {
+          type: true,
+          address: params.address,
+          amount: Number(params.amount),
+        },
+      });
+    },
+    showPolling: () => {
       dispatch({
         type: "DISPLAY",
         payload: false,
@@ -811,7 +840,7 @@ let mapDispatchToProps = (dispatch) =>{
     //     payload: false,
     //   });
     // },
-  }
-}
- 
-export default connect(mapStateToProps,mapDispatchToProps)(Transfer);
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transfer);

@@ -1060,7 +1060,7 @@ class CashPooling extends Component {
       poolArr,
       focusActive,
     } = this.state;
-    // console.log(window.sessionStorage.getItem("curDealType"));
+    // console.log(warning);
     if (
       window.sessionStorage.getItem("curDealType") !== intl.get("Add Liquidity")
     ) {
@@ -1544,7 +1544,7 @@ class CashPooling extends Component {
               ) : (
                 <p
                   className={
-                    warning == intl.get("Deposit Successful")
+                    warning == intl.get("Withdraw Successful")
                       ? "descr descrWarn"
                       : "descr descrRed"
                   }
@@ -1595,10 +1595,7 @@ class CashPooling extends Component {
                                   : "red"
                               }
                             >
-                              {this.optionTypes(
-                                v.transaction_type,
-                                v.status
-                              )}
+                              {this.optionTypes(v.transaction_type, v.status)}
                             </p>
                             {
                               <p>
@@ -1623,12 +1620,20 @@ class CashPooling extends Component {
                             }
                           </div>
                           <div>
-                            {
-                              v.token?<p>
-                                {intl.get("Token")}：+{v.token / 1e6}
-                              </p> :<p>--</p>
-                              
-                            }
+                            {v.token ? (
+                              <p>
+                                {intl.get("Token")}：
+                                {this.optionTypes1(
+                                  v.transaction_type,
+                                  v.status
+                                ).slice(0, 2) == "转入"
+                                  ? "+"
+                                  : "-"}
+                                {v.token / 1e6}
+                              </p>
+                            ) : (
+                              <p>--</p>
+                            )}
 
                             <p>{timeStamp2String(v.confirmed_time + "000")}</p>
                           </div>

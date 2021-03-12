@@ -238,7 +238,7 @@ class MiningAwards extends Component {
     const tx = {
       from: window.sessionStorage.getItem("violas_address"),
       payload: {
-        code: code_data.violas.withdraw_mine_reward,
+        code: code_data.violas.claim_incentive,
         tyArgs: [this.state.tyArgs],
         args: [],
       },
@@ -250,6 +250,8 @@ class MiningAwards extends Component {
       .then((res) => {
         this.setState({
           showWallet: false,
+        },()=>{
+          window.location.reload();
         });
         console.log("send transaction ", res);
       })
@@ -282,8 +284,8 @@ class MiningAwards extends Component {
     const tx = {
       from: window.sessionStorage.getItem("violas_address"),
       payload: {
-        code: code_data.violas.claim_incentive,
-        tyArgs: [this.state.tyArgs],
+        code: code_data.violas.withdraw_mine_reward,
+        tyArgs: [],
         args: [],
       },
       chainId: chainId,
@@ -292,9 +294,14 @@ class MiningAwards extends Component {
     this.state.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
-        this.setState({
-          showWallet: false,
-        });
+        this.setState(
+          {
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
         console.log("send transaction ", res);
       })
       .catch((err) => {
