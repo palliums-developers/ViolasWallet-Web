@@ -130,6 +130,10 @@ class UserRewards extends Component {
             this.setState({
               descr1:"验证成功"
             })
+          }else{
+            this.setState({
+              descr: "当前手机号已无验证机会",
+            });
           }
         });
     }

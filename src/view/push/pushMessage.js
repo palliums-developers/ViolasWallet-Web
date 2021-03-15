@@ -60,36 +60,34 @@ class PushMessage extends Component {
     }
     localStorage.setItem("local", lang);
     intl.options.currentLocale = localStorage.getItem("local");
-    this.getUnreadCount();
   }
   componentDidMount() {
     this.getTranfars();
     this.getNotices();
-    // this.getUnreadCount();
   }
   //获取未读消息数
-  getUnreadCount() {
-    fetch(
-      url +
-        "/1.0/violas/messages/unread/count?token=" +
-        window.sessionStorage.getItem("firebase_token")
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        // console.log(res);
-        if (res.data) {
-          this.setState(
-            {
-              noticeUnread: res.data.notice,
-              tranfarUnread: res.data.message,
-            },
-            () => {
-              this.getDot(0);
-            }
-          );
-        }
-      });
-  }
+  // getUnreadCount() {
+  //   fetch(
+  //     url +
+  //       "/1.0/violas/messages/unread/count?token=" +
+  //       window.sessionStorage.getItem("firebase_token")
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       // console.log(res);
+  //       if (res.data) {
+  //         this.setState(
+  //           {
+  //             noticeUnread: res.data.notice,
+  //             tranfarUnread: res.data.message,
+  //           },
+  //           () => {
+  //             this.getDot(0);
+  //           }
+  //         );
+  //       }
+  //     });
+  // }
   //获取消息列表
   getTranfars = () => {
     fetch(
@@ -157,23 +155,24 @@ class PushMessage extends Component {
   //获取全部已读未读红点
   getDot(id) {
     if (id == 0) {
-      if (this.state.tranfarUnread > 0) {
+      // console.log(this.state.tranfarUnread);
+      if (this.state.tranfarsList.length > 0) {
         this.state.messageList[id].dot = true;
       } else {
         this.state.messageList[id].dot = false;
       }
-      if (this.state.noticeUnread > 0) {
+      if (this.state.noticesList.length > 0) {
         this.state.messageList[id + 1].dot = true;
       } else {
         this.state.messageList[id + 1].dot = false;
       }
     } else if (id == 1) {
-      if (this.state.noticeUnread > 0) {
+      if (this.state.tranfarsList.length > 0) {
         this.state.messageList[id].dot = true;
       } else {
         this.state.messageList[id].dot = false;
       }
-      if (this.state.tranfarUnread > 0) {
+      if (this.state.noticesList.length > 0) {
         this.state.messageList[id - 1].dot = true;
       } else {
         this.state.messageList[id - 1].dot = false;
