@@ -11,6 +11,7 @@ import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { timeStamp2String2 } from '../../utils/timer2';
+import intl from "react-intl-universal";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
 const { RangePicker } = DatePicker;
@@ -508,12 +509,12 @@ class SaveOrder extends Component {
             <NavLink to="/homepage/home/digitalBank">
               {" "}
               <img src="/img/fanhui 2@2x.png" />
-              数字银行
+              {intl.get("Bank")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <NavLink to="/homepage/home/digitalBank/saveOrder">
-              存款订单
+              {intl.get("Deposit Orders")}
             </NavLink>
           </Breadcrumb.Item>
         </Breadcrumb>

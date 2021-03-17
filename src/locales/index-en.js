@@ -265,9 +265,16 @@ export default {
     "Password setting does not match, 8-20 digit password consisting of at least one uppercase letter, one lowercase letter and one number",
   "This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password":
     "This operation requires the consumption of gas fee, if you want to carry out this operation, please enter the password",
-  //数字银行
+  //bank
   "Total Deposit": "Total Deposit",
   "Total Borrowable": "Total Borrowable",
   "Total Earnings": "Total Earnings",
   "Yesterday's Earnings": "Yesterday's Earnings",
+  "Deposit Market": "Deposit Market",
+  "Borrowing Market": "Borrowing Market",
+  "Mining Rules": "Mining Rules",
+  APY: "APY",
+  "Loan rate": "Loan rate",
+  "Deposit Orders": "Deposit Orders",
+  "Borrowing Orders": "Borrowing Orders",
 };

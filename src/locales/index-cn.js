@@ -44,7 +44,7 @@ export default {
   Fees: "手续费",
   "Order Time": "成交时间",
   Submitted: "已提交",
-  "Swapping": "兑换中",
+  Swapping: "兑换中",
   From: "输入",
   To: "输出",
   Input: "转入",
@@ -260,8 +260,16 @@ export default {
   "Password setting does not match":
     "密码设定不符合,至少一个大写字母，一个小写字母和一个数字组成的8-20位密码",
   //数字银行
+  
   "Total Deposit": "存款总额",
   "Total Borrowable": "可借总额",
   "Total Earnings": "累计收益",
   "Yesterday's Earnings": "昨日收益",
+  "Deposit Market": "存款市场",
+  "Borrowing Market": "借款市场",
+  "Mining Rules": "存!借挖矿规则",
+  APY: "年化收益率",
+  "Loan rate": "年化利率",
+  "Deposit Orders": "存款订单",
+  "Borrowing Orders": "借款订单",
 };

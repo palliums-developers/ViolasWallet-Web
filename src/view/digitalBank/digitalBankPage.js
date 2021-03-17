@@ -8,30 +8,30 @@ class DigitalBankPage extends Component {
     constructor() {
         super()
         this.state = {
-            visible:true,
-            visible1:false,
-            type:'存款市场',
-            types:['存款市场','借款市场'],
-            ind:0,
-            orders:[
-                {
-                    name:'存款订单',
-                    imgUrl:'/img/saveOrder.png',
-                    pathname:'/homepage/home/digitalBank/saveOrder'
-                },
-                {
-                    name: '借款订单',
-                    imgUrl: '/img/borrowOrder.png',
-                    pathname: '/homepage/home/digitalBank/borrowOrder'
-                }
-            ],
-            amount:0.00,
-            borrow: 0.00,
-            borrows: [],
-            deposits: [],
-            total: 0.00,
-            yesterday: 0.00
-        }
+          visible: true,
+          visible1: false,
+          type: intl.get("Deposit Market"),
+          types: [intl.get("Deposit Market"), intl.get("Borrowing Market")],
+          ind: 0,
+          orders: [
+            {
+              name: intl.get("Deposit Orders"),
+              imgUrl: "/img/saveOrder.png",
+              pathname: "/homepage/home/digitalBank/saveOrder",
+            },
+            {
+              name: intl.get("Borrowing Orders"),
+              imgUrl: "/img/borrowOrder.png",
+              pathname: "/homepage/home/digitalBank/borrowOrder",
+            },
+          ],
+          amount: 0.0,
+          borrow: 0.0,
+          borrows: [],
+          deposits: [],
+          total: 0.0,
+          yesterday: 0.0,
+        };
     }
     stopPropagation(e) {
         e.nativeEvent.stopImmediatePropagation();
@@ -182,7 +182,8 @@ class DigitalBankPage extends Component {
                   }}
                 >
                   <p>
-                    存!借挖矿规则<span>＞＞</span>
+                    {intl.get("Mining Rules")}
+                    <span>＞＞</span>
                   </p>
                 </div>
               </div>
@@ -212,7 +213,7 @@ class DigitalBankPage extends Component {
                           </p>
                           <p>
                             <span>{Number(v.rate * 100).toFixed(2)}%</span>
-                            <label>{v.rate_desc}</label>
+                            <label>{intl.get("APY")}</label>
                           </p>
                         </div>
                       );
@@ -240,7 +241,7 @@ class DigitalBankPage extends Component {
                           </p>
                           <p>
                             <span>{Number(v.rate * 100).toFixed(2)}%</span>
-                            <label>{v.rate_desc}</label>
+                            <label>{intl.get("Loan rate")}</label>
                           </p>
                         </div>
                       );
