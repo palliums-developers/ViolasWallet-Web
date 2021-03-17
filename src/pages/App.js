@@ -1,5 +1,8 @@
 import "../components/css/App.css";
 import React, { Component } from "react";
+import { Button, Select, Input } from "antd";
+import "antd/dist/antd.css";
+import { inside, outside } from "../components/config/config";
 // import * from '../util';
 
 // Web3 中文文档参考
@@ -11,6 +14,7 @@ import React, { Component } from "react";
 // SDK 项目位置
 // https://github.com/DappPocket/Ethereum-Wallet-SDK
 
+let { Option } = Select;
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,14 +23,9 @@ class App extends Component {
       account: "",
       balance: "",
       tokenBalance: 0,
-      swapAmount: 0,
-      swapContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      // swapContractAddress: "0xE6C7f2DAB2E9B16ab124E45dE3516196457A1120",
-      // swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      tokenContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      contractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      token_USDT: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      amount: 0,
+      contractAddress: "",
+      token_USDT: "",
       violasAddress: "e8da60ef0f4cf18c324527f48b06c7e9",
     };
     this.eth = null;
@@ -35,6 +34,7 @@ class App extends Component {
   componentDidMount() {
     // this.connectWallet();
     // console.log(window.ethereum);
+    console.log(inside);
   }
 
   // 连接 ETH 钱包
@@ -61,15 +61,7 @@ class App extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
-      let {
-        swapContractAddress,
-        tokenContractAddress,
-        token_USDT,
-        contractAddress,
-      } = this.state;
-      let account = this.state.account;
-      let amount = this.state.swapAmount;
-
+      let { token_USDT, contractAddress, account, amount } = this.state;
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
         {
           name: "approve",
@@ -85,15 +77,12 @@ class App extends Component {
             },
           ],
         },
-        // [swapContractAddress, amount]
-        [contractAddress, amount * 1e6]
+        [contractAddress, amount]
       );
-      console.log(amount * 1e6);
       // 调用代币合约，授权兑换合约可以花费 amount 数量的资产。
       this.eth
         .sendTransaction({
           from: account,
-          // to: tokenContractAddress,
           to: token_USDT,
           value: "0",
           gas: 500000,
@@ -117,18 +106,8 @@ class App extends Component {
     if (!(this.eth && this.eth.abi)) {
       alert("请先连接 ETH 钱包");
     } else {
-      // let swapContractAddress = this.state.swapContractAddress;
-      // let tokenContractAddress = this.state.tokenContractAddress;
-      // let account = this.state.account;
       console.log("start swap");
-      let {
-        swapContractAddress,
-        tokenContractAddress,
-        account,
-        violasAddress,
-        token_USDT,
-        contractAddress,
-      } = this.state;
+      let { account, violasAddress, token_USDT, contractAddress } = this.state;
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
         {
           name: "transferProof",
@@ -144,7 +123,6 @@ class App extends Component {
             },
           ],
         },
-        // [tokenContractAddress, violasAddress]
         [token_USDT, violasAddress]
       );
 
@@ -153,7 +131,6 @@ class App extends Component {
       this.eth
         .estimateGas({
           from: account,
-          // to: swapContractAddress,
           to: contractAddress,
           value: "0",
           data: functionCallAbi,
@@ -184,63 +161,63 @@ class App extends Component {
 
   // 查询 ERC20 代币价格
   // 此为 balanceOf 方法调用例子
-  queryTokenBalance = () => {
-    if (!(this.eth && this.eth.abi)) {
-      alert("请先连接 ETH 钱包");
-    } else {
-      let tokenContractAddress = this.state.tokenContractAddress;
-      let account = this.state.account;
+  // queryTokenBalance = () => {
+  //   if (!(this.eth && this.eth.abi)) {
+  //     alert("请先连接 ETH 钱包");
+  //   } else {
+  //     let tokenContractAddress = this.state.tokenContractAddress;
+  //     let account = this.state.account;
 
-      // 查询合约的余额方法，ERC20 方法参照文档 https://eips.ethereum.org/EIPS/eip-20erc20
-      // function balanceOf(address _owner) public view returns (uint256 balance)
-      // 1. 先调用 encodeFunctionCall 方法序列化参数
-      // 2. 调用 call 函数在 ETH 链上查询
-      // 3. 使用 decodeParameters 方法对返回结果进行反序列化
-      let functionCallAbi = this.eth.abi.encodeFunctionCall(
-        {
-          name: "balanceOf",
-          type: "function",
-          inputs: [
-            {
-              type: "address",
-              name: "_owner",
-            },
-          ],
-        },
-        [account]
-      );
+  //     // 查询合约的余额方法，ERC20 方法参照文档 https://eips.ethereum.org/EIPS/eip-20erc20
+  //     // function balanceOf(address _owner) public view returns (uint256 balance)
+  //     // 1. 先调用 encodeFunctionCall 方法序列化参数
+  //     // 2. 调用 call 函数在 ETH 链上查询
+  //     // 3. 使用 decodeParameters 方法对返回结果进行反序列化
+  //     let functionCallAbi = this.eth.abi.encodeFunctionCall(
+  //       {
+  //         name: "balanceOf",
+  //         type: "function",
+  //         inputs: [
+  //           {
+  //             type: "address",
+  //             name: "_owner",
+  //           },
+  //         ],
+  //       },
+  //       [account]
+  //     );
 
-      // 调用兑换合约，发起兑换
-      // ETH 合于调用
-      // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#call
-      this.eth
-        .call({
-          to: tokenContractAddress,
-          data: functionCallAbi,
-        })
-        .then((resultAbi) => {
-          let result = this.eth.abi.decodeParameters(["uint256"], resultAbi);
-          console.log(result[0]);
-          this.setState({
-            tokenBalance: result[0],
-          });
-        });
-    }
-  };
+  //     // 调用兑换合约，发起兑换
+  //     // ETH 合于调用
+  //     // 文档 https://learnblockchain.cn/docs/web3.js/web3-eth.html#call
+  //     this.eth
+  //       .call({
+  //         to: tokenContractAddress,
+  //         data: functionCallAbi,
+  //       })
+  //       .then((resultAbi) => {
+  //         let result = this.eth.abi.decodeParameters(["uint256"], resultAbi);
+  //         console.log(result[0]);
+  //         this.setState({
+  //           tokenBalance: result[0],
+  //         });
+  //       });
+  //   }
+  // };
 
   onChangeSwapAmount = (event) => {
     this.setState({
-      swapAmount: event.target.value,
+      amount: event.target.value,
     });
   };
   onChangeSwapContractAddress = (event) => {
     this.setState({
-      contractAddress: event.target.value,
+      contractAddress: event,
     });
   };
   onChangeTokenContractAddress = (event) => {
     this.setState({
-      token_USDT: event.target.value,
+      token_USDT: event,
     });
   };
   onChangeViolasAddress = (event) => {
@@ -253,51 +230,75 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div className="Connect-div">
-            <button hidden={this.state.connected} onClick={this.connectWallet}>
+            <Button
+              hidden={this.state.connected}
+              type="primary"
+              onClick={this.connectWallet}
+            >
               连接 ETH 钱包
-            </button>
+            </Button>
           </div>
           <p>Address: {this.state.account}</p>
-          <p>Balance: {this.state.balance}</p>
-          <br />
-          <p>-----------mapping dapp-----------</p>
-          <div>
-            <span>violas地址：</span>
-            <input
-              value={this.state.violasAddress}
-              onChange={this.onChangeViolasAddress}
-            />
+          <p>Balance: {this.state.balance / 10e17}</p>
+          <div className="main">
+            <div className="body">
+              <p>-----------mapping dapp-----------</p>
+              <div>
+                <span>violas地址：</span>
+                <Input
+                  value={this.state.violasAddress}
+                  onChange={this.onChangeViolasAddress}
+                />
+              </div>
+              <div>
+                <span>兑换合约地址：</span>
+                {/* <Input
+                  value={this.state.contractAddress}
+                  onChange={this.onChangeSwapContractAddress}
+                /> */}
+                <Select
+                  style={{ width: "100px" }}
+                  onChange={this.onChangeSwapContractAddress}
+                  // defaultValue={inside.contractAddress}
+                >
+                  <Option value={inside.contractAddress}>内部</Option>
+                  <Option value={outside.contractAddress}>外部</Option>
+                </Select>
+                <p>{this.state.contractAddress}</p>
+              </div>
+              <div>
+                <span>(vUSDT)代币合约地址：</span>
+                {/* <Input
+                  value={this.state.token_USDT}
+                  onChange={this.onChangeTokenContractAddress}
+                /> */}
+                <Select
+                  style={{ width: "100px" }}
+                  onChange={this.onChangeTokenContractAddress}
+                  // defaultValue={inside.token_USDT}
+                >
+                  <Option value={inside.token_USDT}>内部</Option>
+                  <Option value={outside.token_USDT}>外部</Option>
+                </Select>
+                <p>{this.state.token_USDT}</p>
+              </div>
+              <div>
+                <span>代币兑换数量：</span>
+                <Input
+                  // style={{ textTransform: "uppercase" }}
+                  // type="number"
+                  placeholder="(最小单位六位数)"
+                  onChange={this.onChangeSwapAmount}
+                />
+              </div>
+              <Button onClick={this.approveContract} type="primary">
+                兑换
+              </Button>
+              {/* <p>---------erc20 token balance---------</p>
+              <Input value={this.state.tokenBalance} />
+              <Button onClick={this.queryTokenBalance}>查寻</Button> */}
+            </div>
           </div>
-          <div>
-            <span>兑换合约地址：</span>
-            <input
-              value={this.state.contractAddress}
-              onChange={this.onChangeSwapContractAddress}
-            />
-          </div>
-          <div>
-            {/* <span>(VLSUSDT)代币合约地址：</span> */}
-            <span>(vUSDT)代币合约地址：</span>
-            <input
-              value={this.state.token_USDT}
-              onChange={this.onChangeTokenContractAddress}
-            />
-          </div>
-          <div>
-            <span>代币兑换数量：</span>
-            <input
-              style={{ textTransform: "uppercase" }}
-              type="number"
-              placeholder="(最小单位六位数)"
-              // value={this.state.swapAmount}
-              onChange={this.onChangeSwapAmount}
-            />
-          </div>
-          <button onClick={this.approveContract}>兑换</button>
-          <br />
-          <p>-----------erc20 token balance-----------</p>
-          <input value={this.state.tokenBalance} />
-          <button onClick={this.queryTokenBalance}>查寻</button>
         </header>
       </div>
     );
