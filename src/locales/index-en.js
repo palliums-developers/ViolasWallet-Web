@@ -277,4 +277,9 @@ export default {
   "Loan rate": "Loan rate",
   "Deposit Orders": "Deposit Orders",
   "Borrowing Orders": "Borrowing Orders",
+  "Current Deposit": "Current Deposit",
+  "Deposit Records": "Deposit Records",
+  "Current Borrowing": "Current Borrowing",
+  "Borrowing Records": "Borrowing Record",
+  "Bonus For Inviting Friends": "Bonus For Inviting Friends",
 };
