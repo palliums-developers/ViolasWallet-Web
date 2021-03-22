@@ -37,11 +37,11 @@ class SaveOrder extends Component {
       types: [
         {
           id: 0,
-          type: "当前存款",
+          type: intl.get("Current Deposit"),
         },
         {
           id: 1,
-          type: "存款明细",
+          type: intl.get("Deposit Records"),
         },
       ],
       data: [],

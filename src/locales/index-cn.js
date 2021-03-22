@@ -260,7 +260,7 @@ export default {
   "Password setting does not match":
     "密码设定不符合,至少一个大写字母，一个小写字母和一个数字组成的8-20位密码",
   //数字银行
-  
+
   "Total Deposit": "存款总额",
   "Total Borrowable": "可借总额",
   "Total Earnings": "累计收益",
@@ -272,4 +272,9 @@ export default {
   "Loan rate": "年化利率",
   "Deposit Orders": "存款订单",
   "Borrowing Orders": "借款订单",
+  "Current Deposit": "当前存款",
+  "Deposit Records": "存款明细",
+  "Current Borrowing": "当前借款",
+  "Borrowing Records": "借款明细",
+  "Bonus For Inviting Friends": "邀请奖励",
 };

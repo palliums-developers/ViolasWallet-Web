@@ -26,9 +26,9 @@ class ViolasExchange extends Component {
       // swapContractAddress: "0xE6C7f2DAB2E9B16ab124E45dE3516196457A1120",
       // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
       tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      contractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      token_USDT: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      swapContractAddress: "0x045B0Dc3908B0c00001E35871250cA3D598E3F32",
+      contractAddress: "0x045B0Dc3908B0c00001E35871250cA3D598E3F32",
+      token_USDT: "0xb64DB0d1810De2548534c003e2E5503564D7f3E5",
       swapAmount: "",
     };
     this.eth = null;
@@ -118,8 +118,8 @@ class ViolasExchange extends Component {
         contractAddress,
         account
       } = this.state;
-
-      let amount = Number(this.state.swapAmount) * 1e6;
+      // console.log(this.state.swapAmount);
+      let amount = ""+Number(this.state.swapAmount) * 1e6;
       let functionCallAbi = this.eth.abi.encodeFunctionCall(
         {
           name: "approve",
@@ -265,7 +265,6 @@ class ViolasExchange extends Component {
   };
   //输入数量
   onChangeSwapAmount = (e) => {
-    // console.log(e.target.value);
     this.setState({
       swapAmount: e.target.value.replace(/\D/g,''),
     });
@@ -301,7 +300,6 @@ class ViolasExchange extends Component {
   };
   render() {
     let { tokenBalance, token, coinName, swapAmount } = this.state;
-    // console.log(token,coinName)
     return (
       <div className="violasExchange">
         <div className="violasExchangeContent">
