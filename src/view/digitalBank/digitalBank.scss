@@ -360,6 +360,7 @@
                 color:rgba(92,92,92,1);
             }
         }
+        
         .iptAmount {
           display: flex;
           align-items: center;
@@ -530,6 +531,7 @@
           }
           
         }
+        
         .arrow{
             display: flex;
             width: 12px;
@@ -574,7 +576,13 @@
             font-weight: 400;
             color: rgba(158, 156, 164, 1);
           }
+          .getFormBorder{
+              border: 0.5px solid rgba(112, 56, 253, 1);
+            }
         }
+        .getFormBorder{
+              border: 0.5px solid rgba(112, 56, 253, 1);
+            }
         .line{
             width:598px;
             border-bottom: 0.5px dashed rgba(60, 56, 72, .2);
@@ -985,11 +993,12 @@
           justify-content: space-between;
           align-items: center;
           // margin-bottom: 40px;
+          cursor: pointer;
           i{
             width: 12px;
             height: 12px;
             display: flex;
-            cursor: pointer;
+            
             img{
               width: 100%;
             }
@@ -1041,11 +1050,12 @@
           justify-content: space-between;
           align-items: center;
           // margin-bottom: 40px;
+          cursor: pointer;
           i{
             width: 12px;
             height: 12px;
             display: flex;
-            cursor: pointer;
+            
             img{
               width: 100%;
             }
@@ -1629,15 +1639,8 @@
     }
   }
 }
-  @media screen and (max-width:1440px){
-  .mapping{
-    >div{
-      width:800px;
-    }
-  }
-  
-}
-@media screen and (max-width:1600px){
+ 
+@media (max-width:1600px){
   .borrowOrder,.saveOrder{
     .curSaveLists{
       width: 90%;
@@ -1645,17 +1648,22 @@
   }
   
 }
-@media screen and (max-width:1315px){
+ @media (max-width:1440px){
+  .mapping{
+    >div{
+      width:800px;
+    }
+  }
+  
+}
+@media (max-width:1315px){
   .ant-space{
     width: 300px;
-  }
-  .ant-select{
-    width: 160px!important;
-    
   }
   .borrowOrder .curSaveLists .saveDetail .selector, .saveOrder .curSaveLists .saveDetail .selector {
     .ant-select{
       margin-left: 15px;
+      width: 160px!important;
     }
     .btn{
       margin-left: 15px;
@@ -1663,7 +1671,7 @@
   }
 }
 
-@media screen and (max-width:1200px){
+@media (max-width:1200px){
   .borrowOrder,.saveOrder{
     .curSaveLists{
       width: 95%;
@@ -1673,16 +1681,13 @@
     width: 800px;
   }
 }
-@media screen and (max-width:1100px){
+@media (max-width:1100px){
   .ant-space{
     width: 280px;
   }
-  .ant-select{
-    width: 150px!important;
-    
-  }
   .borrowOrder .curSaveLists .saveDetail .selector, .saveOrder .curSaveLists .saveDetail .selector {
     .ant-select{
+      width: 150px!important;
       margin-left: 12px;
     }
     .btn{
@@ -1693,12 +1698,22 @@
     width: 750px;
   }
 }
-@media screen and (max-width:1030px){
+@media (max-width:1080px){
+  .ant-space{
+    width: 250px;
+  }
+  .borrowOrder .curSaveLists .saveDetail .selector, .saveOrder .curSaveLists .saveDetail .selector {
+    .ant-select{
+      width: 140px!important;
+    }
+  }
+}
+@media (max-width:1030px){
   
   .digitalBankPage{
     width: 720px;
   }
 }
-@media screen and (max-width:1024px){
+@media (max-width:1024px){
   
 }

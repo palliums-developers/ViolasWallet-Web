@@ -44,8 +44,10 @@ class DigitalBank extends Component {
       btc_mappingInfo: [],
       focusActive: false,
       showWallet: false,
-      ETHAddress:"",
-      ethName:""
+      ETHAddress: "",
+      ethName: "",
+      getFocus: false,
+      getFocus1: false,
     };
   }
   async componentWillMount() {
@@ -523,6 +525,8 @@ class DigitalBank extends Component {
       balance,
       mappingRecord,
       focusActive,
+      getFocus,
+      getFocus1,
     } = this.state;
     // console.log(selData);
     return (
@@ -551,10 +555,22 @@ class DigitalBank extends Component {
                   {balance} {type}
                 </label>
               </h3>
-              <div className="iptAmount">
+              <div
+                className={getFocus ? "iptAmount getFormBorder" : "iptAmount"}
+              >
                 <input
                   value={this.state.amount}
                   placeholder={intl.get("Amount Transfered")}
+                  onFocus={() => {
+                    this.setState({
+                      getFocus: true,
+                    });
+                  }}
+                  onBlur={() => {
+                    this.setState({
+                      getFocus: false,
+                    });
+                  }}
                   onChange={(e) => this.getTransAmount(e)}
                 />
                 <div className="dropdown1">
@@ -634,15 +650,26 @@ class DigitalBank extends Component {
                 <label>{this.state.amount1}</label>
                 <span>{type1}</span>
               </div>
-              {
-                this.state.ethName == "eth" ? <div className="ETHAddress">
-                <input
-                  value={this.state.ETHAddress}
-                  placeholder="请输入转出ETH地址"
-                  onChange={(e) => this.getETHAddressAmount(e)}
-                />
-              </div> : null
-              }
+              {this.state.ethName == "eth" ? (
+                <div className="ETHAddress">
+                  <input
+                    value={this.state.ETHAddress}
+                    placeholder="请输入转出ETH地址"
+                    className={getFocus1 ? "getFormBorder" : ""}
+                    onFocus={() => {
+                      this.setState({
+                        getFocus1: true,
+                      });
+                    }}
+                    onBlur={() => {
+                      this.setState({
+                        getFocus1: false,
+                      });
+                    }}
+                    onChange={(e) => this.getETHAddressAmount(e)}
+                  />
+                </div>
+              ) : null}
               <div className="line"></div>
               <p>
                 <label>{intl.get("Exchange Rate")}：</label>
@@ -750,7 +777,9 @@ class DigitalBank extends Component {
                           {item.out_amount / 1e6}
                           {item.out_show_name}
                         </p>
-                        {/* <label>ETH地址：dhhoiweidjoiejodjoiejodjo</label> */}
+                        {item.to_address ? (
+                          <label>ETH地址：{item.to_address}</label>
+                        ) : null}
                       </div>
                       <div>
                         <label>
