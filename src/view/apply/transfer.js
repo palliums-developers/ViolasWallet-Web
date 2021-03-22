@@ -45,6 +45,8 @@ class Transfer extends Component {
       opinionType: "",
       BTCArr: [],
       showWallet: false,
+      getFocus: false,
+      getFocus1: false,
     };
   }
 
@@ -407,8 +409,6 @@ class Transfer extends Component {
         this.setState({
           warning: intl.get("Transfer success"),
           showWallet: false,
-        },()=>{
-          window.location.reload();
         });
 
         // console.log("send transaction ", res);
@@ -455,15 +455,10 @@ class Transfer extends Component {
       .sendTransaction("_libra", tx)
       .then((res) => {
         // console.log("Libra transaction", res);
-        this.setState(
-          {
-            warning: intl.get("Transfer success"),
-            showWallet: false,
-          },
-          () => {
-            window.location.reload();
-          }
-        );
+        this.setState({
+          warning: intl.get("Transfer success"),
+          showWallet: false,
+        });
       })
       .catch((err) => {
         this.setState({
@@ -489,15 +484,10 @@ class Transfer extends Component {
       .sendTransaction("_bitcoin", tx)
       .then((res) => {
         // console.log("Bitcoin transaction ", res);
-        this.setState(
-          {
-            warning: intl.get("Transfer success"),
-            showWallet: false,
-          },
-          () => {
-            window.location.reload();
-          }
-        );
+        this.setState({
+          warning: intl.get("Transfer success"),
+          showWallet: false,
+        });
       })
       .catch((err) => {
         // console.log("Bitcoin transaction ", err);
@@ -640,6 +630,8 @@ class Transfer extends Component {
       selData,
       tranferDig,
       ind,
+      getFocus,
+      getFocus1,
     } = this.state;
     // console.log(selData,'.....')
     return (
@@ -661,12 +653,37 @@ class Transfer extends Component {
             <div className="iptAddress">
               <textarea
                 placeholder={intl.get("Input Receving Address")}
+                className={getFocus ? "getFormBorder" : ""}
                 onChange={(e) => this.getTransAddress(e)}
+                onFocus={() => {
+                  this.setState({
+                    getFocus: true,
+                    // getFocus1: false,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    getFocus: false,
+                  });
+                }}
               ></textarea>
             </div>
-            <div className="iptAmount">
+            <div
+              className={getFocus1 ? "iptAmount getFormBorder" : "iptAmount"}
+            >
               <input
                 placeholder={intl.get("Input Amount")}
+                onFocus={() => {
+                  this.setState({
+                    getFocus1: true,
+                    // getFocus: false,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    getFocus1: false,
+                  });
+                }}
                 onChange={(e) => this.getTransAmount(e)}
               />
               <div className="dropdown1">
