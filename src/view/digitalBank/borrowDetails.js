@@ -401,18 +401,19 @@ class BorrowDetails extends Component {
             </p>
           </div>
           <div className="productDescr">
-            <div className="h3">
+            <div
+              className="h3"
+              onClick={() => {
+                this.setState({
+                  descrContent: !this.state.descrContent,
+                });
+              }}
+            >
               <label>
                 产品说明
                 <img src="/img/编组 17@2x.png" />
               </label>
-              <i
-                onClick={() => {
-                  this.setState({
-                    descrContent: !this.state.descrContent,
-                  });
-                }}
-              >
+              <i>
                 {this.state.descrContent ? (
                   <img src="/img/descrxia.png" />
                 ) : (
@@ -437,18 +438,19 @@ class BorrowDetails extends Component {
             ) : null}
           </div>
           <div className="question">
-            <div className="h3">
+            <div
+              className="h3"
+              onClick={() => {
+                this.setState({
+                  descrContent1: !this.state.descrContent1,
+                });
+              }}
+            >
               <label>
                 常见问题
                 <img src="/img/wenhao.png" />
               </label>
-              <i
-                onClick={() => {
-                  this.setState({
-                    descrContent1: !this.state.descrContent1,
-                  });
-                }}
-              >
+              <i>
                 {this.state.descrContent1 ? (
                   <img src="/img/descrxia.png" />
                 ) : (

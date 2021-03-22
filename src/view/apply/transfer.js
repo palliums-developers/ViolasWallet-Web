@@ -44,6 +44,8 @@ class Transfer extends Component {
       opinionType: "",
       BTCArr: [],
       showWallet: false,
+      getFocus: false,
+      getFocus1: false,
     };
   }
 
@@ -612,6 +614,8 @@ class Transfer extends Component {
       selData,
       tranferDig,
       ind,
+      getFocus,
+      getFocus1,
     } = this.state;
     // console.log(selData,'.....')
     return (
@@ -633,12 +637,37 @@ class Transfer extends Component {
             <div className="iptAddress">
               <textarea
                 placeholder={intl.get("Input Receving Address")}
+                className={getFocus ? "getFormBorder" : ""}
                 onChange={(e) => this.getTransAddress(e)}
+                onFocus={() => {
+                  this.setState({
+                    getFocus: true,
+                    // getFocus1: false,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    getFocus: false,
+                  });
+                }}
               ></textarea>
             </div>
-            <div className="iptAmount">
+            <div
+              className={getFocus1 ? "iptAmount getFormBorder" : "iptAmount"}
+            >
               <input
                 placeholder={intl.get("Input Amount")}
+                onFocus={() => {
+                  this.setState({
+                    getFocus1: true,
+                    // getFocus: false,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    getFocus1: false,
+                  });
+                }}
                 onChange={(e) => this.getTransAmount(e)}
               />
               <div className="dropdown1">
@@ -670,66 +699,68 @@ class Transfer extends Component {
                       />
                     </div>
                     <div className="searchWrap">
-                    {selData.map((v, i) => {
-                      return (
-                        <div
-                          className="searchList"
-                          key={i}
-                          onClick={() =>
-                            v.show_name == "BTC"
-                              ? this.showTypes(
-                                  v.show_name,
-                                  v.BTC,
-                                  v.name,
-                                  i,
-                                  v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0]
-                                )
-                              : this.showTypes(
-                                  v.show_name,
-                                  v.balance,
-                                  v.name,
-                                  i,
-                                  v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0]
-                                )
-                          }
-                        >
-                          <div className="searchEvery">
-                            <img src={v.show_icon} />
-                            <div className="searchEvery1">
-                              <div>
-                                <h4>{v.show_name}</h4>
-                                <p>
-                                  {intl.get("Balance")}：
-                                  {v.show_icon
-                                    .split("/")
-                                    [v.show_icon.split("/").length - 1].split(
-                                      "."
-                                    )[0] == "btc"
-                                    ? v.BTC == 0
+                      {selData.map((v, i) => {
+                        return (
+                          <div
+                            className="searchList"
+                            key={i}
+                            onClick={() =>
+                              v.show_name == "BTC"
+                                ? this.showTypes(
+                                    v.show_name,
+                                    v.BTC,
+                                    v.name,
+                                    i,
+                                    v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0]
+                                  )
+                                : this.showTypes(
+                                    v.show_name,
+                                    v.balance,
+                                    v.name,
+                                    i,
+                                    v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0]
+                                  )
+                            }
+                          >
+                            <div className="searchEvery">
+                              <img src={v.show_icon} />
+                              <div className="searchEvery1">
+                                <div>
+                                  <h4>{v.show_name}</h4>
+                                  <p>
+                                    {intl.get("Balance")}：
+                                    {v.show_icon
+                                      .split("/")
+                                      [v.show_icon.split("/").length - 1].split(
+                                        "."
+                                      )[0] == "btc"
+                                      ? v.BTC == 0
+                                        ? 0
+                                        : this.getFloat(v.BTC / 1e8, 8)
+                                      : v.balance == 0
                                       ? 0
-                                      : this.getFloat(v.BTC / 1e8, 8)
-                                    : v.balance == 0
-                                    ? 0
-                                    : this.getFloat(v.balance / 1e6, 6)}{" "}
-                                  {v.show_name}
-                                </p>
+                                      : this.getFloat(v.balance / 1e6, 6)}{" "}
+                                    {v.show_name}
+                                  </p>
+                                </div>
+                                <span
+                                  className={
+                                    ind == i ? "check active" : "check"
+                                  }
+                                ></span>
                               </div>
-                              <span
-                                className={ind == i ? "check active" : "check"}
-                              ></span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                     </div>
                   </div>
                 ) : null}
@@ -737,10 +768,7 @@ class Transfer extends Component {
             </div>
             <div className="amountShow">
               <p>
-                {intl.get("Balance")}{" "}
-                <span>
-                  {balance == 0 ? 0 : balance}
-                </span>
+                {intl.get("Balance")} <span>{balance == 0 ? 0 : balance}</span>
               </p>
             </div>
             <div className="foot">
@@ -778,7 +806,9 @@ class Transfer extends Component {
         ) : null}
         {/*  */}
         {this.state.showWallet ? (
-          <WalletconnectDialog getCloseWallet={this.closeWallet}></WalletconnectDialog>
+          <WalletconnectDialog
+            getCloseWallet={this.closeWallet}
+          ></WalletconnectDialog>
         ) : null}
       </div>
     );

@@ -7,6 +7,7 @@ import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { timeStamp2String } from '../../utils/timer';
 import { timeStamp2String2 } from "../../utils/timer2";
+import intl from "react-intl-universal";
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
 const { RangePicker } = DatePicker;
@@ -31,25 +32,25 @@ class BorrowOrder extends Component {
       borrowDetails: [
         {
           id: 0,
-          type: "借款明细",
+          type: intl.get("Borrowing Details"),
         },
         {
           id: 1,
-          type: "还款明细",
+          type: intl.get("Repayment Details"),
         },
         {
           id: 2,
-          type: "清算明细",
+          type: intl.get("Liquidation Details"),
         },
       ],
       types: [
         {
           id: 0,
-          type: "当前借款",
+          type: intl.get("Current Borrowing"),
         },
         {
           id: 1,
-          type: "借款明细",
+          type: intl.get("Borrowing Records"),
         },
       ],
       data: [],
@@ -63,12 +64,12 @@ class BorrowOrder extends Component {
       selectStatus: "",
       columns: [
         {
-          title: "币种",
+          title: intl.get("Token"),
           dataIndex: "coin",
           key: "coin",
         },
         {
-          title: "待还金额",
+          title: intl.get("Rest loan amount"),
           dataIndex: "money",
           key: "money",
         },
@@ -78,7 +79,7 @@ class BorrowOrder extends Component {
           key: "income",
         },
         {
-          title: "操作",
+          title: intl.get("operation"),
           key: "option",
           dataIndex: "option",
 
@@ -95,7 +96,7 @@ class BorrowOrder extends Component {
                         marginRight: "50px",
                         color: "rgba(112, 56, 253, 1)",
                         cursor: "pointer",
-                        whiteSpace:"nowrap"
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {val.name}
@@ -133,7 +134,7 @@ class BorrowOrder extends Component {
                         marginRight: "50px",
                         color: "rgba(112, 56, 253, 1)",
                         cursor: "pointer",
-                        whiteSpace:"nowrap"
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {val.name}
@@ -152,7 +153,7 @@ class BorrowOrder extends Component {
                       marginRight: "50px",
                       color: "rgba(112, 56, 253, 1)",
                       cursor: "pointer",
-                      whiteSpace:"nowrap"
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {val.name}
@@ -170,27 +171,27 @@ class BorrowOrder extends Component {
       ],
       columns1: [
         {
-          title: "时间",
+          title: intl.get("Time"),
           dataIndex: "time",
           key: "time",
         },
         {
-          title: "币种",
+          title: intl.get("Principal"),
           dataIndex: "coin",
           key: "coin",
         },
         {
-          title: "数量",
+          title: intl.get("Amount"),
           dataIndex: "amount",
           key: "amount",
         },
         {
-          title: "矿工费用",
+          title: intl.get("Gas fee"),
           dataIndex: "gas",
           key: "gas",
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           key: "status",
           dataIndex: "status",
           render: (text) => (
@@ -210,15 +211,15 @@ class BorrowOrder extends Component {
               }
             >
               {text == 0
-                ? "已借款"
+                ? intl.get("Borrowed")
                 : text == 1
-                ? "已还款"
+                ? intl.get("Repaid")
+                : text == -1
+                ? intl.get("Borrow failed")
+                : text == -2
+                ? intl.get("Repayment failed")
                 : text == 2
                 ? "已清算"
-                : text == -1
-                ? "借款失败"
-                : text == -2
-                ? "还款失败"
                 : null}
             </label>
           ),
@@ -226,19 +227,19 @@ class BorrowOrder extends Component {
       ],
       secondColumns: [
         {
-          title: "时间",
+          title: intl.get("Time"),
           dataIndex: "date",
           key: "date",
           render: (text) => <label>{timeStamp2String(text + "000")}</label>,
         },
         {
-          title: "数量",
+          title: intl.get("Amount"),
           dataIndex: "amount",
           key: "amount",
           render: (text) => <label>{text / 1e6}</label>,
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           dataIndex: "status",
           key: "status",
           render: (text) => (
@@ -256,13 +257,13 @@ class BorrowOrder extends Component {
               }
             >
               {text == 0
-                ? "已借款"
+                ? intl.get("Borrowed")
                 : text == 1
-                ? "已还款"
+                ? intl.get("Repaid")
                 : text == -1
-                ? "借款失败"
+                ? intl.get("Borrow failed")
                 : text == -2
-                ? "还款失败"
+                ? intl.get("Repayment failed")
                 : null}
             </label>
           ),
@@ -270,25 +271,25 @@ class BorrowOrder extends Component {
       ],
       secondColumns1: [
         {
-          title: "时间",
+          title: intl.get("Time"),
           dataIndex: "date",
           key: "date",
           render: (text) => <label>{timeStamp2String(text)}</label>,
         },
         {
-          title: "数量",
+          title: intl.get("Amount"),
           dataIndex: "amount",
           key: "amount",
           render: (text) => <label>{text / 1e6}</label>,
         },
         {
-          title: "旷工费用",
+          title: intl.get("Gas fee"),
           dataIndex: "gas",
           key: "gas",
           render: () => <label>--</label>,
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           dataIndex: "status",
           key: "status",
           render: (text) => (
@@ -308,13 +309,13 @@ class BorrowOrder extends Component {
               }
             >
               {text == 0
-                ? "已借款"
+                ? intl.get("Borrowed")
                 : text == 1
-                ? "已还款"
+                ? intl.get("Repaid")
                 : text == -1
-                ? "借款失败"
+                ? intl.get("Borrow failed")
                 : text == -2
-                ? "还款失败"
+                ? intl.get("Repayment failed")
                 : text == 2
                 ? "已清算"
                 : null}
@@ -324,7 +325,7 @@ class BorrowOrder extends Component {
       ],
       secondColumns2: [
         {
-          title: "时间",
+          title: intl.get("Time"),
           dataIndex: "date",
           key: "date",
           render: (text) => <label>{timeStamp2String(text + "000")}</label>,
@@ -340,7 +341,7 @@ class BorrowOrder extends Component {
           key: "deductioned",
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           dataIndex: "status",
           key: "status",
           render: (text) => (
@@ -358,13 +359,13 @@ class BorrowOrder extends Component {
               }
             >
               {text == 0
-                ? "已借款"
+                ? intl.get("Borrowed")
                 : text == 1
-                ? "已还款"
+                ? intl.get("Repaid")
                 : text == -1
-                ? "借款失败"
+                ? intl.get("Borrow failed")
                 : text == -2
-                ? "还款失败"
+                ? intl.get("Repayment failed")
                 : null}
             </label>
           ),
@@ -372,7 +373,7 @@ class BorrowOrder extends Component {
       ],
       secondAllData: [],
       page: 1,
-      pageSize:6,
+      pageSize: 6,
       curPage: 1,
       curPageSize: 6,
     };
@@ -731,12 +732,12 @@ class BorrowOrder extends Component {
             <NavLink to="/homepage/home/digitalBank">
               {" "}
               <img src="/img/fanhui 2@2x.png" />
-              数字银行
+              {intl.get("Bank")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <NavLink to="/homepage/home/digitalBank/borrowOrder">
-              借款订单
+              {intl.get("Borrowing Orders")}
             </NavLink>
           </Breadcrumb.Item>
         </Breadcrumb>
