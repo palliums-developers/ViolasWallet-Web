@@ -64,8 +64,8 @@ class Transfer extends Component {
     });
   }
   stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    e.nativeEvent.stopImmediatePropagation();
+  }
   componentDidMount() {
     document.addEventListener("click", this.closeDialog);
     if (window.sessionStorage.getItem("btc_address")) {
@@ -108,36 +108,46 @@ class Transfer extends Component {
       .then((res) => {
         console.log(res.data);
         if (res.data) {
-          this.setState({
-            arr1: res.data.balances,
-          },()=>{
-            if (this.state.arr2.length == 0) {
-            let arrs = this.state.arr1.concat(this.state.BTCArr);
-            this.setState(
-              {
-                selData: arrs,
-              },
-              () => {
-                  this.setState({
-                    type: this.state.selData[0].show_name,
-                    coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? new BigNumber(
-                                  String(this.state.selData[0].balance / 100000000)
-                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
-                    opinionType: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0],
-                  });
+          this.setState(
+            {
+              arr1: res.data.balances,
+            },
+            () => {
+              if (this.state.arr2.length == 0) {
+                let arrs = this.state.arr1.concat(this.state.BTCArr);
+                this.setState(
+                  {
+                    selData: arrs,
+                  },
+                  () => {
+                    this.setState({
+                      type: this.state.selData[0].show_name,
+                      coinName: this.state.selData[0].name,
+                      balance:
+                        this.state.selData[0].show_icon
+                          .split("/")
+                          [
+                            this.state.selData[0].show_icon.split("/").length -
+                              1
+                          ].split(".")[0] == "btc"
+                          ? new BigNumber(
+                              String(this.state.selData[0].balance / 100000000)
+                            ).toFormat(8)
+                          : this.getFloat(
+                              this.state.selData[0].balance / 1e6,
+                              6
+                            ),
+                      opinionType: this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0],
+                    });
+                  }
+                );
               }
-            );
-          }
-          });
+            }
+          );
         }
       });
     fetch(
@@ -153,31 +163,33 @@ class Transfer extends Component {
               arr2: res.data.balances,
             },
             () => {
-              
-              let arr = [],arrs = [];
-              if (JSON.stringify(this.state.arr1)!="[]") {
+              let arr = [],
+                arrs = [];
+              if (JSON.stringify(this.state.arr1) != "[]") {
                 arr = this.state.arr1.concat(this.state.arr2);
                 arrs = arr.concat(this.state.BTCArr);
-              }else{
+              } else {
                 arrs = this.state.arr2.concat(this.state.BTCArr);
               }
-              
+
               this.setState(
                 {
                   selData: arrs,
                 },
                 () => {
-                 
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? new BigNumber(
-                                  String(this.state.selData[0].balance / 100000000)
-                                ).toFormat(8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                    balance:
+                      this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0] == "btc"
+                        ? new BigNumber(
+                            String(this.state.selData[0].balance / 100000000)
+                          ).toFormat(8)
+                        : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -196,15 +208,18 @@ class Transfer extends Component {
                 selData: arrs,
               },
               () => {
-               if (this.state.type == "") {
+                if (this.state.type == "") {
                   this.setState({
                     type: this.state.selData[0].show_name,
                     coinName: this.state.selData[0].name,
-                    balance: this.state.selData[0].show_icon
-                      .split("/")
-                      [
-                        this.state.selData[0].show_icon.split("/").length - 1
-                      ].split(".")[0] == 'btc' ? this.getFloat(this.state.selData[0].balance / 1e8, 8) : this.getFloat(this.state.selData[0].balance / 1e6, 6),
+                    balance:
+                      this.state.selData[0].show_icon
+                        .split("/")
+                        [
+                          this.state.selData[0].show_icon.split("/").length - 1
+                        ].split(".")[0] == "btc"
+                        ? this.getFloat(this.state.selData[0].balance / 1e8, 8)
+                        : this.getFloat(this.state.selData[0].balance / 1e6, 6),
                     opinionType: this.state.selData[0].show_icon
                       .split("/")
                       [
@@ -229,7 +244,10 @@ class Transfer extends Component {
     this.setState(
       {
         type: v,
-        balance: opinionType == 'btc' ? this.getFloat(bal / 1e8, 8) : this.getFloat(bal / 1e6, 6),
+        balance:
+          opinionType == "btc"
+            ? this.getFloat(bal / 1e8, 8)
+            : this.getFloat(bal / 1e6, 6),
         showDealType: false,
         coinName: name,
         ind: ind,
@@ -275,6 +293,20 @@ class Transfer extends Component {
   };
   //获取到输入数量
   getTransAmount = (e) => {
+    e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
+    e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+    e.target.value = e.target.value
+      .replace(".", "$#$")
+      .replace(/\./g, "")
+      .replace("$#$", ".");
+    e.target.value = e.target.value.replace(
+      /^(\-)*(\d+)\.(\d\d\d).*$/,
+      "$1$2.$3"
+    ); //只能输入两个小数
+    if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      e.target.value = parseFloat(e.target.value);
+    }
     this.setState(
       {
         amount: e.target.value,
@@ -304,15 +336,12 @@ class Transfer extends Component {
       }
     } else {
       this.setState({
-          warning: "",
-        });
+        warning: "",
+      });
     }
   }
   amountWarn() {
-    if (
-      Number(this.state.amount) >
-      Number(this.state.balance)
-    ) {
+    if (Number(this.state.amount) > Number(this.state.balance)) {
       this.setState({
         warning: intl.get("Insufficient available balance"),
       });
@@ -458,28 +487,28 @@ class Transfer extends Component {
     console.log(this.state.amount);
     const tx = {
       from: this.state.BTCAddress,
-      amount: ""+this.getFloat(this.state.amount * 1e8,8),
+      amount: "" + this.getFloat(this.state.amount * 1e8, 8),
       changeAddress: this.state.BTCAddress,
       payeeAddress: this.state.address,
       // script: this.state.script
     };
     console.log("bitcoin ", tx);
     this.state.walletConnector
-    .sendTransaction("_bitcoin", tx)
-    .then((res) => {
-      // console.log("Bitcoin transaction ", res);
-      this.setState({
-        warning: intl.get("Transfer success"),
-        showWallet: false,
+      .sendTransaction("_bitcoin", tx)
+      .then((res) => {
+        // console.log("Bitcoin transaction ", res);
+        this.setState({
+          warning: intl.get("Transfer success"),
+          showWallet: false,
+        });
+      })
+      .catch((err) => {
+        // console.log("Bitcoin transaction ", err);
+        this.setState({
+          warning: intl.get("Transfer failed"),
+          showWallet: false,
+        });
       });
-    })
-    .catch((err) => {
-      // console.log("Bitcoin transaction ", err);
-      this.setState({
-        warning: intl.get("Transfer failed"),
-        showWallet: false,
-      });
-    });
   }
   getViolasNext = () => {
     if (this.state.address == "") {
@@ -495,50 +524,51 @@ class Transfer extends Component {
         warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-          this.violas_sendTransaction(parseInt(sessionStorage.getItem("violas_chainId")));
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.violas_sendTransaction(
+              parseInt(sessionStorage.getItem("violas_chainId"))
+            );
+          }
+        );
       }
     }
   };
   getLibraNext = () => {
     if (this.state.address == "") {
       this.setState({
-        warning:  intl.get("Please input address"),
+        warning: intl.get("Please input address"),
       });
     } else if (this.state.amount == "") {
       this.setState({
         warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-       
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-           this.libra_sendTransaction(
-             parseInt(sessionStorage.getItem("libra_chainId"))
-           );
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.libra_sendTransaction(
+              parseInt(sessionStorage.getItem("libra_chainId"))
+            );
+          }
+        );
       }
     }
   };
@@ -549,24 +579,23 @@ class Transfer extends Component {
       });
     } else if (this.state.amount == "") {
       this.setState({
-        warning:  intl.get("Please input amount"),
+        warning: intl.get("Please input amount"),
       });
     } else {
-      if (
-        Number(this.state.amount) >
-        Number(this.state.balance)
-      ) {
+      if (Number(this.state.amount) > Number(this.state.balance)) {
         this.setState({
           warning: intl.get("Insufficient available balance"),
         });
       } else {
-        
-        this.setState({
-          warning: "",
-          showWallet: true
-        },()=>{
-          this.bitcoin_sendTransaction();
-        });
+        this.setState(
+          {
+            warning: "",
+            showWallet: true,
+          },
+          () => {
+            this.bitcoin_sendTransaction();
+          }
+        );
       }
     }
   };
@@ -636,6 +665,7 @@ class Transfer extends Component {
             </h4>
             <div className="iptAddress">
               <textarea
+                value={this.state.address}
                 placeholder={intl.get("Input Receving Address")}
                 className={getFocus ? "getFormBorder" : ""}
                 onChange={(e) => this.getTransAddress(e)}
@@ -656,6 +686,7 @@ class Transfer extends Component {
               className={getFocus1 ? "iptAmount getFormBorder" : "iptAmount"}
             >
               <input
+                value={this.state.amount}
                 placeholder={intl.get("Input Amount")}
                 onFocus={() => {
                   this.setState({

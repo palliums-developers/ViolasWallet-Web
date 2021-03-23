@@ -715,13 +715,13 @@ class DigitalBank extends Component {
                     )}
                   </p>
                   <CopyToClipboard
-                    text="https://wallet.violas.io/violasMapping"
+                    text="https://devwallet.violas.io/violasMapping"
                     onCopy={() =>
                       message.success(`${intl.get("Address copy successful")}`)
                     }
                   >
                     <a>
-                      https://wallet.violas.io/violasMapping
+                      https://devwallet.violas.io/violasMapping
                       <img src="/img/fuzhi 3@2x.png" />
                     </a>
                   </CopyToClipboard>
