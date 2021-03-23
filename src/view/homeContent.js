@@ -262,6 +262,7 @@ class HomeContent extends Component {
   getBalances = async () => {
     await this.getBTCBalances();
     if (!window.sessionStorage.getItem("checkData")) {
+      
       this.initCheckData();
     } else {
       this.updateAmount();

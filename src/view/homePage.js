@@ -34,6 +34,11 @@ class HomePage extends Component {
       localStorage.setItem("local", lang);
       intl.options.currentLocale = localStorage.getItem("local");
     }
+    if (window.sessionStorage.length===0) {
+      window.localStorage.clear();
+      this.props.history.push("/app");
+      window.location.reload();
+    }
     // if (
     //   typeof window=='object' &&
     //   typeof window.localStorage == "object" &&
