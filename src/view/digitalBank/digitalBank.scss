@@ -1162,9 +1162,14 @@
     .saveDetail{
       .selector{
         margin-top: 40px;
+        .ant-picker-focused{
+          -webkit-box-shadow: 0 0 0 2px rgba(112, 56, 253,.1);
+          box-shadow: 0 0 0 2px rgba(112, 56, 253 ,.1);
+        }
         .ant-picker:hover, .ant-picker-focused{
           border-color:#7038fd!important;
         }
+        
         .ant-picker-input > input:hover {
           border-color:#7038fd!important;
         }
@@ -1448,6 +1453,10 @@
 }
 .ant-select-focused:not(.ant-select-disabled).ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
   border-color: #7038fd;
+}
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  -webkit-box-shadow: 0 0 0 2px rgba(112, 56, 253,.1);
+  box-shadow: 0 0 0 2px rgba(112, 56, 253 ,.1);
 }
 //借款
 .borrowDetails{
