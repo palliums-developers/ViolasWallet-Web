@@ -85,6 +85,7 @@ class HomeContent extends Component {
       .catch((err) => {
         console.log(err);
       });
+      console.log(temp,'..........');
     return temp.data.balances;
   };
   getRateList = async (chain) => {

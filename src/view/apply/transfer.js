@@ -423,15 +423,22 @@ class Transfer extends Component {
         this.setState({
           warning: intl.get("Transfer success"),
           showWallet: false,
+        },()=>{
+          window.location.reload();
         });
 
         // console.log("send transaction ", res);
       })
       .catch((err) => {
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
 
         // console.log("send transaction ", err);
       });
