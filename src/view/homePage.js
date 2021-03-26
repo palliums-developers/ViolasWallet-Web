@@ -30,28 +30,12 @@ class HomePage extends Component {
         lang = "EN";
         break;
     }
-    if(window.localStorage!==null&&window.localStorage.setItem!==undefined){
+    if (
+      window.localStorage !== null &&
+      window.localStorage.setItem !== undefined
+    ) {
       localStorage.setItem("local", lang);
       intl.options.currentLocale = localStorage.getItem("local");
-    }
-    if (window.sessionStorage.length === 0) {
-      if (
-        this.props.location.pathname === "/homepage/home/miningAwards" ||
-        this.props.location.pathname === "/homepage/home/ruleDescription" ||
-        this.props.location.pathname === "/homepage/home/rankingList" ||
-        this.props.location.pathname === "/homepage/home/inviteRewards" ||
-        this.props.location.pathname === "/homepage/home/invitationList"
-      ) {
-        if (this.props.location.search == "") {
-          window.localStorage.clear();
-          this.props.history.push("/app");
-          window.location.reload();
-        }
-      } else {
-        window.localStorage.clear();
-        this.props.history.push("/app");
-        window.location.reload();
-      }
     }
     // if (
     //   typeof window=='object' &&
@@ -68,9 +52,9 @@ class HomePage extends Component {
     //    intl.options.currentLocale =
     //    localStorage.getItem && localStorage.getItem("local");
     //  }
-     
+
     // }
-    
+
     await this.getNewWalletConnect();
     // await this.ifNotLogin();
     this.state.walletConnector.on("disconnect", (error, payload) => {
@@ -87,24 +71,61 @@ class HomePage extends Component {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
-  async ifNotLogin() {
-    if(!this.state.walletConnector.connected){
-      if (
-        this.props.location.pathname === "/homepage/home/miningAwards" ||
-        this.props.location.pathname === "/homepage/home/ruleDescription" ||
-        this.props.location.pathname === "/homepage/home/rankingList" ||
-        this.props.location.pathname === "/homepage/home/inviteRewards" ||
-        this.props.location.pathname === "/homepage/home/invitationList"
-      ) {
-        if (this.props.location.search == "") {
-          this.props.history.push("/app");
-        } else {
-        }
-      } else {
-        this.props.history.push("/app");
+
+  checkURL = () => {
+    let temp = this.props.location.pathname;
+    let urls = [
+      "/homepage/home/miningAwards",
+      "/homepage/home/ruleDescription",
+      "/homepage/home/rankingList",
+      "/homepage/home/inviteRewards",
+      "/homepage/home/invitationList",
+    ];
+    for (let i = urls.length - 1; i >= 0; i--) {
+      if (temp === urls[i]) {
+        return true;
       }
     }
+    return false;
+  };
 
+  checkMobile = () => {
+    let isMobile = true;
+    this.props.location.search === "" ? (isMobile = false) : (isMobile = true);
+    return isMobile;
+  };
+
+  redirect2login = (reload) => {
+    window.localStorage.clear();
+    this.props.history.push("/app");
+    reload == "reload" && window.location.reload();
+  };
+
+  async ifNotLogin() {
+    // mobile use web page
+    if (!this.state.walletConnector.connected) {
+      if (this.checkURL()) {
+        if (this.checkMobile()) {
+          console.log("mobile use it");
+        } else {
+          this.redirect2login();
+        }
+      } else {
+        this.redirect2login();
+      }
+    } else {
+      // web page close by accident and reopen it
+      // sessionStorage will be blank and localStorage not
+      if (window.sessionStorage.length === 0) {
+        if (this.checkURL()) {
+          if (!this.checkMobile()) {
+            this.redirect2login("reload");
+          }
+        } else {
+          this.redirect2login("reload");
+        }
+      }
+    }
   }
   componentDidMount() {
     window.addEventListener("onbeforeunload", () => {
