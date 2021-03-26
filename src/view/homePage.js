@@ -17,6 +17,20 @@ class HomePage extends Component {
     };
   }
   async componentWillMount() {
+    await this.getNewWalletConnect();
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      this.props.history.push("/app");
+    });
+  }
+  async getNewWalletConnect() {
+    await this.setState({
+      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
+    });
     let lang = intl.options.currentLocale;
     // console.log(lang);
     switch (lang) {
@@ -30,35 +44,13 @@ class HomePage extends Component {
         lang = "EN";
         break;
     }
-    if(window.localStorage!==null&&window.localStorage.setItem!==undefined){
+    if (
+      window.localStorage !== null &&
+      window.localStorage.setItem !== undefined
+    ) {
       localStorage.setItem("local", lang);
       intl.options.currentLocale = localStorage.getItem("local");
-    }
-    if (window.sessionStorage.length === 0) {
-      alert(this.props.location.search);
-      if (
-        this.props.location.pathname === "/homepage/home/miningAwards" ||
-        this.props.location.pathname === "/homepage/home/ruleDescription" ||
-        this.props.location.pathname === "/homepage/home/rankingList" ||
-        this.props.location.pathname === "/homepage/home/inviteRewards" ||
-        this.props.location.pathname === "/homepage/home/invitationList"
-      ) {
-        if (this.props.location.search == "") {
-          alert('111')
-          window.localStorage.clear();
-          this.props.history.push("/app");
-          window.location.reload();
-        }
-        alert("222");
-      }else{
-        alert("333");
-        window.localStorage.clear();
-        this.props.history.push("/app");
-        window.location.reload();
-      }
-      
-    }
-    
+    } 
     // if (
     //   typeof window=='object' &&
     //   typeof window.localStorage == "object" &&
@@ -77,24 +69,12 @@ class HomePage extends Component {
      
     // }
     
-    await this.getNewWalletConnect();
+    
     // await this.ifNotLogin();
-    this.state.walletConnector.on("disconnect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      this.props.history.push("/app");
-    });
-  }
-  async getNewWalletConnect() {
-    await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
-    });
+    
   }
   async ifNotLogin() {
-    if(!this.state.walletConnector.connected){
+    if (!this.state.walletConnector.connected) {
       if (
         this.props.location.pathname === "/homepage/home/miningAwards" ||
         this.props.location.pathname === "/homepage/home/ruleDescription" ||
@@ -108,6 +88,30 @@ class HomePage extends Component {
         }
       } else {
         this.props.history.push("/app");
+      }
+    } else {
+      if (window.sessionStorage.length === 0) {
+        alert(this.props.location.search);
+        if (
+          this.props.location.pathname === "/homepage/home/miningAwards" ||
+          this.props.location.pathname === "/homepage/home/ruleDescription" ||
+          this.props.location.pathname === "/homepage/home/rankingList" ||
+          this.props.location.pathname === "/homepage/home/inviteRewards" ||
+          this.props.location.pathname === "/homepage/home/invitationList"
+        ) {
+          if (this.props.location.search == "") {
+            alert("111");
+            window.localStorage.clear();
+            this.props.history.push("/app");
+            window.location.reload();
+          }
+          alert("222");
+        } else {
+          alert("333");
+          window.localStorage.clear();
+          this.props.history.push("/app");
+          window.location.reload();
+        }
       }
     }
 
