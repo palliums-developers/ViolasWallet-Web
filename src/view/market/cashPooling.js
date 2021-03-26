@@ -621,6 +621,7 @@ class CashPooling extends Component {
       }
     }
   }
+  
   optionTypes1(transaction_type, status) {
     if (transaction_type == "ADD_LIQUIDITY") {
       if (status == "Executed") {

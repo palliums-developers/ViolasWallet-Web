@@ -35,10 +35,26 @@ class HomePage extends Component {
       intl.options.currentLocale = localStorage.getItem("local");
     }
     if (window.sessionStorage.length === 0) {
-      window.localStorage.clear();
-      this.props.history.push("/app");
-      window.location.reload();
+      if (
+        this.props.location.pathname === "/homepage/home/miningAwards" ||
+        this.props.location.pathname === "/homepage/home/ruleDescription" ||
+        this.props.location.pathname === "/homepage/home/rankingList" ||
+        this.props.location.pathname === "/homepage/home/inviteRewards" ||
+        this.props.location.pathname === "/homepage/home/invitationList"
+      ) {
+        if (this.props.location.search == "") {
+          window.localStorage.clear();
+          this.props.history.push("/app");
+          window.location.reload();
+        }
+      }else{
+        window.localStorage.clear();
+        this.props.history.push("/app");
+        window.location.reload();
+      }
+      
     }
+    
     // if (
     //   typeof window=='object' &&
     //   typeof window.localStorage == "object" &&
