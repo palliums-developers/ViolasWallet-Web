@@ -35,6 +35,7 @@ class HomePage extends Component {
       intl.options.currentLocale = localStorage.getItem("local");
     }
     if (window.sessionStorage.length === 0) {
+      alert(this.props.location.search);
       if (
         this.props.location.pathname === "/homepage/home/miningAwards" ||
         this.props.location.pathname === "/homepage/home/ruleDescription" ||
@@ -43,11 +44,14 @@ class HomePage extends Component {
         this.props.location.pathname === "/homepage/home/invitationList"
       ) {
         if (this.props.location.search == "") {
+          alert('111')
           window.localStorage.clear();
           this.props.history.push("/app");
           window.location.reload();
         }
+        alert("222");
       }else{
+        alert("333");
         window.localStorage.clear();
         this.props.history.push("/app");
         window.location.reload();
