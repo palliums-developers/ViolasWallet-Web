@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "./app.scss";
-import { connect } from 'react-redux';
-import RouterView from '../router/routerView';
+import { connect } from "react-redux";
+import RouterView from "../router/routerView";
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
-import 'antd/dist/antd.css'
+import "antd/dist/antd.css";
 
 //首页 首个路由
 class HomePage extends Component {
@@ -50,7 +50,7 @@ class HomePage extends Component {
     ) {
       localStorage.setItem("local", lang);
       intl.options.currentLocale = localStorage.getItem("local");
-    } 
+    }
     // if (
     //   typeof window=='object' &&
     //   typeof window.localStorage == "object" &&
@@ -66,55 +66,66 @@ class HomePage extends Component {
     //    intl.options.currentLocale =
     //    localStorage.getItem && localStorage.getItem("local");
     //  }
-     
+
     // }
-    
-    
+
     // await this.ifNotLogin();
-    
   }
+
+  checkURL = () => {
+    let temp = this.props.location.pathname;
+    let urls = [
+      "/homepage/home/miningAwards",
+      "/homepage/home/ruleDescription",
+      "/homepage/home/rankingList",
+      "/homepage/home/inviteRewards",
+      "/homepage/home/invitationList",
+    ];
+    for (let i = urls.length - 1; i >= 0; i--) {
+      if (temp === urls[i]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  checkMobile = () => {
+    let isMobile = true;
+    this.props.location.search === "" ? (isMobile = false) : (isMobile = true);
+    return isMobile;
+  };
+
+  redirect2login = (reload) => {
+    window.localStorage.clear();
+    this.props.history.push("/app");
+    reload === "reload" ? window.location.reload() : "";
+  };
+
   async ifNotLogin() {
+    // mobile use web page
     if (!this.state.walletConnector.connected) {
-      if (
-        this.props.location.pathname === "/homepage/home/miningAwards" ||
-        this.props.location.pathname === "/homepage/home/ruleDescription" ||
-        this.props.location.pathname === "/homepage/home/rankingList" ||
-        this.props.location.pathname === "/homepage/home/inviteRewards" ||
-        this.props.location.pathname === "/homepage/home/invitationList"
-      ) {
-        if (this.props.location.search == "") {
-          this.props.history.push("/app");
+      if (this.checkURL()) {
+        if (this.checkMobile()) {
+          console.log("mobile use it");
         } else {
+          this.redirect2login();
         }
       } else {
-        this.props.history.push("/app");
+        this.redirect2login();
       }
     } else {
+      // web page close by accident and reopen it
+      // sessionStorage will be blank and localStorage not
       if (window.sessionStorage.length === 0) {
-        alert(this.props.location.search);
-        if (
-          this.props.location.pathname === "/homepage/home/miningAwards" ||
-          this.props.location.pathname === "/homepage/home/ruleDescription" ||
-          this.props.location.pathname === "/homepage/home/rankingList" ||
-          this.props.location.pathname === "/homepage/home/inviteRewards" ||
-          this.props.location.pathname === "/homepage/home/invitationList"
-        ) {
-          if (this.props.location.search == "") {
-            alert("111");
-            window.localStorage.clear();
-            this.props.history.push("/app");
-            window.location.reload();
+        if (this.checkURL()) {
+          if (!this.checkMobile) {
+            this.redirect2login("reload");
           }
-          alert("222");
         } else {
-          alert("333");
-          window.localStorage.clear();
-          this.props.history.push("/app");
-          window.location.reload();
+          this.redirect2login("reload");
         }
       }
     }
-
   }
   componentDidMount() {
     window.addEventListener("onbeforeunload", () => {
@@ -145,13 +156,11 @@ class HomePage extends Component {
     );
   }
 }
-let mapStateToProps = (state) =>{
+let mapStateToProps = (state) => {
   return state.ListReducer;
-}
-let mapDispatchToProps = (dispatch) =>{
-  return {
-  
-  }
-}
- 
-export default connect(mapStateToProps,mapDispatchToProps)(HomePage);
+};
+let mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
