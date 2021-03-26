@@ -98,7 +98,7 @@ class HomePage extends Component {
   redirect2login = (reload) => {
     window.localStorage.clear();
     this.props.history.push("/app");
-    reload === "reload" ? window.location.reload() : "";
+    reload === "reload" && window.location.reload();
   };
 
   async ifNotLogin() {
