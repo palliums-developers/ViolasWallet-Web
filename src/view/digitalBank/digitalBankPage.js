@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import intl from "react-intl-universal";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
+
 //映射
 class DigitalBankPage extends Component {
     constructor() {
@@ -207,7 +208,7 @@ class DigitalBankPage extends Component {
                           }}
                         >
                           <p>
-                            <img src="/img/BTC复制 2@2x.png" />
+                            <img src={v.logo} />
                             <span>{v.name}</span>
                             <label>{v.desc}</label>
                           </p>
@@ -235,7 +236,7 @@ class DigitalBankPage extends Component {
                           }}
                         >
                           <p>
-                            <img src="/img/BTC复制 2@2x.png" />
+                            <img src={v.logo} />
                             <span>{v.name}</span>
                             <label>{v.desc}</label>
                           </p>

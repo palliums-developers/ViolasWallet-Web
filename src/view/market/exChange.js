@@ -809,7 +809,7 @@ class ExChange extends Component {
         if (type == "btc") {
           if (bal == "0") {
             this.setState({
-              asset: "0.00",
+              asset: "0",
             });
           } else {
             this.setState({
@@ -819,7 +819,7 @@ class ExChange extends Component {
         } else {
           if (bal == 0) {
             this.setState({
-              asset: "0.00",
+              asset: "0",
             });
           } else {
             this.setState({
@@ -1049,7 +1049,7 @@ class ExChange extends Component {
         if (type == "btc") {
           if (bal == "0") {
             this.setState({
-              asset1: "0.00",
+              asset1: "0",
             });
           } else {
             this.setState({
@@ -1059,7 +1059,7 @@ class ExChange extends Component {
         } else {
           if (bal == 0) {
             this.setState({
-              asset1: "0.00",
+              asset1: "0",
             });
           } else {
             this.setState({

@@ -1441,6 +1441,7 @@
     background:rgba(112, 56, 253, .2);
   }
   .ant-btn-primary{
+    color:#FFF;
     background: #7038fd;
     border:0;
   }
@@ -1556,7 +1557,9 @@
       margin-bottom: 19px;
       .pageBtn{
         display: flex;
-        
+        >span{
+          
+        }
       }
       span{
         width: 15px;

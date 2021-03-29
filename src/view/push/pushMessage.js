@@ -16,12 +16,12 @@ class PushMessage extends Component {
         {
           id: 0,
           dot: false,
-          title: "转账通知",
+          title: intl.get("Transaction Notification"),
         },
         {
           id: 1,
           dot: false,
-          title: "系统通知",
+          title: intl.get("System Notification"),
         },
       ],
       idx: 0,
@@ -40,7 +40,6 @@ class PushMessage extends Component {
       page1: 1,
       pageSize1: 4,
       total1: 0,
-      
     };
   }
 
@@ -60,34 +59,36 @@ class PushMessage extends Component {
     }
     localStorage.setItem("local", lang);
     intl.options.currentLocale = localStorage.getItem("local");
+    this.getUnreadCount();
   }
   componentDidMount() {
     this.getTranfars();
     this.getNotices();
+    // this.getUnreadCount();
   }
   //获取未读消息数
-  // getUnreadCount() {
-  //   fetch(
-  //     url +
-  //       "/1.0/violas/messages/unread/count?token=" +
-  //       window.sessionStorage.getItem("firebase_token")
-  //   )
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       // console.log(res);
-  //       if (res.data) {
-  //         this.setState(
-  //           {
-  //             noticeUnread: res.data.notice,
-  //             tranfarUnread: res.data.message,
-  //           },
-  //           () => {
-  //             this.getDot(0);
-  //           }
-  //         );
-  //       }
-  //     });
-  // }
+  getUnreadCount() {
+    fetch(
+      url +
+        "/1.0/violas/messages/unread/count?token=" +
+        window.sessionStorage.getItem("firebase_token")
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        // console.log(res);
+        if (res.data) {
+          this.setState(
+            {
+              noticeUnread: res.data.notice,
+              tranfarUnread: res.data.message,
+            },
+            () => {
+              this.getDot(0);
+            }
+          );
+        }
+      });
+  }
   //获取消息列表
   getTranfars = () => {
     fetch(
@@ -155,24 +156,23 @@ class PushMessage extends Component {
   //获取全部已读未读红点
   getDot(id) {
     if (id == 0) {
-      // console.log(this.state.tranfarUnread);
-      if (this.state.tranfarsList.length > 0) {
+      if (this.state.tranfarUnread > 0) {
         this.state.messageList[id].dot = true;
       } else {
         this.state.messageList[id].dot = false;
       }
-      if (this.state.noticesList.length > 0) {
+      if (this.state.noticeUnread > 0) {
         this.state.messageList[id + 1].dot = true;
       } else {
         this.state.messageList[id + 1].dot = false;
       }
     } else if (id == 1) {
-      if (this.state.tranfarsList.length > 0) {
+      if (this.state.noticeUnread > 0) {
         this.state.messageList[id].dot = true;
       } else {
         this.state.messageList[id].dot = false;
       }
-      if (this.state.noticesList.length > 0) {
+      if (this.state.tranfarUnread > 0) {
         this.state.messageList[id - 1].dot = true;
       } else {
         this.state.messageList[id - 1].dot = false;
@@ -227,7 +227,7 @@ class PushMessage extends Component {
         <div className="headTitle">
           <h3>
             <img src="/img/xiaoxi-2@2x.png" />
-            消息中心
+            {intl.get("Notification Center")}
           </h3>
           <div className="clear" onClick={() => this.clearRead()}>
             <img src="/img/clear.png" />
@@ -259,48 +259,59 @@ class PushMessage extends Component {
             })}
           </div>
           {this.state.idx == 0 ? (
-            <div className="listContent">
-              <div className="listPages">
-                {tranfarsList.map((v, i) => {
-                  return (
-                    <div
-                      className={v.readed == 0 ? "curlist actBack" : "curlist"}
-                      key={i}
-                      onClick={() => {
-                        this.showDetailFun(true);
-                        this.setState({
-                          msg_id1: v.id,
-                        });
-                      }}
-                    >
-                      <div>
-                        <p>
-                          <span>
-                            {v.status == "Executed" ? (
-                              <img src="/img/shenhetongguo 2@2x.png" />
-                            ) : (
-                              <img src="/img/编组 6@2x.png" />
-                            )}
-                            {v.title}
-                          </span>
-                          <label>{timeStamp2String(v.date + "000")}</label>
-                        </p>
-                        <p>{v.body}</p>
+            tranfarsList.length > 0 ? (
+              <div className="listContent">
+                <div className="listPages">
+                  {tranfarsList.map((v, i) => {
+                    return (
+                      <div
+                        className={
+                          v.readed == 0 ? "curlist actBack" : "curlist"
+                        }
+                        key={i}
+                        onClick={() => {
+                          this.showDetailFun(true);
+                          this.setState({
+                            msg_id1: v.id,
+                          });
+                        }}
+                      >
+                        <div>
+                          <p>
+                            <span>
+                              {v.status == "Executed" ? (
+                                <img src="/img/shenhetongguo 2@2x.png" />
+                              ) : (
+                                <img src="/img/编组 6@2x.png" />
+                              )}
+                              {v.title}
+                            </span>
+                            <label>{timeStamp2String(v.date + "000")}</label>
+                          </p>
+                          <p>{v.body}</p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+                {this.state.total >= 4 ? (
+                  <Pagination
+                    defaultCurrent={this.state.page}
+                    pageSize={this.state.pageSize}
+                    total={this.state.total}
+                    onChange={this.onChange}
+                  />
+                ) : null}
               </div>
-              {this.state.total >= 4 ? (
-                <Pagination
-                  defaultCurrent={this.state.page}
-                  pageSize={this.state.pageSize}
-                  total={this.state.total}
-                  onChange={this.onChange}
-                />
-              ) : null}
-            </div>
-          ) : (
+            ) : (
+              <div className="blankWrap">
+                <div className="blank">
+                  <img src="/img/blankPage.png" />
+                  <p>{intl.get("No notification alerts")}</p>
+                </div>
+              </div>
+            )
+          ) : noticesList.length > 0 ? (
             <div className="systemList">
               <div className="listPages">
                 {noticesList.map((v, i) => {
@@ -334,6 +345,13 @@ class PushMessage extends Component {
                   onChange={this.onChange1}
                 />
               ) : null}
+            </div>
+          ) : (
+            <div className="blankWrap">
+              <div className="blank">
+                <img src="/img/blankPage.png" />
+                <p>{intl.get("No notification alerts")}</p>
+              </div>
             </div>
           )}
         </div>
@@ -377,7 +395,6 @@ let mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PushMessage);
-
 {/* <div className="blankWrap">
   <div className="blank">
     <img src="/img/blankPage.png" />

@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { digitalBank, getProductId } from "../../utils/bank";
+import intl from "react-intl-universal";
 import axios from "axios";
 import code_data from "../../utils/code.json";
 let url1 = "https://api4.violas.io";
@@ -270,17 +271,19 @@ class BorrowDetails extends Component {
             <NavLink to="/homepage/home/digitalBank">
               {" "}
               <img src="/img/fanhui 2@2x.png" />
-              数字银行
+              {intl.get("Bank")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <NavLink to="/homepage/home/digitalBank/saveDetails">借款</NavLink>
+            <NavLink to="/homepage/home/digitalBank/saveDetails">
+              {intl.get("Borrow")}
+            </NavLink>
           </Breadcrumb.Item>
         </Breadcrumb>
         <div className="saveDetailsWrap">
           <div className="saveDetailsList">
             <h4>
-              <label>我要借</label>
+              <label>{intl.get("To borrow")}</label>
               <div className="dropdown1">
                 <span
                   onClick={(e) => {
@@ -328,7 +331,7 @@ class BorrowDetails extends Component {
             <div className="saveDetailsShow">
               <p>
                 <img src="/img/kyye.png" />
-                <label>可借额度 ：</label>{" "}
+                <label>{intl.get("Daily limit")} ：</label>{" "}
                 <label>
                   {extra} {showType}
                 </label>
@@ -339,29 +342,39 @@ class BorrowDetails extends Component {
                     });
                   }}
                 >
-                  全部
+                  {intl.get("All")}
                 </span>
               </p>
             </div>
           </div>
           <div className="saveDetailsList1">
             <p>
-              <label>借款利率</label>
-              <span>{Number(borrowList.rate * 100).toFixed(2)}%/日</span>
+              <label>{intl.get("Borrowing rate")}</label>
+              <span>
+                {Number(borrowList.rate * 100).toFixed(2)}%/
+                {intl.get("Day")}
+              </span>
             </p>
             <p>
               <p>
-                <label>质押率</label>
-                <span>质押率=借贷数量/存款数量</span>
+                <label>{intl.get("Loan-to-value Ratio")}</label>
+                <span>
+                  {" "}
+                  {intl.get("Loan-to-value ratio = borrowing/lending")}
+                </span>
               </p>
               <span>{Number(borrowList.pledge_rate * 100).toFixed(2)}%</span>
             </p>
             <p>
               <p>
-                <label>质押账户</label>
-                <span>清算部分将从存款账户扣除</span>
+                <label>{intl.get("Pledge account")}</label>
+                <span>
+                  {intl.get(
+                    "The liquidation part will be deducted from the deposit account"
+                  )}
+                </span>
               </p>
-              <span>银行余额</span>
+              <span>{intl.get("Account balance")}</span>
             </p>
           </div>
           <div className="agreest">
@@ -384,11 +397,12 @@ class BorrowDetails extends Component {
                 }}
               />
             )}
-            我已阅读并同意<span>《质押借款服务协议》</span>
+            {intl.get("I have read and agree with the")}
+            <span>&nbsp;{intl.get("Loan Servicing Agreement")}</span>
           </div>
           <div className="foot">
             <p className="btn" onClick={() => this.borrowingImmediately()}>
-              立即借款
+              {intl.get("Borrow Now")}
             </p>
             <p
               className={
@@ -410,7 +424,7 @@ class BorrowDetails extends Component {
               }}
             >
               <label>
-                产品说明
+                {intl.get("Product Description")}
                 <img src="/img/编组 17@2x.png" />
               </label>
               <i>
@@ -447,7 +461,7 @@ class BorrowDetails extends Component {
               }}
             >
               <label>
-                常见问题
+                {intl.get("FAQ")}
                 <img src="/img/wenhao.png" />
               </label>
               <i>
