@@ -208,7 +208,7 @@ class DigitalBankPage extends Component {
                           }}
                         >
                           <p>
-                            <img src="/img/BTC复制 2@2x.png" />
+                            <img src={v.logo} />
                             <span>{v.name}</span>
                             <label>{v.desc}</label>
                           </p>
@@ -236,7 +236,7 @@ class DigitalBankPage extends Component {
                           }}
                         >
                           <p>
-                            <img src="/img/BTC复制 2@2x.png" />
+                            <img src={v.logo} />
                             <span>{v.name}</span>
                             <label>{v.desc}</label>
                           </p>

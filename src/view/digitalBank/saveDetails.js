@@ -5,10 +5,12 @@ import { NavLink } from "react-router-dom";
 import WalletConnect from "../../packages/browser/src/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { digitalBank, getProductId } from "../../utils/bank";
+import intl from "react-intl-universal";
 import axios from 'axios';
 import code_data from "../../utils/code.json";
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
+
 //存款详情
 class SaveDetails extends Component {
   constructor() {
@@ -256,17 +258,19 @@ class SaveDetails extends Component {
             <NavLink to="/homepage/home/digitalBank">
               {" "}
               <img src="/img/fanhui 2@2x.png" />
-              数字银行
+              {intl.get("Bank")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <NavLink to="/homepage/home/digitalBank/saveDetails">存款</NavLink>
+            <NavLink to="/homepage/home/digitalBank/saveDetails">
+              {intl.get("Deposit")}
+            </NavLink>
           </Breadcrumb.Item>
         </Breadcrumb>
         <div className="saveDetailsWrap">
           <div className="saveDetailsList">
             <h4>
-              <label>我要存</label>
+              <label>{intl.get("To deposit")}</label>
               <div className="dropdown1">
                 <span
                   onClick={(e) => {
@@ -317,11 +321,11 @@ class SaveDetails extends Component {
                 <label>
                   {extra} {showType}
                 </label>
-                <span>全部</span>
+                <span>{intl.get("All")}</span>
               </p>
               <p>
                 <img src="/img/编组 15@2x.png" />
-                <label>每日限额 ： </label>
+                <label>{intl.get("Daily limit")} ： </label>
                 <label>
                   {saveList.limit} {saveList.saveName}
                 </label>
@@ -330,13 +334,15 @@ class SaveDetails extends Component {
           </div>
           <div className="saveDetailsList1">
             <p>
-              <label>存款年利率</label>
+              <label>{intl.get("Lending APY")}</label>
               <span>{Number(saveList.rate * 100).toFixed(2)}%</span>
             </p>
             <p>
               <p>
-                <label>质押率</label>
-                <span>质押率=借贷数量/存款数量</span>
+                <label>{intl.get("Loan-to-value Ratio")}</label>
+                <span>
+                  {intl.get("Loan-to-value ratio = borrowing/lending")}
+                </span>
               </p>
               <span>{Number(saveList.pledge_rate * 100).toFixed(2)}%</span>
             </p>
@@ -347,7 +353,7 @@ class SaveDetails extends Component {
           </div>
           <div className="foot">
             <p className="btn" onClick={() => this.depositImmediately()}>
-              立即存款
+              {intl.get("Deposit Now")}
             </p>
             <p
               className={
@@ -369,7 +375,7 @@ class SaveDetails extends Component {
               }}
             >
               <label>
-                产品说明
+                {intl.get("Product Description")}
                 <img src="/img/编组 17@2x.png" />
               </label>
               <i>
@@ -403,7 +409,7 @@ class SaveDetails extends Component {
               }}
             >
               <label>
-                常见问题
+                {intl.get("FAQ")}
                 <img src="/img/wenhao.png" />
               </label>
               <i>
