@@ -186,7 +186,7 @@ class Head extends React.PureComponent {
               }}
             >
               <img src="/img/yaoqingjiangli 2@2x.png" />
-              邀请奖励
+              {intl.get("Bonus For Inviting Friends")}
             </p>
             {/* <p
               onClick={() => {

@@ -13,7 +13,6 @@ let url1 = "https://api.violas.io";
 // let url1 = "https://tbtc1.trezor.io"
 
 //钱包首页
-//钱包首页
 class HomeContent extends Component {
   constructor() {
     super();
@@ -534,7 +533,7 @@ class HomeContent extends Component {
                           rate:
                             v.BTC == 0
                               ? "0.00"
-                              : v.rate == 0 ||'NAN'
+                              : v.rate == 0 || "NAN"
                               ? "0.00"
                               : this.getFloat(v.rate * (v.BTC / 1e8), 2),
                           icon: v.show_icon,
@@ -676,7 +675,7 @@ class HomeContent extends Component {
                 this.props.history.push("/homepage/home/userRewards");
               }}
             >
-              <span>免费领取</span>
+              <span>{intl.get("Receive1")}</span>
             </div>
           </div>
         </div>
@@ -692,7 +691,7 @@ class HomeContent extends Component {
           <AddCurrency
             showAddCoins={this.showAddCoins}
             checkData={JSON.parse(window.sessionStorage.getItem("checkData"))}
-            BTCBalance={ window.sessionStorage.getItem("BTCBalance")}
+            BTCBalance={window.sessionStorage.getItem("BTCBalance")}
             getInitTotal={this.getInitTotal}
             getBalances={this.getBalances}
             showWalletFun={this.showWalletFun}

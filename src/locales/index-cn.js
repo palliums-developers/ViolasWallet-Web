@@ -330,4 +330,5 @@ export default {
   "Transaction Notification": "转账通知",
   "System Notification": "系统通知",
   "No notification alerts": "暂无消息",
+  Receive1: "免费领取",
 };

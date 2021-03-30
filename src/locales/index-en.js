@@ -336,4 +336,5 @@ export default {
   "Transaction Notification": "Transaction Notification",
   "System Notification": "System Notification",
   "No notification alerts": "No notification alerts",
+  Receive1: "Receive",
 };
