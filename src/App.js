@@ -156,7 +156,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h2>WalletConnect Demo</h2>
+          <h2>WalletConnect Demo Internal</h2>
           <div>
             <button onClick={this.QRCode}>QRCode</button>
             <button onClick={this.showUri}>Show URI</button>

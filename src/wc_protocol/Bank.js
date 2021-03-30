@@ -145,9 +145,10 @@ class Bank extends React.Component {
         break;
       case "eth":
         to_address = this.state.ethAddress;
+        break;
       default:
         to_address = "";
-        return;
+        break;
     }
     if (this.state.mappingCoinType.from_coin.coin_type === "btc") {
       // let script = getBitcoinScript(this.state.mappingCoinType.lable, sessionStorage.getItem('bitcoin_address'), parseInt(this.state.mappingCoinAmount)/100);
@@ -202,6 +203,11 @@ class Bank extends React.Component {
         this.state.mappingCoinType.lable,
         to_address
       );
+      // flag: "violas";
+      // state: "start";
+      // times: 1;
+      // to_address: "0x9cf3AE0491F75Faa87A139f5d1107980B0D5a436";
+      // type: "v2em";
       let tx = getViolasTx(
         sessionStorage.getItem("violas_address"),
         this.state.mappingCoinType.receiver_address,
@@ -211,6 +217,27 @@ class Bank extends React.Component {
         parseInt(sessionStorage.getItem("violas_chainId")),
         script
       );
+      // tx = {
+      //   chainId: 4,
+      //   from: "e8da60ef0f4cf18c324527f48b06c7e9",
+      //   payload: {
+      //     args: [
+      //       { type: "Address", value: "00000000000000000042524755534454" },
+      //       { type: "U64", value: "2000000" },
+      //       {
+      //         type: "Vector",
+      //         value:
+      //           "7b22666c6167223a2276696f6c6173222c2274797065223a22…374617465223a227374617274222c2274696d6573223a317d",
+      //       },
+      //       { type: "Vector", value: "" },
+      //     ],
+      //     code:
+      //       "a11ceb0b010000000701000202020403061004160205181d0735610896011000000001010000020001000003020301010004010300010501060c0108000506080005030a020a020005060c05030a020a020109000c4c696272614163636f756e741257697468647261774361706162696c6974791b657874726163745f77697468647261775f6361706162696c697479087061795f66726f6d1b726573746f72655f77697468647261775f6361706162696c69747900000000000000000000000000000001010104010c0b0011000c050e050a010a020b030b0438000b05110202",
+      //     tyArgs: [
+      //       "070000000000000000000000000000000105765553445405765553445400",
+      //     ],
+      //   },
+      // };
       console.log("violas: ", tx);
       this.props.walletConnector
         .sendTransaction("violas", tx)
