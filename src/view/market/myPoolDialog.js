@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import intl from "react-intl-universal";
 let url1 = "https://api4.violas.io"
 let url = "https://api.violas.io";
+
 class MyPoolDialog extends Component {
     constructor(props) {
         super()
@@ -54,7 +55,7 @@ class MyPoolDialog extends Component {
                     "curDealType",
                     intl.get("Add Liquidity")
                   );
-                  this.props.showDrawer1(false);
+                  window.location.reload();
                 }}
               >
                 {intl.get("Add Liquidity")}
@@ -62,7 +63,7 @@ class MyPoolDialog extends Component {
               <button
                 onClick={() => {
                   window.sessionStorage.setItem("curDealType", intl.get("Remove Liquidity"));
-                  this.props.showDrawer1(false);
+                  window.location.reload();
                 }}
               >
                 {intl.get("Remove Liquidity")}

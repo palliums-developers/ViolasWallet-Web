@@ -312,6 +312,7 @@ export default {
   "Repayment successful": "Repayment successful",
   "Repayment Now": "Repayment Now",
   "Deposit Now": "Deposit Now",
+  "Please enter the deposit amount": "Please enter the deposit amount",
   "Borrow Now": "Borrow Now",
   Deposit: "Deposit",
   "To deposit": "To deposit",
@@ -336,4 +337,7 @@ export default {
   "Transaction Notification": "Transaction Notification",
   "System Notification": "System Notification",
   "No notification alerts": "No notification alerts",
+  Receive1: "Receive",
+  //挖矿激励
+  "Total Earnings": "总收益",
 };

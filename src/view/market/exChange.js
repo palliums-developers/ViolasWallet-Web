@@ -648,27 +648,15 @@ class ExChange extends Component {
             warning: intl.get("Swap Successful"),
             showWallet: false,
           });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
         })
         .catch((err) => {
           // console.log('Bitcoin Swap ', err);
           this.setState({
             warning: intl.get("Swap Failed"),
             showWallet: false,
+          },()=>{
+            window.location.reload()
           });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
         });
     } else if (this.state.swap_in_type === "libra") {
       const tx = await this.getLibraSwap(
@@ -680,31 +668,27 @@ class ExChange extends Component {
         .sendTransaction("_libra", tx)
         .then((res) => {
           // console.log('Libra Swap ', res);
-          this.setState({
-            warning: intl.get("Swap Successful"),
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Swap Successful"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         })
         .catch((err) => {
           // console.log('Libra Swap ', err);
-          this.setState({
-            warning: intl.get("Swap Failed"),
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Swap Failed"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         });
     } else if (this.state.swap_in_type === "violas") {
       const tx = await this.getViolasSwap(
@@ -716,31 +700,27 @@ class ExChange extends Component {
         .sendTransaction("violas", tx)
         .then((res) => {
           // console.log('Violas Swap ', res);
-          this.setState({
-            warning: intl.get("Swap Successful"),
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Swap Successful"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         })
         .catch((err) => {
           console.log('Violas Swap ', err);
-          this.setState({
-            warning: intl.get("Swap Failed"),
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              inputAmount: "",
-              outputAmount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Swap Failed"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         });
     }
   }

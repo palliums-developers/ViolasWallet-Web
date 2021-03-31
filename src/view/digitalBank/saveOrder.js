@@ -443,7 +443,7 @@ class SaveOrder extends Component {
     };
     // console.log(parm);
     axios.post(`${url}${api}`, parm).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code == 2000) {
         this.setState({
           warning: intl.get("Withdrawal Successful"),
@@ -457,6 +457,8 @@ class SaveOrder extends Component {
         setTimeout(() => {
           this.setState({
             showDialog: false,
+          },()=>{
+            window.location.reload()
           });
         }, 1000);
       } else {

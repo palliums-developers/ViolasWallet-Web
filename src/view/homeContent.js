@@ -152,6 +152,7 @@ class HomeContent extends Component {
       arr2: temp_arr2,
       checkData: temp_checkData,
     });
+    // console.log(temp_arr1, temp_arr2);
     window.sessionStorage.setItem(
       "violas_Balances",
       JSON.stringify(temp_arr1.concat(temp_arr2))
@@ -219,6 +220,7 @@ class HomeContent extends Component {
     let libra_balance_list = await this.getBalanceList("libra");
     let violas_rate_list = await this.getRateList("violas");
     let libra_rate_list = await this.getRateList("libra");
+    
     let violas_balance_rate = this.mergeBalanceRate(
       violas_balance_list,
       violas_rate_list,
@@ -256,7 +258,7 @@ class HomeContent extends Component {
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
     window.sessionStorage.setItem(
       "violas_Balances",
-      JSON.stringify(temp_violas_balance)
+      JSON.stringify(violas_balance_list.concat(libra_balance_list))
     );
   };
   getBalances = async () => {
@@ -533,7 +535,7 @@ class HomeContent extends Component {
                           rate:
                             v.BTC == 0
                               ? "0.00"
-                              : v.rate == 0 ||'NAN'
+                              : v.rate == 0 || "NAN"
                               ? "0.00"
                               : this.getFloat(v.rate * (v.BTC / 1e8), 2),
                           icon: v.show_icon,
@@ -675,7 +677,7 @@ class HomeContent extends Component {
                 this.props.history.push("/homepage/home/userRewards");
               }}
             >
-              <span>免费领取</span>
+              <span>{intl.get("Receive1")}</span>
             </div>
           </div>
         </div>
@@ -691,7 +693,7 @@ class HomeContent extends Component {
           <AddCurrency
             showAddCoins={this.showAddCoins}
             checkData={JSON.parse(window.sessionStorage.getItem("checkData"))}
-            BTCBalance={ window.sessionStorage.getItem("BTCBalance")}
+            BTCBalance={window.sessionStorage.getItem("BTCBalance")}
             getInitTotal={this.getInitTotal}
             getBalances={this.getBalances}
             showWalletFun={this.showWalletFun}

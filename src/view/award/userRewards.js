@@ -129,6 +129,8 @@ class UserRewards extends Component {
           if(res.code == 2000){
             this.setState({
               descr1:"验证成功"
+            },()=>{
+              window.location.reload();
             })
           }
         });
