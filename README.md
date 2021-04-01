@@ -1,22 +1,28 @@
-# package
+# Package
 
-window.crypto should add HTTPS.<br/>
-waiting for more function on Mobile Phone.<br/>
+Because of window.crypto, this demo should use HTTPS or localhost.
 
+Waiting of walletconnect v2.0.0 and stopping packaging v1.4.1.
+
+In this demo :
+
+```bash
+"@walletconnect/utils": "1.0.0-beta.47", # must required
+"@walletconnect/qrcode-modal": "1.0.0-beta.47", # just requird in this demo
 ```
-    "@walletconnect/browser": "1.0.0-beta.47",
-    "@walletconnect/qrcode-modal": "1.0.0-beta.47",
-    "@walletconnect/utils": "1.0.0-beta.47",
 
-    /src/packages/types/index.d.ts
-    /node_modules/@walletconnect/types/index.d.ts
-    sendTransaction: (chain: string, tx: ITxData) => Promise<any>
+Other packages are packaging, you can check wc_v1.0.0-beta.47 fold.
 
-    协议规范：
+Web-wallet just check wc_v1.0.0-beta.47/dist folder.
+
+协议规范：
     https://github.com/palliums-developers/Technical-Documentation/blob/master/Wallet%20Connect/Wallet%20Connect%20%E4%BA%A4%E4%BA%92%E5%8D%8F%E8%AE%AE%E8%A7%84%E8%8C%83.md
 
-```
-
+***
 # Notification
 
 Notification running on Chrome currently.<br/>
+
+# Move Code
+
+Modify tx function and make code as parameter.

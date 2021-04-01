@@ -1,0 +1,23 @@
+{
+  "name": "@walletconnect/types",
+  "version": "1.4.1",
+  "description": "Typescript Types for WalletConnect",
+  "scripts": {},
+  "keywords": [
+    "wallet",
+    "walletconnect",
+    "ethereum",
+    "jsonrpc",
+    "mobile",
+    "qrcode",
+    "web3",
+    "crypto",
+    "cryptocurrency",
+    "dapp"
+  ],
+  "author": "nissaka",
+  "homepage": "https://github.com/palliums-developers/ViolasWallet-Web.git",
+  "license": "LGPL-3.0",
+  "main": "",
+  "types": "index"
+}

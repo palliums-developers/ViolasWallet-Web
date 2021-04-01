@@ -1,7 +1,6 @@
 import React from "react";
 import "../App.css";
-import code_data from "../util/code.json";
-import { bytes2StrHex, string2Byte } from "../util/trans";
+import { getViolasTx, getViolasPub } from "../util/violas_trans";
 import axios from "axios";
 
 class Violas extends React.Component {
@@ -23,10 +22,6 @@ class Violas extends React.Component {
   }
   async componentWillMount() {
     await this.getViolasCurrencies();
-    await this.getTyArgs(
-      this.state.violas_currencies[0].module,
-      this.state.violas_currencies[0].name
-    );
     await this.setState({
       violas_currency: this.state.violas_currencies[0].name,
     });
@@ -46,98 +41,20 @@ class Violas extends React.Component {
       }
     );
   }
-  async getTyArgs(_module, _name) {
-    let address = "00000000000000000000000000000001";
-    let prefix = "07";
-    let suffix = "00";
-    let _module_length = _module.length;
-    if (_module_length < 10) {
-      _module_length = "0" + _module_length;
-    }
-    let _module_hex = bytes2StrHex(string2Byte(_module));
-    let name_length = _name.length;
-    if (name_length < 10) {
-      name_length = "0" + name_length;
-    }
-    let _name_hex = bytes2StrHex(string2Byte(_name));
-    let result =
-      prefix +
-      address +
-      _module_length +
-      _module_hex +
-      name_length +
-      _name_hex +
-      suffix;
-    await this.setState({ tyArgs: result });
-  }
   async violas_sendTransaction(chainId) {
-    // const seq = await this.getSeqNumb(this.state.from).then(res => {
-    //   return res
-    // }).catch(err => {
-    //   console.log(err)
-    // })
     console.log(
       "Please confirm current violas address is ",
       sessionStorage.getItem("violas_address")
     );
-    // const tx = {
-    //     from: sessionStorage.getItem('violas_address'),
-    //     payload: {
-    //         code: code_data.violas_code,
-    //         tyArgs: [
-    //             this.state.tyArgs
-    //         ],
-    //         args: [
-    //             {
-    //                 type: 'Address',
-    //                 value: this.state.address
-    //             },
-    //             {
-    //                 type: 'Number',
-    //                 value: this.state.value
-    //             },
-    //             {
-    //                 type: 'Bytes',
-    //                 value: ''
-    //             },
-    //             {
-    //                 type: 'Bytes',
-    //                 value: ''
-    //             },
-    //         ]
-    //     },
-    //     // maxGasAmount: 400000,
-    //     // gasUnitPrice: 0,
-    //     // sequenceNumber: seq,
-    //     gasCurrencyCode: this.state.currencyCode,
-    // }
-    const tx = {
-      from: sessionStorage.getItem("violas_address"),
-      payload: {
-        code: code_data.violas.p2p,
-        tyArgs: [this.state.tyArgs],
-        args: [
-          {
-            type: "Address",
-            value: this.state.address,
-          },
-          {
-            type: "U64",
-            value: this.state.value,
-          },
-          {
-            type: "Vector",
-            value: "",
-          },
-          {
-            type: "Vector",
-            value: "",
-          },
-        ],
-      },
-      chainId: chainId,
-    };
-    console.log("violas ", tx);
+    const tx = getViolasTx(
+      sessionStorage.getItem("violas_address"),
+      this.state.address,
+      this.state.value,
+      this.state.violas_currency,
+      this.state.violas_currency,
+      chainId
+    );
+    console.log(tx);
     this.props.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
@@ -148,16 +65,12 @@ class Violas extends React.Component {
       });
   }
   async sendPublish(chainId) {
-    const tx = {
-      from: sessionStorage.getItem("violas_address"),
-      payload: {
-        code: code_data.violas.publish,
-        tyArgs: [this.state.tyArgs],
-        args: [],
-      },
-      // gasCurrencyCode: this.state.currencyCode,
-      chainId: chainId,
-    };
+    const tx = getViolasPub(
+      sessionStorage.getItem("violas_address"),
+      this.state.violas_currency,
+      this.state.violas_currency,
+      chainId
+    );
     console.log(tx);
     this.props.walletConnector
       .sendTransaction("violas", tx)
@@ -199,10 +112,6 @@ class Violas extends React.Component {
         break;
       case "violas_currency":
         await this.setState({ violas_currency: e.target.value });
-        await this.getTyArgs(
-          this.state.violas_currency,
-          this.state.violas_currency
-        );
         break;
       default:
         break;

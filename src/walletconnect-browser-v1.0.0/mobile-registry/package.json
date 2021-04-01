@@ -1,0 +1,19 @@
+{
+  "name": "@walletconnect/mobile-registry",
+  "version": "1.4.0",
+  "description": "Registry for WalletConnect mobile-to-mobile linking supported Wallets",
+  "scripts": {
+    "build": "node ./scripts/format.js"
+  },
+  "keywords": [
+    "WalletConnect",
+    "mobile",
+    "registry"
+  ],
+  "author": "WalletConnect <walletconnect.org>",
+  "homepage": "https://github.com/palliums-developers/ViolasWallet-Web.git",
+  "main": "registry.json",
+  "devDependencies": {
+    "axios": "^0.21.0"
+  }
+}

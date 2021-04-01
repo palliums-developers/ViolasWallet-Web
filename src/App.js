@@ -1,9 +1,10 @@
 import React from "react";
 import "./App.css";
 import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
-import WalletConnect from "./packages/browser/dist/index";
-import webStorage from "./packages/browser/dist/webStorage";
-// import Connector from "./packages/core/src";
+import webStorage from "./wc_v1.0.0-beta.47/dist/browser/webStorage";
+import WalletConnect from "./wc_v1.0.0-beta.47/dist/browser/index";
+// import webStorage from "./walletconnect-browser-v1.0.0/browser/dist/cjs/index";
+// import WalletConnect from "./walletconnect-browser-v1.0.0/browser/dist/cjs/index";
 
 import Violas from "./wc_protocol/Violas";
 import Libra from "./wc_protocol/Libra";

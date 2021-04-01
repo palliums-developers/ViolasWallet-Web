@@ -1,0 +1,23 @@
+// {
+//   "include": ["src"],
+//   "exclude": ["map"],
+//   "compilerOptions": {
+//     "target": "es5",
+//     // "compileOnSave": true
+//     // "module": "CommonJS",
+//     // "outFile": "../dist/core.js",
+//     // "outFile": "core.ts core.js",
+//     // "outDir": "../dist/",
+//   }
+// }
+{
+  // "extends": "../../../tsconfig.json",
+  "include": [
+      "src/*.ts"
+  ],
+  "compilerOptions": {
+      "target": "es5",
+      // "composite": true,
+      // "tsBuildInfoFile": "../../walletConnect/browser"
+  },
+}
