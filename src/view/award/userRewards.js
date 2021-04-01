@@ -127,9 +127,14 @@ class UserRewards extends Component {
         .then((res) => res.json())
         .then((res) => {
           if(res.code == 2000){
-            this.setState({
-              descr1:"验证成功"
-            })
+            this.setState(
+              {
+                descr1: "验证成功",
+              },
+              () => {
+                window.location.reload();
+              }
+            );
           }else{
             this.setState({
               descr: "当前手机号已无验证机会",

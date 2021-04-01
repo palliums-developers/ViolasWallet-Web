@@ -48,22 +48,22 @@ class SaveOrder extends Component {
       data1: [],
       columns: [
         {
-          title: "币种",
+          title: intl.get("Token"),
           dataIndex: "coin",
           key: "coin",
         },
         {
-          title: "本金",
+          title: intl.get("Principal"),
           dataIndex: "money",
           key: "money",
         },
         {
-          title: "收益",
+          title: intl.get("Earnings"),
           dataIndex: "income",
           key: "income",
         },
         {
-          title: "年化收益率",
+          title: intl.get("APY"),
           key: "yield",
           dataIndex: "yield",
           render: (text) => (
@@ -73,7 +73,7 @@ class SaveOrder extends Component {
           ),
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           key: "status",
           dataIndex: "status",
           render: (text) => (
@@ -91,19 +91,19 @@ class SaveOrder extends Component {
               }
             >
               {text == 0
-                ? "已存款"
+                ? intl.get("Deposited")
                 : text == 1
-                ? "已提取"
+                ? intl.get("Withdrew")
                 : text == -1
-                ? "提取失败"
+                ? intl.get("Withdrawal Failed")
                 : text == -2
-                ? "存款失败"
+                ? intl.get("Deposit Failed")
                 : null}
             </label>
           ),
         },
         {
-          title: "操作",
+          title: intl.get("operation"),
           key: "option",
           dataIndex: "option",
 
@@ -119,23 +119,23 @@ class SaveOrder extends Component {
       ],
       columns1: [
         {
-          title: "时间",
+          title: intl.get("Time"),
           dataIndex: "time",
           key: "time",
           render: (text) => <label>{timeStamp2String2(text + "000")}</label>,
         },
         {
-          title: "币种",
+          title: intl.get("Principal"),
           dataIndex: "coin",
           key: "coin",
         },
         {
-          title: "数量",
+          title: intl.get("Amount"),
           dataIndex: "amount",
           key: "amount",
         },
         {
-          title: "状态",
+          title: intl.get("State"),
           key: "status",
           dataIndex: "status",
           render: (text) => (
@@ -153,13 +153,13 @@ class SaveOrder extends Component {
               }
             >
               {text == 0
-                ? "已存款"
+                ? intl.get("Deposited")
                 : text == 1
-                ? "已提取"
+                ? intl.get("Withdrew")
                 : text == -1
-                ? "提取失败"
+                ? intl.get("Withdrawal Failed")
                 : text == -2
-                ? "存款失败"
+                ? intl.get("Deposit Failed")
                 : null}
             </label>
           ),
@@ -258,7 +258,7 @@ class SaveOrder extends Component {
               income: res.data[i].earnings,
               yield: res.data[i].rate,
               status: res.data[i].status,
-              option: "提取",
+              option: intl.get("Withdrawal"),
             });
           }
           this.setState({
@@ -281,8 +281,8 @@ class SaveOrder extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data.length > 0) {
-          let allCoin = ["全部"];
-          let allStatus = ["全部"];
+          let allCoin = [intl.get("All")];
+          let allStatus = [intl.get("All")];
           for (let i = 0; i < res.data.length; i++) {
             if (allCoin.length > 0) {
               allCoin.push(res.data[i].currency);
@@ -395,7 +395,7 @@ class SaveOrder extends Component {
   withdrawals = () => {
     if (this.state.withdrawalsAmount == "") {
       this.setState({
-        warning: "请输入提取数量",
+        warning: intl.get("Enter withdrawal amount"),
       });
     } else {
       this.getDigitalBank();
@@ -443,10 +443,10 @@ class SaveOrder extends Component {
     };
     // console.log(parm);
     axios.post(`${url}${api}`, parm).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.code == 2000) {
         this.setState({
-          warning: "提取成功",
+          warning: intl.get("Withdrawal Successful"),
         });
         setTimeout(() => {
           this.setState({
@@ -457,11 +457,13 @@ class SaveOrder extends Component {
         setTimeout(() => {
           this.setState({
             showDialog: false,
+          },()=>{
+            window.location.reload()
           });
         }, 1000);
       } else {
         this.setState({
-          warning: "提取失败",
+          warning: intl.get("Withdrawal Failed"),
         });
         setTimeout(() => {
           this.setState({
@@ -576,7 +578,7 @@ class SaveOrder extends Component {
                   showSearch
                   allowClear={true}
                   style={{ width: 200 }}
-                  placeholder="全部币种"
+                  placeholder={intl.get("All Tokens")}
                   optionFilterProp="children"
                   onChange={this.getOptionCoins}
                   // onFocus={onFocus}
@@ -600,7 +602,7 @@ class SaveOrder extends Component {
                   showSearch
                   allowClear={true}
                   style={{ width: 200 }}
-                  placeholder="全部状态"
+                  placeholder={intl.get("All State")}
                   optionFilterProp="children"
                   onChange={this.getOptionStatus}
                   // onFocus={onFocus}
@@ -616,20 +618,20 @@ class SaveOrder extends Component {
                     return (
                       <Option key={i} value={v}>
                         {v == 0
-                          ? "已存款"
+                          ? intl.get("Deposited")
                           : v == 1
-                          ? "已提取"
+                          ? intl.get("Withdrew")
                           : v == -1
-                          ? "提取失败"
+                          ? intl.get("Withdrawal Failed")
                           : v == -2
-                          ? "存款失败"
-                          : "全部"}
+                          ? intl.get("Deposit Failed")
+                          : intl.get("All")}
                       </Option>
                     );
                   })}
                 </Select>
                 <span className="btn" onClick={() => this.searchFunction()}>
-                  搜索
+                  {intl.get("Search")}
                 </span>
               </div>
               <Table
@@ -651,7 +653,7 @@ class SaveOrder extends Component {
             <div className="extractContent">
               <div className="extractList">
                 <div className="head">
-                  <h4>提取</h4>
+                  <h4>{intl.get("Withdrawal")}</h4>
                   <i
                     onClick={() => {
                       this.setState({
@@ -664,7 +666,7 @@ class SaveOrder extends Component {
                 </div>
                 <div className="inputDiv">
                   <input
-                    placeholder="请输入提取数量"
+                    placeholder={intl.get("Enter withdrawal amount")}
                     value={this.state.withdrawalsAmount}
                     onChange={(e) => this.inputWithdrawalsAmount(e)}
                   />
@@ -673,7 +675,7 @@ class SaveOrder extends Component {
                 <div className="inputDescr">
                   <p>
                     <img src="/img/kyye.png" />
-                    可提数量：
+                    {intl.get("Amount1")}：
                     <span>
                       {withdrawalsList.available_quantity / 1e6}
                       {withdrawalsList.token_show_name}
@@ -687,22 +689,24 @@ class SaveOrder extends Component {
                       });
                     }}
                   >
-                    全部
+                    {intl.get("All")}
                   </p>
                 </div>
                 <div className="extractDescr">
                   <img src="/img/编组 4@2x.png" />
                   <p>
-                    如果您当前有借贷操作，则需将部分存款作为质押金。提取质押金需还对应数量的借款金额。
+                    {intl.get(
+                      "If you have loans,some of deposits will be used as collacteral.You can withdraw deposits after payoff the loans."
+                    )}
                   </p>
                 </div>
                 <div className="foot">
                   <p className="btn" onClick={() => this.withdrawals()}>
-                    提 取
+                    {intl.get("Withdrawal")}
                   </p>
                   <p
                     className={
-                      this.state.warning == "提取成功"
+                      this.state.warning == intl.get("Withdrawal Successful")
                         ? "descr descrWarn"
                         : "descr descrRed"
                     }

@@ -35,6 +35,7 @@ class BorrowDetails extends Component {
       borrowProduct: [],
       token_address: "",
       depositProduct: [],
+      idx:""
     };
   }
   stopPropagation(e) {
@@ -69,6 +70,7 @@ class BorrowDetails extends Component {
                 temp.push({
                   type: this.state.borrowProduct[i].token_module,
                   balance: res.data.balances[j].balance / 1e6,
+                  id: this.state.borrowProduct[i].id,
                 });
               }
             }
@@ -96,11 +98,14 @@ class BorrowDetails extends Component {
   }
   componentDidMount() {
     document.addEventListener("click", this.onClose);
+    this.getBorrowAllMessage(sessionStorage.getItem("id"));
+  }
+  getBorrowAllMessage(id){
     //获取借款产品信息
     fetch(
       url +
         "/1.0/violas/bank/borrow/info?id=" +
-        sessionStorage.getItem("id") +
+         id+
         "&&address=" +
         sessionStorage.getItem("violas_address")
     )
@@ -110,6 +115,11 @@ class BorrowDetails extends Component {
         if (res.data) {
           this.setState({
             borrowList: {
+              limit:
+                (res.data.quota_limit - res.data.quota_used) / 1e6 +
+                "/" +
+                res.data.quota_limit / 1e6,
+              limit1: (res.data.quota_limit - res.data.quota_used) / 1e6,
               pledge_rate: res.data.pledge_rate,
               rate: res.data.rate,
               token_address: res.data.token_address,
@@ -120,7 +130,6 @@ class BorrowDetails extends Component {
         }
       });
   }
-
   //获取输入框value
   getInputValue = (e) => {
     if (e.target.value) {
@@ -263,6 +272,7 @@ class BorrowDetails extends Component {
       showLists,
       showType,
       extra,
+      limit
     } = this.state;
     return (
       <div className="borrowDetails">
@@ -306,11 +316,19 @@ class BorrowDetails extends Component {
                         <span
                           key={i}
                           onClick={() => {
-                            this.setState({
-                              showType: v.type,
-                              extra: v.balance,
-                              showList: false,
-                            });
+                            this.setState(
+                              {
+                                idx: v.id,
+                                showType: v.type,
+                                extra: v.balance,
+                                showList: false,
+                              },
+                              () => {
+                                if (this.state.idx) {
+                                  this.getBorrowAllMessage(this.state.idx);
+                                }
+                              }
+                            );
                           }}
                         >
                           <img src="/img/kyye.png" />
@@ -333,12 +351,12 @@ class BorrowDetails extends Component {
                 <img src="/img/kyye.png" />
                 <label>{intl.get("Daily limit")} ：</label>{" "}
                 <label>
-                  {extra} {showType}
+                  {borrowList.limit} {showType}
                 </label>
                 <span
                   onClick={() => {
                     this.setState({
-                      amount: extra,
+                      amount: borrowList.limit1,
                     });
                   }}
                 >
@@ -482,22 +500,6 @@ class BorrowDetails extends Component {
                     </div>
                   );
                 })}
-                {/* <div className="descr">
-                                    <h4>如何增加可借额度？</h4>
-                                    <p>可通过存款增加可借额度</p>
-                                </div>
-                                <div className="descr">
-                                    <h4>借款有时间限制吗？</h4>
-                                    <p>借款限制固定的时间周期，但是，随着时间的流逝，借贷利息会相应增加</p>
-                                </div>
-                                <div className="descr">
-                                    <h4>需要支付多少利息？</h4>
-                                    <p>借贷利率是不断变化的，用户所需支付的利息取决于该资产的供求关系。</p>
-                                </div>
-                                <div className="descr">
-                                    <h4>什么情况下资产将被清算？</h4>
-                                    <p>用户当前已借贷价值超过了最大可借贷价值，则可被清算，清算只清算超出最大可借贷价值的部分</p>
-                                </div> */}
               </div>
             ) : null}
           </div>

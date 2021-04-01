@@ -3,6 +3,7 @@ import "../app.scss";
 import {withRouter} from 'react-router-dom';
 import WalletConnect from "../../packages/browser/src/index";
 import intl from "react-intl-universal";
+
 //头部我的
 class Head extends React.PureComponent {
  

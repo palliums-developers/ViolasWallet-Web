@@ -600,7 +600,8 @@ class CashPooling extends Component {
           this.setState({
             // res.data.balance  res.data.total_token
             poolArr: res.data.balance,
-            total_token: res.data.balance.length>0 && res.data.balance[0].token,
+            total_token:
+              res.data.balance.length > 0 && res.data.balance[0].token,
           });
         }
       });
@@ -621,7 +622,6 @@ class CashPooling extends Component {
       }
     }
   }
-  
   optionTypes1(transaction_type, status) {
     if (transaction_type == "ADD_LIQUIDITY") {
       if (status == "Executed") {
@@ -859,31 +859,27 @@ class CashPooling extends Component {
       .sendTransaction("violas", tx)
       .then((res) => {
         // console.log("Add Liquidity ", res);
-        this.setState({
-          warning: intl.get("Deposit Successful"),
-          showWallet: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            inputAmount: "",
-            inputAmount1: "",
-          });
-        }, 500);
+        this.setState(
+          {
+            warning: intl.get("Deposit Successful"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       })
       .catch((err) => {
         // console.log("Add Liquidity ", err);
-        this.setState({
-          warning: intl.get("Deposit Failed"),
-          showWallet: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            inputAmount: "",
-            inputAmount1: "",
-          });
-        }, 500);
+        this.setState(
+          {
+            warning: intl.get("Deposit Failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       });
   }
   showExchangeCode = () => {
@@ -957,32 +953,24 @@ class CashPooling extends Component {
       .then((res) => {
         // console.log("Remove Liquidity ", res);
         if (res == "success") {
-          this.setState({
-            warning: intl.get("Withdraw Successful"),
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              outputAmount: "",
-              outputAmount1: "",
+          this.setState(
+            {
+              warning: intl.get("Withdraw Successful"),
+              showWallet: false,
+            },()=>{
+              window.location.reload();
             });
-          }, 500);
         }
       })
       .catch((err) => {
         // console.log("Remove Liquidity ", err);
-        this.setState({
-          warning: intl.get("Withdraw Failed"),
-          showWallet: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            outputAmount: "",
-            outputAmount1: "",
+        this.setState(
+          {
+            warning: intl.get("Withdraw Failed"),
+            showWallet: false,
+          },()=>{
+             window.location.reload();
           });
-        }, 500);
       });
   }
   showExchangeCode1 = () => {

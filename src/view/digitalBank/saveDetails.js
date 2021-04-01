@@ -33,6 +33,7 @@ class SaveDetails extends Component {
       showWallet: false,
       token_address: "",
       depositProduct: [],
+      idx:""
     };
   }
   stopPropagation(e) {
@@ -61,6 +62,7 @@ class SaveDetails extends Component {
                 temp.push({
                   type: this.state.depositProduct[i].token_module,
                   balance: res.data.balances[j].balance / 1e6,
+                  id: this.state.depositProduct[i].id,
                 });
               }
             }
@@ -94,23 +96,25 @@ class SaveDetails extends Component {
   componentDidMount() {
     document.addEventListener("click", this.onClose);
     //获取币种列表
-
+    this.getSaveAllMessage(sessionStorage.getItem("id"));
+    
+  }
+  getSaveAllMessage(id){
     //获取存款产品信息
     fetch(
       url +
         "/1.0/violas/bank/deposit/info?id=" +
-        sessionStorage.getItem("id") +
+         id+
         "&&address=" +
         sessionStorage.getItem("violas_address")
     )
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          console.log(res);
           this.setState({
             saveList: {
               limit:
-                res.data.minimum_amount / 1e6 +
+                (res.data.quota_limit - res.data.quota_used) / 1e6 +
                 "/" +
                 res.data.quota_limit / 1e6,
               saveName: res.data.token_name,
@@ -137,7 +141,7 @@ class SaveDetails extends Component {
   depositImmediately = () => {
     if (this.state.amount == "") {
       this.setState({
-        warning: "请输入存款数量",
+        warning: intl.get("Please enter the deposit amount"),
       });
     } else {
       this.setState({
@@ -194,40 +198,37 @@ class SaveDetails extends Component {
       .post(`${url}${api}`, parm)
       .then((res) => {
         if (res.data.code == 2000) {
-          this.setState({
-            warning: "存款成功",
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              amount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Deposit successful"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         } else {
-          this.setState({
-            warning: "存款失败",
-            showWallet: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              warning: "",
-              amount: "",
-            });
-          }, 500);
+          this.setState(
+            {
+              warning: intl.get("Deposit failed"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         }
       })
       .catch((error) => {
-        this.setState({
-          warning: "存款失败",
-          showWallet: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            amount: "",
-          });
-        }, 500);
+        this.setState(
+          {
+            warning: intl.get("Deposit failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       });
   }
   //显示关闭侧边栏
@@ -294,9 +295,14 @@ class SaveDetails extends Component {
                           key={i}
                           onClick={() => {
                             this.setState({
+                              idx:v.id,
                               showType: v.type,
                               extra: v.balance,
                               showList: false,
+                            },()=>{
+                              if(this.state.idx){
+                                this.getSaveAllMessage(this.state.idx);
+                              }
                             });
                           }}
                         >

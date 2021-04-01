@@ -45,11 +45,14 @@ class Repayment extends Component {
     await this.getCurrenciesList();
   }
   async getDepositProduct() {
-    axios(url+"/1.0/violas/bank/product/deposit").then(
-      async (res) => {
-        await this.setState({ depositProduct: res.data.data });
-      }
-    );
+    axios(url + "/1.0/violas/bank/product/deposit").then(async (res) => {
+      await this.setState({ depositProduct: res.data.data });
+    });
+  }
+  async getBorrowProduct() {
+    axios(url + "/1.0/violas/bank/product/borrow").then(async (res) => {
+      await this.setState({ borrowProduct: res.data.data });
+    });
   }
   async getNewWalletConnect() {
     await this.setState({
@@ -60,7 +63,8 @@ class Repayment extends Component {
     let { repayCurList } = this.state;
     //币种列表
     axios(
-      url+"/1.0/violas/currency/published?addr=" +
+      url +
+        "/1.0/violas/currency/published?addr=" +
         sessionStorage.getItem("violas_address")
     ).then(async (res) => {
       let temp = [];
@@ -103,9 +107,10 @@ class Repayment extends Component {
   }
   //获取还款产品信息
   async getAvailableQuantity(currency, borrowProductList) {
+    // console.log(currency, borrowProductList);
     let product_id = 0;
     product_id = getProductId(currency, borrowProductList);
-    //   console.log(product_id,'..........')
+
     if (product_id === 0) {
       await this.setState({ extra: 0 });
       return;
@@ -150,13 +155,7 @@ class Repayment extends Component {
       this.getDigitalBank();
     }
   };
-  async getBorrowProduct() {
-    axios(url+"/1.0/violas/bank/product/borrow").then(
-      async (res) => {
-        await this.setState({ borrowProduct: res.data.data });
-      }
-    );
-  }
+
   async getDigitalBank() {
     let productId = 0;
     let tx = "";
@@ -164,7 +163,7 @@ class Repayment extends Component {
     tx = digitalBank(
       "repay",
       this.state.showType,
-      ""+this.state.amount * 1e6,
+      "" + this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
       this.state.borrowList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
@@ -203,31 +202,26 @@ class Repayment extends Component {
         this.setState({
           warning: "还款成功",
           showWallet: false,
+        },()=>{
+          window.location.reload()
         });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            amount: "",
-          });
-        }, 500);
       } else {
-        this.setState({
-          warning: "还款失败",
-          showWallet: false,
-        });
-        setTimeout(() => {
-          this.setState({
-            warning: "",
-            amount: "",
-          });
-        }, 500);
+        this.setState(
+          {
+            warning: "还款失败",
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       }
     });
   }
   //显示关闭侧边栏
   onClose = () => {
     this.setState({
-      showList: false
+      showList: false,
     });
   };
   closeWallet = (val) => {
@@ -291,7 +285,7 @@ class Repayment extends Component {
                               () => {
                                 this.getAvailableQuantity(
                                   this.state.showType,
-                                  this.state.borrowProductList
+                                  this.state.borrowProduct
                                 );
                               }
                             );
@@ -308,7 +302,7 @@ class Repayment extends Component {
             </h4>
             <input
               placeholder={"1" + showType + "起，每0" + showType + "递增"}
-              className={this.state.warning ? "activeInput" : null}
+              className={this.state.warning == "还款成功" ?  null :"activeInput"}
               onChange={(e) => this.getInputValue(e)}
             />
             <div className="saveDetailsShow">
