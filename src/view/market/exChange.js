@@ -833,6 +833,10 @@ class ExChange extends Component {
               outputAmount: res.data.amount / 1e6,
               exchangeRate: this.getFloat(res.data.rate, 6),
               gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
+            },()=>{
+                this.setState({
+                  
+                });
             });
           }
         });

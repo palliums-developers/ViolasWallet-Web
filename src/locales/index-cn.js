@@ -339,7 +339,6 @@ export default {
   "To extract": "待提取",
   "A key to extract": "一键提取",
   "Rank list": "排行榜",
-
   "": "资金池挖矿已提取",
   "": "数字银行挖矿已提取",
   "":
