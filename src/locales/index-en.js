@@ -339,5 +339,107 @@ export default {
   "No notification alerts": "No notification alerts",
   Receive1: "Receive",
   //挖矿激励
-  "Total Earnings": "总收益",
+  "Mining incentives": "Mining incentives",
+  "Total gain": "Total gain",
+  "Description of rules": "Description of rules",
+  "Mining details": "Mining details",
+  Withdrawable: "Withdrawable",
+  Withdraw1: "Withdraw",
+  Ranking: "Ranking",
+  "Liquidity mining withdrawn": "Liquidity mining withdrawn",
+  "Lending mining withdrawn": "Lending mining withdrawn",
+  "Withdrawal balance at the time of querying that might be different than that of transaction! Final balance is at the time of transaction.":
+    "Withdrawal balance at the time of querying that might be different than that of transaction! Final balance is at the time of transaction.",
+  "Win more VLS": "Win more VLS",
+  "New user verification": "New user verification",
+  Verified: "Verified",
+  "To verify": "To verify",
+  "Invite friend": "Invite friend",
+  "Saving mining": "Saving mining",
+  "Lending mining": "Lending mining",
+  "Liquidity pool mining": "Liquidity pool mining",
+  Invite: "Invite",
+  Deposit1: "Deposit",
+  Borrow1: "Borrow",
+  "Transfer into": "Transfer into",
+  More: "More",
+  "Gaining details": "Gaining details",
+  "Invitee's account": "Invitee's account",
+  "Mining gain": "Mining gain",
+  "Inviting time": "Inviting time",
+  Transaction: "Transaction",
+  "Withdrawing quantity": "Withdrawing quantity",
+  "Withdrawing time": "Withdrawing time",
+  "Gaining ranking": "Gaining ranking",
+  "": "收益榜单将会在每周日晚 00:00 更新",
+  Ranking1: "Ranking",
+  "Phone number verification": "Phone number verification",
+  "One.Each phone number can be used up to 3 times of verification":
+    "One.Each phone number can be used up to 3 times of verification",
+  "Two.Phone number will not be bind with your wallet":
+    "Two.Phone number will not be bind with your wallet",
+  "Three.Win 10 VLS after successful verification":
+    "Three.Win 10 VLS after successful verification",
+  "Get verification code": "Get verification code",
+  "Enter verification code": "Enter verification code",
+  "Inviter's wallet address (Optional)": "Inviter's wallet address (Optional)",
+  "Get award": "Get award",
+  "Phone number has been used over the limit":
+    "Phone number has been used over the limit",
+  "New user verification award": "New user verification award",
+  "a.On the home page 【Click here to win VLS!】after new user verification;":
+    "a.On the home page 【Click here to win VLS!】after new user verification;",
+  "b.Verify phone number to win 10 VLS award.":
+    "b.Verify phone number to win 10 VLS award.",
+  "a.All users can participate. No award limit now;":
+    "a.All users can participate. No award limit now;",
+  "b.During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;":
+    "b.During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;",
+  "c.For each successful invitation, inviter wins 2VLS and invitee wins 1VLS.":
+    "c.For each successful invitation, inviter wins 2VLS and invitee wins 1VLS.",
+  "a.Provide token pair into the liquidity pool for liquidity mining;":
+    "a.Provide token pair into the liquidity pool for liquidity mining;",
+  "b.When withdrawing token pair from the liquidity pool,in additional of liquidity mining reward, win proportional VLS mining award.":
+    "b.When withdrawing token pair from the liquidity pool,in additional of liquidity mining reward, win proportional VLS mining award.",
+  "a.Deposit to direct lending service will earn interest;":
+    "a.Deposit to direct lending service will earn interest;",
+  "b.When withdrawing deposit,it will include earning interest and equivalent VLS mining award.":
+    "b.When withdrawing deposit,it will include earning interest and equivalent VLS mining award.",
+  "a.Borrow from the direct lending service will generate lending costs;":
+    "a.Borrow from the direct lending service will generate lending costs;",
+  "b.When repaying debt, it will include lending costs and equivalent VLS mining award.":
+    "b.When repaying debt, it will include lending costs and equivalent VLS mining award.",
+  Description: "Description",
+  "One.Each phone number can be used up to 3 times of verification":
+    "One.Each phone number can be used up to 3 times of verification",
+  "Two.Phone number will not be bind with your wallet":
+    "Two.Phone number will not be bind with your wallet",
+  "Three.Win 10 VLS after successful verification":
+    "Three.Win 10 VLS after successful verification",
+  "Send invitation link to friend": "Send invitation link to friend",
+  "Friend has passed phone number verification":
+    "Friend has passed phone number verification",
+  "Both sides will win awards": "Both sides will win awards",
+  "My invitation": "My invitation",
+  "Invited to address": "Invited to address",
+  "Number of invitees": "Number of invitees",
+  "Promotion rules": "Promotion rules",
+  "One. All users can participate. No award limit now;":
+    "One. All users can participate. No award limit now;",
+  "Two. During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;":
+    "Two. During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;",
+  "Three. For each successful invitation, inviter wins 2VLS and invitee wins 1VLS;":
+    "Three. For each successful invitation, inviter wins 2VLS and invitee wins 1VLS;",
+  "Four. Invitation awards will be delivered within 72 hours;":
+    "Four. Invitation awards will be delivered within 72 hours;",
+  "Five. Users violated the promotion rules will be disqualified;":
+    "Five. Users violated the promotion rules will be disqualified;",
+  "Six. Any changes or updates to the promotion will be announced on the Violas platform and they will be final.":
+    "Six. Any changes or updates to the promotion will be announced on the Violas platform and they will be final.",
+  "Share link": "Share link",
+  "Share announcement": "Share announcement",
+  "Save image": "Save image",
+  "Invitation ranking": "Invitation ranking",
+  "Total invitation": "Total invitation",
+  people: "people",
 };

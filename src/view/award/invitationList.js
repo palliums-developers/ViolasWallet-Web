@@ -29,7 +29,7 @@ class InvitationList extends Component {
   }
   componentDidMount() {
     if (this.state.ifMobile) {
-      document.title = "邀请榜单";
+      document.title = intl.get("The invitation list");
     }
     this.getInviterTop();
   }
@@ -96,7 +96,7 @@ class InvitationList extends Component {
                 <img src="/img/fanhui 2@2x.png" />
               </NavLink>
             </Breadcrumb.Item>
-            <span>收益榜单</span>
+            <span>{intl.get("Gaining ranking")}</span>
             <span>
               <img src="/img/m_编组 300@2x.png" />
               收益榜单将会在每周日晚 00:00 更新
@@ -112,7 +112,9 @@ class InvitationList extends Component {
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
                     <p className="inv">
-                      共邀请 <span>{v.invite_count}</span> 人
+                      {intl.get("Total invitation")}{" "}
+                      <span>{v.invite_count}</span>{" "}
+                      {intl.get("people")}
                     </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
@@ -126,7 +128,8 @@ class InvitationList extends Component {
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
                     <p className="inv">
-                      共邀请 <span>{v.invite_count}</span> 人
+                      {intl.get("Total invitation")}{" "}
+                      <span>{v.invite_count}</span> {intl.get("people")}
                     </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
@@ -140,7 +143,8 @@ class InvitationList extends Component {
                     </p>
                     <p>{this.showVLSAddress(v.address)}</p>
                     <p className="inv">
-                      共邀请 <span>{v.invite_count}</span> 人
+                      {intl.get("Total invitation")}{" "}
+                      <span>{v.invite_count}</span> {intl.get("people")}
                     </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
@@ -149,10 +153,10 @@ class InvitationList extends Component {
             </div>
             <div className="residualRanking">
               <div className="head">
-                <span>排名</span>
-                <span>邀请地址</span>
-                <span>邀请人数</span>
-                <span>总收益</span>
+                <span>{intl.get("Ranking1")}</span>
+                <span>{intl.get("Invited to address")}</span>
+                <span>{intl.get("Number of invitees")}</span>
+                <span>{intl.get("Total gain")}</span>
               </div>
               <div className="list">
                 <div>

@@ -869,6 +869,22 @@ class ExChange extends Component {
         });
     }
   };
+  setTime = (type,value) =>{
+    if(type === "in"){
+      setTimeout(() => {
+        if (value == this.state.inputAmount) {
+          this.opinionInputAmount();
+        }
+      }, 1000);
+    }else if (type === "out") {
+      setTimeout(() => {
+        if (value == this.state.outputAmount) {
+          this.opinionOutputAmount();
+        }
+      }, 1000);
+    }
+    
+  }
   //输入框输入的金额
   getInputAmount = (e) => {
     if (e.target.value) {
@@ -898,11 +914,8 @@ class ExChange extends Component {
       this.setState(
         {
           inputAmount: e.target.value,
-        },
-        () => {
-          this.opinionInputAmount();
-        }
-      );
+        });
+        this.setTime("in",e.target.value);
     } else {
       this.setState({
         warning: "",
@@ -944,11 +957,8 @@ class ExChange extends Component {
       this.setState(
         {
           outputAmount: e.target.value,
-        },
-        () => {
-          this.opinionOutputAmount();
-        }
-      );
+        });
+         this.setTime("out",e.target.value);
     } else {
       this.setState({
         warning: "",
