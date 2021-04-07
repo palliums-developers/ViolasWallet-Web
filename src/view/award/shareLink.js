@@ -5,7 +5,6 @@ import { verifyMobile } from "../../utils/verifyMobile";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import intl from "react-intl-universal";
-import { message } from "antd";
 import "./award.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
@@ -55,7 +54,7 @@ class ShareLink extends Component {
                   <dt>
                     <img src="/img/m_编组 38@2x.png" />
                   </dt>
-                  <dd>发送邀请链接给好友</dd>
+                  <dd>{intl.get("Send invitation link to friend")}</dd>
                 </dl>
                 <div className="jiantou">
                   <img src="/img/m_jiantou-4 2@2x.png" />
@@ -64,7 +63,9 @@ class ShareLink extends Component {
                   <dt>
                     <img src="/img/m_编组 40@2x.png" />
                   </dt>
-                  <dd>好友通过手机号验证，并输入您的地址</dd>
+                  <dd>
+                    {intl.get("Friend has passed phone number verification")}
+                  </dd>
                 </dl>
                 <div className="jiantou">
                   <img src="/img/m_jiantou-4 2@2x.png" />
@@ -73,7 +74,7 @@ class ShareLink extends Component {
                   <dt>
                     <img src="/img/m_编组 266@2x.png" />
                   </dt>
-                  <dd>双方获得相应奖励</dd>
+                  <dd>{intl.get("Both sides will win awards")}</dd>
                 </dl>
               </div>
             </div>
@@ -83,23 +84,38 @@ class ShareLink extends Component {
             <h4>
               <i></i>
               {/* <img src="/img/m_编组 26@2x.png" /> */}
-              活动规则
+              {intl.get("Promotion rules")}
             </h4>
             <div>
-              <p>一. 凡是平台的用户都可参与，暂不设定奖励上限；</p>
               <p>
-                二.
-                活动期间，每成功邀请一名新用户创建钱包，完成手机号验证，并输入邀请人邀请码，即可获得相应的VLS奖励；
+                {intl.get(
+                  "One. All users can participate. No award limit now;"
+                )}
               </p>
               <p>
-                三.
-                邀请人每成功邀请一位，可获得2VLS奖励；被邀请人可获得1VLS奖励；
+                {intl.get(
+                  "Two. During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;"
+                )}
               </p>
-              <p>四. 邀请奖励将在三个工作日内尽快发放；</p>
-              <p>五. 如用户违反平台的相应风控规则，则无权参与此活动；</p>
               <p>
-                六. 活动如有调整，以Violas平台公告为准，最终解释权归Violas
-                所有；
+                {intl.get(
+                  "Three. For each successful invitation, inviter wins 2VLS and invitee wins 1VLS;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "Four. Invitation awards will be delivered within 72 hours;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "Five. Users violated the promotion rules will be disqualified;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "Six. Any changes or updates to the promotion will be announced on the Violas platform and they will be final."
+                )}
               </p>
             </div>
           </div>
@@ -111,11 +127,13 @@ class ShareLink extends Component {
                 <img src="/img/jlLogo.png" />
               </p>
               <p>
-                <span>Violas钱包</span>
-                <label>安全、简单易用</label>
+                <span>{intl.get("ViolasWallet")}</span>
+                <label>{intl.get("Safe and easy to use")}</label>
               </p>
             </div>
-            <button onClick={()=>this.download()}>下载</button>
+            <button onClick={() => this.download()}>
+              {intl.get("Download")}
+            </button>
           </div>
         </div>
       </div>

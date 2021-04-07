@@ -48,6 +48,7 @@ export default {
   "Please enter an amount2": "Please enter an amount",
   "Insuffcient balance": "Insuffcient balance",
   POOL: "POOL",
+  Pool: "Pool",
   "My Pool": "My Pool",
   "Mining Incentives": "Mining Incentives",
   "Liquidity mining with VLS token incentives":
@@ -252,6 +253,7 @@ export default {
   canceling: "canceling",
   "Input amount": "Input amount",
   Type: "Type",
+  "Safe and easy to use": "Safe and easy to use",
   "type number please": "Type number please",
   "Resting order successful,waiting for Exchange response":
     "Resting order successful,waiting for Exchange response",
@@ -315,6 +317,7 @@ export default {
   "Please enter the deposit amount": "Please enter the deposit amount",
   "Borrow Now": "Borrow Now",
   Deposit: "Deposit",
+  Repayment: "Repayment",
   "To deposit": "To deposit",
   "Daily limit": "Daily limit",
   "Lending APY": "Lending APY",
@@ -445,4 +448,7 @@ export default {
   people: "people",
   "Please create/import the wallet first":
     "Please create/import the wallet first",
+  "Payment not received": "Payment not received",
+  "Payment received": "Payment received",
+  Download: "Download",
 };

@@ -1121,6 +1121,9 @@
         justify-content: space-between;
         margin-top: 23px;
         margin-left: 22px;
+        span:nth-child(1){
+          z-index: 99;
+        }
         span:nth-child(2){
           font-size: 20px;
           font-weight: 600;
@@ -1129,6 +1132,8 @@
         }
         span:nth-child(3){
           
+          display: flex;
+          align-items: center;
           font-size: 12px;
           font-weight: 500;
           color: #272728;
@@ -1652,8 +1657,13 @@
         width:724px;
     }
     .rankingLists,.invitationList{
-      .ant-breadcrumb span:nth-child(2){
-        margin-left: -54%;
+      .ant-breadcrumb {
+        span:nth-child(2){
+          margin-left: -53%;
+        }
+        span:nth-child(3){
+          width: 215px;
+        }
       }
       >div{
         width: 724px;

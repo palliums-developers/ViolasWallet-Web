@@ -72,6 +72,7 @@ export default {
   "Withdraw Successful": "转出成功",
   "Withdraw Failed": "转出失败",
   POOL: "资金池",
+  Pool: "资金池",
   "My Pool": "我的资金池",
   "Pool token": "资金池资产",
   "Mining Incentives": "挖矿福利",
@@ -122,7 +123,7 @@ export default {
   LibraWallet: "Libra钱包",
   BTCWallet: "BTC钱包",
   "Current Balances": "当前资产",
-
+  "Safe and easy to use": "安全、简单易用",
   "Transfer History": "交易记录",
   Fund: "资产",
   "Safety Reminder": "安全提醒",
@@ -310,6 +311,7 @@ export default {
   "Deposit Now": "立即存款",
   "Borrow Now": "立即借款",
   Deposit: "存款",
+  Repayment: "还款",
   "To deposit": "我要存",
   "Daily limit": "每日限额",
   "Lending APY": "存款年利率",
@@ -436,4 +438,7 @@ export default {
   "Total invitation": "共邀请",
   people: "人",
   "Please create/import the wallet first": "请先创建/导入钱包",
+  "Payment not received": "未到账",
+  "Payment received": "已到账",
+  Download: "下载",
 };
