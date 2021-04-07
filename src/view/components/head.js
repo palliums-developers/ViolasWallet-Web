@@ -3,6 +3,8 @@ import "../app.scss";
 import {withRouter} from 'react-router-dom';
 import WalletConnect from "../../packages/browser/src/index";
 import intl from "react-intl-universal";
+let url1 = "https://api4.violas.io";
+
 //头部我的
 class Head extends React.PureComponent {
  
@@ -90,12 +92,25 @@ class Head extends React.PureComponent {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  deleteToken(){
+    fetch(
+      url1 +
+        "/1.0/violas/device/info?token=" +
+        window.sessionStorage.getItem("firebase_token"),
+      { method: "delete" }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+      });
+  }
   async logout() {
     window.localStorage.clear();
     window.sessionStorage.clear();
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
+    await this.deleteToken();
     this.props.history.push("/app");
+    
   }
   render() {
     let { active, showMineDialog} = this.state;

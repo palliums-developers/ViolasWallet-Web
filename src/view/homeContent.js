@@ -417,6 +417,7 @@ class HomeContent extends Component {
       showWallet: val,
     });
   };
+  
   render() {
     let {
       BTCAddress,

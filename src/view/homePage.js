@@ -5,6 +5,7 @@ import RouterView from '../router/routerView';
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 import 'antd/dist/antd.css'
+let url1 = "https://api4.violas.io";
 
 //首页 首个路由
 class HomePage extends Component {
@@ -127,10 +128,21 @@ class HomePage extends Component {
       }
     }
   }
+  deleteToken() {
+    fetch(
+      url1 +
+        "/1.0/violas/device/info?token=" +
+        window.sessionStorage.getItem("firebase_token"),
+      { method: "delete" }
+    )
+      .then((res) => res.json())
+      .then((res) => {});
+  }
   componentDidMount() {
     window.addEventListener("onbeforeunload", () => {
       this.state.walletConnector.killSession();
       this.getNewWalletConnect();
+      this.deleteToken();
       window.localStorage.clear();
       window.sessionStorage.clear();
       this.props.history.push("/app");
@@ -140,6 +152,7 @@ class HomePage extends Component {
     window.removeEventListener("onbeforeunload", () => {
       this.state.walletConnector.killSession();
       this.getNewWalletConnect();
+      this.deleteToken();
       window.localStorage.clear();
       window.sessionStorage.clear();
       this.props.history.push("/app");
