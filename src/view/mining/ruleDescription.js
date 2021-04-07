@@ -22,7 +22,7 @@ class RuleDescription extends Component {
   }
   componentDidMount() {
     if (this.state.ifMobile) {
-      document.title = "规则说明";
+      document.title = intl.get("Description of rules");
     }
   }
   render() {
@@ -43,59 +43,87 @@ class RuleDescription extends Component {
                 <img src="/img/fanhui 2@2x.png" />
               </a>
             </Breadcrumb.Item>
-            <span>规则说明</span>
+            <span>{intl.get("Description of rules")}</span>
             <span></span>
           </Breadcrumb>
           <div className="ruleDescriptionOne">
             <div>
               <h4>
                 <img src="/img/m_编组 7@2x.png" />
-                新用户验证奖励
+                {intl.get("New user verification award")}
               </h4>
-              <p>a.用户创建钱包后，在首页点击【点我！免费领取VLS】</p>
-              <p>b.验证手机号，验证通过后，即可获得10VLS奖励</p>
+              <p>
+                {intl.get(
+                  "a.On the home page 【Click here to win VLS!】after new user verification;"
+                )}
+              </p>
+              <p>{intl.get("b.Verify phone number to win 10 VLS award.")}</p>
             </div>
             <div>
               <h4>
                 <img src="/img/m_编组 30@2x.png" />
-                邀请好友
+                {intl.get("Invite friend")}
               </h4>
-              <p>a.凡是平台的用户都可参与，暂不设定奖励上限；</p>
               <p>
-                b.活动期间，每成功邀请一名新用户创建钱包，完成手机号验证，并输入邀请人邀请码，即可获得相应的VLS奖励；
+                {intl.get("a.All users can participate. No award limit now;")}
               </p>
               <p>
-                c.邀请人每成功邀请一位，可获得2VLS奖励；被邀请人可获得1VLS奖励。
+                {intl.get(
+                  "b.During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "c.For each successful invitation, inviter wins 2VLS and invitee wins 1VLS."
+                )}
               </p>
             </div>
             <div>
               <h4>
                 <img src="/img/m_编组 32@2x.png" />
-                资金池挖矿
+                {intl.get("Liquidity pool mining")}
               </h4>
-              <p>a.在资金池转入交易对，将根据市场情况获得相应的手续费奖励；</p>
               <p>
-                b.在转出资金池的同时，用户将获得同转出手续费奖励同等价值的VLS挖矿奖励。
+                {intl.get(
+                  "a.Provide token pair into the liquidity pool for liquidity mining;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "b.When withdrawing token pair from the liquidity pool,in additional of liquidity mining reward, win proportional VLS mining award."
+                )}
               </p>
             </div>
             <div>
               <h4>
                 <img src="/img/m_编组 56@2x.png" />
-                存款挖矿
+                {intl.get("Saving mining")}
               </h4>
-              <p>a.用户在数字银行进行存款，将获得存款利息；</p>
               <p>
-                b.在提取到钱包账户的同时，用户将获得同提取利息，同等价值的VLS挖矿奖励。
+                {intl.get(
+                  "a.Deposit to direct lending service will earn interest;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "b.When withdrawing deposit,it will include earning interest and equivalent VLS mining award."
+                )}
               </p>
             </div>
             <div>
               <h4>
                 <img src="/img/m_编组 53@2x.png" />
-                借款挖矿
+                {intl.get("Lending mining")}
               </h4>
-              <p>a.用户在数字银行进行借款，将产生借款利息；</p>
               <p>
-                b.在还款的同时，用户将获得同还款利息，同等价值的VLS挖矿奖励。
+                {intl.get(
+                  "a.Borrow from the direct lending service will generate lending costs;"
+                )}
+              </p>
+              <p>
+                {intl.get(
+                  "b.When repaying debt, it will include lending costs and equivalent VLS mining award."
+                )}
               </p>
             </div>
           </div>
@@ -103,12 +131,20 @@ class RuleDescription extends Component {
             <h4>
               <i></i>
               {/* <img src="/img/m_编组 26@2x.png" /> */}
-              说明
+              {intl.get("Description")}
             </h4>
             <div>
-              <p>一. 每个手机号有三次验证机会</p>
-              <p>二. 请您放心，手机号不会绑定您的钱包</p>
-              <p>三. 验证成功后可获取 10 VLS</p>
+              <p>
+                {intl.get(
+                  "One. Each phone number can be used up to 3 times of verification"
+                )}
+              </p>
+              <p>
+                {intl.get("Two. Phone number will not be bind with your wallet")}
+              </p>
+              <p>
+                {intl.get("Three. Win 10 VLS after successful verification")}
+              </p>
             </div>
           </div>
         </div>

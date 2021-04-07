@@ -371,7 +371,8 @@ export default {
   "Withdrawing quantity": "Withdrawing quantity",
   "Withdrawing time": "Withdrawing time",
   "Gaining ranking": "Gaining ranking",
-  "": "收益榜单将会在每周日晚 00:00 更新",
+  "Gaining ranking will be updated every Sunday night at 00:00":
+    "Gaining ranking will be updated every Sunday night at 00:00",
   Ranking1: "Ranking",
   "Phone number verification": "Phone number verification",
   "One.Each phone number can be used up to 3 times of verification":
@@ -410,11 +411,11 @@ export default {
   "b.When repaying debt, it will include lending costs and equivalent VLS mining award.":
     "b.When repaying debt, it will include lending costs and equivalent VLS mining award.",
   Description: "Description",
-  "One.Each phone number can be used up to 3 times of verification":
+  "One. Each phone number can be used up to 3 times of verification":
     "One.Each phone number can be used up to 3 times of verification",
-  "Two.Phone number will not be bind with your wallet":
+  "Two. Phone number will not be bind with your wallet":
     "Two.Phone number will not be bind with your wallet",
-  "Three.Win 10 VLS after successful verification":
+  "Three. Win 10 VLS after successful verification":
     "Three.Win 10 VLS after successful verification",
   "Send invitation link to friend": "Send invitation link to friend",
   "Friend has passed phone number verification":
@@ -442,4 +443,6 @@ export default {
   "Invitation ranking": "Invitation ranking",
   "Total invitation": "Total invitation",
   people: "people",
+  "Please create/import the wallet first":
+    "Please create/import the wallet first",
 };

@@ -64,7 +64,7 @@ class MiningAwards extends Component {
   componentDidMount() {
     this.getInviterTop();
     if (this.state.ifMobile) {
-      document.title = "挖矿激励";
+      document.title = intl.get("Mining incentives");
       this.getMiningInfo(this.state.address);
       
       this.getVerifiedWallet(this.state.address);
@@ -180,7 +180,7 @@ class MiningAwards extends Component {
         (resp) => {}
       );
     }else{
-      message.warning("请先创建/导入钱包");
+      message.warning(intl.get("Please create/import the wallet first"));
     }
     
   };
@@ -275,7 +275,7 @@ class MiningAwards extends Component {
         (resp) => {}
       );
     }else{
-      message.warning("请先创建/导入钱包");
+      message.warning(intl.get("Please create/import the wallet first"));
     }
     
   };
@@ -326,7 +326,7 @@ class MiningAwards extends Component {
         }
       );
     } else {
-      message.warning("请先创建/导入钱包");
+      message.warning(intl.get("Please create/import the wallet first"));
     }
   };
   closeWallet = (val) => {
@@ -368,13 +368,13 @@ class MiningAwards extends Component {
                     }
               }
             >
-              规则说明
+              {intl.get("Description of rules")}
               <img src="/img/m_编组 41@2x.png" />
             </p>
           </div>
 
           <div className="fundList">
-            <h4>总收益 ( VLS )</h4>
+            <h4>{intl.get("Total gain")} ( VLS )</h4>
             <span>{parseInt(total_incentive)}</span>
             <div className="rightImg">
               {ifMobile == false ? (
@@ -392,17 +392,20 @@ class MiningAwards extends Component {
                   : () => this.miningdetail()
               }
             >
-              挖矿明细
+              {intl.get("Mining details")}
               <img src="/img/m_编组 18@2x.png" />
             </p>
           </div>
           <div className="poolingFund">
             <div>
               <div className="poolingFundContent">
-                <p>资金池挖矿已提取：{parseInt(pool_total_incentive)} VLS</p>
+                <p>
+                  {intl.get("Liquidity mining withdrawn")}：
+                  {parseInt(pool_total_incentive)} VLS
+                </p>
                 <p>
                   <span>
-                    <label>待提取(VLS)</label>
+                    <label>{intl.get("Withdrawable")}(VLS)</label>
                     {pool_incentive == null ? 0 : parseInt(pool_incentive)}
                   </span>
                   <button
@@ -412,16 +415,19 @@ class MiningAwards extends Component {
                         : () => this.poolProfit1()
                     }
                   >
-                    一键提取
+                    {intl.get("Withdraw1")}
                   </button>
                 </p>
               </div>
               <div className="line"></div>
               <div className="poolingFundContent">
-                <p>数字银行挖矿已提取：{parseInt(bank_total_incentive)} VLS</p>
+                <p>
+                  {intl.get("Lending mining withdrawn")}：
+                  {parseInt(bank_total_incentive)} VLS
+                </p>
                 <p>
                   <span>
-                    <label>待提取(VLS)</label>
+                    <label>{intl.get("Withdrawable")}(VLS)</label>
                     {bank_incentive == null ? 0 : parseInt(bank_incentive)}
                   </span>
                   <button
@@ -431,12 +437,14 @@ class MiningAwards extends Component {
                         : () => this.bankProfit1()
                     }
                   >
-                    一键提取
+                    {intl.get("Withdraw1")}
                   </button>
                 </p>
                 <p>
                   <img src="/img/m_wenhao 3@2x.png" />
-                  当前待提取数值为查询时结果，可能与最终交易时存在误差！提取结果将以最终交易时为准。
+                  {intl.get(
+                    "Withdrawal balance at the time of querying that might be different than that of transaction! Final balance is at the time of transaction."
+                  )}
                 </p>
               </div>
             </div>
@@ -444,12 +452,12 @@ class MiningAwards extends Component {
         </div>
         <div className="getMoreVLS">
           <div>
-            <h3>获取更多VLS</h3>
+            <h3>{intl.get("Win more VLS")}</h3>
             <div className="line"></div>
             <div className="getMoreContent">
               <div>
                 <p>
-                  <label>新用户验证</label>
+                  <label>{intl.get("New user verification")}</label>
                   {is_new == 0 ? (
                     <button
                       className="btn"
@@ -463,14 +471,14 @@ class MiningAwards extends Component {
                           : () => this.userInfo()
                       }
                     >
-                      去验证
+                      {intl.get("To verify")}
                     </button>
                   ) : (
-                    <button className="btn btn1">已验证</button>
+                    <button className="btn btn1">{intl.get("Verified")}</button>
                   )}
                 </p>
                 <p>
-                  <label>存款挖矿</label>
+                  <label>{intl.get("Saving mining")}</label>
                   <button
                     className="btn"
                     onClick={
@@ -483,11 +491,11 @@ class MiningAwards extends Component {
                         : () => this.depositInfo()
                     }
                   >
-                    去存款
+                    {intl.get("Invite")}
                   </button>
                 </p>
                 <p>
-                  <label>资金池挖矿</label>
+                  <label>{intl.get("Liquidity pool mining")}</label>
                   <button
                     className="btn"
                     onClick={
@@ -500,13 +508,13 @@ class MiningAwards extends Component {
                         : () => this.poolingInfo()
                     }
                   >
-                    去转入
+                    {intl.get("Transfer into")}
                   </button>
                 </p>
               </div>
               <div>
                 <p>
-                  <label>邀请好友</label>
+                  <label>{intl.get("Invite friend")}</label>
                   <button
                     className="btn"
                     onClick={
@@ -526,11 +534,11 @@ class MiningAwards extends Component {
                           }
                     }
                   >
-                    去邀请
+                    {intl.get("Invite")}
                   </button>
                 </p>
                 <p>
-                  <label>借款挖矿</label>
+                  <label>{intl.get("Lending mining")}</label>
                   <button
                     className="btn"
                     onClick={
@@ -543,7 +551,7 @@ class MiningAwards extends Component {
                         : () => this.borrowInfo()
                     }
                   >
-                    去借款
+                    {intl.get("Borrow1")}
                   </button>
                 </p>
               </div>
@@ -553,7 +561,7 @@ class MiningAwards extends Component {
         <div className="rankingList">
           <div>
             <div className="head">
-              <h3>排行榜</h3>
+              <h3>{intl.get("Ranking")}</h3>
               <p
                 onClick={
                   ifMobile == false
@@ -570,7 +578,7 @@ class MiningAwards extends Component {
                       }
                 }
               >
-                <label>查看更多</label>
+                <label>{intl.get("More")}</label>
                 <img src="/img/m_编组 17@2x.png" />
               </p>
             </div>

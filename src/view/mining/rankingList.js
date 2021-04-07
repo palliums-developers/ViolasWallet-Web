@@ -96,10 +96,12 @@ class RankingList extends Component {
                 <img src="/img/fanhui 2@2x.png" />
               </NavLink>
             </Breadcrumb.Item>
-            <span>收益榜单</span>
+            <span>{intl.get("Gaining ranking")}</span>
             <span>
               <img src="/img/m_编组 300@2x.png" />
-              收益榜单将会在每周日晚 00:00 更新
+              {intl.get(
+                "Gaining ranking will be updated every Sunday night at 00:00"
+              )}
             </span>
           </Breadcrumb>
           <div className="rankingWrap">
@@ -147,9 +149,9 @@ class RankingList extends Component {
             </div>
             <div className="residualRanking">
               <div className="head">
-                <span>排名</span>
-                <span>地址</span>
-                <span>总收益</span>
+                <span>{intl.get("Ranking1")}</span>
+                <span>{intl.get("Address")}</span>
+                <span>{intl.get("Total gain")}</span>
               </div>
               <div className="list">
                 <div>

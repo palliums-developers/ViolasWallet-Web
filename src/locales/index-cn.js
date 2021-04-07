@@ -365,7 +365,8 @@ export default {
   "Withdrawing quantity": "提取数量",
   "Withdrawing time": "提取时间",
   "Gaining ranking": "收益榜单",
-  "": "收益榜单将会在每周日晚 00:00 更新",
+  "Gaining ranking will be updated every Sunday night at 00:00":
+    "收益榜单将会在每周日晚 00:00 更新",
   Ranking1: "排名",
   "Phone number verification": "验证手机号",
   "One.Each phone number can be used up to 3 times of verification":
@@ -403,11 +404,11 @@ export default {
   "b.When repaying debt, it will include lending costs and equivalent VLS mining award.":
     "b.在还款的同时，用户将获得同还款利息，同等价值的VLS挖矿奖励。",
   Description: "说明",
-  "One.Each phone number can be used up to 3 times of verification":
+  "One. Each phone number can be used up to 3 times of verification":
     "一. 每个手机号有三次验证机会",
-  "Two.Phone number will not be bind with your wallet":
+  "Two. Phone number will not be bind with your wallet":
     "二. 请您放心，手机号不会绑定您的钱包",
-  "Three.Win 10 VLS after successful verification":
+  "Three. Win 10 VLS after successful verification":
     "三. 验证成功后可获取 10 VLS",
   "Send invitation link to friend": "发送邀请链接给好友",
   "Friend has passed phone number verification": "好友通过手机号验证",
@@ -433,5 +434,6 @@ export default {
   "Save image": "保存图片",
   "Invitation ranking": "邀请榜单",
   "Total invitation": "共邀请",
-  "people":"人"
+  people: "人",
+  "Please create/import the wallet first": "请先创建/导入钱包",
 };

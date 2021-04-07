@@ -935,7 +935,7 @@ class ExChange extends Component {
         .replace(/\./g, "")
         .replace("$#$", ".");
       e.target.value = e.target.value.replace(
-        /^(\-)*(\d+)\.(\d\d\d).*$/,
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
         "$1$2.$3"
       ); //只能输入两个小数
       if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
