@@ -28,7 +28,7 @@ class App extends Component {
     this.setLang();
     await this.getNewWalletConnect();
     await this.QRCode();
-    console.log("inside  版本号:0.1.2！！！！！");
+    console.log("inside  版本号:0.1.3！！！！！");
   }
   async logout() {
     (await this.state.walletConnector.killSession) &&
