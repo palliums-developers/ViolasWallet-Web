@@ -37,7 +37,6 @@ class MiningAwards extends Component {
   componentWillMount() {
     let temp = verifyMobile(window.location);
     intl.options.currentLocale = temp.lang;
-    // console.log(temp.address);
     this.setState({
       id: rndNum(100),
       ifMobile: temp.ifMobile,
