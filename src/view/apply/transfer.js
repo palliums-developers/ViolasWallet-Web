@@ -301,7 +301,7 @@ class Transfer extends Component {
       .replace(/\./g, "")
       .replace("$#$", ".");
     e.target.value = e.target.value.replace(
-      /^(\-)*(\d+)\.(\d\d\d).*$/,
+      /^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,
       "$1$2.$3"
     ); //只能输入两个小数
     if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -420,12 +420,15 @@ class Transfer extends Component {
     this.state.walletConnector
       .sendTransaction("violas", tx)
       .then((res) => {
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        },()=>{
-          window.location.reload();
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
 
         // console.log("send transaction ", res);
       })

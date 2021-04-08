@@ -1325,6 +1325,14 @@
               padding-left: 8px;
               box-sizing: border-box;
             }
+            //隐藏数字框上下箭头
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+            input[type="number"]{
+                -moz-appearance: textfield;
+            }
             ::-webkit-input-placeholder{
               font-size:16px;
               font-weight:400;
@@ -1456,8 +1464,8 @@
   border-color: #7038fd;
 }
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
-  -webkit-box-shadow: 0 0 0 2px rgba(112, 56, 253,.1);
-  box-shadow: 0 0 0 2px rgba(112, 56, 253 ,.1);
+  -webkit-box-shadow: 0 0 0 2px rgba(112, 56, 253,.1);
+  box-shadow: 0 0 0 2px rgba(112, 56, 253 ,.1);
 }
 //借款
 .borrowDetails{

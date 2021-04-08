@@ -262,7 +262,31 @@ class CashPooling extends Component {
       }
     );
   };
-
+  setTime = (type, value) => {
+    if (type === "input") {
+      setTimeout(() => {
+        console.log(value,this.state.inputAmount,'111');
+        if (value == this.state.inputAmount) {
+          this.opinionInputAmount();
+        }
+      }, 1000);
+    } else if (type === "input1") {
+      console.log(value, this.state.inputAmount1, "222");
+      setTimeout(() => {
+        if (value == this.state.inputAmount1) {
+          this.opinionInputAmount1();
+        }
+      }, 1000);
+    }
+    if (type === "output") {
+      console.log(value, this.state.outputAmount, "333");
+      setTimeout(() => {
+        if (value == this.state.outputAmount) {
+          this.opinionOutputAmount();
+        }
+      }, 1000);
+    } 
+  };
   //第一个输入框 输入金额
   getInputAmount = (e) => {
     if (e.target.value) {
@@ -273,7 +297,7 @@ class CashPooling extends Component {
         .replace(/\./g, "")
         .replace("$#$", ".");
       e.target.value = e.target.value.replace(
-        /^(\-)*(\d+)\.(\d\d).*$/,
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
         "$1$2.$3"
       ); //只能输入两个小数
       if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -292,14 +316,10 @@ class CashPooling extends Component {
         }
       }
 
-      this.setState(
-        {
+      this.setState({
           inputAmount: e.target.value,
-        },
-        () => {
-          this.opinionInputAmount();
-        }
-      );
+        });
+      this.setTime("input", e.target.value);
     } else {
       this.setState({
         warning: "",
@@ -318,7 +338,7 @@ class CashPooling extends Component {
         .replace(/\./g, "")
         .replace("$#$", ".");
       e.target.value = e.target.value.replace(
-        /^(\-)*(\d+)\.(\d\d).*$/,
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
         "$1$2.$3"
       ); //只能输入两个小数
       if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -340,11 +360,8 @@ class CashPooling extends Component {
       this.setState(
         {
           inputAmount1: e.target.value,
-        },
-        () => {
-          this.opinionInputAmount1();
-        }
-      );
+        });
+      this.setTime("input1", e.target.value);
     } else {
       this.setState({
         warning: "",
@@ -363,7 +380,7 @@ class CashPooling extends Component {
         .replace(/\./g, "")
         .replace("$#$", ".");
       e.target.value = e.target.value.replace(
-        /^(\-)*(\d+)\.(\d\d).*$/,
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
         "$1$2.$3"
       ); //只能输入两个小数
       if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -386,11 +403,8 @@ class CashPooling extends Component {
       this.setState(
         {
           outputAmount: e.target.value,
-        },
-        () => {
-          this.opinionOutputAmount();
-        }
-      );
+        });
+      this.setTime("output", e.target.value);
     } else {
       this.setState({
         warning: "",
@@ -677,7 +691,7 @@ class CashPooling extends Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          if (res.data) {
+          if (res.code == 2000) {
             // console.log(res.data,'.......')
             this.setState({
               inputAmount1: res.data / 1e6,
@@ -700,7 +714,7 @@ class CashPooling extends Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          if (res.data) {
+          if (res.code == 2000) {
             this.setState({
               inputAmount: res.data / 1e6,
               rate: this.getFloat(
@@ -734,7 +748,7 @@ class CashPooling extends Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          if (res.data) {
+          if (res.code == 2000) {
             this.setState({
               outputAmount1:
                 res.data.coin_a_value / 1e6 +
@@ -836,11 +850,21 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + this.getFloat(Number(this.state.AddLiquidity.coin_a_amount) * 1e6,6),
+            value:
+              "" +
+              this.getFloat(
+                Number(this.state.AddLiquidity.coin_a_amount) * 1e6,
+                6
+              ),
           },
           {
             type: "U64",
-            value: "" + this.getFloat(Number(this.state.AddLiquidity.coin_b_amount) * 1e6,6),
+            value:
+              "" +
+              this.getFloat(
+                Number(this.state.AddLiquidity.coin_b_amount) * 1e6,
+                6
+              ),
           },
           {
             type: "U64",
@@ -902,7 +926,9 @@ class CashPooling extends Component {
         });
       } else if (this.state.inputAmount) {
         if (this.state.inputAmount1) {
-          this.getAddLiquidity(parseInt(sessionStorage.getItem("violas_chainId")));
+          this.getAddLiquidity(
+            parseInt(sessionStorage.getItem("violas_chainId"))
+          );
           this.setState({
             warning: "",
             focusActive: true,
@@ -933,7 +959,7 @@ class CashPooling extends Component {
         args: [
           {
             type: "U64",
-            value: "" + this.getFloat(Number(this.state.outputAmount) * 1e6,6),
+            value: "" + this.getFloat(Number(this.state.outputAmount) * 1e6, 6),
           },
           {
             type: "U64",
@@ -957,9 +983,11 @@ class CashPooling extends Component {
             {
               warning: intl.get("Withdraw Successful"),
               showWallet: false,
-            },()=>{
+            },
+            () => {
               window.location.reload();
-            });
+            }
+          );
         }
       })
       .catch((err) => {
@@ -968,9 +996,11 @@ class CashPooling extends Component {
           {
             warning: intl.get("Withdraw Failed"),
             showWallet: false,
-          },()=>{
-             window.location.reload();
-          });
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       });
   }
   showExchangeCode1 = () => {
@@ -989,7 +1019,9 @@ class CashPooling extends Component {
         });
       } else if (this.state.outputAmount) {
         if (this.state.outputAmount1) {
-          this.getRemoveLiquidity(parseInt(sessionStorage.getItem("violas_chainId")));
+          this.getRemoveLiquidity(
+            parseInt(sessionStorage.getItem("violas_chainId"))
+          );
           this.setState({
             warning: "",
             focusActive: true,

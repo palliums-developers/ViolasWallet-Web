@@ -5,6 +5,7 @@ import RouterView from "../router/routerView";
 import WalletConnect from "../packages/browser/src/index";
 import intl from "react-intl-universal";
 import "antd/dist/antd.css";
+let url1 = "https://api.violas.io";
 
 //首页 首个路由
 class HomePage extends Component {
@@ -17,20 +18,6 @@ class HomePage extends Component {
     };
   }
   async componentWillMount() {
-    await this.getNewWalletConnect();
-    this.state.walletConnector.on("disconnect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      this.props.history.push("/app");
-    });
-  }
-  async getNewWalletConnect() {
-    await this.setState({
-      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
-    });
     let lang = intl.options.currentLocale;
     // console.log(lang);
     switch (lang) {
@@ -69,7 +56,21 @@ class HomePage extends Component {
 
     // }
 
+    await this.getNewWalletConnect();
     // await this.ifNotLogin();
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      this.props.history.push("/app");
+    });
+  }
+  async getNewWalletConnect() {
+    await this.setState({
+      walletConnector: new WalletConnect({ bridge: this.state.bridge }),
+    });
   }
 
   checkURL = () => {
@@ -127,10 +128,21 @@ class HomePage extends Component {
       }
     }
   }
+  deleteToken() {
+    fetch(
+      url1 +
+        "/1.0/violas/device/info?token=" +
+        window.sessionStorage.getItem("firebase_token"),
+      { method: "delete" }
+    )
+      .then((res) => res.json())
+      .then((res) => {});
+  }
   componentDidMount() {
     window.addEventListener("onbeforeunload", () => {
       this.state.walletConnector.killSession();
       this.getNewWalletConnect();
+      this.deleteToken();
       window.localStorage.clear();
       window.sessionStorage.clear();
       this.props.history.push("/app");
@@ -140,6 +152,7 @@ class HomePage extends Component {
     window.removeEventListener("onbeforeunload", () => {
       this.state.walletConnector.killSession();
       this.getNewWalletConnect();
+      this.deleteToken();
       window.localStorage.clear();
       window.sessionStorage.clear();
       this.props.history.push("/app");
@@ -156,11 +169,13 @@ class HomePage extends Component {
     );
   }
 }
-let mapStateToProps = (state) => {
+let mapStateToProps = (state) =>{
   return state.ListReducer;
-};
-let mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+}
+let mapDispatchToProps = (dispatch) =>{
+  return {
+  
+  }
+}
+ 
+export default connect(mapStateToProps,mapDispatchToProps)(HomePage);

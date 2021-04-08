@@ -833,6 +833,10 @@ class ExChange extends Component {
               outputAmount: res.data.amount / 1e6,
               exchangeRate: this.getFloat(res.data.rate, 6),
               gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
+            },()=>{
+                this.setState({
+                  
+                });
             });
           }
         });
@@ -865,6 +869,22 @@ class ExChange extends Component {
         });
     }
   };
+  setTime = (type,value) =>{
+    if(type === "in"){
+      setTimeout(() => {
+        if (value == this.state.inputAmount) {
+          this.opinionInputAmount();
+        }
+      }, 1000);
+    }else if (type === "out") {
+      setTimeout(() => {
+        if (value == this.state.outputAmount) {
+          this.opinionOutputAmount();
+        }
+      }, 1000);
+    }
+    
+  }
   //输入框输入的金额
   getInputAmount = (e) => {
     if (e.target.value) {
@@ -894,11 +914,8 @@ class ExChange extends Component {
       this.setState(
         {
           inputAmount: e.target.value,
-        },
-        () => {
-          this.opinionInputAmount();
-        }
-      );
+        });
+        this.setTime("in",e.target.value);
     } else {
       this.setState({
         warning: "",
@@ -918,7 +935,7 @@ class ExChange extends Component {
         .replace(/\./g, "")
         .replace("$#$", ".");
       e.target.value = e.target.value.replace(
-        /^(\-)*(\d+)\.(\d\d\d).*$/,
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
         "$1$2.$3"
       ); //只能输入两个小数
       if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -940,11 +957,8 @@ class ExChange extends Component {
       this.setState(
         {
           outputAmount: e.target.value,
-        },
-        () => {
-          this.opinionOutputAmount();
-        }
-      );
+        });
+         this.setTime("out",e.target.value);
     } else {
       this.setState({
         warning: "",

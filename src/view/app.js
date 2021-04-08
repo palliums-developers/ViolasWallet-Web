@@ -28,18 +28,18 @@ class App extends Component {
     this.setLang();
     await this.getNewWalletConnect();
     await this.QRCode();
-    console.log("outside版本号:0.1.2！！！");
+    console.log("outside  版本号:0.1.3！！！！！");
   }
   async logout() {
-    await this.state.walletConnector.killSession&&this.state.walletConnector.killSession();
+    (await this.state.walletConnector.killSession) &&
+      this.state.walletConnector.killSession();
     await this.setState({ walletConnector: {} });
     await localStorage.clear();
     await sessionStorage.clear();
-    console.log('run log out')
+    console.log("run log out");
   }
-  componentWillMount() {
-  }
-  setLang(){
+  componentWillMount() {}
+  setLang() {
     let lang = intl.options.currentLocale;
     switch (lang) {
       case "zh":
@@ -59,14 +59,14 @@ class App extends Component {
     await this.setState({
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
-    console.log('create new walletconnect')
+    console.log("create new walletconnect");
   }
   QRCode() {
     if (!this.state.walletConnector.connected) {
       this.state.walletConnector.createSession().then(async () => {
         const uri = this.state.walletConnector.uri;
         webStorage.setSession(this.state.walletConnector.session);
-        console.log('save walletconnect',this.state.walletConnector.clientId)
+        console.log("save walletconnect", this.state.walletConnector.clientId);
         await this.setState({
           uri: uri,
         });
@@ -77,7 +77,7 @@ class App extends Component {
         this.setState({
           status: 2,
         });
-        console.log('connect error ' + error)
+        console.log("connect error " + error);
         throw error;
       }
       console.log("connect success " + JSON.stringify(payload));
@@ -106,7 +106,7 @@ class App extends Component {
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
-      console.log("error disconnect",error);
+        console.log("error disconnect", error);
         throw error;
       }
       console.log("disconnect " + JSON.stringify(payload));

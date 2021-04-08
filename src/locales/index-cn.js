@@ -72,6 +72,7 @@ export default {
   "Withdraw Successful": "转出成功",
   "Withdraw Failed": "转出失败",
   POOL: "资金池",
+  Pool: "资金池",
   "My Pool": "我的资金池",
   "Pool token": "资金池资产",
   "Mining Incentives": "挖矿福利",
@@ -122,7 +123,7 @@ export default {
   LibraWallet: "Libra钱包",
   BTCWallet: "BTC钱包",
   "Current Balances": "当前资产",
-
+  "Safe and easy to use": "安全、简单易用",
   "Transfer History": "交易记录",
   Fund: "资产",
   "Safety Reminder": "安全提醒",
@@ -259,8 +260,8 @@ export default {
   "The amount cannot be zero": "金额不能为零",
   "Password setting does not match":
     "密码设定不符合,至少一个大写字母，一个小写字母和一个数字组成的8-20位密码",
-  //数字银行
 
+  //数字银行
   "Total Deposit": "存款总额",
   "Total Borrowable": "可借总额",
   "Total Earnings": "累计收益",
@@ -290,6 +291,7 @@ export default {
   Deposited: "已存款",
   "Deposit successful": "存款成功",
   "Deposit failed": "存款失败",
+  "Please enter the deposit amount": "请输入存款数量",
   Withdrew: "已提取",
   "Enter withdrawal amount": "请输入提取数量",
   Amount1: "可提数量",
@@ -309,6 +311,7 @@ export default {
   "Deposit Now": "立即存款",
   "Borrow Now": "立即借款",
   Deposit: "存款",
+  Repayment: "还款",
   "To deposit": "我要存",
   "Daily limit": "每日限额",
   "Lending APY": "存款年利率",
@@ -331,4 +334,118 @@ export default {
   "System Notification": "系统通知",
   "No notification alerts": "暂无消息",
   Receive1: "免费领取",
+  //挖矿激励
+  "Mining incentives": "挖矿激励",
+  "Total gain": "总收益",
+  "Description of rules": "规则说明",
+  "Mining details": "挖矿明细",
+  Withdrawable: "待提取",
+  Withdraw1: "一键提取",
+  Ranking: "排行榜",
+  "Liquidity mining withdrawn": "资金池挖矿已提取",
+  "Lending mining withdrawn": "数字银行挖矿已提取",
+  "Withdrawal balance at the time of querying that might be different than that of transaction! Final balance is at the time of transaction.":
+    "当前待提取数值为查询时结果，可能与最终交易时存在误差！提取结果将以最终交易时为准。",
+  "Win more VLS": "获取更多VLS",
+  "New user verification": "新用户验证",
+  Verified: "已验证",
+  "To verify": "去验证",
+  "Invite friend": "邀请好友",
+  "Saving mining": "存款挖矿",
+  "Lending mining": "借款挖矿",
+  "Liquidity pool mining": "资金池挖矿",
+  Invite: "去邀请",
+  Deposit1: "去存款",
+  Borrow1: "去借款",
+  "Transfer into": "去转入",
+  More: "查看更多",
+  "Gaining details": "收益明细",
+  "Invitee's account": "被邀请账号",
+  "Mining gain": "挖矿收益",
+  "Inviting time": "邀请时间",
+  Transaction: "操作类型",
+  "Withdrawing quantity": "提取数量",
+  "Withdrawing time": "提取时间",
+  "Gaining ranking": "收益榜单",
+  "Gaining ranking will be updated every Sunday night at 00:00":
+    "收益榜单将会在每周日晚 00:00 更新",
+  Ranking1: "排名",
+  "Enter mobile phone number": "请输入手机号",
+  "Phone number verification": "验证手机号",
+  "One.Each phone number can be used up to 3 times of verification":
+    "1. 每个手机号有三次验证机会",
+  "Two.Phone number will not be bind with your wallet":
+    "2. 请您放心，手机号不会绑定您的钱包",
+  "Three.Win 10 VLS after successful verification":
+    "3. 验证成功后可获取 10 VLS",
+  "Successful verification": "验证成功",
+  "Get verification code": "获取验证码",
+  "Enter verification code": "请输入验证码",
+  "The phone number you entered is wrong": "你输入的手机号有误",
+  "Inviter's wallet address (Optional)": "邀请人VLS地址（选填）",
+  "Get award": "立即领取",
+  "Phone number has been used over the limit": "当前手机号已无验证机会",
+  "New user verification award": "新用户验证奖励",
+  "a.On the home page 【Click here to win VLS!】after new user verification;":
+    "a.用户创建钱包后，在首页点击【点我！免费领取VLS】；",
+  "b.Verify phone number to win 10 VLS award.":
+    "b.验证手机号，验证通过后，即可获得10VLS奖励。",
+  "a.All users can participate. No award limit now;":
+    "a.凡是平台的用户都可参与，暂不设定奖励上限；",
+  "b.During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;":
+    "b.活动期间，每成功邀请一名新用户创建钱包，完成手机号验证，并输入邀请人邀请码，即可获得相应的VLS奖励；",
+  "c.For each successful invitation, inviter wins 2VLS and invitee wins 1VLS.":
+    "c.邀请人每成功邀请一位，可获得2VLS奖励；被邀请人可获得1VLS奖励。",
+  "a.Provide token pair into the liquidity pool for liquidity mining;":
+    "a.在资金池转入交易对，将根据市场情况获得相应的手续费奖励；",
+  "b.When withdrawing token pair from the liquidity pool,in additional of liquidity mining reward, win proportional VLS mining award.":
+    "b.在转出资金池的同时，用户将获得同转出手续费奖励同等价值的VLS挖矿奖励。",
+  "a.Deposit to direct lending service will earn interest;":
+    "a.用户在数字银行进行存款，将获得存款利息；",
+  "b.When withdrawing deposit,it will include earning interest and equivalent VLS mining award.":
+    "b.在提取到钱包账户的同时，用户将获得同提取利息，同等价值的VLS挖矿奖励。",
+  "a.Borrow from the direct lending service will generate lending costs;":
+    "a.用户在数字银行进行借款，将产生借款利息；",
+  "b.When repaying debt, it will include lending costs and equivalent VLS mining award.":
+    "b.在还款的同时，用户将获得同还款利息，同等价值的VLS挖矿奖励。",
+  Description: "说明",
+  "One. Each phone number can be used up to 3 times of verification":
+    "一. 每个手机号有三次验证机会",
+  "Two. Phone number will not be bind with your wallet":
+    "二. 请您放心，手机号不会绑定您的钱包",
+  "Three. Win 10 VLS after successful verification":
+    "三. 验证成功后可获取 10 VLS",
+  "Send invitation link to friend": "发送邀请链接给好友",
+  "Friend has passed phone number verification": "好友通过手机号验证",
+  "Both sides will win awards": "双方获得相应奖励",
+  "My invitation": "我的邀请",
+  "Invited to address": "邀请地址",
+  "Number of invitees": "邀请人数",
+  "Promotion rules": "活动规则",
+  "One. All users can participate. No award limit now;":
+    "一. 凡是平台的用户都可参与，暂不设定奖励上限；",
+  "Two. During the promotion period, invite each new user will be reward VLS after new user created wallet, completed phone number verification and enter inviter's invitation code;":
+    "二. 活动期间，每成功邀请一名新用户创建钱包，完成手机号验证，并输入邀请人邀请码，即可获得相应的VLS奖励；",
+  "Three. For each successful invitation, inviter wins 2VLS and invitee wins 1VLS;":
+    "三. 邀请人每成功邀请一位，可获得2VLS奖励；被邀请人可获得1VLS奖励；",
+  "Four. Invitation awards will be delivered within 72 hours;":
+    "四. 邀请奖励将在三个工作日内尽快发放；",
+  "Five. Users violated the promotion rules will be disqualified;":
+    "五. 如用户违反平台的相应风控规则，则无权参与此活动；",
+  "Six. Any changes or updates to the promotion will be announced on the Violas platform and they will be final.":
+    "六. 活动如有调整，以Violas平台公告为准，最终解释权归Violas 所有。",
+  "Share link": "分享链接",
+  "Share announcement": "分享海报",
+  "Save image": "保存图片",
+  "Save to an album": "保存到相册",
+  "Invitation ranking": "邀请榜单",
+  "Total invitation": "共邀请",
+  people: "人",
+  "Please create/import the wallet first": "请先创建/导入钱包",
+  "Payment not received": "未到账",
+  "Payment received": "已到账",
+  Download: "下载",
+  "Scan QR code": "扫描二维码",
+  "Divide the rewards together": "一起瓜分奖励",
+  Cancel1: "取 消",
 };

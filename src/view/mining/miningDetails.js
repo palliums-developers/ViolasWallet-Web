@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Breadcrumb, Tabs, Pagination } from "antd";
 import { NavLink } from "react-router-dom";
 import {timeStamp2String} from '../../utils/timer3'
+import intl from "react-intl-universal";
 const { TabPane } = Tabs;
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
@@ -181,18 +182,18 @@ class MiningDetails extends Component {
                 <img src="/img/fanhui 2@2x.png" />
               </a>
             </Breadcrumb.Item>
-            <span>收益明细</span>
+            <span>{intl.get("Gaining details")}</span>
             <span></span>
           </Breadcrumb>
           <div className="detailList">
             <Tabs defaultActiveKey="1" onChange={this.callback}>
-              <TabPane tab="邀请好友" key="1">
+              <TabPane tab={intl.get("Invite friend")} key="1">
                 <div className="listContent">
                   <div className="headList">
-                    <span>被邀请账号</span>
-                    <span>挖矿收益</span>
-                    <span>邀请时间</span>
-                    <span>状态</span>
+                    <span>{intl.get("Invitee's account")}</span>
+                    <span>{intl.get("Mining gain")}</span>
+                    <span>{intl.get("Inviting time")}</span>
+                    <span>{intl.get("State")}</span>
                   </div>
                   <div className="listContents">
                     {inviterOrders.map((v, i) => {
@@ -201,102 +202,107 @@ class MiningDetails extends Component {
                           <span>{this.showVLSAddress(v.be_invited)}</span>
                           <span>{this.getFloat(v.amount / 1e6, 6)}VLS</span>
                           <span>{timeStamp2String(v.date + "000")}</span>
-                          <span>{v.status == 0 ? "未到账" : "已到账"}</span>
+                          <span>
+                            {v.status == 0
+                              ? intl.get("Payment not received")
+                              : intl.get("Payment received")}
+                          </span>
                         </p>
                       );
                     })}
                   </div>
-                  {
-                    total_count > 0 ? <Pagination
-                    pageSize={pageSize}
-                    defaultCurrent={1}
-                    total={total_count}
-                    onChange={(page, pageSize) =>
-                      this.getCurPage(page, pageSize)
-                    }
-                  /> : null
-                  }
-                  
+                  {total_count > 0 ? (
+                    <Pagination
+                      pageSize={pageSize}
+                      defaultCurrent={1}
+                      total={total_count}
+                      onChange={(page, pageSize) =>
+                        this.getCurPage(page, pageSize)
+                      }
+                    />
+                  ) : null}
                 </div>
               </TabPane>
-              <TabPane tab="资金池" key="2">
+              <TabPane tab={intl.get("Pool")} key="2">
                 <div className="listContent">
                   <div className="headList">
-                    <span>操作类型</span>
-                    <span>提取数量</span>
-                    <span>提取时间</span>
-                    <span>状态</span>
+                    <span>{intl.get("Transaction")}</span>
+                    <span>{intl.get("Withdrawing quantity")}</span>
+                    <span>{intl.get("Withdrawing time")}</span>
+                    <span>{intl.get("State")}</span>
                   </div>
                   <div className="listContents">
                     {poolOrders.map((v1, i1) => {
                       return (
                         <p key={v1}>
-                          <span>
-                            {v1.type?"一键提取"
-                              : null}
-                          </span>
+                          <span>{v1.type ? intl.get("Withdraw1") : null}</span>
                           <span>{this.getFloat(v1.amount / 1e6, 6)}VLS</span>
                           <span>{timeStamp2String(v1.date + "000")}</span>
-                          <span>{v1.status == 0 ? "未到账" : "已到账"}</span>
+                          <span>
+                            {v1.status == 0
+                              ? intl.get("Payment not received")
+                              : intl.get("Payment received")}
+                          </span>
                         </p>
                       );
                     })}
                   </div>
-                  {
-                    total_count2 > 0 ?<Pagination
-                    pageSize={pageSize2}
-                    total={total_count2}
-                    onChange={(page, pageSize) =>
-                      this.getCurPage2(page, pageSize)
-                    }
-                  /> : null
-                  }
+                  {total_count2 > 0 ? (
+                    <Pagination
+                      pageSize={pageSize2}
+                      total={total_count2}
+                      onChange={(page, pageSize) =>
+                        this.getCurPage2(page, pageSize)
+                      }
+                    />
+                  ) : null}
                 </div>
               </TabPane>
-              <TabPane tab="数字银行" key="3">
+              <TabPane tab={intl.get("Bank")} key="3">
                 <div className="listContent">
                   <div className="headList">
-                    <span>操作类型</span>
-                    <span>提取数量</span>
-                    <span>提取时间</span>
-                    <span>状态</span>
+                    <span>{intl.get("Transaction")}</span>
+                    <span>{intl.get("Withdrawing quantity")}</span>
+                    <span>{intl.get("Withdrawing time")}</span>
+                    <span>{intl.get("State")}</span>
                   </div>
                   <div className="listContents">
-                    {
-                      bankOrders.map((v2,i2)=>{
-                        return (
-                          <p key={i2}>
-                            <span>
-                              {v2.type == 3
-                                ? "存款"
-                                : v2.type == 4
-                                ? "一键提取"
-                                : v2.type == 5
-                                ? "借款"
-                                : v2.type == 6
-                                ? "还款"
-                                : v2.type == 7
-                                ? "一键提取"
-                                : null}
-                            </span>
-                            <span>{this.getFloat(v2.amount / 1e6, 6)}VLS</span>
-                            <span>{timeStamp2String(v2.date + "000")}</span>
-                            <span>{v2.status == 0 ? "未到账" : "已到账"}</span>
-                          </p>
-                        );
-                      })
-                    }
-                    
+                    {bankOrders.map((v2, i2) => {
+                      return (
+                        <p key={i2}>
+                          <span>
+                            {v2.type == 3
+                              ? intl.get("Deposit")
+                              : v2.type == 4
+                              ? intl.get("Withdraw1")
+                              : v2.type == 5
+                              ? intl.get("Borrow")
+                              : v2.type == 6
+                              ? intl.get("Repayment")
+                              : v2.type == 7
+                              ? intl.get("Withdraw1")
+                              : null}
+                          </span>
+                          <span>{this.getFloat(v2.amount / 1e6, 6)}VLS</span>
+                          <span>{timeStamp2String(v2.date + "000")}</span>
+                          <span>
+                            {v2.status == 0
+                              ? intl.get("Payment not received")
+                              : intl.get("Payment received")}
+                          </span>
+                        </p>
+                      );
+                    })}
                   </div>
-                  {
-                    total_count3 > 0 ? <Pagination
-                    pageSize={pageSize3}
-                    total={total_count3}
-                    onChange={(page, pageSize) =>
-                      this.getCurPage3(page, pageSize)
-                    }
-                  /> : null
-                  }
+                  {total_count3 > 0 ? (
+                    <Pagination
+                      pageSize={pageSize3}
+                      total={total_count3}
+                      onChange={(page, pageSize) =>
+                        this.getCurPage3(page, pageSize)
+                      }
+                    />
+                  ) : null}
                 </div>
               </TabPane>
             </Tabs>

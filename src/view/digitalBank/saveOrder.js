@@ -32,6 +32,7 @@ class SaveOrder extends Component {
       withdrawalsList: {},
       withdrawalsAmount: "",
       warning: "",
+      withdrawalsWay:"",
       total: 0,
       curTotal: 0,
       types: [
@@ -389,6 +390,10 @@ class SaveOrder extends Component {
         withdrawalsAmount: e.target.value,
         warning: "",
       });
+    }else{
+      this.setState({
+        withdrawalsAmount: ""
+      });
     }
   };
   //点击提取
@@ -398,11 +403,26 @@ class SaveOrder extends Component {
         warning: intl.get("Enter withdrawal amount"),
       });
     } else {
-      this.getDigitalBank();
+      if (
+        this.state.withdrawalsAmount ==
+        this.state.withdrawalsList.available_quantity / 1e6
+      ) {
+        this.setState(
+          {
+            withdrawalsWay: "All",
+          },
+          () => {
+            this.getDigitalBank();
+          }
+        );
+      }else{
+        this.getDigitalBank();
+      }
+      
     }
   };
   async getDigitalBank() {
-    let { withdrawalsList, withdrawalsAmount } = this.state;
+    let { withdrawalsList, withdrawalsAmount, withdrawalsWay } = this.state;
     let productId = 0;
     let tx = "";
     productId = getProductId(
@@ -412,7 +432,7 @@ class SaveOrder extends Component {
     tx = digitalBank(
       "redeem",
       withdrawalsList.token_module,
-      ""+withdrawalsAmount * 1e6,
+      withdrawalsWay == "All" ?  "0":""+withdrawalsAmount * 1e6,
       sessionStorage.getItem("violas_address"),
       withdrawalsList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
@@ -425,7 +445,7 @@ class SaveOrder extends Component {
         await this.getBankBroadcast(
           sessionStorage.getItem("violas_address"),
           productId,
-          Number(this.state.withdrawalsAmount * 1e6),
+          withdrawalsWay == "All" ? 0 : Number(withdrawalsAmount * 1e6),
           res
         );
       })
@@ -666,9 +686,10 @@ class SaveOrder extends Component {
                 </div>
                 <div className="inputDiv">
                   <input
+                    type="number"
                     placeholder={intl.get("Enter withdrawal amount")}
-                    value={this.state.withdrawalsAmount}
                     onChange={(e) => this.inputWithdrawalsAmount(e)}
+                    value={this.state.withdrawalsAmount}
                   />
                   <label>{withdrawalsList.token_show_name}</label>
                 </div>

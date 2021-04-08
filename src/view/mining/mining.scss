@@ -12,11 +12,11 @@
     align-items: center;
     overflow-x: hidden;
     .goRule{
-        width: 135px;
+        // width: 135px;
         height: 34px;
         position: absolute;
         top: 0;
-        right: -10px;
+        right: 10px;
         display: flex;
         align-items: center;
         margin-top: 35px;
@@ -24,6 +24,7 @@
             width: 135px;
             height: 34px;
             position: absolute;
+            
         }
         p{
            position: relative;
@@ -33,10 +34,12 @@
            font-weight: 600;
            color: #FFFFFF;
            cursor: pointer;
+           white-space: nowrap;
            img{
                width: 15px;
                height: 12px;
                margin-left: 8px;
+               vertical-align:inherit!important;
            }
         }
     }
@@ -91,6 +94,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            white-space: nowrap;
             img{
                 width: 5px;
                 height: 9px;
@@ -1120,6 +1124,9 @@
         justify-content: space-between;
         margin-top: 23px;
         margin-left: 22px;
+        span:nth-child(1){
+          z-index: 99;
+        }
         span:nth-child(2){
           font-size: 20px;
           font-weight: 600;
@@ -1128,6 +1135,8 @@
         }
         span:nth-child(3){
           
+          display: flex;
+          align-items: center;
           font-size: 12px;
           font-weight: 500;
           color: #272728;
@@ -1651,8 +1660,13 @@
         width:724px;
     }
     .rankingLists,.invitationList{
-      .ant-breadcrumb span:nth-child(2){
-        margin-left: -54%;
+      .ant-breadcrumb {
+        span:nth-child(2){
+          margin-left: -53%;
+        }
+        span:nth-child(3){
+          width: 215px;
+        }
       }
       >div{
         width: 724px;

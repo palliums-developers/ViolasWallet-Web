@@ -3,10 +3,10 @@ import "../app.scss";
 import {withRouter} from 'react-router-dom';
 import WalletConnect from "../../packages/browser/src/index";
 import intl from "react-intl-universal";
+let url1 = "https://api.violas.io";
 
 //头部我的
 class Head extends React.PureComponent {
- 
   constructor() {
     super();
     this.state = {
@@ -19,35 +19,34 @@ class Head extends React.PureComponent {
     };
   }
   stopPropagation(e) {
-        e.nativeEvent.stopImmediatePropagation();
-    }
+    e.nativeEvent.stopImmediatePropagation();
+  }
   getMineDialog = (event) => {
-    this.stopPropagation(event)
+    this.stopPropagation(event);
     this.setState({
-      showMineDialog: true
+      showMineDialog: true,
     });
   };
   getMineDialog1 = (event) => {
     // event.stopPropagation();
     this.setState({
-       showMineDialog: false
-      });
-    
+      showMineDialog: false,
+    });
   };
-   menuMouseEnterEvent = () => {
+  menuMouseEnterEvent = () => {
     let timeout = Number | undefined;
     clearTimeout(timeout);
     timeout = undefined;
     this.setState({
       showMineDialog: true,
     });
-  }
+  };
 
   menuMouseLeaveEvent = () => {
     this.setState({
       showMineDialog: false,
     });
-  }
+  };
   async componentWillMount() {
     await this.getNewWalletConnect();
     this.state.walletConnector.on("disconnect", (error, payload) => {
@@ -60,8 +59,8 @@ class Head extends React.PureComponent {
     });
   }
   componentDidMount() {
-    document.addEventListener('mouseenter', this.getMineDialog1);
-    document.addEventListener('click', this.getMineDialog1);
+    document.addEventListener("mouseenter", this.getMineDialog1);
+    document.addEventListener("click", this.getMineDialog1);
     // console.log(window.localStorage.getItem('walletconnector'),'..............')
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
@@ -91,15 +90,26 @@ class Head extends React.PureComponent {
       walletConnector: new WalletConnect({ bridge: this.state.bridge }),
     });
   }
+  deleteToken() {
+    fetch(
+      url1 +
+        "/1.0/violas/device/info?token=" +
+        window.sessionStorage.getItem("firebase_token"),
+      { method: "delete" }
+    )
+      .then((res) => res.json())
+      .then((res) => {});
+  }
   async logout() {
     window.localStorage.clear();
     window.sessionStorage.clear();
     await this.state.walletConnector.killSession();
     await this.getNewWalletConnect();
+    await this.deleteToken();
     this.props.history.push("/app");
   }
   render() {
-    let { active, showMineDialog} = this.state;
+    let { active, showMineDialog } = this.state;
     return (
       <div className="mine">
         {showMineDialog ? (
