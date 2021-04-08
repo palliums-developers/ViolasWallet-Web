@@ -5,7 +5,7 @@ import {
   Input,
   Button,
 } from "antd";
-import { NavLink } from "react-router-dom";
+import intl from "react-intl-universal";
 import "./award.scss";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
@@ -99,16 +99,16 @@ class UserRewards extends Component {
   receiveFun = () => {
     if (this.state.phoneIpt == "") {
       this.setState({
-        descr: "请输入手机号",
+        descr: intl.get("Enter mobile phone number")
       });
       if (this.state.codeIpt == "") {
         this.setState({
-          descr: "请输入验证码",
+          descr: intl.get("Enter verification code")
         });
       }
     } else if (!/^1[3|4|5|7|8][0-9]{9}$/.test(this.state.phoneIpt)) {
       this.setState({
-        descr: "你输入的手机号有误",
+        descr: intl.get("The phone number you entered is wrong")
       });
     } else {
       fetch(url1 + "/1.0/violas/incentive/mobile/verify", {
@@ -127,11 +127,18 @@ class UserRewards extends Component {
         .then((res) => res.json())
         .then((res) => {
           if(res.code == 2000){
+            this.setState(
+              {
+                descr1: intl.get("Successful verification")
+              },
+              () => {
+                window.location.reload();
+              }
+            );
+          }else{
             this.setState({
-              descr1:"验证成功"
-            },()=>{
-              window.location.reload();
-            })
+              descr: intl.get("Phone number has been used over the limit")
+            });
           }
         });
     }
@@ -153,14 +160,22 @@ class UserRewards extends Component {
                 <img src="/img/fanhui 2@2x.png" />
               </a>
             </Breadcrumb.Item>
-            <span>验证手机号</span>
+            <span>{intl.get("Phone number verification")}</span>
             <span></span>
           </Breadcrumb>
           <div className="verifyList">
             <div className="verifyDescr">
-              <p>1. 每个手机号有三次验证机会</p>
-              <p>2. 请您放心，手机号不会绑定您的钱包</p>
-              <p>3. 验证成功后可获取 10 VLS</p>
+              <p>
+                {intl.get(
+                  "One.Each phone number can be used up to 3 times of verification"
+                )}
+              </p>
+              <p>
+                {intl.get("Two.Phone number will not be bind with your wallet")}
+              </p>
+              <p>
+                {intl.get("Three.Win 10 VLS after successful verification")}
+              </p>
             </div>
             <div className="verifyForm">
               <Form>
@@ -179,7 +194,7 @@ class UserRewards extends Component {
                     maxLength="20"
                     addonBefore="+86"
                     style={{ width: "100%" }}
-                    placeholder="请输入手机号"
+                    placeholder={intl.get("Enter mobile phone number")}
                     type="number"
                     value={phoneIpt}
                     onChange={this.getPhoneValue}
@@ -198,7 +213,7 @@ class UserRewards extends Component {
                   >
                     <Input
                       type="number"
-                      placeholder="请输入验证码"
+                      placeholder={intl.get("Enter verification code")}
                       maxLength="6"
                       value={codeIpt}
                       onChange={this.getCodeValue}
@@ -206,7 +221,7 @@ class UserRewards extends Component {
                   </Form.Item>
                   {this.state.liked ? (
                     <Button onClick={() => this.getVerifyCode()}>
-                      获取验证码
+                      {intl.get("Get verification code")}
                     </Button>
                   ) : (
                     <Button disabled>{this.state.count}</Button>
@@ -220,13 +235,17 @@ class UserRewards extends Component {
                 >
                   <Input
                     maxLength="100"
-                    placeholder="邀请人VLS地址（选填）"
+                    placeholder={intl.get(
+                      "Inviter's wallet address (Optional)"
+                    )}
                     value={addressIpt}
                     onChange={this.getAddressValue}
                   />
                 </Form.Item>
               </Form>
-              <button onClick={() => this.receiveFun()}>立即领取</button>
+              <button onClick={() => this.receiveFun()}>
+                {intl.get("Get award")}
+              </button>
               <p className="p1">{descr}</p>
               <p className="p2">{descr1}</p>
             </div>

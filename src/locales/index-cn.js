@@ -370,6 +370,7 @@ export default {
   "Gaining ranking will be updated every Sunday night at 00:00":
     "收益榜单将会在每周日晚 00:00 更新",
   Ranking1: "排名",
+  "Enter mobile phone number": "请输入手机号",
   "Phone number verification": "验证手机号",
   "One.Each phone number can be used up to 3 times of verification":
     "1. 每个手机号有三次验证机会",
@@ -377,8 +378,10 @@ export default {
     "2. 请您放心，手机号不会绑定您的钱包",
   "Three.Win 10 VLS after successful verification":
     "3. 验证成功后可获取 10 VLS",
+  "Successful verification": "验证成功",
   "Get verification code": "获取验证码",
   "Enter verification code": "请输入验证码",
+  "The phone number you entered is wrong": "你输入的手机号有误",
   "Inviter's wallet address (Optional)": "邀请人VLS地址（选填）",
   "Get award": "立即领取",
   "Phone number has been used over the limit": "当前手机号已无验证机会",
@@ -434,7 +437,7 @@ export default {
   "Share link": "分享链接",
   "Share announcement": "分享海报",
   "Save image": "保存图片",
-  "Save to an album":"保存到相册",
+  "Save to an album": "保存到相册",
   "Invitation ranking": "邀请榜单",
   "Total invitation": "共邀请",
   people: "人",

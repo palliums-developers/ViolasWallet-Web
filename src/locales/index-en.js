@@ -377,6 +377,7 @@ export default {
   "Gaining ranking will be updated every Sunday night at 00:00":
     "Gaining ranking will be updated every Sunday night at 00:00",
   Ranking1: "Ranking",
+  "Enter mobile phone number": "Enter mobile phone number",
   "Phone number verification": "Phone number verification",
   "One.Each phone number can be used up to 3 times of verification":
     "One.Each phone number can be used up to 3 times of verification",
@@ -385,7 +386,10 @@ export default {
   "Three.Win 10 VLS after successful verification":
     "Three.Win 10 VLS after successful verification",
   "Get verification code": "Get verification code",
+  "Successful verification": "Successful verification",
   "Enter verification code": "Enter verification code",
+  "The phone number you entered is wrong":
+    "The phone number you entered is wrong",
   "Inviter's wallet address (Optional)": "Inviter's wallet address (Optional)",
   "Get award": "Get award",
   "Phone number has been used over the limit":
