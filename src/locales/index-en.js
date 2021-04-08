@@ -443,6 +443,7 @@ export default {
   "Share link": "Share link",
   "Share announcement": "Share announcement",
   "Save image": "Save image",
+  "Save to an album": "Save to an album",
   "Invitation ranking": "Invitation ranking",
   "Total invitation": "Total invitation",
   people: "people",
@@ -451,4 +452,7 @@ export default {
   "Payment not received": "Payment not received",
   "Payment received": "Payment received",
   Download: "Download",
+  "Scan QR code": "Scan QR code",
+  "Divide the rewards together": "Divide the rewards together",
+  Cancel1: "Cancel1",
 };

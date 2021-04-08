@@ -434,6 +434,7 @@ export default {
   "Share link": "分享链接",
   "Share announcement": "分享海报",
   "Save image": "保存图片",
+  "Save to an album":"保存到相册",
   "Invitation ranking": "邀请榜单",
   "Total invitation": "共邀请",
   people: "人",
@@ -441,4 +442,7 @@ export default {
   "Payment not received": "未到账",
   "Payment received": "已到账",
   Download: "下载",
+  "Scan QR code": "扫描二维码",
+  "Divide the rewards together": "一起瓜分奖励",
+  Cancel1: "取 消",
 };

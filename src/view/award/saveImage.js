@@ -3,6 +3,8 @@ import QRCode from "qrcode.react";
 import { rndNum } from "../../utils/redomNum";
 // import { message } from "antd";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
+import intl from "react-intl-universal";
+
 //保存图片
 class PhotoSynthesis extends Component {
   constructor(props) {
@@ -43,9 +45,13 @@ class PhotoSynthesis extends Component {
         context1.drawImage(myImage2, 40, 70, 234, 168);
         image3.onload = function () {
           context1.font = "600 17px PingFangSC-Semibold, PingFang SC";
-          context1.fillText("扫描二维码", xw - 120, xh + 5);
+          context1.fillText(intl.get("Scan QR code"), xw - 120, xh + 5);
           context1.fillStyle = "rgba(254, 169, 18, 1)";
-          context1.fillText("一起瓜分奖励", xw - 138, xh + 30);
+          context1.fillText(
+            intl.get("Divide the rewards together"),
+            xw - 138,
+            xh + 30
+          );
           context1.drawImage(image3, xw - 20, xh - 20, 60, 60);
           //绘制完成,转为图片
           setTimeout(function () {
@@ -155,13 +161,13 @@ class PhotoSynthesis extends Component {
           {/* <img id="avatar" ></img> */}
           {ifMobile == false ? (
             <a className="btns" onClick={() => this.getPhoto()}>
-              保存图片
+              {intl.get("Save image")}
             </a>
           ) : (
             <div className="btns1List">
               <a className="btns1" onClick={() => this.getPhoto1()}>
                 <img src="/img/mobile_m_xiazai 2@2x.png" />
-                保存到相册
+                {intl.get("Save to an album")}
               </a>
             </div>
           )}
@@ -177,7 +183,7 @@ class PhotoSynthesis extends Component {
               className="closeDilog1"
               onClick={() => this.props.closeDialog(false)}
             >
-              取 消
+              {intl.get("Cancel1")}
             </p>
           )}
         </div>
