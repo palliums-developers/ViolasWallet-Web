@@ -32,7 +32,7 @@ class BorrowOrder extends Component {
       borrowDetails: [
         {
           id: 0,
-          type: intl.get("Borrowing Details"),
+          type: intl.get("Borrowing Records"),
         },
         {
           id: 1,
@@ -46,11 +46,11 @@ class BorrowOrder extends Component {
       types: [
         {
           id: 0,
-          type: intl.get("Current Borrowing"),
+          type: "当前借款",
         },
         {
           id: 1,
-          type: intl.get("Borrowing Records"),
+          type: "借款明细",
         },
       ],
       data: [],
@@ -74,7 +74,7 @@ class BorrowOrder extends Component {
           key: "money",
         },
         {
-          title: "剩余可借",
+          title: intl.get("Remaining borrow amount"),
           dataIndex: "income",
           key: "income",
         },
@@ -86,7 +86,7 @@ class BorrowOrder extends Component {
           render: (texts) => (
             <div style={{ display: "flex" }}>
               {texts.map((val, i) => {
-                if (val.name == "详情") {
+                if (val.name == intl.get("Detail")) {
                   return (
                     <label
                       key={i}
@@ -121,7 +121,7 @@ class BorrowOrder extends Component {
                       )}
                     </label>
                   );
-                } else if (val.name == "还款") {
+                } else if (val.name == intl.get("Repayment")) {
                   return (
                     <label
                       key={i}
@@ -176,7 +176,7 @@ class BorrowOrder extends Component {
           key: "time",
         },
         {
-          title: intl.get("Principal"),
+          title: intl.get("Token"),
           dataIndex: "coin",
           key: "coin",
         },
@@ -214,12 +214,12 @@ class BorrowOrder extends Component {
                 ? intl.get("Borrowed")
                 : text == 1
                 ? intl.get("Repaid")
+                : text == 2
+                ? intl.get("Liquidated")
                 : text == -1
                 ? intl.get("Borrow failed")
                 : text == -2
                 ? intl.get("Repayment failed")
-                : text == 2
-                ? "已清算"
                 : null}
             </label>
           ),
@@ -271,7 +271,7 @@ class BorrowOrder extends Component {
       ],
       secondColumns1: [
         {
-          title: intl.get("Time"),
+          title:  intl.get("Time"),
           dataIndex: "date",
           key: "date",
           render: (text) => <label>{timeStamp2String(text)}</label>,
@@ -317,7 +317,7 @@ class BorrowOrder extends Component {
                 : text == -2
                 ? intl.get("Repayment failed")
                 : text == 2
-                ? "已清算"
+                ? intl.get("Liquidated")
                 : null}
             </label>
           ),
@@ -331,12 +331,12 @@ class BorrowOrder extends Component {
           render: (text) => <label>{timeStamp2String(text + "000")}</label>,
         },
         {
-          title: "被清算",
+          title: intl.get("Liquidated1"),
           dataIndex: "cleared",
           key: "cleared",
         },
         {
-          title: "已抵扣",
+          title: intl.get("Deducted"),
           dataIndex: "deductioned",
           key: "deductioned",
         },
@@ -431,30 +431,30 @@ class BorrowOrder extends Component {
               option: [
                 {
                   id: 0,
-                  name: "还款",
+                  name: intl.get("Repayment"),
                 },
                 {
                   id: 1,
-                  name: "借款",
+                  name: intl.get("Borrow"),
                 },
                 {
                   id: 2,
-                  name: "详情",
+                  name: intl.get("Detail"),
                   displayMenu: false,
                 },
               ],
               borrowDetails: [
                 {
                   id: 0,
-                  type: "借款明细",
+                  type: intl.get("Borrowing Records"),
                 },
                 {
                   id: 1,
-                  type: "还款明细",
+                  type: intl.get("Repayment Details"),
                 },
                 {
                   id: 2,
-                  type: "清算明细",
+                  type: intl.get("Liquidation Details"),
                 },
               ],
               detailId: 0,
@@ -480,8 +480,8 @@ class BorrowOrder extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
-          let allCoin = ["全部"];
-          let allStatus = ["全部"];
+          let allCoin = [intl.get("All")];
+          let allStatus = [intl.get("All")];
           for (let i = 0; i < res.data.length; i++) {
             if (allCoin.length > 0) {
               allCoin.push(res.data[i].currency);
@@ -804,7 +804,7 @@ class BorrowOrder extends Component {
                   showSearch
                   allowClear={true}
                   style={{ width: 200 }}
-                  placeholder="全部币种"
+                  placeholder={intl.get("All Tokens")}
                   optionFilterProp="children"
                   onChange={this.getOptionCoins}
                   // onFocus={onFocus}
@@ -828,7 +828,7 @@ class BorrowOrder extends Component {
                   showSearch
                   allowClear={true}
                   style={{ width: 200 }}
-                  placeholder="全部状态"
+                  placeholder={intl.get("All State")}
                   optionFilterProp="children"
                   onChange={this.getOptionStatus}
                   // onFocus={onFocus}
@@ -844,22 +844,22 @@ class BorrowOrder extends Component {
                     return (
                       <Option key={i} value={v}>
                         {v == 0
-                          ? "已借款"
+                          ? intl.get("Borrowed")
                           : v == 1
-                          ? "已还款"
+                          ? intl.get("Repaid")
                           : v == 2
-                          ? "已清算"
+                          ? intl.get("Liquidated")
                           : v == -1
-                          ? "借款失败"
+                          ? intl.get("Borrow failed")
                           : v == -2
-                          ? "还款失败"
-                          : "全部"}
+                          ? intl.get("Repayment failed")
+                          : intl.get("All")}
                       </Option>
                     );
                   })}
                 </Select>
                 <span className="btn" onClick={() => this.searchFunction()}>
-                  搜索
+                  {intl.get("Search")}
                 </span>
               </div>
               <Table
@@ -876,12 +876,12 @@ class BorrowOrder extends Component {
             </div>
           )}
         </div>
-        {this.state.showDialog ? (
+        {/* {this.state.showDialog ? (
           <div className="extractMark">
             <div className="extractContent">
               <div className="extractList">
                 <div className="head">
-                  <h4>提取</h4>
+                  <h4>{intl.get("Withdrawal")}</h4>
                   <i
                     onClick={() => {
                       this.setState({
@@ -893,32 +893,34 @@ class BorrowOrder extends Component {
                   </i>
                 </div>
                 <div className="inputDiv">
-                  <input placeholder="请输入提取数量" />
+                  <input placeholder={intl.get("Enter withdrawal amount")} />
                   <label>VLS</label>
                 </div>
                 <div className="inputDescr">
                   <p>
                     <img src="/img/kyye.png" />
-                    可提数量：<span>20VLS</span>
+                    {intl.get("Amount1")}：<span>20VLS</span>
                   </p>
-                  <p>全部</p>
+                  <p>{intl.get("All")}</p>
                 </div>
                 <div className="extractDescr">
                   <img src="/img/编组 4@2x.png" />
                   <p>
-                    如果您当前有借贷操作，则需将部分存款作为质押金。提取质押金需还对应数量的借款金额。
+                    {intl.get(
+                      "If you have loans,some of deposits will be used as collacteral.You can withdraw deposits after payoff the loans."
+                    )}
                   </p>
                 </div>
                 <div className="foot">
                   <p className="btn" onClick={() => {}}>
-                    提 取
+                    {intl.get("Withdrawal")}
                   </p>
-                  <p className="descr">{"请输入提取数量"}</p>
+                  <p className="descr">{intl.get("Enter withdrawal amount")}</p>
                 </div>
               </div>
             </div>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     );
   }
