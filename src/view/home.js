@@ -12,6 +12,7 @@ import "firebase/firebase-messaging";
 import axios from "axios";
 let url1 = "https://api4.violas.io";
 let url = "https://api.violas.io";
+
 //首页
 class Home extends React.PureComponent {
   constructor(props) {
@@ -38,7 +39,7 @@ class Home extends React.PureComponent {
         "BBdwIYTO0CyiJz9XQJInZhaDxlSaDsdgXbsxFnbd_qUMleNCY_3wCAIa4gWYp9gYwJ6JTimYBKUFzjStR6aFlaE",
       token: "",
       firebase_token: "",
-      violas_server: "https://api4.violas.io",
+      violas_server: "https://api.violas.io",
       violas_register: "/1.0/violas/device/info",
       address: "e8da60ef0f4cf18c324527f48b06c7e9",
       language: "en", // en cn
@@ -54,22 +55,40 @@ class Home extends React.PureComponent {
 
   async componentWillMount() {
     await this.getNewWalletConnect();
-    await this.initialPage();
-    await this.getNotificationPermission();
-    await this.setState({ token: await this.getToken() });
-    // console.log(this.state.token);
-
-    await this.sendToken();
-    await this.getUnreadCount();
-    await this.getMessage();
+    this.setState(
+      {
+        token: await this.getToken()
+      },
+      () => {
+        // console.log(this.state.token);
+        if (this.state.token) {
+          this.sendToken();
+          this.getUnreadCount();
+          this.getMessage();
+        }
+      }
+    );
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
-
       window.localStorage.clear();
       window.sessionStorage.clear();
       // this.props.history.push('/app')
+    });
+  }
+  componentDidMount() {
+    // document.addEventListener('click', this.closeDialog);
+    this.initialPage();
+    this.getNotificationPermission();
+    this.setState({ 
+      active: this.props.location.pathname.split("/")[3]
+    });
+    this.state.walletConnector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      console.log("wallet disconnected");
     });
   }
   //获取未读消息数
@@ -81,7 +100,7 @@ class Home extends React.PureComponent {
     )
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res);
+        // console.log(res,'...../');
         if (res.data) {
           this.setState({
             unreadCount: res.data.notice + res.data.message,
@@ -117,7 +136,7 @@ class Home extends React.PureComponent {
         return res;
       })
       .catch((err) => {
-        console.log("Error Occurred " + err);
+        return false;
       });
   };
   sendToken = () => {
@@ -162,8 +181,7 @@ class Home extends React.PureComponent {
   updateRegister = () => {
     let post_data = {
       address: window.sessionStorage.getItem("violas_address"),
-      token: window.sessionStorage.getItem(
-            "firebase_token"),
+      token: this.state.firebase_token,
       fcm_token: this.state.token,
       platform: "web",
       language: this.state.language,
@@ -249,18 +267,6 @@ class Home extends React.PureComponent {
     });
     setTimeout(myNotification.close.bind(myNotification), 3000);
   }
-  componentDidMount() {
-    // document.addEventListener('click', this.closeDialog);
-    this.setState({
-      active: this.props.location.pathname.split("/")[3],
-    });
-    this.state.walletConnector.on("disconnect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      console.log("wallet disconnected");
-    });
-  }
 
   // closeDialog = () => {
   //   this.setState({
@@ -296,7 +302,7 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message, unreadCount } = this.state;
-    // console.log(message, ".......");
+    console.log(active, ".......");
     this.getUnreadCount();
     if (this.props.location) {
       if (this.props.location.search) {
@@ -406,27 +412,7 @@ class Home extends React.PureComponent {
 let mapStateToProps = (state) => {
   return state.ListReducer;
 };
-let mapDispatchToProps = (dispatch) => {
-  return {
-    getTypes: (type) => {
-      dispatch({
-        type: "t_type",
-        params: type.types,
-      });
-    },
-    getTypes1: (type) => {
-      dispatch({
-        type: "t_types",
-        params: type.types1,
-      });
-    },
-    showEveryDetail: () => {
-      dispatch({
-        type: "DISPLAY2",
-        payload: false,
-      });
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);
+// on message: {"status":"Executed","service":"violas_01","type":"PEER_TO_PEER_WITH_METADATA","date":"1615345930","version":"47010033"}
+// home.js:234 {data: {…}, from: "675290848213", priority: "normal", notification: {…}}
+// data: {status: "Executed", service: "violas_01", type: "PEER_TO_PEER_WITH_METADATA", date: "1615345930", version: "47010033",from: "675290848213"},notification: body: "Payment address: c71d7a054c919be00e8e408d552fa0e4"title: "VLS: 1.0 VLS successfully received!"}}
