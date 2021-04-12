@@ -10,8 +10,6 @@ import { Badge } from "antd";
 import firebase from "firebase/app";
 import "firebase/firebase-messaging";
 import axios from "axios";
-import * as AllActions from "../../src/store/action/listAction";
-import { bindActionCreators } from "redux";
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
 //首页
@@ -56,33 +54,34 @@ class Home extends React.PureComponent {
 
   async componentWillMount() {
     await this.getNewWalletConnect();
-    
-
+    this.setState(
+      {
+        token: await this.getToken()
+      },
+      () => {
+        // console.log(this.state.token);
+        if (this.state.token) {
+          this.sendToken();
+          this.getUnreadCount();
+          this.getMessage();
+        }
+      }
+    );
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
       }
-
       window.localStorage.clear();
       window.sessionStorage.clear();
       // this.props.history.push('/app')
     });
   }
-  async componentDidMount() {
+  componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
     this.initialPage();
     this.getNotificationPermission();
-    this.setState({ token: await this.getToken() },()=>{
-      // console.log(this.state.token);
-    if (this.state.token) {
-      this.sendToken();
-      this.getUnreadCount();
-      this.getMessage();
-    }
-    });
-    
-    this.setState({
-      active: this.props.location.pathname.split("/")[3],
+    this.setState({ 
+      active: this.props.location.pathname.split("/")[3]
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
@@ -302,7 +301,6 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message, unreadCount } = this.state;
-    // console.log(message, ".......");
     this.getUnreadCount();
     if (this.props.location) {
       if (this.props.location.search) {
@@ -412,10 +410,7 @@ class Home extends React.PureComponent {
 let mapStateToProps = (state) => {
   return state.ListReducer;
 };
-const mapDispatchToProps = (diapatch) =>
-  bindActionCreators(AllActions, diapatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);
 // on message: {"status":"Executed","service":"violas_01","type":"PEER_TO_PEER_WITH_METADATA","date":"1615345930","version":"47010033"}
 // home.js:234 {data: {…}, from: "675290848213", priority: "normal", notification: {…}}
 // data: {status: "Executed", service: "violas_01", type: "PEER_TO_PEER_WITH_METADATA", date: "1615345930", version: "47010033",from: "675290848213"},notification: body: "Payment address: c71d7a054c919be00e8e408d552fa0e4"title: "VLS: 1.0 VLS successfully received!"}}
