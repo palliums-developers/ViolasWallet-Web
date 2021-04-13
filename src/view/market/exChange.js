@@ -7,7 +7,7 @@ import { Drawer } from "antd";
 import { timeStamp2String } from '../../utils/timer';
 import { bytes2StrHex, string2Byte, decimal2Hex, getTimestamp, int2Byte } from '../../utils/trans'
 import axios from 'axios'
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import code_data from '../../utils/code.json';
 import WalletconnectDialog from "../components/walletconnectDialog";
 import intl from "react-intl-universal";

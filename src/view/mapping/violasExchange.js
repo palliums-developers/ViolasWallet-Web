@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./mapping.scss";
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import { connect } from "react-redux";
 import WalletconnectDialog from "../components/walletconnectDialog";
 //import { BigNumber } from "bignumber.js";

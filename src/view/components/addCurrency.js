@@ -1,6 +1,6 @@
 import React, { cloneElement, Component } from "react";
 import { connect } from "react-redux";
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import code_data from "../../utils/code.json";
 import intl from "react-intl-universal";
 

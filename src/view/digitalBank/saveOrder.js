@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './digitalBank.scss';
 import { DatePicker, Breadcrumb, Table, Tag, Space, Select, Button  } from "antd";
 import { NavLink } from "react-router-dom";
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { digitalBank, getProductId } from "../../utils/bank";
 import axios from "axios";

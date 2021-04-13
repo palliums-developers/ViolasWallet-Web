@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./mapping.scss";
 import { connect } from "react-redux";
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
