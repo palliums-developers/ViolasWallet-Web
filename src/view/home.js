@@ -67,6 +67,7 @@ class Home extends React.PureComponent {
         }
       }
     );
+    
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
