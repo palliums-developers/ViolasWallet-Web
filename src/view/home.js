@@ -9,6 +9,7 @@ import LangPage from "./components/langPage";
 import { Badge } from "antd";
 import firebase from "firebase/app";
 import "firebase/firebase-messaging";
+import { verifyMobile } from "../utils/verifyMobile";
 import axios from "axios";
 let url = "https://api4.violas.io";
 let url1 = "https://api.violas.io";
@@ -51,23 +52,38 @@ class Home extends React.PureComponent {
       showMineDialog: !this.state.showMineDialog,
     });
   };
-
+  checkURL = (temp) => {
+    let urls = [
+      "/homepage/home/miningAwards",
+      "/homepage/home/ruleDescription",
+      "/homepage/home/rankingList",
+      "/homepage/home/inviteRewards",
+      "/homepage/home/invitationList",
+    ];
+    for (let i = urls.length - 1; i >= 0; i--) {
+      if (temp === urls[i]) {
+        return true;
+      }
+    }
+    return false;
+  };
   async componentWillMount() {
     await this.getNewWalletConnect();
+    await this.initialPage();
     this.setState(
-      {
-        token: await this.getToken()
-      },
-      () => {
-        // console.log(this.state.token);
-        if (this.state.token) {
-          this.sendToken();
-          this.getUnreadCount();
-          this.getMessage();
-        }
-      }
-    );
-    
+       {
+         token: await this.getToken(),
+         active: await this.props.location.pathname.split("/")[3],
+       },
+       () => {
+         // console.log(this.state.token);
+         if (this.state.token) {
+           this.sendToken();
+           this.getUnreadCount();
+           this.getMessage();
+         }
+       }
+     );
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
@@ -79,11 +95,6 @@ class Home extends React.PureComponent {
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
-    this.initialPage();
-    this.getNotificationPermission();
-    this.setState({ 
-      active: this.props.location.pathname.split("/")[3]
-    });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
@@ -116,17 +127,6 @@ class Home extends React.PureComponent {
       // firebase.initializeApp(config);
       firebase.initializeApp(this.state.firebaseConfig);
     }
-  };
-  getNotificationPermission = () => {
-    let temp_messaging = firebase.messaging();
-    temp_messaging
-      .requestPermission()
-      .then(() => {
-        console.log("have permission");
-      })
-      .catch((err) => {
-        console.log("Error Occurred " + err);
-      });
   };
   getToken = () => {
     let temp_messaging = firebase.messaging();
