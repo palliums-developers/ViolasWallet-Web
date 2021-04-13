@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import WalletConnect from "../packages/browser/src/index";
+import WalletConnect from "../packages/browser/index";
 // import WalletConnectQRCodeModal from "../packages/qrcode-modal/src/index";
-import webStorage from "../packages/browser/src/webStorage";
+import webStorage from "../packages/browser/webStorage";
 import intl from "react-intl-universal";
 import "./app.scss";
 import QRCode from "qrcode.react"

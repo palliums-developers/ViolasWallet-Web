@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import code_data from '../../utils/code.json';
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import TransfarDialog from './transfarDialog.js';
 import { bytes2StrHex, string2Byte } from '../../utils/trans';
 import intl from "react-intl-universal";

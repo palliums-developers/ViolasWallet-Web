@@ -3,7 +3,7 @@ import "./mining.scss";
 import { rndNum } from "../../utils/redomNum";
 import { callHandler, registerHandler } from "../../utils/jsbridge";
 import code_data from "../../utils/code.json";
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import { bytes2StrHex, string2Byte } from "../../utils/trans";
 import intl from "react-intl-universal";
 import { message } from "antd";

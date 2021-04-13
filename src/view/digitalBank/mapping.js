@@ -7,7 +7,7 @@ import { getBitcoinScript, getLibraScript, getMapScript } from '../../utils/tran
 import getBTCTx from '../../utils/btc_trans';
 import getLibraTx from '../../utils/libra_trans';
 import getViolasTx from '../../utils/violas_trans';
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import intl from "react-intl-universal";

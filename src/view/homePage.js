@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./app.scss";
 import { connect } from "react-redux";
 import RouterView from "../router/routerView";
-import WalletConnect from "../packages/browser/src/index";
+import WalletConnect from "../packages/browser/index";
 import intl from "react-intl-universal";
 import "antd/dist/antd.css";
 let url1 = "https://api.violas.io";

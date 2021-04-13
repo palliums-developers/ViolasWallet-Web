@@ -2,7 +2,7 @@ import React from "react";
 import "./app.scss";
 import { connect } from "react-redux";
 import RouterView from "../router/routerView";
-import WalletConnect from "../packages/browser/src/index";
+import WalletConnect from "../packages/browser/index";
 import intl from "react-intl-universal";
 import Head from "./components/head";
 import LangPage from "./components/langPage";
