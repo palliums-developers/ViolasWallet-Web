@@ -1,7 +1,7 @@
 import React from "react";
 import "../app.scss";
 import {withRouter} from 'react-router-dom';
-import WalletConnect from "../../packages/browser/src/index";
+import WalletConnect from "../../packages/browser/index";
 import intl from "react-intl-universal";
 let url1 = "https://api.violas.io";
 

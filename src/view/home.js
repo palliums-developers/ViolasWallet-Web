@@ -55,6 +55,7 @@ class Home extends React.PureComponent {
 
   async componentWillMount() {
     await this.getNewWalletConnect();
+    await this.initialPage();
     this.setState(
       {
         token: await this.getToken()
@@ -79,8 +80,7 @@ class Home extends React.PureComponent {
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
-    this.initialPage();
-    this.getNotificationPermission();
+    
     this.setState({ 
       active: this.props.location.pathname.split("/")[3]
     });
@@ -116,17 +116,6 @@ class Home extends React.PureComponent {
       // firebase.initializeApp(config);
       firebase.initializeApp(this.state.firebaseConfig);
     }
-  };
-  getNotificationPermission = () => {
-    let temp_messaging = firebase.messaging();
-    temp_messaging
-      .requestPermission()
-      .then(() => {
-        console.log("have permission");
-      })
-      .catch((err) => {
-        console.log("Error Occurred " + err);
-      });
   };
   getToken = () => {
     let temp_messaging = firebase.messaging();
