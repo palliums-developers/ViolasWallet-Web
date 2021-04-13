@@ -52,28 +52,12 @@ class Home extends React.PureComponent {
       showMineDialog: !this.state.showMineDialog,
     });
   };
-  checkURL = (temp) => {
-    let urls = [
-      "/homepage/home/miningAwards",
-      "/homepage/home/ruleDescription",
-      "/homepage/home/rankingList",
-      "/homepage/home/inviteRewards",
-      "/homepage/home/invitationList",
-    ];
-    for (let i = urls.length - 1; i >= 0; i--) {
-      if (temp === urls[i]) {
-        return true;
-      }
-    }
-    return false;
-  };
   async componentWillMount() {
     await this.getNewWalletConnect();
     await this.initialPage();
     this.setState(
        {
-         token: await this.getToken(),
-         active: await this.props.location.pathname.split("/")[3],
+         token: await this.getToken()
        },
        () => {
          // console.log(this.state.token);
@@ -95,6 +79,9 @@ class Home extends React.PureComponent {
   }
   componentDidMount() {
     // document.addEventListener('click', this.closeDialog);
+    this.setState({
+      active: this.props.location.pathname.split("/")[3],
+    });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
         throw error;
