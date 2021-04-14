@@ -414,6 +414,8 @@ class Transfer extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log(tx, "violas");
     this.state.walletConnector
@@ -469,6 +471,8 @@ class Transfer extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log("libra ", tx);
     this.state.walletConnector

@@ -877,6 +877,8 @@ class CashPooling extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log("Add Liquidity ", tx);
     this.state.walletConnector
@@ -972,6 +974,8 @@ class CashPooling extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log("Remove Liquidity ", tx);
     this.state.walletConnector
