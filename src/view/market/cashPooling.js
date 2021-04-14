@@ -1531,7 +1531,9 @@ class CashPooling extends Component {
               )}
               <div className="changeRate">
                 {intl.get("Swap rate")}：
-                {this.state.rate > 0 ? "1:" + this.state.rate : "--"}
+                {this.state.rate == "--" || this.state.rate + "" == "NaN"
+                  ? "--"
+                  : "1:" + this.state.rate}
               </div>
               {/* <div className="changeRate">当前资金池大小：— —</div> */}
               {/* <div className="changeRate">你的资金池共有：{type == '转入' ? '--':total_token}</div> */}

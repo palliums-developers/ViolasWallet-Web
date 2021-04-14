@@ -46,11 +46,11 @@ class BorrowOrder extends Component {
       types: [
         {
           id: 0,
-          type: "当前借款",
+          type: intl.get("Current Borrowing"),
         },
         {
           id: 1,
-          type: "借款明细",
+          type: intl.get("Borrowing Records"),
         },
       ],
       data: [],
@@ -271,7 +271,7 @@ class BorrowOrder extends Component {
       ],
       secondColumns1: [
         {
-          title:  intl.get("Time"),
+          title: intl.get("Time"),
           dataIndex: "date",
           key: "date",
           render: (text) => <label>{timeStamp2String(text)}</label>,

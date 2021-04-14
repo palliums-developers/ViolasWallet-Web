@@ -28,7 +28,7 @@ class UserRewards extends Component {
   getVerifyCode() {
     if (this.state.phoneIpt == "") {
       this.setState({
-        descr: "请输入手机号",
+        descr: intl.get("Enter mobile phone number"),
       });
     } else {
       this.setState({
