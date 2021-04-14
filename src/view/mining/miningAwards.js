@@ -242,6 +242,8 @@ class MiningAwards extends Component {
         args: [],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log(tx, "violas");
     this.state.walletConnector
@@ -288,6 +290,8 @@ class MiningAwards extends Component {
         args: [],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
     console.log(tx, "violas");
     this.state.walletConnector
