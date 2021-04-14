@@ -21,6 +21,7 @@ class Repayment extends Component {
       active: false,
       amount: "",
       warning: "",
+      warning1: false,
       borrowList: {},
       showLists: [],
       showType: "",
@@ -146,7 +147,7 @@ class Repayment extends Component {
   repaymentImmediately = () => {
     if (this.state.amount == "") {
       this.setState({
-        warning: "请输入还款数量",
+        warning: intl.get("Enter repayment amount"),
       });
     } else {
       this.setState({
@@ -199,16 +200,19 @@ class Repayment extends Component {
     console.log(parm);
     axios.post(`${url}${api}`, parm).then((res) => {
       if (res.data.code == 2000) {
-        this.setState({
-          warning: "还款成功",
-          showWallet: false,
-        },()=>{
-          window.location.reload()
-        });
+        this.setState(
+          {
+            warning: intl.get("Repayment successful"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       } else {
         this.setState(
           {
-            warning: "还款失败",
+            warning: intl.get("Repayment failed"),
             showWallet: false,
           },
           () => {
@@ -239,22 +243,24 @@ class Repayment extends Component {
             <NavLink to="/homepage/home/digitalBank">
               {" "}
               <img src="/img/fanhui 2@2x.png" />
-              数字银行
+              {intl.get("Bank")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <NavLink to="/homepage/home/digitalBank/borrowOrder">
-              借款订单
+              {intl.get("Borrowing Orders")}
             </NavLink>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <NavLink to="/homepage/home/digitalBank/saveDetails">还款</NavLink>
+            <NavLink to="/homepage/home/digitalBank/saveDetails">
+              {intl.get("Repayment")}
+            </NavLink>
           </Breadcrumb.Item>
         </Breadcrumb>
         <div className="saveDetailsWrap">
           <div className="saveDetailsList">
             <h4>
-              <label>我要还</label>
+              <label>{intl.get("To payoff")}</label>
               <div className="dropdown1">
                 <span
                   onClick={(e) => {
@@ -302,13 +308,29 @@ class Repayment extends Component {
             </h4>
             <input
               placeholder={"1" + showType + "起，每0" + showType + "递增"}
-              className={this.state.warning == "还款成功" ?  null :"activeInput"}
+              className={
+                this.state.warning == intl.get("Repayment failed")
+                  ? "activeInput"
+                  : this.state.warning1 == true
+                  ? "iptRepay1"
+                  : "iptRepay"
+              }
+              onFocus={() => {
+                this.setState({
+                  warning1: true,
+                });
+              }}
+              onBlur={() => {
+                this.setState({
+                  warning1: false,
+                });
+              }}
               onChange={(e) => this.getInputValue(e)}
             />
             <div className="saveDetailsShow">
               <p>
                 <img src="/img/kyye.png" />
-                <label>待还余额 ：</label>{" "}
+                <label>{intl.get("Repay amount")} ：</label>{" "}
                 <label>
                   {extra} {showType}
                 </label>
@@ -319,14 +341,14 @@ class Repayment extends Component {
                     });
                   }}
                 >
-                  全部
+                  {intl.get("All")}
                 </span>
               </p>
             </div>
           </div>
           <div className="saveDetailsList1">
             <p>
-              <label>借贷率</label>
+              <label>{intl.get("Loan rate")}</label>
               <span>
                 {borrowList.rate
                   ? Number(borrowList.rate * 100).toFixed(2) + "%"
@@ -335,26 +357,26 @@ class Repayment extends Component {
             </p>
             <p>
               <p>
-                <label>矿工费</label>
+                <label>{intl.get("Gas fee")}</label>
                 <span></span>
               </p>
               <span>--</span>
             </p>
             <p>
               <p>
-                <label>还款账户</label>
+                <label>{intl.get("Repayment account")}</label>
                 <span></span>
               </p>
-              <span>银行余额</span>
+              <span>{intl.get("Account balance")}</span>
             </p>
           </div>
           <div className="foot">
             <p className="btn" onClick={() => this.repaymentImmediately()}>
-              立即还款
+              {intl.get("Repayment Now")}
             </p>
             <p
               className={
-                this.state.warning == "还款成功"
+                this.state.warning == intl.get("Repayment successful")
                   ? "descr descrWarn"
                   : "descr descrRed"
               }
