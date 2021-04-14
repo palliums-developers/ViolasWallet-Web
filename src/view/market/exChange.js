@@ -828,16 +828,13 @@ class ExChange extends Component {
         .then((res) => {
           if (res.data) {
             // console.log(res.data,'.............')
-            this.setState({
-              swap_trial: res.data,
-              outputAmount: res.data.amount / 1e6,
-              exchangeRate: this.getFloat(res.data.rate, 6),
-              gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
-            },()=>{
-                this.setState({
-                  
-                });
-            });
+            this.setState(
+              {
+                swap_trial: res.data,
+                outputAmount: res.data.amount / 1e6,
+                gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
+                exchangeRate: this.getFloat(res.data.amount / 1e6 / this.state.inputAmount,6),
+              });
           }
         });
     }
@@ -862,8 +859,8 @@ class ExChange extends Component {
             this.setState({
               swap_trial: res.data,
               inputAmount: res.data.amount / 1e6,
-              exchangeRate: this.getFloat(res.data.rate, 6),
               gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
+              exchangeRate:this.getFloat(res.data.amount / 1e6 / this.state.outputAmount),
             });
           }
         });
@@ -1121,7 +1118,6 @@ class ExChange extends Component {
       exchangeRate,
       focusActive,
     } = this.state;
-    
     // console.log(arr1,'....')
     return (
       <div className="exchange">
@@ -1162,7 +1158,7 @@ class ExChange extends Component {
                     }}
                     onChange={(e) => this.getInputAmount(e)}
                   />
-                  <div className="dropdown1">
+                  <div className="dropdown1 dropdown11">
                     {showMenuViolas ? (
                       <span
                         className="showClick"
@@ -1355,7 +1351,7 @@ class ExChange extends Component {
                   </div>
                 </div>
               </div>
-              {exchangeRate == "--" || "0" ? (
+              {exchangeRate == "--" || exchangeRate + "" == "NaN" ? (
                 <div className="changeRate">{intl.get("Swap rate")}：--</div>
               ) : (
                 <div className="changeRate">

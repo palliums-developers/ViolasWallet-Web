@@ -152,6 +152,11 @@
                 border-bottom: 0.5px solid rgba(222, 222, 222, 1);
                 padding: 15px 0;
                 box-sizing: border-box;
+                .ant-form-item-control-input-content{
+                      display: flex!important;
+                      justify-content: space-between!important;
+                      
+                  }
                 .ant-input{
                   width: 80%;
                   border: 0;
@@ -161,11 +166,7 @@
                   padding-right: 50px;
                   padding-left: 0px;
                   box-sizing: border-box;
-                  .ant-form-item-control-input-content{
-                      display: flex!important;
-                      justify-content: space-between!important;
-                      
-                  }
+                  
                   ::-webkit-input-placeholder{
                       font-size: 16px;
                       font-weight: 400;
@@ -217,8 +218,8 @@
                   padding-left: 0px;
                   box-sizing: border-box;
                   .ant-form-item-control-input-content{
-                      display: flex;
-                      justify-content: space-between;
+                      display: flex!important;
+                      justify-content: space-between!important;
                       
                   }
                   ::-webkit-input-placeholder{

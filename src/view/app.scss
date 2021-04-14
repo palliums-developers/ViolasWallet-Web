@@ -681,9 +681,9 @@ dd {
                   display: flex;
                   top: -3px;
                   >span{
-                    width: 90px;
+                    // width: 90px;
                     height: 30px;
-                    padding: 0 10px;
+                    padding: 0 15px;
                     box-sizing: border-box;
                     display: flex;
                     align-items: center;
@@ -746,6 +746,11 @@ dd {
                   }
                   
                 }
+                .dropdown11{
+                  >span{
+                    width:90px;
+                  }
+                }
               }
             }
             .getFormBorder{
@@ -765,7 +770,7 @@ dd {
                .iptContent{
                  .dropdown1{
                    >span{
-                     width:100px;
+                    //  width:100px;
                      border:0.5px solid rgba(112,56,253,1);
                      background: #FFF;
                    }
@@ -930,6 +935,11 @@ dd {
                       margin: 0 auto;
                     }
                    }
+                }
+                .dropdown11{
+                  >span{
+                    width:100px;
+                  }
                 }
                }
             }
