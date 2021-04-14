@@ -36,6 +36,7 @@ let getLibraTx = (
         },
       ],
     },
+    maxGasAmount: "400000",
     gasUnitPrice: "1",
     chainId: _chainId,
   };
@@ -50,6 +51,7 @@ let getLibraPub = (_from, _module, _name, _chainId) => {
       tyArgs: [getLibraTyArgs(_module, _name)],
       args: [],
     },
+    maxGasAmount: "400000",
     gasUnitPrice: "1",
     chainId: _chainId,
   };
