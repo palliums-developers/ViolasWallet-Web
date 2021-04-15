@@ -1,4 +1,5 @@
 export default {
+  "Please check on the mobile terminal": "请在移动端进行校验",
   "Please use your ViolasPay scan code to log in":
     "请使用手机ViolasPay扫码登录",
   Success: "登录成功",
@@ -30,6 +31,8 @@ export default {
   Mapping1: "映射中",
   "Mapping success": "映射成功",
   "Mapping failed": "映射失败",
+  "Please enter the outgoing Ethereum address": "请输入转出ETH地址",
+  "Ethereum address": "ETH地址",
   "How to map ETH ERC20 token": "如何映射 ETH 代币？",
   "Cope & paste the link to the wallet then map the ETH ERC20 token to Violas wallet":
     "将链接复制到以下钱包，即可将ETH代币映射至violas钱包",
@@ -57,6 +60,7 @@ export default {
   "Please enter an amount": "请输入兑换数量",
   "Please enter an amount1": "请输入输入数量",
   "Please enter an amount2": "请输入输出数量",
+  "Enter amount transfered": "请输入转出数量",
   "Search Token": "搜索Token",
   Token: "通证",
   SWAP: "兑换",
@@ -286,6 +290,7 @@ export default {
   Token: "币种",
   "All Tokens": "全部币种",
   "All State": "全部状态",
+  "Available Balance": "可用余额",
   State: "状态",
   operation: "操作",
   Deposited: "已存款",
@@ -311,6 +316,8 @@ export default {
   "Borrow failed": "借款失败",
   "Repayment failed": "还款失败",
   "Repay amount": "待还余额",
+  "Payment method": "支付方式",
+  "Payment balance": "钱包余额",
   "Borrow successful": "借款成功",
   "Repayment successful": "还款成功",
   "Repayment Now": "立即还款",

@@ -133,6 +133,20 @@ class BorrowDetails extends Component {
   //获取输入框value
   getInputValue = (e) => {
     if (e.target.value) {
+      e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
+      e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      e.target.value = e.target.value
+        .replace(".", "$#$")
+        .replace(/\./g, "")
+        .replace("$#$", ".");
+      e.target.value = e.target.value.replace(
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
+        "$1$2.$3"
+      ); //只能输入两个小数
+      if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
+        //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+        e.target.value = parseFloat(e.target.value);
+      }
       this.setState({
         amount: e.target.value,
         warning: "",
@@ -217,7 +231,7 @@ class BorrowDetails extends Component {
         // console.log(res.data)
         if (res.data.code == 2000) {
           this.setState({
-            warning: "借款成功",
+            warning: intl.get("Borrow successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -228,7 +242,7 @@ class BorrowDetails extends Component {
           }, 500);
         } else {
           this.setState({
-            warning: "借款失败",
+            warning: intl.get("Borrow failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -241,7 +255,7 @@ class BorrowDetails extends Component {
       })
       .catch((error) => {
         this.setState({
-          warning: "借款失败",
+          warning: intl.get("Borrow failed"),
           showWallet: false,
         });
         setTimeout(() => {
@@ -342,7 +356,23 @@ class BorrowDetails extends Component {
             </h4>
             <input
               placeholder={"1" + showType + "起，每0" + showType + "递增"}
-              className={this.state.warning ? "activeInput" : null}
+              className={
+                this.state.warning == intl.get("Borrow failed")
+                  ? "activeInput"
+                  : this.state.warning1 == true
+                  ? "iptRepay1"
+                  : "iptRepay"
+              }
+              onFocus={() => {
+                this.setState({
+                  warning1: true,
+                });
+              }}
+              onBlur={() => {
+                this.setState({
+                  warning1: false,
+                });
+              }}
               value={this.state.amount}
               onChange={(e) => this.getInputValue(e)}
             />
@@ -424,7 +454,7 @@ class BorrowDetails extends Component {
             </p>
             <p
               className={
-                this.state.warning == "借款成功"
+                this.state.warning == intl.get("Borrow successful")
                   ? "descr descrWarn"
                   : "descr descrRed"
               }

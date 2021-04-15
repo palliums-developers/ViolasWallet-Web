@@ -304,10 +304,11 @@
             display: flex;
             .tokenList1{
               p{
+                width: 365px;
               font-size: 14px;
               font-weight: 400;
               color: #333333;
-              white-space: nowrap;
+              // white-space: nowrap;
               }
               a{
               font-size: 14px;
@@ -595,7 +596,7 @@
             margin-bottom: 10px!important;
             display: flex;
             label{
-                width: 60px;
+                // width: 60px;
                 font-size:12px;
                 font-weight:400;
                 color:rgba(153,153,153,1);
