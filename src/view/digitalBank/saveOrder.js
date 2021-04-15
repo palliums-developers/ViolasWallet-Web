@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import './digitalBank.scss';
-import { DatePicker, Breadcrumb, Table, Tag, Space, Select, Button  } from "antd";
+import {
+  ConfigProvider,
+  DatePicker,
+  Breadcrumb,
+  Table,
+  Tag,
+  Space,
+  Select,
+  Button,
+} from "antd";
+import enUS from "antd/lib/locale/en_US";
+import zhCN from "antd/lib/locale/zh_CN";
 import { NavLink } from "react-router-dom";
 import WalletConnect from "../../packages/browser/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
@@ -32,9 +43,10 @@ class SaveOrder extends Component {
       withdrawalsList: {},
       withdrawalsAmount: "",
       warning: "",
-      withdrawalsWay:"",
+      withdrawalsWay: "",
       total: 0,
       curTotal: 0,
+      locale: enUS,
       types: [
         {
           id: 0,
@@ -219,16 +231,15 @@ class SaveOrder extends Component {
   }
   componentDidMount() {
     // this.getPage(this.state.page, this.state.pageSize)
-    this.getCurSaveDetail()
+    this.getCurSaveDetail();
     this.getSaveDetail();
     this.getSaveDetail1();
+
   }
   async getDepositProduct() {
-    axios(url+"/1.0/violas/bank/product/deposit").then(
-      async (res) => {
-        await this.setState({ depositProduct: res.data.data });
-      }
-    );
+    axios(url + "/1.0/violas/bank/product/deposit").then(async (res) => {
+      await this.setState({ depositProduct: res.data.data });
+    });
   }
   //当前存款
   getCurSaveDetail = () => {
@@ -390,9 +401,9 @@ class SaveOrder extends Component {
         withdrawalsAmount: e.target.value,
         warning: "",
       });
-    }else{
+    } else {
       this.setState({
-        withdrawalsAmount: ""
+        withdrawalsAmount: "",
       });
     }
   };
@@ -415,10 +426,9 @@ class SaveOrder extends Component {
             this.getDigitalBank();
           }
         );
-      }else{
+      } else {
         this.getDigitalBank();
       }
-      
     }
   };
   async getDigitalBank() {
@@ -432,7 +442,7 @@ class SaveOrder extends Component {
     tx = digitalBank(
       "redeem",
       withdrawalsList.token_module,
-      withdrawalsWay == "All" ?  "0":""+withdrawalsAmount * 1e6,
+      withdrawalsWay == "All" ? "0" : "" + withdrawalsAmount * 1e6,
       sessionStorage.getItem("violas_address"),
       withdrawalsList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
@@ -475,11 +485,14 @@ class SaveOrder extends Component {
           });
         }, 500);
         setTimeout(() => {
-          this.setState({
-            showDialog: false,
-          },()=>{
-            window.location.reload()
-          });
+          this.setState(
+            {
+              showDialog: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         }, 1000);
       } else {
         this.setState({
@@ -503,12 +516,15 @@ class SaveOrder extends Component {
   };
   //获取当前存款每页的页码和条数
   getCurPage = (page, pageSize) => {
-    this.setState({
-      curPage: page,
-      curPageSize: pageSize,
-    },()=>{
-      this.getCurSaveDetail();
-    });
+    this.setState(
+      {
+        curPage: page,
+        curPageSize: pageSize,
+      },
+      () => {
+        this.getCurSaveDetail();
+      }
+    );
   };
   //获取每页的页码和条数
   getPage = (page, pageSize) => {
@@ -524,6 +540,7 @@ class SaveOrder extends Component {
   };
   render() {
     let { types, allCoin, allStatus, withdrawalsList, warning } = this.state;
+    
     return (
       <div className="saveOrder">
         <Breadcrumb separator=">">
@@ -585,15 +602,25 @@ class SaveOrder extends Component {
           ) : (
             <div className="saveDetail">
               <div className="selector">
-                <Space direction="vertical" size={12}>
-                  <RangePicker
-                    locale={locale}
-                    showTime={{ format: "HH:mm" }}
-                    format="YYYY-MM-DD HH:mm"
-                    onChange={this.onChange}
-                    onOk={this.onOk}
-                  />
-                </Space>
+                <ConfigProvider locale={window.localStorage.getItem('local') === 'CN' ? zhCN : enUS}>
+                  <Space
+                    key={
+                      locale
+                        ? locale.locale
+                        : "en"
+                    }
+                    direction="vertical"
+                    size={12}
+                  >
+                    <RangePicker
+                      locale={locale}
+                      showTime={{ format: "HH:mm" }}
+                      format="YYYY-MM-DD HH:mm"
+                      onChange={this.onChange}
+                      onOk={this.onOk}
+                    />
+                  </Space>
+                </ConfigProvider>
                 <Select
                   showSearch
                   allowClear={true}
