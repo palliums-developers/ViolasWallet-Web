@@ -269,7 +269,7 @@ class DigitalBank extends Component {
   //输出数量提示
   amountWarn() {
     if (
-      Number(this.state.amount / 1e8) >
+      Number(this.state.amount) >
       Number(this.getFloat(this.state.balance, 6))
     ) {
       this.setState({
@@ -319,16 +319,18 @@ class DigitalBank extends Component {
         warning: intl.get("Enter amount transfered"),
         focusActive: true,
       });
-    }if (
-      Number(this.state.amount / 1e8) >
-      Number(this.getFloat(this.state.balance, 6))
-    ) { 
-      intl.get("Insufficient available balance");
-    }else {
-      this.setState({
-        showWallet: true,
-      });
-      this.getMap();
+    }else{
+      if (
+        Number(this.state.amount) >
+        Number(this.getFloat(this.state.balance, 6))
+      ) {
+        intl.get("Insufficient available balance");
+      } else {
+        this.setState({
+          showWallet: true,
+        });
+        this.getMap();
+      }
     }
   };
   //确认映射
