@@ -30,10 +30,11 @@ class SaveDetails extends Component {
       extra: 0,
       amount: "",
       warning: "",
+      warning1: false,
       showWallet: false,
       token_address: "",
       depositProduct: [],
-      idx:""
+      idx: "",
     };
   }
   stopPropagation(e) {
@@ -131,10 +132,31 @@ class SaveDetails extends Component {
   //获取输入框value
   getInputValue = (e) => {
     if (e.target.value) {
-      this.setState({
-        amount: e.target.value,
-        warning: "",
-      });
+      e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
+      e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      e.target.value = e.target.value
+        .replace(".", "$#$")
+        .replace(/\./g, "")
+        .replace("$#$", ".");
+      e.target.value = e.target.value.replace(
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
+        "$1$2.$3"
+      ); //只能输入两个小数
+      if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
+        //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+        e.target.value = parseFloat(e.target.value);
+      }
+      if (Number(e.target.value) > Number(this.state.extra)) {
+        this.setState({
+          warning: intl.get("Insufficient available balance"),
+        });
+      }else{
+        this.setState({
+          amount: e.target.value,
+          warning: "",
+        });
+      }
+     
     }
   };
   //立即存款
@@ -142,6 +164,10 @@ class SaveDetails extends Component {
     if (this.state.amount == "") {
       this.setState({
         warning: intl.get("Please enter the deposit amount"),
+      });
+    }else if (Number(this.state.amount) > Number(this.state.extra)) {
+      this.setState({
+        warning: intl.get("Insufficient available balance"),
       });
     } else {
       this.setState({
@@ -294,16 +320,19 @@ class SaveDetails extends Component {
                         <span
                           key={i}
                           onClick={() => {
-                            this.setState({
-                              idx:v.id,
-                              showType: v.type,
-                              extra: v.balance,
-                              showList: false,
-                            },()=>{
-                              if(this.state.idx){
-                                this.getSaveAllMessage(this.state.idx);
+                            this.setState(
+                              {
+                                idx: v.id,
+                                showType: v.type,
+                                extra: v.balance,
+                                showList: false,
+                              },
+                              () => {
+                                if (this.state.idx) {
+                                  this.getSaveAllMessage(this.state.idx);
+                                }
                               }
-                            });
+                            );
                           }}
                         >
                           <img src="/img/kyye.png" />
@@ -317,13 +346,29 @@ class SaveDetails extends Component {
             </h4>
             <input
               placeholder={"1" + showType + "起，每0" + showType + "递增"}
-              className={this.state.warning ? "activeInput" : null}
+              className={
+                this.state.warning == intl.get("Deposit failed")
+                  ? "activeInput"
+                  : this.state.warning1 == true
+                  ? "iptRepay1"
+                  : "iptRepay"
+              }
+              onFocus={() => {
+                this.setState({
+                  warning1: true,
+                });
+              }}
+              onBlur={() => {
+                this.setState({
+                  warning1: false,
+                });
+              }}
               onChange={(e) => this.getInputValue(e)}
             />
             <div className="saveDetailsShow">
               <p>
                 <img src="/img/kyye.png" />
-                <label>可用余额 ：</label>{" "}
+                <label>{intl.get("Available Balance")}：</label>{" "}
                 <label>
                   {extra} {showType}
                 </label>
@@ -353,8 +398,8 @@ class SaveDetails extends Component {
               <span>{Number(saveList.pledge_rate * 100).toFixed(2)}%</span>
             </p>
             <p>
-              <label>支付方式</label>
-              <span>钱包余额</span>
+              <label>{intl.get("Payment method")}</label>
+              <span>{intl.get("Payment amount")}</span>
             </p>
           </div>
           <div className="foot">
@@ -363,7 +408,7 @@ class SaveDetails extends Component {
             </p>
             <p
               className={
-                this.state.warning == "存款成功"
+                this.state.warning == intl.get("Deposit successful")
                   ? "descr descrWarn"
                   : "descr descrRed"
               }

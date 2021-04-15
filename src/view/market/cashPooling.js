@@ -917,6 +917,14 @@ class CashPooling extends Component {
       this.setState({
         warning: intl.get("Please Select Token"),
       });
+    }else if (this.state.inputAmount > this.state.asset) {
+      this.setState({
+        warning: intl.get("Insuffcient balance"),
+      });
+    } else if (this.state.inputAmount1 > this.state.asset2) {
+      this.setState({
+        warning: intl.get("Insuffcient balance"),
+      });
     } else {
       if (this.state.inputAmount == "") {
         this.setState({
@@ -1535,7 +1543,7 @@ class CashPooling extends Component {
               )}
               <div className="changeRate">
                 {intl.get("Swap rate")}：
-                {this.state.rate == "--" || this.state.rate + "" == "NaN"
+                {this.state.rate == "--" || this.state.rate  + "" == "NaN"
                   ? "--"
                   : "1:" + this.state.rate}
               </div>
@@ -1760,24 +1768,6 @@ let mapDispatchToProps = (dispatch) => {
                 }
             })
         },
-        // showPolling: (payload) => {
-        //     dispatch({
-        //         type: 'SHOWPOOL',
-        //         payload: payload
-        //     })
-        // },
-        // showDrawer: () => {
-        //     dispatch({
-        //         type: 'VISIBLE',
-        //         payload: false
-        //     })
-        // },
-        // showDrawer1: (type) => {
-        //     dispatch({
-        //         type: 'VISIBLE1',
-        //         payload: !type
-        //     })
-        // }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CashPooling);

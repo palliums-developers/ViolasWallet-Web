@@ -547,7 +547,7 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6,6),
+            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6, 6),
           },
           {
             type: "Vector",
@@ -558,7 +558,7 @@ class ExChange extends Component {
                   this.state.type1,
                   code_data.libra.type.start,
                   address_temp,
-                  this.getFloat(this.state.outputAmount * 1e6,6)
+                  this.getFloat(this.state.outputAmount * 1e6, 6)
                 )
               )
             ),
@@ -570,6 +570,8 @@ class ExChange extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
   }
   //violas链兑换其他测试链的币种
@@ -599,7 +601,7 @@ class ExChange extends Component {
           },
           {
             type: "U64",
-            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6,6),
+            value: "" + this.getFloat(Number(this.state.inputAmount) * 1e6, 6),
           },
           {
             type: "Vector",
@@ -622,6 +624,8 @@ class ExChange extends Component {
         ],
       },
       chainId: chainId,
+      maxGasAmount: "400000",
+      gasUnitPrice: "1",
     };
   }
   async getViolasSwap(_out_type, chainId) {
@@ -832,16 +836,9 @@ class ExChange extends Component {
               {
                 swap_trial: res.data,
                 outputAmount: res.data.amount / 1e6,
-                exchangeRate: this.getFloat(
-                  res.data.amount / 1e6 / this.state.inputAmount,
-                  6
-                ),
                 gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
-              },
-              () => {
-                this.setState({});
-              }
-            );
+                exchangeRate: this.getFloat(res.data.amount / 1e6 / this.state.inputAmount,6),
+              });
           }
         });
     }
@@ -866,11 +863,8 @@ class ExChange extends Component {
             this.setState({
               swap_trial: res.data,
               inputAmount: res.data.amount / 1e6,
-              exchangeRate: this.getFloat(
-                res.data.amount / 1e6 / this.state.inputAmount,
-                6
-              ),
               gasFee: this.getFloat(res.data.fee / 1e6, 6) + "%",
+              exchangeRate:this.getFloat(res.data.amount / 1e6 / this.state.outputAmount),
             });
           }
         });
@@ -981,6 +975,15 @@ class ExChange extends Component {
     if (this.state.type1 == intl.get("Select Token")) {
       this.setState({
         warning: intl.get("Please Select Token"),
+      });
+    }
+    else if (this.state.inputAmount > this.state.asset) {
+      this.setState({
+        warning: intl.get("Insuffcient balance"),
+      });
+    } else if (this.state.outputAmount > this.state.asset1) {
+      this.setState({
+        warning: intl.get("Insuffcient balance"),
       });
     } else {
       if (this.state.inputAmount) {
@@ -1128,7 +1131,6 @@ class ExChange extends Component {
       exchangeRate,
       focusActive,
     } = this.state;
-    
     // console.log(arr1,'....')
     return (
       <div className="exchange">

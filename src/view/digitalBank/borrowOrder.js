@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import './digitalBank.scss';
-import { DatePicker, Breadcrumb, Table, Tag, Space, Select } from "antd";
+import {
+  ConfigProvider,
+  DatePicker,
+  Breadcrumb,
+  Table,
+  Tag,
+  Space,
+  Select,
+} from "antd";
+import enUS from "antd/lib/locale/en_US";
+import zhCN from "antd/lib/locale/zh_CN";
 import { NavLink } from "react-router-dom";
 import 'antd/dist/antd.css'
 import 'moment/locale/zh-cn';
@@ -791,15 +801,25 @@ class BorrowOrder extends Component {
           ) : (
             <div className="saveDetail">
               <div className="selector">
-                <Space direction="vertical" size={12}>
-                  <RangePicker
-                    locale={locale}
-                    showTime={{ format: "HH:mm" }}
-                    format="YYYY-MM-DD HH:mm"
-                    onChange={this.onChange}
-                    onOk={this.onOk}
-                  />
-                </Space>
+                <ConfigProvider
+                  locale={
+                    window.localStorage.getItem("local") === "CN" ? zhCN : enUS
+                  }
+                >
+                  <Space
+                    key={locale ? locale.locale : "en"}
+                    direction="vertical"
+                    size={12}
+                  >
+                    <RangePicker
+                      locale={locale}
+                      showTime={{ format: "HH:mm" }}
+                      format="YYYY-MM-DD HH:mm"
+                      onChange={this.onChange}
+                      onOk={this.onOk}
+                    />
+                  </Space>
+                </ConfigProvider>
                 <Select
                   showSearch
                   allowClear={true}

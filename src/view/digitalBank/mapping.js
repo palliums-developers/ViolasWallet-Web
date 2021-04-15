@@ -273,7 +273,7 @@ class DigitalBank extends Component {
       Number(this.getFloat(this.state.balance, 6))
     ) {
       this.setState({
-        warning: "余额不足",
+        warning: intl.get("Insufficient available balance"),
       });
     } else {
       this.setState({
@@ -281,11 +281,11 @@ class DigitalBank extends Component {
       });
     }
   }
-  getETHAddressAmount = (e) =>{
+  getETHAddressAmount = (e) => {
     this.setState({
-      ETHAddress:e.target.value
+      ETHAddress: e.target.value,
     });
-  }
+  };
   getTypeShow = (event) => {
     this.stopPropagation(event);
     this.setState({
@@ -294,7 +294,7 @@ class DigitalBank extends Component {
   };
   //转出数量选中
   showTypes = (v, v1, bal, name, ind, val) => {
-    console.log(val, "........");
+    // console.log(val, "........");
     this.setState(
       {
         type: v,
@@ -304,7 +304,7 @@ class DigitalBank extends Component {
         coinName: name,
         ind: ind,
         mappingCoinType: val,
-        ethName:val.to_coin.coin_type
+        ethName: val.to_coin.coin_type,
       },
       () => {
         // this.getTypeBalance()
@@ -316,14 +316,20 @@ class DigitalBank extends Component {
   confirmMapping = () => {
     if (this.state.amount == "") {
       this.setState({
-        warning: "请输入转出数量",
+        warning: intl.get("Enter amount transfered"),
         focusActive: true,
       });
     } else {
-      this.setState({
-        showWallet: true,
-      });
-      this.getMap();
+      if (
+        Number(this.state.amount) > Number(this.getFloat(this.state.balance, 6))
+      ) {
+        intl.get("Insufficient available balance");
+      } else {
+        this.setState({
+          showWallet: true,
+        });
+        this.getMap();
+      }
     }
   };
   //确认映射
@@ -368,7 +374,7 @@ class DigitalBank extends Component {
           // console.log("Bitcoin mapping ", res);
           this.setState(
             {
-              warning: "映射成功",
+              warning: intl.get("Mapping success"),
               showWallet: false,
             },
             () => {
@@ -378,13 +384,15 @@ class DigitalBank extends Component {
         })
         .catch((err) => {
           // console.log("Bitcoin mapping ", err);
-          this.setState({
-            warning: "映射失败",
-            showWallet: false,
-          },()=>{
-            window.location.reload();
-          });
-          
+          this.setState(
+            {
+              warning: intl.get("Mapping failed"),
+              showWallet: false,
+            },
+            () => {
+              window.location.reload();
+            }
+          );
         });
     } else if (this.state.mappingCoinType.from_coin.coin_type === "libra") {
       let script = getMapScript(
@@ -407,7 +415,7 @@ class DigitalBank extends Component {
         .then((res) => {
           // console.log("Libra mapping ", res);
           this.setState({
-            warning: "映射成功",
+            warning: intl.get("Mapping success"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -421,7 +429,7 @@ class DigitalBank extends Component {
         .catch((err) => {
           // console.log("Libra mapping ", err);
           this.setState({
-            warning: "映射失败",
+            warning: intl.get("Mapping failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -453,7 +461,7 @@ class DigitalBank extends Component {
         .then((res) => {
           // console.log("Violas mapping ", res);
           this.setState({
-            warning: "映射成功",
+            warning: intl.get("Mapping success"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -467,7 +475,7 @@ class DigitalBank extends Component {
         .catch((err) => {
           // console.log("Violas mapping ", err);
           this.setState({
-            warning: "映射失败",
+            warning: intl.get("Mapping failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -654,7 +662,9 @@ class DigitalBank extends Component {
                 <div className="ETHAddress">
                   <input
                     value={this.state.ETHAddress}
-                    placeholder="请输入转出ETH地址"
+                    placeholder={intl.get(
+                      "Please enter the outgoing Ethereum address"
+                    )}
                     className={getFocus1 ? "getFormBorder" : ""}
                     onFocus={() => {
                       this.setState({
@@ -698,7 +708,9 @@ class DigitalBank extends Component {
                 </p>
                 <p
                   className={
-                    warning == "映射成功" ? "descr descrWarn" : "descr descrRed"
+                    warning == intl.get("Mapping success")
+                      ? "descr descrWarn"
+                      : "descr descrRed"
                   }
                 >
                   {warning}
@@ -778,7 +790,9 @@ class DigitalBank extends Component {
                           {item.out_show_name}
                         </p>
                         {item.to_address ? (
-                          <label>ETH地址：{item.to_address}</label>
+                          <label>
+                            {intl.get("Ethereum address")}：{item.to_address}
+                          </label>
                         ) : null}
                       </div>
                       <div>

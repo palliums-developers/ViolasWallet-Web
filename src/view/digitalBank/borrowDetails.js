@@ -133,6 +133,20 @@ class BorrowDetails extends Component {
   //获取输入框value
   getInputValue = (e) => {
     if (e.target.value) {
+      e.target.value = e.target.value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
+      e.target.value = e.target.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      e.target.value = e.target.value
+        .replace(".", "$#$")
+        .replace(/\./g, "")
+        .replace("$#$", ".");
+      e.target.value = e.target.value.replace(
+        /^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,
+        "$1$2.$3"
+      ); //只能输入两个小数
+      if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
+        //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+        e.target.value = parseFloat(e.target.value);
+      }
       this.setState({
         amount: e.target.value,
         warning: "",
@@ -217,7 +231,7 @@ class BorrowDetails extends Component {
         // console.log(res.data)
         if (res.data.code == 2000) {
           this.setState({
-            warning: "借款成功",
+            warning: intl.get("Borrow successful"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -228,7 +242,7 @@ class BorrowDetails extends Component {
           }, 500);
         } else {
           this.setState({
-            warning: "借款失败",
+            warning: intl.get("Borrow failed"),
             showWallet: false,
           });
           setTimeout(() => {
@@ -241,7 +255,7 @@ class BorrowDetails extends Component {
       })
       .catch((error) => {
         this.setState({
-          warning: "借款失败",
+          warning: intl.get("Borrow failed"),
           showWallet: false,
         });
         setTimeout(() => {
@@ -342,7 +356,23 @@ class BorrowDetails extends Component {
             </h4>
             <input
               placeholder={"1" + showType + "起，每0" + showType + "递增"}
-              className={this.state.warning ? "activeInput" : null}
+              className={
+                this.state.warning == intl.get("Borrow failed")
+                  ? "activeInput"
+                  : this.state.warning1 == true
+                  ? "iptRepay1"
+                  : "iptRepay"
+              }
+              onFocus={() => {
+                this.setState({
+                  warning1: true,
+                });
+              }}
+              onBlur={() => {
+                this.setState({
+                  warning1: false,
+                });
+              }}
               value={this.state.amount}
               onChange={(e) => this.getInputValue(e)}
             />
@@ -424,7 +454,7 @@ class BorrowDetails extends Component {
             </p>
             <p
               className={
-                this.state.warning == "借款成功"
+                this.state.warning == intl.get("Borrow successful")
                   ? "descr descrWarn"
                   : "descr descrRed"
               }
@@ -500,6 +530,22 @@ class BorrowDetails extends Component {
                     </div>
                   );
                 })}
+                {/* <div className="descr">
+                                    <h4>如何增加可借额度？</h4>
+                                    <p>可通过存款增加可借额度</p>
+                                </div>
+                                <div className="descr">
+                                    <h4>借款有时间限制吗？</h4>
+                                    <p>借款限制固定的时间周期，但是，随着时间的流逝，借贷利息会相应增加</p>
+                                </div>
+                                <div className="descr">
+                                    <h4>需要支付多少利息？</h4>
+                                    <p>借贷利率是不断变化的，用户所需支付的利息取决于该资产的供求关系。</p>
+                                </div>
+                                <div className="descr">
+                                    <h4>什么情况下资产将被清算？</h4>
+                                    <p>用户当前已借贷价值超过了最大可借贷价值，则可被清算，清算只清算超出最大可借贷价值的部分</p>
+                                </div> */}
               </div>
             ) : null}
           </div>

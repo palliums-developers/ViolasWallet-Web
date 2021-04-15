@@ -1,4 +1,5 @@
 export default {
+  "Please check on the mobile terminal": "Please check on the mobile terminal",
   "Please use your ViolasPay scan code to log in":
     "Please use your ViolasPay scan code to log in",
   Success: "Success",
@@ -16,8 +17,12 @@ export default {
   Balance: "Balance",
   "Mining Bonus": "Mining Bonus",
   "Mining Bonus1": "Mining Bonus",
+  "Please enter the outgoing Ethereum address":
+    "Please enter the outgoing Ethereum address",
+  "Ethereum address": "Ethereum address",
   "Input Amount": "Input Amount",
   "Input Receving Address": "Input Receving Address",
+  "Enter amount transfered": "Enter amount transfered",
   "Transfer success": "Transfer success",
   "Transfer failed": "Transfer failed",
   "Payment success": "Payment success",
@@ -296,6 +301,7 @@ export default {
   operation: "operation",
   "All Tokens": "All Tokens",
   "All State": "All State",
+  "Available Balance": "Available Balance",
   Deposited: "Deposited",
   "Deposit successful": "Deposit Successfu",
   "Deposit failed": "Deposit Failed",
@@ -337,6 +343,8 @@ export default {
   "To borrow": "To borrow",
   "To payoff": "To payoff",
   "Repay amount": "Repay amount",
+  "Payment method": "Payment method",
+  "Payment balance": "Payment balance",
   "Borrowing rate": "Borrowing rate",
   "Account balance": "Account balance",
   "Pledge account": "Pledge account",
