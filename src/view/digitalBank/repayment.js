@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import WalletConnect from "../../packages/browser/index";
 import WalletconnectDialog from "../components/walletconnectDialog";
 import { digitalBank, getProductId } from "../../utils/bank";
+import intl from "react-intl-universal";
 import axios from "axios";
 import code_data from "../../utils/code.json";
 let url1 = "https://api4.violas.io";
