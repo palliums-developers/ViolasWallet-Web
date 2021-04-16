@@ -503,9 +503,14 @@ class HomeContent extends Component {
               <i
                 onClick={(e) => {
                   this.stopPropagation(e);
-                  this.setState({
-                    display: true,
-                  });
+                  this.setState(
+                    {
+                      display: true,
+                    },
+                    () => {
+                      this.updateAmount();
+                    }
+                  );
                   // this.props.showPolling(!this.props.display);
                 }}
               >
