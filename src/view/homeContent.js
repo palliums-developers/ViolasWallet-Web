@@ -505,6 +505,8 @@ class HomeContent extends Component {
                   this.stopPropagation(e);
                   this.setState({
                     display: true,
+                  },()=>{
+                    this.updateAmount();
                   });
                   // this.props.showPolling(!this.props.display);
                 }}

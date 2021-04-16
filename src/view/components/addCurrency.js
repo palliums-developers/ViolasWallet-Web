@@ -41,9 +41,7 @@ class AddCurrency extends Component {
   }
   async componentWillMount() {
     await this.getNewWalletConnect();
-    if (false) {
-      this.forceUpdate();
-    }
+    
   }
   async getNewWalletConnect() {
     await this.setState({
