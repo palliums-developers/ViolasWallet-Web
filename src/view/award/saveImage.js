@@ -11,14 +11,21 @@ class PhotoSynthesis extends Component {
     super(props);
     this.state = {
       imgData: "",
-      id:""
+      id: "",
     };
   }
   componentWillMount() {
-    
     this.setState({
-      id: rndNum(100)
+      id: rndNum(100),
     });
+  }
+  componentDidMount() {
+    if (window.localStorage.getItem("local") == "CN") {
+      this.initCanvas();
+    }else if (window.localStorage.getItem("local") == "EN") {
+      this.initCanvas1();
+    }
+    
   }
   initCanvas() {
     let canvas1 = document.getElementById("customCanvas");
@@ -66,6 +73,52 @@ class PhotoSynthesis extends Component {
       };
     };
   }
+  initCanvas1() {
+    let canvas1 = document.getElementById("customCanvas");
+    let width = (canvas1.width = 305);
+    let height = (canvas1.height = 534);
+    let context1 = canvas1.getContext("2d");
+    context1.rect(100, 0, canvas1.width, canvas1.height);
+    context1.fillStyle = "#fff";
+    context1.fill();
+    var myImage = new Image();
+    myImage.src = require("./image/m_编组 322@2x.png"); //背景图片 你自己本地的图片或者在线图片
+    myImage.crossOrigin = "Anonymous";
+    myImage.onload = function () {
+      context1.drawImage(myImage, -2, 0, 309, 534);
+      var myImage2 = new Image();
+      myImage2.src = require("./image/m_编组 31@2x.png"); //你自己本地的图片或者在线图片
+      myImage2.crossOrigin = "Anonymous";
+      myImage2.onload = function () {
+        let qrCodeCanvas = document.querySelectorAll("canvas")[0];
+        let image3 = new Image();
+        image3.src = qrCodeCanvas.toDataURL("image/png");
+        let xw = width - 72;
+        let xh = height - 72;
+        context1.drawImage(myImage2, 40, 70, 234, 168);
+        image3.onload = function () {
+          context1.font = "600 15px PingFangSC-Semibold, PingFang SC";
+          context1.fillText(intl.get("Scan QR code"), xw - 122, xh + 5);
+          context1.fillStyle = "rgba(254, 169, 18, 1)";
+          context1.fillText(
+            intl.get("Divide the rewards together"),
+            xw - 230,
+            xh + 30
+          );
+          context1.drawImage(image3, xw - 10, xh - 20, 60, 60);
+          //绘制完成,转为图片
+          setTimeout(function () {
+            //在ios上无法在画完之后取到整个画布内容，加了个settimeout
+            let bigcan = document.querySelectorAll("canvas")[1];
+            let images = new Image();
+            images.src = bigcan.toDataURL("image/png");
+            // alert(bigcan.toDataURL("image/png"));
+            images.setAttribute("crossOrigin", "Anonymous");
+          });
+        };
+      };
+    };
+  }
   getPhoto1 = () => {
     var type = "png";
     var bigcan = document.querySelectorAll("canvas")[1];
@@ -85,11 +138,11 @@ class PhotoSynthesis extends Component {
         params: [imgBase64],
       }),
       (resp) => {
-         if (JSON.parse(resp).result == "success") {
-           setTimeout(() => {
+        if (JSON.parse(resp).result == "success") {
+          setTimeout(() => {
             this.props.closeDialog(false);
           }, 500);
-         }
+        }
       }
     );
   };
@@ -137,9 +190,6 @@ class PhotoSynthesis extends Component {
     };
     var filename = new Date().toLocaleDateString() + "." + type;
     saveFile(imgdata, filename);
-  }
-  componentDidMount() {
-    this.initCanvas();
   }
 
   render() {
