@@ -165,35 +165,35 @@ class InviteRewards extends Component {
                 <img src="/img/mobile_m_编组 33@2x.png" />
               )}
             </div>
-            <div className="stepWrap">
-              <div>
-                <dl>
-                  <dt>
-                    <img src="/img/m_编组 38@2x.png" />
-                  </dt>
-                  <dd>{intl.get("Send invitation link to friend")}</dd>
-                </dl>
-                <div className="jiantou">
-                  <img src="/img/m_jiantou-4 2@2x.png" />
-                </div>
-                <dl>
-                  <dt>
-                    <img src="/img/m_编组 40@2x.png" />
-                  </dt>
-                  <dd>
-                    {intl.get("Friend has passed phone number verification")}
-                  </dd>
-                </dl>
-                <div className="jiantou">
-                  <img src="/img/m_jiantou-4 2@2x.png" />
-                </div>
-                <dl>
-                  <dt>
-                    <img src="/img/m_编组 266@2x.png" />
-                  </dt>
-                  <dd>{intl.get("Both sides will win awards")}</dd>
-                </dl>
+          </div>
+          <div className="stepWrap">
+            <div>
+              <dl>
+                <dt>
+                  <img src="/img/m_编组 38@2x.png" />
+                </dt>
+                <dd>{intl.get("Send invitation link to friend")}</dd>
+              </dl>
+              <div className="jiantou">
+                <img src="/img/m_jiantou-4 2@2x.png" />
               </div>
+              <dl>
+                <dt>
+                  <img src="/img/m_编组 40@2x.png" />
+                </dt>
+                <dd>
+                  {intl.get("Friend has passed phone number verification")}
+                </dd>
+              </dl>
+              <div className="jiantou">
+                <img src="/img/m_jiantou-4 2@2x.png" />
+              </div>
+              <dl>
+                <dt>
+                  <img src="/img/m_编组 266@2x.png" />
+                </dt>
+                <dd>{intl.get("Both sides will win awards")}</dd>
+              </dl>
             </div>
           </div>
           <div className="myInvitation">

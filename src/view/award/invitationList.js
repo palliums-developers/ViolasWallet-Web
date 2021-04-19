@@ -99,7 +99,9 @@ class InvitationList extends Component {
             <span>{intl.get("Gaining ranking")}</span>
             <span>
               <img src="/img/m_编组 300@2x.png" />
-              收益榜单将会在每周日晚 00:00 更新
+              {intl.get(
+                "Gaining ranking will be updated every Sunday night at 00:00"
+              )}
             </span>
           </Breadcrumb>
           <div className="rankingWrap">
@@ -113,8 +115,7 @@ class InvitationList extends Component {
                     <p>{this.showVLSAddress(v.address)}</p>
                     <p className="inv">
                       {intl.get("Total invitation")}{" "}
-                      <span>{v.invite_count}</span>{" "}
-                      {intl.get("people")}
+                      <span>{v.invite_count}</span> {intl.get("people")}
                     </p>
                     <p>{parseInt(v.incentive / 1e6)}VLS</p>
                   </div>
