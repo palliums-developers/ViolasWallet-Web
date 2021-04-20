@@ -282,6 +282,7 @@
                   width: 717px;
                   height: 167px;
               }
+              
           }
           
       }
@@ -587,6 +588,10 @@
               img{
                   width: 260px;
                   height: 157px;
+              }
+              #img2{
+                  height: 100px;
+                  margin-bottom: 30px;
               }
           }
           
@@ -964,7 +969,7 @@
                         }
                     }
                     dd{
-                        
+                        white-space: nowrap;
                         font-size: 14px;
                         // font-family: PingFangSC-Regular, PingFang SC;
                         font-weight: 400;
@@ -982,6 +987,7 @@
                 }
                 .jiantou{
                     display: flex;
+                    margin-top: -25px;
                     img{
                         width: 34px;
                         height: 6;
@@ -1574,6 +1580,32 @@
       
     }
 }
+@media (max-width:590px){
+.shareLink {
+    .inviteContent {
+        .stepWrap {
+            dl:nth-child(5) {
+                dd{
+                    margin-right: 10px;
+                 }
+            }
+        }
+    }
+}
+}
+@media (max-width:450px){
+    .shareLink {
+    .inviteContent {
+        .stepWrap {
+            dl:nth-child(5) {
+                dd{
+                    margin-right:30px;
+                 }
+            }
+        }
+    }
+}
+}
 @media (min-width:376px){
     .inviteRewards1{
         .inviteContent{
@@ -1587,6 +1619,7 @@
             }
         }
     }
+    
 }
 @media (max-width:321px){
     .inviteRewards1{
