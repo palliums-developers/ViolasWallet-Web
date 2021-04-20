@@ -16,21 +16,21 @@ class CurrencyDetail extends Component {
     this.state = {
       types: [
         {
-          name: "全部",
+          name: intl.get("All"),
           type: "all",
         },
         {
-          name: "转入",
+          name: intl.get("Input"),
           type: "into",
         },
         {
-          name: "转出",
+          name: intl.get("Output"),
           type: "out",
         },
       ],
       types1: [
         {
-          name: "全部",
+          name: intl.get("All"),
           type: "all",
         },
       ],
@@ -420,17 +420,26 @@ class CurrencyDetail extends Component {
                             ? this.getSubStr(v.sender)
                             : this.getSubStr(v.sender)}
                         </p>
-                        <p>{timeStamp2String(v.confirmed_time + "000")}</p>
+                        <p>
+                          {v.confirmed_time == null
+                            ? timeStamp2String(v.expiration_time + "000")
+                            : timeStamp2String(v.confirmed_time + "000")}
+                        </p>
                       </div>
                       <div className="listResult">
-                        <p className={v.status == "Executed" ? "gre" : "red"}>
-                          {v.receiver == detailAddrs
-                            ? "+"
-                            : v.sender == detailAddrs
-                            ? "-"
-                            : "+"}
-                          {v.amount / 1e6}
-                        </p>
+                        {v.amount == null ? (
+                          <p className="gre">--</p>
+                        ) : (
+                          <p className={v.status == "Executed" ? "gre" : "red"}>
+                            {v.receiver == detailAddrs
+                              ? "+"
+                              : v.sender == detailAddrs
+                              ? "-"
+                              : "+"}
+                            {v.amount / 1e6}
+                          </p>
+                        )}
+
                         {/* <p className="org">交易中</p> */}
                       </div>
                     </div>

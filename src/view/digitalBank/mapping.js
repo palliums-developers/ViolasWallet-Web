@@ -780,10 +780,12 @@ class DigitalBank extends Component {
                             : `${intl.get("Mapping failed")}`}
                         </span>
                         <p>
-                          {item.in_amount / 1e6}
+                          {item.in_show_name == "BTC"
+                            ? item.in_amount / 1e8
+                            : item.in_amount / 1e6}
                           {item.in_show_name}
                           <img src="/img/路径 2@2x.png" />
-                          {item.out_amount / 1e6}
+                          {item.out_show_name == "BTC" ? (item.out_amount / 1e8):(item.out_amount / 1e6)}
                           {item.out_show_name}
                         </p>
                         {item.to_address ? (

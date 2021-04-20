@@ -479,16 +479,26 @@ class Transfer extends Component {
       .sendTransaction("_libra", tx)
       .then((res) => {
         // console.log("Libra transaction", res);
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       })
       .catch((err) => {
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
 
         // console.log("Libra transaction ", err);
       });
@@ -508,17 +518,27 @@ class Transfer extends Component {
       .sendTransaction("_bitcoin", tx)
       .then((res) => {
         // console.log("Bitcoin transaction ", res);
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       })
       .catch((err) => {
         // console.log("Bitcoin transaction ", err);
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       });
   }
   getViolasNext = () => {

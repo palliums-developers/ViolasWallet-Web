@@ -1442,7 +1442,9 @@ class ExChange extends Component {
                         </span>
 
                         <p>
-                          {timeStamp2String(v.confirmed_time + "000")}
+                          {v.confirmed_time == null
+                            ? timeStamp2String(v.date + "000")
+                            : timeStamp2String(v.confirmed_time + "000")}
                           <i>
                             <img src="/img/rightArrow.png" />
                           </i>
