@@ -441,10 +441,9 @@ export default {
     "Two.Phone number will not be bind with your wallet",
   "Three. Win 10 VLS after successful verification":
     "Three.Win 10 VLS after successful verification",
-  "Send invitation link to friend": "Send invitation link to friend",
-  "Friend has passed phone number verification":
-    "Friend has passed phone number verification",
-  "Both sides will win awards": "Both sides will win awards",
+  "Send invitation link to friend": "Send invitation link",
+  "Friend has passed phone number verification": "Friend verify number",
+  "Both sides will win awards": "Both win bonus",
   "My invitation": "My invitation",
   "Invited to address": "Invited to address",
   "Number of invitees": "Number of invitees",
