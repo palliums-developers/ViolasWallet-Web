@@ -4,11 +4,13 @@ import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
 import intl from "react-intl-universal";
 import BigNumber from "bignumber.js";
+import dealwith_tbtc1_txid from "../../utils/tbtc1"
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
 let url1 = 'https://api.violas.io'
 let url = "https://api4.violas.io"
 let btcUrl = "https://tbtc1.trezor.io";
+
 //币种详情
 class CurrencyDetail extends Component {
   constructor(props) {
@@ -99,32 +101,16 @@ class CurrencyDetail extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res, ".......");
-        if (res.transactions) {
-          let transactions = res.transactions;
-          for (let i = 0; i < transactions.length; i++) {
-            for (let j = 0; j < transactions[i].vin.length; j++) {
-              transactions[i].vin[j].type = "vin";
-            }
-            for (let x = 0; x < transactions[i].vout.length; x++) {
-              transactions[i].vout[x].type = "vout";
-            }
-            transactions[i].trans = transactions[i].vin.concat(
-              transactions[i].vout
-            );
-            transactions[i].transLength = transactions[i].trans.length;
-            // console.log(transactions[i].vin.concat(transactions[i].vout));
-          }
-          console.log(transactions);
-          if (this.state.navType == "all") {
-            if (this.state.total == 0) {
-              this.setState({
-                total: transactions && transactions[0].transLength,
-                dataList1: transactions,
-              });
-            }
-          }
-        }
+        let transactions = dealwith_tbtc1_txid(res);
+        // console.log(dealwith_tbtc1_txid(res))
+         if (this.state.navType == "all") {
+           if (this.state.total == 0) {
+             this.setState({
+               total: transactions.length,
+               dataList1: transactions,
+             });
+           }
+         }
       });
   }
   getNavData() {
@@ -357,40 +343,36 @@ class CurrencyDetail extends Component {
           <div className="detailLists">
             {this.state.type == "btc"
               ? dataList1.map((v, i) => {
-                  return v.trans.map((v1, i1) => {
-                    return (
-                      <div
-                        key={i1}
-                        className="detailList"
-                        onClick={() => {
-                          this.props.showDetails(false);
-                          this.props.curDataFun(v1);
-                          this.props.showDetails1(true);
-                        }}
-                      >
-                        <i>
-                          {v1.type == "vin" ? (
-                            <img src="/img/编组 13备份 2@2x.png" />
-                          ) : (
-                            <img src="/img/编组 13备份 3@2x.png" />
-                          )}
-                        </i>
-                        <div className="listCenter">
-                          <p>{this.getSubStr(v1.addresses[0])}</p>
-                          <p>{timeStamp2String(v.blockTime + "000")}</p>
-                        </div>
-                        <div className="listResult">
-                          <p className="gre">
-                            {v1.type == "vin" ? "+" : "-"}
-                            {new BigNumber(String(v1.value / 100000000)).toFormat(
-                              8
-                            )}
-                          </p>
-                          {/* <p className="org">交易中</p> */}
-                        </div>
+                  return (
+                    <div
+                      key={i}
+                      className="detailList"
+                      onClick={() => {
+                        this.props.showDetails(false);
+                        this.props.curDataFun(v);
+                        this.props.showDetails1(true);
+                      }}
+                    >
+                      <i>
+                        {v.type == "vin" ? (
+                          <img src="/img/编组 13备份 2@2x.png" />
+                        ) : (
+                          <img src="/img/编组 13备份 3@2x.png" />
+                        )}
+                      </i>
+                      <div className="listCenter">
+                        <p>{this.getSubStr(v.show_address)}</p>
+                        <p>{timeStamp2String(v.timestamp + "000")}</p>
                       </div>
-                    );
-                  });
+                      <div className="listResult">
+                        <p className="gre">
+                          {v.sender ? "-" : "+"}
+                          {v.show_value}
+                        </p>
+                        {/* <p className="org">交易中</p> */}
+                      </div>
+                    </div>
+                  );
                 })
               : dataList.map((v, i) => {
                   return (

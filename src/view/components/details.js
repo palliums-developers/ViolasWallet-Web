@@ -15,7 +15,9 @@ class Details extends Component {
             deal:false
         };
     }
-    componentDidMount() { }
+    componentDidMount() {
+      
+     }
     handleCopy = (v) => {
         const spanText = document.getElementById(v).innerText;
         const oInput = document.createElement('input');
@@ -39,7 +41,7 @@ class Details extends Component {
     render() {
         let { detailDatas } = this.props;
         let { reve, tran,deal } = this.state;
-        // console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
+        // console.log(detailDatas)
         return (
           <div className="details">
             <h4
@@ -52,108 +54,207 @@ class Details extends Component {
               </i>
               {intl.get("Detail")}
             </h4>
-            <div className="detailsTable">
-              <div className="tableContent">
-                {detailDatas && detailDatas.type == 0 ? (
-                  <i>
-                    <img src="/img/shenhezhong-2 4@2x.png" />
-                  </i>
-                ) : detailDatas.sender ==
-                  window.sessionStorage.getItem("detailAddr") ? (
-                  <i>
-                    <img src="/img/shenhetongguo 4@2x.png" />
-                  </i>
-                ) : (
-                  <i>
-                    <img src="/img/shenhetongguo 4@2x.png" />
-                  </i>
-                )}
-                {detailDatas && detailDatas.type == 0 ? (
-                  <h3>{intl.get("Stability coin activated successfully")}</h3>
-                ) : detailDatas.sender ==
-                  window.sessionStorage.getItem("detailAddr") ? (
-                  <h3>{intl.get("Transfer success")}</h3>
-                ) : (
-                  <h3>{intl.get("Payment success")}</h3>
-                )}
-
-                <p>
-                  {timeStamp2String1(
-                    detailDatas && detailDatas.expiration_time + "000"
+            {detailDatas.show_type == "btc" ? (
+              <div className="detailsTable">
+                <div className="tableContent">
+                  {detailDatas.show_confirmations == false ? (
+                    <i>
+                      <img src="/img/shenhezhong-2 4@2x.png" />
+                    </i>
+                  ) : detailDatas.sender ? (
+                    <i>
+                      <img src="/img/shenhetongguo 4@2x.png" />
+                    </i>
+                  ) : (
+                    <i>
+                      <img src="/img/shenhetongguo 4@2x.png" />
+                    </i>
                   )}
-                </p>
-                <div className="line">
-                  <img src="/img/路径 42@2x.png" />
-                </div>
+                  {detailDatas.show_confirmations == false ? (
+                    <h3>{intl.get("Stability coin activated successfully")}</h3>
+                  ) : detailDatas.sender ? (
+                    <h3>{intl.get("Transfer success")}</h3>
+                  ) : (
+                    <h3>{intl.get("Payment success")}</h3>
+                  )}
 
-                <div className="tableList">
                   <p>
-                    <label>{intl.get("Amount")}：</label>
-                    <span>
-                      {detailDatas && detailDatas.amount / 1e6}{" "}
-                      {detailDatas && detailDatas.currency}
-                    </span>
+                    {timeStamp2String1(
+                      detailDatas && detailDatas.timestamp + "000"
+                    )}
                   </p>
-                  <p>
-                    <label>{intl.get("Cost of miners")}：</label>
-                    <span>
-                      {detailDatas && detailDatas.gas / 1e6}{" "}
-                      {detailDatas.gas_currency}
-                    </span>
-                  </p>
-                  <p>
-                    <label>{intl.get("Collection address")}：</label>
-                    <span>
-                      <i id="reve">
-                        {detailDatas.receiver == null
-                          ? "--"
-                          : detailDatas.receiver}
-                      </i>
-                      <img
-                        onClick={() => this.handleCopy("reve")}
-                        src="/img/icon- 2@2x.png"
-                      />
-                      {reve ? (
-                        <p className="warn">
-                          {intl.get("Address copy successful")}
-                        </p>
-                      ) : null}
-                    </span>
-                  </p>
-                  <p>
-                    <label>{intl.get("Payment address")}：</label>
-                    <span>
-                      <i id="tran">{detailDatas.sender}</i>
-                      <img
-                        onClick={() => this.handleCopy("tran")}
-                        src="/img/icon- 2@2x.png"
-                      />
-                      {tran ? (
-                        <p className="warn">
-                          {intl.get("Address copy successful")}
-                        </p>
-                      ) : null}
-                    </span>
-                  </p>
-                  <p>
-                    <label>{intl.get("Transaction no")}：</label>
-                    <span>
-                      <i id="deal">{detailDatas.version}</i>
-                      <img
-                        onClick={() => this.handleCopy("deal")}
-                        src="/img/icon- 2@2x.png"
-                      />
-                      {deal ? (
-                        <p className="warn">
-                          {intl.get("Address copy successful")}
-                        </p>
-                      ) : null}
-                    </span>
-                  </p>
+                  <div className="line">
+                    <img src="/img/路径 42@2x.png" />
+                  </div>
+
+                  <div className="tableList">
+                    <p>
+                      <label>{intl.get("Amount")}：</label>
+                      <span>
+                        {detailDatas && detailDatas.show_value}BTC
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Cost of miners")}：</label>
+                      <span>{detailDatas && detailDatas.fee} BTC</span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Collection address")}：</label>
+                      <span>
+                        <i id="reve">{detailDatas.receive_address}</i>
+                        <img
+                          onClick={() => this.handleCopy("reve")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {reve ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Payment address")}：</label>
+                      <span>
+                        <i id="tran">{detailDatas.sender_address}</i>
+                        <img
+                          onClick={() => this.handleCopy("tran")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {tran ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Transaction no")}：</label>
+                      <span>
+                        <i id="deal">{detailDatas.txid}</i>
+                        <img
+                          onClick={() => this.handleCopy("deal")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {deal ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <p className="goBrower" onClick={()=>{window.open("https://testnet.violas.io");}}>
+            ) : (
+              <div className="detailsTable">
+                <div className="tableContent">
+                  {detailDatas && detailDatas.type == 0 ? (
+                    <i>
+                      <img src="/img/shenhezhong-2 4@2x.png" />
+                    </i>
+                  ) : detailDatas.sender ==
+                    window.sessionStorage.getItem("detailAddr") ? (
+                    <i>
+                      <img src="/img/shenhetongguo 4@2x.png" />
+                    </i>
+                  ) : (
+                    <i>
+                      <img src="/img/shenhetongguo 4@2x.png" />
+                    </i>
+                  )}
+                  {detailDatas && detailDatas.type == 0 ? (
+                    <h3>{intl.get("Stability coin activated successfully")}</h3>
+                  ) : detailDatas.sender ==
+                    window.sessionStorage.getItem("detailAddr") ? (
+                    <h3>{intl.get("Transfer success")}</h3>
+                  ) : (
+                    <h3>{intl.get("Payment success")}</h3>
+                  )}
+
+                  <p>
+                    {timeStamp2String1(
+                      detailDatas && detailDatas.expiration_time + "000"
+                    )}
+                  </p>
+                  <div className="line">
+                    <img src="/img/路径 42@2x.png" />
+                  </div>
+
+                  <div className="tableList">
+                    <p>
+                      <label>{intl.get("Amount")}：</label>
+                      <span>
+                        {detailDatas && detailDatas.amount / 1e6}{" "}
+                        {detailDatas && detailDatas.currency}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Cost of miners")}：</label>
+                      <span>
+                        {detailDatas && detailDatas.gas / 1e6}{" "}
+                        {detailDatas.gas_currency}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Collection address")}：</label>
+                      <span>
+                        <i id="reve">
+                          {detailDatas.receiver == null
+                            ? "--"
+                            : detailDatas.receiver}
+                        </i>
+                        <img
+                          onClick={() => this.handleCopy("reve")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {reve ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Payment address")}：</label>
+                      <span>
+                        <i id="tran">{detailDatas.sender}</i>
+                        <img
+                          onClick={() => this.handleCopy("tran")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {tran ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                    <p>
+                      <label>{intl.get("Transaction no")}：</label>
+                      <span>
+                        <i id="deal">{detailDatas.version}</i>
+                        <img
+                          onClick={() => this.handleCopy("deal")}
+                          src="/img/icon- 2@2x.png"
+                        />
+                        {deal ? (
+                          <p className="warn">
+                            {intl.get("Address copy successful")}
+                          </p>
+                        ) : null}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            <p
+              className="goBrower"
+              onClick={() => {
+                window.open("https://testnet.violas.io");
+              }}
+            >
               {intl.get("The browser queries for more details")}
               <img src="/img/go.png" />
             </p>
