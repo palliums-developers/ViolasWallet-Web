@@ -1670,7 +1670,11 @@ class CashPooling extends Component {
                               <p>--</p>
                             )}
 
-                            <p>{timeStamp2String(v.confirmed_time + "000")}</p>
+                            <p>
+                              {v.confirmed_time == null
+                                ? timeStamp2String(v.date + "000")
+                                : timeStamp2String(v.confirmed_time + "000")}
+                            </p>
                           </div>
                         </div>
                         <label>

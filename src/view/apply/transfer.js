@@ -107,7 +107,7 @@ class Transfer extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data) {
           this.setState(
             {
@@ -483,16 +483,26 @@ class Transfer extends Component {
       .sendTransaction("_libra", tx)
       .then((res) => {
         // console.log("Libra transaction", res);
-        this.setState({
-          warning: intl.get("Transfer success"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer success"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       })
       .catch((err) => {
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
 
         // console.log("Libra transaction ", err);
       });
@@ -519,10 +529,15 @@ class Transfer extends Component {
       })
       .catch((err) => {
         // console.log("Bitcoin transaction ", err);
-        this.setState({
-          warning: intl.get("Transfer failed"),
-          showWallet: false,
-        });
+        this.setState(
+          {
+            warning: intl.get("Transfer failed"),
+            showWallet: false,
+          },
+          () => {
+            window.location.reload();
+          }
+        );
       });
   }
   getViolasNext = () => {

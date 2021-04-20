@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { timeStamp2String } from '../../utils/timer';
 import { Pagination } from 'antd';
 import intl from "react-intl-universal";
-import BigNumber from "bignumber.js";
+import dealwith_tbtc1_txid from "../../utils/tbtc1";
 // import { withRouter } from "react-router-dom";
 import '../app.scss';
 let url = 'https://api.violas.io'
@@ -16,21 +16,21 @@ class CurrencyDetail extends Component {
     this.state = {
       types: [
         {
-          name: "全部",
+          name: intl.get("All"),
           type: "all",
         },
         {
-          name: "转入",
+          name: intl.get("Input"),
           type: "into",
         },
         {
-          name: "转出",
+          name: intl.get("Output"),
           type: "out",
         },
       ],
       types1: [
         {
-          name: "全部",
+          name: intl.get("All"),
           type: "all",
         },
       ],
@@ -39,6 +39,7 @@ class CurrencyDetail extends Component {
       dataList: [],
       dataList1: [],
       total: 0,
+      total1: 0,
       page: 0,
       pageSize: 6,
       page1: 1,
@@ -99,37 +100,21 @@ class CurrencyDetail extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res, ".......");
-        if (res.transactions) {
-          let transactions = res.transactions;
-          for (let i = 0; i < transactions.length; i++) {
-            for (let j = 0; j < transactions[i].vin.length; j++) {
-              transactions[i].vin[j].type = "vin";
-            }
-            for (let x = 0; x < transactions[i].vout.length; x++) {
-              transactions[i].vout[x].type = "vout";
-            }
-            transactions[i].trans = transactions[i].vin.concat(
-              transactions[i].vout
-            );
-            transactions[i].transLength = transactions[i].trans.length;
-            // console.log(transactions[i].vin.concat(transactions[i].vout));
-          }
-          console.log(transactions);
-          if (this.state.navType == "all") {
-            if (this.state.total == 0) {
-              this.setState({
-                total: transactions && transactions[0].transLength,
-                dataList1: transactions,
-              });
-            }
-          }
-        }
+        // console.log(res)
+        let transactions = dealwith_tbtc1_txid(res)&&dealwith_tbtc1_txid(res);
+        // console.log(dealwith_tbtc1_txid(res))
+         if (this.state.navType == "all") {
+           if (this.state.total == 0) {
+             this.setState({
+               total: transactions && transactions.length,
+               dataList1: transactions && transactions,
+             });
+           }
+         }
       });
   }
   getNavData() {
     let { detailAddrs, type } = this.state;
-
     if (type == "btc") {
       this.getUTXO();
     } else {
@@ -141,8 +126,9 @@ class CurrencyDetail extends Component {
             .then((res) => res.json())
             .then((res) => {
               if (res.data) {
+                console.log(res.data.length);
                 this.setState({
-                  total: res.data.length,
+                  total1: res.data.length,
                 });
               }
             });
@@ -183,7 +169,7 @@ class CurrencyDetail extends Component {
           .then((res) => res.json())
           .then((res) => {
             this.setState({
-              total: res.data.length,
+              total1: res.data.length,
               dataList: res.data,
             });
           });
@@ -203,7 +189,7 @@ class CurrencyDetail extends Component {
           .then((res) => res.json())
           .then((res) => {
             this.setState({
-              total: res.data.length,
+              total1: res.data.length,
               dataList: res.data,
             });
           });
@@ -275,10 +261,11 @@ class CurrencyDetail extends Component {
       dataList,
       dataList1,
       total,
+      total1,
       dis,
     } = this.state;
     let { detailAddrs, nameType, icon, rate, balance } = this.props;
-
+    // console.log(total, total1);
     return (
       <div className="currencyDetail">
         <h4 onClick={() => this.props.showDetails(false)}>
@@ -356,41 +343,38 @@ class CurrencyDetail extends Component {
           </div>
           <div className="detailLists">
             {this.state.type == "btc"
-              ? dataList1.map((v, i) => {
-                  return v.trans.map((v1, i1) => {
-                    return (
-                      <div
-                        key={i1}
-                        className="detailList"
-                        onClick={() => {
-                          this.props.showDetails(false);
-                          this.props.curDataFun(v1);
-                          this.props.showDetails1(true);
-                        }}
-                      >
-                        <i>
-                          {v1.type == "vin" ? (
-                            <img src="/img/编组 13备份 2@2x.png" />
-                          ) : (
-                            <img src="/img/编组 13备份 3@2x.png" />
-                          )}
-                        </i>
-                        <div className="listCenter">
-                          <p>{this.getSubStr(v1.addresses[0])}</p>
-                          <p>{timeStamp2String(v.blockTime + "000")}</p>
-                        </div>
-                        <div className="listResult">
-                          <p className="gre">
-                            {v1.type == "vin" ? "+" : "-"}
-                            {new BigNumber(String(v1.value / 100000000)).toFormat(
-                              8
-                            )}
-                          </p>
-                          {/* <p className="org">交易中</p> */}
-                        </div>
+              ? dataList1 &&
+                dataList1.map((v, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="detailList"
+                      onClick={() => {
+                        this.props.showDetails(false);
+                        this.props.curDataFun(v);
+                        this.props.showDetails1(true);
+                      }}
+                    >
+                      <i>
+                        {v.type == "vin" ? (
+                          <img src="/img/编组 13备份 2@2x.png" />
+                        ) : (
+                          <img src="/img/编组 13备份 3@2x.png" />
+                        )}
+                      </i>
+                      <div className="listCenter">
+                        <p>{this.getSubStr(v.show_address)}</p>
+                        <p>{timeStamp2String(v.timestamp + "000")}</p>
                       </div>
-                    );
-                  });
+                      <div className="listResult">
+                        <p className="gre">
+                          {v.sender ? "-" : "+"}
+                          {v.show_value}
+                        </p>
+                        {/* <p className="org">交易中</p> */}
+                      </div>
+                    </div>
+                  );
                 })
               : dataList.map((v, i) => {
                   return (
@@ -420,17 +404,26 @@ class CurrencyDetail extends Component {
                             ? this.getSubStr(v.sender)
                             : this.getSubStr(v.sender)}
                         </p>
-                        <p>{timeStamp2String(v.confirmed_time + "000")}</p>
+                        <p>
+                          {v.confirmed_time == null
+                            ? timeStamp2String(v.expiration_time + "000")
+                            : timeStamp2String(v.confirmed_time + "000")}
+                        </p>
                       </div>
                       <div className="listResult">
-                        <p className={v.status == "Executed" ? "gre" : "red"}>
-                          {v.receiver == detailAddrs
-                            ? "+"
-                            : v.sender == detailAddrs
-                            ? "-"
-                            : "+"}
-                          {v.amount / 1e6}
-                        </p>
+                        {v.amount == null ? (
+                          <p className="gre">--</p>
+                        ) : (
+                          <p className={v.status == "Executed" ? "gre" : "red"}>
+                            {v.receiver == detailAddrs
+                              ? "+"
+                              : v.sender == detailAddrs
+                              ? "-"
+                              : "+"}
+                            {v.amount / 1e6}
+                          </p>
+                        )}
+
                         {/* <p className="org">交易中</p> */}
                       </div>
                     </div>
@@ -438,19 +431,20 @@ class CurrencyDetail extends Component {
                 })}
           </div>
         </div>
-        {dataList1.length > 0 ? (
-          <Pagination
-            defaultCurrent={this.state.page}
-            pageSize={this.state.pageSize1}
-            total={Number(total)}
-            onChange={this.onChange1}
-          />
-        ) : null}
-        {dataList.length > 0 ? (
+        {nameType == "BTC" ? (
+          dataList1 && dataList1.length > 0 ? (
+            <Pagination
+              defaultCurrent={this.state.page}
+              pageSize={this.state.pageSize1}
+              total={Number(total)}
+              onChange={this.onChange1}
+            />
+          ) : null
+        ) : dataList.length > 0 ? (
           <Pagination
             defaultCurrent={1}
             defaultPageSize={6}
-            total={Number(total)}
+            total={Number(total1)}
             onChange={this.onChange}
           />
         ) : null}

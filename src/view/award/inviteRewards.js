@@ -156,13 +156,27 @@ class InviteRewards extends Component {
         <div className="inviteContent">
           <div className="head">
             <div className="logo">
-              <img src="/img/m_编组 24@2x.png" />
+              {ifMobile == false ? (window.localStorage.getItem("local") == "CN" ? (
+                <img src="/img/m_编组 24@2x.png" />
+              ) : (
+                <img src="/img/m_编组 242@2x.png" />
+              )) : this.state.lang == "CN" ? (
+                <img src="/img/m_编组 24@2x.png" />
+              ) : (
+                <img src="/img/m_编组 242@2x.png" />
+              )}
             </div>
             <div className="descr">
               {ifMobile == false ? (
-                <img src="/img/m_编组 566@2x.png" />
-              ) : (
+                window.localStorage.getItem("local") == "CN" ? (
+                  <img src="/img/m_编组 566@2x.png" />
+                ) : (
+                  <img src="/img/m_编组 5662@2x.png" />
+                )
+              ) : this.state.lang == "CN" ? (
                 <img src="/img/mobile_m_编组 33@2x.png" />
+              ) : (
+                <img id="img2" src="/img/mobile_m_编组 332@2x.png" />
               )}
             </div>
           </div>

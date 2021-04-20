@@ -86,7 +86,9 @@ class ExchangeDetail extends Component {
               <p>
                 <label>{intl.get("Order Time")}：</label>
                 <span>
-                  {timeStamp2String2(changeList.confirmed_time + "000")}
+                  {changeList.confirmed_time == null
+                    ? timeStamp2String2(changeList.date + "000")
+                    : timeStamp2String2(changeList.confirmed_time + "000")}
                 </span>
               </p>
             </div>

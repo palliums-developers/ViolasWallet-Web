@@ -87,7 +87,7 @@ class PhotoSynthesis extends Component {
     myImage.onload = function () {
       context1.drawImage(myImage, -2, 0, 309, 534);
       var myImage2 = new Image();
-      myImage2.src = require("./image/m_编组 31@2x.png"); //你自己本地的图片或者在线图片
+      myImage2.src = require("./image/m_编组 312@2x.png"); //你自己本地的图片或者在线图片
       myImage2.crossOrigin = "Anonymous";
       myImage2.onload = function () {
         let qrCodeCanvas = document.querySelectorAll("canvas")[0];

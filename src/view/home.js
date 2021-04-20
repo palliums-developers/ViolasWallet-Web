@@ -291,7 +291,7 @@ class Home extends React.PureComponent {
   render() {
     let { routes } = this.props;
     let { active, message, unreadCount } = this.state;
-    console.log(active, ".......");
+    // console.log(active, ".......");
     this.getUnreadCount();
     if (this.props.location) {
       if (this.props.location.search) {
