@@ -1,5 +1,8 @@
 let dealwith_tbtc1_txid = (_tbtc1_result) => {
   let tbtc_address = _tbtc1_result.address;
+   if (_tbtc1_result && !_tbtc1_result.transactions) {
+     return;
+   }
   let transactions = _tbtc1_result.transactions;
   let result = [];
   for (let i of transactions) {

@@ -41,6 +41,7 @@ class CurrencyDetail extends Component {
       dataList: [],
       dataList1: [],
       total: 0,
+      total1: 0,
       page: 0,
       pageSize: 6,
       page1: 1,
@@ -101,13 +102,14 @@ class CurrencyDetail extends Component {
     )
       .then((res) => res.json())
       .then((res) => {
-        let transactions = dealwith_tbtc1_txid(res);
+        // console.log(res)
+        let transactions = dealwith_tbtc1_txid(res)&&dealwith_tbtc1_txid(res);
         // console.log(dealwith_tbtc1_txid(res))
          if (this.state.navType == "all") {
            if (this.state.total == 0) {
              this.setState({
-               total: transactions.length,
-               dataList1: transactions,
+               total: transactions && transactions.length,
+               dataList1: transactions && transactions,
              });
            }
          }
@@ -115,7 +117,6 @@ class CurrencyDetail extends Component {
   }
   getNavData() {
     let { detailAddrs, type } = this.state;
-
     if (type == "btc") {
       this.getUTXO();
     } else {
@@ -127,8 +128,9 @@ class CurrencyDetail extends Component {
             .then((res) => res.json())
             .then((res) => {
               if (res.data) {
+                console.log(res.data.length);
                 this.setState({
-                  total: res.data.length,
+                  total1: res.data.length,
                 });
               }
             });
@@ -169,7 +171,7 @@ class CurrencyDetail extends Component {
           .then((res) => res.json())
           .then((res) => {
             this.setState({
-              total: res.data.length,
+              total1: res.data.length,
               dataList: res.data,
             });
           });
@@ -189,7 +191,7 @@ class CurrencyDetail extends Component {
           .then((res) => res.json())
           .then((res) => {
             this.setState({
-              total: res.data.length,
+              total1: res.data.length,
               dataList: res.data,
             });
           });
@@ -261,10 +263,11 @@ class CurrencyDetail extends Component {
       dataList,
       dataList1,
       total,
+      total1,
       dis,
     } = this.state;
     let { detailAddrs, nameType, icon, rate, balance } = this.props;
-
+    // console.log(total, total1);
     return (
       <div className="currencyDetail">
         <h4 onClick={() => this.props.showDetails(false)}>
@@ -342,7 +345,8 @@ class CurrencyDetail extends Component {
           </div>
           <div className="detailLists">
             {this.state.type == "btc"
-              ? dataList1.map((v, i) => {
+              ? dataList1 &&
+                dataList1.map((v, i) => {
                   return (
                     <div
                       key={i}
@@ -429,19 +433,20 @@ class CurrencyDetail extends Component {
                 })}
           </div>
         </div>
-        {dataList1.length > 0 ? (
-          <Pagination
-            defaultCurrent={this.state.page}
-            pageSize={this.state.pageSize1}
-            total={Number(total)}
-            onChange={this.onChange1}
-          />
-        ) : null}
-        {dataList.length > 0 ? (
+        {nameType == "BTC" ? (
+          dataList1 && dataList1.length > 0 ? (
+            <Pagination
+              defaultCurrent={this.state.page}
+              pageSize={this.state.pageSize1}
+              total={Number(total)}
+              onChange={this.onChange1}
+            />
+          ) : null
+        ) : dataList.length > 0 ? (
           <Pagination
             defaultCurrent={1}
             defaultPageSize={6}
-            total={Number(total)}
+            total={Number(total1)}
             onChange={this.onChange}
           />
         ) : null}
