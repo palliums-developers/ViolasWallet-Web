@@ -431,6 +431,7 @@ class Transfer extends Component {
         // console.log("send transaction ", res);
       })
       .catch((err) => {
+        console.log(err)
         this.setState(
           {
             warning: intl.get("Transfer failed"),
