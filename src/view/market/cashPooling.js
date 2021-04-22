@@ -190,6 +190,7 @@ class CashPooling extends Component {
     this.setState({
       showDealType: !this.state.showDealType,
       warning: "",
+      
     });
   };
   //显示输入时通证列表
@@ -199,6 +200,7 @@ class CashPooling extends Component {
         name: v,
         showMenuViolas: false,
         index: i,
+        
       },
       () => {
         this.opinionInputAmount();
@@ -256,6 +258,10 @@ class CashPooling extends Component {
       {
         type: window.sessionStorage.getItem("curDealType"),
         showDealType: false,
+        inputAmount: "",
+        inputAmount1: "",
+        outputAmount: "",
+        outputAmount1: "",
       },
       () => {
         this.getExchangeRecode();
@@ -685,9 +691,9 @@ class CashPooling extends Component {
           "/1.0/market/pool/deposit/trial?amount=" +
           this.state.inputAmount * 1e6 +
           "&&coin_a=" +
-          this.state.type1 +
+          this.state.name +
           "&&coin_b=" +
-          this.state.name
+          this.state.type1
       )
         .then((res) => res.json())
         .then((res) => {
@@ -708,9 +714,9 @@ class CashPooling extends Component {
           "/1.0/market/pool/deposit/trial?amount=" +
           this.state.inputAmount1 * 1e6 +
           "&&coin_a=" +
-          this.state.name +
+          this.state.type1 +
           "&&coin_b=" +
-          this.state.type1
+          this.state.name
       )
         .then((res) => res.json())
         .then((res) => {
