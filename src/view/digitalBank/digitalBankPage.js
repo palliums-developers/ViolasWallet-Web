@@ -46,9 +46,10 @@ class DigitalBankPage extends Component {
              this.setState({
                amount: res.data.amount,
                borrow:
-                 res.data.borrow == 0
-                   ? "0.00" + "/" + res.data.borrow_limit
-                   : res.data.borrow + "/" + res.data.borrow_limit,
+               res.data.borrow_limit == 0 && res.data.borrow == 0 ? "0.00/0.00":
+                 res.data.borrow_limit +
+                 "/" +
+                 (res.data.borrow + res.data.borrow_limit),
                //  borrows: res.data.borrows,
                //  deposits: res.data.deposits,
                total: res.data.total == 0 ? "0.00" : res.data.total,

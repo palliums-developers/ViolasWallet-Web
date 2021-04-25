@@ -9,6 +9,7 @@ import '../app.scss';
 let url = 'https://api.violas.io'
 let url1 = "https://api4.violas.io"
 let btcUrl = "https://tbtc1.trezor.io";
+
 //币种详情
 class CurrencyDetail extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class CurrencyDetail extends Component {
       dataList1: [],
       total: 0,
       total1: 0,
-      page: 0,
+      page: 1,
       pageSize: 6,
       page1: 1,
       pageSize1: 3,
@@ -63,6 +64,12 @@ class CurrencyDetail extends Component {
           this.getNavData();
         }
       );
+    }
+    if (this.state.name != this.props.name) {
+      this.setState({
+        page: 1,
+        pageSize: 6,
+      });
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -140,8 +147,10 @@ class CurrencyDetail extends Component {
             type +
             "/transaction?addr=" +
             detailAddrs +
+            "&currency=" +
+            this.state.name +
             "&&offset=" +
-            this.state.page +
+            (this.state.page - 1) * this.state.pageSize +
             "&&limit=" +
             this.state.pageSize
         )
@@ -160,9 +169,11 @@ class CurrencyDetail extends Component {
             type +
             "/transaction?addr=" +
             detailAddrs +
+            "&currency=" +
+            this.state.name +
             "&&flows=1" +
             "&&offset=" +
-            this.state.page +
+            (this.state.page - 1) * this.state.pageSize +
             "&&limit=" +
             this.state.pageSize
         )
@@ -180,9 +191,11 @@ class CurrencyDetail extends Component {
             type +
             "/transaction?addr=" +
             detailAddrs +
+            "&currency=" +
+            this.state.name +
             "&&flows=0" +
             "&&offset=" +
-            this.state.page +
+            (this.state.pageSize - 1) * this.state.page +
             "&&limit=" +
             this.state.pageSize
         )
@@ -308,6 +321,7 @@ class CurrencyDetail extends Component {
                         this.setState(
                           {
                             navType: val.type,
+                            page1:1
                           },
                           () => {
                             this.getNavData();
@@ -328,6 +342,7 @@ class CurrencyDetail extends Component {
                         this.setState(
                           {
                             navType: val.type,
+                            page: 1,
                           },
                           () => {
                             this.getNavData();
@@ -434,7 +449,7 @@ class CurrencyDetail extends Component {
         {nameType == "BTC" ? (
           dataList1 && dataList1.length > 0 ? (
             <Pagination
-              defaultCurrent={this.state.page}
+              defaultCurrent={this.state.page1}
               pageSize={this.state.pageSize1}
               total={Number(total)}
               onChange={this.onChange1}
@@ -442,8 +457,8 @@ class CurrencyDetail extends Component {
           ) : null
         ) : dataList.length > 0 ? (
           <Pagination
-            defaultCurrent={1}
-            defaultPageSize={6}
+            defaultCurrent={this.state.page}
+            defaultPageSize={this.state.pageSize}
             total={Number(total1)}
             onChange={this.onChange}
           />
@@ -457,12 +472,6 @@ let mapStateToProps = (state) => {
 };
 let mapDispatchToProps = (dispatch) => {
     return {
-        // showDetails: () => {
-        //     dispatch({
-        //         type: "DISPLAY1",
-        //         payload: false,
-        //     });
-        // },
         showEveryDetail: (payload) => {
             dispatch({
                 type: "DISPLAY2",
@@ -472,13 +481,6 @@ let mapDispatchToProps = (dispatch) => {
                 }
             });
         },
-       
-        // getDetailData:(payload)=>{
-        //     dispatch({
-        //         type: "DETAILDATA",
-        //         payload: payload
-        //     });
-        // }
     };
 };
 
