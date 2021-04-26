@@ -436,8 +436,8 @@ class AddCurrency extends Component {
         args: [],
       },
       chainId: chainId,
-      maxGasAmount: "400000",
-      gasUnitPrice: "1",
+      maxGasAmount: 400000,
+      gasUnitPrice: 1
     };
     console.log(tx, "tx.........");
     this.state.walletConnector
@@ -484,8 +484,8 @@ class AddCurrency extends Component {
         args: [],
       },
       chainId: _chainId,
-      maxGasAmount: "400000",
-      gasUnitPrice: "1",
+      maxGasAmount: 400000,
+      gasUnitPrice: 1
     };
     console.log("libra ", tx);
     this.state.walletConnector
