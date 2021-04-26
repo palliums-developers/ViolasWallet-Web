@@ -570,8 +570,8 @@ class ExChange extends Component {
         ],
       },
       chainId: chainId,
-      maxGasAmount: "400000",
-      gasUnitPrice: "1",
+      maxGasAmount: 400000,
+      gasUnitPrice: 1
     };
   }
   //violas链兑换其他测试链的币种
@@ -624,8 +624,8 @@ class ExChange extends Component {
         ],
       },
       chainId: chainId,
-      maxGasAmount: "400000",
-      gasUnitPrice: "1",
+      maxGasAmount: 400000,
+      gasUnitPrice: 1
     };
   }
   async getViolasSwap(_out_type, chainId) {

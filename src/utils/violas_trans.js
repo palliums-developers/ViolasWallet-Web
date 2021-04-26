@@ -27,8 +27,8 @@ let getViolasTx = (_from, _to, _amount, _module, _name, _chainId, _script) => {
         ],
       },
       chainId: _chainId,
-      maxGasAmount: "400000",
-      gasUnitPrice: "1",
+      maxGasAmount: 400000,
+      gasUnitPrice: 1
     };
     return tx;
 }
