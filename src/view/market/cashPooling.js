@@ -271,13 +271,11 @@ class CashPooling extends Component {
   setTime = (type, value) => {
     if (type === "input") {
       setTimeout(() => {
-        console.log(value,this.state.inputAmount,'111');
         if (value == this.state.inputAmount) {
           this.opinionInputAmount();
         }
       }, 1000);
     } else if (type === "input1") {
-      console.log(value, this.state.inputAmount1, "222");
       setTimeout(() => {
         if (value == this.state.inputAmount1) {
           this.opinionInputAmount1();
@@ -285,7 +283,6 @@ class CashPooling extends Component {
       }, 1000);
     }
     if (type === "output") {
-      console.log(value, this.state.outputAmount, "333");
       setTimeout(() => {
         if (value == this.state.outputAmount) {
           this.opinionOutputAmount();
