@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { timeStamp2String1 } from '../../utils/timer1';
+import { timeStamp2String } from '../../utils/time5';
 // import { withRouter } from "react-router-dom";
 import intl from "react-intl-universal";
 import '../app.scss'
@@ -95,7 +95,11 @@ class PushDetails extends Component {
               <img src="/img/shenhetongguo 4@2x.png" />
             </i>
             <h3>{intl.get("Transfer success")}</h3>
-            <p>2018-11-06</p>
+            <p>
+              {tranfarList.confirmed_time == null
+                ? timeStamp2String(tranfarList.expiration_time + "000")
+                : timeStamp2String(tranfarList.confirmed_time + "000")}
+            </p>
             <div className="line">
               <img src="/img/路径 42@2x.png" />
             </div>
