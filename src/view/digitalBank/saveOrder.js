@@ -74,6 +74,11 @@ class SaveOrder extends Component {
           title: intl.get("Earnings"),
           dataIndex: "income",
           key: "income",
+          render: (text) => (
+            <label>
+              {(text / 1e6).toFixed(6) == 0 ? 0 : (text / 1e6).toFixed(6)}
+            </label>
+          ),
         },
         {
           title: intl.get("APY"),
