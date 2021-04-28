@@ -328,24 +328,23 @@ class SaveOrder extends Component {
       });
   };
   //存款明细
-  getSaveDetail1 = (start, end, curreny, status) => {
+  getSaveDetail1 = (start, end, currency="", status) => {
     let { page, pageSize } = this.state;
+    console.log(currency, status);
+    if (currency == intl.get("All")) {
+      currency = ""
+    }
+    if (status == intl.get("All")) {
+      status = "";
+    }
     fetch(
-      url +
-        "/1.0/violas/bank/deposit/order/list?address=" +
-        window.sessionStorage.getItem("violas_address") +
-        "&currency=" +
-        curreny +
-        "&status=" +
-        status +
-        "&start=" +
-        start +
-        "&end=" +
-        end +
-        "&limit=" +
-        pageSize +
-        "&offset=" +
+      `${url}/1.0/violas/bank/deposit/order/list?address=${window.sessionStorage.getItem(
+        "violas_address"
+      )}${
+        currency === "" ? "" : `&currency=${currency}`
+      }&status=${status}&start=${start}&end=${end}&limit=${pageSize}&offset=${
         (page - 1) * pageSize
+      }`
     )
       .then((res) => res.json())
       .then((res) => {
