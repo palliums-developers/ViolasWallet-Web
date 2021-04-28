@@ -68,8 +68,8 @@ class BorrowOrder extends Component {
       secondData: [],
       secondData1: [],
       secondData2: [],
-      selectTime1: 0,
-      selectTime2: 0,
+      selectTime1:"",
+      selectTime2: "",
       selectCoin: "",
       selectStatus: "",
       columns: [
@@ -525,24 +525,22 @@ class BorrowOrder extends Component {
       });
   };
   //借款明细
-  getBorrowDetail1 = (start, end, curreny, status) => {
+  getBorrowDetail1 = (start, end,currency='', status) => {
     let { page, pageSize } = this.state;
+    if (currency == intl.get("All")) {
+      currency = "";
+    }
+    if (status == intl.get("All")) {
+      status = "";
+    }
     fetch(
-      url +
-        "/1.0/violas/bank/borrow/order/list?address=" +
-        window.sessionStorage.getItem("violas_address") +
-        "&curreny=" +
-        curreny +
-        "&status=" +
-        status +
-        "&start=" +
-        start +
-        "&end=" +
-        end +
-        "&limit=" +
-        pageSize +
-        "&offset=" +
+      `${url}/1.0/violas/bank/borrow/order/list?address=${window.sessionStorage.getItem(
+        "violas_address"
+      )}${
+        currency === "" ? "" : `&currency=${currency}`
+      }&status=${status}&start=${start}&end=${end}&limit=${pageSize}&offset=${
         (page - 1) * pageSize
+      }`
     )
       .then((res) => res.json())
       .then((res) => {

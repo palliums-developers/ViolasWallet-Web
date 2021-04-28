@@ -669,7 +669,7 @@
                 display: flex;
                 flex-direction: column;
                 .recordList:first-child{
-                    margin-top: 20px;
+                    margin-top:10px;
                 }
                 .recordList{
                     width: 100%;
@@ -678,6 +678,8 @@
                     // align-items: center;
                     justify-content: space-between;
                     border-bottom: 0.5px solid rgba(224, 224, 224, 1);
+                    padding: 10px 0;
+                    box-sizing: border-box;
                     div{
                         display: flex;
                         // justify-content: center;
