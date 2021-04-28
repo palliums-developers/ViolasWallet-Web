@@ -183,8 +183,8 @@ class SaveOrder extends Component {
           ),
         },
       ],
-      selectTime1: 0,
-      selectTime2: 0,
+      selectTime1: "",
+      selectTime2: "",
       selectCoin: "",
       selectStatus: "",
       page: 1,
@@ -334,7 +334,7 @@ class SaveOrder extends Component {
       url +
         "/1.0/violas/bank/deposit/order/list?address=" +
         window.sessionStorage.getItem("violas_address") +
-        "&curreny=" +
+        "&currency=" +
         curreny +
         "&status=" +
         status +
@@ -389,12 +389,14 @@ class SaveOrder extends Component {
   };
   //选择币种
   getOptionCoins = (value) => {
+    console.log(value, ".币种");
     this.setState({
       selectCoin: value,
     });
   };
   //选择状态
   getOptionStatus = (value) => {
+    console.log(value,'.状态')
     this.setState({
       selectStatus: value,
     });

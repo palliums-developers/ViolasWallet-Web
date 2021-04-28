@@ -33,6 +33,7 @@ class Repayment extends Component {
       depositProduct: [],
       repayCurList: {},
       available: 0,
+      withdrawalsWay:""
     };
   }
   stopPropagation(e) {
@@ -166,7 +167,7 @@ class Repayment extends Component {
     tx = digitalBank(
       "repay",
       this.state.showType,
-      "" + this.state.amount * 1e6,
+      this.state.withdrawalsWay == "all" ?"0":"" + this.state.amount * 1e6,
       sessionStorage.getItem("violas_address"),
       this.state.borrowList.token_address,
       parseInt(sessionStorage.getItem("violas_chainId"))
@@ -328,6 +329,7 @@ class Repayment extends Component {
                 });
               }}
               onChange={(e) => this.getInputValue(e)}
+              value={this.state.amount}
             />
             <div className="saveDetailsShow">
               <p>
@@ -340,6 +342,7 @@ class Repayment extends Component {
                   onClick={() => {
                     this.setState({
                       amount: extra,
+                      withdrawalsWay:"All"
                     });
                   }}
                 >
