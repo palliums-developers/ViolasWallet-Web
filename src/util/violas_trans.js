@@ -36,8 +36,8 @@ let getViolasTx = (
         },
       ],
     },
-    maxGasAmount: "400000",
-    gasUnitPrice: "1",
+    maxGasAmount: 400000,
+    gasUnitPrice: 1,
     chainId: _chainId,
   };
   return tx;
@@ -51,8 +51,8 @@ let getViolasPub = (_from, _module, _name, _chainId) => {
       tyArgs: [getViolasTyArgs(_module, _name)],
       args: [],
     },
-    maxGasAmount: "400000",
-    gasUnitPrice: "1",
+    maxGasAmount: 400000,
+    gasUnitPrice: 1,
     chainId: _chainId,
   };
   return tx;
