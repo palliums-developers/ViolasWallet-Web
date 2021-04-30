@@ -74,7 +74,7 @@ class PushDetails extends Component {
     }, 1000);
   };
   render() {
-    let { detailDatas } = this.props;
+    
     let { reve, tran, deal, tranfarList } = this.state;
     // console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
     return (

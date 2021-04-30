@@ -582,12 +582,7 @@ class AddCurrency extends Component {
               </div>
             );
           })}
-          {/* <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
-          <div className="addCurrencyList"><p><i><img src="/img/编组 38@2x.png" /></i><label>BTC</label></p></div>
-          <div className="addCurrencyList">
-            <p><i><img src="/img/编组 38@2x.png" /></i><label>AAAUSD</label></p>
-            <p><img src="/img/编组 4复制 2@2x.png"/></p>
-          </div> */}
+
         </div>
       </div>
     );

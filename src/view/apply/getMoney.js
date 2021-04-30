@@ -456,10 +456,6 @@ class GetMoney extends Component {
                     <img src="/img/Fill 3@2x.png" />
                   </i>
                 )}
-
-                {/* {
-                      dis ? <div className="warn"><img src="/img/suc.png"/></div> : null
-                    } */}
               </div>
             </div>
           </div>

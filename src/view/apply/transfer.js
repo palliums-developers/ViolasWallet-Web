@@ -896,12 +896,6 @@ let mapDispatchToProps = (dispatch) => {
         payload: false,
       });
     },
-    // showDetails: () => {
-    //   dispatch({
-    //     type: "DISPLAY1",
-    //     payload: false,
-    //   });
-    // },
   };
 };
 

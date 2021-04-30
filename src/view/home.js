@@ -402,6 +402,4 @@ let mapStateToProps = (state) => {
   return state.ListReducer;
 };
 export default connect(mapStateToProps)(Home);
-// on message: {"status":"Executed","service":"violas_01","type":"PEER_TO_PEER_WITH_METADATA","date":"1615345930","version":"47010033"}
-// home.js:234 {data: {…}, from: "675290848213", priority: "normal", notification: {…}}
-// data: {status: "Executed", service: "violas_01", type: "PEER_TO_PEER_WITH_METADATA", date: "1615345930", version: "47010033",from: "675290848213"},notification: body: "Payment address: c71d7a054c919be00e8e408d552fa0e4"title: "VLS: 1.0 VLS successfully received!"}}
+
