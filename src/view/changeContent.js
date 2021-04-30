@@ -53,11 +53,6 @@ class ChangeContent extends Component {
                   {intl.get("POOL")}
                 </NavLink>
               </div>
-              {/* {
-                        this.state.types.map((v, i) => {
-                            return <NavLink key={i} activeStyle={{ background: 'rgba(75, 63, 152,.06)', color:'rgba(80, 27, 162, 1)'}} to={v.path}><i></i>{v.name}</NavLink>
-                        })
-                    } */}
             </div>
             <RouterView routes={routes}></RouterView>
           </div>

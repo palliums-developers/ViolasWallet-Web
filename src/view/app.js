@@ -197,11 +197,3 @@ class App extends Component {
 }
 
 export default App;
-// : this.state.status == 3 ? (
-//   <img
-//     onClick={() => {
-//       window.location.reload();
-//     }}
-//     src="/img/erweimashixiao 2@2x.png"
-//   />
-// ) 
