@@ -92,7 +92,6 @@ class App extends Component {
             this.props.history.push("/homepage");
           }, 1000);
 
-          // console.log("you have connected ");
         }
       );
     });
@@ -102,7 +101,6 @@ class App extends Component {
       }
       const { accounts, chainId } = payload.params[0];
       this.getAccount();
-      // console.log("session update ");
     });
     this.state.walletConnector.on("disconnect", (error, payload) => {
       if (error) {
@@ -110,9 +108,7 @@ class App extends Component {
         throw error;
       }
       console.log("disconnect " + JSON.stringify(payload));
-      // window.localStorage.clear();
-      // window.sessionStorage.clear();
-      // this.props.history.push("/app");
+
     });
   }
 
@@ -162,7 +158,6 @@ class App extends Component {
             <div className="link_logo">
               <img src="/img/编组复制 11@2x.png" />
             </div>
-            {/* <h3>ViolasPay</h3> */}
             <div
               className="qrCode"
               onClick={() => {

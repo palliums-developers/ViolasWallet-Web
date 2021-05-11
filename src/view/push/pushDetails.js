@@ -63,7 +63,6 @@ class PushDetails extends Component {
     oInput.className = "oInput";
     oInput.style.display = "none";
     document.body.removeChild(oInput);
-    // console.log([v])
     this.setState({
       [v]: true,
     });
@@ -76,7 +75,6 @@ class PushDetails extends Component {
   render() {
     
     let { reve, tran, deal, tranfarList } = this.state;
-    // console.log(detailDatas.receiver, window.sessionStorage.getItem('detailAddr'))
     return (
       <div className="details">
         <h4

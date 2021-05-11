@@ -475,4 +475,5 @@ export default {
   "Scan QR code": "Scan QR code",
   "Divide the rewards together": "Divide the rewards together",
   Cancel1: "Cancel1",
+  "Download link": "Download link",
 };

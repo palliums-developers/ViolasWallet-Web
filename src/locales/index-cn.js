@@ -464,4 +464,5 @@ export default {
   "Scan QR code": "扫描二维码",
   "Divide the rewards together": "一起瓜分奖励",
   Cancel1: "取 消",
+  "Download link": "下载链接",
 };

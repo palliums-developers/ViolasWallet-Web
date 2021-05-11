@@ -55,12 +55,12 @@ class SystemDetails extends Component {
         <div className="detailContent">
           <h3>{noticesList.title}</h3>
           <span>
-            {timeStamp2String1(noticesList.date+'000')} {noticesList.author}
+            {timeStamp2String1(noticesList.date + "000")} {noticesList.author}
           </span>
           <div className="line"></div>
           <p>{noticesList.content}</p>
           <p>
-            下载链接：<a href="">https://violas.com/</a>
+            {intl.get("Download link")}：<a href="">https://violas.com/</a>
           </p>
         </div>
       </div>

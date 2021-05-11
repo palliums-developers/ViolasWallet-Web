@@ -14,18 +14,10 @@ class ChangeContent extends Component {
         }
     }
     componentDidMount() {
-        // console.log(this.props.location.pathname.split('/')[4])
         this.setState({
             name: this.props.location.pathname.split('/')[4]
         })
     }
-    // getActive = (ind, val) => {
-    //     this.props.history.push('/home/homeContent/' + val)
-    //     this.setState({
-    //         ind: ind,
-    //         name: val
-    //     })
-    // }
 
     render() {
         let { routes } = this.props;

@@ -172,10 +172,5 @@ class HomePage extends Component {
 let mapStateToProps = (state) =>{
   return state.ListReducer;
 }
-let mapDispatchToProps = (dispatch) =>{
-  return {
-  
-  }
-}
- 
-export default connect(mapStateToProps,mapDispatchToProps)(HomePage);
+
+export default connect(mapStateToProps)(HomePage);

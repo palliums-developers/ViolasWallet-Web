@@ -47,7 +47,6 @@ class Home extends React.PureComponent {
     };
   }
   getMineDialog = (event) => {
-    // event.stopPropagation();
     this.setState({
       showMineDialog: !this.state.showMineDialog,
     });
@@ -79,8 +78,6 @@ class Home extends React.PureComponent {
     });
   }
   componentDidMount() {
-    // document.addEventListener('click', this.closeDialog);
-    
     this.setState({ 
       active: this.props.location.pathname.split("/")[3]
     });
@@ -189,7 +186,6 @@ class Home extends React.PureComponent {
   getMessage = () => {
     let temp_messaging = firebase.messaging();
     temp_messaging.onMessage(async (payload) => {
-      // console.log("on message: " + JSON.stringify(payload.data));
       await this.setState({ message: payload });
       await this.showNotification();
     });
@@ -198,10 +194,8 @@ class Home extends React.PureComponent {
     window.localStorage.setItem("sentToServer", sent ? "1" : "0");
   };
   sendTokenToServer = (currentToken) => {
-    // console.log(this.isTokenSentToServer(),'....');
     if (!this.isTokenSentToServer()) {
       console.log("Sending token to server...");
-      // console.log(window.sessionStorage.getItem("firebase_token"));
       if (window.sessionStorage.getItem("firebase_token")) {
         this.updateRegister();
       } else {
@@ -257,11 +251,6 @@ class Home extends React.PureComponent {
     setTimeout(myNotification.close.bind(myNotification), 3000);
   }
 
-  // closeDialog = () => {
-  //   this.setState({
-  //     showMineDialog: false
-  //   })
-  // }
   getFloat(number, n) {
     n = n ? parseInt(n) : 0;
     if (n <= 0) {
@@ -302,7 +291,6 @@ class Home extends React.PureComponent {
     }
     return (
       <div className={this.state.ifMobile == false ? "home" : "home home1"}>
-        {/* <div style={{position:'absolute'}}>log out</div> */}
 
         {this.state.ifMobile == false ? (
           <div className="header header1">
