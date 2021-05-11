@@ -442,8 +442,7 @@ export default {
   "Three. Win 10 VLS after successful verification":
     "Three.Win 10 VLS after successful verification",
   "Send invitation link to friend": "Send invitation link",
-  "Friend has passed phone number verification":
-    "Friend verify number",
+  "Friend has passed phone number verification": "Friend verify number",
   "Both sides will win awards": "Both win bonus",
   "My invitation": "My invitation",
   "Invited to address": "Invited to address",
@@ -476,4 +475,5 @@ export default {
   "Scan QR code": "Scan QR code",
   "Divide the rewards together": "Divide the rewards together",
   Cancel1: "Cancel1",
+  "Download link": "Download link",
 };
