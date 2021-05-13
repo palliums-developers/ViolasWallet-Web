@@ -25,9 +25,9 @@ class ViolasExchange extends Component {
       ],
       // swapContractAddress: "0xE6C7f2DAB2E9B16ab124E45dE3516196457A1120",
       // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
-      swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
-      contractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
+      // tokenContractAddress: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
+      // swapContractAddress: "0xC600601D8F3C3598628ad996Fe0da6C8CF832C02",
+      contractAddress: "0xc6aC75b3B3f6E48Ac1228a34C2732d1F0b9BF934",
       token_USDT: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
       swapAmount: "",
     };
@@ -112,11 +112,11 @@ class ViolasExchange extends Component {
       this.connectWallet();
     } else {
       let {
-        swapContractAddress,
-        tokenContractAddress,
+        // swapContractAddress,
+        // tokenContractAddress,
         token_USDT,
         contractAddress,
-        account
+        account,
       } = this.state;
 
       let amount = Number(this.state.swapAmount) * 1e6;
@@ -135,7 +135,7 @@ class ViolasExchange extends Component {
             },
           ],
         },
-        [swapContractAddress, amount]
+        [contractAddress, amount]
       );
       // console.log(functionCallAbi, "..functionCallAbi1");
       // 调用代币合约，授权兑换合约可以花费 amount 数量的资产。
@@ -143,7 +143,7 @@ class ViolasExchange extends Component {
         .sendTransaction({
           from: account,
           // to: tokenContractAddress,
-          to:token_USDT,
+          to: token_USDT,
           value: "0",
           gas: 500000,
           data: functionCallAbi,
@@ -164,8 +164,8 @@ class ViolasExchange extends Component {
       alert("请先连接 ETH 钱包");
     } else {
       let {
-        swapContractAddress,
-        tokenContractAddress,
+        // swapContractAddress,
+        // tokenContractAddress,
         account,
         token_USDT,
         contractAddress,
@@ -305,7 +305,6 @@ class ViolasExchange extends Component {
       if (value == this.state.token[i].address) {
         this.setState({
           coinName: this.state.token[i].name,
-
         });
       }
     }
