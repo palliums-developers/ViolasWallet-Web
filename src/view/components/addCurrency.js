@@ -49,6 +49,7 @@ class AddCurrency extends Component {
     });
   }
   async componentWillReceiveProps(nextProps) {
+    // console.log(nextProps.checkData);
     await this.setState({
       BTCBalance: Number(nextProps.BTCBalance),
     });

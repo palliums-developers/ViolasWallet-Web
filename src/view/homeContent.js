@@ -157,11 +157,12 @@ class HomeContent extends Component {
       "violas_Balances",
       JSON.stringify(temp_arr1.concat(temp_arr2))
     );
-    // console.log(temp_checkData);
+    console.log(temp_checkData);
     window.sessionStorage.setItem("libra_Balances", JSON.stringify(temp_arr2));
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
   };
   updateDataAmount = (one, list) => {
+    
     for (let i in list) {
       if (list[i].name === one.name) {
         if (list[i].balance !== one.balance) {
@@ -234,6 +235,7 @@ class HomeContent extends Component {
     let temp_violas_balance = JSON.parse(
       window.sessionStorage.getItem("violas_Balances")
     );
+    // console.log(temp_violas_balance);
     let temp_checkData = JSON.parse(window.sessionStorage.getItem("checkData"));
     for (let i in temp_violas_balance) {
       if (temp_violas_balance[i].chain === "violas") {
@@ -250,11 +252,12 @@ class HomeContent extends Component {
         temp_violas_balance[i] = temp;
       }
     }
-    // console.log(temp_violas_balance);
+    // console.log(temp_checkData, temp_violas_balance);
     temp_checkData = this.updateCheckDataAmount(
       temp_checkData,
       temp_violas_balance
     );
+    
     window.sessionStorage.setItem("checkData", JSON.stringify(temp_checkData));
     window.sessionStorage.setItem(
       "violas_Balances",

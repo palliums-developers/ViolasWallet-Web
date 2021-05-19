@@ -330,7 +330,7 @@ class SaveOrder extends Component {
   //存款明细
   getSaveDetail1 = (start, end, currency="", status) => {
     let { page, pageSize } = this.state;
-    console.log(currency, status);
+    // console.log(currency, status);
     if (currency == intl.get("All")) {
       currency = ""
     }
@@ -388,14 +388,14 @@ class SaveOrder extends Component {
   };
   //选择币种
   getOptionCoins = (value) => {
-    console.log(value, ".币种");
+    // console.log(value, ".币种");
     this.setState({
       selectCoin: value,
     });
   };
   //选择状态
   getOptionStatus = (value) => {
-    console.log(value,'.状态')
+    // console.log(value,'.状态')
     this.setState({
       selectStatus: value,
     });
