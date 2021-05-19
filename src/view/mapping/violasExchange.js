@@ -19,7 +19,7 @@ class ViolasExchange extends Component {
       coinName: "",
       token: [
         {
-          name: "vUSDT",
+          name: "VUSDT",
           address: "0x6f08730dA8e7de49a4064d2217c6B68d7E61E727",
         },
       ],
